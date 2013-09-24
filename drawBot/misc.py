@@ -1,4 +1,4 @@
-from AppKit import *
+import AppKit
 
 import sys
 
@@ -7,29 +7,28 @@ class DrawBotError(TypeError): pass
 
 # default tools
 
-
 def getDefault(key, defaultValue=None):
     """
     Get a value from the user default for a key. 
     """
-    defaultsFromFile = NSUserDefaults.standardUserDefaults()
+    defaultsFromFile = AppKit.NSUserDefaults.standardUserDefaults()
     return defaultsFromFile.get(key, defaultValue)
     
 def setDefault(key, value):
     """
     Set a value to the user defaults for a given key.
     """
-    defaultsFromFile = NSUserDefaults.standardUserDefaults()
+    defaultsFromFile = AppKit.NSUserDefaults.standardUserDefaults()
     defaultsFromFile.setObject_forKey_(value, key)
 
 def _getNSDefault(key, defaultValue=None):
     data = getDefault(key, defaultValue)
-    if isinstance(data, NSData):
-        return NSUnarchiver.unarchiveObjectWithData_(data)
+    if isinstance(data, AppKit.NSData):
+        return AppKit.NSUnarchiver.unarchiveObjectWithData_(data)
     return data
 
 def _setNSDefault(key, value):
-    data = NSArchiver.archivedDataWithRootObject_(value)
+    data = AppKit.NSArchiver.archivedDataWithRootObject_(value)
     setDefault(key, data)
 
 def getFontDefault(key, defaultValue=None):
