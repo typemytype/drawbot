@@ -28,8 +28,16 @@ a:hover, a.drawbotlink:hover {
 	color: {{ theme_textcolor }};
 }
 
-h6.download {
+div.downloadlink {
+	font-weight: bold;
 	margin: 0 0 20px 0;
+}
+div.downloadlink a {
+	display: block;
+}
+
+div.downloadlink a.drawbotlink {
+	font-size: 1.2em
 }
 
 h1, h2, h3, h4, h5, h6 {
