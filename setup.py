@@ -13,6 +13,8 @@ import robofab
 import fontTools
 import pygments
 
+from drawBotSettings import *
+
 codeSignDeveloperName = None
 if "--codesign" in sys.argv:
     try:
@@ -23,9 +25,7 @@ if "--codesign" in sys.argv:
     except:
         pass
 
-appName = "DrawBot"
 
-version = "3.1"
 
 plist = dict(
 

@@ -16,7 +16,7 @@ Version 2.0
 
 In use at the TypeMedia department of the Royal Academy in The Hague for about then 10 years!. Many Improvements on the API and text support. (2007)
 
-Version 3.0
+Version 3.1
 -----------
 
 Complete rewritten and many improvements on the API.
