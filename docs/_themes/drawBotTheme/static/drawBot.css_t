@@ -15,6 +15,10 @@ body {
 	margin: 10px;
 }
 
+br {
+	display:none;
+}
+
 a, a:visited, a.drawbotlink, a.drawbotlink:visited {
 	color: {{ theme_linkcolor }};
 	text-decoration: none;
