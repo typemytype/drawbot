@@ -1,5 +1,6 @@
-from AppKit import *
-from Quartz import PDFDocument
+import AppKit
+import Quartz
+
 import os
 
 from pdfContext import PDFContext
@@ -7,13 +8,13 @@ from pdfContext import PDFContext
 class ImageContext(PDFContext):
 
     _saveImageFileTypes = {
-        "jpg" : NSJPEGFileType,
-        "jpeg" : NSJPEGFileType,
-        "tiff" : NSTIFFFileType,
-        "tif" : NSTIFFFileType,
-        "gif" : NSGIFFileType,
-        "png" : NSPNGFileType,
-        "bmp" : NSBMPFileType
+        "jpg" : AppKit.NSJPEGFileType,
+        "jpeg" : AppKit.NSJPEGFileType,
+        "tiff" : AppKit.NSTIFFFileType,
+        "tif" : AppKit.NSTIFFFileType,
+        "gif" : AppKit.NSGIFFileType,
+        "png" : AppKit.NSPNGFileType,
+        "bmp" : AppKit.NSBMPFileType
         }
 
     fileExtensions = _saveImageFileTypes.keys()
@@ -21,9 +22,9 @@ class ImageContext(PDFContext):
     def _writeDataToFile(self, data, path):
         fileName, ext = os.path.splitext(path)
         ext = ext[1:]
-        pdfDocument = PDFDocument.alloc().initWithData_(data)
+        pdfDocument = Quartz.PDFDocument.alloc().initWithData_(data)
         page = pdfDocument.pageAtIndex_(pdfDocument.pageCount()-1)
-        image = NSImage.alloc().initWithData_(page.dataRepresentation())
-        imageRep = NSBitmapImageRep.imageRepWithData_(image.TIFFRepresentation())
+        image = AppKit.NSImage.alloc().initWithData_(page.dataRepresentation())
+        imageRep = AppKit.NSBitmapImageRep.imageRepWithData_(image.TIFFRepresentation())
         imageData = imageRep.representationUsingType_properties_(self._saveImageFileTypes[ext], None)
         imageData.writeToFile_atomically_(path, True)

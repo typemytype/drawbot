@@ -1,5 +1,5 @@
-from AppKit import *
-from CoreText import *
+import AppKit
+import CoreText
 
 import uuid
 
@@ -57,15 +57,15 @@ class SVGContext(BaseContext):
         }
 
     _svgLineJoinStylesMap = {   
-                    NSMiterLineJoinStyle : "miter",
-                    NSRoundLineJoinStyle : "round",
-                    NSBevelLineJoinStyle : "bevel"
+                    AppKit.NSMiterLineJoinStyle : "miter",
+                    AppKit.NSRoundLineJoinStyle : "round",
+                    AppKit.NSBevelLineJoinStyle : "bevel"
                     }
 
     _svgLineCapStylesMap = {
-        NSButtLineCapStyle : "butt",
-        NSSquareLineCapStyle : "square",
-        NSRoundLineCapStyle : "round",
+        AppKit.NSButtLineCapStyle : "butt",
+        AppKit.NSSquareLineCapStyle : "square",
+        AppKit.NSRoundLineCapStyle : "round",
     }
 
     fileExtensions = ["svg"]
@@ -127,10 +127,10 @@ class SVGContext(BaseContext):
 
     def _textBox(self, txt, (x, y, w, h), align):
         attrString = self.attributedString(txt, align=align)
-        setter = CTFramesetterCreateWithAttributedString(attrString)
-        path = CGPathCreateMutable()
-        CGPathAddRect(path, None, CGRectMake(x, y, w, h))
-        box = CTFramesetterCreateFrame(setter, (0, 0), path, None)
+        setter = CoreText.CTFramesetterCreateWithAttributedString(attrString)
+        path = CoreText.CGPathCreateMutable()
+        CoreText.CGPathAddRect(path, None, CoreText.CGRectMake(x, y, w, h))
+        box = CoreText.CTFramesetterCreateFrame(setter, (0, 0), path, None)
 
         self._save()
         self._svgBeginClipPath()
@@ -142,9 +142,9 @@ class SVGContext(BaseContext):
 
         lines = []
         
-        ctLines = CTFrameGetLines(box)
+        ctLines = CoreText.CTFrameGetLines(box)
         for ctLine in ctLines:
-            r = CTLineGetStringRange(ctLine)
+            r = CoreText.CTLineGetStringRange(ctLine)
             line = txt[r.location:r.location+r.length]
             while line and line[-1] == " ":
                 line = line[:-1]
@@ -153,7 +153,7 @@ class SVGContext(BaseContext):
         self._svgContext.begintag("text", **data)
         self._svgContext.newline()
         txt = []
-        origins = CTFrameGetLineOrigins(box, (0, len(ctLines)), None)
+        origins = CoreText.CTFrameGetLineOrigins(box, (0, len(ctLines)), None)
         for i, (originX, originY) in enumerate(origins):
             line = lines[i]
             self._svgContext.begintag("tspan", x=originX, y=h-originY)
@@ -169,10 +169,10 @@ class SVGContext(BaseContext):
     def _image(self, path, (x, y), alpha):
         self._svgBeginClipPath()
         if path.startswith("http"):
-            url = NSURL.URLWithString_(path)
+            url = AppKit.NSURL.URLWithString_(path)
         else:
-            url = NSURL.fileURLWithPath_(path)
-        im = NSImage.alloc().initByReferencingURL_(url)
+            url = AppKit.NSURL.fileURLWithPath_(path)
+        im = AppKit.NSImage.alloc().initByReferencingURL_(url)
         w, h = im.size()
         data = dict()
         data["x"] = 0
@@ -202,13 +202,13 @@ class SVGContext(BaseContext):
         svg = ""
         for i in range(path.elementCount()):
             instruction, points = path.elementAtIndex_associatedPoints_(i)
-            if instruction == NSMoveToBezierPathElement:
+            if instruction == AppKit.NSMoveToBezierPathElement:
                 svg += "M%s,%s " %(points[0].x, points[0].y)
-            elif instruction == NSLineToBezierPathElement:
+            elif instruction == AppKit.NSLineToBezierPathElement:
                 svg += "L%s,%s " %(points[0].x, points[0].y)
-            elif instruction == NSCurveToBezierPathElement:
+            elif instruction == AppKit.NSCurveToBezierPathElement:
                 svg += "C%s,%s,%s,%s,%s,%s " %(points[0].x, points[0].y, points[1].x, points[1].y, points[2].x, points[2].y)
-            elif instruction == NSClosePathBezierPathElement:
+            elif instruction == AppKit.NSClosePathBezierPathElement:
                 svg += "Z "
         return svg
 

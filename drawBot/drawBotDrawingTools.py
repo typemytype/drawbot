@@ -1,4 +1,5 @@
-from AppKit import *
+import AppKit
+
 import math
 import os
 
@@ -226,7 +227,6 @@ class DrawBotDrawingTool(object):
         _deprecatedWarning("curveTo((%s, %s), (%s, %s), (%s, %s))" % (x1, y1, x2, y2, x3, y3))
         self.curveTo((x1, y1), (x2, y2), (x3, y3))
         
-
     def closePath(self):
         """
         Close the path.
@@ -637,7 +637,7 @@ class DrawBotDrawingTool(object):
         if y is None:
             x, y = x
         else:
-            _deprecatedWarning("text(%s, (%s, %s))" % (txt, x, y))
+            _deprecatedWarning("text('%s', (%s, %s))" % (txt, x, y))
         w, h = self.textSize(txt, None)
         self.textBox(txt, (x, y, w+1, h))
 
@@ -709,7 +709,7 @@ class DrawBotDrawingTool(object):
         """
         Returns a list of all installed fonts.
         """
-        return [str(f) for f in NSFontManager.sharedFontManager().availableFonts()]
+        return [str(f) for f in AppKit.NSFontManager.sharedFontManager().availableFonts()]
 
     def installedfonts(self):
         _deprecatedWarning("installedFonts()")

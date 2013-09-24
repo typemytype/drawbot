@@ -23,7 +23,7 @@ oval(10, 120, 100, 100)
 oval(120, 120, 100, 100)
 
 # draw polygon
-polygon(10, 250, 100, 250, 100, 400, 50, 300, close=False)
+polygon((10, 250), (100, 250), (100, 400), (50, 300), close=False)
 
 # create path 
 newPath()
@@ -92,18 +92,18 @@ strokeWidth(8)
 lineCap("square")
 lineJoin("miter")
 miterLimit(5)
-polygon(10, 10, 10, 400, 50, 350, close=False)
+polygon((10, 10), (10, 400), (50, 350), close=False)
 
 lineCap("round")
 lineJoin("round")
-polygon(110, 10, 110, 400, 150, 350, close=False)
+polygon((110, 10), (110, 400), (150, 350), close=False)
 
 lineCap("butt")
 lineJoin("bevel")
-polygon(210, 10, 210, 400, 250, 350, close=False)
+polygon((210, 10), (210, 400), (250, 350), close=False)
 
 lineDash(10, 10, 2, 5)
-polygon(310, 10, 310, 400, 350, 350, close=False)
+polygon((310, 10), (310, 400), (350, 350), close=False)
 
 newPage()
 print "PAGECOUNT:", PAGECOUNT
@@ -198,7 +198,7 @@ fill(1, 0, 0, .3)
 rect(10, 10, 100, 100)
 
 fontSize(30)
-text("Hello World", 50, 80)
+text("Hello World", (50, 80))
 
 restore()
 

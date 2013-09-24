@@ -2,13 +2,17 @@ from AppKit import *
 from CoreText import *
 from Quartz import *
 
+import AppKit
+import CoreText
+import Quartz
+
 from drawBot.misc import DrawBotError, cmyk2rgb, warnings
 
 class BezierPath(object):
 
     def __init__(self, path=None):
         if path is None:
-            self._path = NSBezierPath.bezierPath()
+            self._path = AppKit.NSBezierPath.bezierPath()
         else:
             self._path = path
 
@@ -73,11 +77,11 @@ class Color(object):
         if r is None:
             return
         if g == None and b == None:
-            self._color = NSColor.colorWithCalibratedRed_green_blue_alpha_(r, r, r, a)
+            self._color = AppKit.NSColor.colorWithCalibratedRed_green_blue_alpha_(r, r, r, a)
         elif b == None:
-            self._color = NSColor.colorWithCalibratedRed_green_blue_alpha_(r, r, r, g)
+            self._color = AppKit.NSColor.colorWithCalibratedRed_green_blue_alpha_(r, r, r, g)
         else:
-            self._color = NSColor.colorWithCalibratedRed_green_blue_alpha_(r, g, b, a)
+            self._color = AppKit.NSColor.colorWithCalibratedRed_green_blue_alpha_(r, g, b, a)
     
     def set(self):
         self._color.set()
@@ -96,7 +100,7 @@ class Color(object):
 class CMYKColor(Color):
 
     def __init__(self, c, m, y, k, a=1):
-        self._color = NSColor.colorWithDeviceCyan_magenta_yellow_black_alpha_(c, m, y, k, a)
+        self._color = AppKit.NSColor.colorWithDeviceCyan_magenta_yellow_black_alpha_(c, m, y, k, a)
 
 class Shadow(object):
 
@@ -167,11 +171,11 @@ class Text(object):
         self._lineHeight = None
     
     def _get_font(self):
-        _font = NSFont.fontWithName_size_(self._fontName, self.fontSize)
+        _font = AppKit.NSFont.fontWithName_size_(self._fontName, self.fontSize)
         if _font == None:
             warnings.warn("font: %s is not installed, back to the falllback font: %s" % (self._fontName, self._backupFont))
             self._fontName = self._backupFont
-            _font = NSFont.fontWithName_size_(self._backupFont, self.fontSize)
+            _font = AppKit.NSFont.fontWithName_size_(self._backupFont, self.fontSize)
         return _font
             
     font = property(_get_font)
@@ -269,21 +273,21 @@ class BaseContext(object):
     fileExtensions = []
 
     _lineJoinStylesMap = dict(   
-        miter=kCGLineJoinMiter,
-        round=kCGLineJoinRound,
-        bevel=kCGLineJoinBevel
+        miter=Quartz.kCGLineJoinMiter,
+        round=Quartz.kCGLineJoinRound,
+        bevel=Quartz.kCGLineJoinBevel
         )
 
     _lineCapStylesMap = dict(
-        butt=kCGLineCapButt,
-        square=kCGLineCapSquare,
-        round=kCGLineCapRound,
+        butt=Quartz.kCGLineCapButt,
+        square=Quartz.kCGLineCapSquare,
+        round=Quartz.kCGLineCapRound,
         )
 
     _textAlignMap = dict(
-        center=NSCenterTextAlignment,
-        left=NSLeftTextAlignment,
-        right=NSRightTextAlignment,
+        center=AppKit.NSCenterTextAlignment,
+        left=AppKit.NSLeftTextAlignment,
+        right=AppKit.NSRightTextAlignment,
         )
 
     def __init__(self):
@@ -524,7 +528,7 @@ class BaseContext(object):
         self._state.text.lineHeight = value
 
     def attributedString(self, txt, align=None):
-        attributes = {NSFontAttributeName : self._state.text.font}
+        attributes = {AppKit.NSFontAttributeName : self._state.text.font}
         if self._state.fillColor is not None:
             extra = {
                 #NSForegroundColorAttributeName : self._state.fillColor.getNSObject(),
@@ -535,30 +539,30 @@ class BaseContext(object):
             if self._state.fillColor is not None:
                 strokeWidth *= -1
             extra = {
-                    NSStrokeWidthAttributeName : strokeWidth,
+                    AppKit.NSStrokeWidthAttributeName : strokeWidth,
                     #NSStrokeColorAttributeName : self._state.strokeColor.getNSObject(),
                     }
         
             attributes.update(extra)
-        para = NSMutableParagraphStyle.alloc().init()
+        para = AppKit.NSMutableParagraphStyle.alloc().init()
         if align:
             para.setAlignment_(self._textAlignMap[align])
         if self._state.text.lineHeight:
             para.setLineSpacing_(self._state.text.lineHeight)
             para.setMaximumLineHeight_(self._state.text.lineHeight)
             para.setMinimumLineHeight_(self._state.text.lineHeight)
-        attributes[NSParagraphStyleAttributeName] = para
+        attributes[AppKit.NSParagraphStyleAttributeName] = para
     
-        text = NSAttributedString.alloc().initWithString_attributes_(txt, attributes)
+        text = AppKit.NSAttributedString.alloc().initWithString_attributes_(txt, attributes)
         return text
 
     def clippedText(self, txt, (x, y, w, h), align):
         attrString = self.attributedString(txt, align=align)
-        setter = CTFramesetterCreateWithAttributedString(attrString)
-        path = CGPathCreateMutable()
-        CGPathAddRect(path, None, CGRectMake(x, y, w, h))
-        box = CTFramesetterCreateFrame(setter, (0, 0), path, None)
-        visibleRange = CTFrameGetVisibleStringRange(box)
+        setter = CoreText.CTFramesetterCreateWithAttributedString(attrString)
+        path = CoreText.CGPathCreateMutable()
+        CoreText.CGPathAddRect(path, None, CGRectMake(x, y, w, h))
+        box = CoreText.CTFramesetterCreateFrame(setter, (0, 0), path, None)
+        visibleRange = CoreText.CTFrameGetVisibleStringRange(box)
         return txt[visibleRange.length:]
 
     def textSize(self, txt, align):
