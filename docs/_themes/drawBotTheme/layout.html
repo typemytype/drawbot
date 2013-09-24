@@ -1,0 +1,130 @@
+
+{%- extends "basic/layout.html" %}
+
+{%- macro navBar() %}
+    <div class="navbar">
+      <ul>
+        <li>
+          <a class="brand" href="{{ pathto(master_doc) }}">{{ project|e }}</a>
+          <span class="navbar-text">{{ version|e }}</span>
+        </li>
+        <li><a href="{{ pathto('content/quickReference.html', 1) }}">Quick Reference</a></li>
+        <li><a href="{{ pathto('content/download.html', 1) }}">Download</a></li>
+        <li><a href="{{ pathto('genindex.html', 1) }}">index</a></li>
+      </ul>
+      {%- include "searchbox.html" %}
+    </div>
+{%- endmacro %}
+
+{%- block extrahead %}
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <script type="text/javascript" src="{{ pathto('_static/drawBotURLhandler.js', 1) }}"></script>
+{% endblock %}
+
+{%- block header %}
+<div class="container">
+  <div class="header">
+    <div class="sixteen columns">
+      {%- if pagename == "index" %}
+        <img src="{{ pathto('_static/drawBotIcon.svg', 1) }}" class="logo" alt="One of the colorful icons of the Drawbot app, used as a header image">
+      {%- endif %}
+      <div class="header-text">
+        <h1><a href="{{ pathto(master_doc) }}">DrawBot</a></h1>
+      </div>
+    </div>
+    <div class="three columns">&nbsp;</div>
+    <div class="eleven columns">
+      {{ navBar() }}
+    </div>
+  </div>
+  <div class="clearer"></div>
+{% endblock %}
+
+{%- block relbar1 %}
+  
+{% endblock %}
+
+{%- block sidebar1 %}
+  <div class="three columns">
+    {{ sidebar() }}
+  </div>
+{% endblock %}
+
+{%- block sidebar2 %}{% endblock %}
+
+{%- block sidebarsearch %}{%- endblock %}
+
+{% block sidebartoc %}
+    {{ toctree(includehidden=True) }}
+{% endblock %}
+
+{%- block sidebarsourcelink %}
+  <div class="canhide">
+    <h3>Indices</h3>
+    <ul>
+      <li><a href="{{ pathto('genindex.html', 1) }}">index</a></li>
+      <li><a href="{{ pathto('search.html', 1) }}">search</a></li>
+    </ul>
+    <h3>More</h3>
+    <ul>
+      <li><a href="http://docs.python.org/2/">Python</a></li>
+      <li><a href="http://www.code.org">Code.org</a></li>
+      <li><a href="https://github.com/typemytype/drawbot">DrawBot Source</a></li>
+    </ul>
+  </div>
+{%- endblock %}
+
+{% block document %}
+  <div class="eleven columns">
+    <div class="documentwrapper">
+        {%- if render_sidebar %}
+          <div class="bodywrapper">
+        {%- endif %}
+            <div class="body" id="content">
+              {% block body %} {% endblock %}
+              {%- if pagename == "index" %}
+                <h2>Tweets</h2>
+                <a class="twitter-timeline" width="640" height="300" data-chrome="noheader nofooter noborders transparent" href="https://twitter.com/drawbotapp" data-widget-id="379328957260124160">Tweets by @drawbotapp</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+              {%- endif %}
+            </div>
+        {%- if render_sidebar %}
+          </div>
+        {%- endif %}
+    </div>
+  </div>
+{% endblock %}
+
+{%- block relbar2 %}{% endblock %}
+
+{%- block footer %}
+  </div>
+  {%- if pagename == "genindex" %}
+  <script>
+    content = $("#content");
+    html = content.html();
+    html = html.replace(/\(\) \(in module drawBot\)/g,'');
+    html = html.replace(/\(\) \(built-in function\)/g,'');
+    content.html(html);
+  </script>
+  {%- endif %}
+  <div class="sixteen columns">
+      <div class="footer">
+      <div class="description">Drawing With <a href="http://www.python.org">Python</a></div>
+      <div>
+        &copy; Copyright <script>document.write(new Date().getFullYear())</script>
+        <a href="http://letterror.com">Just van Rossum</a>, <a href="http://letterror.com">Erik van Blokland</a>, <a href="http://typemytype.com">Frederik Berlaen</a>
+      </div>
+      {%- if last_updated %}
+        <div>
+          {% trans last_updated=last_updated|e %}Last updated on {{ last_updated }}.{% endtrans %}
+        </div>
+      {%- endif %}
+      {%- if show_sphinx %}
+        <div>
+          {% trans sphinx_version=sphinx_version|e %}Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> {{ sphinx_version }}.{% endtrans %}
+        </div>
+      {%- endif %}
+      </div>
+    </div>
+{%- endblock %}

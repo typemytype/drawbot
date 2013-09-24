@@ -1,0 +1,345 @@
+
+@import url("http://static.typemytype.com/drawBot/drawbotFonts.css");
+@import url("skeleton/base.css");
+@import url("skeleton/layout.css");
+@import url("skeleton/skeleton.css");
+
+html {
+	background-color: {{ theme_headercolor2 }};
+}
+
+body {
+	font-family: {{ theme_bodyfont }};
+	color: {{ theme_textcolor }};
+	background-color: {{ theme_bgcolor }};
+	margin: 10px;
+}
+
+a, a:visited, a.drawbotlink, a.drawbotlink:visited {
+	color: {{ theme_linkcolor }};
+	text-decoration: none;
+}
+
+a:hover, a.drawbotlink:hover {
+	color: {{ theme_textcolor }};
+}
+
+h6.download {
+	margin: 0 0 20px 0;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	font-family: {{ theme_headerfont }};
+	font-weight: bold;
+	color: {{ theme_headercolor2 }};
+}
+
+h1 {
+	color: {{ theme_headercolor1 }};
+}
+
+h1 a, h1 a, h2 a, h3 a, h4 a {
+	color: {{ theme_headerlinkcolor }};
+}
+
+a.headerlink, a.headerlink:visited  {
+	visibility: hidden;
+}
+
+h1:hover > a.headerlink,
+h2:hover > a.headerlink,
+h3:hover > a.headerlink,
+h4:hover > a.headerlink,
+h5:hover > a.headerlink,
+h6:hover > a.headerlink,
+dt:hover > a.headerlink {
+    visibility: visible;
+    color: {{ theme_linkcolor }};
+}
+
+div.clearer {
+	clear: both;
+}
+
+div.highlight {
+	border: lightgray 1px solid;
+	border-radius: 3px;
+	padding: 10px;
+	margin: 0 0 20px 0;
+	background-color: #FAF9F7;
+}
+
+cite {
+	background-color: #DEF9FA;
+	padding: 3px;
+}
+
+#content ul, #content ol {
+	list-style: disc;
+	margin-left: 1.1em;
+}
+
+ul ul, ul ol, ol ol, ol ul {
+	margin: 4px 0 5px 15px;
+	font-size: 100%;
+}
+
+/* auto doc classes */
+
+.function dt {
+	font-size: 1.5em;
+	margin-bottom: 10px;
+	font-family: {{ theme_headerfont }};
+	font-weight: bold;
+	color: lightgray;
+}
+
+.function dt .descname {
+	color: #F7B805;
+}
+
+em {
+	font-family: {{ theme_headerfont }};
+	font-weight: bold;
+	font-style: normal;
+}
+
+strong {
+	font-family: {{ theme_headerfont }};
+	font-weight: bold;
+	font-style: normal;
+}
+
+pre {
+	white-space: pre-wrap;       /* css-3 */
+	white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+	white-space: -pre-wrap;      /* Opera 4-6 */
+	white-space: -o-pre-wrap;    /* Opera 7 */
+	word-wrap: break-word;       /* Internet Explorer 5.5+ */
+}
+
+/* header */
+
+div.header {
+	position: relative;
+}
+
+div.header-text {
+	-webkit-transform: rotate(-4deg);
+	-moz-transform: rotate(-4deg);
+	-ms-transform: rotate(-4deg);
+	-o-transform: rotate(-4deg);
+}
+
+div.header h1 {
+	font-size: 16em;
+	margin: 0px 0px 55px -15px;
+	line-height: 1em;
+}
+
+div.header a {
+	color: {{ theme_textcolor }};
+}
+
+div.header a:hover {
+	font-weight: normal;
+}
+
+/* logo */
+
+.logo {
+	margin-left: 150px;
+	margin-right: auto;
+	margin-bottom: -40px;
+	width: 50%;
+	display: block;
+}
+
+
+/* navbar */
+
+div.navbar {
+	background-color: {{ theme_headercolor2 }};
+	padding: 10px;
+	margin-bottom: 20px;
+}
+
+div.navbar ul {
+	margin-bottom: 5px;
+}
+
+div.navbar li {
+	display: inline-block;
+	font-family: {{ theme_headerfont }};
+	font-weight: bold;
+	font-size: 1.2em;
+	line-height: 1em;
+	color: white;
+	margin: 0;
+	margin-right: 10px;
+}
+
+div.navbar li a {
+	color: white;
+}
+
+div.navbar li a:hover {
+	font-weight: normal;
+}
+
+form {
+	display: block;
+}
+
+.highlighted {
+	border: 1px solid {{ theme_linkcolor }};
+	border-radius: 3px;
+	padding: 3px;
+	margin: -4px;
+}
+
+p.highlight-link {
+	margin: 10px 0px 0px 0px;
+}
+
+p.highlight-link a {
+	font-family: {{ theme_headerfont }};
+	font-weight: bold;
+	color: white;
+}
+
+p.highlight-link a:hover {
+	font-weight: normal;
+}
+
+.container input {
+	display: inline-block;
+	font-family: {{ theme_headerfont }};
+	font-weight: bold;
+	line-height: 1em;
+	color: white;
+	text-shadow: none;
+	background: none;
+	background-color: {{ theme_headercolor2 }};
+	border: white 1px solid;
+	border-radius: 3px;
+}
+
+.container input[type="text"] {
+	width: 160px;
+}
+
+.container input[type="text"]:active, .container input[type="text"]:focus {
+	border: white 1px solid;
+	color: white;
+	box-shadow:  none;
+}
+
+.container input[type="submit"] {
+	padding: 9px 10px 8px 10px;
+}
+
+.container input[type="submit"]:hover, .container input[type="submit"]:active {
+	color: {{ theme_headercolor2 }};
+	background: none;
+	background-color: white;
+	border: white 1px solid;
+}
+
+.container input, .container form {
+	margin: 0;
+}
+
+.container .body form {
+	font-size: 1.2em;
+	line-height: 1em;
+	margin-bottom: 20px;
+}
+
+.container .body input[type="submit"]:hover, .container .body input[type="submit"]:active {
+	color: {{ theme_headercolor2 }};
+	background: none;
+	background-color: white;
+	border: {{ theme_headercolor2 }} 1px solid;
+}
+
+.body {
+	min-height: 300px;
+}
+
+/* footer */
+
+div.footer {
+	font-family: {{ theme_headerfont }};
+	font-weight: bold;
+	background-color: {{ theme_headercolor2 }};
+	color: white;
+	font-size: .8em;
+	line-height: 1.2em;
+	text-align: center;
+	margin: 0px -10px -10px -10px;
+	padding: 10px;
+}
+
+div.footer div.description {
+	font-size: 2.3em;
+	line-height: 1.1em;
+	margin: 10px 0px 20px 0px;
+	-webkit-transform: rotate(-2deg);
+	-moz-transform: rotate(-2deg);
+	-ms-transform: rotate(-2deg);
+	-o-transform: rotate(-2deg);
+}
+
+div.footer a {
+	color: white;
+}
+
+div.footer a:hover {
+	font-weight: normal;
+}
+
+@media only screen and (min-width: 768px) and (max-width: 959px) {
+	.logo {
+		margin-left: 100px;
+	}
+
+	div.header h1 {
+		font-size: 12em;
+		margin: 0px 0px 35px -10px;
+	}
+}
+
+@media only screen and (max-width: 767px) {
+	div.header h1 {
+		font-size: 6em;
+		margin: 0px 0px -10px -4px;
+	}
+	.logo {
+		margin-left: 50px;
+		margin-bottom: 0;
+	}
+	div.navbar li {
+		display: block;
+	}
+
+	.canhide {
+		display: none;
+	}
+}
+
+@media only screen and (max-width: 479px) {
+	
+	h1 { font-size: 33px; line-height: 1.1em; }
+	h2 { font-size: 29px; line-height: 1.1em; }
+	h3 { font-size: 25px; line-height: 1.1em; }
+	h4 { font-size: 21px; line-height: 1.1em; }
+	h5 { font-size: 17px; line-height: 1.1em; }
+	h6 { font-size: 14px; line-height: 1.1em; }
+
+
+	div.header h1 {
+		font-size: 4.5em;
+		margin: 4px 0px -10px 7px;
+	}
+}
