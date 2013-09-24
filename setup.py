@@ -5,6 +5,7 @@ import os
 import sys
 import subprocess
 import shutil
+import tempfile
 from plistlib import readPlist, writePlist
 
 import vanilla
@@ -88,15 +89,41 @@ writePlist(appPlist, path)
 if "-A" not in sys.argv and codeSignDeveloperName:
     # get relevant paths
     distLocation = os.path.join(os.getcwd(), "dist")
-    appLocation = os.path.join(distLocation, "%s.app" %appName)
+    appLocation = os.path.join(distLocation, "%s.app" % appName)
+    imgLocation = os.path.join(distLocation,  "img")
+    existingDmgLocation = os.path.join(distLocation,  "%s.dmg" % appName)
+    dmgLocation = os.path.join(distLocation,  appName)
 
     # ================
     # = code singing =
     # ================
     print "---------------------"
-    print "-   code singing    -"
+    print "-   code signing    -"
     cmds = ["codesign", "-f", "-s", "Developer ID Application: %s" % codeSignDeveloperName, appLocation]
     popen = subprocess.Popen(cmds)
     popen.wait()
     print "- done code singing -"
     print "---------------------"
+
+
+    # ================
+    # = creating dmg =
+    # ================
+
+    if os.path.exists(existingDmgLocation):
+        os.remove(existingDmgLocation)
+    
+    os.mkdir(imgLocation)
+    os.rename(os.path.join(distLocation, "%s.app" %appName), os.path.join(imgLocation, "%s.app" %appName))
+    tempDmgName = "%s.tmp.dmg" %appName
+
+    os.system("hdiutil create -srcfolder \"%s\" -volname %s -format UDZO \"%s\"" %(imgLocation, appName, os.path.join(distLocation, tempDmgName)))
+
+    os.system("hdiutil convert -format UDZO -imagekey zlib-level=9 -o \"%s\" \"%s\"" %(dmgLocation, os.path.join(distLocation, tempDmgName)))
+
+    os.remove(os.path.join(distLocation, tempDmgName))
+
+    os.rename(os.path.join(imgLocation, "%s.app" %appName), os.path.join(distLocation, "%s.app" %appName))
+
+    shutil.rmtree(imgLocation)
+
