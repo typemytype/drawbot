@@ -1,10 +1,5 @@
-## read the docs hack
-try:
-    from Quartz import *
-    from QTKit import *
-except:
-    pass
-
+from Quartz import *
+from QTKit import *
 import os
 
 from drawBot.misc import DrawBotError

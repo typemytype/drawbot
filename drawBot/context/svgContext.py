@@ -1,9 +1,5 @@
-## read the docs hack
-try:
-    from AppKit import *
-    from CoreText import *
-except:
-    pass
+from AppKit import *
+from CoreText import *
 
 import uuid
 

@@ -1,9 +1,5 @@
-## read the docs hack
-try:
-    from AppKit import *
-except:
-    pass
-    
+from AppKit import *
+
 import sys
 
 # errors

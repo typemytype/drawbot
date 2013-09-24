@@ -1,10 +1,6 @@
-## read the docs hack
-try:
-    from AppKit import *
-    from CoreText import *
-    from Quartz import *
-except:
-    pass
+from AppKit import *
+from CoreText import *
+from Quartz import *
 
 from baseContext import BaseContext
 
