@@ -297,8 +297,8 @@ def visit_download_reference(self, node):
             urlPath=posixpath.join(self.builder.dlpath, node['filename']),
             fileName=node['filename']
             )
-        self.body.append('<h5><a class="reference internal drawbotlink" href="%(urlPath)s">Open in DrawBot: %(fileName)s</a></h5>' % data)
-        self.body.append('<h6 class="download"><a class="reference internal" href="%(urlPath)s">Download: %(fileName)s</a></h6>' % data)
+        self.body.append('<div class="downloadlink"><a class="reference internal drawbotlink" href="%(urlPath)s">Open in DrawBot: %(fileName)s</a>' % data)
+        self.body.append('<a class="reference internal" href="%(urlPath)s">Download: %(fileName)s</a></div>' % data)
             
         node.clear()
 
