@@ -273,7 +273,7 @@ class Mock(object):
         else:
             return Mock()
 
-MOCK_MODULES = ['AppKit', 'Quartz', 'CoreText', 'QTKit']
+MOCK_MODULES = ['AppKit', 'Quartz', 'CoreText', 'QTKit', 'xmlWriter']
 for mod_name in MOCK_MODULES:
     sys.modules[mod_name] = Mock()
 
