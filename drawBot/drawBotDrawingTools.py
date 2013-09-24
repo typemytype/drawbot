@@ -637,7 +637,7 @@ class DrawBotDrawingTool(object):
         if y is None:
             x, y = x
         else:
-            _deprecatedWarning("text('%s', (%s, %s))" % (txt, x, y))
+            warnings.warn("postion must a tuple: text('%s', (%s, %s))" % (txt, x, y))
         w, h = self.textSize(txt, None)
         self.textBox(txt, (x, y, w+1, h))
 
