@@ -1,5 +1,10 @@
-from AppKit import *
-from Quartz import PDFDocument
+## read the docs hack
+try:
+    from AppKit import *
+    from Quartz import PDFDocument
+except:
+    pass
+
 import os
 
 from pdfContext import PDFContext

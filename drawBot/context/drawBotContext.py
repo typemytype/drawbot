@@ -1,4 +1,8 @@
-from Quartz import *
+## read the docs hack
+try:
+    from Quartz import *
+except:
+    pass
 
 from pdfContext import PDFContext
 
