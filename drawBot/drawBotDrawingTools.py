@@ -1,4 +1,9 @@
-from AppKit import *
+## read the docs hack
+try:
+    from AppKit import *
+except:
+    pass
+
 import math
 import os
 

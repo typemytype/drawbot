@@ -1,7 +1,11 @@
-from AppKit import *
-from CoreText import *
-from Quartz import *
-
+## read the docs hack
+try:
+    from AppKit import *
+    from CoreText import *
+    from Quartz import *
+except:
+    pass
+    
 from drawBot.misc import DrawBotError, cmyk2rgb, warnings
 
 class BezierPath(object):
