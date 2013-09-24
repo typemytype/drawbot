@@ -1,7 +1,3 @@
-from AppKit import *
-from CoreText import *
-from Quartz import *
-
 import AppKit
 import CoreText
 import Quartz
@@ -560,7 +556,7 @@ class BaseContext(object):
         attrString = self.attributedString(txt, align=align)
         setter = CoreText.CTFramesetterCreateWithAttributedString(attrString)
         path = CoreText.CGPathCreateMutable()
-        CoreText.CGPathAddRect(path, None, CGRectMake(x, y, w, h))
+        CoreText.CGPathAddRect(path, None, CoreText.CGRectMake(x, y, w, h))
         box = CoreText.CTFramesetterCreateFrame(setter, (0, 0), path, None)
         visibleRange = CoreText.CTFrameGetVisibleStringRange(box)
         return txt[visibleRange.length:]

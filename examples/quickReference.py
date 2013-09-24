@@ -209,6 +209,7 @@ saveImage([
     u"~/Desktop/drawBotTest.pdf",
     u"~/Desktop/drawBotTest.png",
     u"~/Desktop/drawBotTest.svg",
+    u"~/Desktop/drawBotTest.mov",
     ])
     
 print "Done"

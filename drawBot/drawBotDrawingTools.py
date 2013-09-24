@@ -241,7 +241,7 @@ class DrawBotDrawingTool(object):
         """
         Draw the current path, or draw the provided path.         
         """
-        if isinstance(path, NSBezierPath):
+        if isinstance(path, AppKit.NSBezierPath):
             path = self._bezierPathClass(path)
         self._addInstruction("drawPath", path)
 
