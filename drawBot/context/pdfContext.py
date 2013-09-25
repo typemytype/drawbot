@@ -15,24 +15,23 @@ class PDFContext(BaseContext):
     def _newPage(self, width, height):
         self.size(width, height)
         mediaBox = Quartz.CGRectMake(0, 0, self.width, self.height)
-        pageInfo = { Quartz.kCGPDFContextMediaBox : mediaBox}
 
         if self._hasContext:
             # reset the context
             self.reset()
             # add a new page
-            Quartz.CGPDFContextEndPage(self._pdfContext)
-            Quartz.CGPDFContextBeginPage(self._pdfContext, pageInfo)
+            Quartz.CGContextEndPage(self._pdfContext)
+            Quartz.CGContextBeginPage(self._pdfContext, mediaBox)
         else:
             # create a new pdf document
             self._pdfData = Quartz.CFDataCreateMutable(None, 0)
             dataConsumer = Quartz.CGDataConsumerCreateWithCFData(self._pdfData)
             self._pdfContext = Quartz.CGPDFContextCreate(dataConsumer, mediaBox, None)
-            Quartz.CGPDFContextBeginPage(self._pdfContext, pageInfo)
+            Quartz.CGContextBeginPage(self._pdfContext, mediaBox)
             self._hasContext = True
 
     def _closeContext(self):
-        Quartz.CGPDFContextEndPage(self._pdfContext)
+        Quartz.CGContextEndPage(self._pdfContext)
         Quartz.CGPDFContextClose(self._pdfContext)
         self._hasContext = False
 
