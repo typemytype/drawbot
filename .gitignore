@@ -38,4 +38,5 @@ nosetests.xml
 *.sublime-project
 
 docs/_build
+local
 
