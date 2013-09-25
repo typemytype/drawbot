@@ -113,6 +113,8 @@ class DrawBotDrawingTool(object):
 
         .. showcode:: /../examples/newPage.py
         """
+        self._width = width
+        self._height = height
         self._addInstruction("newPage", width, height)
 
     def newpage(self, width=None, height=None):
