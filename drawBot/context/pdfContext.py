@@ -73,7 +73,7 @@ class PDFContext(BaseContext):
             elif self._state.fillColor is not None:
                 self._pdfPath(self._state.path)
                 self._pdfFillColor()
-                Quartz.CGContextEOFillPath(self._pdfContext)
+                Quartz.CGContextFillPath(self._pdfContext)
             if self._state.strokeColor is not None:
                 self._pdfPath(self._state.path)
                 self._pdfStrokeColor()
