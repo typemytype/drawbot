@@ -122,6 +122,21 @@ class DrawBotAppDelegate(NSObject):
             f.close()
             document, error = documentController.openUntitledDocumentAndDisplay_error_(True, None)
             document.windowController.setCode(code)
+
+        def result(shouldOpen):
+            if not shouldOpen:
+                document.close()
+
+        fileName = os.path.basename(data.path)
+        domain = data.netloc
+        if not domain:
+            domain = "Local"
+        document.windowController.showAskYesNo("Download External Script", 
+            "You opened '%s' from '%s'.\n\n"
+            "Read the code before running it so you know what it will do. If you don't understand it, don't run it.\n\n"
+            "Do you want to open this Script?" % (fileName, data.netloc) ,
+            result
+            )
             
 if __name__ == "__main__":
 	AppHelper.runEventLoop()
