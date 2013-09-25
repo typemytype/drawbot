@@ -35,6 +35,7 @@ plist = dict(
 		CFBundleTypeExtensions = ["py"],
 		CFBundleTypeName = "Python Source File",
 		CFBundleTypeRole = "Editor",
+        CFBundleTypeIconFile = "pythonIcon.icns",
 		NSDocumentClass = "DrawBotDocument",
 	    ),
 		
