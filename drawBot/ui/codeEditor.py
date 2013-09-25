@@ -476,6 +476,7 @@ class CodeNSTextView(NSTextView):
         self._canDrag = False
         if NSEvent.modifierFlags() & NSCommandKeyMask and self.selectedRange():
             self._canDrag = True
+            self.undoManager().beginUndoGrouping()
             selRng = self.selectedRange()
             txt = self.string().substringWithRange_(selRng)
             if txt == "True":
@@ -504,6 +505,11 @@ class CodeNSTextView(NSTextView):
             except:
                 pass
         super(CodeNSTextView, self).mouseDragged_(event)    
+
+    def mouseUp_(self, event):
+        if self._canDrag:
+            self.undoManager().endUndoGrouping()
+        super(CodeNSTextView, self).mouseUp_(event)
 
     def insertTab_(self, sender):
         if self.usesTabs():
