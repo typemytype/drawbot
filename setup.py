@@ -42,8 +42,8 @@ plist = dict(
 		],
 	CFBundleIdentifier = "com.drawbot",
 	LSMinimumSystemVersion = "10.6.0",
-	CFBundleShortVersionString = version,
-	CFBundleVersion = version,
+	CFBundleShortVersionString = __version__,
+	CFBundleVersion = __version__,
 	CFBundleIconFile = "DrawBot.icns",
 	NSHumanReadableCopyright = "Copyright by Just van Rossum and Frederik Berlaen.",
     CFBundleURLTypes = [

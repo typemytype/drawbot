@@ -8,6 +8,7 @@ from context.baseContext import BezierPath
 from context.dummyContext import DummyContext
 
 from misc import DrawBotError, warnings
+import drawBotSettings
 
 import math, random
 
@@ -24,6 +25,8 @@ def _deprecatedWarning(txt):
 
 class DrawBotDrawingTool(object):
 
+    __version__ = drawBotSettings.__version__
+    
     def __init__(self):
         self._reset()
 
