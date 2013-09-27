@@ -91,6 +91,11 @@ cite {
 	margin-left: 1.1em;
 }
 
+#content .toctree-wrapper ul {
+	list-style: none;
+	margin-left: 0;
+}
+
 ul ul, ul ol, ol ol, ol ul {
 	margin: 4px 0 5px 15px;
 	font-size: 100%;
