@@ -24,8 +24,6 @@ def _deprecatedWarning(txt):
     warnings.warn("lowercase API is deprecated use: '%s'" % txt)
 
 class DrawBotDrawingTool(object):
-
-    __version__ = drawBotSettings.__version__
     
     def __init__(self):
         self._reset()
@@ -35,6 +33,11 @@ class DrawBotDrawingTool(object):
     
     __all__ = property(_get__all__)
 
+    def _get_version(self):
+        return drawBotSettings.__version__
+
+    __version__ = property(_get_version)
+    
     def _addToNamespace(self, namespace):
         namespace.update(_getmodulecontents(self))
         namespace.update(_getmodulecontents(random, ["random", "randint", "choice"]))
@@ -85,7 +88,7 @@ class DrawBotDrawingTool(object):
 
     PAGECOUNT = property(_get_pageCount)
 
-    _magicVariables = ["WIDTH", "HEIGHT", "PAGECOUNT"]
+    _magicVariables = ["WIDTH", "HEIGHT", "PAGECOUNT", "__version__"]
 
     ## public callbacks
 

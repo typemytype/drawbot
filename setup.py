@@ -14,7 +14,7 @@ import robofab
 import fontTools
 import pygments
 
-from drawBotSettings import *
+from drawBotSettings import __version__, appName
 
 codeSignDeveloperName = None
 if "--codesign" in sys.argv:
