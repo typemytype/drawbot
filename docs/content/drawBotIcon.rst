@@ -1,5 +1,5 @@
-The DrawBot Icon
-================
+DrawBot Icon
+============
 
 The making off (by Andy Clymer)
 
