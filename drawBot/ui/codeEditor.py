@@ -440,17 +440,30 @@ class CodeNSTextView(NSTextView):
     def keyDown_(self, event):
         char = event.characters()
         selectedRange = self.selectedRange()
-        if NSEvent.modifierFlags() & NSCommandKeyMask and selectedRange and char in (NSUpArrowFunctionKey, NSDownArrowFunctionKey):
+        if NSEvent.modifierFlags() & NSCommandKeyMask and selectedRange and char in (NSUpArrowFunctionKey, NSDownArrowFunctionKey, NSLeftArrowFunctionKey, NSRightArrowFunctionKey):
             value = self._getSelectedValueForRange(selectedRange)
             if value is not None:
                 if char ==  NSUpArrowFunctionKey:
                     add = 1
                 elif char == NSDownArrowFunctionKey:
                     add = -1
+                if char == NSLeftArrowFunctionKey:
+                    add = -1
+                elif char == NSRightArrowFunctionKey:
+                    add = 1
 
                 if NSEvent.modifierFlags() & NSShiftKeyMask:
                     add *= 10
-                value += add
+
+                if isinstance(value, tuple):
+                    valueX, valueY = value
+                    if char in [NSUpArrowFunctionKey, NSDownArrowFunctionKey]:
+                        valueY += add
+                    else:
+                        valueX += add
+                    value =  "%s, %s" % (valueX, valueY)
+                else:
+                    value += add
                 self._insertTextAndRun("%s" % value, selectedRange)
                 return
 
