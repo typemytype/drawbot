@@ -17,7 +17,7 @@ DrawBot has proven itself as part of the curriculum at selected courses at the R
 Python
 ------
 
-DrawBot is written in Python_. The binary download is fully self-sufficient (ie. it doesn't need a Python install around), but the `source code`_ is available if you want to roll your own.
+DrawBot is written in Python_. The binary download is fully self-contained (ie. it doesn't need a Python install around), but the `source code`_ is available if you want to roll your own.
 
 
 .. toctree::
