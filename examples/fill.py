@@ -1,4 +1,3 @@
-
 fill(1, 0, 0, .5)
 # draw a rect
 rect(0, 10, 10, 100)

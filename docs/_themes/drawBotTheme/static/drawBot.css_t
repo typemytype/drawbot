@@ -96,6 +96,14 @@ ul ul, ul ol, ol ol, ol ul {
 	font-size: 100%;
 }
 
+.sphinxsidebarwrapper ul li.toctree-l1:last-child {
+	margin-bottom:30px;
+}
+
+.sphinxsidebarwrapper ul a.current {
+	font-weight: bold;
+}
+
 /* auto doc classes */
 
 .function dt {
@@ -222,6 +230,10 @@ p.highlight-link a {
 
 p.highlight-link a:hover {
 	font-weight: normal;
+}
+.container .body img {
+	max-width: 100%;
+	cursor: hand;
 }
 
 .container input {

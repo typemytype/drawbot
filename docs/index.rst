@@ -30,11 +30,23 @@ DrawBot is written in Python_. The binary download is fully self-contained (ie. 
 	content/text
 	content/images
 	content/quickReference
+
+.. toctree::
+	:titlesonly:
+	:hidden:
+
+	content/drawBotApp
 	content/download
+	content/drawBotIcon
+
+.. toctree::
+	:titlesonly:
+	:hidden:
+
 	content/courseware
 	content/history
 	content/credits
-	content/drawBotIcon
+
 
 .. _Python: http://www.python.org/
 .. _source code: https://github.com/typemytype/drawbot/
