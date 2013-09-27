@@ -21,10 +21,6 @@ sys.path.insert(0, os.path.abspath('../'))
 
 import drawBotSettings
 
-## read the docs settings
-
-PRODUCTION_DOMAIN = "drawbot.com"
-
 # -- General configuration -----------------------------------------------------
 
 # If your documentation needs a minimal Sphinx version, state it here.
