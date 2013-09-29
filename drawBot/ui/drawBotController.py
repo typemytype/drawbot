@@ -91,8 +91,12 @@ class DrawBotController(BaseWindowController):
         self.output = []
         self.stdout = StdOutput(self.output)
         self.stderr = StdOutput(self.output, True)
+        # warnings should show the warnings
+        warnings.shouldShowWarnings = True
         # run the code
         ScriptRunner(code, path, namespace=namespace, stdout=self.stdout, stderr=self.stderr)
+        # warnings should stop posting them
+        warnings.shouldShowWarnings = False
         # set context, only when the panes are visible
         if self.w.split.isPaneVisible("drawView") or self.w.split.isPaneVisible("thumbnails"):
             def createContext(context):

@@ -29,7 +29,7 @@ class DrawBotDrawingTool(object):
         self._reset()
 
     def _get__all__(self):
-        return [i for i in dir(self) if not i.startswith("_")]
+        return [i for i in dir(self) if not i.startswith("_")] + ["__version__"]
     
     __all__ = property(_get__all__)
 
@@ -39,7 +39,7 @@ class DrawBotDrawingTool(object):
     __version__ = property(_get_version)
     
     def _addToNamespace(self, namespace):
-        namespace.update(_getmodulecontents(self))
+        namespace.update(_getmodulecontents(self, self.__all__))
         namespace.update(_getmodulecontents(random, ["random", "randint", "choice"]))
         namespace.update(_getmodulecontents(math))
 
@@ -50,7 +50,7 @@ class DrawBotDrawingTool(object):
         if not self._instructionsStack:
             return
         if self._instructionsStack[0][0] != "newPage":
-            self._instructionsStack.insert(0, ("newPage", [self.WIDTH, self.HEIGHT], {}))
+            self._instructionsStack.insert(0, ("newPage", [self.width(), self.height()], {}))
         for callback, args, kwargs in self._instructionsStack:
             attr = getattr(context, callback)
             attr(*args, **kwargs)
@@ -63,21 +63,29 @@ class DrawBotDrawingTool(object):
 
     ## magic variables
 
-    def _get_width(self):
+    def width(self):
         if self._width is None:
             return 1000
         return self._width
     
+    def _get_width(self):
+        warnings.warn("Magic variables are deprecated use: 'width()'")
+        return self.width()
+
     WIDTH = property(_get_width)
 
-    def _get_height(self):
+    def height(self):
         if self._height is None:
             return 1000
         return self._height
 
+    def _get_height(self):
+        warnings.warn("Magic variables are deprecated use: 'height()'")
+        return self.height()
+
     HEIGHT = property(_get_height)
 
-    def _get_pageCount(self):
+    def pageCount(self):
         pageCount = 1
         if self._instructionsStack and self._instructionsStack[0][0] == "newPage":
             pageCount = 0
@@ -86,9 +94,13 @@ class DrawBotDrawingTool(object):
                 pageCount += 1
         return pageCount
 
+    def _get_pageCount(self):
+        warnings.warn("Magic variables are deprecated use: 'pageCount()'")
+        return self.pageCount()
+
     PAGECOUNT = property(_get_pageCount)
 
-    _magicVariables = ["WIDTH", "HEIGHT", "PAGECOUNT", "__version__"]
+    _magicVariables = ["WIDTH", "HEIGHT", "PAGECOUNT"]
 
     ## public callbacks
 
@@ -544,7 +556,7 @@ class DrawBotDrawingTool(object):
         self._addInstruction("lineDash", value)
 
     def linedash(self, *value):
-        _deprecatedWarning("lineDash(%s)" % (", ".join(value)))
+        _deprecatedWarning("lineDash(%s)" % ", ".join([str(i) for i in value]))
         self.lineDash(*value)
     
     # transform

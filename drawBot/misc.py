@@ -76,11 +76,14 @@ class Warnings(object):
 
     def __init__(self):
         self._warnMessages = set()
+        self.shouldShowWarnings = False
 
     def resetWarnings(self):
         self._warnMessages = set()
 
     def warn(self, message):
+        if not self.shouldShowWarnings:
+            return
         if message in self._warnMessages:
             return
         sys.stderr.write("*** DrawBot warning: %s ***\n" % message)
