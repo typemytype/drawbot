@@ -296,6 +296,12 @@ p.highlight-link a:hover {
 	min-height: 300px;
 }
 
+.app-download-link {
+	font-size: 30px;
+	font-weight: bold;
+	line-height: 1em;
+}
+
 /* footer */
 
 div.footer {

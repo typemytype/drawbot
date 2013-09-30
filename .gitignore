@@ -40,7 +40,4 @@ nosetests.xml
 docs/_build
 local
 
-
-#compile.command
-
 *.command

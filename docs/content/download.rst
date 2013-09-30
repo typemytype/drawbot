@@ -1,5 +1,9 @@
-`Download DrawBot`_
-===================
+Download
+========
+
+.. cssclass:: app-download-link
+
+☛ `Download DrawBot`_ ☚
 
 License
 -------
