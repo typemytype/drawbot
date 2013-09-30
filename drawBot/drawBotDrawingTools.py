@@ -668,6 +668,8 @@ class DrawBotDrawingTool(object):
         Possible `align` values are: `left`, `center` and `right`.
 
         If the text overflows the rectangle, the overflowed text is returned.
+
+        The default alignment is 'left'.
         
         .. showcode:: /../examples/text.py 
         """
