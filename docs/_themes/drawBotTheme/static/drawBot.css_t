@@ -300,6 +300,7 @@ p.highlight-link a:hover {
 	font-size: 30px;
 	font-weight: bold;
 	line-height: 1em;
+	text-indent: 1.5em;
 }
 
 /* footer */
