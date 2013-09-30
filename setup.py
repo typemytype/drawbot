@@ -16,17 +16,24 @@ import pygments
 
 from drawBotSettings import __version__, appName
 
-codeSignDeveloperName = None
-if "--codesign" in sys.argv:
-    try:
-        i = sys.argv.index("--codesign")
-        codeSignDeveloperName = sys.argv[i+1]
-        sys.argv.remove("--codesign")
-        sys.argv.remove(codeSignDeveloperName)
-    except:
-        pass
+def getValueFromSysArgv(key, default=None):
+    if key in sys.argv:
+        try:
+            i = sys.argv.index(key)
+            value = sys.argv[i+1]
+            sys.argv.remove(key)
+            sys.argv.remove(value)
+            return value
+        except:
+            pass
+    return default
 
+codeSignDeveloperName = getValueFromSysArgv("--codesign")
 
+ftpHost = getValueFromSysArgv("--ftphost")
+ftpPath = getValueFromSysArgv("--ftppath")
+ftpLogin = getValueFromSysArgv("--ftplogin")
+ftpPassword = getValueFromSysArgv("--ftppassword")
 
 plist = dict(
 
@@ -110,7 +117,8 @@ if "-A" not in sys.argv and codeSignDeveloperName:
     # ================
     # = creating dmg =
     # ================
-
+    print "------------------------"
+    print "-    building dmg...   -"
     if os.path.exists(existingDmgLocation):
         os.remove(existingDmgLocation)
     
@@ -127,4 +135,26 @@ if "-A" not in sys.argv and codeSignDeveloperName:
     os.rename(os.path.join(imgLocation, "%s.app" %appName), os.path.join(distLocation, "%s.app" %appName))
 
     shutil.rmtree(imgLocation)
+
+    print "- done building dmg... -"
+    print "------------------------"
+
+    if ftpHost and ftpPath and ftpLogin and ftpPassword:
+        import ftplib
+        print "-------------------------"
+        print "-    uploading to ftp   -"
+        session = ftplib.FTP(ftpHost, ftpLogin, ftpPassword)
+        session.cwd(ftpPath)
+
+        dmgFile = open(existingDmgLocation,'rb')
+        fileName = os.path.basename(existingDmgLocation)
+
+        session.storbinary('STOR %s' % fileName, dmgFile) 
+        dmgFile.close()
+        print "- done uploading to ftp -"
+        print "-------------------------"
+        session.quit()
+
+
+
 
