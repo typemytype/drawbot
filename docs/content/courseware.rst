@@ -4,7 +4,9 @@ Courseware
 Teaching with DrawBot
 ---------------------
 
-Python is a great language for introducing the basic concepts of programming to entry level students. There are many tutorials and introduction packages available for the language (see the `overview on the python site`_). DrawBot combines the easy to learn Python with a compact but powerful application in which code, result and feedback are visible at a glance. This section collects scripts and advice on how to specifically use DrawBot in a programming course.
+Python is a great language for introducing the basic concepts of programming to entry level students. There are many tutorials and introduction packages available for the language (see the `overview on the python site`_). 
+
+DrawBot combines the easy to learn Python with a compact but powerful application in which code, result and feedback are visible at a glance. This section collects scripts and advice on how to specifically use DrawBot in a programming course.
 Step by step
 
 Each of the scripts on this page focus on a particular section of Python. Click on the link and copy the text of the script to a new DrawBot window. Read the comments (the lines starting with a #) for clues and help.
