@@ -63,24 +63,29 @@ class DrawBotDrawingTool(object):
 
     ## magic variables        
     
-    def _get_width(self):
-        warnings.warn("Magic variables are deprecated.'")
+    def width(self):
         if self._width is None:
             return 1000
         return self._width
 
+    def _get_width(self):
+        warnings.warn("Magic variables are deprecated.'")
+        return self.width()
+
     WIDTH = property(_get_width)
 
-    def _get_height(self):
-        warnings.warn("Magic variables are deprecated.'")
+    def height(self):
         if self._height is None:
             return 1000
         return self._height
 
+    def _get_height(self):
+        warnings.warn("Magic variables are deprecated.'")
+        return self.height()
+
     HEIGHT = property(_get_height)
 
-    def _get_pageCount(self):
-        warnings.warn("Magic variables are deprecated.'")
+    def pageCount(self):
         pageCount = 1
         if self._instructionsStack and self._instructionsStack[0][0] == "newPage":
             pageCount = 0
@@ -88,6 +93,10 @@ class DrawBotDrawingTool(object):
             if i[0] == "newPage":
                 pageCount += 1
         return pageCount
+
+    def _get_pageCount(self):
+        warnings.warn("Magic variables are deprecated.'")
+        return self.pageCount()
 
     PAGECOUNT = property(_get_pageCount)
 

@@ -443,16 +443,22 @@ class CodeNSTextView(NSTextView):
         if NSEvent.modifierFlags() & NSCommandKeyMask and selectedRange and char in (NSUpArrowFunctionKey, NSDownArrowFunctionKey, NSLeftArrowFunctionKey, NSRightArrowFunctionKey):
             value = self._getSelectedValueForRange(selectedRange)
             if value is not None:
-                if char ==  NSUpArrowFunctionKey:
-                    add = 1
-                elif char == NSDownArrowFunctionKey:
-                    add = -1
-                if char == NSLeftArrowFunctionKey:
-                    add = -1
-                elif char == NSRightArrowFunctionKey:
-                    add = 1
+                altDown = NSEvent.modifierFlags() & NSAlternateKeyMask
+                shiftDown = NSEvent.modifierFlags() & NSShiftKeyMask
+                altDown = NSEvent.modifierFlags() & NSAlternateKeyMask
 
-                if NSEvent.modifierFlags() & NSShiftKeyMask:
+                add = 1
+                if altDown:
+                    add = .1
+
+                if char == NSDownArrowFunctionKey:
+                    add *= -1
+                elif char == NSLeftArrowFunctionKey:
+                    add *= -1
+
+                if shiftDown and altDown:
+                    add /= 10
+                elif shiftDown:
                     add *= 10
 
                 if isinstance(value, tuple):
@@ -505,13 +511,24 @@ class CodeNSTextView(NSTextView):
                 selRng = self.selectedRange()
                 value = self._getSelectedValueForRange(selRng)
                 if value is not None:
+                    altDown = event.modifierFlags() & NSAlternateKeyMask
+                    shiftDown = event.modifierFlags() & NSShiftKeyMask
+                    altDown = event.modifierFlags() & NSAlternateKeyMask
+                    add = 1
+                    if altDown and shiftDown:
+                        add = .01
+                    elif altDown:
+                        add = .1
+                    elif shiftDown:
+                        add = 10
+
                     if isinstance(value, tuple):
                         valueX, valueY = value
-                        valueX += int(event.deltaX()*2)
-                        valueY -= int(event.deltaY()*2)
+                        valueX += int(event.deltaX()*2) * add
+                        valueY -= int(event.deltaY()*2) * add
                         txtValue =  "%s, %s" % (valueX, valueY)
                     else:
-                        value += int(event.deltaX()*2)
+                        value += int(event.deltaX()*2) * add
                         txtValue = "%s" % value
 
                     self._insertTextAndRun(txtValue, selRng)
