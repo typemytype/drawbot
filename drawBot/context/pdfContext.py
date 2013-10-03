@@ -127,12 +127,12 @@ class PDFContext(BaseContext):
                     self._pdfFillColor()
                     self._state.fillColor = None
                     self._state.cmykColor = None
-                    Quartz.CGContextSetTextDrawingMode(self._pdfContext, kCGTextFill)
+                    Quartz.CGContextSetTextDrawingMode(self._pdfContext, Quartz.kCGTextFill)
                     Quartz.CGContextShowTextAtPoint(self._pdfContext, x+originX, y+originY, line, len(line))
                     self._restore()
             if self._state.gradient is not None:
                 self._save()
-                Quartz.CGContextSetTextDrawingMode(self._pdfContext, kCGTextClip)
+                Quartz.CGContextSetTextDrawingMode(self._pdfContext, Quartz.kCGTextClip)
                 Quartz.CGContextShowTextAtPoint(self._pdfContext, x+originX, y+originY, line, len(line))
                 self._pdfGradient(self._state.gradient)
                 self._restore()
