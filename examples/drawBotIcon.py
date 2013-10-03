@@ -31,7 +31,7 @@ def drawIcon():
     
     r, g, b = 1, .5, 0
     fill(r, g, b)
-    rect(0, 0, WIDTH, HEIGHT)
+    rect(0, 0, width(), height())
 
     for i in range(20):
         r, g, b = 1, 1, 1

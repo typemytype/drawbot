@@ -2,7 +2,7 @@
 size(150, 100)
 
 # draw a background
-rect(10, 10, WIDTH-20, HEIGHT-20)
+rect(10, 10, width()-20, height()-20)
 
 # set a fill
 fill(1)

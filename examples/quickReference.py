@@ -1,17 +1,17 @@
 
 # DrawBot reference
 
-# using the magic variables WIDTH, HEIGHT and PAGECOUNT
-print "WIDTH:", WIDTH
-print "HEIGHT:", HEIGHT
+# using the magic variables width, height and pageCount
+print "width:", width()
+print "height:", height()
 
 # set a size for the canvas
 size(500, 500)
 
-print "WIDTH:", WIDTH
-print "HEIGHT:", HEIGHT
+print "width:", width()
+print "height:", height()
 
-print "PAGECOUNT:", PAGECOUNT
+print "pageCount:", pageCount()
 
 # simple shapes
 
@@ -46,7 +46,7 @@ newPage()
 image("http://f.cl.ly/items/1T3x1y372J371p0v1F2Z/drawBot.jpg", (10, 10), .5)
 
 newPage()
-print "PAGECOUNT:", PAGECOUNT
+print "pageCount:", pageCount()
 # colors
 # fill(r, g, b)
 # fill(r, g, b, alpha)
@@ -84,7 +84,7 @@ oval(250, 50, 100, 100)
 newPage()
 # stroke attributes
 
-print "PAGECOUNT:", PAGECOUNT
+print "pageCount:", pageCount()
 fill(None)
 stroke(0)
 strokeWidth(8)
@@ -106,7 +106,7 @@ lineDash(10, 10, 2, 5)
 polygon((310, 10), (310, 400), (350, 350), close=False)
 
 newPage()
-print "PAGECOUNT:", PAGECOUNT
+print "pageCount:", pageCount()
 
 text("Hello World", (10, 10))
 
@@ -126,7 +126,7 @@ print "textSize:", textSize("Hallo")
 
 newPage()
 # canvas transformations
-print "PAGECOUNT:", PAGECOUNT
+print "pageCount:", pageCount()
 
 fill(None)
 stroke(0)
@@ -150,7 +150,7 @@ rect(10, 10, 100, 100)
 restore()
 
 newPage()
-print "PAGECOUNT:", PAGECOUNT
+print "pageCount:", pageCount()
 
 #    c m y k alpha 
 cmykFill(0, 1, 0, 0)
@@ -173,7 +173,7 @@ cmykShadow((10, 10), 20, (0, 1, 1, 0))
 oval(130, 310, 300, 150)
 
 newPage()
-print "PAGECOUNT:", PAGECOUNT
+print "pageCount:", pageCount()
 
 fill(1, 0, 1)
 linearGradient((10, 10), (200, 20), ([1, 1, 0], [0, 1, 1]))

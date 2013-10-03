@@ -5,4 +5,4 @@ for i in range(100):
     # set a random fill color
     fill(random(), random(), random())
     # draw a rect with the size of the page
-    rect(0, 0, WIDTH, HEIGHT)
+    rect(0, 0, width(), height())
