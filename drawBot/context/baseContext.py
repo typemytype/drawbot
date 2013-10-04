@@ -151,7 +151,7 @@ class Gradient(object):
         new.cmykColors = None
         if self.cmykColors:
             new.cmykColors = [color.copy() for color in self.cmykColors]
-        new.position = list(self.positions)
+        new.positions = list(self.positions)
         new.start = self.start
         new.end = self.end
         new.startRadius = self.startRadius
@@ -242,7 +242,7 @@ class GraphicsState(object):
         if self.shadow:
             new.shadow = self.shadow.copy()
         if self.gradient:
-            new.gradientType = self.gradient.copy()
+            new.gradient = self.gradient.copy()
         if self.path is not None:
             new.path = self.path.copy()
         new.text = self.text.copy()

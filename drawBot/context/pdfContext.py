@@ -63,7 +63,7 @@ class PDFContext(BaseContext):
                     self._pdfFillColor()
                     self._state.fillColor = None
                     self._state.cmykColor = None
-                    Quartz.CGContextEOFillPath(self._pdfContext)
+                    Quartz.CGContextFillPath(self._pdfContext)
                     self._restore()
             if self._state.gradient is not None:
                 self._save()
@@ -92,7 +92,7 @@ class PDFContext(BaseContext):
     def _clipPath(self):
         if self._state.path:
             self._pdfPath(self._state.path)
-            Quartz.CGContextEOClip(self._pdfContext)
+            Quartz.CGContextClip(self._pdfContext)
 
     def _textBox(self, txt, (x, y, w, h), align):
         attrString = self.attributedString(txt, align=align)
