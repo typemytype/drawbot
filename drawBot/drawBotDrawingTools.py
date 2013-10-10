@@ -109,9 +109,9 @@ class DrawBotDrawingTool(object):
     def size(self, width, height=None):
         """
         Set the width and height of the canvas. 
-        Without calling `size` the default drawing board is 1000 by 1000 points.
+        Without calling `size()` the default drawing board is 1000 by 1000 points.
         
-        Afterwards the magic variables `WIDTH` and `HEIGHT` can be used for calculations
+        Afterwards the functions `width()` and `height()` can be used for calculations.
         
         .. showcode:: /../examples/size.py
         """
