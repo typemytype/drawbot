@@ -1,7 +1,7 @@
 
 # DrawBot reference
 
-# using the magic variables width, height and pageCount
+# using the functions width, height and pageCount
 print "width:", width()
 print "height:", height()
 

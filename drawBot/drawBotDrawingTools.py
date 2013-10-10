@@ -317,7 +317,7 @@ class DrawBotDrawingTool(object):
             args = [args[i:i+2] for i in range(0, len(args), 2)]
 
         if not args:
-            raise DrawBotError, "polygon() expects more then a single point"
+            raise DrawBotError, "polygon() expects more than a single point"
         doClose = kwargs.get("close", True)
         if len(kwargs) > 1:
             raise DrawBotError, "unexpected keyword argument for this function"
@@ -334,7 +334,7 @@ class DrawBotDrawingTool(object):
 
     def fill(self, r=None, g=None, b=None, alpha=1):
         """
-        Sets the fill color with a `red`, `green`, `blue` and alpha` value.
+        Sets the fill color with a `red`, `green`, `blue` and `alpha` value.
         Each argument must a value float between 0 and 1.
 
         .. showcode:: /../examples/fill.py
@@ -380,8 +380,8 @@ class DrawBotDrawingTool(object):
 
     def shadow(self, offset, blur=None, color=None):
         """
-        Adds a shadow with an `offset` (x, y), `blur` and a `color.
-        The `color` argument must be a tuple similary as `fill`
+        Adds a shadow with an `offset` (x, y), `blur` and a `color`.
+        The `color` argument must be a tuple similarly as `fill`.
         
         .. showcode:: /../examples/shadow.py
         """
@@ -393,8 +393,8 @@ class DrawBotDrawingTool(object):
 
     def cmykShadow(self, offset, blur=None, color=None):
         """
-        Adds a cmyk shadow with an `offset` (x, y), `blur` and a `color.
-        The `color` argument must be a tuple similary as `cmykFill`
+        Adds a cmyk shadow with an `offset` (x, y), `blur` and a `color`.
+        The `color` argument must be a tuple similarly as `cmykFill`.
         
         .. showcode:: /../examples/cmykShadow.py
         """
@@ -530,7 +530,7 @@ class DrawBotDrawingTool(object):
 
     def lineCap(self, value):
         """
-        Set a line join.
+        Set a line cap.
 
         Possible values are `butt`, `square` and `round`.
 
@@ -545,7 +545,7 @@ class DrawBotDrawingTool(object):
     def lineDash(self, *value):
         """
         Set a line dash with any given amount of lenghts. 
-        Uneven lenghts will have a visible stroke, uneven lenghts will unvisible.
+        Uneven lenghts will have a visible stroke, even lenghts will be invisible.
         
         .. showcode:: /../examples/lineDash.py        
         """
@@ -597,7 +597,7 @@ class DrawBotDrawingTool(object):
         """
         Skew the canvas with given `angle1` and `angle2`.
 
-        If only 1 argument is provided a proportional skew is applied.
+        If only one argument is provided a proportional skew is applied.
         """
         angle1 = math.radians(angle1)
         angle2 = math.radians(angle2)
@@ -612,7 +612,7 @@ class DrawBotDrawingTool(object):
         The default font, also used as fallback font, is 'LucidaGrande'.
         The default `fontSize` is 10pt.
         
-        The name of the font relates the the font postscript name.
+        The name of the font relates to the font's postscript name.
 
         ::
 
@@ -650,7 +650,7 @@ class DrawBotDrawingTool(object):
 
     def text(self, txt, x, y=None):
         """
-        Draw a text a provided possition.
+        Draw a text at a provided position.
 
         .. showcode:: /../examples/text.py 
         """
@@ -663,13 +663,13 @@ class DrawBotDrawingTool(object):
 
     def textBox(self, txt, (x, y, w, h), align=None):
         """
-        Draw a text a provided rectangle.
+        Draw a text in a provided rectangle.
         Optionally an alignment can be set. 
         Possible `align` values are: `left`, `center` and `right`.
 
         If the text overflows the rectangle, the overflowed text is returned.
 
-        The default alignment is 'left'.
+        The default alignment is `left`.
         
         .. showcode:: /../examples/text.py 
         """
