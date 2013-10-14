@@ -5,5 +5,5 @@ print width(), height()
 
 # set a color
 fill(1, 0, 0)
-# use those varialbes to set a background color
+# use those variables to set a background color
 rect(0, 0, width(), height())

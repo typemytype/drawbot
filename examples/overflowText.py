@@ -1,4 +1,4 @@
-t = """DrawBot is an powerful, free application for MacOSX that invites you to write simple Python scripts to generate two-dimensional graphics. The builtin graphics primitives support rectangles, ovals, (bezier) paths, polygons, text objects and transparency. 
+t = """DrawBot is a powerful, free application for MacOSX that invites you to write simple Python scripts to generate two-dimensional graphics. The builtin graphics primitives support rectangles, ovals, (bezier) paths, polygons, text objects and transparency. 
 DrawBot is an ideal tool to teach the basics of programming. Students get colorful graphic treats while getting familiar with variables, conditional statements, functions and what have you. Results can be saved in a selection of different file formats, including as high resolution, scaleable PDF. 
 DrawBot has proven itself as part of the curriculum at selected courses at the Royal Academy in The Hague."""
 
@@ -45,9 +45,9 @@ while len(t):
     # set a font
     font("DrawBot-Bold", 20)
     # get the page count text size as a (width, height) tuple
-    tw, th = textSize("%s" % PAGECOUNT)
+    tw, th = textSize("%s" % pageCount())
     # draw the text
-    textBox("%s" % PAGECOUNT, (10, 10, 480, th), align="center")
+    textBox("%s" % pageCount(), (10, 10, 480, th), align="center")
 
 saveImage("~/Desktop/drawbot.mov")
 
