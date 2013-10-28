@@ -29,7 +29,10 @@ class DrawBotDocument(NSDocument):
 
     def makeWindowControllers(self):
         self.windowController = DrawBotController()
-        self.windowController.assignToDocument(self)
+        wc = self.windowController.w.getNSWindowController()
+        self.addWindowController_(wc)
+        wc.setShouldCloseDocument_(True)
+        
         url = self.fileURL()
         if url:
             self.windowController.setPath(url.path())
