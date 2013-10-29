@@ -100,21 +100,11 @@ class PDFContext(BaseContext):
         path = Quartz.CGPathCreateMutable()
         Quartz.CGPathAddRect(path, None, Quartz.CGRectMake(x, y, w, h))
         box = CoreText.CTFramesetterCreateFrame(setter, (0, 0), path, None)
-
-        lines = []
             
         ctLines = CoreText.CTFrameGetLines(box)
-        for ctLine in ctLines:
-            r = CoreText.CTLineGetStringRange(ctLine)
-            line = txt[r.location:r.location+r.length]
-            while line and line[-1] == " ":
-                line = line[:-1]
-            lines.append(line.replace("\n", ""))
-
         origins = CoreText.CTFrameGetLineOrigins(box, (0, len(ctLines)), None)
         for i, (originX, originY) in enumerate(origins):
-            line = lines[i]
-
+            ctLine = ctLines[i]
             self._save()
             Quartz.CGContextSelectFont(self._pdfContext, self._state.text.fontName, self._state.text.fontSize, Quartz.kCGEncodingMacRoman)
             drawingMode = None
@@ -128,12 +118,14 @@ class PDFContext(BaseContext):
                     self._state.fillColor = None
                     self._state.cmykColor = None
                     Quartz.CGContextSetTextDrawingMode(self._pdfContext, Quartz.kCGTextFill)
-                    Quartz.CGContextShowTextAtPoint(self._pdfContext, x+originX, y+originY, line, len(line))
+                    Quartz.CGContextSetTextPosition(self._pdfContext, x+originX, y+originY)
+                    CoreText.CTLineDraw(ctLine, self._pdfContext)
                     self._restore()
             if self._state.gradient is not None:
                 self._save()
                 Quartz.CGContextSetTextDrawingMode(self._pdfContext, Quartz.kCGTextClip)
-                Quartz.CGContextShowTextAtPoint(self._pdfContext, x+originX, y+originY, line, len(line))
+                Quartz.CGContextSetTextPosition(self._pdfContext, x+originX, y+originY)
+                CoreText.CTLineDraw(ctLine, self._pdfContext)
                 self._pdfGradient(self._state.gradient)
                 self._restore()
                 drawingMode = None
@@ -158,7 +150,8 @@ class PDFContext(BaseContext):
             
             if drawingMode is not None:
                 Quartz.CGContextSetTextDrawingMode(self._pdfContext, drawingMode)
-                Quartz.CGContextShowTextAtPoint(self._pdfContext, x+originX, y+originY, line, len(line))
+                Quartz.CGContextSetTextPosition(self._pdfContext, x+originX, y+originY)
+                CoreText.CTLineDraw(ctLine, self._pdfContext)
             self._restore()
 
     def _image(self, path, (x, y), alpha):
