@@ -527,7 +527,7 @@ class BaseContext(object):
         attributes = {AppKit.NSFontAttributeName : self._state.text.font}
         if self._state.fillColor is not None:
             extra = {
-                #NSForegroundColorAttributeName : self._state.fillColor.getNSObject(),
+                AppKit.NSForegroundColorAttributeName : self._state.fillColor.getNSObject(),
                 }
             attributes.update(extra)
         if self._state.strokeColor is not None:
@@ -536,7 +536,7 @@ class BaseContext(object):
                 strokeWidth *= -1
             extra = {
                     AppKit.NSStrokeWidthAttributeName : strokeWidth,
-                    #NSStrokeColorAttributeName : self._state.strokeColor.getNSObject(),
+                    AppKit.NSStrokeColorAttributeName : self._state.strokeColor.getNSObject(),
                     }
         
             attributes.update(extra)
