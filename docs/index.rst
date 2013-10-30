@@ -29,6 +29,7 @@ DrawBot is written in Python_. The binary download is fully self-contained (ie. 
 	content/canvas
 	content/text
 	content/images
+	content/variables
 	content/quickReference
 
 .. toctree::

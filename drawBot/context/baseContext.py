@@ -72,7 +72,9 @@ class Color(object):
     def __init__(self, r=None, g=None, b=None, a=1):
         if r is None:
             return
-        if g == None and b == None:
+        if isinstance(r, AppKit.NSColor):
+            self._color = r.colorUsingColorSpaceName_("NSCalibratedRGBColorSpace")
+        elif g == None and b == None:
             self._color = AppKit.NSColor.colorWithCalibratedRed_green_blue_alpha_(r, r, r, a)
         elif b == None:
             self._color = AppKit.NSColor.colorWithCalibratedRed_green_blue_alpha_(r, r, r, g)
@@ -96,7 +98,10 @@ class Color(object):
 class CMYKColor(Color):
 
     def __init__(self, c, m, y, k, a=1):
-        self._color = AppKit.NSColor.colorWithDeviceCyan_magenta_yellow_black_alpha_(c, m, y, k, a)
+        if isinstance(c, AppKit.NSColor):
+            self._color = c.colorUsingColorSpaceName_("NSDeviceCMYKColorSpace")
+        else:
+            self._color = AppKit.NSColor.colorWithDeviceCyan_magenta_yellow_black_alpha_(c, m, y, k, a)
 
 class Shadow(object):
 

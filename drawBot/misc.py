@@ -1,6 +1,7 @@
 import AppKit
-
 import sys
+
+import vanilla
 
 # errors
 class DrawBotError(TypeError): pass
@@ -90,3 +91,60 @@ class Warnings(object):
         self._warnMessages.add(message)
 
 warnings = Warnings()
+
+
+class VariableController(object):
+    
+    def __init__(self, attributes, callback, document=None):
+        self._callback = callback
+        self._attributes = None
+        self.w = vanilla.FloatingWindow((250, 50))
+        self.buildUI(attributes)
+        self.w.open()
+        if document:
+            self.w.assignToDocument(document)
+        self.w.setTitle("Variables")
+
+    def buildUI(self, attributes):
+        if self._attributes == attributes:
+            return
+        self._attributes = attributes
+        if hasattr(self.w, "ui"):
+            del self.w.ui
+        self.w.ui = ui = vanilla.Group((0, 0, -0, -0))
+        y = 10
+        labelSize = 100
+        gutter = 5
+        for attribute in self._attributes:
+            uiElement = attribute["ui"]
+            name = attribute["name"]
+            args = dict(attribute.get("args", {}))
+            if uiElement != "CheckBox":
+                label = vanilla.TextBox((0, y+2, labelSize-gutter, 19), "%s:" % name, alignment="right", sizeStyle="small")
+                setattr(ui, "%sLabel" % name, label)
+            else:
+                args["title"] = name
+            if uiElement not in ("ColorWell"):
+                args["sizeStyle"] = "small"
+            else:
+                if "color" not in args:
+                    args["color"] = AppKit.NSColor.blackColor()
+            attr = getattr(vanilla, uiElement)((labelSize, y, -10, 19), callback=self.changed, **args)
+            setattr(ui, name, attr)
+            y += 25
+        
+        self.w.resize(250, y)
+    
+    def changed(self, sender):
+        if self._callback:
+            self._callback() 
+
+    def get(self):
+        data = {}
+        for attribute in self._attributes:
+            name = attribute["name"] 
+            data[name] = getattr(self.w.ui, name).get()
+        return data
+    
+    def show(self):
+        self.w.show()

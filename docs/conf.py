@@ -256,7 +256,14 @@ autodoc_member_order = 'bysource'
 
 # read the docs hacking
 
+class MetaMock(type):
+    
+    def __getattr__(self, name):
+        return self
+
 class Mock(object):
+
+    __metaclass__ = MetaMock
 
     def __init__(self, *args, **kwargs):
         pass
@@ -269,13 +276,14 @@ class Mock(object):
         if name in ('__file__', '__path__'):
             return '/dev/null'
         else:
-            return Mock()
+            return Mock
 
 MOCK_MODULES = ['AppKit', 'Quartz', 'CoreText', 'QTKit', 
         'xmlWriter', 
         'fontTools',
         'fontTools.misc',
-        'fontTools.misc.transform']
+        'fontTools.misc.transform',
+        'vanilla']
 for mod_name in MOCK_MODULES:
     sys.modules[mod_name] = Mock()
 

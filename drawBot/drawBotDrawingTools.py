@@ -7,7 +7,7 @@ from context import getContextForFileExt
 from context.baseContext import BezierPath
 from context.dummyContext import DummyContext
 
-from misc import DrawBotError, warnings
+from misc import DrawBotError, warnings, VariableController
 import drawBotSettings
 
 import math, random
@@ -761,5 +761,34 @@ class DrawBotDrawingTool(object):
     def Bezierpath(self):
         _deprecatedWarning("BezierPath()")
         return self.BezierPath()
+
+    def Variable(self, variables, workSpace):
+        """
+        Build small UI for variables in a script.
+
+        The `workSpace` is usually `globals()` 
+        as you want to insert the variable in the current workspace.
+        It is required that `workSpace` is a `dict` object.
+        
+        .. image:: assets/variables.png
+        
+        .. showcode:: /../examples/variables.py 
+        """
+
+        documents = AppKit.NSApp().orderedDocuments()
+        if not documents:
+            raise DrawBotError, "There is no document open"
+        document = documents[0]
+        controller = document.windowController
+
+        try:
+            controller._variableController.buildUI(variables)
+            controller._variableController.show()
+        except:
+            controller._variableController = VariableController(variables, controller.runCode, document)
+
+        data = controller._variableController.get()
+        for v, value in data.items():
+            workSpace[v] = value
 
 _drawBotDrawingTool = DrawBotDrawingTool()
