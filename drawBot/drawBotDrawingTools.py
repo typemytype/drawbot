@@ -218,7 +218,7 @@ class DrawBotDrawingTool(object):
 
     def moveTo(self, (x, y)):
         """
-        Move to a point x, y.
+        Move to a point `x`, `y`.
         """
         self._addInstruction("moveTo", (x, y))
 
@@ -228,7 +228,7 @@ class DrawBotDrawingTool(object):
 
     def lineTo(self, (x, y)):
         """
-        Line to a point x, y.
+        Line to a point `x`, `y`.
         """
         self._addInstruction("lineTo", (x, y))
 
@@ -238,8 +238,8 @@ class DrawBotDrawingTool(object):
 
     def curveTo(self, (x1, y1), (x2, y2), (x3, y3)):
         """
-        Curve to a point x3, y3.
-        With given bezier handles x1, y1 and x2, y2.
+        Curve to a point `x3`, `y3`.
+        With given bezier handles `x1`, `y1` and `x2`, `y2`.
         """
         self._addInstruction("curveTo", (x1, y1), (x2, y2), (x3, y3))
 
@@ -744,15 +744,61 @@ class DrawBotDrawingTool(object):
         Return a BezierPath object.
         This is a reusable object, if you want to draw the same over and over again.
         
-        All BezierPath methods:
+        **BezierPath methods**
 
         .. function:: bezierPath.moveTo((x, y))
+
+            Move to a point `x`, `y`.
+
         .. function:: bezierPath.lineTo((x, y))
+            
+            Line to a point `x`, `y`.
+
         .. function:: bezierPath.curveTo((x1, y1), (x2, y2), (x3, y3))
+
+            Curve to a point `x3`, `y3`.
+            With given bezier handles `x1`, `y1` and `x2`, `y2`.
+
         .. function:: bezierPath.closePath()
+
+            Close the path.
+
         .. function:: bezierPath.rect(x, y, w, h)
+
+            Add a rectangle at possition `x`, `y` with a size of `w`, `h`
+
         .. function:: bezierPath.oval(x, y, w, h)
+
+            Add a oval at possition `x`, `y` with a size of `w`, `h`
+        
+        .. function:: bezierPath.pointInside((x, y))
+
+            Check if a point `x`, `y` is inside a path.
+        
         .. function:: bezierPath.copy()
+
+            Copy the bezier path.
+        
+
+        |
+        
+        **BezierPath attributes**
+
+        .. attribute:: bezierPath.points
+            
+            Return a list of all points.
+
+        .. attribute:: bezierPath.onCurvePoints
+
+            Return a list of all on curve points.
+
+        .. attribute:: bezierPath.offCurvePoints
+
+            Return a list of all off curve points.
+
+        .. attribute:: bezierPath.contours
+
+            Return a list of contours with all point coordinates sorted in segments.
 
         .. showcode:: /../examples/bezierPath.py
         """

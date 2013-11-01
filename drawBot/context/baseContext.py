@@ -11,10 +11,13 @@ class BezierPath(object):
             self._path = AppKit.NSBezierPath.bezierPath()
         else:
             self._path = path
-
+    
+    def __repr__(self):
+        return "<BezierPath>"
+        
     def moveTo(self, x, y=None):
         """
-        Move to a point x, y.
+        Move to a point `x`, `y`.
         """
         if y is None:
             x, y = x
@@ -24,7 +27,7 @@ class BezierPath(object):
 
     def lineTo(self, x, y=None):
         """
-        Line to a point x, y.
+        Line to a point `x`, `y`.
         """
         if y is None:
             x, y = x
@@ -34,8 +37,8 @@ class BezierPath(object):
 
     def curveTo(self, x1, y1, x2, y2=None, x3=None, y3=None):
         """
-        Curve to a point x3, y3.
-        With given bezier handles x1, y1 and x2, y2.
+        Curve to a point `x3`, `y3`.
+        With given bezier handles `x1`, `y1` and `x2`, `y2`.
         """
         if y2 is None and x3 is None and y3 is None:
             x3, y3 = x2
@@ -46,23 +49,89 @@ class BezierPath(object):
     curveto = curveTo
 
     def closePath(self):
+        """
+        Close the path.
+        """
         self._path.closePath()
 
     closepath = closePath
 
     def rect(self, x, y, w, h):
+        """
+        Add a rectangle at possition `x`, `y` with a size of `w`, `h`
+        """
         self._path.appendBezierPathWithRect_(((x, y), (w, h)))
 
     def oval(self, x, y, w, h):
+        """
+        Add a oval at possition `x`, `y` with a size of `w`, `h`
+        """
         self._path.appendBezierPathWithOvalInRect_(((x, y), (w, h)))
 
     def getNSBezierPath(self):
+        """
+        Return the nsBezierPath.
+        """
         return self._path
 
     def setNSBezierPath(self, path):
+        """
+        Set a nsBezierPath.
+        """
         self._path = path
+    
+    def pointInside(self, (x, y)):
+        """
+        Check if a point `x`, `y` is inside a path.
+        """
+        return self._path.containsPoint_((x, y))
+    
+    def _points(self, onCurve=True, offCurve=True):
+        points = []
+        if not onCurve and not offCurve:
+            return points
+        for index in range(self._path.elementCount()):
+            instruction, pts = self._path.elementAtIndex_associatedPoints_(index)
+            if not onCurve:
+                pts = pts[:-1]
+            elif not offCurve:
+                pts = pts[-1:]
+            points.extend([(p.x, p.y) for p in pts])
+        return points
+    
+    def _get_points(self):
+        return self._points()
+        
+    points = property(_get_points, doc="Return a list of all points.")
+    
+    def _get_onCurvePoints(self):
+        return self._points(offCurve=False)
+    
+    onCurvePoints = property(_get_onCurvePoints, doc="Return a list of all on curve points.")
+    
+    def _get_offCurvePoints(self):
+        return self._points(onCurve=False)
+    
+    offCurvePoints = property(_get_offCurvePoints, doc="Return a list of all off curve points.")
+    
+    def _get_contours(self):
+        contours = []
+        for index in range(self._path.elementCount()):
+            instruction, pts = self._path.elementAtIndex_associatedPoints_(index)
+            if instruction == 0:
+                contours.append([])
+            if pts:
+                contours[-1].append([(p.x, p.y) for p in pts])
+        if len(contours) >= 2 and len(contours[-1]) == 1 and contours[-1][0] == contours[-2][0]:
+            contours.pop()
+        return contours
+
+    contours = property(_get_contours, doc="Return a list of contours with all point coordinates sorted in segments.")
 
     def copy(self):
+        """
+        Copy the bezier path.
+        """
         new = self.__class__()
         new._path = self._path.copy()
         return new
@@ -80,7 +149,7 @@ class Color(object):
             self._color = AppKit.NSColor.colorWithCalibratedRed_green_blue_alpha_(r, r, r, g)
         else:
             self._color = AppKit.NSColor.colorWithCalibratedRed_green_blue_alpha_(r, g, b, a)
-    
+
     def set(self):
         self._color.set()
         

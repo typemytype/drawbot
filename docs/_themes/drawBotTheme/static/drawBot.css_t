@@ -19,6 +19,10 @@ br {
 	display:none;
 }
 
+.line-block br {
+	display:block;
+}
+
 a, a:visited, a.drawbotlink, a.drawbotlink:visited {
 	color: {{ theme_linkcolor }};
 	text-decoration: none;

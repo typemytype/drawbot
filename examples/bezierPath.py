@@ -17,3 +17,18 @@ for i in range(10):
     drawPath(path)
     # translate the canvas
     translate(5, 5)
+
+
+print "All Points:"
+print path.points
+
+print "On Curve Points:"
+print path.onCurvePoints
+
+print "Off Curve Points:"
+print path.offCurvePoints
+
+# print out all points from all segments in all contours
+for contour in path.contours:
+	for x, y in contour:
+		print x, y
