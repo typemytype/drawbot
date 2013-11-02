@@ -1,13 +1,9 @@
-
 # DrawBot reference
-
-# using the functions width, height and pageCount
-print "width:", width()
-print "height:", height()
 
 # set a size for the canvas
 size(500, 500)
 
+# using the functions width, height and pageCount
 print "width:", width()
 print "height:", height()
 
