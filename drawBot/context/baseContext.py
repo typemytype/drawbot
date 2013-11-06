@@ -166,7 +166,9 @@ class Color(object):
 
 class CMYKColor(Color):
 
-    def __init__(self, c, m, y, k, a=1):
+    def __init__(self, c=None, m=None, y=None, k=None, a=1):
+        if c is None:
+            return
         if isinstance(c, AppKit.NSColor):
             self._color = c.colorUsingColorSpaceName_("NSDeviceCMYKColorSpace")
         else:
