@@ -1,7 +1,7 @@
 import AppKit
 import CoreText
 
-import uuid
+import random
 
 from xmlWriter import XMLWriter
 
@@ -192,7 +192,9 @@ class SVGContext(BaseContext):
     # helpers
 
     def _getUniqueID(self):
-        return uuid.uuid4()
+        b = [chr(random.randrange(256)) for i in range(16)]
+        i = long(('%02x'*16) % tuple(map(ord, b)), 16)
+        return '%032x' % i
 
     def _svgTransform(self, transform):
         return "matrix(%s)" % (",".join([str(s) for s in transform]))
