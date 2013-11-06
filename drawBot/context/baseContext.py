@@ -48,6 +48,9 @@ class BezierPath(object):
 
     curveto = curveTo
 
+    def arcTo(self, pt1, pt2, radius):
+        self._path.appendBezierPathWithArcFromPoint_toPoint_radius_(pt1, pt2, radius)
+
     def closePath(self):
         """
         Close the path.
@@ -469,6 +472,9 @@ class BaseContext(object):
     def curveTo(self, pt1, pt2, pt):
         self._state.path.curveTo(pt1, pt2, pt)
     
+    def arcTo(self, pt1, pt2, radius):
+        self._state.path.arcTo(pt1, pt2, radius)
+
     def closePath(self):
         self._state.path.closePath()
     
