@@ -248,7 +248,7 @@ class Text(object):
     def _get_font(self):
         _font = AppKit.NSFont.fontWithName_size_(self._fontName, self.fontSize)
         if _font == None:
-            warnings.warn("font: %s is not installed, back to the falllback font: %s" % (self._fontName, self._backupFont))
+            warnings.warn("font: %s is not installed, back to the fallback font: %s" % (self._fontName, self._backupFont))
             self._fontName = self._backupFont
             _font = AppKit.NSFont.fontWithName_size_(self._backupFont, self.fontSize)
         return _font
