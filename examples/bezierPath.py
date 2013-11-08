@@ -30,5 +30,6 @@ print path.offCurvePoints
 
 # print out all points from all segments in all contours
 for contour in path.contours:
-	for x, y in contour:
-		print x, y
+	for segment in contour:
+	    for x, y in segment:
+    		print x, y

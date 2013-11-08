@@ -119,7 +119,10 @@ class DrawBotDrawingTool(object):
             width, height = width
         self._width = width
         self._height = height
-        self._addInstruction("size", width, height)
+        if not self._instructionsStack:
+            self.newPage(width, height)
+        else:
+            self._addInstruction("size", width, height)
 
     def newPage(self, width=None, height=None):
         """
@@ -246,7 +249,13 @@ class DrawBotDrawingTool(object):
     def curveto(self, x1, y1, x2, y2, x3, y3):
         _deprecatedWarning("curveTo((%s, %s), (%s, %s), (%s, %s))" % (x1, y1, x2, y2, x3, y3))
         self.curveTo((x1, y1), (x2, y2), (x3, y3))
-        
+    
+    def arcTo(self, (x1, y1), (x2, y2), radius):
+        """
+        Arc from one point to an other point with a given `radius`.
+        """
+        self._addInstruction("arcTo", (x1, y1), (x2, y2), radius)
+
     def closePath(self):
         """
         Close the path.
@@ -648,18 +657,20 @@ class DrawBotDrawingTool(object):
         _deprecatedWarning("lineHeight(%s)" % value)
         self.lineHeight(value)
 
+    # drawing text
+
     def text(self, txt, x, y=None):
         """
         Draw a text at a provided position.
 
         .. showcode:: /../examples/text.py 
         """
-        if y is None:
+        if isinstance(x, (tuple, list)):
             x, y = x
         else:
             warnings.warn("postion must a tuple: text('%s', (%s, %s))" % (txt, x, y))
-        w, h = self.textSize(txt, None)
-        self.textBox(txt, (x, y, w+1, h))
+        w, h = self.textSize(txt)
+        self.textBox(txt, (x, y, w*1.3, h))
 
     def textBox(self, txt, (x, y, w, h), align=None):
         """
@@ -758,6 +769,10 @@ class DrawBotDrawingTool(object):
 
             Curve to a point `x3`, `y3`.
             With given bezier handles `x1`, `y1` and `x2`, `y2`.
+        
+        .. function:: bezierPath.arcTo((x1, y1), (x2, y2), radius)
+
+            Arc from one point to an other point with a given `radius`
 
         .. function:: bezierPath.closePath()
 

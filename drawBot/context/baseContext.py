@@ -49,6 +49,9 @@ class BezierPath(object):
     curveto = curveTo
 
     def arcTo(self, pt1, pt2, radius):
+        """
+        Arc from one point to an other point with a given `radius`.
+        """
         self._path.appendBezierPathWithArcFromPoint_toPoint_radius_(pt1, pt2, radius)
 
     def closePath(self):

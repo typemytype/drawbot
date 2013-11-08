@@ -7,6 +7,7 @@ Using bezier paths
 .. autofunction:: drawBot.moveTo
 .. autofunction:: drawBot.lineTo
 .. autofunction:: drawBot.curveTo
+.. autofunction:: drawBot.arcTo
 .. autofunction:: drawBot.closePath
 .. autofunction:: drawBot.drawPath
 
