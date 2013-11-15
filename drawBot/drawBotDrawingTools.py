@@ -7,7 +7,7 @@ from context import getContextForFileExt
 from context.baseContext import BezierPath
 from context.dummyContext import DummyContext
 
-from misc import DrawBotError, warnings, VariableController
+from misc import DrawBotError, warnings, VariableController, optimizePath
 import drawBotSettings
 
 import math, random
@@ -160,7 +160,7 @@ class DrawBotDrawingTool(object):
         if isinstance(paths, (str, unicode)):
             paths = [paths]
         for path in paths:
-            path = os.path.expanduser(path)
+            path = optimizePath(path)
             base, ext = os.path.splitext(path)
             ext = ext.lower()[1:]
             context = getContextForFileExt(ext)

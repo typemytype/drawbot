@@ -2,7 +2,12 @@ import AppKit
 import CoreText
 import Quartz
 
+import os
+
 from baseContext import BaseContext
+from drawBot.misc import optimizePath
+
+_cachedImages = {}
 
 class PDFContext(BaseContext):
     
@@ -154,15 +159,25 @@ class PDFContext(BaseContext):
                 CoreText.CTLineDraw(ctLine, self._pdfContext)
             self._restore()
 
+    def _getImageSource(self, key):
+        if key not in _cachedImages:
+            path = key
+            if path.startswith("http"):
+                url = AppKit.NSURL.URLWithString_(path)
+            else:
+                path = optimizePath(path)
+                url = AppKit.NSURL.fileURLWithPath_(path)
+            source = Quartz.CGImageSourceCreateWithURL(url, None)
+            if source is not None:
+                _cachedImages[key] = Quartz.CGImageSourceCreateImageAtIndex(source, 0, None)
+            else:
+                return None
+        return _cachedImages[key]
+
     def _image(self, path, (x, y), alpha):
         self._save()
-        if path.startswith("http"):
-            url = AppKit.NSURL.URLWithString_(path)
-        else:
-            url = AppKit.NSURL.fileURLWithPath_(path)
-        source = Quartz.CGImageSourceCreateWithURL(url, None)
-        if source is not None:
-            image = Quartz.CGImageSourceCreateImageAtIndex(source, 0, None)
+        image = self._getImageSource(path)
+        if image is not None:
             w = Quartz.CGImageGetWidth(image)
             h = Quartz.CGImageGetHeight(image)
             Quartz.CGContextSetAlpha(self._pdfContext, alpha)

@@ -1,5 +1,6 @@
 import AppKit
 import sys
+import os
 
 import vanilla
 
@@ -43,6 +44,14 @@ def getColorDefault(key, defaultValue=None):
 
 def setColorDefault(key, color):
     _setNSDefault(key, color)
+
+# path tools
+
+def optimizePath(path):
+    path = os.path.expanduser(path)
+    if not os.path.isabs(path):
+        path = os.path.abspath(path)
+    return path
 
 # color tools
 
