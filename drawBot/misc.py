@@ -48,6 +48,8 @@ def setColorDefault(key, color):
 # path tools
 
 def optimizePath(path):
+    if path.startswith("http"):
+        return path
     path = os.path.expanduser(path)
     if not os.path.isabs(path):
         path = os.path.abspath(path)

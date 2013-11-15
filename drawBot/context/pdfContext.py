@@ -5,6 +5,7 @@ import Quartz
 import os
 
 from baseContext import BaseContext
+from drawBot.misc import DrawBotError
 
 class PDFContext(BaseContext):
     
@@ -168,7 +169,7 @@ class PDFContext(BaseContext):
             if source is not None:
                 self._cachedImages[key] = Quartz.CGImageSourceCreateImageAtIndex(source, 0, None)
             else:
-                return None
+                raise DrawBotError, "No image found at %s" % key
         return self._cachedImages[key]
 
     def _image(self, path, (x, y), alpha):
