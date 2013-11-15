@@ -711,6 +711,7 @@ class DrawBotDrawingTool(object):
             x, y = x
         if alpha is None:
             alpha = 1
+        path = optimizePath(path)
         self._addInstruction("image", path, (x, y), alpha)
 
     # mov
