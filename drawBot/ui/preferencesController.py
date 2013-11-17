@@ -330,7 +330,7 @@ class PreferencesController(BaseWindowController):
     def __init__(self):
         self.w = Window((500, 400), miniaturizable=False, minSize=(500, 300))
 
-        y = -70
+        y = -100
         self.w.syntaxColors = SyntaxColors((0, 0, -0, y))
 
         self.w.hl1 = HorizontalLine((10, y, -10, 1))
@@ -338,7 +338,9 @@ class PreferencesController(BaseWindowController):
         self.w.clearOutPut = CheckBox((10, y, -10, 22), "Clear text output before running script", callback=self.setToDefaults)
         y += 30
         self.w.animateIcon = CheckBox((10, y, -10, 22), "Animate Icon", callback=self.anitmateIconCallback)
-
+        y += 30
+        self.w.checkForUpdates = CheckBox((10, y, 230, 22), "Check For Updates at Startup", callback=self.setToDefaults)
+        self.w.checkNow = Button((230, y, 100, 22), "Check Now", callback=self.checkNowCallback, sizeStyle="small")
         self.setUpBaseWindowBehavior()
         self.getFromDefaults()
         self.w.open()
@@ -346,15 +348,26 @@ class PreferencesController(BaseWindowController):
     def getFromDefaults(self):
         self.w.clearOutPut.set(getDefault("DrawBotClearOutput", True))
         self.w.animateIcon.set(getDefault("DrawBotAnimateIcon", True))
+        self.w.checkForUpdates.set(getDefault("DrawBotCheckForUpdatesAtStartup", True))
         self.w.syntaxColors.getFromDefaults()
 
     def setToDefaults(self, sender=None):
         setDefault("DrawBotClearOutput", self.w.clearOutPut.get())
         setDefault("DrawBotAnimateIcon", self.w.animateIcon.get())
+        setDefault("DrawBotCheckForUpdatesAtStartup", self.w.checkForUpdates.get())
 
     def anitmateIconCallback(self, sender):
         self.setToDefaults()
         NSApp().delegate().sheduleIconTimer()
+
+    def checkNowCallback(self, sender):
+        from drawBot.updater import Updater
+        oldValue = getDefault("DrawBotCheckForUpdatesAtStartup", True)
+        setDefault("DrawBotCheckForUpdatesAtStartup", True)
+        updater = Updater(self.w)
+        if not updater.needsUpdate:
+            self.showMessage("You have the latest version!", "DrawBot %s is currently the newest version" % updater.__version__)
+        setDefault("DrawBotCheckForUpdatesAtStartup", oldValue)
 
     def show(self):
         self.w.show()

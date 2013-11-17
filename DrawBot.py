@@ -9,6 +9,7 @@ from drawBot.ui.preferencesController import PreferencesController
 from drawBot.ui.debug import DebugWindowController
 
 from drawBot.misc import getDefault, stringToInt
+from drawBot.updater import Updater
 
 import objc
 
@@ -70,6 +71,7 @@ class DrawBotAppDelegate(NSObject):
 
     def applicationDidFinishLaunching_(self, notification):
         self._debugger = DebugWindowController()
+        Updater()
 
     def applicationDidBecomeActive_(self, notification):
         self.sheduleIconTimer()
