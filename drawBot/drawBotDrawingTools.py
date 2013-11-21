@@ -707,8 +707,11 @@ class DrawBotDrawingTool(object):
         .. showcode:: /../examples/image.py 
         """
         if isinstance(x, (tuple)):
-            alpha = y
+            if alpha is None and y is not None:
+                alpha = y
             x, y = x
+        else:
+            _deprecatedWarning("image(\"%s\", (%s, %s), alpha=%s)" % (path, x, y, alpha))
         if alpha is None:
             alpha = 1
         path = optimizePath(path)
