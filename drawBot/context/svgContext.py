@@ -86,7 +86,7 @@ class SVGContext(BaseContext):
         self.reset()
         self.size(width, height)
         self._svgData = self._svgFileClass()
-        self._svgContext = XMLWriter(self._svgData)
+        self._svgContext = XMLWriter(self._svgData, encoding="utf-8")
         self._svgContext.begintag("svg", width=self.width, height=self.height, **self._svgTagArguments)
         self._svgContext.newline()
         self._state.transformMatrix = self._state.transformMatrix.scale(1, -1).translate(0, -self.height)
@@ -126,7 +126,13 @@ class SVGContext(BaseContext):
         self._state.clipPathID = uniqueID
 
     def _textBox(self, txt, (x, y, w, h), align):
+        if align == "justified":
+             warnings.warn("justified text is not supported in a svg context")
         attrString = self.attributedString(txt, align=align)
+        if self._state.text.hyphenation:
+            attrString = self.hyphenateAttributedString(attrString, w)
+        txt = attrString.string()
+
         setter = CoreText.CTFramesetterCreateWithAttributedString(attrString)
         path = CoreText.CGPathCreateMutable()
         CoreText.CGPathAddRect(path, None, CoreText.CGRectMake(x, y, w, h))
@@ -145,14 +151,14 @@ class SVGContext(BaseContext):
         ctLines = CoreText.CTFrameGetLines(box)
         for ctLine in ctLines:
             r = CoreText.CTLineGetStringRange(ctLine)
-            line = txt[r.location:r.location+r.length]
+            line = txt.substringWithRange_((r.location, r.length))
             while line and line[-1] == " ":
                 line = line[:-1]
-            lines.append(line.replace("\n", ""))
+            line = line.replace("\n", "")
+            lines.append(line.encode("utf-8"))
 
         self._svgContext.begintag("text", **data)
         self._svgContext.newline()
-        txt = []
         origins = CoreText.CTFrameGetLineOrigins(box, (0, len(ctLines)), None)
         for i, (originX, originY) in enumerate(origins):
             line = lines[i]

@@ -92,6 +92,20 @@ class BezierPath(object):
         """
         return self._path.containsPoint_((x, y))
     
+    def bounds(self):
+        """
+        Return the bounding box of the path.
+        """
+        (x, y), (w, h) = self._path.bounds()
+        return x, y, w, h
+
+    def controlPointBounds(self):
+        """
+        Return the bounding box of the path including the offcurve points.
+        """
+        (x, y), (w, h) = self._path.controlPointBounds()
+        return x, y, w, h
+
     def _points(self, onCurve=True, offCurve=True):
         points = []
         if not onCurve and not offCurve:
@@ -247,6 +261,7 @@ class Text(object):
         self._fontName = self._backupFont
         self._fontSize = 10
         self._lineHeight = None
+        self._hyphenation = None
     
     def _get_font(self):
         _font = AppKit.NSFont.fontWithName_size_(self._fontName, self.fontSize)
@@ -282,11 +297,20 @@ class Text(object):
 
     lineHeight = property(_get_lineHeight, _set_lineHeight)
 
+    def _get_hyphenation(self):
+        return self._hyphenation
+
+    def _set_hyphenation(self, value):
+        self._hyphenation = value
+
+    hyphenation = property(_get_hyphenation, _set_hyphenation)
+
     def copy(self):
         new = self.__class__()
         new.fontName = self.fontName
         new.fontSize = self.fontSize
         new.lineHeight = self.lineHeight
+        new.hyphenation = self.hyphenation
         return new
 
 class GraphicsState(object):
@@ -366,7 +390,10 @@ class BaseContext(object):
         center=AppKit.NSCenterTextAlignment,
         left=AppKit.NSLeftTextAlignment,
         right=AppKit.NSRightTextAlignment,
+        justified=AppKit.NSJustifiedTextAlignment,
         )
+
+    _softHypen = 0x00AD
 
     def __init__(self):
         self.width = None
@@ -608,6 +635,9 @@ class BaseContext(object):
     def lineHeight(self, value):
         self._state.text.lineHeight = value
 
+    def hyphenation(self, value):
+        self._state.text.hyphenation = value
+
     def attributedString(self, txt, align=None):
         attributes = {AppKit.NSFontAttributeName : self._state.text.font}
         if self._state.fillColor is not None:
@@ -636,6 +666,46 @@ class BaseContext(object):
     
         text = AppKit.NSAttributedString.alloc().initWithString_attributes_(txt, attributes)
         return text
+
+    def hyphenateAttributedString(self, attrString, width):
+        attrString = attrString.mutableCopy()
+        mutString = attrString.mutableString()
+        wordRange = AppKit.NSMakeRange(mutString.length(), 0)
+        while wordRange.location > 2:
+            wordRange = attrString.doubleClickAtIndex_(wordRange.location - 2)
+            hyphenIndex = AppKit.NSMaxRange(wordRange)
+            while hyphenIndex != AppKit.NSNotFound:
+                hyphenIndex = attrString.lineBreakByHyphenatingBeforeIndex_withinRange_(hyphenIndex, wordRange)
+                if hyphenIndex != AppKit.NSNotFound:
+                    mutString.insertString_atIndex_(unichr(self._softHypen), hyphenIndex)
+
+        hyphenAttrString = self.attributedString("-")
+        hyphenWidth = hyphenAttrString.size().width
+        textLength = attrString.length()
+        
+        setter = CoreText.CTTypesetterCreateWithAttributedString(attrString)
+        location = 0
+
+        while location < textLength:
+            breakIndex = CoreText.CTTypesetterSuggestLineBreak(setter, location, width)
+            sub = attrString.attributedSubstringFromRange_((location, breakIndex))
+            location += breakIndex
+            subString = sub.string()
+            if breakIndex == 0:
+                break
+            subString = sub.string()
+            if subString[-1] == unichr(self._softHypen):
+                if sub.size().width + hyphenWidth < width:
+                    mutString.insertString_atIndex_("-", location)
+                    setter = CoreText.CTTypesetterCreateWithAttributedString(attrString)
+                    location += 1
+                else:
+                    attrString.deleteCharactersInRange_((location-1, 1))
+                    setter = CoreText.CTTypesetterCreateWithAttributedString(attrString)
+                    location -= breakIndex
+                    
+        mutString.replaceOccurrencesOfString_withString_options_range_(unichr(self._softHypen), "", AppKit.NSLiteralSearch, (0, mutString.length()))
+        return attrString
 
     def clippedText(self, txt, (x, y, w, h), align):
         attrString = self.attributedString(txt, align=align)

@@ -22,22 +22,22 @@ class DrawBotDocument(NSDocument):
     
     def writeSafelyToURL_ofType_forSaveOperation_error_(self, url, fileType, saveOperation, error):
         path = url.path()
-        code = self.windowController.code()
+        code = self.vanillaWindowController.code()
         f = file(path, "w")
         f.write(code.encode("utf8"))
         f.close()	
         return True, None
 
     def makeWindowControllers(self):
-        self.windowController = DrawBotController()
-        wc = self.windowController.w.getNSWindowController()
+        self.vanillaWindowController = DrawBotController()
+        wc = self.vanillaWindowController.w.getNSWindowController()
         self.addWindowController_(wc)
         wc.setShouldCloseDocument_(True)
         
         url = self.fileURL()
         if url:
-            self.windowController.setPath(url.path())
-        self.windowController.open()
+            self.vanillaWindowController.setPath(url.path())
+        self.vanillaWindowController.open()
 
     # main menu callbacks
 
@@ -45,20 +45,20 @@ class DrawBotDocument(NSDocument):
         liveCoding = False
         if hasattr(sender, "isLiveCoding"):
             liveCoding = sender.isLiveCoding()
-        self.windowController.runCode(liveCoding)
+        self.vanillaWindowController.runCode(liveCoding)
         return True
 
     def checkSyntax_(self, sender):
-        self.windowController.checkSyntax()
+        self.vanillaWindowController.checkSyntax()
         return True
 
     def saveDocumentAsPDF_(self, sender):
-        self.windowController.savePDF()
+        self.vanillaWindowController.savePDF()
         return True
 
     def validateMenuItem_(self, menuItem):
         if menuItem.action() in ("saveDocumentAsPDF:"):
-            return self.windowController.pdfData() is not None
+            return self.vanillaWindowController.pdfData() is not None
         return True
 
 class DrawBotAppDelegate(NSObject):
@@ -118,7 +118,7 @@ class DrawBotAppDelegate(NSObject):
             code = response.read()
             response.close()
             document, error = documentController.openUntitledDocumentAndDisplay_error_(True, None)
-            document.windowController.setCode(code)
+            document.vanillaWindowController.setCode(code)
         else:
             # local
             pythonPath = data.path
@@ -126,7 +126,7 @@ class DrawBotAppDelegate(NSObject):
             code = f.read()
             f.close()
             document, error = documentController.openUntitledDocumentAndDisplay_error_(True, None)
-            document.windowController.setCode(code)
+            document.vanillaWindowController.setCode(code)
 
         def result(shouldOpen):
             if not shouldOpen:
@@ -136,7 +136,7 @@ class DrawBotAppDelegate(NSObject):
         domain = data.netloc
         if not domain:
             domain = "Local"
-        document.windowController.showAskYesNo("Download External Script", 
+        document.vanillaWindowController.showAskYesNo("Download External Script", 
             "You opened '%s' from '%s'.\n\n"
             "Read the code before running it so you know what it will do. If you don't understand it, don't run it.\n\n"
             "Do you want to open this Script?" % (fileName, data.netloc) ,

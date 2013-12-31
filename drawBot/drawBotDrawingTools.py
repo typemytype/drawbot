@@ -649,6 +649,8 @@ class DrawBotDrawingTool(object):
     def lineHeight(self, value):
         """
         Set the line height.
+    
+        .. showcode:: /../examples/lineHeight.py 
         """
         self._dummyContext.lineHeight(value)
         self._addInstruction("lineHeight", value)
@@ -656,6 +658,15 @@ class DrawBotDrawingTool(object):
     def lineheight(self, value):
         _deprecatedWarning("lineHeight(%s)" % value)
         self.lineHeight(value)
+
+    def hyphenation(self, value):
+        """
+        Set hyphenation, `True` or `False`.
+
+        .. showcode:: /../examples/hyphenation.py 
+        """
+        self._dummyContext.hyphenation(value)
+        self._addInstruction("hyphenation", value)
 
     # drawing text
 
@@ -794,6 +805,14 @@ class DrawBotDrawingTool(object):
 
             Check if a point `x`, `y` is inside a path.
         
+        .. function:: bezierPath.bounds()
+            
+            Return the bounding box of the path as `x`, `y`, `width`, `height`. 
+        
+        .. function:: bezierPath.controlPointBounds()
+
+            Return the bounding box of the path including the offcurve points as `x`, `y`, `width`, `height`.
+
         .. function:: bezierPath.copy()
 
             Copy the bezier path.
@@ -844,7 +863,7 @@ class DrawBotDrawingTool(object):
         if not documents:
             raise DrawBotError, "There is no document open"
         document = documents[0]
-        controller = document.windowController
+        controller = document.vanillaWindowController
 
         try:
             controller._variableController.buildUI(variables)

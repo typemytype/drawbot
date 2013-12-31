@@ -100,15 +100,21 @@ class PDFContext(BaseContext):
 
     def _textBox(self, txt, (x, y, w, h), align):
         attrString = self.attributedString(txt, align=align)
+        if self._state.text.hyphenation:
+            attrString = self.hyphenateAttributedString(attrString, w)
+
         setter = CoreText.CTFramesetterCreateWithAttributedString(attrString)
         path = Quartz.CGPathCreateMutable()
         Quartz.CGPathAddRect(path, None, Quartz.CGRectMake(x, y, w, h))
         box = CoreText.CTFramesetterCreateFrame(setter, (0, 0), path, None)
-            
+
         ctLines = CoreText.CTFrameGetLines(box)
         origins = CoreText.CTFrameGetLineOrigins(box, (0, len(ctLines)), None)
         for i, (originX, originY) in enumerate(origins):
             ctLine = ctLines[i]
+            bounds = CoreText.CTLineGetImageBounds(ctLine, self._pdfContext)
+            if bounds.size.width == 0:
+                continue
             self._save()
             Quartz.CGContextSelectFont(self._pdfContext, self._state.text.fontName, self._state.text.fontSize, Quartz.kCGEncodingMacRoman)
             drawingMode = None
