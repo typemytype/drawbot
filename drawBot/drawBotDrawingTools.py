@@ -4,7 +4,7 @@ import math
 import os
 
 from context import getContextForFileExt
-from context.baseContext import BezierPath
+from context.baseContext import BezierPath, FormattedString
 from context.dummyContext import DummyContext
 
 from misc import DrawBotError, warnings, VariableController, optimizePath
@@ -627,6 +627,7 @@ class DrawBotDrawingTool(object):
 
             font("Times-Italic")
         """
+        fontName = fontName.encode("ascii", "ignore")
         self._dummyContext.font(fontName, fontSize)
         self._addInstruction("font", fontName, fontSize)
 
@@ -705,6 +706,40 @@ class DrawBotDrawingTool(object):
     def textbox(self, txt, x, y, w, h, align=None):
         _deprecatedWarning("textbox(%s, (%s, %s, %s, %s), align=%s)" % (txt, x, y, y, w, align))
         self.textbox(txt, (x, y, w, h), align)
+
+    _formattedStringClass = FormattedString
+
+    def FormattedString(self, *args, **kwargs):
+        """
+        Return a string object that can handle text formatting.
+        
+        This is a reusable object, if you want to draw the same over and over again.
+        FromattedString objects can be draw with the `text(txt, (x, y))` and `textBox(txt, (x, y, w, h))` methods.
+
+        **FormattedString methods**
+
+        .. function:: formattedString.append(text, font, fontSize=10, fill=(0, 0, 0), cmykFill=None, stroke=None, cmykStroke=None, strokeWidth=1, align=None, lineHeight=None)
+            
+            Add `text` to the formatted string with some additional text formatting attributes:
+
+            * `font`: the font to be used for the given text
+            * `fontSize`: the font size to be used for the given text
+            * `fill`: the fill color to be used for the given text
+            * `cmykFill`: the cmyk fill color to be used for the given text
+            * `stroke`: the stroke color to be used for the given text
+            * `cmykStroke`: the cmyk stroke color to be used for the given text
+            * `strokeWidth`: the strokeWidth to be used for the given text
+            * `align`: the alignment to be used for the given text
+            * `lineHeight`: the lineHeight to be used for the given text
+
+            All formatting attributes following the same notition as other similar DrawBot methods. 
+            A color is a tuple of `(r, g, b, alpha)` a cmykColor is a tuple of `(c, m, y, k, alpha)`.
+        
+            Text can also be added with `formattedString += "hello"`. It will append the text with the current settings of the formatted string.
+
+        .. showcode:: /../examples/formattedString.py 
+        """
+        return self._formattedStringClass(*args, **kwargs)
 
     # images
 

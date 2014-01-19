@@ -4,7 +4,7 @@ import Quartz
 
 import os
 
-from baseContext import BaseContext
+from baseContext import BaseContext, FormattedString
 from drawBot.misc import DrawBotError
 
 class PDFContext(BaseContext):
@@ -99,6 +99,7 @@ class PDFContext(BaseContext):
             Quartz.CGContextClip(self._pdfContext)
 
     def _textBox(self, txt, (x, y, w, h), align):
+        canDoGradients = not isinstance(txt, FormattedString)
         attrString = self.attributedString(txt, align=align)
         if self._state.text.hyphenation:
             attrString = self.hyphenateAttributedString(attrString, w)
@@ -115,54 +116,59 @@ class PDFContext(BaseContext):
             bounds = CoreText.CTLineGetImageBounds(ctLine, self._pdfContext)
             if bounds.size.width == 0:
                 continue
-            self._save()
-            Quartz.CGContextSelectFont(self._pdfContext, self._state.text.fontName, self._state.text.fontSize, Quartz.kCGEncodingMacRoman)
-            drawingMode = None
-            if self._state.shadow is not None:
-                self._pdfShadow(self._state.shadow)
-                if self._state.gradient is not None:
-                    self._save()
-                    self._state.fillColor = self._state.shadow.color
-                    self._state.cmykColor = self._state.shadow.cmykColor
-                    self._pdfFillColor()
-                    self._state.fillColor = None
-                    self._state.cmykColor = None
-                    Quartz.CGContextSetTextDrawingMode(self._pdfContext, Quartz.kCGTextFill)
-                    Quartz.CGContextSetTextPosition(self._pdfContext, x+originX, y+originY)
-                    CoreText.CTLineDraw(ctLine, self._pdfContext)
-                    self._restore()
-            if self._state.gradient is not None:
+            ctRuns = CoreText.CTLineGetGlyphRuns(ctLine)
+            for ctRun in ctRuns:
+                attributes = CoreText.CTRunGetAttributes(ctRun)
+                fillColor = attributes.get(AppKit.NSForegroundColorAttributeName)
+                strokeColor = attributes.get(AppKit.NSStrokeColorAttributeName)
+                strokeWidth = attributes.get(AppKit.NSStrokeWidthAttributeName, self._state.strokeWidth)
+
                 self._save()
-                Quartz.CGContextSetTextDrawingMode(self._pdfContext, Quartz.kCGTextClip)
-                Quartz.CGContextSetTextPosition(self._pdfContext, x+originX, y+originY)
-                CoreText.CTLineDraw(ctLine, self._pdfContext)
-                self._pdfGradient(self._state.gradient)
-                self._restore()
                 drawingMode = None
-            elif self._state.fillColor is not None:
-                drawingMode = Quartz.kCGTextFill
-                self._pdfFillColor()
-            if self._state.strokeColor is not None:
-                drawingMode = Quartz.kCGTextStroke
-                self._pdfStrokeColor()
-                strokeWidth = self._state.strokeWidth
-                Quartz.CGContextSetLineWidth(self._pdfContext, self._state.strokeWidth)
-                if self._state.lineDash is not None:
-                    Quartz.CGContextSetLineDash(self._pdfContext, 0, self._state.lineDash, len(self._state.lineDash))
-                if self._state.miterLimit is not None:
-                    Quartz.CGContextSetMiterLimit(self._pdfContext, self._state.miterLimit)
-                if self._state.lineCap is not None:
-                    Quartz.CGContextSetLineCap(self._pdfContext, self._state.lineCap)
-                if self._state.lineJoin is not None:
-                    Quartz.CGContextSetLineJoin(self._pdfContext, self._state.lineJoin)
-            if self._state.fillColor is not None and self._state.strokeColor is not None:
-                drawingMode = Quartz.kCGTextFillStroke
-            
-            if drawingMode is not None:
-                Quartz.CGContextSetTextDrawingMode(self._pdfContext, drawingMode)
-                Quartz.CGContextSetTextPosition(self._pdfContext, x+originX, y+originY)
-                CoreText.CTLineDraw(ctLine, self._pdfContext)
-            self._restore()
+                if self._state.shadow is not None:
+                    self._pdfShadow(self._state.shadow)
+                    if canDoGradients and self._state.gradient is not None:
+                        self._save()
+                        self._state.fillColor = self._state.shadow.color
+                        self._state.cmykColor = self._state.shadow.cmykColor
+                        self._pdfFillColor()
+                        self._state.fillColor = None
+                        self._state.cmykColor = None
+                        Quartz.CGContextSetTextDrawingMode(self._pdfContext, Quartz.kCGTextFill)
+                        Quartz.CGContextSetTextPosition(self._pdfContext, x+originX, y+originY)
+                        CoreText.CTRunDraw(ctRun, self._pdfContext, (0, 0))
+                        self._restore()
+                if canDoGradients and self._state.gradient is not None:
+                    self._save()
+                    Quartz.CGContextSetTextDrawingMode(self._pdfContext, Quartz.kCGTextClip)
+                    Quartz.CGContextSetTextPosition(self._pdfContext, x+originX, y+originY)
+                    CoreText.CTRunDraw(ctRun, self._pdfContext, (0, 0))
+                    self._pdfGradient(self._state.gradient)
+                    self._restore()
+                    drawingMode = None
+                elif fillColor is not None:
+                    drawingMode = Quartz.kCGTextFill
+                    self._pdfFillColor(fillColor)
+                if strokeColor is not None:
+                    drawingMode = Quartz.kCGTextStroke
+                    self._pdfStrokeColor(strokeColor)
+                    Quartz.CGContextSetLineWidth(self._pdfContext, strokeWidth)
+                    if self._state.lineDash is not None:
+                        Quartz.CGContextSetLineDash(self._pdfContext, 0, self._state.lineDash, len(self._state.lineDash))
+                    if self._state.miterLimit is not None:
+                        Quartz.CGContextSetMiterLimit(self._pdfContext, self._state.miterLimit)
+                    if self._state.lineCap is not None:
+                        Quartz.CGContextSetLineCap(self._pdfContext, self._state.lineCap)
+                    if self._state.lineJoin is not None:
+                        Quartz.CGContextSetLineJoin(self._pdfContext, self._state.lineJoin)
+                if fillColor is not None and strokeColor is not None:
+                    drawingMode = Quartz.kCGTextFillStroke
+                
+                if drawingMode is not None:
+                    Quartz.CGContextSetTextDrawingMode(self._pdfContext, drawingMode)
+                    Quartz.CGContextSetTextPosition(self._pdfContext, x+originX, y+originY)
+                    CoreText.CTRunDraw(ctRun, self._pdfContext, (0, 0))
+                self._restore()
 
     def _getImageSource(self, key):
         if key not in self._cachedImages:
@@ -206,21 +212,21 @@ class PDFContext(BaseContext):
             elif instruction == AppKit.NSClosePathBezierPathElement:
                 Quartz.CGContextClosePath(self._pdfContext)
 
-    def _pdfFillColor(self):
-        if self._state.cmykFillColor:
-            c = self._state.cmykFillColor.getNSObject()
-            Quartz.CGContextSetCMYKFillColor(self._pdfContext, c.cyanComponent(), c.magentaComponent(), c.yellowComponent(), c.blackComponent(), c.alphaComponent())
-        else:
-            c = self._state.fillColor.getNSObject()
-            Quartz.CGContextSetRGBFillColor(self._pdfContext, c.redComponent(), c.greenComponent(), c.blueComponent(), c.alphaComponent())
+    def _pdfFillColor(self, c=None):
+        if c is None:
+            if self._state.cmykFillColor:
+                c = self._state.cmykFillColor.getNSObject()
+            else:
+                c = self._state.fillColor.getNSObject()
+        Quartz.CGContextSetFillColorWithColor(self._pdfContext, c.CGColor())
     
-    def _pdfStrokeColor(self):
-        if self._state.cmykStrokeColor:
-            c = self._state.cmykStrokeColor.getNSObject()
-            Quartz.CGContextSetCMYKStrokeColor(self._pdfContext, c.cyanComponent(), c.magentaComponent(), c.yellowComponent(), c.blackComponent(), c.alphaComponent())
-        else:
-            c = self._state.strokeColor.getNSObject()
-            Quartz.CGContextSetRGBStrokeColor(self._pdfContext, c.redComponent(), c.greenComponent(), c.blueComponent(), c.alphaComponent())
+    def _pdfStrokeColor(self, c=None):
+        if c is None:
+            if self._state.cmykStrokeColor:
+                c = self._state.cmykStrokeColor.getNSObject()
+            else:
+                c = self._state.strokeColor.getNSObject()
+        Quartz.CGContextSetStrokeColorWithColor(self._pdfContext, c.CGColor())
 
     def _pdfShadow(self, shadow):
         if shadow.cmykColor:

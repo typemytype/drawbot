@@ -177,7 +177,7 @@ class Color(object):
         self._color.setStroke()
         
     def getNSObject(self):
-        return self._color
+        return self._color        
 
     def copy(self):
         new = self.__class__()
@@ -252,6 +252,139 @@ class Gradient(object):
         new.end = self.end
         new.startRadius = self.startRadius
         new.endRadius = self.endRadius
+        return new
+
+class FormattedString(object):
+    
+    _colorClass = Color
+    _cmykColorClass = CMYKColor
+
+    _textAlignMap = dict(
+        center=AppKit.NSCenterTextAlignment,
+        left=AppKit.NSLeftTextAlignment,
+        right=AppKit.NSRightTextAlignment,
+        justified=AppKit.NSJustifiedTextAlignment,
+        )
+
+    def __init__(self, txt=None, 
+                        font=None, fontSize=10, 
+                        fill=(0, 0, 0), cmykFill=None, 
+                        stroke=None, cmykStroke=None, strokeWidth=1,
+                        align=None, lineHeight=None):
+        self._attributedString = AppKit.NSMutableAttributedString.alloc().init()
+        self._font = font
+        self._fontSize = fontSize
+        self._fill = fill
+        self._cmykFill = cmykFill
+        self._stroke = stroke
+        self._cmykStroke = cmykStroke
+        self._strokeWidth = strokeWidth
+        self._align = align
+        self._lineHeight = lineHeight
+        if txt:
+            self.append(txt, font=font, fontSize=fontSize, 
+                        fill=fill, cmykFill=cmykFill,
+                        stroke=stroke, cmykStroke=cmykStroke, strokeWidth=strokeWidth,
+                        align=align, lineHeight=lineHeight)
+    
+    def append(self, txt, 
+                    font, fontSize=10, 
+                    fill=(0, 0, 0), cmykFill=None,
+                    stroke=None, cmykStroke=None, strokeWidth=1,
+                    align=None, lineHeight=None):
+        self._font = font
+        self._fontSize = fontSize
+        self._fill = fill
+        self._cmykFill = cmykFill
+        self._stroke = stroke
+        self._cmykStroke = cmykStroke
+        self._strokeWidth = strokeWidth
+        self._align = align
+        self._lineHeight = lineHeight
+        if isinstance(txt, FormattedString):
+            self._attributedString.appendAttributedString_(txt.getNSObject())
+            return
+        attributes = {}
+        if font:
+            font = AppKit.NSFont.fontWithName_size_(font, fontSize)
+            if font is not None:
+                attributes[AppKit.NSFontAttributeName] = font
+        if fill or cmykFill:
+            if fill:
+                fillColor = self._colorClass(*fill).getNSObject()
+            elif cmykFill:
+                fillColor = self._cmykColorClass(*cmykFill).getNSObject()
+            attributes[AppKit.NSForegroundColorAttributeName] = fillColor
+        if stroke or cmykStroke:
+            if stroke:
+                strokeColor = self._colorClass(*stroke).getNSObject()
+            elif cmykStroke:
+                strokeColor = self._cmykColorClass(*cmykStroke).getNSObject()
+            attributes[AppKit.NSStrokeColorAttributeName] = strokeColor
+            attributes[AppKit.NSStrokeWidthAttributeName] = -abs(strokeWidth)
+        para = AppKit.NSMutableParagraphStyle.alloc().init()
+        if align:
+            para.setAlignment_(self._textAlignMap[align])
+        if lineHeight:
+            para.setLineSpacing_(lineHeight)
+            para.setMaximumLineHeight_(lineHeight)
+            para.setMinimumLineHeight_(lineHeight)
+        attributes[AppKit.NSParagraphStyleAttributeName] = para
+        txt = AppKit.NSAttributedString.alloc().initWithString_attributes_(txt, attributes)
+        self._attributedString.appendAttributedString_(txt)
+    
+    def __add__(self, txt):
+        new = self.copy()
+        new.append(txt, 
+                    font=self._font, fontSize=self._fontSize, 
+                    fill=self._fill, cmykFill=self._cmykFill, 
+                    stroke=self._stroke, cmykStroke=self._cmykStroke, strokeWidth=self._strokeWidth)
+        return new
+    
+    def __getitem__(self, index):
+        if isinstance(index, slice):
+            start = index.start
+            stop = index.stop
+            textLenght = len(self)
+            
+            if start is None:
+                start = 0
+            elif start < 0:
+                start = textLenght + start
+            elif start > textLenght:
+                start = textLenght
+
+            if stop is None:
+                stop = textLenght
+            elif stop < 0:
+                stop = textLenght + stop
+                        
+            if start + (stop-start) > textLenght:
+                stop = textLenght - stop
+            
+            rng = (start, stop-start)
+            new = self.__class__()
+            try:
+                new._attributedString = self._attributedString.attributedSubstringFromRange_(rng)
+            except:
+                pass
+            return new
+        else:
+            text = str(self)
+            return text[index]
+    
+    def __len__(self):
+        return self._attributedString.length()
+    
+    def __repr__(self):
+        return self._attributedString.string()
+        
+    def getNSObject(self):
+        return self._attributedString
+            
+    def copy(self):
+        new = self.__class__()
+        new._attributedString = self._attributedString.mutableCopy()
         return new
 
 class Text(object):
@@ -566,6 +699,7 @@ class BaseContext(object):
     def linearGradient(self, startPoint=None, endPoint=None, colors=None, locations=None):
         if startPoint is None:
             self._state.gradient = None
+            self.fill(0)
             return
         self._state.gradient = self._gradientClass("linear", startPoint, endPoint, colors, locations)
         self.fill(None)
@@ -573,6 +707,7 @@ class BaseContext(object):
     def cmykLinearGradient(self, startPoint=None, endPoint=None, colors=None, locations=None):
         if startPoint is None:
             self._state.gradient = None
+            self.fill(0)
             return
         rgbColors = [cmyk2rgb(color[0], color[1], color[2], color[3]) for color in colors]
         self._state.gradient = self._gradientClass("linear", startPoint, endPoint, rgbColors, locations)
@@ -582,6 +717,7 @@ class BaseContext(object):
     def radialGradient(self, startPoint=None, endPoint=None, colors=None, locations=None, startRadius=0, endRadius=100):
         if startPoint is None:
             self._state.gradient = None
+            self.fill(0)
             return
         self._state.gradient = self._gradientClass("radial", startPoint, endPoint, colors, locations, startRadius, endRadius)
         self.fill(None)
@@ -589,6 +725,7 @@ class BaseContext(object):
     def cmykRadialGradient(self, startPoint=None, endPoint=None, colors=None, locations=None, startRadius=0, endRadius=100):
         if startPoint is None:
             self._state.gradient = None
+            self.fill(0)
             return
         rgbColors = [cmyk2rgb(color[0], color[1], color[2], color[3]) for color in colors]
         self._state.gradient = self._gradientClass("radial", startPoint, endPoint, rgbColors, locations, startRadius, endRadius)
@@ -639,6 +776,8 @@ class BaseContext(object):
         self._state.text.hyphenation = value
 
     def attributedString(self, txt, align=None):
+        if isinstance(txt, FormattedString):
+            return txt.getNSObject()
         attributes = {AppKit.NSFontAttributeName : self._state.text.font}
         if self._state.fillColor is not None:
             extra = {
@@ -646,15 +785,13 @@ class BaseContext(object):
                 }
             attributes.update(extra)
         if self._state.strokeColor is not None:
-            strokeWidth = self._state.strokeWidth
-            if self._state.fillColor is not None:
-                strokeWidth *= -1
-            extra = {
-                    AppKit.NSStrokeWidthAttributeName : strokeWidth,
-                    AppKit.NSStrokeColorAttributeName : self._state.strokeColor.getNSObject(),
-                    }
+             strokeWidth = -abs(self._state.strokeWidth)
+             extra = {
+                     #AppKit.NSStrokeWidthAttributeName : strokeWidth,
+                     AppKit.NSStrokeColorAttributeName : self._state.strokeColor.getNSObject(),
+                     }
         
-            attributes.update(extra)
+             attributes.update(extra)
         para = AppKit.NSMutableParagraphStyle.alloc().init()
         if align:
             para.setAlignment_(self._textAlignMap[align])
@@ -679,8 +816,6 @@ class BaseContext(object):
                 if hyphenIndex != AppKit.NSNotFound:
                     mutString.insertString_atIndex_(unichr(self._softHypen), hyphenIndex)
 
-        hyphenAttrString = self.attributedString("-")
-        hyphenWidth = hyphenAttrString.size().width
         textLength = attrString.length()
         
         setter = CoreText.CTTypesetterCreateWithAttributedString(attrString)
@@ -695,6 +830,9 @@ class BaseContext(object):
                 break
             subString = sub.string()
             if subString[-1] == unichr(self._softHypen):
+                subAttr, _ = sub.attributesAtIndex_effectiveRange_(0, None)
+                hyphenAttrString = AppKit.NSAttributedString.alloc().initWithString_attributes_("-", subAttr)
+                hyphenWidth = hyphenAttrString.size().width
                 if sub.size().width + hyphenWidth < width:
                     mutString.insertString_atIndex_("-", location)
                     setter = CoreText.CTTypesetterCreateWithAttributedString(attrString)
@@ -709,12 +847,18 @@ class BaseContext(object):
 
     def clippedText(self, txt, (x, y, w, h), align):
         attrString = self.attributedString(txt, align=align)
+        if self._state.text.hyphenation:
+            attrString = self.hyphenateAttributedString(attrString, w)
         setter = CoreText.CTFramesetterCreateWithAttributedString(attrString)
         path = CoreText.CGPathCreateMutable()
         CoreText.CGPathAddRect(path, None, CoreText.CGRectMake(x, y, w, h))
         box = CoreText.CTFramesetterCreateFrame(setter, (0, 0), path, None)
         visibleRange = CoreText.CTFrameGetVisibleStringRange(box)
-        return txt[visibleRange.length:]
+        clip = visibleRange.length
+        if self._state.text.hyphenation:
+            subString = attrString.string()[:clip]
+            clip -= subString.count("-")
+        return txt[clip:]
 
     def textSize(self, txt, align):
         text = self.attributedString(txt, align)
