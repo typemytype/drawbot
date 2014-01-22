@@ -216,25 +216,33 @@ class PDFContext(BaseContext):
         if c is None:
             if self._state.cmykFillColor:
                 c = self._state.cmykFillColor.getNSObject()
+                cgColor = self._cmykNSColorToCGColor(c)
             else:
                 c = self._state.fillColor.getNSObject()
-        Quartz.CGContextSetFillColorWithColor(self._pdfContext, c.CGColor())
+                cgColor = self._rgbNSColorToCGColor(c)
+        else:
+            cgColor = self._nsColorToCGColor(c)
+        Quartz.CGContextSetFillColorWithColor(self._pdfContext, cgColor)
     
     def _pdfStrokeColor(self, c=None):
         if c is None:
             if self._state.cmykStrokeColor:
                 c = self._state.cmykStrokeColor.getNSObject()
+                cgColor = self._cmykNSColorToCGColor(c)
             else:
                 c = self._state.strokeColor.getNSObject()
-        Quartz.CGContextSetStrokeColorWithColor(self._pdfContext, c.CGColor())
+                cgColor = self._rgbNSColorToCGColor(c)
+        else:
+            cgColor = self._nsColorToCGColor(c)
+        Quartz.CGContextSetStrokeColorWithColor(self._pdfContext, cgColor)
 
     def _pdfShadow(self, shadow):
         if shadow.cmykColor:
             c = shadow.cmykColor.getNSObject()
-            color = Quartz.CGColorCreateGenericCMYK(c.cyanComponent(), c.magentaComponent(), c.yellowComponent(), c.blackComponent(), c.alphaComponent())
+            color = self._cmykNSColorToCGColor(c)
         else:
             c = shadow.color.getNSObject()
-            color = Quartz.CGColorCreateGenericRGB(c.redComponent(), c.greenComponent(), c.blueComponent(), c.alphaComponent())
+            color = self._rgbNSColorToCGColor(c)
 
         Quartz.CGContextSetShadowWithColor(self._pdfContext, self._state.shadow.offset, self._state.shadow.blur, color)
     
@@ -244,14 +252,14 @@ class PDFContext(BaseContext):
             colors = []
             for color in gradient.cmykColors:
                 c = color.getNSObject()
-                cgColor = Quartz.CGColorCreateGenericCMYK(c.cyanComponent(), c.magentaComponent(), c.yellowComponent(), c.blackComponent(), c.alphaComponent())
+                cgColor = self._cmykNSColorToCGColor(c)
                 colors.append(cgColor)
         else:
             colorSpace = Quartz.CGColorSpaceCreateDeviceRGB()
             colors = []
             for color in gradient.colors:
                 c = color.getNSObject()
-                cgColor = Quartz.CGColorCreateGenericRGB(c.redComponent(), c.greenComponent(), c.blueComponent(), c.alphaComponent())
+                cgColor = self._rgbNSColorToCGColor(c)
                 colors.append(cgColor)
 
         cgGradient = Quartz.CGGradientCreateWithColors(
@@ -264,6 +272,17 @@ class PDFContext(BaseContext):
         elif gradient.gradientType == "radial":
             Quartz.CGContextDrawRadialGradient(self._pdfContext, cgGradient, gradient.start, gradient.startRadius, gradient.end, gradient.endRadius, Quartz.kCGGradientDrawsBeforeStartLocation|Quartz.kCGGradientDrawsAfterEndLocation)
 
+    def _nsColorToCGColor(self, c):
+        if c.numberOfComponents() == 5:
+            return self._cmykNSColorToCGColor(c)
+        else:
+            return self._rgbNSColorToCGColor(c)
+    
+    def _cmykNSColorToCGColor(self, c):
+        return Quartz.CGColorCreateGenericCMYK(c.cyanComponent(), c.magentaComponent(), c.yellowComponent(), c.blackComponent(), c.alphaComponent())
+
+    def _rgbNSColorToCGColor(self, c):
+        return Quartz.CGColorCreateGenericRGB(c.redComponent(), c.greenComponent(), c.blueComponent(), c.alphaComponent())
 
 
 
