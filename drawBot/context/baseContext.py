@@ -848,6 +848,7 @@ class BaseContext(object):
     def clippedText(self, txt, (x, y, w, h), align):
         attrString = self.attributedString(txt, align=align)
         if self._state.text.hyphenation:
+            hyphenIndexes = [i for i, c in enumerate(attrString.string()) if c == "-"]
             attrString = self.hyphenateAttributedString(attrString, w)
         setter = CoreText.CTFramesetterCreateWithAttributedString(attrString)
         path = CoreText.CGPathCreateMutable()
@@ -857,7 +858,13 @@ class BaseContext(object):
         clip = visibleRange.length
         if self._state.text.hyphenation:
             subString = attrString.string()[:clip]
+            for i in hyphenIndexes:
+                if i < clip:
+                    clip += 1
+                else:
+                    break
             clip -= subString.count("-")
+
         return txt[clip:]
 
     def textSize(self, txt, align):
