@@ -171,7 +171,14 @@ class PDFContext(BaseContext):
                 self._restore()
 
     def _getImageSource(self, key):
-        if key not in self._cachedImages:
+        if isinstance(key, AppKit.NSImage):
+            k = id(key)
+            if k not in self._cachedImages:
+                data = key.TIFFRepresentation()
+                source = Quartz.CGImageSourceCreateWithData(data, {})
+                self._cachedImages[k] = Quartz.CGImageSourceCreateImageAtIndex(source, 0, None)
+            return self._cachedImages[k]
+        elif key not in self._cachedImages:
             path = key
             if path.startswith("http"):
                 url = AppKit.NSURL.URLWithString_(path)

@@ -760,7 +760,8 @@ class DrawBotDrawingTool(object):
             _deprecatedWarning("image(\"%s\", (%s, %s), alpha=%s)" % (path, x, y, alpha))
         if alpha is None:
             alpha = 1
-        path = optimizePath(path)
+        if isinstance(path, (str, unicode)):
+            path = optimizePath(path)
         self._addInstruction("image", path, (x, y), alpha)
 
     # mov
