@@ -39,13 +39,19 @@ class PDFContext(BaseContext):
         Quartz.CGPDFContextClose(self._pdfContext)
         self._hasContext = False
 
-    def _saveImage(self, path):
+    def _saveImage(self, path, multipage):
         self._closeContext()
-        self._writeDataToFile(self._pdfData, path)
+        self._writeDataToFile(self._pdfData, path, multipage)
         self._pdfContext = None
         self._pdfData = None
 
-    def _writeDataToFile(self, data, path):
+    def _writeDataToFile(self, data, path, multipage):
+        if multipage is None:
+            multipage = True
+        if not multipage:
+            pdfDocument = Quartz.PDFDocument.alloc().initWithData_(data)
+            page = pdfDocument.pageAtIndex_(pdfDocument.pageCount()-1)
+            data = page.dataRepresentation()
         data.writeToFile_atomically_(path, True)
 
     def _save(self):

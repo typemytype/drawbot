@@ -19,12 +19,23 @@ class ImageContext(PDFContext):
 
     fileExtensions = _saveImageFileTypes.keys()
 
-    def _writeDataToFile(self, data, path):
-        fileName, ext = os.path.splitext(path)
-        ext = ext[1:]
+    def _writeDataToFile(self, data, path, multipage):
+        if multipage is None:
+            multipage = False
+        fileName, fileExt = os.path.splitext(path)
+        ext = fileExt[1:]
         pdfDocument = Quartz.PDFDocument.alloc().initWithData_(data)
-        page = pdfDocument.pageAtIndex_(pdfDocument.pageCount()-1)
-        image = AppKit.NSImage.alloc().initWithData_(page.dataRepresentation())
-        imageRep = AppKit.NSBitmapImageRep.imageRepWithData_(image.TIFFRepresentation())
-        imageData = imageRep.representationUsingType_properties_(self._saveImageFileTypes[ext], None)
-        imageData.writeToFile_atomically_(path, True)
+        firstPage = 0
+        pageCount = pdfDocument.pageCount()
+        pathAdd = "_1"
+        if not multipage:
+            firstPage = pageCount - 1
+            pathAdd = ""
+        for index in range(firstPage, pageCount):
+            page = pdfDocument.pageAtIndex_(index)
+            image = AppKit.NSImage.alloc().initWithData_(page.dataRepresentation())
+            imageRep = AppKit.NSBitmapImageRep.imageRepWithData_(image.TIFFRepresentation())
+            imageData = imageRep.representationUsingType_properties_(self._saveImageFileTypes[ext], None)
+            imagePath = fileName + pathAdd + fileExt
+            imageData.writeToFile_atomically_(imagePath, True)
+            pathAdd = "_%s" % (index + 2)

@@ -1,0 +1,4 @@
+BezierPath
+==========
+
+.. autofunction:: drawBot.BezierPath

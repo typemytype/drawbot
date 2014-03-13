@@ -6,6 +6,10 @@ from drawBot.misc import DrawBotError, cmyk2rgb, warnings
 
 class BezierPath(object):
 
+    """
+    A bezier path object, if you want to draw the same over and over again.
+    """
+
     def __init__(self, path=None):
         if path is None:
             self._path = AppKit.NSBezierPath.bezierPath()
@@ -74,6 +78,25 @@ class BezierPath(object):
         """
         self._path.appendBezierPathWithOvalInRect_(((x, y), (w, h)))
 
+    def text(self, txt, font=None, fontSize=10, offset=None):
+        """
+        Draws a `text` with a `font` and `fontSize` at an `offset` in the bezier path.
+        """
+        font = AppKit.NSFont.fontWithName_size_(font, fontSize)
+        if font is None:
+            raise DrawBotError, "Font '%s' is not installed." % font
+        attributedString = AppKit.NSAttributedString.alloc().initWithString_(txt)
+        line = CoreText.CTLineCreateWithAttributedString(attributedString)
+        glyphRuns = CoreText.CTLineGetGlyphRuns(line)
+        if offset:
+            x, y = offset
+        else:
+            x = y = 0
+        self._path.moveToPoint_((x, y))
+        for run in glyphRuns:
+            glyphs = CoreText.CTRunGetGlyphs(run, CoreText.CTRunGetStringRange(run), None)
+            self._path.appendBezierPathWithGlyphs_count_inFont_(glyphs, len(glyphs), font)
+        
     def getNSBezierPath(self):
         """
         Return the nsBezierPath.
@@ -266,6 +289,11 @@ class FormattedString(object):
         justified=AppKit.NSJustifiedTextAlignment,
         )
 
+    """
+    A fromatted string object, if you want to draw the same over and over again.
+    FromattedString objects can be draw with the `text(txt, (x, y))` and `textBox(txt, (x, y, w, h))` methods.
+    """
+
     def __init__(self, txt=None, 
                         font=None, fontSize=10, 
                         fill=(0, 0, 0), cmykFill=None, 
@@ -288,19 +316,73 @@ class FormattedString(object):
                         align=align, lineHeight=lineHeight)
     
     def append(self, txt, 
-                    font, fontSize=10, 
-                    fill=(0, 0, 0), cmykFill=None,
-                    stroke=None, cmykStroke=None, strokeWidth=1,
+                    font=None, fontSize=None, 
+                    fill=None, cmykFill=None,
+                    stroke=None, cmykStroke=None, strokeWidth=None,
                     align=None, lineHeight=None):
-        self._font = font
-        self._fontSize = fontSize
-        self._fill = fill
-        self._cmykFill = cmykFill
-        self._stroke = stroke
-        self._cmykStroke = cmykStroke
-        self._strokeWidth = strokeWidth
-        self._align = align
-        self._lineHeight = lineHeight
+        """
+        Add `text` to the formatted string with some additional text formatting attributes:
+
+        * `font`: the font to be used for the given text
+        * `fontSize`: the font size to be used for the given text
+        * `fill`: the fill color to be used for the given text
+        * `cmykFill`: the cmyk fill color to be used for the given text
+        * `stroke`: the stroke color to be used for the given text
+        * `cmykStroke`: the cmyk stroke color to be used for the given text
+        * `strokeWidth`: the strokeWidth to be used for the given text
+        * `align`: the alignment to be used for the given text
+        * `lineHeight`: the lineHeight to be used for the given text
+
+        All formatting attributes following the same notition as other similar DrawBot methods. 
+        A color is a tuple of `(r, g, b, alpha)` a cmykColor is a tuple of `(c, m, y, k, alpha)`.
+    
+        Text can also be added with `formattedString += "hello"`. It will append the text with the current settings of the formatted string.
+        """
+        if font is None:
+            font = self._font
+        else:
+            self._font = font
+
+        if fontSize is None:
+            fontSize = self._fontSize
+        else:
+            self._fontSize = fontSize
+
+        if fill is None:
+            fill = self._fill
+        else:
+            self._fill = fill
+
+        if cmykFill is None:
+            cmykFill = self._cmykFill
+        else:
+            self._cmykFill = cmykFill
+
+        if stroke is None:
+            stroke = self._stroke
+        else:
+            self._stroke = stroke
+
+        if cmykStroke is None:
+            cmykStroke = self._cmykStroke
+        else:
+            self._cmykStroke = cmykStroke
+
+        if strokeWidth is None:
+            strokeWidth = self._strokeWidth
+        else:
+            self._strokeWidth = strokeWidth
+
+        if align is None:
+            align = self._align
+        else:
+            self._align = align
+
+        if lineHeight is None:
+            lineHeight = self._lineHeight
+        else:
+            self._lineHeight = lineHeight
+
         if isinstance(txt, FormattedString):
             self._attributedString.appendAttributedString_(txt.getNSObject())
             return
@@ -326,7 +408,7 @@ class FormattedString(object):
         if align:
             para.setAlignment_(self._textAlignMap[align])
         if lineHeight:
-            para.setLineSpacing_(lineHeight)
+            #para.setLineSpacing_(lineHeight)
             para.setMaximumLineHeight_(lineHeight)
             para.setMinimumLineHeight_(lineHeight)
         attributes[AppKit.NSParagraphStyleAttributeName] = para
@@ -338,7 +420,8 @@ class FormattedString(object):
         new.append(txt, 
                     font=self._font, fontSize=self._fontSize, 
                     fill=self._fill, cmykFill=self._cmykFill, 
-                    stroke=self._stroke, cmykStroke=self._cmykStroke, strokeWidth=self._strokeWidth)
+                    stroke=self._stroke, cmykStroke=self._cmykStroke, strokeWidth=self._strokeWidth,
+                    align=self._align, lineHeight=self._lineHeight)
         return new
     
     def __getitem__(self, index):
@@ -378,11 +461,83 @@ class FormattedString(object):
     
     def __repr__(self):
         return self._attributedString.string()
-        
+    
+    def font(self, font, fontSize=None):
+        """
+        Set a font with the name of the font.
+        Optionally a `fontSize` can be set directly.
+        The default font, also used as fallback font, is 'LucidaGrande'.
+        The default `fontSize` is 10pt.
+    
+        The name of the font relates to the font's postscript name.
+        """
+        self._font = font
+        if fontSize is not None:
+            self._fontSize = fontSize
+
+    def fontSize(self, fontSize):
+        """
+        Set the font size in points.
+        The default `fontSize` is 10pt.
+        """
+        self._fontSize = fontSize
+
+    def fill(self, *fill):
+        """
+        Sets the fill color with a `red`, `green`, `blue` and `alpha` value.
+        Each argument must a value float between 0 and 1.
+        """
+        self._fill = fill
+
+    def stroke(self, *stroke):
+        """
+        Sets the stroke color with a `red`, `green`, `blue` and `alpha` value.
+        Each argument must a value float between 0 and 1.
+        """
+        self._stroke = stroke
+
+    def cmykFill(self, *cmykFill):
+        """
+        Set a fill using a CMYK color before drawing a shape. This is handy if the file is intended for print.
+
+        Sets the CMYK fill color. Each value must be a float between 0.0 and 1.0.
+        """
+        self._cmykFill = cmykFill
+
+    def cmykStroke(self, *cmykStroke):
+        """
+        Set a stroke using a CMYK color before drawing a shape. This is handy if the file is intended for print.
+
+        Sets the CMYK stroke color. Each value must be a float between 0.0 and 1.0.
+        """
+        self._cmykStroke = cmykStroke
+
+    def strokeWidth(self, strokeWidth):
+        """
+        Sets stroke width.
+        """
+        self._strokeWidth = strokeWidth
+
+    def align(self, align):
+        """
+        Sets the text alignment.
+        Possible `align` values are: `left`, `center` and `right`.
+        """
+        self._align = align
+
+    def lineHeight(self, lineHeight):
+        """
+        Set the line height.
+        """
+        self._lineHeight = lineHeight
+
     def getNSObject(self):
         return self._attributedString
             
     def copy(self):
+        """
+        Copy the formatted string.
+        """
         new = self.__class__()
         new._attributedString = self._attributedString.mutableCopy()
         return new
@@ -569,7 +724,7 @@ class BaseContext(object):
     def _reset(self):
         pass
 
-    def _saveImage(self, path):
+    def _saveImage(self, path, multipage):
         pass
 
     ### 
@@ -593,10 +748,10 @@ class BaseContext(object):
         self.hasPage = True
         self._newPage(width, height)
 
-    def saveImage(self, path):
+    def saveImage(self, path, multipage):
         if not self.hasPage:
             raise DrawBotError, "can't save image when no page is set"
-        self._saveImage(path)
+        self._saveImage(path, multipage)
 
     def frameDuration(self, seconds):
         self._frameDuration(seconds)
@@ -796,7 +951,7 @@ class BaseContext(object):
         if align:
             para.setAlignment_(self._textAlignMap[align])
         if self._state.text.lineHeight:
-            para.setLineSpacing_(self._state.text.lineHeight)
+            #para.setLineSpacing_(self._state.text.lineHeight)
             para.setMaximumLineHeight_(self._state.text.lineHeight)
             para.setMinimumLineHeight_(self._state.text.lineHeight)
         attributes[AppKit.NSParagraphStyleAttributeName] = para

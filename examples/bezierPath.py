@@ -18,6 +18,7 @@ for i in range(10):
     # translate the canvas
     translate(5, 5)
 
+path.tex("Hello world", font="Helvetica", fontSize=30, offset=(210, 210))
 
 print "All Points:"
 print path.points

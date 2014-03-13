@@ -7,8 +7,8 @@ class PrintContext(BaseContext):
     def _newPage(self, width, height):
         print "newPage", width, height
 
-    def _saveImage(self, paths):
-        print "saveImage", paths
+    def _saveImage(self, paths, multipage):
+        print "saveImage", paths, multipage
 
     def _save(self):
         print "save"
