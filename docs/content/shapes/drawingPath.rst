@@ -1,5 +1,5 @@
-Paths
-=====
+Drawing Paths
+=============
 
 Using bezier paths
 
@@ -16,5 +16,3 @@ Using bezier paths
 .. autofunction:: drawBot.clipPath
 
 .. showcode:: /../examples/clipPath.py
-
-.. autofunction:: drawBot.BezierPath

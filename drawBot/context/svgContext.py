@@ -1,6 +1,8 @@
 import AppKit
 import CoreText
 
+import os
+
 import random
 
 from xmlWriter import XMLWriter
@@ -70,6 +72,10 @@ class SVGContext(BaseContext):
 
     fileExtensions = ["svg"]
 
+    def __init__(self):
+        super(SVGContext, self).__init__()
+        self._pages = []
+
     def shadow(self, offset, blur, color):
         warnings.warn("shadow is not supported in a svg context")
 
@@ -83,17 +89,33 @@ class SVGContext(BaseContext):
         warnings.warn("radialGradient is not supported in a svg context")
 
     def _newPage(self, width, height):
+        if hasattr(self, "_svgContext"):
+            self._svgContext.endtag("svg")
         self.reset()
         self.size(width, height)
         self._svgData = self._svgFileClass()
+        self._pages.append(self._svgData)
         self._svgContext = XMLWriter(self._svgData, encoding="utf-8")
         self._svgContext.begintag("svg", width=self.width, height=self.height, **self._svgTagArguments)
         self._svgContext.newline()
         self._state.transformMatrix = self._state.transformMatrix.scale(1, -1).translate(0, -self.height)
 
-    def _saveImage(self, path):
+    def _saveImage(self, path, multipage):
+        if multipage is None:
+            multipage = False
         self._svgContext.endtag("svg")
-        self._svgData.writeToFile(path) 
+        fileName, fileExt = os.path.splitext(path)
+        firstPage = 0
+        pageCount = len(self._pages)
+        pathAdd = "_1"
+        if not multipage:
+            firstPage = pageCount - 1
+            pathAdd = ""
+        for index in range(firstPage, pageCount):
+            page = self._pages[index]
+            svgPath = fileName + pathAdd + fileExt
+            page.writeToFile(svgPath)
+            pathAdd = "_%s" % (index + 2)
 
     def _save(self):
         pass

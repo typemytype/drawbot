@@ -142,7 +142,7 @@ class DrawBotDrawingTool(object):
         _deprecatedWarning("newPage(%s, %s)" % (width, height))
         self.newPage(width, height)
 
-    def saveImage(self, paths):
+    def saveImage(self, paths, multipage=None):
         """
         Save or export the canvas to a specified format.
         The argument `paths` can either be a single path or a list of paths.
@@ -151,9 +151,9 @@ class DrawBotDrawingTool(object):
 
         All supported file extensions: `pdf`, `svg`, `png`, `jpg`, `jpeg`, `tiff`, `tif`, `gif`, `bmp` and `mov`.
         
-        * A `pdf` can be multipage. 
+        * A `pdf` can be multipage. If `multipage` is `False` only the current page is saved.
         * A `mov` will use each page as a frame.
-        * All images and `svg` formats will only save the current page.
+        * All images and `svg` formats will only save the current page. If `multipage` is `True` all pages are saved to disk. (a page index will be added to the file name)
 
         .. showcode:: /../examples/saveImage.py
         """
@@ -161,11 +161,14 @@ class DrawBotDrawingTool(object):
             paths = [paths]
         for path in paths:
             path = optimizePath(path)
+            dirName = os.path.dirname(path)
+            if not os.path.exists(dirName):
+                raise DrawBotError, "Folder '%s' doesn't exists" % dirName
             base, ext = os.path.splitext(path)
             ext = ext.lower()[1:]
             context = getContextForFileExt(ext)
             self._drawInContext(context)
-            context.saveImage(path)
+            context.saveImage(path, multipage)
 
     def saveimage(self, paths):
         _deprecatedWarning("saveImage()")
@@ -718,7 +721,7 @@ class DrawBotDrawingTool(object):
 
         **FormattedString methods**
 
-        .. function:: formattedString.append(text, font, fontSize=10, fill=(0, 0, 0), cmykFill=None, stroke=None, cmykStroke=None, strokeWidth=1, align=None, lineHeight=None)
+        .. function:: formattedString.append(text, font=None, fontSize=None, fill=None, cmykFill=None, stroke=None, cmykStroke=None, strokeWidth=None, align=None, lineHeight=None)
             
             Add `text` to the formatted string with some additional text formatting attributes:
 
@@ -736,6 +739,55 @@ class DrawBotDrawingTool(object):
             A color is a tuple of `(r, g, b, alpha)` a cmykColor is a tuple of `(c, m, y, k, alpha)`.
         
             Text can also be added with `formattedString += "hello"`. It will append the text with the current settings of the formatted string.
+        
+        .. function:: formattedString.font(fontName, fontSize=None)
+
+            Set a font with the name of the font.
+            Optionally a `fontSize` can be set directly.
+            The default font, also used as fallback font, is 'LucidaGrande'.
+            The default `fontSize` is 10pt.
+        
+            The name of the font relates to the font's postscript name.
+
+        .. function:: formattedString.fontSize(fontSize)
+
+            Set the font size in points.
+            The default `fontSize` is 10pt.
+
+        .. function:: formattedString.fill(r, g, b, a)
+
+            Sets the fill color with a `red`, `green`, `blue` and `alpha` value.
+            Each argument must a value float between 0 and 1.
+        
+        .. function:: FromattedString.stroke(r, g, b, a)
+
+            Sets the stroke color with a `red`, `green`, `blue` and `alpha` value.
+            Each argument must a value float between 0 and 1.
+
+        .. function:: FromattedString.cmykFill(c, m, y, k, a)
+            
+            Set a fill using a CMYK color before drawing a shape. This is handy if the file is intended for print.
+
+            Sets the CMYK fill color. Each value must be a float between 0.0 and 1.0.
+
+        .. function:: FromattedString.cmykStroke(c, m, y, k, a)
+            
+            Set a stroke using a CMYK color before drawing a shape. This is handy if the file is intended for print.
+
+            Sets the CMYK stroke color. Each value must be a float between 0.0 and 1.0.
+
+        .. function:: FromattedString.strokeWidth(value)
+            
+            Sets stroke width.
+
+        .. function:: FromattedString.align(align)
+
+            Sets the text alignment.
+            Possible `align` values are: `left`, `center` and `right`.
+
+        .. function:: FromattedString.lineHeight(value)
+            
+            Set the line height.
 
         .. showcode:: /../examples/formattedString.py 
         """
@@ -764,6 +816,24 @@ class DrawBotDrawingTool(object):
             path = optimizePath(path)
         self._addInstruction("image", path, (x, y), alpha)
 
+    def imageSize(self, path):
+        """
+        Return the `width` and `height` for an image.
+        
+        .. showcode:: /../examples/imageSize.py 
+        """
+        if isinstance(path, AppKit.NSImage):
+            source = path
+        else:
+            if isinstance(path, (str, unicode)):
+                path = optimizePath(path)
+            if path.startswith("http"):
+                url = AppKit.NSURL.URLWithString_(path)
+            else:
+                url = AppKit.NSURL.fileURLWithPath_(path)
+            source = AppKit.NSImage.alloc().initByReferencingURL_(url)
+        w, h = source.size()
+        return w, h
     # mov
 
     def frameDuration(self, seconds):
@@ -837,6 +907,10 @@ class DrawBotDrawingTool(object):
 
             Add a oval at possition `x`, `y` with a size of `w`, `h`
         
+        .. function:: bezierPath.text(txt, font=None, fontSize=10, offset=None)
+
+            Draws a `text` with a `font` and `fontSize` at an `offset` in the bezier path.
+
         .. function:: bezierPath.pointInside((x, y))
 
             Check if a point `x`, `y` is inside a path.
