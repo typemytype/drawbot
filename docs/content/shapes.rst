@@ -1,7 +1,7 @@
 Shapes
 ========
 
-Different shapes and how to make them
+Different shapes and how to make them.
 
 .. toctree::
 	:titlesonly:
@@ -9,5 +9,5 @@ Different shapes and how to make them
 
 	shapes/drawingPath
 	shapes/pathProperties
-	shapes/primtives
+	shapes/primitives
 	shapes/bezierPath

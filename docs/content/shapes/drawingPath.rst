@@ -1,7 +1,7 @@
 Drawing Paths
 =============
 
-Using bezier paths
+Using bezier paths.
 
 .. autofunction:: drawBot.newPath
 .. autofunction:: drawBot.moveTo
