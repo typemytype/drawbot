@@ -18,7 +18,7 @@ for i in range(10):
     # translate the canvas
     translate(5, 5)
 
-path.tex("Hello world", font="Helvetica", fontSize=30, offset=(210, 210))
+path.text("Hello world", font="Helvetica", fontSize=30, offset=(210, 210))
 
 print "All Points:"
 print path.points
@@ -31,6 +31,6 @@ print path.offCurvePoints
 
 # print out all points from all segments in all contours
 for contour in path.contours:
-	for segment in contour:
-	    for x, y in segment:
-    		print x, y
+    for segment in contour:
+        for x, y in segment:
+            print x, y

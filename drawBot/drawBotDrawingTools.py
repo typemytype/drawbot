@@ -153,7 +153,7 @@ class DrawBotDrawingTool(object):
         
         * A `pdf` can be multipage. If `multipage` is `False` only the current page is saved.
         * A `mov` will use each page as a frame.
-        * All images and `svg` formats will only save the current page. If `multipage` is `True` all pages are saved to disk. (a page index will be added to the file name)
+        * All images and `svg` formats will only save the current page. If `multipage` is `True` all pages are saved to disk (a page index will be added to the file name).
 
         .. showcode:: /../examples/saveImage.py
         """
@@ -287,7 +287,7 @@ class DrawBotDrawingTool(object):
     def clipPath(self, path=None):
         """
         Use the current path as a clipping path.
-        The clipping path will used until the canvas get a `restore()`
+        The clipping path will be used until the canvas gets a `restore()`.
         """
         self._addInstruction("clipPath", path)
 
@@ -312,7 +312,7 @@ class DrawBotDrawingTool(object):
 
     def polygon(self, x, y=None, *args, **kwargs):
         """
-        Draws a polygon with x-amount of points. 
+        Draws a polygon with n-amount of points. 
         Optionally a `close` argument can be provided to open or close the path.
         As default a `polygon` is a closed path.
 
@@ -717,28 +717,28 @@ class DrawBotDrawingTool(object):
         Return a string object that can handle text formatting.
         
         This is a reusable object, if you want to draw the same over and over again.
-        FromattedString objects can be draw with the `text(txt, (x, y))` and `textBox(txt, (x, y, w, h))` methods.
+        FormattedString objects can be drawn with the `text(txt, (x, y))` and `textBox(txt, (x, y, w, h))` methods.
 
         **FormattedString methods**
 
-        .. function:: formattedString.append(text, font=None, fontSize=None, fill=None, cmykFill=None, stroke=None, cmykStroke=None, strokeWidth=None, align=None, lineHeight=None)
+        .. function:: formattedString.append(txt, font=None, fontSize=None, fill=None, cmykFill=None, stroke=None, cmykStroke=None, strokeWidth=None, align=None, lineHeight=None)
             
-            Add `text` to the formatted string with some additional text formatting attributes:
+            Add `txt` to the formatted string with some additional formatting attributes for the given text:
 
-            * `font`: the font to be used for the given text
-            * `fontSize`: the font size to be used for the given text
-            * `fill`: the fill color to be used for the given text
-            * `cmykFill`: the cmyk fill color to be used for the given text
-            * `stroke`: the stroke color to be used for the given text
-            * `cmykStroke`: the cmyk stroke color to be used for the given text
-            * `strokeWidth`: the strokeWidth to be used for the given text
-            * `align`: the alignment to be used for the given text
-            * `lineHeight`: the lineHeight to be used for the given text
+            * `font`: the font to be used
+            * `fontSize`: the font size
+            * `fill`: the fill color
+            * `cmykFill`: the cmyk fill color
+            * `stroke`: the stroke color
+            * `cmykStroke`: the cmyk stroke color
+            * `strokeWidth`: the stroke width
+            * `align`: the alignment of the text
+            * `lineHeight`: the line height
 
-            All formatting attributes following the same notition as other similar DrawBot methods. 
-            A color is a tuple of `(r, g, b, alpha)` a cmykColor is a tuple of `(c, m, y, k, alpha)`.
+            All formatting attributes follow the same notation as other similar DrawBot methods. 
+            A color is a tuple of `(r, g, b, alpha)` and a cmykColor is a tuple of `(c, m, y, k, alpha)`.
         
-            Text can also be added with `formattedString += "hello"`. It will append the text with the current settings of the formatted string.
+            Text can also be added with `formattedString += "hello"`. This will append the text with the current settings of the formatted string.
         
         .. function:: formattedString.font(fontName, fontSize=None)
 
@@ -747,7 +747,7 @@ class DrawBotDrawingTool(object):
             The default font, also used as fallback font, is 'LucidaGrande'.
             The default `fontSize` is 10pt.
         
-            The name of the font relates to the font's postscript name.
+            The name of the font relates to the font's PostScript name.
 
         .. function:: formattedString.fontSize(fontSize)
 
@@ -759,33 +759,33 @@ class DrawBotDrawingTool(object):
             Sets the fill color with a `red`, `green`, `blue` and `alpha` value.
             Each argument must a value float between 0 and 1.
         
-        .. function:: FromattedString.stroke(r, g, b, a)
+        .. function:: FormattedString.stroke(r, g, b, a)
 
             Sets the stroke color with a `red`, `green`, `blue` and `alpha` value.
             Each argument must a value float between 0 and 1.
 
-        .. function:: FromattedString.cmykFill(c, m, y, k, a)
+        .. function:: FormattedString.cmykFill(c, m, y, k, a)
             
             Set a fill using a CMYK color before drawing a shape. This is handy if the file is intended for print.
 
             Sets the CMYK fill color. Each value must be a float between 0.0 and 1.0.
 
-        .. function:: FromattedString.cmykStroke(c, m, y, k, a)
+        .. function:: FormattedString.cmykStroke(c, m, y, k, a)
             
             Set a stroke using a CMYK color before drawing a shape. This is handy if the file is intended for print.
 
             Sets the CMYK stroke color. Each value must be a float between 0.0 and 1.0.
 
-        .. function:: FromattedString.strokeWidth(value)
+        .. function:: FormattedString.strokeWidth(value)
             
-            Sets stroke width.
+            Sets the stroke width.
 
-        .. function:: FromattedString.align(align)
+        .. function:: FormattedString.align(align)
 
             Sets the text alignment.
             Possible `align` values are: `left`, `center` and `right`.
 
-        .. function:: FromattedString.lineHeight(value)
+        .. function:: FormattedString.lineHeight(value)
             
             Set the line height.
 
@@ -818,7 +818,7 @@ class DrawBotDrawingTool(object):
 
     def imageSize(self, path):
         """
-        Return the `width` and `height` for an image.
+        Return the `width` and `height` of an image.
         
         .. showcode:: /../examples/imageSize.py 
         """
@@ -938,11 +938,11 @@ class DrawBotDrawingTool(object):
 
         .. attribute:: bezierPath.onCurvePoints
 
-            Return a list of all on curve points.
+            Return a list of all on-curve points.
 
         .. attribute:: bezierPath.offCurvePoints
 
-            Return a list of all off curve points.
+            Return a list of all off-curve points.
 
         .. attribute:: bezierPath.contours
 

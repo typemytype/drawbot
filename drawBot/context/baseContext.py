@@ -290,8 +290,8 @@ class FormattedString(object):
         )
 
     """
-    A fromatted string object, if you want to draw the same over and over again.
-    FromattedString objects can be draw with the `text(txt, (x, y))` and `textBox(txt, (x, y, w, h))` methods.
+    A formatted string object, if you want to draw the same over and over again.
+    FormattedString objects can be drawn with the `text(txt, (x, y))` and `textBox(txt, (x, y, w, h))` methods.
     """
 
     def __init__(self, txt=None, 
@@ -321,7 +321,7 @@ class FormattedString(object):
                     stroke=None, cmykStroke=None, strokeWidth=None,
                     align=None, lineHeight=None):
         """
-        Add `text` to the formatted string with some additional text formatting attributes:
+        Add `txt` to the formatted string with some additional text formatting attributes:
 
         * `font`: the font to be used for the given text
         * `fontSize`: the font size to be used for the given text
@@ -333,8 +333,8 @@ class FormattedString(object):
         * `align`: the alignment to be used for the given text
         * `lineHeight`: the lineHeight to be used for the given text
 
-        All formatting attributes following the same notition as other similar DrawBot methods. 
-        A color is a tuple of `(r, g, b, alpha)` a cmykColor is a tuple of `(c, m, y, k, alpha)`.
+        All formatting attributes follow the same notation as other similar DrawBot methods. 
+        A color is a tuple of `(r, g, b, alpha)`, and a cmykColor is a tuple of `(c, m, y, k, alpha)`.
     
         Text can also be added with `formattedString += "hello"`. It will append the text with the current settings of the formatted string.
         """
