@@ -1,7 +1,6 @@
 Text
 ====
 
-
 .. toctree::
 	:titlesonly:
 	:glob:

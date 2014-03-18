@@ -3,7 +3,7 @@ Code Editor
 
 The place where you can tell Python to draw things on the page and/or print things in the console.
 
-The syntax colors can be customized in the :doc:`drawBotApp/preferences` window.
+The syntax colors can be customized in the :doc:`preferences` window.
 
 Code interaction
 ----------------

@@ -1,0 +1,4 @@
+Saving
+======
+
+.. autofunction:: drawBot.saveImage

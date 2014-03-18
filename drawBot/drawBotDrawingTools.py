@@ -113,6 +113,9 @@ class DrawBotDrawingTool(object):
         
         Afterwards the functions `width()` and `height()` can be used for calculations.
         
+        It is advised to use `size()` always at the top of the script and not use `size()` 
+        in a multiple page document as a `newPage(w, h)` set the correct dimentions directly. 
+
         .. showcode:: /../examples/size.py
         """
         if height is None:
