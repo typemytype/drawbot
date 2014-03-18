@@ -64,6 +64,9 @@ class DrawBotDrawingTool(object):
     ## magic variables        
     
     def width(self):
+        """
+        Returns the width of the current page.
+        """
         if self._width is None:
             return 1000
         return self._width
@@ -75,6 +78,9 @@ class DrawBotDrawingTool(object):
     WIDTH = property(_get_width)
 
     def height(self):
+        """
+        Returns the height of the current page.
+        """
         if self._height is None:
             return 1000
         return self._height
@@ -86,6 +92,9 @@ class DrawBotDrawingTool(object):
     HEIGHT = property(_get_height)
 
     def pageCount(self):
+        """
+        Returns the current page count.
+        """
         pageCount = 1
         if self._instructionsStack and self._instructionsStack[0][0] == "newPage":
             pageCount = 0

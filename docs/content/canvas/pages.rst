@@ -10,7 +10,10 @@ Size
 
 .. autofunction:: drawBot.size
 
-Frame duration
---------------
+Page Attributes
+---------------
 
+.. autofunction:: drawBot.width
+.. autofunction:: drawBot.height
+.. autofunction:: drawBot.pageCount
 .. autofunction:: drawBot.frameDuration
