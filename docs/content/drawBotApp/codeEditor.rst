@@ -11,8 +11,12 @@ Code interaction
 The code editor also makes it easy and fun to interact with values in your program. When selected, some kinds of Python objects can be modified dynamically by pressing the Cmd key. The effects depend on the type of object:
 
 - `bool`: select and Cmd-click to turn the value on/off like a switch.
-- `int` or `float`: select the number, press Cmd and move the mouse up/down or right/left to increase/decrease the number. The default step is 1, by pressing the shift or alt the value is changed in steps of 10 or 0.1. Using the arrow keys also works.
+- `int` or `float`: select the number, press Cmd and move the mouse up/down or right/left to increase/decrease the number. The default step is 1, by pressing alt the step is changed to 0.1. Additional shift can be pressed to multiply the steps by 10. Using the arrow keys also works.
 - in `tuples` with numbers it is possible to select two neighbouring numbers and modify them together at the same time – this is specially useful when working with coordinate pairs or dimensions.
+
+.. raw:: html ::
+
+	<iframe src="http://player.vimeo.com/video/89407186" width="500" height="328" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
 
 Live coding
 -----------

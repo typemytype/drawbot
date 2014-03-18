@@ -852,7 +852,7 @@ class DrawBotDrawingTool(object):
         """
         When exporting to `mov` each frame can have duration set in `seconds`.
 
-        .. showcode:: /../examples/frameduration.py
+        .. showcode:: /../examples/frameDuration.py
         """
         self._addInstruction("frameDuration", seconds)
 
