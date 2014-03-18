@@ -9,3 +9,8 @@ Size
 ----
 
 .. autofunction:: drawBot.size
+
+Frame duration
+--------------
+
+.. autofunction:: drawBot.frameDuration

@@ -762,33 +762,33 @@ class DrawBotDrawingTool(object):
             Sets the fill color with a `red`, `green`, `blue` and `alpha` value.
             Each argument must a value float between 0 and 1.
         
-        .. function:: FormattedString.stroke(r, g, b, a)
+        .. function:: formattedString.stroke(r, g, b, a)
 
             Sets the stroke color with a `red`, `green`, `blue` and `alpha` value.
             Each argument must a value float between 0 and 1.
 
-        .. function:: FormattedString.cmykFill(c, m, y, k, a)
+        .. function:: formattedString.cmykFill(c, m, y, k, a)
             
             Set a fill using a CMYK color before drawing a shape. This is handy if the file is intended for print.
 
             Sets the CMYK fill color. Each value must be a float between 0.0 and 1.0.
 
-        .. function:: FormattedString.cmykStroke(c, m, y, k, a)
+        .. function:: formattedString.cmykStroke(c, m, y, k, a)
             
             Set a stroke using a CMYK color before drawing a shape. This is handy if the file is intended for print.
 
             Sets the CMYK stroke color. Each value must be a float between 0.0 and 1.0.
 
-        .. function:: FormattedString.strokeWidth(value)
+        .. function:: formattedString.strokeWidth(value)
             
             Sets the stroke width.
 
-        .. function:: FormattedString.align(align)
+        .. function:: formattedString.align(align)
 
             Sets the text alignment.
             Possible `align` values are: `left`, `center` and `right`.
 
-        .. function:: FormattedString.lineHeight(value)
+        .. function:: formattedString.lineHeight(value)
             
             Set the line height.
 
@@ -842,6 +842,8 @@ class DrawBotDrawingTool(object):
     def frameDuration(self, seconds):
         """
         When exporting to `mov` each frame can have duration set in `seconds`.
+
+        .. showcode:: /../examples/frameduration.py
         """
         self._addInstruction("frameDuration", seconds)
 
