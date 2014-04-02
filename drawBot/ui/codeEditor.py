@@ -76,9 +76,9 @@ fallbackStyles = [
     (Operator.Word,      '#6D37C9'),
 
     (Comment,            '#A3A3A3'),
-    
+
     (String,             '#FC00E7'),
-    (String.Doc,         '#FC00E7'), 
+    (String.Doc,         '#FC00E7'),
 ]
 
 fallbackStyleDict = {}
@@ -108,7 +108,7 @@ def outputTextAttributesForStyles(styles=None, isError=False):
         style = styles.style_for_token(Error)
     else:
         style = styles.style_for_token(Token)
-    attr = _textAttributesForStyle(style)    
+    attr = _textAttributesForStyle(style)
     for key in (NSForegroundColorAttributeName, NSUnderlineColorAttributeName):
         if key in attr:
             attr[key] = _hexToNSColor(attr[key])
@@ -126,7 +126,7 @@ class _JumpToLineSheet(object):
         self.w.cancelButton = Button((-170, -30, -80, 20), "Cancel", callback=self.cancelCallback, sizeStyle="small")
         self.w.cancelButton.bind(".", ["command"])
         self.w.cancelButton.bind(unichr(27), [])
-        
+
         self.w.okButton = Button((-70, -30, -10, 20), "OK", callback=self.okCallback, sizeStyle="small")
         self.w.setDefaultButton(self.w.okButton)
 
@@ -157,7 +157,7 @@ def _hexToNSColor(color, default=NSColor.blackColor()):
     g = int(color[2:4], 16) / 255.
     b = int(color[4:6], 16) / 255.
     return NSColor.colorWithCalibratedRed_green_blue_alpha_(r, g, b, 1)
-    
+
 def _hexStringToNSColor(txt, default=NSColor.blackColor()):
     if not txt.startswith("#"):
         raise DrawBotError, "Not a hex color, should start with '#'"
@@ -262,7 +262,7 @@ class CodeNSTextView(NSTextView):
         self._fallbackBackgroundColor = fallbackBackgroundColor
         self._fallbackHightLightColor = fallbackHightLightColor
         self._fallbackFont = fallbackFont
-        
+
         self.setTypingAttributes_(_textAttributesForStyle(dict(color=self._fallbackTextColor)))
         self.setUsesFontPanel_(False)
         self.setRichText_(False)
@@ -274,7 +274,7 @@ class CodeNSTextView(NSTextView):
 
         self._usesTabs = False
         self._indentSize = 4
-        
+
         self._ignoreProcessEditing = False
         self._lexer = None
         self.highlightStyleMap = dict()
@@ -288,7 +288,7 @@ class CodeNSTextView(NSTextView):
         self._liveCoding = False
 
         return self
-    
+
     def __del__(self):
         nc = NSNotificationCenter.defaultCenter()
         nc.removeObserver_(self)
@@ -299,19 +299,19 @@ class CodeNSTextView(NSTextView):
         self._lexer = lexer
         if self.window():
             self.resetHighLightSyntax()
-    
+
     def lexer(self):
         return self._lexer
-    
+
     def setHighlightStyle_(self, style):
         self._highlightStyle = style
         self._buildhighlightStyleMap()
         if self.window():
             self.resetHighLightSyntax()
-    
+
     def highlightStyle(self):
         return self._highlightStyle
-    
+
     def setLanguagesIDEBehavior_(self, languagesIDEBehavior):
         self._languagesIDEBehavior = languagesIDEBehavior
 
@@ -322,7 +322,7 @@ class CodeNSTextView(NSTextView):
         return self._languagesIDEBehavior.get(language)
 
     def _buildhighlightStyleMap(self):
-        ## cache all tokens with nscolors 
+        ## cache all tokens with nscolors
         styles = self.highlightStyle()
         backgroundColor = _hexStringToNSColor(styles.background_color, self._fallbackBackgroundColor)
         self.setBackgroundColor_(backgroundColor)
@@ -330,45 +330,45 @@ class CodeNSTextView(NSTextView):
         self.setSelectedTextAttributes_({NSBackgroundColorAttributeName:selectionColor})
 
         self.highlightStyleMap = dict()
-        
+
         for token, style in styles:
             for key in "color", "bgcolor", "border":
-                style[key] = _hexToNSColor(style[key], None)                
+                style[key] = _hexToNSColor(style[key], None)
             self.highlightStyleMap[token] = style
 
     def setUsesTabs_(self, usesTabs):
         oldIndent = self.indent()
         self._usesTabs = usesTabs
         newIndent = self.indent()
-        
+
         string = self.string()
         string = string.replace(oldIndent, newIndent)
         self.setString_(string)
-        
+
     def usesTabs(self):
         return self._usesTabs
-    
+
     def setIndentSize_(self, size):
         oldIndent = oldIndent = self.indent()
         self._indentSize = size
         newIndent = self.indent()
-        
+
         if not self.usesTabs():
             string = self.string()
             string = string.replace(oldIndent, newIndent)
             self.setString_(string)
-    
+
     def indentSize(self):
         return self._indentSize
-        
+
     def indent(self):
         if self.usesTabs():
             return "\t"
         else:
             return " " * self.indentSize()
-    
+
     ## overwritting NSTextView methods
-    
+
     def setBackgroundColor_(self, color):
         # invert the insertioin pointer color
         # and the fallback text color and background color
@@ -386,33 +386,33 @@ class CodeNSTextView(NSTextView):
             self._fallbackBackgroundColor = NSColor.whiteColor()
             self._fallbackTextColor = NSColor.blackColor()
             self.setInsertionPointColor_(NSColor.blackColor())
-        
+
         if self.enclosingScrollView():
             self.enclosingScrollView().setBackgroundColor_(color)
         self._updateRulersColors()
         super(CodeNSTextView, self).setBackgroundColor_(color)
-    
+
     def changeColor_(self, color):
-        ## prevent external color overwrite, 
+        ## prevent external color overwrite,
         pass
-    
+
     def changeAttributes_(self, attr):
         ## prevent external attributes overwrite
-        pass 
-    
+        pass
+
     def smartInsertDeleteEnabled(self):
         return False
-    
+
     def isAutomaticTextReplacementEnabled(self):
         return False
-    
-    # hightlighting        
-    
+
+    # hightlighting
+
     def resetHighLightSyntax(self):
         self._ignoreProcessEditing = True
         self._highlightSyntax(0, self.string())
         self._ignoreProcessEditing = False
-        
+
     def _highlightSyntax(self, location, text):
         if self.lexer() is None:
             return
@@ -436,7 +436,7 @@ class CodeNSTextView(NSTextView):
         self.textStorage().endEditing()
 
     ## key down
-    
+
     def keyDown_(self, event):
         char = event.characters()
         selectedRange = self.selectedRange()
@@ -486,7 +486,7 @@ class CodeNSTextView(NSTextView):
         self._balanceParenForChar(char, selectedRange.location)
         if self.isLiveCoding():
             self.performSelectorInBackground_withObject_("_runInternalCode", None)
-    
+
     def flagsChanged_(self, event):
         self._arrowSelectionDirection = None
         super(CodeNSTextView, self).flagsChanged_(event)
@@ -504,7 +504,7 @@ class CodeNSTextView(NSTextView):
                 self._insertTextAndRun("True", selRng)
             return
         super(CodeNSTextView, self).mouseDown_(event)
-            
+
     def mouseDragged_(self, event):
         if self._canDrag:
             try:
@@ -534,7 +534,7 @@ class CodeNSTextView(NSTextView):
                     self._insertTextAndRun(txtValue, selRng)
             except:
                 pass
-        super(CodeNSTextView, self).mouseDragged_(event)    
+        super(CodeNSTextView, self).mouseDragged_(event)
 
     def mouseUp_(self, event):
         if self._canDrag:
@@ -545,10 +545,10 @@ class CodeNSTextView(NSTextView):
         if self.usesTabs():
             return super(CodeNSTextView, self).insertTab_(sender)
         self.insertText_(self.indent())
-    
-    def insertNewline_(self, sender): 
+
+    def insertNewline_(self, sender):
         selectedRange = self.selectedRange()
-        super(CodeNSTextView, self).insertNewline_(sender)   
+        super(CodeNSTextView, self).insertNewline_(sender)
         languageData = self.languagesIDEBehaviorForLanguage_(self.lexer().name)
         if languageData:
             leadingSpace = ""
@@ -595,7 +595,7 @@ class CodeNSTextView(NSTextView):
             self.setSelectedRange_((location, 0))
         else:
             super(CodeNSTextView, self).moveWordLeft_(sender)
-    
+
     def moveWordLeftAndModifySelection_(self, sender):
         ranges = self.selectedRanges()
         if self._arrowSelectionDirection is None:
@@ -624,7 +624,7 @@ class CodeNSTextView(NSTextView):
             self.setSelectedRange_((location, 0))
         else:
             super(CodeNSTextView, self).moveWordRight_(sender)
-    
+
     def moveWordRightAndModifySelection_(self, sender):
         ranges = self.selectedRanges()
         if self._arrowSelectionDirection is None:
@@ -640,7 +640,7 @@ class CodeNSTextView(NSTextView):
                 location = self._getRightWordRange(newRange)
                 newRange = NSRange(newRange.location, location - newRange.location)
             if newRange.length == 0:
-                self._arrowSelectionDirection = None 
+                self._arrowSelectionDirection = None
             self.setSelectedRange_(newRange)
         else:
             super(CodeNSTextView, self).moveWordRightAndModifySelection_(sender)
@@ -652,7 +652,7 @@ class CodeNSTextView(NSTextView):
             if newRange.length == 0:
                 self.moveWordLeftAndModifySelection_(sender)
         super(CodeNSTextView, self).deleteWordForward_(sender)
-        
+
     def deleteWordForward_(self, sender):
         ranges = self.selectedRanges()
         if len(ranges) == 1:
@@ -699,7 +699,7 @@ class CodeNSTextView(NSTextView):
             keyWords.sort()
             keyWords = sorted(keyWords, lambda a,b: cmp(len(a), len(b)))
         return keyWords, index
-    
+
     def selectionRangeForProposedRange_granularity_(self, proposedRange, granularity):
         location = proposedRange.location
         if granularity == NSSelectByWord and proposedRange.length == 0 and location != 0:
@@ -730,7 +730,7 @@ class CodeNSTextView(NSTextView):
             return location, length
         else:
             return super(CodeNSTextView, self).selectionRangeForProposedRange_granularity_(proposedRange, granularity)
-    
+
 
     ## drop
 
@@ -799,7 +799,10 @@ class CodeNSTextView(NSTextView):
             commentTag = languageData.get("comment")
             if commentTag is None:
                 return lines
-            commentEndTag = languageData.get("commentEnd", "")         
+            commentTag += " "
+            commentEndTag = languageData.get("commentEnd", "")
+            if commentEndTag:
+                commentEndTag = " " + commentEndTag
             commentedLines = []
             indent = self.indent()
             pos = 100
@@ -826,15 +829,16 @@ class CodeNSTextView(NSTextView):
                 return lines
             commentTag = languageData.get("comment", "")
             commentEndTag = languageData.get("commentEnd", "")
-            _commentRE = re.compile(r"[ \t]*(%s)" % commentTag)
+            _commentRE = re.compile(r"[ \t]*(%s)[ ]?" % commentTag)
 
             commentedLines = []
             commentMatch = _commentRE.match
             for line in lines:
                 m = commentMatch(line)
                 if m is not None:
-                    pos = m.start(1)
-                    line = line[:pos] + line[pos+len(commentTag):]
+                    start = m.start(1)
+                    end = m.end()
+                    line = line[:start] + line[end:]
                     line = line.replace(commentEndTag, "")
                 commentedLines.append(line)
             return commentedLines
@@ -858,7 +862,7 @@ class CodeNSTextView(NSTextView):
             self.setSelectedRange_(found)
             self.scrollRangeToVisible_(found)
 
-    def jumpToLine_(self, sender): 
+    def jumpToLine_(self, sender):
         self.jumpToLineWindowClass(self._jumpToLine, self.window())
 
     def jumpToLineNumber_(self, lineNumber):
@@ -909,7 +913,7 @@ class CodeNSTextView(NSTextView):
                 break
         text = string.substringWithRange_((lineStart, lineLength))
         self._highlightSyntax(lineStart, text)
-        
+
     def viewDidMoveToWindow(self):
         self._buildhighlightStyleMap()
         self.resetHighLightSyntax()
@@ -951,7 +955,7 @@ class CodeNSTextView(NSTextView):
         if not string:
             return superFunc(sender)
         possibleIndentStart = selectedRange.location - self.indentSize()
-        possibleIndentEnd = self.indentSize() 
+        possibleIndentEnd = self.indentSize()
         if isForward:
             possibleIndentStart = selectedRange.location
 
@@ -1043,10 +1047,10 @@ class CodeNSTextView(NSTextView):
         text = self.string()
         lenText = len(text)
         location = newRange.location - 1
-        
+
         c = text.substringWithRange_((location, 1))[0]
         isChar = foundChar = c in variableChars
-        
+
         count = 0
         while isChar == foundChar:
             count += 1
@@ -1056,7 +1060,7 @@ class CodeNSTextView(NSTextView):
                 foundChar = not isChar
             else:
                 c = text.substringWithRange_((location, 1))[0]
-                foundChar = c in variableChars                
+                foundChar = c in variableChars
                 if count == 1 and isChar != foundChar:
                     isChar = not isChar
         if location != 0:
@@ -1070,7 +1074,7 @@ class CodeNSTextView(NSTextView):
         location = newRange.location + newRange.length
         if location >= lenText:
             return lenText
-            
+
         count = 0
         c = text.substringWithRange_((location, 1))[0]
         isChar = foundChar = c in variableChars
@@ -1091,7 +1095,7 @@ class CodeNSTextView(NSTextView):
         string = self.string()
         lineRange = string.lineRangeForRange_(lineRange)
         return string.substringWithRange_(lineRange), lineRange
-    
+
     def _getSelectedValueForRange(self, selectedRange):
         value = None
         try:
@@ -1099,7 +1103,7 @@ class CodeNSTextView(NSTextView):
             for c in txt:
                 if c not in "0123456789.,- ":
                     raise DrawBotError, "No dragging possible"
-            exec("value = %s" % txt)            
+            exec("value = %s" % txt)
         except:
             pass
         return value
@@ -1123,7 +1127,7 @@ class CodeNSTextView(NSTextView):
             return False
 
 class CodeEditor(TextEditor):
-    
+
     nsTextViewClass = CodeNSTextView
 
     def __init__(self, *args, **kwargs):
@@ -1167,16 +1171,16 @@ class CodeEditor(TextEditor):
 
     def setHighlightStyle(self, style):
         self.getNSTextView().setHighlightStyle_(style)
-    
+
     def setLexer(self, lexer):
         self.getNSTextView().setLexer_(lexer)
-    
+
     def setLanguagesIDEBehavior(self, languagesIDEBehavior):
         self.getNSTextView().setLanguagesIDEBehavior_(languagesIDEBehavior)
 
     def setUsesTabs(self, value):
         self.getNSTextView().setUsesTabs_(value)
-    
+
     def usesTabs(self):
         return self.getNSTextView().usesTabs()
 
@@ -1221,7 +1225,7 @@ class OutPutCodeNSTextView(CodeNSTextView):
 
     def appendText_isError_(self, text, isError):
         self._items.append((text, isError))
-        attrs = self.textAttributes 
+        attrs = self.textAttributes
         if isError:
             attrs = self.tracebackAttributes
         text = NSAttributedString.alloc().initWithString_attributes_(text, attrs)

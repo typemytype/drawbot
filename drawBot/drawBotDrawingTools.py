@@ -24,20 +24,20 @@ def _deprecatedWarning(txt):
     warnings.warn("lowercase API is deprecated use: '%s'" % txt)
 
 class DrawBotDrawingTool(object):
-    
+
     def __init__(self):
         self._reset()
 
     def _get__all__(self):
         return [i for i in dir(self) if not i.startswith("_")] + ["__version__"]
-    
+
     __all__ = property(_get__all__)
 
     def _get_version(self):
         return drawBotSettings.__version__
 
     __version__ = property(_get_version)
-    
+
     def _addToNamespace(self, namespace):
         namespace.update(_getmodulecontents(self, self.__all__))
         namespace.update(_getmodulecontents(random, ["random", "randint", "choice"]))
@@ -61,8 +61,8 @@ class DrawBotDrawingTool(object):
         self._width = None
         self._height = None
 
-    ## magic variables        
-    
+    ## magic variables
+
     def width(self):
         """
         Returns the width of the current page.
@@ -117,13 +117,13 @@ class DrawBotDrawingTool(object):
 
     def size(self, width, height=None):
         """
-        Set the width and height of the canvas. 
+        Set the width and height of the canvas.
         Without calling `size()` the default drawing board is 1000 by 1000 points.
-        
+
         Afterwards the functions `width()` and `height()` can be used for calculations.
-        
-        It is advised to use `size()` always at the top of the script and not use `size()` 
-        in a multiple page document as a `newPage(w, h)` set the correct dimentions directly. 
+
+        It is advised to use `size()` always at the top of the script and not use `size()`
+        in a multiple page document as a `newPage(w, h)` set the correct dimentions directly.
 
         .. showcode:: /../examples/size.py
         """
@@ -162,7 +162,7 @@ class DrawBotDrawingTool(object):
         The file extension is important because it will determine the format in which the image will be exported.
 
         All supported file extensions: `pdf`, `svg`, `png`, `jpg`, `jpeg`, `tiff`, `tif`, `gif`, `bmp` and `mov`.
-        
+
         * A `pdf` can be multipage. If `multipage` is `False` only the current page is saved.
         * A `mov` will use each page as a frame.
         * All images and `svg` formats will only save the current page. If `multipage` is `True` all pages are saved to disk (a page index will be added to the file name).
@@ -264,7 +264,7 @@ class DrawBotDrawingTool(object):
     def curveto(self, x1, y1, x2, y2, x3, y3):
         _deprecatedWarning("curveTo((%s, %s), (%s, %s), (%s, %s))" % (x1, y1, x2, y2, x3, y3))
         self.curveTo((x1, y1), (x2, y2), (x3, y3))
-    
+
     def arcTo(self, (x1, y1), (x2, y2), radius):
         """
         Arc from one point to an other point with a given `radius`.
@@ -283,7 +283,7 @@ class DrawBotDrawingTool(object):
 
     def drawPath(self, path=None):
         """
-        Draw the current path, or draw the provided path.         
+        Draw the current path, or draw the provided path.
         """
         if isinstance(path, AppKit.NSBezierPath):
             path = self._bezierPathClass(path)
@@ -324,7 +324,7 @@ class DrawBotDrawingTool(object):
 
     def polygon(self, x, y=None, *args, **kwargs):
         """
-        Draws a polygon with n-amount of points. 
+        Draws a polygon with n-amount of points.
         Optionally a `close` argument can be provided to open or close the path.
         As default a `polygon` is a closed path.
 
@@ -369,7 +369,7 @@ class DrawBotDrawingTool(object):
         """
         Sets the stroke color with a `red`, `green`, `blue` and `alpha` value.
         Each argument must a value float between 0 and 1.
-        
+
         .. showcode:: /../examples/stroke.py
         """
         self._addInstruction("stroke", r, g, b, alpha)
@@ -393,7 +393,7 @@ class DrawBotDrawingTool(object):
         Set a stroke using a CMYK color before drawing a shape. This is handy if the file is intended for print.
 
         Sets the CMYK stroke color. Each value must be a float between 0.0 and 1.0.
-        
+
         .. showcode:: /../examples/cmykStroke.py
         """
         self._addInstruction("cmykStroke", c, m, y, k, alpha)
@@ -406,7 +406,7 @@ class DrawBotDrawingTool(object):
         """
         Adds a shadow with an `offset` (x, y), `blur` and a `color`.
         The `color` argument must be a tuple similarly as `fill`.
-        
+
         .. showcode:: /../examples/shadow.py
         """
         if color is None:
@@ -419,7 +419,7 @@ class DrawBotDrawingTool(object):
         """
         Adds a cmyk shadow with an `offset` (x, y), `blur` and a `color`.
         The `color` argument must be a tuple similarly as `cmykFill`.
-        
+
         .. showcode:: /../examples/cmykShadow.py
         """
         if color is None:
@@ -434,13 +434,13 @@ class DrawBotDrawingTool(object):
 
     def linearGradient(self, startPoint=None, endPoint=None, colors=None, locations=None):
         """
-        A linear gradient fill with: 
-        
+        A linear gradient fill with:
+
         * `startPoint` as (x, y)
         * `endPoint` as (x, y)
-        * `colors` as a list of colors, described similary as `fill` 
+        * `colors` as a list of colors, described similary as `fill`
         * `locations` of each color as a list of floats. (optionally)
-        
+
         Setting a gradient will ignore the `fill`.
 
         .. showcode:: /../examples/linearGradient.py
@@ -453,13 +453,13 @@ class DrawBotDrawingTool(object):
 
     def cmykLinearGradient(self, startPoint=None, endPoint=None, colors=None, locations=None):
         """
-        A cmyk linear gradient fill with: 
-        
+        A cmyk linear gradient fill with:
+
         * `startPoint` as (x, y)
         * `endPoint` as (x, y)
-        * `colors` as a list of colors, described similary as `cmykFill` 
+        * `colors` as a list of colors, described similary as `cmykFill`
         * `locations` of each color as a list of floats. (optionally)
-        
+
         Setting a gradient will ignore the `fill`.
 
         .. showcode:: /../examples/cmykLinearGradient.py
@@ -472,15 +472,15 @@ class DrawBotDrawingTool(object):
 
     def radialGradient(self, startPoint=None, endPoint=None, colors=None, locations=None, startRadius=0, endRadius=100):
         """
-        A radial gradient fill with: 
-        
+        A radial gradient fill with:
+
         * `startPoint` as (x, y)
         * `endPoint` as (x, y)
-        * `colors` as a list of colors, described similary as `fill` 
+        * `colors` as a list of colors, described similary as `fill`
         * `locations` of each color as a list of floats. (optionally)
         * `startRadius` radius around the startPoint in degrees (optionally)
         * `endRadius` radius around the endPoint in degrees (optionally)
-        
+
         Setting a gradient will ignore the `fill`.
 
         .. showcode:: /../examples/radialGradient.py
@@ -493,21 +493,21 @@ class DrawBotDrawingTool(object):
 
     def cmykRadialGradient(self, startPoint=None, endPoint=None, colors=None, locations=None, startRadius=0, endRadius=100):
         """
-        A cmyk radial gradient fill with: 
-        
+        A cmyk radial gradient fill with:
+
         * `startPoint` as (x, y)
         * `endPoint` as (x, y)
-        * `colors` as a list of colors, described similary as `cmykFill` 
+        * `colors` as a list of colors, described similary as `cmykFill`
         * `locations` of each color as a list of floats. (optionally)
         * `startRadius` radius around the startPoint in degrees (optionally)
         * `endRadius` radius around the endPoint in degrees (optionally)
-        
+
         Setting a gradient will ignore the `fill`.
 
         .. showcode:: /../examples/cmykRadialGradient.py
         """
         self._addInstruction("cmykRadialGradient", startPoint, endPoint, colors, locations, startRadius, endRadius)
-    
+
     def cmykradialgradient(self, startPoint=None, endPoint=None, colors=None, locations=None, startRadius=0, endRadius=100):
         _deprecatedWarning("cmykRadialGradient(%s,  %s, %s, %s, %s, %s)" % (startPoint, endPoint, colors, locations, startRadius, endRadius))
         self.cmykRadialGradient(startPoint, endPoint, colors, locations, startRadius, endRadius)
@@ -529,7 +529,7 @@ class DrawBotDrawingTool(object):
     def miterLimit(self, value):
         """
         Set a miter limit. Used on corner points.
-        
+
         .. showcode:: /../examples/miterLimit.py
         """
         self._addInstruction("miterLimit", value)
@@ -568,10 +568,10 @@ class DrawBotDrawingTool(object):
 
     def lineDash(self, *value):
         """
-        Set a line dash with any given amount of lenghts. 
+        Set a line dash with any given amount of lenghts.
         Uneven lenghts will have a visible stroke, even lenghts will be invisible.
-        
-        .. showcode:: /../examples/lineDash.py        
+
+        .. showcode:: /../examples/lineDash.py
         """
         if not value:
             raise DrawBotError, "lineDash must be a list of dashes or None"
@@ -582,11 +582,11 @@ class DrawBotDrawingTool(object):
     def linedash(self, *value):
         _deprecatedWarning("lineDash(%s)" % ", ".join([str(i) for i in value]))
         self.lineDash(*value)
-    
+
     # transform
 
     def transform(self, matrix):
-        """    
+        """
         Transform the canvas with a transformation matrix.
         """
         self._addInstruction("transform", matrix)
@@ -606,9 +606,9 @@ class DrawBotDrawingTool(object):
         c = math.cos(angle)
         s = math.sin(angle)
         self.transform((c, s, -s, c, 0, 0))
-        
+
     def scale(self, x=1, y=None):
-        """        
+        """
         Scale the canvas with a given `x` (horizontal scale) and `y` (vertical scale).
 
         If only 1 argument is provided a proportional scale is applied.
@@ -635,7 +635,7 @@ class DrawBotDrawingTool(object):
         Optionally a `fontSize` can be set directly.
         The default font, also used as fallback font, is 'LucidaGrande'.
         The default `fontSize` is 10pt.
-        
+
         The name of the font relates to the font's postscript name.
 
         ::
@@ -656,7 +656,7 @@ class DrawBotDrawingTool(object):
             fontSize(30)
         """
         self._dummyContext.fontSize(fontSize)
-        self._addInstruction("fontSize", fontSize)        
+        self._addInstruction("fontSize", fontSize)
 
     def fontsize(self, fontSize):
         _deprecatedWarning("fontSize(%s)" % fontSize)
@@ -665,8 +665,8 @@ class DrawBotDrawingTool(object):
     def lineHeight(self, value):
         """
         Set the line height.
-    
-        .. showcode:: /../examples/lineHeight.py 
+
+        .. showcode:: /../examples/lineHeight.py
         """
         self._dummyContext.lineHeight(value)
         self._addInstruction("lineHeight", value)
@@ -679,7 +679,7 @@ class DrawBotDrawingTool(object):
         """
         Set hyphenation, `True` or `False`.
 
-        .. showcode:: /../examples/hyphenation.py 
+        .. showcode:: /../examples/hyphenation.py
         """
         self._dummyContext.hyphenation(value)
         self._addInstruction("hyphenation", value)
@@ -690,7 +690,7 @@ class DrawBotDrawingTool(object):
         """
         Draw a text at a provided position.
 
-        .. showcode:: /../examples/text.py 
+        .. showcode:: /../examples/text.py
         """
         if isinstance(x, (tuple, list)):
             x, y = x
@@ -702,14 +702,14 @@ class DrawBotDrawingTool(object):
     def textBox(self, txt, (x, y, w, h), align=None):
         """
         Draw a text in a provided rectangle.
-        Optionally an alignment can be set. 
+        Optionally an alignment can be set.
         Possible `align` values are: `left`, `center` and `right`.
 
         If the text overflows the rectangle, the overflowed text is returned.
 
         The default alignment is `left`.
-        
-        .. showcode:: /../examples/textBox.py 
+
+        .. showcode:: /../examples/textBox.py
         """
         if align is None:
             align = "left"
@@ -727,14 +727,14 @@ class DrawBotDrawingTool(object):
     def FormattedString(self, *args, **kwargs):
         """
         Return a string object that can handle text formatting.
-        
+
         This is a reusable object, if you want to draw the same over and over again.
         FormattedString objects can be drawn with the `text(txt, (x, y))` and `textBox(txt, (x, y, w, h))` methods.
 
         **FormattedString methods**
 
         .. function:: formattedString.append(txt, font=None, fontSize=None, fill=None, cmykFill=None, stroke=None, cmykStroke=None, strokeWidth=None, align=None, lineHeight=None)
-            
+
             Add `txt` to the formatted string with some additional formatting attributes for the given text:
 
             * `font`: the font to be used
@@ -747,18 +747,18 @@ class DrawBotDrawingTool(object):
             * `align`: the alignment of the text
             * `lineHeight`: the line height
 
-            All formatting attributes follow the same notation as other similar DrawBot methods. 
+            All formatting attributes follow the same notation as other similar DrawBot methods.
             A color is a tuple of `(r, g, b, alpha)` and a cmykColor is a tuple of `(c, m, y, k, alpha)`.
-        
+
             Text can also be added with `formattedString += "hello"`. This will append the text with the current settings of the formatted string.
-        
+
         .. function:: formattedString.font(fontName, fontSize=None)
 
             Set a font with the name of the font.
             Optionally a `fontSize` can be set directly.
             The default font, also used as fallback font, is 'LucidaGrande'.
             The default `fontSize` is 10pt.
-        
+
             The name of the font relates to the font's PostScript name.
 
         .. function:: formattedString.fontSize(fontSize)
@@ -770,26 +770,26 @@ class DrawBotDrawingTool(object):
 
             Sets the fill color with a `red`, `green`, `blue` and `alpha` value.
             Each argument must a value float between 0 and 1.
-        
+
         .. function:: formattedString.stroke(r, g, b, a)
 
             Sets the stroke color with a `red`, `green`, `blue` and `alpha` value.
             Each argument must a value float between 0 and 1.
 
         .. function:: formattedString.cmykFill(c, m, y, k, a)
-            
+
             Set a fill using a CMYK color before drawing a shape. This is handy if the file is intended for print.
 
             Sets the CMYK fill color. Each value must be a float between 0.0 and 1.0.
 
         .. function:: formattedString.cmykStroke(c, m, y, k, a)
-            
+
             Set a stroke using a CMYK color before drawing a shape. This is handy if the file is intended for print.
 
             Sets the CMYK stroke color. Each value must be a float between 0.0 and 1.0.
 
         .. function:: formattedString.strokeWidth(value)
-            
+
             Sets the stroke width.
 
         .. function:: formattedString.align(align)
@@ -798,10 +798,10 @@ class DrawBotDrawingTool(object):
             Possible `align` values are: `left`, `center` and `right`.
 
         .. function:: formattedString.lineHeight(value)
-            
+
             Set the line height.
 
-        .. showcode:: /../examples/formattedString.py 
+        .. showcode:: /../examples/formattedString.py
         """
         return self._formattedStringClass(*args, **kwargs)
 
@@ -813,8 +813,8 @@ class DrawBotDrawingTool(object):
         This should accept most common file types like pdf, jpg, png, tiff and gif.
 
         Optionally an `alpha` can be provided, which is a value between 0 and 1.
-        
-        .. showcode:: /../examples/image.py 
+
+        .. showcode:: /../examples/image.py
         """
         if isinstance(x, (tuple)):
             if alpha is None and y is not None:
@@ -831,8 +831,8 @@ class DrawBotDrawingTool(object):
     def imageSize(self, path):
         """
         Return the `width` and `height` of an image.
-        
-        .. showcode:: /../examples/imageSize.py 
+
+        .. showcode:: /../examples/imageSize.py
         """
         if isinstance(path, AppKit.NSImage):
             source = path
@@ -889,7 +889,7 @@ class DrawBotDrawingTool(object):
         """
         Return a BezierPath object.
         This is a reusable object, if you want to draw the same over and over again.
-        
+
         **BezierPath methods**
 
         .. function:: bezierPath.moveTo((x, y))
@@ -897,14 +897,14 @@ class DrawBotDrawingTool(object):
             Move to a point `x`, `y`.
 
         .. function:: bezierPath.lineTo((x, y))
-            
+
             Line to a point `x`, `y`.
 
         .. function:: bezierPath.curveTo((x1, y1), (x2, y2), (x3, y3))
 
             Curve to a point `x3`, `y3`.
             With given bezier handles `x1`, `y1` and `x2`, `y2`.
-        
+
         .. function:: bezierPath.arcTo((x1, y1), (x2, y2), radius)
 
             Arc from one point to an other point with a given `radius`
@@ -920,7 +920,7 @@ class DrawBotDrawingTool(object):
         .. function:: bezierPath.oval(x, y, w, h)
 
             Add a oval at possition `x`, `y` with a size of `w`, `h`
-        
+
         .. function:: bezierPath.text(txt, font=None, fontSize=10, offset=None)
 
             Draws a `text` with a `font` and `fontSize` at an `offset` in the bezier path.
@@ -928,11 +928,11 @@ class DrawBotDrawingTool(object):
         .. function:: bezierPath.pointInside((x, y))
 
             Check if a point `x`, `y` is inside a path.
-        
+
         .. function:: bezierPath.bounds()
-            
-            Return the bounding box of the path as `x`, `y`, `width`, `height`. 
-        
+
+            Return the bounding box of the path as `x`, `y`, `width`, `height`.
+
         .. function:: bezierPath.controlPointBounds()
 
             Return the bounding box of the path including the offcurve points as `x`, `y`, `width`, `height`.
@@ -940,14 +940,14 @@ class DrawBotDrawingTool(object):
         .. function:: bezierPath.copy()
 
             Copy the bezier path.
-        
+
 
         |
-        
+
         **BezierPath attributes**
 
         .. attribute:: bezierPath.points
-            
+
             Return a list of all points.
 
         .. attribute:: bezierPath.onCurvePoints
@@ -974,13 +974,13 @@ class DrawBotDrawingTool(object):
         """
         Build small UI for variables in a script.
 
-        The `workSpace` is usually `globals()` 
+        The `workSpace` is usually `globals()`
         as you want to insert the variable in the current workspace.
         It is required that `workSpace` is a `dict` object.
-        
+
         .. image:: assets/variables.png
-        
-        .. showcode:: /../examples/variables.py 
+
+        .. showcode:: /../examples/variables.py
         """
 
         documents = AppKit.NSApp().orderedDocuments()
