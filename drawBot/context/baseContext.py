@@ -15,10 +15,10 @@ class BezierPath(object):
             self._path = AppKit.NSBezierPath.bezierPath()
         else:
             self._path = path
-    
+
     def __repr__(self):
         return "<BezierPath>"
-        
+
     def moveTo(self, x, y=None):
         """
         Move to a point `x`, `y`.
@@ -96,7 +96,7 @@ class BezierPath(object):
         for run in glyphRuns:
             glyphs = CoreText.CTRunGetGlyphs(run, CoreText.CTRunGetStringRange(run), None)
             self._path.appendBezierPathWithGlyphs_count_inFont_(glyphs, len(glyphs), font)
-        
+
     def getNSBezierPath(self):
         """
         Return the nsBezierPath.
@@ -108,13 +108,13 @@ class BezierPath(object):
         Set a nsBezierPath.
         """
         self._path = path
-    
+
     def pointInside(self, (x, y)):
         """
         Check if a point `x`, `y` is inside a path.
         """
         return self._path.containsPoint_((x, y))
-    
+
     def bounds(self):
         """
         Return the bounding box of the path.
@@ -141,22 +141,22 @@ class BezierPath(object):
                 pts = pts[-1:]
             points.extend([(p.x, p.y) for p in pts])
         return points
-    
+
     def _get_points(self):
         return self._points()
-        
+
     points = property(_get_points, doc="Return a list of all points.")
-    
+
     def _get_onCurvePoints(self):
         return self._points(offCurve=False)
-    
+
     onCurvePoints = property(_get_onCurvePoints, doc="Return a list of all on curve points.")
-    
+
     def _get_offCurvePoints(self):
         return self._points(onCurve=False)
-    
+
     offCurvePoints = property(_get_offCurvePoints, doc="Return a list of all off curve points.")
-    
+
     def _get_contours(self):
         contours = []
         for index in range(self._path.elementCount()):
@@ -195,12 +195,12 @@ class Color(object):
 
     def set(self):
         self._color.set()
-        
+
     def setStroke(self):
         self._color.setStroke()
-        
+
     def getNSObject(self):
-        return self._color        
+        return self._color
 
     def copy(self):
         new = self.__class__()
@@ -278,7 +278,7 @@ class Gradient(object):
         return new
 
 class FormattedString(object):
-    
+
     _colorClass = Color
     _cmykColorClass = CMYKColor
 
@@ -294,9 +294,9 @@ class FormattedString(object):
     FormattedString objects can be drawn with the `text(txt, (x, y))` and `textBox(txt, (x, y, w, h))` methods.
     """
 
-    def __init__(self, txt=None, 
-                        font=None, fontSize=10, 
-                        fill=(0, 0, 0), cmykFill=None, 
+    def __init__(self, txt=None,
+                        font=None, fontSize=10,
+                        fill=(0, 0, 0), cmykFill=None,
                         stroke=None, cmykStroke=None, strokeWidth=1,
                         align=None, lineHeight=None):
         self._attributedString = AppKit.NSMutableAttributedString.alloc().init()
@@ -310,13 +310,13 @@ class FormattedString(object):
         self._align = align
         self._lineHeight = lineHeight
         if txt:
-            self.append(txt, font=font, fontSize=fontSize, 
+            self.append(txt, font=font, fontSize=fontSize,
                         fill=fill, cmykFill=cmykFill,
                         stroke=stroke, cmykStroke=cmykStroke, strokeWidth=strokeWidth,
                         align=align, lineHeight=lineHeight)
-    
-    def append(self, txt, 
-                    font=None, fontSize=None, 
+
+    def append(self, txt,
+                    font=None, fontSize=None,
                     fill=None, cmykFill=None,
                     stroke=None, cmykStroke=None, strokeWidth=None,
                     align=None, lineHeight=None):
@@ -333,9 +333,9 @@ class FormattedString(object):
         * `align`: the alignment to be used for the given text
         * `lineHeight`: the lineHeight to be used for the given text
 
-        All formatting attributes follow the same notation as other similar DrawBot methods. 
+        All formatting attributes follow the same notation as other similar DrawBot methods.
         A color is a tuple of `(r, g, b, alpha)`, and a cmykColor is a tuple of `(c, m, y, k, alpha)`.
-    
+
         Text can also be added with `formattedString += "hello"`. It will append the text with the current settings of the formatted string.
         """
         if font is None:
@@ -414,22 +414,22 @@ class FormattedString(object):
         attributes[AppKit.NSParagraphStyleAttributeName] = para
         txt = AppKit.NSAttributedString.alloc().initWithString_attributes_(txt, attributes)
         self._attributedString.appendAttributedString_(txt)
-    
+
     def __add__(self, txt):
         new = self.copy()
-        new.append(txt, 
-                    font=self._font, fontSize=self._fontSize, 
-                    fill=self._fill, cmykFill=self._cmykFill, 
+        new.append(txt,
+                    font=self._font, fontSize=self._fontSize,
+                    fill=self._fill, cmykFill=self._cmykFill,
                     stroke=self._stroke, cmykStroke=self._cmykStroke, strokeWidth=self._strokeWidth,
                     align=self._align, lineHeight=self._lineHeight)
         return new
-    
+
     def __getitem__(self, index):
         if isinstance(index, slice):
             start = index.start
             stop = index.stop
             textLenght = len(self)
-            
+
             if start is None:
                 start = 0
             elif start < 0:
@@ -441,10 +441,10 @@ class FormattedString(object):
                 stop = textLenght
             elif stop < 0:
                 stop = textLenght + stop
-                        
+
             if start + (stop-start) > textLenght:
                 stop = textLenght - stop
-            
+
             rng = (start, stop-start)
             new = self.__class__()
             try:
@@ -455,20 +455,20 @@ class FormattedString(object):
         else:
             text = str(self)
             return text[index]
-    
+
     def __len__(self):
         return self._attributedString.length()
-    
+
     def __repr__(self):
         return self._attributedString.string()
-    
+
     def font(self, font, fontSize=None):
         """
         Set a font with the name of the font.
         Optionally a `fontSize` can be set directly.
         The default font, also used as fallback font, is 'LucidaGrande'.
         The default `fontSize` is 10pt.
-    
+
         The name of the font relates to the font's postscript name.
         """
         self._font = font
@@ -533,7 +533,7 @@ class FormattedString(object):
 
     def getNSObject(self):
         return self._attributedString
-            
+
     def copy(self):
         """
         Copy the formatted string.
@@ -550,7 +550,7 @@ class Text(object):
         self._fontSize = 10
         self._lineHeight = None
         self._hyphenation = None
-    
+
     def _get_font(self):
         _font = AppKit.NSFont.fontWithName_size_(self._fontName, self.fontSize)
         if _font == None:
@@ -558,9 +558,9 @@ class Text(object):
             self._fontName = self._backupFont
             _font = AppKit.NSFont.fontWithName_size_(self._backupFont, self.fontSize)
         return _font
-            
+
     font = property(_get_font)
-    
+
     def _get_fontName(self):
         return self._fontName
 
@@ -571,10 +571,10 @@ class Text(object):
 
     def _get_fontSize(self):
         return self._fontSize
-        
+
     def _set_fontSize(self, value):
         self._fontSize = value
-    
+
     fontSize = property(_get_fontSize, _set_fontSize)
 
     def _get_lineHeight(self):
@@ -662,7 +662,7 @@ class BaseContext(object):
 
     fileExtensions = []
 
-    _lineJoinStylesMap = dict(   
+    _lineJoinStylesMap = dict(
         miter=Quartz.kCGLineJoinMiter,
         round=Quartz.kCGLineJoinRound,
         bevel=Quartz.kCGLineJoinBevel
@@ -727,7 +727,7 @@ class BaseContext(object):
     def _saveImage(self, path, multipage):
         pass
 
-    ### 
+    ###
 
     def reset(self):
         self._stack = []
@@ -789,13 +789,13 @@ class BaseContext(object):
 
     def curveTo(self, pt1, pt2, pt):
         self._state.path.curveTo(pt1, pt2, pt)
-    
+
     def arcTo(self, pt1, pt2, radius):
         self._state.path.arcTo(pt1, pt2, radius)
 
     def closePath(self):
         self._state.path.closePath()
-    
+
     def drawPath(self, path):
         if path is not None:
             self._state.path = path
@@ -810,10 +810,10 @@ class BaseContext(object):
         if r is  None:
             self._state.fillColor = None
             self._state.cmykFillColor = None
-            return 
+            return
         self._state.fillColor = self._colorClass(r, g, b, a)
         self._state.gradient = None
-    
+
     def cmykFill(self, c , m, y, k, a=1):
         if c is None:
             self.fill(None)
@@ -828,7 +828,7 @@ class BaseContext(object):
             self._state.cmykStrokeColor = None
             return
         self._state.strokeColor = self._colorClass(r, g, b, a)
-    
+
     def cmykStroke(self, c , m, y, k, a=1):
         if c is None:
             self.stroke(None)
@@ -889,17 +889,17 @@ class BaseContext(object):
 
     def strokeWidth(self, value):
         self._state.strokeWidth = value
-    
+
     def miterLimit(self, value):
         self._state.miterLimit = value
-    
+
     def lineJoin(self, join):
         if join is None:
             self._state.lineJoin = None
         if join not in self._lineJoinStylesMap:
             raise DrawBotError, "lineJoin() argument must be 'bevel', 'miter' or 'round'"
         self._state.lineJoin = self._lineJoinStylesMap[join]
-    
+
     def lineCap(self, cap):
         if cap is None:
             self._state.lineCap = None
@@ -920,10 +920,10 @@ class BaseContext(object):
         self._state.text.fontName = fontName
         if fontSize != None:
             self.fontSize(fontSize)
-            
+
     def fontSize(self, fontSize):
         self._state.text.fontSize = fontSize
-    
+
     def lineHeight(self, value):
         self._state.text.lineHeight = value
 
@@ -935,18 +935,26 @@ class BaseContext(object):
             return txt.getNSObject()
         attributes = {AppKit.NSFontAttributeName : self._state.text.font}
         if self._state.fillColor is not None:
+            if self._state.cmykFillColor:
+                c = self._state.cmykFillColor
+            else:
+                c = self._state.fillColor
             extra = {
-                AppKit.NSForegroundColorAttributeName : self._state.fillColor.getNSObject(),
+                AppKit.NSForegroundColorAttributeName : c.getNSObject(),
                 }
             attributes.update(extra)
         if self._state.strokeColor is not None:
-             strokeWidth = -abs(self._state.strokeWidth)
-             extra = {
-                     #AppKit.NSStrokeWidthAttributeName : strokeWidth,
-                     AppKit.NSStrokeColorAttributeName : self._state.strokeColor.getNSObject(),
-                     }
-        
-             attributes.update(extra)
+            if self._state.cmykFillColor:
+                c = self._state.cmykFillColor
+            else:
+                c = self._state.fillColor
+            strokeWidth = -abs(self._state.strokeWidth)
+            extra = {
+                    #AppKit.NSStrokeWidthAttributeName : strokeWidth,
+                    AppKit.NSStrokeColorAttributeName : c.getNSObject(),
+                    }
+
+            attributes.update(extra)
         para = AppKit.NSMutableParagraphStyle.alloc().init()
         if align:
             para.setAlignment_(self._textAlignMap[align])
@@ -955,7 +963,7 @@ class BaseContext(object):
             para.setMaximumLineHeight_(self._state.text.lineHeight)
             para.setMinimumLineHeight_(self._state.text.lineHeight)
         attributes[AppKit.NSParagraphStyleAttributeName] = para
-    
+
         text = AppKit.NSAttributedString.alloc().initWithString_attributes_(txt, attributes)
         return text
 
@@ -972,7 +980,7 @@ class BaseContext(object):
                     mutString.insertString_atIndex_(unichr(self._softHypen), hyphenIndex)
 
         textLength = attrString.length()
-        
+
         setter = CoreText.CTTypesetterCreateWithAttributedString(attrString)
         location = 0
 
@@ -996,7 +1004,7 @@ class BaseContext(object):
                     attrString.deleteCharactersInRange_((location-1, 1))
                     setter = CoreText.CTTypesetterCreateWithAttributedString(attrString)
                     location -= breakIndex
-                    
+
         mutString.replaceOccurrencesOfString_withString_options_range_(unichr(self._softHypen), "", AppKit.NSLiteralSearch, (0, mutString.length()))
         return attrString
 

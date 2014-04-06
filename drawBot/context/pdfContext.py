@@ -8,13 +8,13 @@ from baseContext import BaseContext, FormattedString
 from drawBot.misc import DrawBotError
 
 class PDFContext(BaseContext):
-    
+
     fileExtensions = ["pdf"]
 
     def __init__(self):
         super(PDFContext, self).__init__()
-        self._hasContext = False  
-        self._cachedImages = {}     
+        self._hasContext = False
+        self._cachedImages = {}
 
     def _newPage(self, width, height):
         self.size(width, height)
@@ -169,7 +169,7 @@ class PDFContext(BaseContext):
                         Quartz.CGContextSetLineJoin(self._pdfContext, self._state.lineJoin)
                 if fillColor is not None and strokeColor is not None:
                     drawingMode = Quartz.kCGTextFillStroke
-                
+
                 if drawingMode is not None:
                     Quartz.CGContextSetTextDrawingMode(self._pdfContext, drawingMode)
                     Quartz.CGContextSetTextPosition(self._pdfContext, x+originX, y+originY)
@@ -236,7 +236,7 @@ class PDFContext(BaseContext):
         else:
             cgColor = self._nsColorToCGColor(c)
         Quartz.CGContextSetFillColorWithColor(self._pdfContext, cgColor)
-    
+
     def _pdfStrokeColor(self, c=None):
         if c is None:
             if self._state.cmykStrokeColor:
@@ -258,7 +258,7 @@ class PDFContext(BaseContext):
             color = self._rgbNSColorToCGColor(c)
 
         Quartz.CGContextSetShadowWithColor(self._pdfContext, self._state.shadow.offset, self._state.shadow.blur, color)
-    
+
     def _pdfGradient(self, gradient):
         if gradient.cmykColors:
             colorSpace = Quartz.CGColorSpaceCreateDeviceCMYK()
@@ -290,7 +290,7 @@ class PDFContext(BaseContext):
             return self._cmykNSColorToCGColor(c)
         else:
             return self._rgbNSColorToCGColor(c)
-    
+
     def _cmykNSColorToCGColor(self, c):
         return Quartz.CGColorCreateGenericCMYK(c.cyanComponent(), c.magentaComponent(), c.yellowComponent(), c.blackComponent(), c.alphaComponent())
 

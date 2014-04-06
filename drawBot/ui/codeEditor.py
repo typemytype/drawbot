@@ -406,6 +406,21 @@ class CodeNSTextView(NSTextView):
     def isAutomaticTextReplacementEnabled(self):
         return False
 
+    def isAutomaticQuoteSubstitutionEnabled(self):
+        return False
+
+    def isAutomaticLinkDetectionEnabled(self):
+        return False
+
+    def isAutomaticDataDetectionEnabled(self):
+        return False
+
+    def isAutomaticDashSubstitutionEnabled(self):
+        return False
+
+    def isAutomaticSpellingCorrectionEnabled(self):
+        return False
+
     # hightlighting
 
     def resetHighLightSyntax(self):
