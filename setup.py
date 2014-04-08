@@ -45,7 +45,7 @@ plist = dict(
         CFBundleTypeIconFile = "pythonIcon.icns",
 		NSDocumentClass = "DrawBotDocument",
 	    ),
-		
+
 		],
 	CFBundleIdentifier = "com.drawbot",
 	LSMinimumSystemVersion = "10.6.0",
@@ -63,7 +63,7 @@ plist = dict(
 
 dataFiles = [
         "Resources/English.lproj",
-        os.path.dirname(vanilla.__file__),
+        #os.path.dirname(vanilla.__file__),
         ]
 
 for fileName in os.listdir("Resources/Images"):
@@ -78,11 +78,16 @@ setup(
     app=[dict(script="DrawBot.py", plist=plist)],
     options = dict(py2app=dict(
                     packages=[
-                        os.path.dirname(vanilla.__file__),
-                        os.path.dirname(defconAppKit.__file__),
-                        os.path.dirname(robofab.__file__),
-                        os.path.dirname(pygments.__file__),
-                        os.path.dirname(fontTools.__file__),
+                        'vanilla',
+                        'defcon',
+                        'defconAppKit',
+                        'robofab',
+                        'pygments',
+                        'fontTools',
+                        'xml'
+                        ],
+                    includes=[
+                        'csv'
                         ],
                     )
                 )
@@ -121,7 +126,7 @@ if "-A" not in sys.argv and codeSignDeveloperName:
     print "-    building dmg...   -"
     if os.path.exists(existingDmgLocation):
         os.remove(existingDmgLocation)
-    
+
     os.mkdir(imgLocation)
     os.rename(os.path.join(distLocation, "%s.app" %appName), os.path.join(imgLocation, "%s.app" %appName))
     tempDmgName = "%s.tmp.dmg" %appName
@@ -149,7 +154,7 @@ if "-A" not in sys.argv and codeSignDeveloperName:
         dmgFile = open(existingDmgLocation,'rb')
         fileName = os.path.basename(existingDmgLocation)
 
-        session.storbinary('STOR %s' % fileName, dmgFile) 
+        session.storbinary('STOR %s' % fileName, dmgFile)
         dmgFile.close()
         print "- done uploading to ftp -"
         print "-------------------------"

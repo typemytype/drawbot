@@ -16,16 +16,16 @@ import objc
 objc.setVerbose(True)
 
 class DrawBotDocument(NSDocument):
-        
+
     def readFromFile_ofType_(self, path, tp):
         return True, None
-    
+
     def writeSafelyToURL_ofType_forSaveOperation_error_(self, url, fileType, saveOperation, error):
         path = url.path()
         code = self.vanillaWindowController.code()
         f = file(path, "w")
         f.write(code.encode("utf8"))
-        f.close()	
+        f.close()
         return True, None
 
     def makeWindowControllers(self):
@@ -33,7 +33,7 @@ class DrawBotDocument(NSDocument):
         wc = self.vanillaWindowController.w.getNSWindowController()
         self.addWindowController_(wc)
         wc.setShouldCloseDocument_(True)
-        
+
         url = self.fileURL()
         if url:
             self.vanillaWindowController.setPath(url.path())
@@ -62,7 +62,7 @@ class DrawBotDocument(NSDocument):
         return True
 
 class DrawBotAppDelegate(NSObject):
-    
+
     def init(self):
         self = super(DrawBotAppDelegate, self).init()
         code = stringToInt("GURL")
@@ -136,12 +136,12 @@ class DrawBotAppDelegate(NSObject):
         domain = data.netloc
         if not domain:
             domain = "Local"
-        document.vanillaWindowController.showAskYesNo("Download External Script", 
+        document.vanillaWindowController.showAskYesNo("Download External Script",
             "You opened '%s' from '%s'.\n\n"
             "Read the code before running it so you know what it will do. If you don't understand it, don't run it.\n\n"
             "Do you want to open this Script?" % (fileName, data.netloc) ,
             result
             )
-            
+
 if __name__ == "__main__":
 	AppHelper.runEventLoop()
