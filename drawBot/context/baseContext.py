@@ -944,10 +944,10 @@ class BaseContext(object):
                 }
             attributes.update(extra)
         if self._state.strokeColor is not None:
-            if self._state.cmykFillColor:
-                c = self._state.cmykFillColor
+            if self._state.cmykStrokeColor:
+                c = self._state.cmykStrokeColor
             else:
-                c = self._state.fillColor
+                c = self._state.strokeColor
             strokeWidth = -abs(self._state.strokeWidth)
             extra = {
                     #AppKit.NSStrokeWidthAttributeName : strokeWidth,
