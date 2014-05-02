@@ -357,6 +357,7 @@ class FormattedString(object):
             cmykFill = self._cmykFill
         else:
             self._cmykFill = cmykFill
+            fill = None
 
         if stroke is None:
             stroke = self._stroke
@@ -367,6 +368,7 @@ class FormattedString(object):
             cmykStroke = self._cmykStroke
         else:
             self._cmykStroke = cmykStroke
+            stroke = None
 
         if strokeWidth is None:
             strokeWidth = self._strokeWidth
