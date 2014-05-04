@@ -348,27 +348,25 @@ class FormattedString(object):
         else:
             self._fontSize = fontSize
 
-        if fill is None:
+        if fill is None and cmykFill is None:
             fill = self._fill
-        else:
-            self._fill = fill
-
-        if cmykFill is None:
             cmykFill = self._cmykFill
-        else:
+        elif fill is not None:
+            self._fill = fill
+            self._cmykFill = None
+        elif cmykFill is not None:
             self._cmykFill = cmykFill
-            fill = None
+            self._fill = None
 
-        if stroke is None:
+        if stroke is None and cmykStroke is None:
             stroke = self._stroke
-        else:
-            self._stroke = stroke
-
-        if cmykStroke is None:
             cmykStroke = self._cmykStroke
-        else:
+        elif stroke is not None:
+            self._stroke = stroke
+            self._cmykStroke = None
+        elif cmykStroke is not None:
             self._cmykStroke = cmykStroke
-            stroke = None
+            self._stroke = None
 
         if strokeWidth is None:
             strokeWidth = self._strokeWidth
@@ -490,6 +488,7 @@ class FormattedString(object):
         Each argument must a value float between 0 and 1.
         """
         self._fill = fill
+        self._cmykFill = None
 
     def stroke(self, *stroke):
         """
@@ -497,6 +496,7 @@ class FormattedString(object):
         Each argument must a value float between 0 and 1.
         """
         self._stroke = stroke
+        self._cmykStroke = None
 
     def cmykFill(self, *cmykFill):
         """
@@ -505,6 +505,7 @@ class FormattedString(object):
         Sets the CMYK fill color. Each value must be a float between 0.0 and 1.0.
         """
         self._cmykFill = cmykFill
+        self._fill = None
 
     def cmykStroke(self, *cmykStroke):
         """
@@ -513,6 +514,7 @@ class FormattedString(object):
         Sets the CMYK stroke color. Each value must be a float between 0.0 and 1.0.
         """
         self._cmykStroke = cmykStroke
+        self._stroke = None
 
     def strokeWidth(self, strokeWidth):
         """
