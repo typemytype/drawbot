@@ -330,12 +330,14 @@ class PreferencesController(BaseWindowController):
     def __init__(self):
         self.w = Window((500, 400), miniaturizable=False, minSize=(500, 300))
 
-        y = -100
+        y = -130
         self.w.syntaxColors = SyntaxColors((0, 0, -0, y))
 
         self.w.hl1 = HorizontalLine((10, y, -10, 1))
         y += 10
         self.w.clearOutPut = CheckBox((10, y, -10, 22), "Clear text output before running script", callback=self.setToDefaults)
+        y += 30
+        self.w.liveOutPut = CheckBox((10, y, -10, 22), "Live update output", callback=self.setToDefaults)
         y += 30
         self.w.animateIcon = CheckBox((10, y, -10, 22), "Animate Icon", callback=self.anitmateIconCallback)
         y += 30
@@ -347,12 +349,14 @@ class PreferencesController(BaseWindowController):
 
     def getFromDefaults(self):
         self.w.clearOutPut.set(getDefault("DrawBotClearOutput", True))
+        self.w.liveOutPut.set(getDefault("DrawButLiveUpdateStdoutStderr", False))
         self.w.animateIcon.set(getDefault("DrawBotAnimateIcon", True))
         self.w.checkForUpdates.set(getDefault("DrawBotCheckForUpdatesAtStartup", True))
         self.w.syntaxColors.getFromDefaults()
 
     def setToDefaults(self, sender=None):
         setDefault("DrawBotClearOutput", self.w.clearOutPut.get())
+        setDefault("DrawButLiveUpdateStdoutStderr", self.w.liveOutPut.get())
         setDefault("DrawBotAnimateIcon", self.w.animateIcon.get())
         setDefault("DrawBotCheckForUpdatesAtStartup", self.w.checkForUpdates.get())
 

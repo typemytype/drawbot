@@ -10,9 +10,10 @@ import time
 
 class StdOutput(object):
 
-    def __init__(self, output, isError=False):
+    def __init__(self, output, isError=False, outputView=None):
         self.data = output
         self.isError = isError
+        self.outputView = outputView
 
     def write(self, data):
         if isinstance(data, str):
@@ -20,7 +21,13 @@ class StdOutput(object):
                 data = unicode(data, "utf-8", "replace")
             except UnicodeDecodeError:
                 data = "XXX " + repr(data)
-        self.data.append((data, self.isError))
+        if self.outputView is not None:
+            self.outputView.append(data, self.isError)
+            self.outputView.forceUpdate()
+            self.outputView.scrollToEnd()
+        else:
+            self.data.append((data, self.isError))
+
 
     def flush(self):
         pass

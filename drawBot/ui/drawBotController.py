@@ -89,8 +89,13 @@ class DrawBotController(BaseWindowController):
             self.outPutView.clear()
         # create a new std output, catching all print statements and tracebacks
         self.output = []
-        self.stdout = StdOutput(self.output)
-        self.stderr = StdOutput(self.output, True)
+
+        liveOutput = None
+        if getDefault("DrawButLiveUpdateStdoutStderr", False):
+            liveOutput = self.outPutView
+
+        self.stdout = StdOutput(self.output, outputView=liveOutput)
+        self.stderr = StdOutput(self.output, isError=True, outputView=liveOutput)
         # warnings should show the warnings
         warnings.shouldShowWarnings = True
         # run the code

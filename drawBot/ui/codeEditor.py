@@ -1280,6 +1280,9 @@ class OutPutEditor(TextEditor):
     def clear(self):
         self.getNSTextView().clear()
 
+    def forceUpdate(self):
+        self.getNSTextView().display()
+
     def scrollToEnd(self):
         self.getNSTextView().scrollRangeToVisible_((len(self.get()), 0))
 
