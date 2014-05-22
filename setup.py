@@ -87,7 +87,8 @@ setup(
                         'xml'
                         ],
                     includes=[
-                        'csv'
+                        'csv',
+                        'this'
                         ],
                     )
                 )
