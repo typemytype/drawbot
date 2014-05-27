@@ -2,6 +2,7 @@ import AppKit
 
 import math
 import os
+import random
 
 from context import getContextForFileExt
 from context.baseContext import BezierPath, FormattedString
@@ -10,7 +11,6 @@ from context.dummyContext import DummyContext
 from misc import DrawBotError, warnings, VariableController, optimizePath
 import drawBotSettings
 
-import math, random
 
 def _getmodulecontents(module, names=None):
     d = {}
@@ -184,7 +184,7 @@ class DrawBotDrawingTool(object):
 
     def saveimage(self, paths):
         _deprecatedWarning("saveImage()")
-        self.saveImage(path)
+        self.saveImage(paths)
 
     # graphic state
 
@@ -330,9 +330,7 @@ class DrawBotDrawingTool(object):
 
         .. showcode:: /../examples/polygon.py
         """
-        isTuple = False
         if isinstance(x, tuple) and isinstance(y, tuple):
-            isTuple = True
             args = list(args)
             args.insert(0, y)
             x, y = x
