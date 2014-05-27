@@ -148,7 +148,7 @@ class VariableController(object):
     
     def changed(self, sender):
         if self._callback:
-            self._callback() 
+            self._callback()
 
     def get(self):
         data = {}
