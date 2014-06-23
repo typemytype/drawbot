@@ -207,6 +207,23 @@ class Color(object):
         new._color = self._color.copy()
         return new
 
+    @classmethod
+    def getColorsFromList(self, inputColors):
+        outputColors = []
+        for color in inputColors:
+            color = self.getColor(color)
+            outputColors.append(color)
+        return outputColors
+
+    @classmethod
+    def getColor(self, color):
+        if isinstance(color, (tuple, list)):
+            return self(*color)
+        elif isinstance(color, AppKit.NSColor):
+            return self(color)
+        raise DrawBotError, "Not a valid color: %s" % color
+
+
 class CMYKColor(Color):
 
     def __init__(self, c=None, m=None, y=None, k=None, a=1):
@@ -226,7 +243,7 @@ class Shadow(object):
             return
         self.offset = offset
         self.blur = blur
-        self.color = self._colorClass(*color)
+        self.color = self._colorClass.getColor(color)
         self.cmykColor = None
 
     def copy(self):
@@ -255,7 +272,7 @@ class Gradient(object):
         if len(colors) != len(positions):
             raise DrawBotError, "Gradient needs a correct position for each color"
         self.gradientType = gradientType
-        self.colors = [self._colorClass(*color) for color in colors]
+        self.colors = self._colorClass.getColorsFromList(colors)
         self.cmykColors = None
         self.positions = positions
         self.start = start
@@ -393,15 +410,15 @@ class FormattedString(object):
                 attributes[AppKit.NSFontAttributeName] = font
         if fill or cmykFill:
             if fill:
-                fillColor = self._colorClass(*fill).getNSObject()
+                fillColor = self._colorClass.getColor(fill).getNSObject()
             elif cmykFill:
-                fillColor = self._cmykColorClass(*cmykFill).getNSObject()
+                fillColor = self._cmykColorClass.getColor(cmykFill).getNSObject()
             attributes[AppKit.NSForegroundColorAttributeName] = fillColor
         if stroke or cmykStroke:
             if stroke:
-                strokeColor = self._colorClass(*stroke).getNSObject()
+                strokeColor = self._colorClass.getColor(stroke).getNSObject()
             elif cmykStroke:
-                strokeColor = self._cmykColorClass(*cmykStroke).getNSObject()
+                strokeColor = self._cmykColorClass.getColor(cmykStroke).getNSObject()
             attributes[AppKit.NSStrokeColorAttributeName] = strokeColor
             attributes[AppKit.NSStrokeWidthAttributeName] = -abs(strokeWidth)
         para = AppKit.NSMutableParagraphStyle.alloc().init()
@@ -952,7 +969,7 @@ class BaseContext(object):
                 c = self._state.cmykStrokeColor
             else:
                 c = self._state.strokeColor
-            strokeWidth = -abs(self._state.strokeWidth)
+            #strokeWidth = -abs(self._state.strokeWidth)
             extra = {
                     #AppKit.NSStrokeWidthAttributeName : strokeWidth,
                     AppKit.NSStrokeColorAttributeName : c.getNSObject(),
