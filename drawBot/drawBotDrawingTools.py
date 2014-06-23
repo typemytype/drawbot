@@ -165,6 +165,7 @@ class DrawBotDrawingTool(object):
 
         * A `pdf` can be multipage. If `multipage` is `False` only the current page is saved.
         * A `mov` will use each page as a frame.
+        * A `gif` can be animated when there are multiple pages and it will use each page as a frame.
         * All images and `svg` formats will only save the current page. If `multipage` is `True` all pages are saved to disk (a page index will be added to the file name).
 
         .. showcode:: /../examples/saveImage.py
@@ -819,7 +820,8 @@ class DrawBotDrawingTool(object):
                 alpha = y
             x, y = x
         else:
-            _deprecatedWarning("image(\"%s\", (%s, %s), alpha=%s)" % (path, x, y, alpha))
+            txt = "image(\"%s\", (%s, %s), alpha=%s)" % (path, x, y, alpha)
+            warnings.warn("deprecated syntax, wrap x and y values in a tuple: '%s'" % txt)
         if alpha is None:
             alpha = 1
         if isinstance(path, (str, unicode)):
@@ -843,12 +845,12 @@ class DrawBotDrawingTool(object):
                 url = AppKit.NSURL.fileURLWithPath_(path)
             source = AppKit.NSImage.alloc().initByReferencingURL_(url)
         w, h = source.size()
-        return w, h
+        return int(w), int(h)
     # mov
 
     def frameDuration(self, seconds):
         """
-        When exporting to `mov` each frame can have duration set in `seconds`.
+        When exporting to `mov` or `gif` each frame can have duration set in `seconds`.
 
         .. showcode:: /../examples/frameDuration.py
         """

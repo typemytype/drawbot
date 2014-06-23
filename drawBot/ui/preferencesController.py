@@ -82,7 +82,7 @@ toolTips = {
     "Operator.Word" : "Color for word operators and or not in",
 
     "Comment" : "Color for comments #...",
-    
+
     "String" : "Color for a string",
     "String.Doc" : "Color for a doc string",
 }
@@ -118,7 +118,7 @@ class SyntaxPopupColorPanel(NSObject):
         self.colorWell.setTarget_(self)
         self.colorWell.setAction_("changeColor:")
         self.colorWell.performClick_(self)
-    
+
     def changeColor_(self, sender):
         self._callback(sender)
 
@@ -190,11 +190,11 @@ class ColorItem(NSObject):
 
 
 class SyntaxColors(Group):
-    
+
     def __init__(self, posSize):
         self._initializing = True
         super(SyntaxColors, self).__init__(posSize)
-        
+
         middle = 100
         gutter = 5
 
@@ -207,7 +207,7 @@ class SyntaxColors(Group):
         y += 30
         self.backgroundColorText = TextBox((x, y, middle, 22), "Background:", alignment="right")
         self.backgroundColor = ColorWell((x+middle+gutter, y-2, 50, 25), callback=self.setToDefaults)
-        
+
         x = -255
         self.hightLightColorText = TextBox((x, y, middle, 22), "Text Selection:", alignment="right")
         self.hightLightColor = ColorWell((x+middle+gutter, y-2, 50, 25), callback=self.setToDefaults)
@@ -216,15 +216,15 @@ class SyntaxColors(Group):
         columnDescriptions = [
                 dict(title="Element", key="tokenString", width=170, cell=PreviewTokeCell.alloc().init()),
                 dict(title="Color", key="color", width=100, cell=ColorCell.alloc().initWithDoubleClickCallack_(self.colorDoubleClickCallback), editable=True),
-                dict(title="", key="bold", width=50, cell=CheckBoxListCell("Bold")),                
+                dict(title="", key="bold", width=50, cell=CheckBoxListCell("Bold")),
                 dict(title="", key="italic", width=50, cell=CheckBoxListCell("Italic")),
                 dict(title="", key="underline", width=90, cell=CheckBoxListCell("Underline")),
             ]
 
-        self.tokenList = List((10, y, -10, -10), [], 
+        self.tokenList = List((10, y, -10, -10), [],
                               columnDescriptions=columnDescriptions,
                               editCallback=self.editCallback,
-                              allowsEmptySelection=True, 
+                              allowsEmptySelection=True,
                               allowsMultipleSelection=True,
                               drawVerticalLines=False
                               )
@@ -239,13 +239,13 @@ class SyntaxColors(Group):
     def getSelectedItems(self):
         sel = self.tokenList.getSelection()
         return [self.tokenList[i] for i in sel]
-    
+
     def editCallback(self, sender):
         self.setToDefaults()
 
     # color
 
-    def setStyleColor_(self, sender):        
+    def setStyleColor_(self, sender):
         items = self.getSelectedItems()
         for item in items:
             item.setColor_(sender.color())
@@ -274,13 +274,13 @@ class SyntaxColors(Group):
             self._setFont(newFont)
             setFontDefault("PyDEFont", newFont)
             self.preferencesChanged()
-            
+
     def selectFontCallback(self, sender):
         fm = NSFontManager.sharedFontManager()
         fm.setSelectedFont_isMultiple_(getFontDefault("PyDEFont", fallbackFont), False)
         fm.orderFrontFontPanel_(sender)
         fp = fm.fontPanel_(False)
-        
+
         self._fontCallbackWrapper = VanillaCallbackWrapper(self._selectFontCallback)
         fm.setTarget_(self._fontCallbackWrapper)
         fm.setAction_("action:")
@@ -305,7 +305,7 @@ class SyntaxColors(Group):
         self.backgroundColor.set(getColorDefault("PyDEBackgroundColor", fallbackBackgroundColor))
         self.hightLightColor.set(getColorDefault("PyDEHightLightColor", fallbackHightLightColor))
         self._initializing = False
-        
+
     def setToDefaults(self, sender=None):
         if self._initializing:
             return
@@ -328,9 +328,9 @@ class SyntaxColors(Group):
 class PreferencesController(BaseWindowController):
 
     def __init__(self):
-        self.w = Window((500, 400), miniaturizable=False, minSize=(500, 300))
+        self.w = Window((500, 430), miniaturizable=False, minSize=(500, 330))
 
-        y = -130
+        y = -160
         self.w.syntaxColors = SyntaxColors((0, 0, -0, y))
 
         self.w.hl1 = HorizontalLine((10, y, -10, 1))
@@ -338,6 +338,8 @@ class PreferencesController(BaseWindowController):
         self.w.clearOutPut = CheckBox((10, y, -10, 22), "Clear text output before running script", callback=self.setToDefaults)
         y += 30
         self.w.liveOutPut = CheckBox((10, y, -10, 22), "Live update output", callback=self.setToDefaults)
+        y += 30
+        self.w.useFutureDivision = CheckBox((10, y, -10, 22), "Use Future Division (relaxed float division)", callback=self.setToDefaults)
         y += 30
         self.w.animateIcon = CheckBox((10, y, -10, 22), "Animate Icon", callback=self.anitmateIconCallback)
         y += 30
@@ -350,6 +352,7 @@ class PreferencesController(BaseWindowController):
     def getFromDefaults(self):
         self.w.clearOutPut.set(getDefault("DrawBotClearOutput", True))
         self.w.liveOutPut.set(getDefault("DrawButLiveUpdateStdoutStderr", False))
+        self.w.useFutureDivision.set(getDefault("DrawBotUseFutureDivision", True))
         self.w.animateIcon.set(getDefault("DrawBotAnimateIcon", True))
         self.w.checkForUpdates.set(getDefault("DrawBotCheckForUpdatesAtStartup", True))
         self.w.syntaxColors.getFromDefaults()
@@ -357,6 +360,7 @@ class PreferencesController(BaseWindowController):
     def setToDefaults(self, sender=None):
         setDefault("DrawBotClearOutput", self.w.clearOutPut.get())
         setDefault("DrawButLiveUpdateStdoutStderr", self.w.liveOutPut.get())
+        setDefault("DrawBotUseFutureDivision", self.w.useFutureDivision.get())
         setDefault("DrawBotAnimateIcon", self.w.animateIcon.get())
         setDefault("DrawBotCheckForUpdatesAtStartup", self.w.checkForUpdates.get())
 
@@ -376,7 +380,7 @@ class PreferencesController(BaseWindowController):
     def show(self):
         self.w.show()
 
-   
+
 if __name__ == "__main__":
     from vanilla.test.testTools import executeVanillaTest
     executeVanillaTest(PreferencesController)

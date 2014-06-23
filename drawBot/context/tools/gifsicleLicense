@@ -1,0 +1,11 @@
+Copyright/License
+
+All source code is Copyright (C) 1997-2013 Eddie Kohler.
+
+IF YOU PLAN TO USE GIFSICLE ONLY TO CREATE OR MODIFY GIF IMAGES, DON'T WORRY ABOUT THE REST OF THIS SECTION. Anyone can use Gifsicle however they wish; the license applies only to those who plan to copy, distribute, or alter its code. If you use Gifsicle for an organizational or commercial Web site, I would appreciate a link to the Gifsicle home page on any 'About This Server' page, but it's not required.
+
+This code is distributed under the GNU General Public License, Version 2 (and only Version 2). The GNU General Public License is available via the Web at http://www.gnu.org/licenses/gpl.html or in the 'COPYING' file in this directory.
+
+The following alternative license may be used at your discretion.
+
+Permission is granted to copy, distribute, or alter Gifsicle, whole or in part, as long as source code copyright notices are kept intact, with the following restriction: Developers or distributors who plan to use Gifsicle code, whole or in part, in a product whose source code will not be made available to the end user -- more precisely, in a context which would violate the GPL -- MUST contact the author and obtain permission before doing so.

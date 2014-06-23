@@ -8,6 +8,8 @@ import tempfile
 import Quartz
 import time
 
+from drawBot.misc import getDefault
+
 class StdOutput(object):
 
     def __init__(self, output, isError=False, outputView=None):
@@ -86,9 +88,9 @@ def getLocalCurrentPythonVersionDirName():
     f.close()
 
     log = _execute(["python", tempFile])[1]
-    
+
     sitePackages = log.split("\n")[0]
-    
+
     os.remove(tempFile)
     if os.path.exists(sitePackages):
         return sitePackages
@@ -117,13 +119,13 @@ class _Helper(object):
     def __repr__(self):
         return "Type help() for interactive help, " \
                "or help(object) for help about object."
-               
+
     def __call__(self, *args, **kwds):
         import pydoc
         return pydoc.help(*args, **kwds)
 
 class ScriptRunner(object):
-    
+
     def __init__(self, text=None, path=None, stdout=None, stderr=None, namespace=None, checkSyntaxOnly=False):
         from threading import Thread
         if path:
@@ -145,7 +147,7 @@ class ScriptRunner(object):
         namespace["__file__"] = path
         namespace["__name__"] = "__main__"
         namespace["help"] = _Helper()
-        
+
         if stdout:
             sys.stdout = stdout
         if stderr:
@@ -162,9 +164,14 @@ class ScriptRunner(object):
             f.close()
         source = text.replace('\r\n', '\n').replace('\r', '\n')
         userCancelID = None
+
+        compileFlags = 0
+        if getDefault("DrawBotUseFutureDivision", True):
+            compileFlags |= __future__.CO_FUTURE_DIVISION
+
         try:
             try:
-                code = compile(source + '\n\n', fileName, "exec", __future__.CO_FUTURE_DIVISION)
+                code = compile(source + '\n\n', fileName, "exec", compileFlags)
             except:
                 traceback.print_exc(0)
             else:

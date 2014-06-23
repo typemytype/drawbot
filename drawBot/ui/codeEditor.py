@@ -1,24 +1,20 @@
 from AppKit import *
 
-import os
 from keyword import kwlist
 import re
 
-import pygments
-from pygments import lex
-from pygments.lexers import PythonLexer, PythonConsoleLexer, get_lexer_by_name
-from pygments.lexer import RegexLexer, include, bygroups
+from pygments.lexers import PythonLexer, get_lexer_by_name
 from pygments.token import *
 from pygments.style import Style
 from pygments.styles.default import DefaultStyle
-from pygments.styles import get_all_styles, get_style_by_name
-from pygments.formatter import Formatter
+
+import jedi
 
 from vanilla import *
 
 from lineNumberRulerView import NSLineNumberRuler
-from drawBot.misc import getDefault, setDefault, getFontDefault, getColorDefault, DrawBotError
-
+from drawBot.misc import getDefault, getFontDefault, getColorDefault, DrawBotError
+from drawBot.drawBotDrawingTools import _drawBotDrawingTool
 
 variableChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_"
 
@@ -235,12 +231,32 @@ def _findWhitespace(s, pos=0):
         return pos
     return m.end()
 
+def _pythonWordCompletions(text, charRange):
+    partialString = text.substringWithRange_(charRange)
+    keyWords = list(_drawBotDrawingTool.__all__)
+    try:
+        lines = text[:charRange.location].count("\n") + 1
+        if len(text) == charRange.location:
+            columns = None
+        else:
+            columns = 0
+            if text:
+                while text[charRange.location-columns] != "\n":
+                    columns += 1
+        script = jedi.api.Script(source=text, line=lines, column=columns)
+        keyWords += [c.word for c in script.complete()]
+    except:
+        pass
+    keyWords = [word for word in sorted(keyWords) if word.startswith(partialString)]
+    return keyWords, 0
+
 languagesIDEBehavior = {
         "Python" : {
             "openToCloseMap" : {"(": ")", "[": "]", "{": "}", "<" : ">"},
             "indentWithEndOfLine" : [":", "(", "[", "{"],
             "comment" : "#",
             "keywords" : kwlist,
+            "wordCompletions" : _pythonWordCompletions,
             "dropPathFormatting" : 'u"%s"',
             "dropPathsFormatting" : '[%s]',
             "dropPathsSeperator" : ", "
@@ -694,13 +710,14 @@ class CodeNSTextView(NSTextView):
         return charRange
 
     def completionsForPartialWordRange_indexOfSelectedItem_(self, charRange, index):
-        """
-        keys = CurrentFont().keys()
-        input = "hbr"
-        import difflib
-        print difflib.get_close_matches(input, keys)
-        """
+        languageData = self.languagesIDEBehaviorForLanguage_(self.lexer().name)
+        if languageData is None:
+            return [], 0
         text = self.string()
+        func = languageData.get("wordCompletions", self._genericCompletions)
+        return func(text, charRange)
+
+    def _genericCompletions(self, text, charRange):
         partialString = text.substringWithRange_(charRange)
         keyWords = list()
         index = 0

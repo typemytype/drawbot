@@ -83,6 +83,7 @@ setup(
                         'defconAppKit',
                         'robofab',
                         'pygments',
+                        'jedi',
                         'fontTools',
                         'xml'
                         ],
@@ -107,6 +108,12 @@ if "-A" not in sys.argv and codeSignDeveloperName:
     imgLocation = os.path.join(distLocation,  "img")
     existingDmgLocation = os.path.join(distLocation,  "%s.dmg" % appName)
     dmgLocation = os.path.join(distLocation,  appName)
+
+    # copy external tools into the resources folder (gifsicle)
+    resourcesPath = os.path.join(appLocation, "contents", "Resources", "tools")
+    toolsSourcePath = os.path.join(os.getcwd(), "drawBot", "context", "tools")
+    print "copy", toolsSourcePath, resourcesPath
+    shutil.copytree(toolsSourcePath, resourcesPath)
 
     # ================
     # = code singing =

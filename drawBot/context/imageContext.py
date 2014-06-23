@@ -12,7 +12,7 @@ class ImageContext(PDFContext):
         "jpeg" : AppKit.NSJPEGFileType,
         "tiff" : AppKit.NSTIFFFileType,
         "tif" : AppKit.NSTIFFFileType,
-        "gif" : AppKit.NSGIFFileType,
+        #"gif" : AppKit.NSGIFFileType,
         "png" : AppKit.NSPNGFileType,
         "bmp" : AppKit.NSBMPFileType
         }
@@ -31,6 +31,7 @@ class ImageContext(PDFContext):
         if not multipage:
             firstPage = pageCount - 1
             pathAdd = ""
+        outputPaths = []
         for index in range(firstPage, pageCount):
             page = pdfDocument.pageAtIndex_(index)
             image = AppKit.NSImage.alloc().initWithData_(page.dataRepresentation())
@@ -39,3 +40,5 @@ class ImageContext(PDFContext):
             imagePath = fileName + pathAdd + fileExt
             imageData.writeToFile_atomically_(imagePath, True)
             pathAdd = "_%s" % (index + 2)
+            outputPaths.append(imagePath)
+        return outputPaths
