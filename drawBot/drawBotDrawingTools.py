@@ -23,6 +23,8 @@ def _getmodulecontents(module, names=None):
 def _deprecatedWarning(txt):
     warnings.warn("lowercase API is deprecated use: '%s'" % txt)
 
+_chachedPixelColorBitmaps = {}
+
 class DrawBotDrawingTool(object):
 
     def __init__(self):
@@ -846,6 +848,35 @@ class DrawBotDrawingTool(object):
             source = AppKit.NSImage.alloc().initByReferencingURL_(url)
         w, h = source.size()
         return int(w), int(h)
+
+    def imagePixelColor(self, path, (x, y)):
+        """
+        Return the color `r, g, b, a` of an image at a specified `x`, `y` possition.
+
+        .. showcode:: /../examples/pixelColor.py
+        """
+        bitmap = _chachedPixelColorBitmaps.get(path)
+        if bitmap is None:
+            if isinstance(path, AppKit.NSImage):
+                source = path
+            else:
+                if isinstance(path, (str, unicode)):
+                    path = optimizePath(path)
+                if path.startswith("http"):
+                    url = AppKit.NSURL.URLWithString_(path)
+                else:
+                    url = AppKit.NSURL.fileURLWithPath_(path)
+                source = AppKit.NSImage.alloc().initByReferencingURL_(url)
+
+            bitmap = AppKit.NSBitmapImageRep.imageRepWithData_(source.TIFFRepresentation())
+            _chachedPixelColorBitmaps[path] = bitmap
+
+        color = bitmap.colorAtX_y_(x, bitmap.pixelsHigh() - y - 1)
+        if color is None:
+            return None
+        color = color.colorUsingColorSpaceName_("NSCalibratedRGBColorSpace")
+        return color.redComponent(), color.greenComponent(), color.blueComponent(), color.alphaComponent()
+
     # mov
 
     def frameDuration(self, seconds):

@@ -2,8 +2,6 @@ import AppKit
 import CoreText
 import Quartz
 
-import os
-
 from baseContext import BaseContext, FormattedString
 from drawBot.misc import DrawBotError
 

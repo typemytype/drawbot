@@ -727,9 +727,8 @@ class CodeNSTextView(NSTextView):
         if partialString:
             _reWords = re.compile(r"\b%s\w+\b" %partialString)
             keyWords = _reWords.findall(text)
-            keyWords = list(set(keyWords) - set(languageData.get("keywords")))
-            keyWords.sort()
-            keyWords = sorted(keyWords, lambda a,b: cmp(len(a), len(b)))
+            keyWords = list(set(keyWords + languageData.get("keywords", [])))
+            keyWords = [word for word in sorted(keyWords) if word.startswith(partialString)]
         return keyWords, index
 
     def selectionRangeForProposedRange_granularity_(self, proposedRange, granularity):
@@ -1077,7 +1076,6 @@ class CodeNSTextView(NSTextView):
         if newRange.location == 0:
             return 0
         text = self.string()
-        lenText = len(text)
         location = newRange.location - 1
 
         c = text.substringWithRange_((location, 1))[0]
