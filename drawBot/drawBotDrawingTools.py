@@ -63,6 +63,9 @@ class DrawBotDrawingTool(object):
         self._width = None
         self._height = None
 
+    def newDrawing(self):
+        self._reset()
+
     ## magic variables
 
     def width(self):

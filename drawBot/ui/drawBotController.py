@@ -50,7 +50,7 @@ class DrawBotController(BaseWindowController):
             dict(view=self.outPutView, identifier="outPutView", size=100, minSize=50, canCollapse=False),
         ]
         self.codeSplit = SplitView((0, 0, -0, -0), paneDescriptors, isVertical=False)
-        
+
         # collect the draw scroll view and the code split view in a splitview
         paneDescriptors = [
             dict(view=self.thumbnails, identifier="thumbnails", minSize=100, size=100, maxSize=100),
@@ -58,7 +58,7 @@ class DrawBotController(BaseWindowController):
             dict(view=self.codeSplit, identifier="codeSplit", minSize=50, canCollapse=False),
         ]
         self.w.split = SplitView((0, 0, -0, -0), paneDescriptors)
-        
+
         # setup BaseWindowController base behavoir
         self.setUpBaseWindowBehavior()
 
@@ -68,7 +68,7 @@ class DrawBotController(BaseWindowController):
         self.w.split.setDividerPosition(0, 0)
         self.w.split.setDividerPosition(1, windowWidth * .6)
         self.codeSplit.setDividerPosition(0, windowHeight * .7)
-            
+
     def runCode(self, liveCoding=False):
         # get the code
         code = self.code()
@@ -79,7 +79,7 @@ class DrawBotController(BaseWindowController):
         # reset the internal warning system
         warnings.resetWarnings()
         # reset the drawing tool
-        _drawBotDrawingTool._reset()
+        _drawBotDrawingTool.newDrawing()
         # create a namespace
         namespace = DrawBotNamespace(_drawBotDrawingTool, _drawBotDrawingTool._magicVariables)
         # add the tool callbacks in the name space
@@ -130,11 +130,11 @@ class DrawBotController(BaseWindowController):
         # reset the code backup if the script runs with any crashes
         setDefault("DrawBotCodeBackup", None)
         # clean up
-        
+
         self.output = None
         self.stdout = None
         self.stderr = None
-    
+
     def checkSyntax(self, sender=None):
         # get the code
         code = self.code()
@@ -163,14 +163,14 @@ class DrawBotController(BaseWindowController):
         if data:
             # if there is date save it
             data.writeToFile_atomically_(path , False)
-        
+
     def savePDF(self, sender=None):
         """
         Save the content as a pdf.
         """
         # pop up a show put file sheet
         self.showPutFile(["pdf"], callback=self._savePDF)
-        
+
     def setPath(self, path):
         """
         Sets the content of a file into the code view.
@@ -183,10 +183,10 @@ class DrawBotController(BaseWindowController):
         f.close()
         # set the content into the code view
         self.codeView.set(code)
-    
+
     def path(self):
         """
-        Returns the path of the document, 
+        Returns the path of the document,
         return None if the document is never saved before.
         """
         # get the docuemnt
@@ -206,7 +206,7 @@ class DrawBotController(BaseWindowController):
         Returns the content of the code view as a string.
         """
         return self.codeView.get()
-    
+
     def setCode(self, code):
         """
         Sets code in to the code view.
@@ -219,7 +219,7 @@ class DrawBotController(BaseWindowController):
         """
         return self.drawView.get()
 
-    # UI 
+    # UI
 
     def open(self):
         # open the window
@@ -228,9 +228,9 @@ class DrawBotController(BaseWindowController):
         self.w.getNSWindow().makeFirstResponder_(self.codeView.getNSTextView())
 
     def assignToDocument(self, nsDocument):
-        # assing the window to the document 
+        # assing the window to the document
         self.w.assignToDocument(nsDocument)
-    
+
     def document(self):
         """
         Returns the document.
@@ -245,12 +245,12 @@ class DrawBotController(BaseWindowController):
 
     def windowMoveCallback(self, sender):
         # save the frame in the defaults
-        self.w.getNSWindow().saveFrameUsingName_(self.windowAutoSaveName)    
-        
+        self.w.getNSWindow().saveFrameUsingName_(self.windowAutoSaveName)
+
     def windowResizeCallback(self, sender):
         # save the frame in the defaults
         self.w.getNSWindow().saveFrameUsingName_(self.windowAutoSaveName)
-    
+
     def windowCloseCallback(self, sender):
         # unbind on window close
         self.w.unbind("move", self.windowMoveCallback)
