@@ -192,6 +192,16 @@ class DrawBotDrawingTool(object):
         _deprecatedWarning("saveImage()")
         self.saveImage(paths)
 
+    def printImage(self):
+        """
+        Export the canvas to a printing dialog, ready to print.
+
+        .. showcode:: /../examples/printImage.py
+        """
+        context = getContextForFileExt("pdf")
+        self._drawInContext(context)
+        context.printImage()
+
     # graphic state
 
     def save(self):
@@ -688,6 +698,21 @@ class DrawBotDrawingTool(object):
         self._dummyContext.hyphenation(value)
         self._addInstruction("hyphenation", value)
 
+    def openTypeFeatures(self, *args, **features):
+        """
+        Enable OpenType features.
+
+        Supported OpenType tags:
+
+        ::
+
+            c2pc, c2sc, calt, case, dlig, frac, liga, lnum, onum, pnum, rlig, smcp, ss00, ss01, ss02, ss03, ss04, ss05, ss06, ss07, ss08, ss09, ss10, ss11, ss12, ss13, ss14, ss15, ss16, ss17, ss18, ss19, swsh, tnum
+
+        .. showcode:: /../examples/openTypeFeatures.py
+        """
+        self._dummyContext.openTypeFeatures(*args, **features)
+        self._addInstruction("openTypeFeatures", *args, **features)
+
     # drawing text
 
     def text(self, txt, x, y=None):
@@ -701,7 +726,7 @@ class DrawBotDrawingTool(object):
         else:
             warnings.warn("postion must a tuple: text('%s', (%s, %s))" % (txt, x, y))
         w, h = self.textSize(txt)
-        self.textBox(txt, (x, y, w*1.3, h))
+        self.textBox(txt, (x, y, w*2, h))
 
     def textBox(self, txt, (x, y, w, h), align=None):
         """
@@ -750,6 +775,7 @@ class DrawBotDrawingTool(object):
             * `strokeWidth`: the stroke width
             * `align`: the alignment of the text
             * `lineHeight`: the line height
+            * `openTypeFeatures`: enable OpenType features
 
             All formatting attributes follow the same notation as other similar DrawBot methods.
             A color is a tuple of `(r, g, b, alpha)` and a cmykColor is a tuple of `(c, m, y, k, alpha)`.
@@ -804,6 +830,10 @@ class DrawBotDrawingTool(object):
         .. function:: formattedString.lineHeight(value)
 
             Set the line height.
+
+        .. function:: formattedString.openTypeFeatures(frac=True, case=True, ...)
+
+            Enable OpenType features.
 
         .. showcode:: /../examples/formattedString.py
         """

@@ -4,6 +4,8 @@ import Quartz
 
 from drawBot.misc import DrawBotError, cmyk2rgb, warnings
 
+from tools import openType
+
 class BezierPath(object):
 
     """
@@ -315,7 +317,8 @@ class FormattedString(object):
                         font=None, fontSize=10,
                         fill=(0, 0, 0), cmykFill=None,
                         stroke=None, cmykStroke=None, strokeWidth=1,
-                        align=None, lineHeight=None):
+                        align=None, lineHeight=None,
+                        openTypeFeatures=None):
         self._attributedString = AppKit.NSMutableAttributedString.alloc().init()
         self._font = font
         self._fontSize = fontSize
@@ -326,17 +329,22 @@ class FormattedString(object):
         self._strokeWidth = strokeWidth
         self._align = align
         self._lineHeight = lineHeight
+        if openTypeFeatures is None:
+            openTypeFeatures = dict()
+        self._openTypeFeatures = openTypeFeatures
         if txt:
             self.append(txt, font=font, fontSize=fontSize,
                         fill=fill, cmykFill=cmykFill,
                         stroke=stroke, cmykStroke=cmykStroke, strokeWidth=strokeWidth,
-                        align=align, lineHeight=lineHeight)
+                        align=align, lineHeight=lineHeight,
+                        openTypeFeatures=openTypeFeatures)
 
     def append(self, txt,
                     font=None, fontSize=None,
                     fill=None, cmykFill=None,
                     stroke=None, cmykStroke=None, strokeWidth=None,
-                    align=None, lineHeight=None):
+                    align=None, lineHeight=None,
+                    openTypeFeatures=None):
         """
         Add `txt` to the formatted string with some additional text formatting attributes:
 
@@ -349,6 +357,7 @@ class FormattedString(object):
         * `strokeWidth`: the strokeWidth to be used for the given text
         * `align`: the alignment to be used for the given text
         * `lineHeight`: the lineHeight to be used for the given text
+        * `openTypeFeatures`: enable OpenType features
 
         All formatting attributes follow the same notation as other similar DrawBot methods.
         A color is a tuple of `(r, g, b, alpha)`, and a cmykColor is a tuple of `(c, m, y, k, alpha)`.
@@ -400,6 +409,11 @@ class FormattedString(object):
         else:
             self._lineHeight = lineHeight
 
+        if openTypeFeatures is None:
+            openTypeFeatures = self._openTypeFeatures
+        else:
+            self._openTypeFeatures = openTypeFeatures
+
         if isinstance(txt, FormattedString):
             self._attributedString.appendAttributedString_(txt.getNSObject())
             return
@@ -407,6 +421,16 @@ class FormattedString(object):
         if font:
             font = AppKit.NSFont.fontWithName_size_(font, fontSize)
             if font is not None:
+                coreTextfeatures = []
+                for featureTag, value in openTypeFeatures.items():
+                    if not value:
+                        featureTag = "%s_off" % featureTag
+                    if featureTag in openType.featureMap:
+                        feature = openType.featureMap[featureTag]
+                        coreTextfeatures.append(feature)
+                fontDescriptor = font.fontDescriptor()
+                fontDescriptor = fontDescriptor.fontDescriptorByAddingAttributes_({CoreText.NSFontFeatureSettingsAttribute : coreTextfeatures})
+                font = AppKit.NSFont.fontWithDescriptor_size_(fontDescriptor, fontSize)
                 attributes[AppKit.NSFontAttributeName] = font
         if fill or cmykFill:
             if fill:
@@ -552,6 +576,15 @@ class FormattedString(object):
         """
         self._lineHeight = lineHeight
 
+    def openTypeFeatures(self, *args, **features):
+        """
+        Enable OpenType features.
+        """
+        if args and args[0] == None:
+            self._openTypeFeatures.clear()
+        else:
+            self._openTypeFeatures.update(features)
+
     def getNSObject(self):
         return self._attributedString
 
@@ -571,6 +604,7 @@ class Text(object):
         self._fontSize = 10
         self._lineHeight = None
         self._hyphenation = None
+        self.openTypeFeatures = dict()
 
     def _get_font(self):
         _font = AppKit.NSFont.fontWithName_size_(self._fontName, self.fontSize)
@@ -578,6 +612,16 @@ class Text(object):
             warnings.warn("font: %s is not installed, back to the fallback font: %s" % (self._fontName, self._backupFont))
             self._fontName = self._backupFont
             _font = AppKit.NSFont.fontWithName_size_(self._backupFont, self.fontSize)
+        coreTextfeatures = []
+        for featureTag, value in self.openTypeFeatures.items():
+            if not value:
+                featureTag = "%s_off" % featureTag
+            if featureTag in openType.featureMap:
+                feature = openType.featureMap[featureTag]
+                coreTextfeatures.append(feature)
+        fontDescriptor = _font.fontDescriptor()
+        fontDescriptor = fontDescriptor.fontDescriptorByAddingAttributes_({CoreText.NSFontFeatureSettingsAttribute : coreTextfeatures})
+        _font = AppKit.NSFont.fontWithDescriptor_size_(fontDescriptor, self.fontSize)
         return _font
 
     font = property(_get_font)
@@ -620,6 +664,7 @@ class Text(object):
         new.fontSize = self.fontSize
         new.lineHeight = self.lineHeight
         new.hyphenation = self.hyphenation
+        new.openTypeFeatures = dict(self.openTypeFeatures)
         return new
 
 class GraphicsState(object):
@@ -748,6 +793,9 @@ class BaseContext(object):
     def _saveImage(self, path, multipage):
         pass
 
+    def _printImage(self):
+        pass
+
     ###
 
     def reset(self):
@@ -773,6 +821,9 @@ class BaseContext(object):
         if not self.hasPage:
             raise DrawBotError, "can't save image when no page is set"
         self._saveImage(path, multipage)
+
+    def printImage(self):
+        self._printImage()
 
     def frameDuration(self, seconds):
         self._frameDuration(seconds)
@@ -950,6 +1001,12 @@ class BaseContext(object):
 
     def hyphenation(self, value):
         self._state.text.hyphenation = value
+
+    def openTypeFeatures(self, *args, **features):
+        if args and args[0] == None:
+            self._state.text.openTypeFeatures.clear()
+        else:
+            self._state.text.openTypeFeatures.update(features)
 
     def attributedString(self, txt, align=None):
         if isinstance(txt, FormattedString):
