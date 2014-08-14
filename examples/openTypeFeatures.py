@@ -5,6 +5,6 @@ fontSize(50)
 # draw a string
 text("aa1465", (100, 200))
 # enable some OpenType features
-openTypeFeatures(tnum=True, smcp=True)
+openTypeFeatures(lnum=True, smcp=True)
 # draw the same string
 text("aa1465", (100, 100))

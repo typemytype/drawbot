@@ -706,7 +706,7 @@ class DrawBotDrawingTool(object):
 
         ::
 
-            c2pc, c2sc, calt, case, dlig, frac, liga, lnum, onum, pnum, rlig, smcp, ss00, ss01, ss02, ss03, ss04, ss05, ss06, ss07, ss08, ss09, ss10, ss11, ss12, ss13, ss14, ss15, ss16, ss17, ss18, ss19, swsh, tnum
+            c2pc, c2sc, calt, case, cpsp, cswh, dlig, frac, liga, lnum, onum, ordn, pnum, rlig, sinf, smcp, ss01, ss02, ss03, ss04, ss05, ss06, ss07, ss08, ss09, ss10, ss11, ss12, ss13, ss14, ss15, ss16, ss17, ss18, ss19, ss20, subs, sups, swsh, titl, tnum
 
         .. showcode:: /../examples/openTypeFeatures.py
         """
