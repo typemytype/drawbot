@@ -120,12 +120,25 @@ if "-A" not in sys.argv and codeSignDeveloperName:
     # ================
     print "---------------------"
     print "-   code signing    -"
-    cmds = ["codesign", "-f", "-s", "Developer ID Application: %s" % codeSignDeveloperName, appLocation]
+    cmds = ["codesign", "--force", "--deep", "--sign", "Developer ID Application: %s" % codeSignDeveloperName, appLocation]
     popen = subprocess.Popen(cmds)
     popen.wait()
     print "- done code singing -"
     print "---------------------"
 
+    print "------------------------------"
+    print "- verifying with codesign... -"
+    cmds = ["codesign", "--verify", "--verbose=4", appLocation]
+    popen = subprocess.Popen(cmds)
+    popen.wait()
+    print "------------------------------"
+
+    print "---------------------------"
+    print "- verifying with spctl... -"
+    cmds = ["spctl", "--verbose=4", "--raw", "--assess", "--type", "execute", appLocation]
+    popen = subprocess.Popen(cmds)
+    popen.wait()
+    print "---------------------------"
 
     # ================
     # = creating dmg =
