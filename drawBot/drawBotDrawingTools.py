@@ -20,8 +20,11 @@ def _getmodulecontents(module, names=None):
         d[name] = getattr(module, name)
     return d
 
-def _deprecatedWarning(txt):
+def _deprecatedWarningLowercase(txt):
     warnings.warn("lowercase API is deprecated use: '%s'" % txt)
+
+def _deprecatedWarningWrapInTuple(txt):
+    warnings.warn("deprecated syntax, wrap x and y values in a tuple: '%s'" % txt)
 
 _chachedPixelColorBitmaps = {}
 
@@ -156,7 +159,7 @@ class DrawBotDrawingTool(object):
         self._addInstruction("newPage", width, height)
 
     def newpage(self, width=None, height=None):
-        _deprecatedWarning("newPage(%s, %s)" % (width, height))
+        _deprecatedWarningLowercase("newPage(%s, %s)" % (width, height))
         self.newPage(width, height)
 
     def saveImage(self, paths, multipage=None):
@@ -189,7 +192,7 @@ class DrawBotDrawingTool(object):
             context.saveImage(path, multipage)
 
     def saveimage(self, paths):
-        _deprecatedWarning("saveImage()")
+        _deprecatedWarningLowercase("saveImage()")
         self.saveImage(paths)
 
     def printImage(self):
@@ -247,7 +250,7 @@ class DrawBotDrawingTool(object):
         self._addInstruction("newPath")
 
     def newpath(self):
-        _deprecatedWarning("newPath()")
+        _deprecatedWarningLowercase("newPath()")
         self.newPath()
 
     def moveTo(self, (x, y)):
@@ -257,7 +260,7 @@ class DrawBotDrawingTool(object):
         self._addInstruction("moveTo", (x, y))
 
     def moveto(self, x, y):
-        _deprecatedWarning("moveTo((%s, %s))" % (x, y))
+        _deprecatedWarningLowercase("moveTo((%s, %s))" % (x, y))
         self.moveTo((x, y))
 
     def lineTo(self, (x, y)):
@@ -267,7 +270,7 @@ class DrawBotDrawingTool(object):
         self._addInstruction("lineTo", (x, y))
 
     def lineto(self, x, y):
-        _deprecatedWarning("lineTo((%s, %s))" % (x, y))
+        _deprecatedWarningLowercase("lineTo((%s, %s))" % (x, y))
         self.lineTo((x, y))
 
     def curveTo(self, (x1, y1), (x2, y2), (x3, y3)):
@@ -278,7 +281,7 @@ class DrawBotDrawingTool(object):
         self._addInstruction("curveTo", (x1, y1), (x2, y2), (x3, y3))
 
     def curveto(self, x1, y1, x2, y2, x3, y3):
-        _deprecatedWarning("curveTo((%s, %s), (%s, %s), (%s, %s))" % (x1, y1, x2, y2, x3, y3))
+        _deprecatedWarningLowercase("curveTo((%s, %s), (%s, %s), (%s, %s))" % (x1, y1, x2, y2, x3, y3))
         self.curveTo((x1, y1), (x2, y2), (x3, y3))
 
     def arcTo(self, (x1, y1), (x2, y2), radius):
@@ -294,7 +297,7 @@ class DrawBotDrawingTool(object):
         self._addInstruction("closePath")
 
     def closepath(self):
-        _deprecatedWarning("closePath()")
+        _deprecatedWarningLowercase("closePath()")
         self.closePath()
 
     def drawPath(self, path=None):
@@ -309,7 +312,7 @@ class DrawBotDrawingTool(object):
         warning = "drawPath()"
         if path:
             warning = "drawPath(pathObject)"
-        _deprecatedWarning(warning)
+        _deprecatedWarningLowercase(warning)
         self.drawPath(path)
 
     def clipPath(self, path=None):
@@ -320,7 +323,7 @@ class DrawBotDrawingTool(object):
         self._addInstruction("clipPath", path)
 
     def clippath(self, path=None):
-        _deprecatedWarning("clipPath(path)")
+        _deprecatedWarningLowercase("clipPath(path)")
         self.clipPath(path)
 
     def line(self, x1, y1, x2=None, y2=None):
@@ -332,7 +335,7 @@ class DrawBotDrawingTool(object):
         if x2 is None and y2 is None:
             (x1, y1), (x2, y2) = x1, y1
         else:
-            _deprecatedWarning("line((%s, %s), (%s, %s))" % (x1, y1, x2, y2))
+            _deprecatedWarningWrapInTuple("line((%s, %s), (%s, %s))" % (x1, y1, x2, y2))
         path = self._bezierPathClass()
         path.moveTo((x1, y1))
         path.lineTo((x2, y2))
@@ -351,9 +354,8 @@ class DrawBotDrawingTool(object):
             args.insert(0, y)
             x, y = x
         else:
-            _deprecatedWarning("polygon((x, y), (x1, y1), (x2, y2), (x3, y3), ... )")
             args = [args[i:i+2] for i in range(0, len(args), 2)]
-
+            _deprecatedWarningWrapInTuple("polygon((%s, %s), %s)" % (x, y, ", ".join([str(i) for i in args])))
         if not args:
             raise DrawBotError, "polygon() expects more than a single point"
         doClose = kwargs.get("close", True)
@@ -399,7 +401,7 @@ class DrawBotDrawingTool(object):
         self._addInstruction("cmykFill", c, m, y, k, alpha)
 
     def cmykfill(self, c,  m=None, y=None, k=None, alpha=1):
-        _deprecatedWarning("cmykFill(%s, %s, %s, %s, alpha=%s)" % (c, m, y, k, alpha))
+        _deprecatedWarningLowercase("cmykFill(%s, %s, %s, %s, alpha=%s)" % (c, m, y, k, alpha))
         self.cmykFill(c, m, y, k)
 
     def cmykStroke(self, c, m=None, y=None, k=None, alpha=1):
@@ -413,7 +415,7 @@ class DrawBotDrawingTool(object):
         self._addInstruction("cmykStroke", c, m, y, k, alpha)
 
     def cmykstroke(self, c,  m=None, y=None, k=None, alpha=1):
-        _deprecatedWarning("cmykStroke(%s, %s, %s, %s, alpha=%s)" % (c, m, y, k, alpha))
+        _deprecatedWarningLowercase("cmykStroke(%s, %s, %s, %s, alpha=%s)" % (c, m, y, k, alpha))
         self.cmykStroke(c, m, y, k)
 
     def shadow(self, offset, blur=None, color=None):
@@ -443,7 +445,7 @@ class DrawBotDrawingTool(object):
         self._addInstruction("cmykShadow", offset, blur, color)
 
     def cmykshadow(self, offset, blur=None, color=None):
-        _deprecatedWarning("cmykShadow(%s,  %s, %s)" % (offset, blur, color))
+        _deprecatedWarningLowercase("cmykShadow(%s,  %s, %s)" % (offset, blur, color))
         self.cmykShadow(offset, blur, color)
 
     def linearGradient(self, startPoint=None, endPoint=None, colors=None, locations=None):
@@ -462,7 +464,7 @@ class DrawBotDrawingTool(object):
         self._addInstruction("linearGradient", startPoint, endPoint, colors, locations)
 
     def lineargradient(self, startPoint=None, endPoint=None, colors=None, locations=None):
-        _deprecatedWarning("linearGradient(%s,  %s, %s, %s)" % (startPoint, endPoint, colors, locations))
+        _deprecatedWarningLowercase("linearGradient(%s,  %s, %s, %s)" % (startPoint, endPoint, colors, locations))
         self.linearGradient(startPoint, endPoint, colors, locations)
 
     def cmykLinearGradient(self, startPoint=None, endPoint=None, colors=None, locations=None):
@@ -481,7 +483,7 @@ class DrawBotDrawingTool(object):
         self._addInstruction("cmykLinearGradient", startPoint, endPoint, colors, locations)
 
     def cmyklinearGradient(self, startPoint=None, endPoint=None, colors=None, locations=None):
-        _deprecatedWarning("cmykLinearGradient(%s,  %s, %s, %s)" % (startPoint, endPoint, colors, locations))
+        _deprecatedWarningLowercase("cmykLinearGradient(%s,  %s, %s, %s)" % (startPoint, endPoint, colors, locations))
         self.cmykLinearGradient(startPoint, endPoint, colors, locations)
 
     def radialGradient(self, startPoint=None, endPoint=None, colors=None, locations=None, startRadius=0, endRadius=100):
@@ -502,7 +504,7 @@ class DrawBotDrawingTool(object):
         self._addInstruction("radialGradient", startPoint, endPoint, colors, locations, startRadius, endRadius)
 
     def radialgradient(self, startPoint=None, endPoint=None, colors=None, locations=None, startRadius=0, endRadius=100):
-        _deprecatedWarning("radialGradient(%s,  %s, %s, %s, %s, %s)" % (startPoint, endPoint, colors, locations, startRadius, endRadius))
+        _deprecatedWarningLowercase("radialGradient(%s,  %s, %s, %s, %s, %s)" % (startPoint, endPoint, colors, locations, startRadius, endRadius))
         self.radialGradient(startPoint, endPoint, colors, locations, startRadius, endRadius)
 
     def cmykRadialGradient(self, startPoint=None, endPoint=None, colors=None, locations=None, startRadius=0, endRadius=100):
@@ -523,7 +525,7 @@ class DrawBotDrawingTool(object):
         self._addInstruction("cmykRadialGradient", startPoint, endPoint, colors, locations, startRadius, endRadius)
 
     def cmykradialgradient(self, startPoint=None, endPoint=None, colors=None, locations=None, startRadius=0, endRadius=100):
-        _deprecatedWarning("cmykRadialGradient(%s,  %s, %s, %s, %s, %s)" % (startPoint, endPoint, colors, locations, startRadius, endRadius))
+        _deprecatedWarningLowercase("cmykRadialGradient(%s,  %s, %s, %s, %s, %s)" % (startPoint, endPoint, colors, locations, startRadius, endRadius))
         self.cmykRadialGradient(startPoint, endPoint, colors, locations, startRadius, endRadius)
 
     # path drawing behavoir
@@ -537,7 +539,7 @@ class DrawBotDrawingTool(object):
         self._addInstruction("strokeWidth", value)
 
     def strokewidth(self, value):
-        _deprecatedWarning("strokeWidth(%s)" % value)
+        _deprecatedWarningLowercase("strokeWidth(%s)" % value)
         self.strokeWidth(value)
 
     def miterLimit(self, value):
@@ -549,7 +551,7 @@ class DrawBotDrawingTool(object):
         self._addInstruction("miterLimit", value)
 
     def miterlimit(self, value):
-        _deprecatedWarning("miterLimit(%s)" % value)
+        _deprecatedWarningLowercase("miterLimit(%s)" % value)
         self.miterLimit(value)
 
     def lineJoin(self, value):
@@ -563,7 +565,7 @@ class DrawBotDrawingTool(object):
         self._addInstruction("lineJoin", value)
 
     def linejoin(self, value):
-        _deprecatedWarning("lineJoin(%s)" % value)
+        _deprecatedWarningLowercase("lineJoin(%s)" % value)
         self.lineJoin(value)
 
     def lineCap(self, value):
@@ -577,7 +579,7 @@ class DrawBotDrawingTool(object):
         self._addInstruction("lineCap", value)
 
     def linecap(self, value):
-        _deprecatedWarning("lineCap(%s)" % value)
+        _deprecatedWarningLowercase("lineCap(%s)" % value)
         self.lineCap(value)
 
     def lineDash(self, *value):
@@ -594,7 +596,7 @@ class DrawBotDrawingTool(object):
         self._addInstruction("lineDash", value)
 
     def linedash(self, *value):
-        _deprecatedWarning("lineDash(%s)" % ", ".join([str(i) for i in value]))
+        _deprecatedWarningLowercase("lineDash(%s)" % ", ".join([str(i) for i in value]))
         self.lineDash(*value)
 
     # transform
@@ -673,7 +675,7 @@ class DrawBotDrawingTool(object):
         self._addInstruction("fontSize", fontSize)
 
     def fontsize(self, fontSize):
-        _deprecatedWarning("fontSize(%s)" % fontSize)
+        _deprecatedWarningLowercase("fontSize(%s)" % fontSize)
         self.fontSize(fontSize)
 
     def lineHeight(self, value):
@@ -686,7 +688,7 @@ class DrawBotDrawingTool(object):
         self._addInstruction("lineHeight", value)
 
     def lineheight(self, value):
-        _deprecatedWarning("lineHeight(%s)" % value)
+        _deprecatedWarningLowercase("lineHeight(%s)" % value)
         self.lineHeight(value)
 
     def hyphenation(self, value):
@@ -732,7 +734,7 @@ class DrawBotDrawingTool(object):
         """
         Draw a text in a provided rectangle.
         Optionally an alignment can be set.
-        Possible `align` values are: `left`, `center` and `right`.
+        Possible `align` values are: `"left"`, `"center"` and `"right"`.
 
         If the text overflows the rectangle, the overflowed text is returned.
 
@@ -748,7 +750,7 @@ class DrawBotDrawingTool(object):
         return self._dummyContext.clippedText(txt, (x, y, w, h), align)
 
     def textbox(self, txt, x, y, w, h, align=None):
-        _deprecatedWarning("textbox(%s, (%s, %s, %s, %s), align=%s)" % (txt, x, y, y, w, align))
+        _deprecatedWarningLowercase("textbox(%s, (%s, %s, %s, %s), align=%s)" % (txt, x, y, y, w, align))
         self.textbox(txt, (x, y, w, h), align)
 
     _formattedStringClass = FormattedString
@@ -855,8 +857,8 @@ class DrawBotDrawingTool(object):
                 alpha = y
             x, y = x
         else:
-            txt = "image(\"%s\", (%s, %s), alpha=%s)" % (path, x, y, alpha)
-            warnings.warn("deprecated syntax, wrap x and y values in a tuple: '%s'" % txt)
+            _deprecatedWarningWrapInTuple("image(\"%s\", (%s, %s), alpha=%s)" % (path, x, y, alpha))
+
         if alpha is None:
             alpha = 1
         if isinstance(path, (str, unicode)):
@@ -921,7 +923,7 @@ class DrawBotDrawingTool(object):
         self._addInstruction("frameDuration", seconds)
 
     def frameduration(self, seconds):
-        _deprecatedWarning("frameDuration(%s)" % seconds)
+        _deprecatedWarningLowercase("frameDuration(%s)" % seconds)
         self.frameDuration(seconds)
 
     # helpers
@@ -934,7 +936,7 @@ class DrawBotDrawingTool(object):
         return self._dummyContext.textSize(txt, align)
 
     def textsize(self, txt, align=None):
-        _deprecatedWarning("textSize(%s, %s)" % (txt, align))
+        _deprecatedWarningLowercase("textSize(%s, %s)" % (txt, align))
         return self.textSize(txt, align)
 
     def installedFonts(self):
@@ -944,7 +946,7 @@ class DrawBotDrawingTool(object):
         return [str(f) for f in AppKit.NSFontManager.sharedFontManager().availableFonts()]
 
     def installedfonts(self):
-        _deprecatedWarning("installedFonts()")
+        _deprecatedWarningLowercase("installedFonts()")
         return self.installedFonts()
 
     _bezierPathClass = BezierPath
@@ -1031,7 +1033,7 @@ class DrawBotDrawingTool(object):
         return self._bezierPathClass()
 
     def Bezierpath(self):
-        _deprecatedWarning("BezierPath()")
+        _deprecatedWarningLowercase("BezierPath()")
         return self.BezierPath()
 
     def Variable(self, variables, workSpace):
