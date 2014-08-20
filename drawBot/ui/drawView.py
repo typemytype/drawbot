@@ -6,7 +6,7 @@ from vanilla import Group
 epsPasteBoardType = "CorePasteboardFlavorType 0x41494342"
 
 class DrawBotPDFThumbnailView(PDFThumbnailView):
-    
+
     def draggingUpdated_(self, draggingInfo):
         return NSDragOperationNone
 
@@ -23,7 +23,9 @@ class DrawView(Group):
 
     def __init__(self, posSize):
         super(DrawView, self).__init__(posSize)
-        view = self.getNSView().documentView()
+        pdfView = self.getNSView()
+        pdfView.setAutoScales_(True)
+        view = pdfView.documentView()
         scrollview = view.enclosingScrollView()
         scrollview.setBorderType_(NSBezelBorder)
 
