@@ -232,8 +232,8 @@ man_pages = [
 #  dir menu entry, description, category)
 texinfo_documents = [
   ('index', 'DrawBot', u'DrawBot',
-   u'Just van Rossum, Erik van Blokland, Frederik Berlaen', 
-   'DrawBot', 
+   u'Just van Rossum, Erik van Blokland, Frederik Berlaen',
+   'DrawBot',
    'Drawing With Python.',
    ),
 ]
@@ -257,7 +257,7 @@ autodoc_member_order = 'bysource'
 # read the docs hacking
 
 class MetaMock(type):
-    
+
     def __getattr__(self, name):
         return self
 
@@ -278,8 +278,8 @@ class Mock(object):
         else:
             return Mock
 
-MOCK_MODULES = ['AppKit', 'Quartz', 'CoreText', 'QTKit', 
-        'xmlWriter', 
+MOCK_MODULES = ['AppKit', 'Quartz', 'CoreText', 'QTKit',
+        'xmlWriter',
         'fontTools',
         'fontTools.misc',
         'fontTools.misc.transform',
@@ -307,7 +307,7 @@ def visit_download_reference(self, node):
             )
         self.body.append('<div class="downloadlink"><a class="reference internal drawbotlink" href="%(urlPath)s">Open in DrawBot: %(fileName)s</a>' % data)
         self.body.append('<a class="reference internal" href="%(urlPath)s">Download: %(fileName)s</a></div>' % data)
-            
+
         node.clear()
 
 def depart_download_reference(self, node):
@@ -317,7 +317,7 @@ HTMLTranslator.visit_download_reference = visit_download_reference
 HTMLTranslator.depart_download_reference = depart_download_reference
 
 class ShowCode(LiteralInclude):
-    
+
     has_content = False
     required_arguments = 1
     final_argument_whitespace = True
