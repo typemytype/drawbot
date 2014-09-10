@@ -1,4 +1,6 @@
 import AppKit
+import CoreText
+import Quartz
 
 import math
 import os
@@ -27,6 +29,31 @@ def _deprecatedWarningWrapInTuple(txt):
     warnings.warn("deprecated syntax, wrap x and y values in a tuple: '%s'" % txt)
 
 _chachedPixelColorBitmaps = {}
+
+_paperSizes = {
+    'Letter'        : (612, 792),
+    'LetterSmall'   : (612, 792),
+    'Tabloid'       : (792, 1224),
+    'Ledger'        : (1224, 792),
+    'Legal'         : (612, 1008),
+    'Statement'     : (396, 612),
+    'Executive'     : (540, 720),
+    'A0'            : (2384, 3371),
+    'A1'            : (1685, 2384),
+    'A2'            : (1190, 1684),
+    'A3'            : (842, 1190),
+    'A4'            : (595, 842),
+    'A4Small'       : (595, 842),
+    'A5'            : (420, 595),
+    'B4'            : (729, 1032),
+    'B5'            : (516, 729),
+    'Folio'         : (612, 936),
+    'Quarto'        : (610, 780),
+    '10x14'         : (720, 1008),
+}
+
+for key, (w, h) in _paperSizes.items():
+    _paperSizes["%sLandscape" % key] = (h, w)
 
 class DrawBotDrawingTool(object):
 
@@ -67,6 +94,11 @@ class DrawBotDrawingTool(object):
         self._height = None
 
     def newDrawing(self):
+        """
+        Reset the drawing stack to the clean and empty stack.
+
+        .. showcode:: /../examples/newDrawing.py
+        """
         self._reset()
 
     ## magic variables
@@ -128,6 +160,8 @@ class DrawBotDrawingTool(object):
         Set the width and height of the canvas.
         Without calling `size()` the default drawing board is 1000 by 1000 points.
 
+        Alternatively `size('A4')` can be used. All supported papersizes: 10x14, 10x14Landscape, A0, A0Landscape, A1, A1Landscape, A2, A2Landscape, A3, A3Landscape, A4, A4Landscape, A4Small, A4SmallLandscape, A5, A5Landscape, B4, B4Landscape, B5, B5Landscape, Executive, ExecutiveLandscape, Folio, FolioLandscape, Ledger, LedgerLandscape, Legal, LegalLandscape, Letter, LetterLandscape, LetterSmall, LetterSmallLandscape, Quarto, QuartoLandscape, Statement, StatementLandscape, Tabloid, TabloidLandscape.
+
         Afterwards the functions `width()` and `height()` can be used for calculations.
 
         It is advised to use `size()` always at the top of the script and not use `size()`
@@ -135,6 +169,8 @@ class DrawBotDrawingTool(object):
 
         .. showcode:: /../examples/size.py
         """
+        if width in _paperSizes:
+            width, height = _paperSizes[width]
         if height is None:
             width, height = width
         self._width = width
@@ -152,8 +188,12 @@ class DrawBotDrawingTool(object):
         Optionally a `width` and `height` argument can be provided to set the size.
         If not provided the default size will be used.
 
+        Alternatively `size('A4')` can be used. All supported papersizes: 10x14, 10x14Landscape, A0, A0Landscape, A1, A1Landscape, A2, A2Landscape, A3, A3Landscape, A4, A4Landscape, A4Small, A4SmallLandscape, A5, A5Landscape, B4, B4Landscape, B5, B5Landscape, Executive, ExecutiveLandscape, Folio, FolioLandscape, Ledger, LedgerLandscape, Legal, LegalLandscape, Letter, LetterLandscape, LetterSmall, LetterSmallLandscape, Quarto, QuartoLandscape, Statement, StatementLandscape, Tabloid, TabloidLandscape.
+
         .. showcode:: /../examples/newPage.py
         """
+        if width in _paperSizes:
+            width, height = _paperSizes[width]
         self._width = width
         self._height = height
         self._addInstruction("newPage", width, height)
@@ -727,7 +767,17 @@ class DrawBotDrawingTool(object):
             x, y = x
         else:
             warnings.warn("postion must a tuple: text('%s', (%s, %s))" % (txt, x, y))
-        w, h = self.textSize(txt)
+        attrString = self._dummyContext.attributedString(txt)
+        w, h = attrString.size()
+        setter = CoreText.CTFramesetterCreateWithAttributedString(attrString)
+        path = Quartz.CGPathCreateMutable()
+        Quartz.CGPathAddRect(path, None, Quartz.CGRectMake(x, y, w*2, h))
+        box = CoreText.CTFramesetterCreateFrame(setter, (0, 0), path, None)
+        ctLines = CoreText.CTFrameGetLines(box)
+        origins = CoreText.CTFrameGetLineOrigins(box, (0, len(ctLines)), None)
+        if origins:
+            x -= origins[-1][0]
+            y -= origins[-1][1]
         self.textBox(txt, (x, y, w*2, h))
 
     def textBox(self, txt, (x, y, w, h), align=None):
@@ -836,6 +886,10 @@ class DrawBotDrawingTool(object):
         .. function:: formattedString.openTypeFeatures(frac=True, case=True, ...)
 
             Enable OpenType features.
+
+        .. function:: formattedString.size()
+
+            Return the size of the string.
 
         .. showcode:: /../examples/formattedString.py
         """
