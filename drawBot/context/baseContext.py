@@ -6,6 +6,8 @@ from drawBot.misc import DrawBotError, cmyk2rgb, warnings
 
 from tools import openType
 
+_FALLBACKFONT = "LucidaGrande"
+
 class BezierPath(object):
 
     """
@@ -80,24 +82,54 @@ class BezierPath(object):
         """
         self._path.appendBezierPathWithOvalInRect_(((x, y), (w, h)))
 
-    def text(self, txt, font=None, fontSize=10, offset=None):
+    def text(self, txt, font=_FALLBACKFONT, fontSize=10, offset=None):
         """
-        Draws a `text` with a `font` and `fontSize` at an `offset` in the bezier path.
+        Draws a `txt` with a `font` and `fontSize` at an `offset` in the bezier path.
+
+        Optionally `txt` can be a `FormattedString`.
         """
-        font = AppKit.NSFont.fontWithName_size_(font, fontSize)
-        if font is None:
-            raise DrawBotError, "Font '%s' is not installed." % font
-        attributedString = AppKit.NSAttributedString.alloc().initWithString_(txt)
-        line = CoreText.CTLineCreateWithAttributedString(attributedString)
-        glyphRuns = CoreText.CTLineGetGlyphRuns(line)
+        if isinstance(txt, FormattedString):
+            attributedString = txt.getNSObject()
+        else:
+            fontName = font
+            font = AppKit.NSFont.fontWithName_size_(font, fontSize)
+            if font is None:
+                warnings.warn("font: %s is not installed, back to the fallback font: %s" % (fontName, _FALLBACKFONT))
+                font = AppKit.NSFont.fontWithName_size_(_FALLBACKFONT, fontSize)
+
+            attributes = {
+                AppKit.NSFontAttributeName : font
+            }
+            attributedString = AppKit.NSAttributedString.alloc().initWithString_attributes_(txt, attributes)
+        w, h = attributedString.size()
+        setter = CoreText.CTFramesetterCreateWithAttributedString(attributedString)
+        path = Quartz.CGPathCreateMutable()
+        Quartz.CGPathAddRect(path, None, Quartz.CGRectMake(0, -h, w*2, h*2))
+        box = CoreText.CTFramesetterCreateFrame(setter, (0, 0), path, None)
+        ctLines = CoreText.CTFrameGetLines(box)
+        origins = CoreText.CTFrameGetLineOrigins(box, (0, len(ctLines)), None)
         if offset:
             x, y = offset
         else:
             x = y = 0
-        self._path.moveToPoint_((x, y))
-        for run in glyphRuns:
-            glyphs = CoreText.CTRunGetGlyphs(run, CoreText.CTRunGetStringRange(run), None)
-            self._path.appendBezierPathWithGlyphs_count_inFont_(glyphs, len(glyphs), font)
+        if origins:
+            x -= origins[-1][0]
+            y -= origins[-1][1]
+        for i, (originX, originY) in enumerate(origins):
+            ctLine = ctLines[i]
+            # path around a bug somewhere
+            # create a new CTLine from a substring with the same range...
+            rng = CoreText.CTLineGetStringRange(ctLine)
+            txtLine = attributedString.attributedSubstringFromRange_(rng)
+            ctLine = CoreText.CTLineCreateWithAttributedString(txtLine)
+            ctRuns = CoreText.CTLineGetGlyphRuns(ctLine)
+            self._path.moveToPoint_((x+originX, y+originY))
+            for ctRun in ctRuns:
+                glyphs = CoreText.CTRunGetGlyphs(ctRun, CoreText.CTRunGetStringRange(ctRun), None)
+                attributes = CoreText.CTRunGetAttributes(ctRun)
+                font = attributes.get(AppKit.NSFontAttributeName)
+                glyphs = [g for g in glyphs if g != 0]
+                self._path.appendBezierPathWithGlyphs_count_inFont_(glyphs, len(glyphs), font)
 
     def getNSBezierPath(self):
         """
@@ -121,6 +153,8 @@ class BezierPath(object):
         """
         Return the bounding box of the path.
         """
+        if self._path.isEmpty():
+            return None
         (x, y), (w, h) = self._path.bounds()
         return x, y, w, h
 
@@ -419,19 +453,22 @@ class FormattedString(object):
             return
         attributes = {}
         if font:
-            font = AppKit.NSFont.fontWithName_size_(font, fontSize)
-            if font is not None:
-                coreTextfeatures = []
-                for featureTag, value in openTypeFeatures.items():
-                    if not value:
-                        featureTag = "%s_off" % featureTag
-                    if featureTag in openType.featureMap:
-                        feature = openType.featureMap[featureTag]
-                        coreTextfeatures.append(feature)
-                fontDescriptor = font.fontDescriptor()
-                fontDescriptor = fontDescriptor.fontDescriptorByAddingAttributes_({CoreText.NSFontFeatureSettingsAttribute : coreTextfeatures})
-                font = AppKit.NSFont.fontWithDescriptor_size_(fontDescriptor, fontSize)
-                attributes[AppKit.NSFontAttributeName] = font
+            fontName = font
+            font = AppKit.NSFont.fontWithName_size_(fontName, fontSize)
+            if font is None:
+                warnings.warn("font: %s is not installed, back to the fallback font: %s" % (fontName, _FALLBACKFONT))
+                font = AppKit.NSFont.fontWithName_size_(_FALLBACKFONT, fontSize)
+            coreTextfeatures = []
+            for featureTag, value in openTypeFeatures.items():
+                if not value:
+                    featureTag = "%s_off" % featureTag
+                if featureTag in openType.featureMap:
+                    feature = openType.featureMap[featureTag]
+                    coreTextfeatures.append(feature)
+            fontDescriptor = font.fontDescriptor()
+            fontDescriptor = fontDescriptor.fontDescriptorByAddingAttributes_({CoreText.NSFontFeatureSettingsAttribute : coreTextfeatures})
+            font = AppKit.NSFont.fontWithDescriptor_size_(fontDescriptor, fontSize)
+            attributes[AppKit.NSFontAttributeName] = font
         if fill or cmykFill:
             if fill:
                 fillColor = self._colorClass.getColor(fill).getNSObject()
@@ -462,7 +499,7 @@ class FormattedString(object):
                     font=self._font, fontSize=self._fontSize,
                     fill=self._fill, cmykFill=self._cmykFill,
                     stroke=self._stroke, cmykStroke=self._cmykStroke, strokeWidth=self._strokeWidth,
-                    align=self._align, lineHeight=self._lineHeight)
+                    align=self._align, lineHeight=self._lineHeight, openTypeFeatures=self._openTypeFeatures)
         return new
 
     def __getitem__(self, index):
@@ -585,6 +622,12 @@ class FormattedString(object):
         else:
             self._openTypeFeatures.update(features)
 
+    def size(self):
+        """
+        Return the size of the text.
+        """
+        return self._attributedString.size()
+
     def getNSObject(self):
         return self._attributedString
 
@@ -599,8 +642,7 @@ class FormattedString(object):
 class Text(object):
 
     def __init__(self):
-        self._backupFont = "LucidaGrande"
-        self._fontName = self._backupFont
+        self._fontName = _FALLBACKFONT
         self._fontSize = 10
         self._lineHeight = None
         self._hyphenation = None
@@ -609,9 +651,9 @@ class Text(object):
     def _get_font(self):
         _font = AppKit.NSFont.fontWithName_size_(self._fontName, self.fontSize)
         if _font == None:
-            warnings.warn("font: %s is not installed, back to the fallback font: %s" % (self._fontName, self._backupFont))
-            self._fontName = self._backupFont
-            _font = AppKit.NSFont.fontWithName_size_(self._backupFont, self.fontSize)
+            warnings.warn("font: %s is not installed, back to the fallback font: %s" % (self._fontName, _FALLBACKFONT))
+            self._fontName = _FALLBACKFONT
+            _font = AppKit.NSFont.fontWithName_size_(_FALLBACKFONT, self.fontSize)
         coreTextfeatures = []
         for featureTag, value in self.openTypeFeatures.items():
             if not value:
