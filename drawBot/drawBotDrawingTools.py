@@ -160,7 +160,7 @@ class DrawBotDrawingTool(object):
         Set the width and height of the canvas.
         Without calling `size()` the default drawing board is 1000 by 1000 points.
 
-        Alternatively `size('A4')` can be used. All supported papersizes: 10x14, 10x14Landscape, A0, A0Landscape, A1, A1Landscape, A2, A2Landscape, A3, A3Landscape, A4, A4Landscape, A4Small, A4SmallLandscape, A5, A5Landscape, B4, B4Landscape, B5, B5Landscape, Executive, ExecutiveLandscape, Folio, FolioLandscape, Ledger, LedgerLandscape, Legal, LegalLandscape, Letter, LetterLandscape, LetterSmall, LetterSmallLandscape, Quarto, QuartoLandscape, Statement, StatementLandscape, Tabloid, TabloidLandscape.
+        Alternatively `size('A4')` can be used.
 
         Afterwards the functions `width()` and `height()` can be used for calculations.
 
@@ -168,6 +168,8 @@ class DrawBotDrawingTool(object):
         in a multiple page document as a `newPage(w, h)` set the correct dimentions directly.
 
         .. showcode:: /../examples/size.py
+
+        All supported papersizes: 10x14, 10x14Landscape, A0, A0Landscape, A1, A1Landscape, A2, A2Landscape, A3, A3Landscape, A4, A4Landscape, A4Small, A4SmallLandscape, A5, A5Landscape, B4, B4Landscape, B5, B5Landscape, Executive, ExecutiveLandscape, Folio, FolioLandscape, Ledger, LedgerLandscape, Legal, LegalLandscape, Letter, LetterLandscape, LetterSmall, LetterSmallLandscape, Quarto, QuartoLandscape, Statement, StatementLandscape, Tabloid, TabloidLandscape.
         """
         if width in _paperSizes:
             width, height = _paperSizes[width]
@@ -188,9 +190,11 @@ class DrawBotDrawingTool(object):
         Optionally a `width` and `height` argument can be provided to set the size.
         If not provided the default size will be used.
 
-        Alternatively `size('A4')` can be used. All supported papersizes: 10x14, 10x14Landscape, A0, A0Landscape, A1, A1Landscape, A2, A2Landscape, A3, A3Landscape, A4, A4Landscape, A4Small, A4SmallLandscape, A5, A5Landscape, B4, B4Landscape, B5, B5Landscape, Executive, ExecutiveLandscape, Folio, FolioLandscape, Ledger, LedgerLandscape, Legal, LegalLandscape, Letter, LetterLandscape, LetterSmall, LetterSmallLandscape, Quarto, QuartoLandscape, Statement, StatementLandscape, Tabloid, TabloidLandscape.
+        Alternatively `size('A4')` can be used.
 
         .. showcode:: /../examples/newPage.py
+
+        All supported papersizes: 10x14, 10x14Landscape, A0, A0Landscape, A1, A1Landscape, A2, A2Landscape, A3, A3Landscape, A4, A4Landscape, A4Small, A4SmallLandscape, A5, A5Landscape, B4, B4Landscape, B5, B5Landscape, Executive, ExecutiveLandscape, Folio, FolioLandscape, Ledger, LedgerLandscape, Legal, LegalLandscape, Letter, LetterLandscape, LetterSmall, LetterSmallLandscape, Quarto, QuartoLandscape, Statement, StatementLandscape, Tabloid, TabloidLandscape.
         """
         if width in _paperSizes:
             width, height = _paperSizes[width]
