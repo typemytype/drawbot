@@ -91,6 +91,13 @@ setup(
                         'csv',
                         'this'
                         ],
+                    excludes=[
+                        "scipy",
+                        "mathplitlib",
+                        "PIL",
+                        "pygame",
+                        "wx",
+                        ],
                     )
                 )
             )
