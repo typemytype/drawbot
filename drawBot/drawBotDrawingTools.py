@@ -249,6 +249,17 @@ class DrawBotDrawingTool(object):
         self._drawInContext(context)
         context.printImage()
 
+    def pdfImage(self, multipage=None):
+        """
+        Return the image as a pdf document object.
+
+        * A `pdf` can be multipage. If `multipage` is `False` only the current page is returned.
+        """
+        from context.drawBotContext import DrawBotContext
+        context = DrawBotContext()
+        self._drawInContext(context, multipage)
+        return context.getNSPDFDocument()
+
     # graphic state
 
     def save(self):
