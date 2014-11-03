@@ -113,10 +113,11 @@ class DrawBotController(BaseWindowController):
             CallbackRunner(createContext, stdout=self.stdout, stderr=self.stderr, args=[context])
             # get the pdf document and set in the draw view
             pdfDocument = context.getNSPDFDocument()
+            selectionIndex = self.thumbnails.getSelection()
             if not liveCoding or (pdfDocument and pdfDocument.pageCount()):
                 self.drawView.setPDFDocument(pdfDocument)
-            # scroll down
-            self.drawView.scrollDown()
+             # scroll to the original position
+            self.drawView.scrollToPageIndex(selectionIndex)
         else:
             # if the panes are not visible, clear the draw view
             self.drawView.setPDFDocument(None)

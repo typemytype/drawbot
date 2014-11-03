@@ -17,6 +17,15 @@ class ThumbnailView(Group):
     def setDrawView(self, view):
         self.getNSView().setPDFView_(view.getNSView())
 
+    def getSelection(self):
+        selection = self.getNSView().selectedPages()
+        if selection:
+            for page in selection:
+                document = page.document()
+                index = document.indexForPage_(page)
+                return index
+        return -1
+
 class DrawView(Group):
 
     nsViewClass = PDFView
@@ -56,3 +65,15 @@ class DrawView(Group):
     def scrollDown(self):
         document = self.getNSView().documentView()
         document.scrollPoint_((0, 0))
+
+    def scrollToPageIndex(self, index):
+        pdf = self.getPDFDocument()
+        if pdf is None:
+            self.scrollDown()
+        elif 0 <= index < pdf.pageCount():
+            page = pdf.pageAtIndex_(index)
+            self.getNSView().goToPage_(page)
+        else:
+            self.scrollDown()
+
+
