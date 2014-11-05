@@ -4,11 +4,13 @@ import subprocess
 import plistlib
 import AppKit
 
+from distutils.version import StrictVersion
+
 import vanilla
 from defconAppKit.windows.progressWindow import ProgressWindow 
 
 from drawBot import __version__
-from misc import DrawBotError, getDefault, setDefault
+from misc import DrawBotError, getDefault
 
 def getCurrentVersion():
     """
@@ -59,7 +61,7 @@ class Updater(object):
         if not getDefault("DrawBotCheckForUpdatesAtStartup", True):
             return
         self.currentVersion = getCurrentVersion()
-        self.needsUpdate = __version__ < self.currentVersion
+        self.needsUpdate = StrictVersion(__version__) < StrictVersion(self.currentVersion)
         if not self.needsUpdate:
             return
         if parentWindow:
