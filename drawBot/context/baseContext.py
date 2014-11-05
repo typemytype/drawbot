@@ -639,6 +639,51 @@ class FormattedString(object):
         new._attributedString = self._attributedString.mutableCopy()
         return new
 
+    def fontAscender(self):
+        """
+        Returns the current font ascender, based on the current `font` and `fontSize`.
+        """
+        font = AppKit.NSFont.fontWithName_size_(self._fontName, self._fontSize)
+        return font.ascender()
+
+    def fontDescender(self):
+        """
+        Returns the current font descender, based on the current `font` and `fontSize`.
+        """
+        font = AppKit.NSFont.fontWithName_size_(self._fontName, self._fontSize)
+        return font.descender()        
+
+    def fontXHeight(self):
+        """
+        Returns the current font x-height, based on the current `font` and `fontSize`.
+        """
+        font = AppKit.NSFont.fontWithName_size_(self._fontName, self._fontSize)
+        return font.xHeight()
+
+    def fontCapHeight(self):
+        """
+        Returns the current font cap height, based on the current `font` and `fontSize`.
+        """
+        font = AppKit.NSFont.fontWithName_size_(self._fontName, self._fontSize)
+        return font.capHeight()
+
+    def fontLeading(self):
+        """
+        Returns the current font leading, based on the current `font` and `fontSize`.
+        """
+        font = AppKit.NSFont.fontWithName_size_(self._fontName, self._fontSize)
+        return font.leading()
+
+    def fontLineHeight(self):
+        """
+        Returns the current line height, based on the current `font` and `fontSize`.
+        If a `lineHeight` is set, this value will be returned.
+        """    
+        if self._lineHeight is not None:
+            return self._lineHeight
+        font = AppKit.NSFont.fontWithName_size_(self._fontName, self._fontSize)
+        return font.defaultLineHeightForFont()
+
 class Text(object):
 
     def __init__(self):
