@@ -249,15 +249,13 @@ class DrawBotDrawingTool(object):
         self._drawInContext(context)
         context.printImage()
 
-    def pdfImage(self, multipage=None):
+    def pdfImage(self):
         """
         Return the image as a pdf document object.
-
-        * A `pdf` can be multipage. If `multipage` is `False` only the current page is returned.
         """
         from context.drawBotContext import DrawBotContext
         context = DrawBotContext()
-        self._drawInContext(context, multipage)
+        self._drawInContext(context)
         return context.getNSPDFDocument()
 
     # graphic state
@@ -920,18 +918,18 @@ class DrawBotDrawingTool(object):
 
             Returns the current font x-height, based on the current `font` and `fontSize`.
 
-        .. function:: formattedString.fontCapHeight() 
-        
+        .. function:: formattedString.fontCapHeight()
+
             Returns the current font cap height, based on the current `font` and `fontSize`.
 
         .. function:: formattedString.fontLeading()
 
             Returns the current font leading, based on the current `font` and `fontSize`.
-        
+
         .. function:: formattedString.fontLineHeight()
 
             Returns the current line height, based on the current `font` and `fontSize`.
-            If a `lineHeight` is set, this value will be returned.   
+            If a `lineHeight` is set, this value will be returned.
         """
         return self._formattedStringClass(*args, **kwargs)
 
@@ -1053,7 +1051,7 @@ class DrawBotDrawingTool(object):
         """
         Returns the current font descender, based on the current `font` and `fontSize`.
         """
-        return self._dummyContext._state.text.font.descender()        
+        return self._dummyContext._state.text.font.descender()
 
     def fontXHeight(self):
         """
@@ -1077,7 +1075,7 @@ class DrawBotDrawingTool(object):
         """
         Returns the current line height, based on the current `font` and `fontSize`.
         If a `lineHeight` is set, this value will be returned.
-        """    
+        """
         if self._dummyContext._state.text._lineHeight is not None:
             return self._dummyContext._state.text._lineHeight
         return self._dummyContext._state.text.font.defaultLineHeightForFont()
