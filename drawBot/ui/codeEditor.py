@@ -8,7 +8,11 @@ from pygments.token import *
 from pygments.style import Style
 from pygments.styles.default import DefaultStyle
 
-import jedi
+try:
+    import jedi
+    hasJedi = True
+except:
+    hasJedi = False
 
 from vanilla import *
 
@@ -232,6 +236,8 @@ def _findWhitespace(s, pos=0):
     return m.end()
 
 def _pythonWordCompletions(text, charRange):
+    if not hasJedi:
+        return [], 0
     partialString = text.substringWithRange_(charRange)
     keyWords = list(_drawBotDrawingTool.__all__)
     try:
