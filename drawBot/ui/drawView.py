@@ -18,7 +18,11 @@ class ThumbnailView(Group):
         self.getNSView().setPDFView_(view.getNSView())
 
     def getSelection(self):
-        selection = self.getNSView().selectedPages()
+        try:
+            # sometimes this goes weirdly wrong...
+            selection = self.getNSView().selectedPages()
+        except:
+            return -1
         if selection:
             for page in selection:
                 document = page.document()
@@ -48,6 +52,11 @@ class DrawView(Group):
         pdf = PDFDocument.alloc().initWithData_(self._pdfData)
         self.setPDFDocument(pdf)
 
+    def setPath(self, path):
+        url = NSURL.fileURLWithPath_(path)
+        document = PDFDocument.alloc().initWithURL_(url)
+        self.setPDFDocument(document)
+
     def setPDFDocument(self, document):
         if document is None:
             document = PDFDocument.alloc().init()
@@ -71,8 +80,12 @@ class DrawView(Group):
         if pdf is None:
             self.scrollDown()
         elif 0 <= index < pdf.pageCount():
-            page = pdf.pageAtIndex_(index)
-            self.getNSView().goToPage_(page)
+            try:
+                # sometimes this goes weirdly wrong...
+                page = pdf.pageAtIndex_(index)
+                self.getNSView().goToPage_(page)
+            except:
+                self.scrollDown()
         else:
             self.scrollDown()
 
