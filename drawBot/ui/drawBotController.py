@@ -72,6 +72,7 @@ class DrawBotController(BaseWindowController):
     def runCode(self, liveCoding=False):
         # get the code
         code = self.code()
+        code = code.encode("utf-8")
         # save the code in the defaults, if something goes wrong
         setDefault("DrawBotCodeBackup", code)
         # get te path of the document (will be None for an untitled document)
