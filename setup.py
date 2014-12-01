@@ -48,7 +48,7 @@ plist = dict(
 
 		],
 	CFBundleIdentifier = "com.drawbot",
-	LSMinimumSystemVersion = "10.6.0",
+	LSMinimumSystemVersion = "10.9.0",
 	CFBundleShortVersionString = __version__,
 	CFBundleVersion = __version__,
 	CFBundleIconFile = "DrawBot.icns",
@@ -96,8 +96,8 @@ setup(
                         "mathplitlib",
                         "PIL",
                         "pygame",
-                        "wx",
-                        ],
+                        "wx"
+                        ]
                     )
                 )
             )
