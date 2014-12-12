@@ -900,6 +900,8 @@ class DrawBotDrawingTool(object):
 
             Enable OpenType features.
 
+        .. showcode:: /../examples/openTypeFeaturesFromattedString.py
+
         .. function:: formattedString.size()
 
             Return the size of the string.
@@ -930,6 +932,13 @@ class DrawBotDrawingTool(object):
 
             Returns the current line height, based on the current `font` and `fontSize`.
             If a `lineHeight` is set, this value will be returned.
+
+        .. function:: formattedString.appendGlyph(glyphName1, glyphName2, ...)
+
+            Appends a glyph by his glyph name using the current `font`.
+
+        .. showcode:: /../examples/appendGlyphFormattedString.py
+        
         """
         return self._formattedStringClass(*args, **kwargs)
 
