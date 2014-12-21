@@ -245,6 +245,8 @@ class DrawBotDrawingTool(object):
         """
         Export the canvas to a printing dialog, ready to print.
 
+        Optionally a `pdf` object can be provided.
+
         .. showcode:: /../examples/printImage.py
         """
         context = getContextForFileExt("pdf")
