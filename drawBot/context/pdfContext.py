@@ -5,6 +5,13 @@ import Quartz
 from baseContext import BaseContext, FormattedString
 from drawBot.misc import DrawBotError
 
+def sendPDFtoPrinter(pdfDocument):
+    printInfo = AppKit.NSPrintInfo.sharedPrintInfo()
+    op = pdfDocument.getPrintOperationForPrintInfo_autoRotate_(printInfo, True)
+    printPanel = op.printPanel()
+    printPanel.setOptions_(AppKit.NSPrintPanelShowsCopies | AppKit.NSPrintPanelShowsPageRange | AppKit.NSPrintPanelShowsPaperSize | AppKit.NSPrintPanelShowsOrientation | AppKit.NSPrintPanelShowsScaling | AppKit.NSPrintPanelShowsPrintSelection | AppKit.NSPrintPanelShowsPreview)
+    op.runOperation()
+
 class PDFContext(BaseContext):
 
     fileExtensions = ["pdf"]
@@ -52,16 +59,15 @@ class PDFContext(BaseContext):
             data = page.dataRepresentation()
         data.writeToFile_atomically_(path, True)
 
-    def _printImage(self):
-        self._closeContext()
-        pdfDocument = Quartz.PDFDocument.alloc().initWithData_(self._pdfData)
-        printInfo = AppKit.NSPrintInfo.sharedPrintInfo()
-        op = pdfDocument.getPrintOperationForPrintInfo_autoRotate_(printInfo, True)
-        printPanel = op.printPanel()
-        printPanel.setOptions_(AppKit.NSPrintPanelShowsCopies | AppKit.NSPrintPanelShowsPageRange | AppKit.NSPrintPanelShowsPaperSize | AppKit.NSPrintPanelShowsOrientation | AppKit.NSPrintPanelShowsScaling | AppKit.NSPrintPanelShowsPrintSelection | AppKit.NSPrintPanelShowsPreview)
-        op.runOperation()
-        self._pdfContext = None
-        self._pdfData = None
+    def _printImage(self, pdf=None):
+        if pdf:
+            sendPDFtoPrinter(pdf)
+        else:
+            self._closeContext()
+            pdfDocument = Quartz.PDFDocument.alloc().initWithData_(self._pdfData)
+            sendPDFtoPrinter(pdfDocument)
+            self._pdfContext = None
+            self._pdfData = None
 
     def _save(self):
         Quartz.CGContextSaveGState(self._pdfContext)
