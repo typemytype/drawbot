@@ -102,6 +102,8 @@ _featureMap = dict(
     )
 
 featureMap = dict()
+reversedFeatureMap = dict()
+
 for key, value in _featureMap.items():
     if isinstance(value, tuple):
         value = [value]
@@ -112,3 +114,22 @@ for key, value in _featureMap.items():
             CoreText.NSFontFeatureSelectorIdentifierKey : featureSelector
         }
 
+        reversedFeatureMap[(featureType, featureSelector)] = key
+
+
+def getFeatureTagsForFontName(fontName):
+    descriptor = CoreText.NSFontDescriptor.fontDescriptorWithName_size_(fontName, 12)
+    featureDescriptions = CoreText.CTFontDescriptorCopyAttribute(descriptor, CoreText.kCTFontFeaturesAttribute)
+    if featureDescriptions is None:
+        return []
+    featureTags = list()
+    for featureDescription in featureDescriptions:
+        featureType = featureDescription[CoreText.NSFontFeatureTypeIdentifierKey]
+        for selector in featureDescription["CTFeatureTypeSelectors"]:
+            featureSelector = selector[CoreText.NSFontFeatureSelectorIdentifierKey]
+            featureTag = reversedFeatureMap.get((featureType, featureSelector))
+            if featureTag:
+                featureTag = featureTag.replace("_off", "")
+                if featureTag not in featureTags:
+                    featureTags.append(featureTag)
+    return featureTags

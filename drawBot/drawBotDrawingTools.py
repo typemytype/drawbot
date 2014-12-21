@@ -10,6 +10,8 @@ from context import getContextForFileExt
 from context.baseContext import BezierPath, FormattedString
 from context.dummyContext import DummyContext
 
+from context.tools import openType
+
 from misc import DrawBotError, warnings, VariableController, optimizePath
 import drawBotSettings
 
@@ -239,15 +241,18 @@ class DrawBotDrawingTool(object):
         _deprecatedWarningLowercase("saveImage()")
         self.saveImage(paths)
 
-    def printImage(self):
+    def printImage(self, pdf=None):
         """
         Export the canvas to a printing dialog, ready to print.
 
         .. showcode:: /../examples/printImage.py
         """
         context = getContextForFileExt("pdf")
-        self._drawInContext(context)
-        context.printImage()
+        if pdf is None:
+            self._drawInContext(context)
+            context.printImage()
+        else:
+            context.printImage(pdf)
 
     def pdfImage(self):
         """
@@ -715,6 +720,21 @@ class DrawBotDrawingTool(object):
         self._dummyContext.font(fontName, fontSize)
         self._addInstruction("font", fontName, fontSize)
 
+    def fallbackFont(self, fontName):
+        """
+        Set a fallback font, this is used whenever a glyph is not available in the current font.
+
+        ::
+
+            fallbackFont("Times")
+        """
+        fontName = fontName.encode("ascii", "ignore")
+        dummyFont = AppKit.NSFont.fontWithName_size_(fontName, 10)
+        if dummyFont is None:
+            raise DrawBotError, "Fallback font '%s' is not available" % fontName
+        self._dummyContext.fallbackFont(fontName)
+        self._addInstruction("fallbackFont", fontName)
+
     def fontSize(self, fontSize):
         """
         Set the font size in points.
@@ -768,6 +788,16 @@ class DrawBotDrawingTool(object):
         self._dummyContext.openTypeFeatures(*args, **features)
         self._addInstruction("openTypeFeatures", *args, **features)
 
+    def listOpenTypeFeatures(self, fontName=None):
+        """
+        List all OpenType feature tags for the current font.
+
+        Optionally a `fontName` can be given.
+        """
+        if fontName is None:
+            fontName = self._dummyContext._state.text.fontName
+        return openType.getFeatureTagsForFontName(fontName)
+
     # drawing text
 
     def text(self, txt, x, y=None):
@@ -791,7 +821,7 @@ class DrawBotDrawingTool(object):
         if origins:
             x -= origins[-1][0]
             y -= origins[-1][1]
-        self.textBox(txt, (x, y, w*2, h))
+        self.textBox(txt, (x, y-h, w*2, h*2))
 
     def textBox(self, txt, (x, y, w, h), align=None):
         """
@@ -861,6 +891,10 @@ class DrawBotDrawingTool(object):
             Set the font size in points.
             The default `fontSize` is 10pt.
 
+        .. function:: formattedString.fallbackFont(fontName)
+
+            Set a fallback font, this is used whenever a glyph is not available in the current font.
+
         .. function:: formattedString.fill(r, g, b, a)
 
             Sets the fill color with a `red`, `green`, `blue` and `alpha` value.
@@ -901,6 +935,12 @@ class DrawBotDrawingTool(object):
             Enable OpenType features.
 
         .. showcode:: /../examples/openTypeFeaturesFromattedString.py
+
+        .. function:: formattedString.listOpenTypeFeatures(fontName=None)
+
+            List all OpenType feature tags for the current font.
+
+            Optionally a `fontName` can be given.
 
         .. function:: formattedString.size()
 

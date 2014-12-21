@@ -348,7 +348,7 @@ class FormattedString(object):
     """
 
     def __init__(self, txt=None,
-                        font=None, fontSize=10,
+                        font=None, fontSize=10, fallbackFont=None,
                         fill=(0, 0, 0), cmykFill=None,
                         stroke=None, cmykStroke=None, strokeWidth=1,
                         align=None, lineHeight=None,
@@ -363,18 +363,19 @@ class FormattedString(object):
         self._strokeWidth = strokeWidth
         self._align = align
         self._lineHeight = lineHeight
+        self._fallbackFont = fallbackFont
         if openTypeFeatures is None:
             openTypeFeatures = dict()
         self._openTypeFeatures = openTypeFeatures
         if txt:
-            self.append(txt, font=font, fontSize=fontSize,
+            self.append(txt, font=font, fontSize=fontSize, fallbackFont=fallbackFont,
                         fill=fill, cmykFill=cmykFill,
                         stroke=stroke, cmykStroke=cmykStroke, strokeWidth=strokeWidth,
                         align=align, lineHeight=lineHeight,
                         openTypeFeatures=openTypeFeatures)
 
     def append(self, txt,
-                    font=None, fontSize=None,
+                    font=None, fallbackFont=None, fontSize=None,
                     fill=None, cmykFill=None,
                     stroke=None, cmykStroke=None, strokeWidth=None,
                     align=None, lineHeight=None,
@@ -383,6 +384,7 @@ class FormattedString(object):
         Add `txt` to the formatted string with some additional text formatting attributes:
 
         * `font`: the font to be used for the given text
+        * `fallbackFont`: the fallback font
         * `fontSize`: the font size to be used for the given text
         * `fill`: the fill color to be used for the given text
         * `cmykFill`: the cmyk fill color to be used for the given text
@@ -402,6 +404,11 @@ class FormattedString(object):
             font = self._font
         else:
             self._font = font
+
+        if fallbackFont is None:
+            fallbackFont = self._fallbackFont
+        else:
+            self._fallbackFont = fallbackFont
 
         if fontSize is None:
             fontSize = self._fontSize
@@ -456,8 +463,11 @@ class FormattedString(object):
             fontName = font
             font = AppKit.NSFont.fontWithName_size_(fontName, fontSize)
             if font is None:
-                warnings.warn("font: %s is not installed, back to the fallback font: %s" % (fontName, _FALLBACKFONT))
-                font = AppKit.NSFont.fontWithName_size_(_FALLBACKFONT, fontSize)
+                ff = fallbackFont
+                if ff is None:
+                    ff = _FALLBACKFONT
+                warnings.warn("font: %s is not installed, back to the fallback font: %s" % (fontName, ff))
+                font = AppKit.NSFont.fontWithName_size_(ff, fontSize)
             coreTextfeatures = []
             for featureTag, value in openTypeFeatures.items():
                 if not value:
@@ -466,7 +476,12 @@ class FormattedString(object):
                     feature = openType.featureMap[featureTag]
                     coreTextfeatures.append(feature)
             fontDescriptor = font.fontDescriptor()
-            fontDescriptor = fontDescriptor.fontDescriptorByAddingAttributes_({CoreText.NSFontFeatureSettingsAttribute : coreTextfeatures})
+            fontAttributes = {
+                CoreText.NSFontFeatureSettingsAttribute : coreTextfeatures,
+                }
+            if fallbackFont:
+                fontAttributes[CoreText.NSFontCascadeListAttribute] = [AppKit.NSFontDescriptor.fontDescriptorWithName_size_(fallbackFont, fontSize)]
+            fontDescriptor = fontDescriptor.fontDescriptorByAddingAttributes_(fontAttributes)
             font = AppKit.NSFont.fontWithDescriptor_size_(fontDescriptor, fontSize)
             attributes[AppKit.NSFontAttributeName] = font
         elif fontSize:
@@ -499,7 +514,7 @@ class FormattedString(object):
     def __add__(self, txt):
         new = self.copy()
         new.append(txt,
-                    font=self._font, fontSize=self._fontSize,
+                    font=self._font, fallbackFont=self._fallbackFont, fontSize=self._fontSize,
                     fill=self._fill, cmykFill=self._cmykFill,
                     stroke=self._stroke, cmykStroke=self._cmykStroke, strokeWidth=self._strokeWidth,
                     align=self._align, lineHeight=self._lineHeight, openTypeFeatures=self._openTypeFeatures)
@@ -552,9 +567,21 @@ class FormattedString(object):
 
         The name of the font relates to the font's postscript name.
         """
+        font = font.encode("ascii", "ignore")
         self._font = font
         if fontSize is not None:
             self._fontSize = fontSize
+
+    def fallbackFont(self, font):
+        """
+        Set a fallback font, used whenever a glyph is not available in the normal font.
+        """
+        if font:
+            font = font.encode("ascii", "ignore")
+            testFont = AppKit.NSFont.fontWithName_size_(font, self._fontSize)
+            if testFont is None:
+                raise DrawBotError, "Fallback font '%s' is not available" % font
+        self._fallbackFont = font
 
     def fontSize(self, fontSize):
         """
@@ -624,6 +651,16 @@ class FormattedString(object):
             self._openTypeFeatures.clear()
         else:
             self._openTypeFeatures.update(features)
+
+    def listOpenTypeFeatures(self, fontName=None):
+        """
+        List all OpenType feature tags for the current font.
+
+        Optionally a `fontName` can be given.
+        """
+        if fontName is None:
+            fontName = self._font
+        return openType.getFeatureTagsForFontName(fontName)
 
     def size(self):
         """
@@ -699,6 +736,8 @@ class FormattedString(object):
         if font is None:
             warnings.warn("font: %s is not installed, back to the fallback font: %s" % (self._font, _FALLBACKFONT))
             font = AppKit.NSFont.fontWithName_size_(_FALLBACKFONT, self._fontSize)
+        fallbackFont = self._fallbackFont
+        self._fallbackFont = None
         for glyphName in glyphNames:
             glyph = font.glyphWithName_(glyphName)
             if glyph:
@@ -707,11 +746,13 @@ class FormattedString(object):
                 self._attributedString.addAttribute_value_range_(AppKit.NSGlyphInfoAttributeName, glyphInfo, (len(self)-1, 1))
             else:
                 warnings.warn("font %s has no glyph with the name %s" % (font.fontName(), glyphName))
+        self._fallbackFont = fallbackFont
 
 class Text(object):
 
     def __init__(self):
         self._fontName = _FALLBACKFONT
+        self._fallbackFontName = None
         self._fontSize = 10
         self._lineHeight = None
         self._hyphenation = None
@@ -720,9 +761,12 @@ class Text(object):
     def _get_font(self):
         _font = AppKit.NSFont.fontWithName_size_(self._fontName, self.fontSize)
         if _font == None:
-            warnings.warn("font: %s is not installed, back to the fallback font: %s" % (self._fontName, _FALLBACKFONT))
-            self._fontName = _FALLBACKFONT
-            _font = AppKit.NSFont.fontWithName_size_(_FALLBACKFONT, self.fontSize)
+            ff = self._fallbackFontName
+            if self._fallbackFontName is None:
+                ff = _FALLBACKFONT
+            warnings.warn("font: %s is not installed, back to the fallback font: %s" % (self._fontName, ff))
+            self._fontName = ff
+            _font = AppKit.NSFont.fontWithName_size_(ff, self.fontSize)
         coreTextfeatures = []
         for featureTag, value in self.openTypeFeatures.items():
             if not value:
@@ -731,7 +775,12 @@ class Text(object):
                 feature = openType.featureMap[featureTag]
                 coreTextfeatures.append(feature)
         fontDescriptor = _font.fontDescriptor()
-        fontDescriptor = fontDescriptor.fontDescriptorByAddingAttributes_({CoreText.NSFontFeatureSettingsAttribute : coreTextfeatures})
+        fontAttributes = {
+            CoreText.NSFontFeatureSettingsAttribute : coreTextfeatures,
+            }
+        if self._fallbackFontName:
+            fontAttributes[CoreText.NSFontCascadeListAttribute] = [AppKit.NSFontDescriptor.fontDescriptorWithName_size_(self._fallbackFontName, self.fontSize)]
+        fontDescriptor = fontDescriptor.fontDescriptorByAddingAttributes_(fontAttributes)
         _font = AppKit.NSFont.fontWithDescriptor_size_(fontDescriptor, self.fontSize)
         return _font
 
@@ -744,6 +793,18 @@ class Text(object):
         self._fontName = fontName
 
     fontName = property(_get_fontName, _set_fontName)
+
+    def _get_fallbackFontName(self):
+        return self._fallbackFontName
+
+    def _set_fallbackFontName(self, fontName):
+        if fontName:
+            dummyFont = AppKit.NSFont.fontWithName_size_(fontName, 10)
+            if dummyFont is None:
+                raise DrawBotError, "Fallback font '%s' is not available" % fontName
+        self._fallbackFontName = fontName
+
+    fallbackFontName = property(_get_fallbackFontName, _set_fallbackFontName)
 
     def _get_fontSize(self):
         return self._fontSize
@@ -772,6 +833,7 @@ class Text(object):
     def copy(self):
         new = self.__class__()
         new.fontName = self.fontName
+        new.fallbackFontName = self.fallbackFontName
         new.fontSize = self.fontSize
         new.lineHeight = self.lineHeight
         new.hyphenation = self.hyphenation
@@ -904,7 +966,7 @@ class BaseContext(object):
     def _saveImage(self, path, multipage):
         pass
 
-    def _printImage(self):
+    def _printImage(self, pdf=None):
         pass
 
     ###
@@ -933,8 +995,8 @@ class BaseContext(object):
             raise DrawBotError, "can't save image when no page is set"
         self._saveImage(path, multipage)
 
-    def printImage(self):
-        self._printImage()
+    def printImage(self, pdf=None):
+        self._printImage(pdf)
 
     def frameDuration(self, seconds):
         self._frameDuration(seconds)
@@ -1103,6 +1165,9 @@ class BaseContext(object):
         self._state.text.fontName = fontName
         if fontSize != None:
             self.fontSize(fontSize)
+
+    def fallbackFont(self, fontName):
+        self._state.text.fallbackFontName = fontName
 
     def fontSize(self, fontSize):
         self._state.text.fontSize = fontSize
