@@ -684,6 +684,10 @@ class FormattedString(object):
         Returns the current font ascender, based on the current `font` and `fontSize`.
         """
         font = AppKit.NSFont.fontWithName_size_(self._font, self._fontSize)
+        if font is None:
+            ff = self._fallbackFont or _FALLBACKFONT
+            warnings.warn("font: %s is not installed, back to the fallback font: %s" % (self._font, ff))
+            font = AppKit.NSFont.fontWithName_size_(ff, self._fontSize)
         return font.ascender()
 
     def fontDescender(self):
@@ -691,6 +695,10 @@ class FormattedString(object):
         Returns the current font descender, based on the current `font` and `fontSize`.
         """
         font = AppKit.NSFont.fontWithName_size_(self._font, self._fontSize)
+        if font is None:
+            ff = self._fallbackFont or _FALLBACKFONT
+            warnings.warn("font: %s is not installed, back to the fallback font: %s" % (self._font, ff))
+            font = AppKit.NSFont.fontWithName_size_(ff, self._fontSize)
         return font.descender()        
 
     def fontXHeight(self):
@@ -698,6 +706,10 @@ class FormattedString(object):
         Returns the current font x-height, based on the current `font` and `fontSize`.
         """
         font = AppKit.NSFont.fontWithName_size_(self._font, self._fontSize)
+        if font is None:
+            ff = self._fallbackFont or _FALLBACKFONT
+            warnings.warn("font: %s is not installed, back to the fallback font: %s" % (self._font, ff))
+            font = AppKit.NSFont.fontWithName_size_(ff, self._fontSize)
         return font.xHeight()
 
     def fontCapHeight(self):
@@ -705,6 +717,10 @@ class FormattedString(object):
         Returns the current font cap height, based on the current `font` and `fontSize`.
         """
         font = AppKit.NSFont.fontWithName_size_(self._font, self._fontSize)
+        if font is None:
+            ff = self._fallbackFont or _FALLBACKFONT
+            warnings.warn("font: %s is not installed, back to the fallback font: %s" % (self._font, ff))
+            font = AppKit.NSFont.fontWithName_size_(ff, self._fontSize)
         return font.capHeight()
 
     def fontLeading(self):
@@ -712,6 +728,10 @@ class FormattedString(object):
         Returns the current font leading, based on the current `font` and `fontSize`.
         """
         font = AppKit.NSFont.fontWithName_size_(self._font, self._fontSize)
+        if font is None:
+            ff = self._fallbackFont or _FALLBACKFONT
+            warnings.warn("font: %s is not installed, back to the fallback font: %s" % (self._font, ff))
+            font = AppKit.NSFont.fontWithName_size_(ff, self._fontSize)
         return font.leading()
 
     def fontLineHeight(self):
@@ -722,6 +742,10 @@ class FormattedString(object):
         if self._lineHeight is not None:
             return self._lineHeight
         font = AppKit.NSFont.fontWithName_size_(self._font, self._fontSize)
+        if font is None:
+            ff = self._fallbackFont or _FALLBACKFONT
+            warnings.warn("font: %s is not installed, back to the fallback font: %s" % (self._font, ff))
+            font = AppKit.NSFont.fontWithName_size_(ff, self._fontSize)
         return font.defaultLineHeightForFont()
 
     def appendGlyph(self, *glyphNames):
@@ -761,9 +785,7 @@ class Text(object):
     def _get_font(self):
         _font = AppKit.NSFont.fontWithName_size_(self._fontName, self.fontSize)
         if _font == None:
-            ff = self._fallbackFontName
-            if self._fallbackFontName is None:
-                ff = _FALLBACKFONT
+            ff = self._fallbackFontName or _FALLBACKFONT
             warnings.warn("font: %s is not installed, back to the fallback font: %s" % (self._fontName, ff))
             self._fontName = ff
             _font = AppKit.NSFont.fontWithName_size_(ff, self.fontSize)
