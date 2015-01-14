@@ -766,6 +766,13 @@ class DrawBotDrawingTool(object):
         _deprecatedWarningLowercase("lineHeight(%s)" % value)
         self.lineHeight(value)
 
+    def tracking(self, value):
+        """
+        Set the tracking between characters.
+        """
+        self._dummyContext.tracking(value)
+        self._addInstruction("tracking", value)
+
     def hyphenation(self, value):
         """
         Set hyphenation, `True` or `False`.
@@ -931,6 +938,10 @@ class DrawBotDrawingTool(object):
         .. function:: formattedString.lineHeight(value)
 
             Set the line height.
+
+        .. function:: formattedString.tracking(value)
+
+            Set the tracking between characters.
 
         .. function:: formattedString.openTypeFeatures(frac=True, case=True, ...)
 

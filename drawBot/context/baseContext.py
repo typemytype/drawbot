@@ -351,7 +351,7 @@ class FormattedString(object):
                         font=None, fontSize=10, fallbackFont=None,
                         fill=(0, 0, 0), cmykFill=None,
                         stroke=None, cmykStroke=None, strokeWidth=1,
-                        align=None, lineHeight=None,
+                        align=None, lineHeight=None, tracking=None,
                         openTypeFeatures=None):
         self._attributedString = AppKit.NSMutableAttributedString.alloc().init()
         self._font = font
@@ -363,6 +363,7 @@ class FormattedString(object):
         self._strokeWidth = strokeWidth
         self._align = align
         self._lineHeight = lineHeight
+        self._tracking = tracking
         self._fallbackFont = fallbackFont
         if openTypeFeatures is None:
             openTypeFeatures = dict()
@@ -378,7 +379,7 @@ class FormattedString(object):
                     font=None, fallbackFont=None, fontSize=None,
                     fill=None, cmykFill=None,
                     stroke=None, cmykStroke=None, strokeWidth=None,
-                    align=None, lineHeight=None,
+                    align=None, lineHeight=None, tracking=None,
                     openTypeFeatures=None):
         """
         Add `txt` to the formatted string with some additional text formatting attributes:
@@ -450,6 +451,11 @@ class FormattedString(object):
         else:
             self._lineHeight = lineHeight
 
+        if tracking is None:
+            tracking = self._tracking
+        else:
+            self._tracking = tracking
+
         if openTypeFeatures is None:
             openTypeFeatures = self._openTypeFeatures
         else:
@@ -507,6 +513,9 @@ class FormattedString(object):
             #para.setLineSpacing_(lineHeight)
             para.setMaximumLineHeight_(lineHeight)
             para.setMinimumLineHeight_(lineHeight)
+        print tracking
+        if tracking:
+            attributes[AppKit.NSKernAttributeName] = tracking
         attributes[AppKit.NSParagraphStyleAttributeName] = para
         txt = AppKit.NSAttributedString.alloc().initWithString_attributes_(txt, attributes)
         self._attributedString.appendAttributedString_(txt)
@@ -517,7 +526,7 @@ class FormattedString(object):
                     font=self._font, fallbackFont=self._fallbackFont, fontSize=self._fontSize,
                     fill=self._fill, cmykFill=self._cmykFill,
                     stroke=self._stroke, cmykStroke=self._cmykStroke, strokeWidth=self._strokeWidth,
-                    align=self._align, lineHeight=self._lineHeight, openTypeFeatures=self._openTypeFeatures)
+                    align=self._align, lineHeight=self._lineHeight, tracking=self._tracking, openTypeFeatures=self._openTypeFeatures)
         return new
 
     def __getitem__(self, index):
@@ -642,6 +651,12 @@ class FormattedString(object):
         Set the line height.
         """
         self._lineHeight = lineHeight
+
+    def tracking(self, tracking):
+        """
+        Set the tracking between characters.
+        """
+        self._tracking = tracking
 
     def openTypeFeatures(self, *args, **features):
         """
@@ -779,6 +794,7 @@ class Text(object):
         self._fallbackFontName = None
         self._fontSize = 10
         self._lineHeight = None
+        self._tracking = None
         self._hyphenation = None
         self.openTypeFeatures = dict()
 
@@ -844,6 +860,14 @@ class Text(object):
 
     lineHeight = property(_get_lineHeight, _set_lineHeight)
 
+    def _get_tracking(self):
+        return self._tracking
+
+    def _set_tracking(self, value):
+        self._tracking = value
+
+    tracking = property(_get_tracking, _set_tracking)
+
     def _get_hyphenation(self):
         return self._hyphenation
 
@@ -858,6 +882,7 @@ class Text(object):
         new.fallbackFontName = self.fallbackFontName
         new.fontSize = self.fontSize
         new.lineHeight = self.lineHeight
+        new.tracking = self.tracking
         new.hyphenation = self.hyphenation
         new.openTypeFeatures = dict(self.openTypeFeatures)
         return new
@@ -1194,8 +1219,11 @@ class BaseContext(object):
     def fontSize(self, fontSize):
         self._state.text.fontSize = fontSize
 
-    def lineHeight(self, value):
-        self._state.text.lineHeight = value
+    def lineHeight(self, lineHeight):
+        self._state.text.lineHeight = lineHeight
+
+    def tracking(self, tracking):
+        self._state.text.tracking = tracking
 
     def hyphenation(self, value):
         self._state.text.hyphenation = value
@@ -1239,7 +1267,8 @@ class BaseContext(object):
             para.setMaximumLineHeight_(self._state.text.lineHeight)
             para.setMinimumLineHeight_(self._state.text.lineHeight)
         attributes[AppKit.NSParagraphStyleAttributeName] = para
-
+        if self._state.text.tracking:
+            attributes[AppKit.NSKernAttributeName] = self._state.text.tracking
         text = AppKit.NSAttributedString.alloc().initWithString_attributes_(txt, attributes)
         return text
 
