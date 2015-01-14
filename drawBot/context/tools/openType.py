@@ -5,8 +5,8 @@ import CoreText
 _featureMap = dict(
 
         # Ligatures
-        rlig = (1, 1),
-        rlig_off = (1, 2),
+        rlig = (0, 0),
+        rlig_off = (0, 1),
 
         liga = (1, 2),
         liga_off = (1, 3),
