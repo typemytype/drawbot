@@ -82,11 +82,11 @@ class BezierPath(object):
         """
         self._path.appendBezierPathWithOvalInRect_(((x, y), (w, h)))
 
-    def text(self, txt, font=_FALLBACKFONT, fontSize=10, offset=None):
+    def text(self, txt, font=_FALLBACKFONT, fontSize=10, offset=None, box=None):
         """
         Draws a `txt` with a `font` and `fontSize` at an `offset` in the bezier path.
 
-        Optionally `txt` can be a `FormattedString`.
+        Optionally `txt` can be a `FormattedString` and be drawn inside a `box`, a tuple of (x, y, width, height).
         """
         if isinstance(txt, FormattedString):
             attributedString = txt.getNSObject()
@@ -104,32 +104,36 @@ class BezierPath(object):
         w, h = attributedString.size()
         setter = CoreText.CTFramesetterCreateWithAttributedString(attributedString)
         path = Quartz.CGPathCreateMutable()
-        Quartz.CGPathAddRect(path, None, Quartz.CGRectMake(0, -h, w*2, h*2))
-        box = CoreText.CTFramesetterCreateFrame(setter, (0, 0), path, None)
-        ctLines = CoreText.CTFrameGetLines(box)
-        origins = CoreText.CTFrameGetLineOrigins(box, (0, len(ctLines)), None)
         if offset:
             x, y = offset
         else:
             x = y = 0
-        if origins:
+        if box:
+            bx, by, w, h = box
+            x += bx
+            y += by
+            Quartz.CGPathAddRect(path, None, Quartz.CGRectMake(0, 0, w, h))
+        else:
+            Quartz.CGPathAddRect(path, None, Quartz.CGRectMake(0, -h, w*2, h*2))
+        box = CoreText.CTFramesetterCreateFrame(setter, (0, 0), path, None)
+        ctLines = CoreText.CTFrameGetLines(box)
+        origins = CoreText.CTFrameGetLineOrigins(box, (0, len(ctLines)), None)
+        
+        if origins and box is not None:
             x -= origins[-1][0]
             y -= origins[-1][1]
         for i, (originX, originY) in enumerate(origins):
             ctLine = ctLines[i]
-            # path around a bug somewhere
-            # create a new CTLine from a substring with the same range...
-            rng = CoreText.CTLineGetStringRange(ctLine)
-            txtLine = attributedString.attributedSubstringFromRange_(rng)
-            ctLine = CoreText.CTLineCreateWithAttributedString(txtLine)
             ctRuns = CoreText.CTLineGetGlyphRuns(ctLine)
-            self._path.moveToPoint_((x+originX, y+originY))
             for ctRun in ctRuns:
-                glyphs = CoreText.CTRunGetGlyphs(ctRun, CoreText.CTRunGetStringRange(ctRun), None)
                 attributes = CoreText.CTRunGetAttributes(ctRun)
                 font = attributes.get(AppKit.NSFontAttributeName)
-                glyphs = [g for g in glyphs if g != 0]
-                self._path.appendBezierPathWithGlyphs_count_inFont_(glyphs, len(glyphs), font)
+                glyphCount = CoreText.CTRunGetGlyphCount(ctRun)
+                for i in range(glyphCount):
+                    glyph = CoreText.CTRunGetGlyphs(ctRun, (i, 1), None)[0]
+                    ax, ay = CoreText.CTRunGetPositions(ctRun, (i, 1), None)[0]
+                    self._path.moveToPoint_((x+originX+ax, y+originY+ay))
+                    self._path.appendBezierPathWithGlyph_inFont_(glyph, font)
 
     def getNSBezierPath(self):
         """
@@ -513,7 +517,6 @@ class FormattedString(object):
             #para.setLineSpacing_(lineHeight)
             para.setMaximumLineHeight_(lineHeight)
             para.setMinimumLineHeight_(lineHeight)
-        print tracking
         if tracking:
             attributes[AppKit.NSKernAttributeName] = tracking
         attributes[AppKit.NSParagraphStyleAttributeName] = para
