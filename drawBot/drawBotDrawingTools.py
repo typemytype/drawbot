@@ -769,6 +769,8 @@ class DrawBotDrawingTool(object):
     def tracking(self, value):
         """
         Set the tracking between characters.
+
+        .. showcode:: /../examples/tracking.py
         """
         self._dummyContext.tracking(value)
         self._addInstruction("tracking", value)
