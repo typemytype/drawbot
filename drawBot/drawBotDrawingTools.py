@@ -1182,9 +1182,11 @@ class DrawBotDrawingTool(object):
 
             Add a oval at possition `x`, `y` with a size of `w`, `h`
 
-        .. function:: bezierPath.text(txt, font=None, fontSize=10, offset=None)
+        .. function:: bezierPath.text(txt, font=None, fontSize=10, offset=None, box=None)
 
-            Draws a `text` with a `font` and `fontSize` at an `offset` in the bezier path.
+            Draws a `txt` with a `font` and `fontSize` at an `offset` in the bezier path.
+
+            Optionally `txt` can be a `FormattedString` and be drawn inside a `box`, a tuple of (x, y, width, height).
 
         .. function:: bezierPath.pointInside((x, y))
 
