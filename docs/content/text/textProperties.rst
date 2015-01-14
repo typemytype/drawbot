@@ -6,6 +6,7 @@ Text Properties
 .. autofunction:: drawBot.fallbackFont
 .. autofunction:: drawBot.hyphenation
 .. autofunction:: drawBot.lineHeight
+.. autofunction:: drawBot.tracking
 .. autofunction:: drawBot.openTypeFeatures(frac=True, case=True, ...)
 .. autofunction:: drawBot.listOpenTypeFeatures
 
