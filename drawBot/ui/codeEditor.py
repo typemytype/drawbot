@@ -426,7 +426,7 @@ class CodeNSTextView(NSTextView):
         return False
 
     def isAutomaticTextReplacementEnabled(self):
-        return False
+        return True
 
     def isAutomaticQuoteSubstitutionEnabled(self):
         return False
