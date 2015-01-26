@@ -16,7 +16,7 @@ _featureMap = dict(
 
         # Letter Case
         c2sc = (3, 8),
-        smcp = [(3, 12), (3, 3)],
+        smcp = [(3, 12), (3, 3), (37, 1)],
 
         # Number Spacing
         tnum = (6, 0),
@@ -107,14 +107,18 @@ reversedFeatureMap = dict()
 for key, value in _featureMap.items():
     if isinstance(value, tuple):
         value = [value]
-
+    
+    values = []
     for featureType, featureSelector in value:
-        featureMap[key] = {
+        values.append({
             CoreText.NSFontFeatureTypeIdentifierKey : featureType,
             CoreText.NSFontFeatureSelectorIdentifierKey : featureSelector
-        }
-
+        })
         reversedFeatureMap[(featureType, featureSelector)] = key
+    
+    featureMap[key] = values
+
+
 
 
 def getFeatureTagsForFontName(fontName):
