@@ -483,9 +483,8 @@ class FormattedString(object):
                 if not value:
                     featureTag = "%s_off" % featureTag
                 if featureTag in openType.featureMap:
-                    features = openType.featureMap[featureTag]
-                    for feature in features:
-                        coreTextfeatures.append(feature)
+                    feature = openType.featureMap[featureTag]
+                    coreTextfeatures.append(feature)
             fontDescriptor = font.fontDescriptor()
             fontAttributes = {
                 CoreText.NSFontFeatureSettingsAttribute : coreTextfeatures,
@@ -814,9 +813,8 @@ class Text(object):
             if not value:
                 featureTag = "%s_off" % featureTag
             if featureTag in openType.featureMap:
-                features = openType.featureMap[featureTag]
-                for feature in features:
-                    coreTextfeatures.append(feature)
+                feature = openType.featureMap[featureTag]
+                coreTextfeatures.append(feature)
         fontDescriptor = _font.fontDescriptor()
         fontAttributes = {
             CoreText.NSFontFeatureSettingsAttribute : coreTextfeatures,
