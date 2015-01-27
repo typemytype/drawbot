@@ -3,10 +3,6 @@ import CoreText
 # https://developer.apple.com/fonts/TrueType-Reference-Manual/RM09/AppendixF.html
 
 _featureMap = dict(
-        
-        # Access All Alternates
-        aalt = (0, 0),
-        aalt_off = (0, 1),
 
         # Ligatures
         rlig = (1, 0),
