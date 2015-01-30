@@ -5,8 +5,8 @@ import CoreText
 _featureMap = dict(
 
         # Ligatures
-        rlig = (0, 0),
-        rlig_off = (0, 1),
+        rlig = (1, 0),
+        rlig_off = (1, 1),
 
         liga = (1, 2),
         liga_off = (1, 3),
@@ -14,9 +14,11 @@ _featureMap = dict(
         dlig = (1, 4),
         dlig_off = (1, 5),
 
+        clig = (1, 18),
+        clig_off = (1, 19),
+
         # Letter Case
-        c2sc = (3, 8),
-        smcp = [(3, 12), (3, 3)],
+        sc = (3, 3),
 
         # Number Spacing
         tnum = (6, 0),
@@ -97,24 +99,28 @@ _featureMap = dict(
         cswh = (36, 4),
         cswh_off = (36, 5),
 
+        # Lower Case
+        smcp = (37, 1),
+        pcap = (37, 2),
+
         # Upper Case
-        c2pc = (37, 2),
+        c2sc = (38, 1),
+        c2pc = (38, 2),
+
     )
 
 featureMap = dict()
 reversedFeatureMap = dict()
 
 for key, value in _featureMap.items():
-    if isinstance(value, tuple):
-        value = [value]
-
-    for featureType, featureSelector in value:
-        featureMap[key] = {
-            CoreText.NSFontFeatureTypeIdentifierKey : featureType,
-            CoreText.NSFontFeatureSelectorIdentifierKey : featureSelector
-        }
-
-        reversedFeatureMap[(featureType, featureSelector)] = key
+    
+    featureType, featureSelector = value
+    feature = {
+        CoreText.NSFontFeatureTypeIdentifierKey : featureType,
+        CoreText.NSFontFeatureSelectorIdentifierKey : featureSelector
+    }
+    featureMap[key] = feature
+    reversedFeatureMap[(featureType, featureSelector)] = key
 
 
 def getFeatureTagsForFontName(fontName):
