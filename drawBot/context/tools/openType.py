@@ -17,8 +17,8 @@ _featureMap = dict(
         clig = (1, 18),
         clig_off = (1, 19),
 
-        # Letter Case
-        sc = (3, 3),
+        # Letter Case (letter case is deprecated see link above)
+        _smcp = (3, 3),
 
         # Number Spacing
         tnum = (6, 0),
