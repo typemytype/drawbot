@@ -1,7 +1,7 @@
 # create an empty formatted string object
 t = FormattedString()
 # set a font
-t.font("HoeflerText-Regular")
+t.font("ACaslonPro-Regular")
 # set a font size
 t.fontSize(60)
 # add some text

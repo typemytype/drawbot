@@ -1,5 +1,5 @@
 # set a font
-font("Hoefler Text")
+font("ACaslonPro-Regular")
 # set the font size
 fontSize(50)
 # draw a string

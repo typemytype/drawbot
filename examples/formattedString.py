@@ -20,8 +20,8 @@ text(txt, (10, 10))
 txt = FormattedString()
 
 # adding some text with some formatting
-txt.append("hello", font="Hoefler Text", fontSize=50)
+txt.append("hello", font="ACaslonPro-Regular", fontSize=50)
 # adding more text with an
-txt.append("world", font="Hoefler Text", fontSize=50, openTypeFeatures=dict(smcp=True))
+txt.append("world", font="ACaslonPro-Regular", fontSize=50, openTypeFeatures=dict(smcp=True))
 
 text(txt, (10, 110))
