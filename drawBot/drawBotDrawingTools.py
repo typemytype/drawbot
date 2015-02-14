@@ -817,6 +817,10 @@ class DrawBotDrawingTool(object):
 
         .. showcode:: /../examples/text.py
         """
+        try:
+            txt = txt.decode("utf-8")
+        except:
+            pass
         if isinstance(x, (tuple, list)):
             x, y = x
         else:
@@ -846,6 +850,10 @@ class DrawBotDrawingTool(object):
 
         .. showcode:: /../examples/textBox.py
         """
+        try:
+            txt = txt.decode("utf-8")
+        except:
+            pass
         if align is None:
             align = "left"
         elif align not in self._dummyContext._textAlignMap.keys():
