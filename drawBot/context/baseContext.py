@@ -88,6 +88,10 @@ class BezierPath(object):
 
         Optionally `txt` can be a `FormattedString` and be drawn inside a `box`, a tuple of (x, y, width, height).
         """
+        try:
+            txt = txt.decode("utf-8")
+        except:
+            pass
         if isinstance(txt, FormattedString):
             attributedString = txt.getNSObject()
         else:
@@ -132,8 +136,10 @@ class BezierPath(object):
                 for i in range(glyphCount):
                     glyph = CoreText.CTRunGetGlyphs(ctRun, (i, 1), None)[0]
                     ax, ay = CoreText.CTRunGetPositions(ctRun, (i, 1), None)[0]
-                    self._path.moveToPoint_((x+originX+ax, y+originY+ay))
-                    self._path.appendBezierPathWithGlyph_inFont_(glyph, font)
+                    if glyph:
+                        self._path.moveToPoint_((x+originX+ax, y+originY+ay))
+                        self._path.appendBezierPathWithGlyph_inFont_(glyph, font)
+        self.optimizePath()
 
     def getNSBezierPath(self):
         """
@@ -160,14 +166,14 @@ class BezierPath(object):
         if self._path.isEmpty():
             return None
         (x, y), (w, h) = self._path.bounds()
-        return x, y, w, h
+        return x, y, x+w, y+h
 
     def controlPointBounds(self):
         """
         Return the bounding box of the path including the offcurve points.
         """
         (x, y), (w, h) = self._path.controlPointBounds()
-        return x, y, w, h
+        return x, y, x+w, y+h
 
     def _points(self, onCurve=True, offCurve=True):
         points = []
@@ -210,6 +216,23 @@ class BezierPath(object):
         return contours
 
     contours = property(_get_contours, doc="Return a list of contours with all point coordinates sorted in segments.")
+
+    def optimizePath(self):
+        count = self._path.elementCount()
+        if self._path.elementAtIndex_(count-1) == AppKit.NSMoveToBezierPathElement:
+            optimizedPath = AppKit.NSBezierPath.bezierPath()
+            for i in range(count-1):
+                instruction, points = self._path.elementAtIndex_associatedPoints_(i)
+                if instruction == AppKit.NSMoveToBezierPathElement:
+                    optimizedPath.moveToPoint_(*points)
+                elif instruction == AppKit.NSLineToBezierPathElement:
+                    optimizedPath.lineToPoint_(*points)
+                elif instruction == AppKit.NSCurveToBezierPathElement:
+                    p1, p2, p3 = points
+                    optimizedPath.curveToPoint_controlPoint1_controlPoint2_(p3, p1, p2)
+                elif instruction == AppKit.NSClosePathBezierPathElement:
+                    optimizedPath.closePath()
+            self._path = optimizedPath
 
     def copy(self):
         """
@@ -405,6 +428,10 @@ class FormattedString(object):
 
         Text can also be added with `formattedString += "hello"`. It will append the text with the current settings of the formatted string.
         """
+        try:
+            txt = txt.decode("utf-8")
+        except:
+            pass
         if font is None:
             font = self._font
         else:
