@@ -842,7 +842,7 @@ class DrawBotDrawingTool(object):
         """
         Draw a text in a provided rectangle.
         Optionally an alignment can be set.
-        Possible `align` values are: `"left"`, `"center"` and `"right"`.
+        Possible `align` values are: `"left"`, `"center"`, `"right"` and `"justified"`.
 
         If the text overflows the rectangle, the overflowed text is returned.
 
