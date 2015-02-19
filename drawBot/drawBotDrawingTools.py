@@ -102,6 +102,7 @@ class DrawBotDrawingTool(object):
         .. showcode:: /../examples/newDrawing.py
         """
         self._reset()
+        self.installedFonts()
 
     ## magic variables
 
@@ -132,6 +133,15 @@ class DrawBotDrawingTool(object):
         return self.height()
 
     HEIGHT = property(_get_height)
+
+    def sizes(self, paperSize=None):
+        """
+        Returns the width and height of a specified canvas size.
+        If no canvas size is given it will return the dictionary containing all possible page sizes.
+        """
+        if paperSize:
+            return _paperSizes[paperSize]
+        return _paperSizes
 
     def pageCount(self):
         """
@@ -273,6 +283,7 @@ class DrawBotDrawingTool(object):
         This will save the state of the canvas (with all the transformations)
         but also the state of the colors, strokes...
         """
+        self._dummyContext.save()
         self._addInstruction("save")
 
     def restore(self):
@@ -281,6 +292,7 @@ class DrawBotDrawingTool(object):
         This will restore the state of the canvas (with all the transformations)
         but also the state of colors, strokes...
         """
+        self._dummyContext.restore()
         self._addInstruction("restore")
 
     # basic shapes
