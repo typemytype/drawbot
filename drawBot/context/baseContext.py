@@ -1362,7 +1362,6 @@ class BaseContext(object):
                 else:
                     break
             clip -= subString.count("-")
-
         return txt[clip:]
 
     def textSize(self, txt, align):
