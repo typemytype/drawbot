@@ -10,6 +10,7 @@ Size
 ----
 
 .. autofunction:: drawBot.size
+.. autofunction:: drawing.sizes
 
 Page Attributes
 ---------------
