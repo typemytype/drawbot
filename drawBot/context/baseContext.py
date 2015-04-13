@@ -244,17 +244,20 @@ class BezierPath(object):
 
 class Color(object):
 
+    colorSpace = AppKit.NSColorSpace.genericRGBColorSpace
+
     def __init__(self, r=None, g=None, b=None, a=1):
         if r is None:
             return
         if isinstance(r, AppKit.NSColor):
-            self._color = r.colorUsingColorSpaceName_("NSCalibratedRGBColorSpace")
+            self._color = r
         elif g == None and b == None:
             self._color = AppKit.NSColor.colorWithCalibratedRed_green_blue_alpha_(r, r, r, a)
         elif b == None:
             self._color = AppKit.NSColor.colorWithCalibratedRed_green_blue_alpha_(r, r, r, g)
         else:
             self._color = AppKit.NSColor.colorWithCalibratedRed_green_blue_alpha_(r, g, b, a)
+        self._color = self._color.colorUsingColorSpace_(self.colorSpace())
 
     def set(self):
         self._color.set()
@@ -289,13 +292,16 @@ class Color(object):
 
 class CMYKColor(Color):
 
+    colorSpace = AppKit.NSColorSpace.genericCMYKColorSpace()
+
     def __init__(self, c=None, m=None, y=None, k=None, a=1):
         if c is None:
             return
         if isinstance(c, AppKit.NSColor):
-            self._color = c.colorUsingColorSpaceName_("NSDeviceCMYKColorSpace")
+            self._color = c
         else:
             self._color = AppKit.NSColor.colorWithDeviceCyan_magenta_yellow_black_alpha_(c, m, y, k, a)
+        self._color = self._color.colorUsingColorSpace_(self.colorSpace)
 
 class Shadow(object):
 
@@ -923,6 +929,7 @@ class GraphicsState(object):
     _colorClass = Color
 
     def __init__(self):
+        self.colorSpace = self._colorClass.colorSpace
         self.fillColor =  self._colorClass(0)
         self.strokeColor = None
         self.cmykFillColor = None
@@ -939,6 +946,7 @@ class GraphicsState(object):
 
     def copy(self):
         new = self.__class__()
+        new.colorSpace = self.colorSpace
         if self.fillColor is not None:
             new.fillColor = self.fillColor.copy()
         else:
@@ -964,6 +972,18 @@ class GraphicsState(object):
         new.lineJoin = self.lineJoin
         new.miterLimit = self.miterLimit
         return new
+
+    def update(self):
+        self.updateColorSpace()
+
+    # support for color spaces
+     
+    def setColorSpace(self, colorSpace):
+        self.colorSpace = colorSpace
+        self.updateColorSpace()
+
+    def updateColorSpace(self):
+        self._colorClass.colorSpace = self.colorSpace
 
 class BaseContext(object):
 
@@ -995,6 +1015,12 @@ class BaseContext(object):
         left=AppKit.NSLeftTextAlignment,
         right=AppKit.NSRightTextAlignment,
         justified=AppKit.NSJustifiedTextAlignment,
+        )
+
+    _colorSpaceMap = dict(
+        genericRGB=AppKit.NSColorSpace.genericRGBColorSpace,
+        adobeRGB1998=AppKit.NSColorSpace.adobeRGB1998ColorSpace,
+        sRGB=AppKit.NSColorSpace.sRGBColorSpace,
         )
 
     _softHypen = 0x00AD
@@ -1086,6 +1112,7 @@ class BaseContext(object):
         if not self._stack:
             raise DrawBotError, "can't restore graphics state: no matching save()"
         self._state = self._stack.pop()
+        self._state.update()
         self._restore()
 
     def rect(self, x, y, w, h):
@@ -1127,6 +1154,14 @@ class BaseContext(object):
         if path is not None:
             self._state.path = path
         self._clipPath()
+
+    def colorSpace(self, colorSpace):
+        if colorSpace is None:
+            colorSpace = 'genericRGB'
+        if colorSpace not in self._colorSpaceMap:
+            raise DrawBotError, "'%s' is not a valid colorSpace, argument must be '%s'" % (colorSpace, "', '".join(self._colorSpaceMap.keys()))
+        colorSpace = self._colorSpaceMap[colorSpace]
+        self._state.setColorSpace(colorSpace)
 
     def fill(self, r, g=None, b=None, a=1):
         if r is  None:

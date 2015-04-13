@@ -444,6 +444,21 @@ class DrawBotDrawingTool(object):
 
     # color
 
+    def colorSpace(self, colorSpace):
+        """
+        Set the color space.
+        Options are `genericRGB`, `adobeRGB1998`, `sRGB`
+        The default is `genericRGB`. 
+        `None` will reset it back to the default.
+        """
+        self._addInstruction("colorSpace", colorSpace)
+
+    def listColorSpaces(self):
+        """
+        Return a list of all available color spaces.
+        """
+        return self._dummyContext._colorSpaceMap.keys()
+
     def fill(self, r=None, g=None, b=None, alpha=1):
         """
         Sets the fill color with a `red`, `green`, `blue` and `alpha` value.
