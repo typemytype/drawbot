@@ -450,6 +450,8 @@ class DrawBotDrawingTool(object):
         Options are `genericRGB`, `adobeRGB1998`, `sRGB`
         The default is `genericRGB`. 
         `None` will reset it back to the default.
+
+        .. showCode:: /../examples/colorSpace.py
         """
         self._addInstruction("colorSpace", colorSpace)
 
