@@ -10,7 +10,7 @@ requirements: osX 10.9+
 Older Downloads
 ---------------
 
-`DrawBot for osX 10.6 - 10.9`_
+`DrawBot for osX 10.6 - 10.9`_ version 3.45
 
 License
 -------
