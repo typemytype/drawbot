@@ -5,7 +5,12 @@ Download
 
 ☛ `Download DrawBot`_ ☚
 
-`Download DrawBot for osX 10.6 - 10.9`_
+requirements: osX 10.9+
+
+Older Downloads
+---------------
+
+`DrawBot for osX 10.6 - 10.9`_
 
 License
 -------
