@@ -192,24 +192,25 @@ class PDFContext(BaseContext):
                 self._restore()
 
     def _getImageSource(self, key):
+        path = key
+        image = None
         if isinstance(key, AppKit.NSImage):
-            k = id(key)
-            if k not in self._cachedImages:
-                data = key.TIFFRepresentation()
-                source = Quartz.CGImageSourceCreateWithData(data, {})
-                self._cachedImages[k] = Quartz.CGImageSourceCreateImageAtIndex(source, 0, None)
-            return self._cachedImages[k]
-        elif key not in self._cachedImages:
-            path = key
-            if path.startswith("http"):
-                url = AppKit.NSURL.URLWithString_(path)
-            else:
-                url = AppKit.NSURL.fileURLWithPath_(path)
-            source = Quartz.CGImageSourceCreateWithURL(url, None)
+            image = key
+            key = id(key)
+        if key not in self._cachedImages:
+            if image is None:
+                if path.startswith("http"):
+                    url = AppKit.NSURL.URLWithString_(path)
+                else:
+                    url = AppKit.NSURL.fileURLWithPath_(path)
+                image = AppKit.NSImage.alloc().initByReferencingURL_(url)
+            data = image.TIFFRepresentation()
+            source = Quartz.CGImageSourceCreateWithData(data, {})
             if source is not None:
                 self._cachedImages[key] = Quartz.CGImageSourceCreateImageAtIndex(source, 0, None)
             else:
                 raise DrawBotError, "No image found at %s" % key
+        print self._cachedImages.keys()
         return self._cachedImages[key]
 
     def _image(self, path, (x, y), alpha):
