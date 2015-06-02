@@ -5,16 +5,17 @@ import os
 
 from pdfContext import PDFContext
 
+
 class ImageContext(PDFContext):
 
     _saveImageFileTypes = {
-        "jpg" : AppKit.NSJPEGFileType,
-        "jpeg" : AppKit.NSJPEGFileType,
-        "tiff" : AppKit.NSTIFFFileType,
-        "tif" : AppKit.NSTIFFFileType,
-        #"gif" : AppKit.NSGIFFileType,
-        "png" : AppKit.NSPNGFileType,
-        "bmp" : AppKit.NSBMPFileType
+        "jpg": AppKit.NSJPEGFileType,
+        "jpeg": AppKit.NSJPEGFileType,
+        "tiff": AppKit.NSTIFFFileType,
+        "tif": AppKit.NSTIFFFileType,
+        #"gif": AppKit.NSGIFFileType,
+        "png": AppKit.NSPNGFileType,
+        "bmp": AppKit.NSBMPFileType
         }
 
     fileExtensions = _saveImageFileTypes.keys()
