@@ -5,12 +5,14 @@ import Quartz
 from baseContext import BaseContext, FormattedString
 from drawBot.misc import DrawBotError
 
+
 def sendPDFtoPrinter(pdfDocument):
     printInfo = AppKit.NSPrintInfo.sharedPrintInfo()
     op = pdfDocument.getPrintOperationForPrintInfo_autoRotate_(printInfo, True)
     printPanel = op.printPanel()
     printPanel.setOptions_(AppKit.NSPrintPanelShowsCopies | AppKit.NSPrintPanelShowsPageRange | AppKit.NSPrintPanelShowsPaperSize | AppKit.NSPrintPanelShowsOrientation | AppKit.NSPrintPanelShowsScaling | AppKit.NSPrintPanelShowsPrintSelection | AppKit.NSPrintPanelShowsPreview)
     op.runOperation()
+
 
 class PDFContext(BaseContext):
 
@@ -209,8 +211,7 @@ class PDFContext(BaseContext):
             if source is not None:
                 self._cachedImages[key] = Quartz.CGImageSourceCreateImageAtIndex(source, 0, None)
             else:
-                raise DrawBotError, "No image found at %s" % key
-        print self._cachedImages.keys()
+                raise DrawBotError("No image found at %s" % key)
         return self._cachedImages[key]
 
     def _image(self, path, (x, y), alpha):
@@ -297,9 +298,9 @@ class PDFContext(BaseContext):
             gradient.positions)
 
         if gradient.gradientType == "linear":
-            Quartz.CGContextDrawLinearGradient(self._pdfContext, cgGradient, gradient.start, gradient.end, Quartz.kCGGradientDrawsBeforeStartLocation|Quartz.kCGGradientDrawsAfterEndLocation)
+            Quartz.CGContextDrawLinearGradient(self._pdfContext, cgGradient, gradient.start, gradient.end, Quartz.kCGGradientDrawsBeforeStartLocation | Quartz.kCGGradientDrawsAfterEndLocation)
         elif gradient.gradientType == "radial":
-            Quartz.CGContextDrawRadialGradient(self._pdfContext, cgGradient, gradient.start, gradient.startRadius, gradient.end, gradient.endRadius, Quartz.kCGGradientDrawsBeforeStartLocation|Quartz.kCGGradientDrawsAfterEndLocation)
+            Quartz.CGContextDrawRadialGradient(self._pdfContext, cgGradient, gradient.start, gradient.startRadius, gradient.end, gradient.endRadius, Quartz.kCGGradientDrawsBeforeStartLocation | Quartz.kCGGradientDrawsAfterEndLocation)
 
     def _nsColorToCGColor(self, c):
         if c.numberOfComponents() == 5:
@@ -312,6 +313,3 @@ class PDFContext(BaseContext):
 
     def _rgbNSColorToCGColor(self, c):
         return Quartz.CGColorCreateGenericRGB(c.redComponent(), c.greenComponent(), c.blueComponent(), c.alphaComponent())
-
-
-
