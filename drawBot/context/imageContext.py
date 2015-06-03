@@ -13,7 +13,7 @@ class ImageContext(PDFContext):
         "jpeg": AppKit.NSJPEGFileType,
         "tiff": AppKit.NSTIFFFileType,
         "tif": AppKit.NSTIFFFileType,
-        #"gif": AppKit.NSGIFFileType,
+        # "gif": AppKit.NSGIFFileType,
         "png": AppKit.NSPNGFileType,
         "bmp": AppKit.NSBMPFileType
         }
