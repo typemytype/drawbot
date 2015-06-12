@@ -154,20 +154,34 @@ class VariableController(object):
             uiElement = attribute["ui"]
             name = attribute["name"]
             args = dict(attribute.get("args", {}))
+            height = 19
+            # create a label for every ui element except a checkbox
             if uiElement != "CheckBox":
-                label = vanilla.TextBox((0, y+2, labelSize-gutter, 19), "%s:" % name, alignment="right", sizeStyle="small")
+                # create the label view
+                label = vanilla.TextBox((0, y+2, labelSize-gutter, height), "%s:" % name, alignment="right", sizeStyle="small")
+                # set the label view
                 setattr(ui, "%sLabel" % name, label)
             else:
                 args["title"] = name
-            if uiElement not in ("ColorWell"):
-                args["sizeStyle"] = "small"
-            else:
+            # check the provided args and add required keys
+            if uiElement == "ColorWell":
+                # a color well needs a color to be set
+                # no size style
                 if "color" not in args:
                     args["color"] = AppKit.NSColor.blackColor()
-            attr = getattr(vanilla, uiElement)((labelSize, y, -10, 19), callback=self.changed, **args)
+            elif uiElement == "TextEditor":
+                # different control height
+                # no size style
+                height = attribute.get("height", 75)
+            else:
+                # all other get a size style
+                args["sizeStyle"] = "small"
+            # create the control view
+            attr = getattr(vanilla, uiElement)((labelSize, y, -10, height), callback=self.changed, **args)
+            # set the control view
             setattr(ui, name, attr)
-            y += 25
-
+            y += height + 6
+        # resize the window according the provided ui elements
         self.w.resize(250, y)
 
     def changed(self, sender):
