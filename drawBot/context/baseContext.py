@@ -1034,6 +1034,37 @@ class BaseContext(object):
         sRGB=AppKit.NSColorSpace.sRGBColorSpace,
         )
 
+    _blendModeMap = dict(
+        normal=Quartz.kCGBlendModeNormal,
+        multiply=Quartz.kCGBlendModeMultiply,
+        screen=Quartz.kCGBlendModeScreen,
+        overlay=Quartz.kCGBlendModeOverlay,
+        darken=Quartz.kCGBlendModeDarken,
+        lighten=Quartz.kCGBlendModeLighten,
+        colorDodge=Quartz.kCGBlendModeColorDodge,
+        colorBurn=Quartz.kCGBlendModeColorBurn,
+        softLight=Quartz.kCGBlendModeSoftLight,
+        hardLight=Quartz.kCGBlendModeHardLight,
+        difference=Quartz.kCGBlendModeDifference,
+        exclusion=Quartz.kCGBlendModeExclusion,
+        hue=Quartz.kCGBlendModeHue,
+        saturation=Quartz.kCGBlendModeSaturation,
+        color=Quartz.kCGBlendModeColor,
+        luminosity=Quartz.kCGBlendModeLuminosity,
+        clear=Quartz.kCGBlendModeClear,
+        copy=Quartz.kCGBlendModeCopy,
+        sourceIn=Quartz.kCGBlendModeSourceIn,
+        sourceOut=Quartz.kCGBlendModeSourceOut,
+        sourceAtop=Quartz.kCGBlendModeSourceAtop,
+        destinationOver=Quartz.kCGBlendModeDestinationOver,
+        destinationIn=Quartz.kCGBlendModeDestinationIn,
+        destinationOut=Quartz.kCGBlendModeDestinationOut,
+        destinationAtop=Quartz.kCGBlendModeDestinationAtop,
+        xOR=Quartz.kCGBlendModeXOR,
+        plusDarker=Quartz.kCGBlendModePlusDarker,
+        plusLighter=Quartz.kCGBlendModePlusLighter,
+        )
+
     _softHypen = 0x00AD
 
     def __init__(self):
@@ -1051,6 +1082,9 @@ class BaseContext(object):
         pass
 
     def _restore(self):
+        pass
+
+    def _blendMode(self, operation):
         pass
 
     def _drawPath(self):
@@ -1173,6 +1207,9 @@ class BaseContext(object):
             raise DrawBotError("'%s' is not a valid colorSpace, argument must be '%s'" % (colorSpace, "', '".join(self._colorSpaceMap.keys())))
         colorSpace = self._colorSpaceMap[colorSpace]
         self._state.setColorSpace(colorSpace)
+
+    def blendMode(self, operation):
+        self._blendMode(operation)
 
     def fill(self, r, g=None, b=None, a=1):
         if r is None:

@@ -35,25 +35,25 @@ def _deprecatedWarningWrapInTuple(txt):
 _chachedPixelColorBitmaps = {}
 
 _paperSizes = {
-    'Letter'        : (612, 792),
-    'LetterSmall'   : (612, 792),
-    'Tabloid'       : (792, 1224),
-    'Ledger'        : (1224, 792),
-    'Legal'         : (612, 1008),
-    'Statement'     : (396, 612),
-    'Executive'     : (540, 720),
-    'A0'            : (2384, 3371),
-    'A1'            : (1685, 2384),
-    'A2'            : (1190, 1684),
-    'A3'            : (842, 1190),
-    'A4'            : (595, 842),
-    'A4Small'       : (595, 842),
-    'A5'            : (420, 595),
-    'B4'            : (729, 1032),
-    'B5'            : (516, 729),
-    'Folio'         : (612, 936),
-    'Quarto'        : (610, 780),
-    '10x14'         : (720, 1008),
+    'Letter'      : (612, 792),
+    'LetterSmall' : (612, 792),
+    'Tabloid'     : (792, 1224),
+    'Ledger'      : (1224, 792),
+    'Legal'       : (612, 1008),
+    'Statement'   : (396, 612),
+    'Executive'   : (540, 720),
+    'A0'          : (2384, 3371),
+    'A1'          : (1685, 2384),
+    'A2'          : (1190, 1684),
+    'A3'          : (842, 1190),
+    'A4'          : (595, 842),
+    'A4Small'     : (595, 842),
+    'A5'          : (420, 595),
+    'B4'          : (729, 1032),
+    'B5'          : (516, 729),
+    'Folio'       : (612, 936),
+    'Quarto'      : (610, 780),
+    '10x14'       : (720, 1008),
 }
 
 for key, (w, h) in _paperSizes.items():
@@ -465,6 +465,23 @@ class DrawBotDrawingTool(object):
         Return a list of all available color spaces.
         """
         return self._dummyContext._colorSpaceMap.keys()
+
+    def blendMode(self, operation):
+        """
+        Set a blend mode.
+
+        Available operations are: `normal`, `multiply`, `screen`, `overlay`,
+        `darken`, `lighten`, `colorDodge`, `colorBurn`, `softLight`,
+        `hardLight`, `difference`, `exclusion`, `hue`, `saturation`,
+        `color`, `luminosity`, `clear`, `copy`, `sourceIn`, `sourceOut`,
+        `sourceAtop`, `destinationOver`, `destinationIn`, `destinationOut`,
+        `destinationAtop`, `xOR`, `plusDarker` and `plusLighter`,
+
+        .. showcode:: /../examples/blendMode.py
+        """
+        if operation not in self._dummyContext._blendModeMap.keys():
+            raise DrawBotError("blend mode must be %s" % (", ".join(self._dummyContext._blendModeMap.keys())))
+        self._addInstruction("blendMode", operation)
 
     def fill(self, r=None, g=None, b=None, alpha=1):
         """

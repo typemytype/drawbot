@@ -77,6 +77,10 @@ class PDFContext(BaseContext):
     def _restore(self):
         Quartz.CGContextRestoreGState(self._pdfContext)
 
+    def _blendMode(self, operation):
+        value = self._blendModeMap[operation]
+        Quartz.CGContextSetBlendMode(self._pdfContext, value)
+
     def _drawPath(self):
         if self._state.path:
             self._save()

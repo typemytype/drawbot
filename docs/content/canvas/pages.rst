@@ -19,3 +19,4 @@ Page Attributes
 .. autofunction:: drawBot.height
 .. autofunction:: drawBot.pageCount
 .. autofunction:: drawBot.frameDuration
+.. autofunction:: drawBot.blendMode

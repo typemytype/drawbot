@@ -17,6 +17,9 @@ class PrintContext(BaseContext):
     def _restore(self):
         print "restore"
 
+    def _blendMode(self, operation):
+        print "blend mode", operation
+
     def _drawPath(self):
         print "drawPath", self._state.path
 
