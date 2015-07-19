@@ -11,10 +11,11 @@ gifsiclePath = os.path.join(os.path.dirname(__file__), "tools", "gifsicle")
 if not os.path.exists(gifsiclePath):
     gifsiclePath = os.path.join(os.getcwd(), "tools", "gifsicle")
 
+
 class GifContext(ImageContext):
 
     _saveImageFileTypes = {
-        "gif" : AppKit.NSGIFFileType,
+        "gif": AppKit.NSGIFFileType,
         }
 
     fileExtensions = _saveImageFileTypes.keys()

@@ -46,44 +46,45 @@ fallbackTracebackAttributes = dict(fallbackTypeAttributes)
 fallbackTracebackAttributes[NSForegroundColorAttributeName] = NSColor.redColor()
 
 fallbackStyles = [
-    (Token,              '#000000'),
-    (Text,               ''),
-    (Error,              '#FF0000'),
-    (Punctuation,        '#4C4C4C'),
+    (Token,               '#000000'),
+    (Text,                ''),
+    (Error,               '#FF0000'),
+    (Punctuation,         '#4C4C4C'),
 
-    (Keyword,            '#4978FC'),
-    (Keyword.Namespace,  '#1950FD'),
+    (Keyword,             '#4978FC'),
+    (Keyword.Namespace,   '#1950FD'),
 
-    (Number,             '#CC5858'),
-    (Number.Float,       ''),
-    (Number.Oct,         ''),
-    (Number.Hex,         ''),
+    (Number,              '#CC5858'),
+    (Number.Float,        ''),
+    (Number.Oct,          ''),
+    (Number.Hex,          ''),
 
-    (Name,               ''),
-    (Name.Tag,           '#fb660a'),
-    (Name.Variable,      '#fb660a'),
-    (Name.Attribute,     '#ff0086'),
-    (Name.Function,      '#ff0086'),
-    (Name.Class,         '#ff0086' ),
-    (Name.Constant,      '#0086d2'),
-    (Name.Namespace,     ''),
-    (Name.Builtin,       '#31A73E'),
-    (Name.Builtin.Pseudo,'#FF8700'),
-    (Name.Exception,     '#FF1400'),
-    (Name.Decorator,      ''),
+    (Name,                ''),
+    (Name.Tag,            '#fb660a'),
+    (Name.Variable,       '#fb660a'),
+    (Name.Attribute,      '#ff0086'),
+    (Name.Function,       '#ff0086'),
+    (Name.Class,          '#ff0086'),
+    (Name.Constant,       '#0086d2'),
+    (Name.Namespace,      ''),
+    (Name.Builtin,        '#31A73E'),
+    (Name.Builtin.Pseudo, '#FF8700'),
+    (Name.Exception,      '#FF1400'),
+    (Name.Decorator,       ''),
 
-    (Operator,           '#6D37C9'),
-    (Operator.Word,      '#6D37C9'),
+    (Operator,            '#6D37C9'),
+    (Operator.Word,       '#6D37C9'),
 
-    (Comment,            '#A3A3A3'),
+    (Comment,             '#A3A3A3'),
 
-    (String,             '#FC00E7'),
-    (String.Doc,         '#FC00E7'),
+    (String,              '#FC00E7'),
+    (String.Doc,          '#FC00E7'),
 ]
 
 fallbackStyleDict = {}
 for key, value in fallbackStyles:
     fallbackStyleDict[str(key)] = value
+
 
 def styleFromDefault():
     styles = dict()
@@ -100,6 +101,7 @@ def styleFromDefault():
 
     return style
 
+
 def outputTextAttributesForStyles(styles=None, isError=False):
     if styles is None:
         styles = styleFromDefault()
@@ -113,6 +115,7 @@ def outputTextAttributesForStyles(styles=None, isError=False):
         if key in attr:
             attr[key] = _hexToNSColor(attr[key])
     return attr
+
 
 class _JumpToLineSheet(object):
 
@@ -148,6 +151,7 @@ class _JumpToLineSheet(object):
     def closeCallback(self, sender):
         self.w.close()
 
+
 def _hexToNSColor(color, default=NSColor.blackColor()):
     if color is None:
         return default
@@ -158,10 +162,12 @@ def _hexToNSColor(color, default=NSColor.blackColor()):
     b = int(color[4:6], 16) / 255.
     return NSColor.colorWithCalibratedRed_green_blue_alpha_(r, g, b, 1)
 
+
 def _hexStringToNSColor(txt, default=NSColor.blackColor()):
     if not txt.startswith("#"):
         raise DrawBotError, "Not a hex color, should start with '#'"
     return _hexToNSColor(txt[1:], default)
+
 
 def _NSColorToHexString(color):
     color = color.colorUsingColorSpaceName_(NSCalibratedRGBColorSpace)
@@ -170,16 +176,20 @@ def _NSColorToHexString(color):
     b = color.blueComponent() * 255
     return "#%02X%02X%02X" %(r, g, b)
 
+
 def _reverseMap(sourceMap):
     destMap = dict()
     for key, item in sourceMap.items():
         destMap[item] = key
     return destMap
 
+
 _textAttributesForStyleCache = {}
+
 
 def _clearTextAttributesForStyleCache():
     _textAttributesForStyleCache.clear()
+
 
 def _textAttributesForStyle(style, font=None, token=None):
     if font is None:
@@ -187,13 +197,13 @@ def _textAttributesForStyle(style, font=None, token=None):
     if token and token in _textAttributesForStyleCache:
         return _textAttributesForStyleCache[token]
     attr =  {
-        NSLigatureAttributeName : 0,
-        NSParagraphStyleAttributeName : basicParagraph,
+        NSLigatureAttributeName: 0,
+        NSParagraphStyleAttributeName: basicParagraph,
     }
 
     if style.get("italic", False) and style.get("bold", False):
         fontManager = NSFontManager.sharedFontManager()
-        boldItalic = fontManager.convertFont_toHaveTrait_(font, NSBoldFontMask|NSItalicFontMask)
+        boldItalic = fontManager.convertFont_toHaveTrait_(font, NSBoldFontMask | NSItalicFontMask)
         if boldItalic is not None:
             font = boldItalic
     elif style.get("italic", False):
@@ -229,11 +239,13 @@ _multiLineRE = re.compile(
 
 _whiteSpaceRE = re.compile(r"[ \t]+")
 
+
 def _findWhitespace(s, pos=0):
     m = _whiteSpaceRE.match(s, pos)
     if m is None:
         return pos
     return m.end()
+
 
 def _pythonWordCompletions(text, charRange):
     if not hasJedi:
@@ -257,20 +269,21 @@ def _pythonWordCompletions(text, charRange):
     return keyWords, 0
 
 languagesIDEBehavior = {
-        "Python" : {
-            "openToCloseMap" : {"(": ")", "[": "]", "{": "}", "<" : ">"},
-            "indentWithEndOfLine" : [":", "(", "[", "{"],
-            "comment" : "#",
-            "keywords" : kwlist,
-            "wordCompletions" : _pythonWordCompletions,
-            "dropPathFormatting" : 'u"%s"',
-            "dropPathsFormatting" : '[%s]',
-            "dropPathsSeperator" : ", "
+        "Python": {
+            "openToCloseMap": {"(": ")", "[": "]", "{": "}", "<": ">"},
+            "indentWithEndOfLine": [":", "(", "[", "{"],
+            "comment": "#",
+            "keywords": kwlist,
+            "wordCompletions": _pythonWordCompletions,
+            "dropPathFormatting": 'u"%s"',
+            "dropPathsFormatting": '[%s]',
+            "dropPathsSeperator": ", "
         },
     }
 
 downArrowSelectionDirection = 0
 upArrowSelectionDirection = 1
+
 
 class CodeNSTextView(NSTextView):
 
@@ -344,12 +357,12 @@ class CodeNSTextView(NSTextView):
         return self._languagesIDEBehavior.get(language)
 
     def _buildhighlightStyleMap(self):
-        ## cache all tokens with nscolors
+        # cache all tokens with nscolors
         styles = self.highlightStyle()
         backgroundColor = _hexStringToNSColor(styles.background_color, self._fallbackBackgroundColor)
         self.setBackgroundColor_(backgroundColor)
         selectionColor = _hexStringToNSColor(styles.highlight_color, self._fallbackHightLightColor)
-        self.setSelectedTextAttributes_({NSBackgroundColorAttributeName:selectionColor})
+        self.setSelectedTextAttributes_({NSBackgroundColorAttributeName: selectionColor})
 
         self.highlightStyleMap = dict()
 
@@ -389,7 +402,7 @@ class CodeNSTextView(NSTextView):
         else:
             return " " * self.indentSize()
 
-    ## overwritting NSTextView methods
+    # overwritting NSTextView methods
 
     def setBackgroundColor_(self, color):
         # invert the insertioin pointer color
@@ -415,11 +428,11 @@ class CodeNSTextView(NSTextView):
         super(CodeNSTextView, self).setBackgroundColor_(color)
 
     def changeColor_(self, color):
-        ## prevent external color overwrite,
+        # prevent external color overwrite,
         pass
 
     def changeAttributes_(self, attr):
-        ## prevent external attributes overwrite
+        # prevent external attributes overwrite
         pass
 
     def smartInsertDeleteEnabled(self):
@@ -458,7 +471,7 @@ class CodeNSTextView(NSTextView):
         setAttrs = self.textStorage().setAttributes_range_
         if text.endswith("\n"):
             text = text[:-1]
-        #setAttrs = self.layoutManager().addTemporaryAttributes_forCharacterRange_
+        # setAttrs = self.layoutManager().addTemporaryAttributes_forCharacterRange_
         self.textStorage().beginEditing()
         totLenValue = 0
         for pos, token, value in self.lexer().get_tokens_unprocessed(text):
@@ -472,7 +485,7 @@ class CodeNSTextView(NSTextView):
         self.textStorage().fixFontAttributeInRange_((location, totLenValue))
         self.textStorage().endEditing()
 
-    ## key down
+    # key down
 
     def keyDown_(self, event):
         char = event.characters()
@@ -504,7 +517,7 @@ class CodeNSTextView(NSTextView):
                         valueY += add
                     else:
                         valueX += add
-                    value =  "%s, %s" % (valueX, valueY)
+                    value = "%s, %s" % (valueX, valueY)
                 else:
                     value += add
                 self._insertTextAndRun("%s" % value, selectedRange)
@@ -563,7 +576,7 @@ class CodeNSTextView(NSTextView):
                         valueX, valueY = value
                         valueX += int(event.deltaX()*2) * add
                         valueY -= int(event.deltaY()*2) * add
-                        txtValue =  "%s, %s" % (valueX, valueY)
+                        txtValue = "%s, %s" % (valueX, valueY)
                     else:
                         value += int(event.deltaX()*2) * add
                         txtValue = "%s" % value
@@ -698,7 +711,7 @@ class CodeNSTextView(NSTextView):
                 self.moveWordRightAndModifySelection_(sender)
         super(CodeNSTextView, self).deleteWordForward_(sender)
 
-    ## text completion
+    # text completion
 
     def rangeForUserCompletion(self):
         charRange = super(CodeNSTextView, self).rangeForUserCompletion()
@@ -712,7 +725,7 @@ class CodeNSTextView(NSTextView):
             charRange.length = len(partialString)
         for c in partialString:
             if c not in variableChars:
-                 return (NSNotFound, 0)
+                return (NSNotFound, 0)
         return charRange
 
     def completionsForPartialWordRange_indexOfSelectedItem_(self, charRange, index):
@@ -731,7 +744,7 @@ class CodeNSTextView(NSTextView):
         if languageData is None:
             return keyWords, index
         if partialString:
-            _reWords = re.compile(r"\b%s\w+\b" %partialString)
+            _reWords = re.compile(r"\b%s\w+\b" % partialString)
             keyWords = _reWords.findall(text)
             keyWords = list(set(keyWords + languageData.get("keywords", [])))
             keyWords = [word for word in sorted(keyWords) if word.startswith(partialString)]
@@ -768,8 +781,7 @@ class CodeNSTextView(NSTextView):
         else:
             return super(CodeNSTextView, self).selectionRangeForProposedRange_granularity_(proposedRange, granularity)
 
-
-    ## drop
+    # drop
 
     def acceptableDragTypes(self):
         acceptableDragTypes = super(CodeNSTextView, self).acceptableDragTypes()
@@ -778,7 +790,7 @@ class CodeNSTextView(NSTextView):
     def draggingEntered_(self, dragInfo):
         pboard = dragInfo.draggingPasteboard()
         types = pboard.types()
-        if NSFilenamesPboardType in pboard.types():
+        if NSFilenamesPboardType in types:
             languageData = self.languagesIDEBehaviorForLanguage_(self.lexer().name)
             if languageData is not None:
                 formatter = languageData.get("dropPathFormatting")
@@ -801,7 +813,7 @@ class CodeNSTextView(NSTextView):
                         pboard.setString_forType_(dropText, NSPasteboardTypeString)
         return super(CodeNSTextView, self).draggingEntered_(dragInfo)
 
-    ## menu
+    # menu
 
     def indent_(self, sender):
         def indentFilter(lines):
@@ -841,7 +853,6 @@ class CodeNSTextView(NSTextView):
             if commentEndTag:
                 commentEndTag = " " + commentEndTag
             commentedLines = []
-            indent = self.indent()
             pos = 100
             for line in lines:
                 if not line.strip():
@@ -916,14 +927,14 @@ class CodeNSTextView(NSTextView):
             item.setState_(self.isLiveCoding())
         return super(CodeNSTextView, self).validateUserInterfaceItem_(item)
 
-    ## notifications
+    # notifications
 
     def textStorageDidProcessEditing_(self, notification):
         if self._ignoreProcessEditing:
             return
         string = self.string()
         if not string:
-            ## no text to color
+            # no text to color
             return
         length = len(string)
         textStorage = self.textStorage()
@@ -937,7 +948,7 @@ class CodeNSTextView(NSTextView):
             lineStart = length
             lineLength = 0
         if lineStart + lineLength > length:
-            lineLength =  length - lineStart
+            lineLength = length - lineStart
 
         lineStart, lineLength = string.lineRangeForRange_((lineStart, lineLength))
 
@@ -972,7 +983,7 @@ class CodeNSTextView(NSTextView):
     # helpers
 
     def _updateRulersColors(self):
-        scrollView  = self.enclosingScrollView()
+        scrollView = self.enclosingScrollView()
         if scrollView and scrollView.hasVerticalRuler():
             ruler = scrollView.verticalRulerView()
             if hasattr(ruler, "setTextColor_"):
@@ -1055,8 +1066,8 @@ class CodeNSTextView(NSTextView):
             shadow.setShadowColor_(textColor)
             shadow.setShadowBlurRadius_(3)
             balancingAttrs = {
-                            NSBackgroundColorAttributeName : selectionColor,
-                            NSShadowAttributeName : shadow
+                            NSBackgroundColorAttributeName: selectionColor,
+                            NSShadowAttributeName: shadow
                             }
             self.layoutManager().setTemporaryAttributes_forCharacterRange_(balancingAttrs, (found, 1))
             self.performSelector_withObject_afterDelay_("_resetBalanceParens:", (oldAttrs, effRng), 0.2)
@@ -1138,7 +1149,7 @@ class CodeNSTextView(NSTextView):
             txt = self.string().substringWithRange_(selectedRange)
             for c in txt:
                 if c not in "0123456789.,- ":
-                    raise DrawBotError, "No dragging possible"
+                    raise DrawBotError("No dragging possible")
             exec("value = %s" % txt)
         except:
             pass
@@ -1161,6 +1172,7 @@ class CodeNSTextView(NSTextView):
                     return True
         except:
             return False
+
 
 class CodeEditor(TextEditor):
 
@@ -1247,6 +1259,7 @@ class CodeEditor(TextEditor):
     def toggleLineNumbers(self):
         self.getNSScrollView().setHasVerticalRuler_(not self.getNSScrollView().hasVerticalRuler())
 
+
 class OutPutCodeNSTextView(CodeNSTextView):
 
     def init(self):
@@ -1282,7 +1295,7 @@ class OutPutCodeNSTextView(CodeNSTextView):
         backgroundColor = _hexStringToNSColor(styles.background_color, self._fallbackBackgroundColor)
         self.setBackgroundColor_(backgroundColor)
         selectionColor = _hexStringToNSColor(styles.highlight_color, self._fallbackHightLightColor)
-        self.setSelectedTextAttributes_({NSBackgroundColorAttributeName:selectionColor})
+        self.setSelectedTextAttributes_({NSBackgroundColorAttributeName: selectionColor})
 
         self.setFont_(getFontDefault("PyDEFont", self._fallbackFont))
 
@@ -1290,6 +1303,7 @@ class OutPutCodeNSTextView(CodeNSTextView):
         self._items = []
         for text, isError in items:
             self.appendText_isError_(text, isError)
+
 
 class OutPutEditor(TextEditor):
 
@@ -1306,6 +1320,3 @@ class OutPutEditor(TextEditor):
 
     def scrollToEnd(self):
         self.getNSTextView().scrollRangeToVisible_((len(self.get()), 0))
-
-
-

@@ -7,12 +7,13 @@ import os
 from drawBot.misc import DrawBotError
 from pdfContext import PDFContext
 
+
 class MOVContext(PDFContext):
-    
+
     fileExtensions = ["mov"]
 
     _saveMovieAttributes = {
-        QTKit.QTAddImageCodecType : "png "
+        QTKit.QTAddImageCodecType: "png "
         }
 
     _frameLength = 100
@@ -39,12 +40,12 @@ class MOVContext(PDFContext):
             os.remove(path)
         movie, error = QTKit.QTMovie.alloc().initToWritableFile_error_(path, None)
         if error:
-            raise DrawBotError, "Could not create a quick time movie, %s" % error.localizedDescription()
-        
+            raise DrawBotError("Could not create a quick time movie, %s" % error.localizedDescription())
+
         pdfDocument = Quartz.PDFDocument.alloc().initWithData_(data)
 
         for index in range(pdfDocument.pageCount()):
-            pool = AppKit.NSAutoreleasePool.alloc().init() 
+            pool = AppKit.NSAutoreleasePool.alloc().init()
             frameLength, frameScale = self._frameDurationData[index]
             duration = QTKit.QTMakeTime(frameLength, frameScale)
             page = pdfDocument.pageAtIndex_(index)
