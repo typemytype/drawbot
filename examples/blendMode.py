@@ -2,7 +2,7 @@
 blendMode("multiply")
 
 # set a color
-cmykFill(1, 0, 0, 1)
+cmykFill(1, 0, 0, 0)
 # draw a rectangle
 rect(10, 10, 100, 100)
 # set an other color
