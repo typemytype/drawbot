@@ -15,13 +15,13 @@ from drawBot.misc import warnings
 
 
 class SVGFile(object):
-    
+
     def __init__(self):
         self._svgdata = []
-    
+
     def write(self, value):
         self._svgdata.append(value)
-    
+
     def writeToFile(self, path):
         data = self.read()
         f = open(path, "w")
@@ -30,9 +30,10 @@ class SVGFile(object):
 
     def read(self):
         return "".join(self._svgdata)
-    
+
     def close(self):
         pass
+
 
 class SVGGraphicsState(GraphicsState):
 
@@ -47,27 +48,28 @@ class SVGGraphicsState(GraphicsState):
         new.clipPathID = self.clipPathID
         return new
 
+
 class SVGContext(BaseContext):
-    
+
     _graphicsStateClass = SVGGraphicsState
     _svgFileClass = SVGFile
 
     _svgTagArguments = {
-        "version" : "1.1", 
-        "xmlns" : "http://www.w3.org/2000/svg",
-        "xmlns:xlink" : "http://www.w3.org/1999/xlink"
+        "version": "1.1",
+        "xmlns": "http://www.w3.org/2000/svg",
+        "xmlns:xlink": "http://www.w3.org/1999/xlink"
         }
 
-    _svgLineJoinStylesMap = {   
-                    AppKit.NSMiterLineJoinStyle : "miter",
-                    AppKit.NSRoundLineJoinStyle : "round",
-                    AppKit.NSBevelLineJoinStyle : "bevel"
+    _svgLineJoinStylesMap = {
+                    AppKit.NSMiterLineJoinStyle: "miter",
+                    AppKit.NSRoundLineJoinStyle: "round",
+                    AppKit.NSBevelLineJoinStyle: "bevel"
                     }
 
     _svgLineCapStylesMap = {
-        AppKit.NSButtLineCapStyle : "butt",
-        AppKit.NSSquareLineCapStyle : "square",
-        AppKit.NSRoundLineCapStyle : "round",
+        AppKit.NSButtLineCapStyle: "butt",
+        AppKit.NSSquareLineCapStyle: "square",
+        AppKit.NSRoundLineCapStyle: "round",
     }
 
     fileExtensions = ["svg"]
@@ -149,7 +151,7 @@ class SVGContext(BaseContext):
 
     def _textBox(self, txt, (x, y, w, h), align):
         if align == "justified":
-             warnings.warn("justified text is not supported in a svg context")
+            warnings.warn("justified text is not supported in a svg context")
         attrString = self.attributedString(txt, align=align)
         if self._state.text.hyphenation:
             attrString = self.hyphenateAttributedString(attrString, w)
@@ -169,7 +171,7 @@ class SVGContext(BaseContext):
         data["text-anchor"] = "start"
 
         lines = []
-        
+
         ctLines = CoreText.CTFrameGetLines(box)
         for ctLine in ctLines:
             r = CoreText.CTLineGetStringRange(ctLine)
@@ -233,11 +235,11 @@ class SVGContext(BaseContext):
         for i in range(path.elementCount()):
             instruction, points = path.elementAtIndex_associatedPoints_(i)
             if instruction == AppKit.NSMoveToBezierPathElement:
-                svg += "M%s,%s " %(points[0].x, points[0].y)
+                svg += "M%s,%s " % (points[0].x, points[0].y)
             elif instruction == AppKit.NSLineToBezierPathElement:
-                svg += "L%s,%s " %(points[0].x, points[0].y)
+                svg += "L%s,%s " % (points[0].x, points[0].y)
             elif instruction == AppKit.NSCurveToBezierPathElement:
-                svg += "C%s,%s,%s,%s,%s,%s " %(points[0].x, points[0].y, points[1].x, points[1].y, points[2].x, points[2].y)
+                svg += "C%s,%s,%s,%s,%s,%s " % (points[0].x, points[0].y, points[1].x, points[1].y, points[2].x, points[2].y)
             elif instruction == AppKit.NSClosePathBezierPathElement:
                 svg += "Z "
         return svg
@@ -276,7 +278,7 @@ class SVGContext(BaseContext):
             return "rgba(%s,%s,%s,%s)" % (int(255*c.redComponent()), int(255*c.greenComponent()), int(255*c.blueComponent()), c.alphaComponent())
         else:
             return "none"
-    
+
     def _svgStrokeColor(self):
         if self._state.strokeColor:
             c = self._state.strokeColor.getNSObject()

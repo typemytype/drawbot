@@ -1,5 +1,6 @@
 from baseContext import BaseContext
 
+
 class PrintContext(BaseContext):
 
     fileExtensions = ["*"]
@@ -30,6 +31,3 @@ class PrintContext(BaseContext):
 
     def _frameDuration(self, seconds):
         print "frameDuration", seconds
-
-    def _saveImage(self, path):
-        print "saveImage", path

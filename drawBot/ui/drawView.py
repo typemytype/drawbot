@@ -5,10 +5,12 @@ from vanilla import Group
 
 epsPasteBoardType = "CorePasteboardFlavorType 0x41494342"
 
+
 class DrawBotPDFThumbnailView(PDFThumbnailView):
 
     def draggingUpdated_(self, draggingInfo):
         return NSDragOperationNone
+
 
 class ThumbnailView(Group):
 
@@ -29,6 +31,7 @@ class ThumbnailView(Group):
                 index = document.indexForPage_(page)
                 return index
         return -1
+
 
 class DrawView(Group):
 
@@ -88,5 +91,3 @@ class DrawView(Group):
                 self.scrollDown()
         else:
             self.scrollDown()
-
-

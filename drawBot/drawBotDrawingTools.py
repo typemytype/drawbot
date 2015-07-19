@@ -24,8 +24,10 @@ def _getmodulecontents(module, names=None):
         d[name] = getattr(module, name)
     return d
 
+
 def _deprecatedWarningLowercase(txt):
     warnings.warn("lowercase API is deprecated use: '%s'" % txt)
+
 
 def _deprecatedWarningWrapInTuple(txt):
     warnings.warn("deprecated syntax, wrap x and y values in a tuple: '%s'" % txt)
@@ -56,6 +58,7 @@ _paperSizes = {
 
 for key, (w, h) in _paperSizes.items():
     _paperSizes["%sLandscape" % key] = (h, w)
+
 
 class DrawBotDrawingTool(object):
 
@@ -104,7 +107,7 @@ class DrawBotDrawingTool(object):
         self._reset()
         self.installedFonts()
 
-    ## magic variables
+    # magic variables
 
     def width(self):
         """
@@ -163,7 +166,9 @@ class DrawBotDrawingTool(object):
 
     _magicVariables = ["WIDTH", "HEIGHT", "PAGECOUNT"]
 
-    ## public callbacks
+    # ====================
+    # = public callbacks =
+    # ====================
 
     # size and pages
 
@@ -240,7 +245,7 @@ class DrawBotDrawingTool(object):
             path = optimizePath(path)
             dirName = os.path.dirname(path)
             if not os.path.exists(dirName):
-                raise DrawBotError, "Folder '%s' doesn't exists" % dirName
+                raise DrawBotError("Folder '%s' doesn't exists" % dirName)
             base, ext = os.path.splitext(path)
             ext = ext.lower()[1:]
             context = getContextForFileExt(ext)
@@ -429,10 +434,10 @@ class DrawBotDrawingTool(object):
             args = [args[i:i+2] for i in range(0, len(args), 2)]
             _deprecatedWarningWrapInTuple("polygon((%s, %s), %s)" % (x, y, ", ".join([str(i) for i in args])))
         if not args:
-            raise DrawBotError, "polygon() expects more than a single point"
+            raise DrawBotError("polygon() expects more than a single point")
         doClose = kwargs.get("close", True)
         if len(kwargs) > 1:
-            raise DrawBotError, "unexpected keyword argument for this function"
+            raise DrawBotError("unexpected keyword argument for this function")
 
         path = self._bezierPathClass()
         path.moveTo((x, y))
@@ -448,7 +453,7 @@ class DrawBotDrawingTool(object):
         """
         Set the color space.
         Options are `genericRGB`, `adobeRGB1998`, `sRGB`.
-        The default is `genericRGB`. 
+        The default is `genericRGB`.
         `None` will reset it back to the default.
 
         .. showCode:: /../examples/colorSpace.py
@@ -679,7 +684,7 @@ class DrawBotDrawingTool(object):
         .. showcode:: /../examples/lineDash.py
         """
         if not value:
-            raise DrawBotError, "lineDash must be a list of dashes or None"
+            raise DrawBotError("lineDash must be a list of dashes or None")
         if isinstance(value[0], (list, tuple)):
             value = value[0]
         self._addInstruction("lineDash", value)
@@ -762,7 +767,7 @@ class DrawBotDrawingTool(object):
         fontName = fontName.encode("ascii", "ignore")
         dummyFont = AppKit.NSFont.fontWithName_size_(fontName, 10)
         if dummyFont is None:
-            raise DrawBotError, "Fallback font '%s' is not available" % fontName
+            raise DrawBotError("Fallback font '%s' is not available" % fontName)
         self._dummyContext.fallbackFont(fontName)
         self._addInstruction("fallbackFont", fontName)
 
@@ -886,7 +891,7 @@ class DrawBotDrawingTool(object):
         if align is None:
             align = "left"
         elif align not in self._dummyContext._textAlignMap.keys():
-            raise DrawBotError, "align must be %s" % (", ".join(self._dummyContext._textAlignMap.keys()))
+            raise DrawBotError("align must be %s" % (", ".join(self._dummyContext._textAlignMap.keys())))
         self._addInstruction("textBox", txt, (x, y, w, h), align)
         return self._dummyContext.clippedText(txt, (x, y, w, h), align)
 
@@ -1030,7 +1035,7 @@ class DrawBotDrawingTool(object):
             Appends a glyph by his glyph name using the current `font`.
 
         .. showcode:: /../examples/appendGlyphFormattedString.py
-        
+
         """
         return self._formattedStringClass(*args, **kwargs)
 
@@ -1285,7 +1290,7 @@ class DrawBotDrawingTool(object):
 
         documents = AppKit.NSApp().orderedDocuments()
         if not documents:
-            raise DrawBotError, "There is no document open"
+            raise DrawBotError("There is no document open")
         document = documents[0]
         controller = document.vanillaWindowController
 
