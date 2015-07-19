@@ -940,6 +940,7 @@ class GraphicsState(object):
 
     def __init__(self):
         self.colorSpace = self._colorClass.colorSpace
+        self.blendMode = None
         self.fillColor = self._colorClass(0)
         self.strokeColor = None
         self.cmykFillColor = None
@@ -957,6 +958,7 @@ class GraphicsState(object):
     def copy(self):
         new = self.__class__()
         new.colorSpace = self.colorSpace
+        new.blendMode = self.blendMode
         if self.fillColor is not None:
             new.fillColor = self.fillColor.copy()
         else:
@@ -983,16 +985,22 @@ class GraphicsState(object):
         new.miterLimit = self.miterLimit
         return new
 
-    def update(self):
-        self.updateColorSpace()
+    def update(self, context):
+        self.updateColorSpace(context)
+        self.updateBlendMode(context)
 
+    # support for blend mode
+
+    def updateBlendMode(self, context):
+        if self.blendMode:
+            context.blendMode(self.blendMode)
     # support for color spaces
 
     def setColorSpace(self, colorSpace):
         self.colorSpace = colorSpace
         self.updateColorSpace()
 
-    def updateColorSpace(self):
+    def updateColorSpace(self, context):
         self._colorClass.colorSpace = self.colorSpace
 
 
@@ -1157,7 +1165,7 @@ class BaseContext(object):
         if not self._stack:
             raise DrawBotError("can't restore graphics state: no matching save()")
         self._state = self._stack.pop()
-        self._state.update()
+        self._state.update(self)
         self._restore()
 
     def rect(self, x, y, w, h):
@@ -1209,6 +1217,7 @@ class BaseContext(object):
         self._state.setColorSpace(colorSpace)
 
     def blendMode(self, operation):
+        self._state.blendMode = operation
         self._blendMode(operation)
 
     def fill(self, r, g=None, b=None, a=1):
