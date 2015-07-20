@@ -987,13 +987,7 @@ class GraphicsState(object):
 
     def update(self, context):
         self.updateColorSpace(context)
-        self.updateBlendMode(context)
 
-    # support for blend mode
-
-    def updateBlendMode(self, context):
-        if self.blendMode:
-            context.blendMode(self.blendMode)
     # support for color spaces
 
     def setColorSpace(self, colorSpace):
