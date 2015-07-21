@@ -252,6 +252,7 @@ class Color(object):
     colorSpace = AppKit.NSColorSpace.genericRGBColorSpace
 
     def __init__(self, r=None, g=None, b=None, a=1):
+        self._color = None
         if r is None:
             return
         if isinstance(r, AppKit.NSColor):
