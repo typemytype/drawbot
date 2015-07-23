@@ -1,20 +1,23 @@
 Compile DrawBot
 ===============
 
-Required packages:
-------------------
+drawBot.app
+-----------
 
-* [vanilla](https://github.com/typesupply/vanilla) 
+### Required packages:
+
+
+* [vanilla](https://github.com/typesupply/vanilla)
 * [defcon](https://github.com/typesupply/defcon)
 * [defconAppKit](https://github.com/typesupply/defconAppKit)
 * [robofab](https://github.com/robofab-developers/robofab)
-* [fontTools](http://sourceforge.net/projects/fonttools/)
+* [fontTools](https://github.com/behdad/fonttools)
 * [pygments](http://pygments.org)
 * [jedi](http://jedi.jedidjah.ch/en/latest/)
 
 
-Compile:
---------
+### Compile:
+
 
 DrawBot is compiled with [py2app](https://pypi.python.org/pypi/py2app/) into an application package.
 
@@ -22,4 +25,19 @@ DrawBot is compiled with [py2app](https://pypi.python.org/pypi/py2app/) into an 
     cd path/To/drawBot
     python setup.py py2app
 
-    
+
+drawBot as module
+-----------------
+
+### Required packages:
+
+This module only works on OSx as it requires `AppKit`, `CoreText` and `Quartz`.
+
+* [vanilla](https://github.com/typesupply/vanilla)
+* [defconAppKit](https://github.com/typesupply/defconAppKit)
+* [fontTools](https://github.com/behdad/fonttools)
+
+### Compile:
+
+	cd path/To/drawBot
+    python setupAsModule.py install
