@@ -6,7 +6,8 @@ from defconAppKit.windows.baseWindow import BaseWindowController
 
 from drawBot.misc import getDefault, setDefault, getFontDefault, setFontDefault, getColorDefault, setColorDefault
 
-from codeEditor import _hexToNSColor, _textAttributesForStyle, _hexToNSColor, fallbackBackgroundColor, fallbackHightLightColor, fallbackFont, styleFromDefault, fallbackStyles
+from codeEditor import _textAttributesForStyle, _hexToNSColor, fallbackBackgroundColor, fallbackHightLightColor, fallbackFont, styleFromDefault, fallbackStyles
+
 
 class ColorCell(NSActionCell):
 
@@ -26,6 +27,7 @@ class ColorCell(NSActionCell):
             self._callback(self)
             return True
         return False
+
 
 class PreviewTokeCell(NSActionCell):
 
@@ -50,42 +52,44 @@ class PreviewTokeCell(NSActionCell):
 
         text.drawInRect_(textFrame)
 
+
 toolTips = {
-    "Fallback" : "The color used",
-    "Text" : "",
-    "Error" : "Color for errors, tracebacks",
-    "Punctuation" : "Color for puntuaction {[(,.)]}",
+    "Fallback": "The color used",
+    "Text": "",
+    "Error": "Color for errors, tracebacks",
+    "Punctuation": "Color for puntuaction {[(,.)]}",
 
-    "Keyword" : "Color for Python keyword",
-    "Keyword.Namespace" : "Color for imported modules",
+    "Keyword": "Color for Python keyword",
+    "Keyword.Namespace": "Color for imported modules",
 
-    "Number" : "Color for a number",
-    "Number.Float" : "Color for a float (0.5)",
-    "Number.Oct" : "Color for a octonal number",
-    "Number.Hex" : "Color for a hexadecimal number",
+    "Number": "Color for a number",
+    "Number.Float": "Color for a float (0.5)",
+    "Number.Oct": "Color for a octonal number",
+    "Number.Hex": "Color for a hexadecimal number",
 
-    "Name" : "Color for all sorts of names",
-    "Name.Tag" : "Color for tag names",
-    "Name.Variable" : "Color for varialble names",
-    "Name.Attribute" : "Color for attributes names",
-    "Name.Function" : "Color for function names, declaration",
-    "Name.Class" : "Color for class names, declaration",
-    "Name.Constant" : "Color for constansts",
-    "Name.Namespace" : "Color for namespace names (import x form y)",
-    "Name.Builtin" : "Color for builtin python names (import, max, min, object, ...)",
-    "Name.Builtin.Pseudo" : "Color for builtin python names (None, self, True, False, ...)",
-    "Name.Exception" : "Color for exceptions",
-    "Name.Decorator" : "Color for decorators (@<name>)",
+    "Name": "Color for all sorts of names",
+    "Name.Tag": "Color for tag names",
+    "Name.Variable": "Color for varialble names",
+    "Name.Attribute": "Color for attributes names",
+    "Name.Function": "Color for function names, declaration",
+    "Name.Class": "Color for class names, declaration",
+    "Name.Constant": "Color for constansts",
+    "Name.Namespace": "Color for namespace names (import x form y)",
+    "Name.Builtin": "Color for builtin python names (import, max, min, object, ...)",
+    "Name.Builtin.Pseudo": "Color for builtin python names (None, self, True, False, ...)",
+    "Name.Exception": "Color for exceptions",
+    "Name.Decorator": "Color for decorators (@<name>)",
 
 
-    "Operator" : "Color for operators == != <= >=",
-    "Operator.Word" : "Color for word operators and or not in",
+    "Operator": "Color for operators == != <= >=",
+    "Operator.Word": "Color for word operators and or not in",
 
-    "Comment" : "Color for comments #...",
+    "Comment": "Color for comments #...",
 
-    "String" : "Color for a string",
-    "String.Doc" : "Color for a doc string",
+    "String": "Color for a string",
+    "String.Doc": "Color for a doc string",
 }
+
 
 class SyntaxColorPanelDelegate(NSObject):
 
@@ -98,6 +102,7 @@ class SyntaxColorPanelDelegate(NSObject):
     def changeColor_(self, sender):
         self._callback(sender)
 
+
 class SyntaxColorListDelegate(NSObject):
 
     def tableView_toolTipForCell_rect_tableColumn_row_mouseLocation_(self, tableView, cell, rect, column, row, location):
@@ -105,6 +110,7 @@ class SyntaxColorListDelegate(NSObject):
         if column.identifier() == "tokenString":
             value = cell.objectValue().string()
         return toolTips.get(value, ""), rect
+
 
 class SyntaxPopupColorPanel(NSObject):
 
@@ -121,6 +127,7 @@ class SyntaxPopupColorPanel(NSObject):
 
     def changeColor_(self, sender):
         self._callback(sender)
+
 
 class ColorItem(NSObject):
 
@@ -167,7 +174,7 @@ class ColorItem(NSObject):
         r = color.redComponent() * 255
         g = color.greenComponent() * 255
         b = color.blueComponent() * 255
-        self._style["color"] = "%02X%02X%02X" %(r, g, b)
+        self._style["color"] = "%02X%02X%02X" % (r, g, b)
 
     def bold(self):
         return self._style.get("bold", False)
@@ -234,6 +241,7 @@ class SyntaxColors(Group):
         self.tokenList.getNSTableView().setDelegate_(self._delegate)
 
         self._initializing = False
+
     # list
 
     def getSelectedItems(self):

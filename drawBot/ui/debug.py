@@ -6,14 +6,17 @@ from vanilla import *
 
 from codeEditor import OutPutEditor
 
+
 class ShowHideNSPanel(NSPanel):
-    
+
     def close(self):
         self.orderOut_(None)
 
+
 class ShowHideFloatingWindow(FloatingWindow):
-    
+
     nsWindowClass = ShowHideNSPanel
+
 
 class DebugWindowController(object):
 
@@ -22,8 +25,8 @@ class DebugWindowController(object):
     """
 
     def __init__(self):
-        self.w = ShowHideFloatingWindow((300, 500), "Debugger", 
-                                    minSize=(200, 300), 
+        self.w = ShowHideFloatingWindow((300, 500), "Debugger",
+                                    minSize=(200, 300),
                                     autosaveName="DrawBotDebugWindow",
                                     initiallyVisible=False)
 
@@ -36,7 +39,7 @@ class DebugWindowController(object):
         sys.stderr = self
 
         self.w.open()
-        
+
     def showHide(self):
         if self.w.isVisible():
             self.w.hide()
@@ -56,7 +59,7 @@ class DebugWindowController(object):
     def write(self, inputText):
         """
         Write text in the output window.
-        Duplicate the text also in the default logging system 
+        Duplicate the text also in the default logging system
         so it will appear in the console.app.
         """
         NSLog(inputText)
@@ -65,5 +68,3 @@ class DebugWindowController(object):
 
     def flush(self):
         pass
-
-

@@ -113,11 +113,10 @@ featureMap = dict()
 reversedFeatureMap = dict()
 
 for key, value in _featureMap.items():
-    
     featureType, featureSelector = value
     feature = {
-        CoreText.NSFontFeatureTypeIdentifierKey : featureType,
-        CoreText.NSFontFeatureSelectorIdentifierKey : featureSelector
+        CoreText.NSFontFeatureTypeIdentifierKey: featureType,
+        CoreText.NSFontFeatureSelectorIdentifierKey: featureSelector
     }
     featureMap[key] = feature
     reversedFeatureMap[(featureType, featureSelector)] = key

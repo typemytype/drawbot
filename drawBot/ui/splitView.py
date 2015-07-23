@@ -1,7 +1,8 @@
 from AppKit import *
 
 from vanilla import *
-from vanilla.vanillaBase import VanillaBaseObject, _calcFrame
+from vanilla.vanillaBase import VanillaBaseObject
+
 
 class SimpleNSSplitView(NSSplitView):
 
@@ -17,7 +18,7 @@ class SimpleNSSplitView(NSSplitView):
 
     def setDividerThickness_(self, value):
         self.__dividerThickness = value
-        
+
     def dividerThickness(self):
         return self.__dividerThickness
 
@@ -47,14 +48,15 @@ class SimpleNSSplitView(NSSplitView):
     def splitView_shouldCollapseSubview_forDoubleClickOnDividerAtIndex_(self, splitView, subview, dividerIndex):
         return True
 
+
 class SplitView(VanillaBaseObject):
-    
+
     nsSplitView = SimpleNSSplitView
-    
+
     dividerStyleDict = dict(thick=NSSplitViewDividerStyleThick, thin=NSSplitViewDividerStyleThin)
 
     def __init__(self, posSize,
-                    paneDescriptions = [],
+                    paneDescriptions=list(),
                     isVertical=True,
                     dividerStyle="thick",
                     dividerThickness=8,
@@ -64,19 +66,19 @@ class SplitView(VanillaBaseObject):
         self._nsObject.setVertical_(isVertical)
         self._nsObject.setDividerStyle_(self.dividerStyleDict.get(dividerStyle, "thick"))
         self._nsObject.setDividerThickness_(dividerThickness)
-        
+
         self._nsObject.setDelegate_(self._nsObject)
 
         if autoSaveName is not None:
             self._nsObject.setAutosaveName_(autoSaveName)
-        
+
         self._paneIndentifiers = dict()
         for index, paneDescription in enumerate(paneDescriptions):
             vanillaView = paneDescription.get("view")
             view = vanillaView._nsObject
             self._paneIndentifiers[paneDescription["identifier"]] = view
             self._nsObject.addSubview_(view)
-            
+
             if paneDescription.get("canCollapse", True):
                 self._nsObject.addCollapsableSubview_(view)
 
@@ -94,4 +96,3 @@ class SplitView(VanillaBaseObject):
                 return w != 0
             return h != 0
         return not self._nsObject.isSubviewCollapsed_(view)
-        

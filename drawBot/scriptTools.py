@@ -5,10 +5,9 @@ import sys
 import traceback
 import site
 import tempfile
-import Quartz
-import time
 
 from drawBot.misc import getDefault
+
 
 class StdOutput(object):
 
@@ -30,12 +29,12 @@ class StdOutput(object):
         else:
             self.data.append((data, self.isError))
 
-
     def flush(self):
         pass
 
     def close(self):
         pass
+
 
 def _makeEnviron():
     env = dict(os.environ)
@@ -44,6 +43,7 @@ def _makeEnviron():
         if key in env:
             del env[key]
     return env
+
 
 def _execute(cmds):
     import subprocess
@@ -73,12 +73,14 @@ def _execute(cmds):
     # done
     return stderr, stdout
 
+
 localSitePackagesCode = u"""
 from distutils import sysconfig
 
 _site_packages_path = sysconfig.get_python_lib()
 print _site_packages_path
 """
+
 
 def getLocalCurrentPythonVersionDirName():
     tempFile = tempfile.mkstemp(".py")[1]
@@ -97,7 +99,9 @@ def getLocalCurrentPythonVersionDirName():
     else:
         return False
 
+
 localSitePackagesPath = getLocalCurrentPythonVersionDirName()
+
 
 class DrawBotNamespace(dict):
 
@@ -109,6 +113,7 @@ class DrawBotNamespace(dict):
         if item in self._variables:
             return getattr(self._context, item)
         return super(DrawBotNamespace, self).__getitem__(item)
+
 
 class _Helper(object):
     """
@@ -123,6 +128,7 @@ class _Helper(object):
     def __call__(self, *args, **kwds):
         import pydoc
         return pydoc.help(*args, **kwds)
+
 
 class ScriptRunner(object):
 
@@ -163,7 +169,6 @@ class ScriptRunner(object):
             text = f.read()
             f.close()
         source = text.replace('\r\n', '\n').replace('\r', '\n')
-        userCancelID = None
 
         compileFlags = 0
         if getDefault("DrawBotUseFutureDivision", True):
@@ -197,6 +202,7 @@ class ScriptRunner(object):
                 os.chdir(saveDir)
             sys.path.remove(curDir)
 
+
 def CallbackRunner(callback, stdout=None, stderr=None, args=[], kwargs={}, fallbackResult=None):
     result = fallbackResult
     saveStdout = sys.stdout
@@ -218,7 +224,3 @@ def CallbackRunner(callback, stdout=None, stderr=None, args=[], kwargs={}, fallb
         sys.stderr = saveStderr
 
     return result
-
-
-
-

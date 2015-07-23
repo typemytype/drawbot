@@ -1,6 +1,3 @@
-import sys
-import traceback
-
 from vanilla import *
 from defconAppKit.windows.baseWindow import BaseWindowController
 
@@ -13,6 +10,7 @@ from drawBot.context.drawBotContext import DrawBotContext
 from drawBot.misc import getDefault, setDefault, warnings
 
 from splitView import SplitView
+
 
 class DrawBotController(BaseWindowController):
 
@@ -29,7 +27,7 @@ class DrawBotController(BaseWindowController):
         self.w.getNSWindow().setFrameUsingName_(self.windowAutoSaveName)
         try:
             # on 10.7+ full screen support
-            self.w.getNSWindow().setCollectionBehavior_(128) #NSWindowCollectionBehaviorFullScreenPrimary
+            self.w.getNSWindow().setCollectionBehavior_(128)  # NSWindowCollectionBehaviorFullScreenPrimary
         except:
             pass
 
@@ -72,7 +70,7 @@ class DrawBotController(BaseWindowController):
     def runCode(self, liveCoding=False):
         # get the code
         code = self.code()
-        #code = code.encode("utf-8")
+        # code = code.encode("utf-8")
         # save the code in the defaults, if something goes wrong
         setDefault("DrawBotCodeBackup", code)
         # get te path of the document (will be None for an untitled document)
@@ -117,7 +115,7 @@ class DrawBotController(BaseWindowController):
             selectionIndex = self.thumbnails.getSelection()
             if not liveCoding or (pdfDocument and pdfDocument.pageCount()):
                 self.drawView.setPDFDocument(pdfDocument)
-             # scroll to the original position
+            # scroll to the original position
             self.drawView.scrollToPageIndex(selectionIndex)
         else:
             # if the panes are not visible, clear the draw view
@@ -164,7 +162,7 @@ class DrawBotController(BaseWindowController):
         data = self.drawView.get()
         if data:
             # if there is date save it
-            data.writeToFile_atomically_(path , False)
+            data.writeToFile_atomically_(path, False)
 
     def savePDF(self, sender=None):
         """
