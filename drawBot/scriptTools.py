@@ -135,6 +135,8 @@ class ScriptRunner(object):
     def __init__(self, text=None, path=None, stdout=None, stderr=None, namespace=None, checkSyntaxOnly=False):
         from threading import Thread
         if path:
+            if isinstance(path, unicode):
+                path = path.encode("utf-8")
             curDir, fileName = os.path.split(path)
         else:
             curDir = os.getenv("HOME")
