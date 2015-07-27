@@ -13,8 +13,6 @@ from context.dummyContext import DummyContext
 from context.tools import openType
 
 from misc import DrawBotError, warnings, VariableController, optimizePath
-import drawBotSettings
-
 
 def _getmodulecontents(module, names=None):
     d = {}
@@ -71,7 +69,14 @@ class DrawBotDrawingTool(object):
     __all__ = property(_get__all__)
 
     def _get_version(self):
-        return drawBotSettings.__version__
+        try:
+            import drawBotSettings
+            return drawBotSettings.__version__
+        except:
+            # DrawBot is installed as a module
+            import pkg_resources
+            return pkg_resources.require("drawBot")[0].version
+        return ""
 
     __version__ = property(_get_version)
 
