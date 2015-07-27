@@ -1216,9 +1216,9 @@ class BaseContext(object):
         self._blendMode(operation)
 
     def fill(self, r, g=None, b=None, a=1):
+        self._state.cmykFillColor = None
         if r is None:
             self._state.fillColor = None
-            self._state.cmykFillColor = None
             return
         self._state.fillColor = self._colorClass(r, g, b, a)
         self._state.gradient = None
@@ -1232,9 +1232,9 @@ class BaseContext(object):
             self.fill(r, g, b, a)
 
     def stroke(self, r, g=None, b=None, a=1):
+        self._state.cmykStrokeColor = None
         if r is None:
             self._state.strokeColor = None
-            self._state.cmykStrokeColor = None
             return
         self._state.strokeColor = self._colorClass(r, g, b, a)
 
