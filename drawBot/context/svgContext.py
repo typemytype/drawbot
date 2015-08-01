@@ -455,7 +455,7 @@ class SVGContext(BaseContext):
         for i in range(path.elementCount()):
             instruction, points = path.elementAtIndex_associatedPoints_(i)
             if instruction == AppKit.NSMoveToBezierPathElement:
-                svg += "M%.4g,%.4g " % (points[0].x, points[0].y)
+                svg += "M%.4g,%.4g" % (points[0].x, points[0].y)
                 lastPoint = points[0]
             elif instruction == AppKit.NSLineToBezierPathElement:
                 svg += "l%.4g,%.4g" % (points[0].x - lastPoint.x, points[0].y - lastPoint.y)
@@ -464,7 +464,8 @@ class SVGContext(BaseContext):
                 svg += "c%.4g,%.4g,%.4g,%.4g,%.4g,%.4g" % (points[0].x - lastPoint.x, points[0].y - lastPoint.y, points[1].x - lastPoint.x, points[1].y - lastPoint.y, points[2].x - lastPoint.x, points[2].y - lastPoint.y)
                 lastPoint = points[2]
             elif instruction == AppKit.NSClosePathBezierPathElement:
-                svg += "Z "
+                svg += "Z"
+        svg = svg.replace(",-", "-")
         return svg
 
     def _svgBeginClipPath(self):
