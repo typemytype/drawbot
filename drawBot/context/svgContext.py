@@ -451,14 +451,18 @@ class SVGContext(BaseContext):
             aT.setTransformStruct_(transformMatrix[:])
             path.transformUsingAffineTransform_(aT)
         svg = ""
+        lastPoint = None
         for i in range(path.elementCount()):
             instruction, points = path.elementAtIndex_associatedPoints_(i)
             if instruction == AppKit.NSMoveToBezierPathElement:
-                svg += "M%s,%s " % (points[0].x, points[0].y)
+                svg += "M%.4g,%.4g " % (points[0].x, points[0].y)
+                lastPoint = points[0]
             elif instruction == AppKit.NSLineToBezierPathElement:
-                svg += "L%s,%s " % (points[0].x, points[0].y)
+                svg += "l%.4g,%.4g" % (points[0].x - lastPoint.x, points[0].y - lastPoint.y)
+                lastPoint = points[0]
             elif instruction == AppKit.NSCurveToBezierPathElement:
-                svg += "C%s,%s,%s,%s,%s,%s " % (points[0].x, points[0].y, points[1].x, points[1].y, points[2].x, points[2].y)
+                svg += "c%.4g,%.4g,%.4g,%.4g,%.4g,%.4g" % (points[0].x - lastPoint.x, points[0].y - lastPoint.y, points[1].x - lastPoint.x, points[1].y - lastPoint.y, points[2].x - lastPoint.x, points[2].y - lastPoint.y)
+                lastPoint = points[2]
             elif instruction == AppKit.NSClosePathBezierPathElement:
                 svg += "Z "
         return svg
