@@ -11,7 +11,7 @@ from fontTools.misc.transform import Transform
 
 from baseContext import BaseContext, GraphicsState, Shadow, Color, FormattedString, Gradient
 
-from drawBot.misc import warnings
+from drawBot.misc import warnings, formatNumber
 
 
 # simple file object
@@ -454,11 +454,22 @@ class SVGContext(BaseContext):
         for i in range(path.elementCount()):
             instruction, points = path.elementAtIndex_associatedPoints_(i)
             if instruction == AppKit.NSMoveToBezierPathElement:
-                svg += "M%s,%s " % (points[0].x, points[0].y)
+                svg += "M%s,%s " % (formatNumber(points[0].x), formatNumber(points[0].y))
+                previousPoint = points[-1]
             elif instruction == AppKit.NSLineToBezierPathElement:
-                svg += "L%s,%s " % (points[0].x, points[0].y)
+                x = points[0].x - previousPoint.x
+                y = points[0].y - previousPoint.y
+                svg += "l%s,%s " % (formatNumber(x), formatNumber(y))
+                previousPoint = points[-1]
             elif instruction == AppKit.NSCurveToBezierPathElement:
-                svg += "C%s,%s,%s,%s,%s,%s " % (points[0].x, points[0].y, points[1].x, points[1].y, points[2].x, points[2].y)
+                offx1 = points[0].x - previousPoint.x
+                offy1 = points[0].y - previousPoint.y
+                offx2 = points[1].x - previousPoint.x
+                offy2 = points[1].y - previousPoint.y
+                x = points[2].x - previousPoint.x
+                y = points[2].y - previousPoint.y
+                svg += "c%s,%s,%s,%s,%s,%s " % (formatNumber(offx1), formatNumber(offy1), formatNumber(offx2), formatNumber(offy2), formatNumber(x), formatNumber(y))
+                previousPoint = points[-1]
             elif instruction == AppKit.NSClosePathBezierPathElement:
                 svg += "Z "
         return svg
