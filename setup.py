@@ -37,28 +37,29 @@ ftpPassword = getValueFromSysArgv("--ftppassword")
 
 plist = dict(
 
-	CFBundleDocumentTypes = [
-	dict(
-		CFBundleTypeExtensions = ["py"],
-		CFBundleTypeName = "Python Source File",
-		CFBundleTypeRole = "Editor",
+    CFBundleDocumentTypes = [
+    dict(
+        CFBundleTypeExtensions = ["py"],
+        CFBundleTypeName = "Python Source File",
+        CFBundleTypeRole = "Editor",
         CFBundleTypeIconFile = "pythonIcon.icns",
-		NSDocumentClass = "DrawBotDocument",
-	    ),
+        NSDocumentClass = "DrawBotDocument",
+        ),
 
-		],
-	CFBundleIdentifier = "com.drawbot",
-	LSMinimumSystemVersion = "10.9.0",
-	CFBundleShortVersionString = __version__,
-	CFBundleVersion = __version__,
-	CFBundleIconFile = "DrawBot.icns",
-	NSHumanReadableCopyright = "Copyright by Just van Rossum and Frederik Berlaen.",
+        ],
+    CFBundleIdentifier = "com.drawbot",
+    # LSMinimumSystemVersion = "10.9.0",
+    LSMinimumSystemVersion = "10.6.8",
+    CFBundleShortVersionString = __version__,
+    CFBundleVersion = __version__,
+    CFBundleIconFile = "DrawBot.icns",
+    NSHumanReadableCopyright = "Copyright by Just van Rossum and Frederik Berlaen.",
     CFBundleURLTypes = [
             dict(
                 CFBundleURLName = "com.drawbot",
                 CFBundleURLSchemes = [appName.lower()])
         ],
-	)
+    )
 
 
 dataFiles = [
@@ -84,7 +85,7 @@ setup(
                         'robofab',
                         'mutatorMath',
                         'woffTools',
-                        'compositor',
+                        # 'compositor',
                         'feaTools2',
                         'ufo2svg',
                         'booleanOperations',
@@ -102,6 +103,9 @@ setup(
                         "mathplitlib",
                         "PIL",
                         "pygame",
+                        "numpy",
+                        "sphinx",
+                        "babel",
                         "wx"
                         ]
                     )
@@ -193,7 +197,4 @@ if "-A" not in sys.argv and codeSignDeveloperName:
         print "- done uploading to ftp -"
         print "-------------------------"
         session.quit()
-
-
-
 
