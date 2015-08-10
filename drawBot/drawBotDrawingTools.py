@@ -1288,6 +1288,7 @@ class DrawBotDrawingTool(object):
         .. attribute:: bezierPath.contours
 
             Return a list of contours with all point coordinates sorted in segments.
+            Each contour object has a `contour.open` attribute, indecating if a contour is open or closed.
 
         .. showcode:: /../examples/bezierPath.py
         """
