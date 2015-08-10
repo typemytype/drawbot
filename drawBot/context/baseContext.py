@@ -993,7 +993,7 @@ class GraphicsState(object):
 
     def setColorSpace(self, colorSpace):
         self.colorSpace = colorSpace
-        self.updateColorSpace()
+        self.updateColorSpace( None )
 
     def updateColorSpace(self, context):
         self._colorClass.colorSpace = self.colorSpace

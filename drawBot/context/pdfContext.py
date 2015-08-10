@@ -1,3 +1,4 @@
+import objc
 import AppKit
 import CoreText
 import Quartz
@@ -10,7 +11,13 @@ def sendPDFtoPrinter(pdfDocument):
     printInfo = AppKit.NSPrintInfo.sharedPrintInfo()
     op = pdfDocument.getPrintOperationForPrintInfo_autoRotate_(printInfo, True)
     printPanel = op.printPanel()
-    printPanel.setOptions_(AppKit.NSPrintPanelShowsCopies | AppKit.NSPrintPanelShowsPageRange | AppKit.NSPrintPanelShowsPaperSize | AppKit.NSPrintPanelShowsOrientation | AppKit.NSPrintPanelShowsScaling | AppKit.NSPrintPanelShowsPrintSelection | AppKit.NSPrintPanelShowsPreview)
+    printPanel.setOptions_(  AppKit.NSPrintPanelShowsCopies
+                           | AppKit.NSPrintPanelShowsPageRange
+                           | AppKit.NSPrintPanelShowsPaperSize
+                           | AppKit.NSPrintPanelShowsOrientation
+                           | AppKit.NSPrintPanelShowsScaling
+                           | AppKit.NSPrintPanelShowsPrintSelection
+                           | AppKit.NSPrintPanelShowsPreview)
     op.runOperation()
 
 
@@ -19,7 +26,7 @@ class PDFContext(BaseContext):
     fileExtensions = ["pdf"]
 
     def __init__(self):
-        super(PDFContext, self).__init__()
+        objc.super(PDFContext, self).__init__()
         self._hasContext = False
         self._cachedImages = {}
 

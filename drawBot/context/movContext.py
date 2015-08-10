@@ -1,3 +1,4 @@
+import objc
 import AppKit
 import QTKit
 import Quartz
@@ -20,11 +21,11 @@ class MOVContext(PDFContext):
     _frameScale = 1000
 
     def __init__(self):
-        super(MOVContext, self).__init__()
+        objc.super(MOVContext, self).__init__()
         self._frameDurationData = []
 
     def _newPage(self, width, height):
-        super(MOVContext, self)._newPage(width, height)
+        objc.super(MOVContext, self)._newPage(width, height)
         self._frameDurationData.append((self._frameLength, self._frameScale))
         self.save()
         self.fill(1, 1, 1, 1)

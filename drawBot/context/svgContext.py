@@ -1,3 +1,4 @@
+import objc
 import AppKit
 import CoreText
 
@@ -48,7 +49,10 @@ class SVGColor(Color):
     def svgColor(self):
         c = self.getNSObject()
         if c:
-            return "rgba(%s,%s,%s,%s)" % (int(255*c.redComponent()), int(255*c.greenComponent()), int(255*c.blueComponent()), c.alphaComponent())
+            return "rgba(%s,%s,%s,%s)" % (int(255*c.redComponent()),
+                                          int(255*c.greenComponent()),
+                                          int(255*c.blueComponent()),
+                                          c.alphaComponent())
         return "none"
 
 
@@ -57,11 +61,11 @@ class SVGGradient(Gradient):
     _colorClass = SVGColor
 
     def __init__(self, *args, **kwargs):
-        super(SVGGradient, self).__init__(*args, **kwargs)
+        objc.super(SVGGradient, self).__init__(*args, **kwargs)
         self.tagID = id(self)
 
     def copy(self):
-        new = super(SVGShadow, self).copy()
+        new = objc.super(SVGShadow, self).copy()
         new.tagID = self.tagID
         return new
 
@@ -122,11 +126,11 @@ class SVGShadow(Shadow):
     _colorClass = SVGColor
 
     def __init__(self, *args, **kwargs):
-        super(SVGShadow, self).__init__(*args, **kwargs)
+        objc.super(SVGShadow, self).__init__(*args, **kwargs)
         self.tagID = id(self)
 
     def copy(self):
-        new = super(SVGShadow, self).copy()
+        new = objc.super(SVGShadow, self).copy()
         new.tagID = self.tagID
         return new
 
@@ -178,12 +182,12 @@ class SVGGraphicsState(GraphicsState):
     _colorClass = SVGColor
 
     def __init__(self):
-        super(SVGGraphicsState, self).__init__()
+        objc.super(SVGGraphicsState, self).__init__()
         self.transformMatrix = Transform(1, 0, 0, 1, 0, 0)
         self.clipPathID = None
 
     def copy(self):
-        new = super(SVGGraphicsState, self).copy()
+        new = objc.super(SVGGraphicsState, self).copy()
         new.transformMatrix = Transform(*self.transformMatrix[:])
         new.clipPathID = self.clipPathID
         return new
@@ -219,7 +223,7 @@ class SVGContext(BaseContext):
     fileExtensions = ["svg"]
 
     def __init__(self):
-        super(SVGContext, self).__init__()
+        objc.super(SVGContext, self).__init__()
         self._pages = []
 
     # not supported in a svg context
@@ -245,17 +249,17 @@ class SVGContext(BaseContext):
     # svg overwrites
 
     def shadow(self, offset, blur, color):
-        super(SVGContext, self).shadow(offset, blur, color)
+        objc.super(SVGContext, self).shadow(offset, blur, color)
         if self._state.shadow is not None:
             self._state.shadow.writeDefs(self._svgContext)
 
     def linearGradient(self, startPoint=None, endPoint=None, colors=None, locations=None):
-        super(SVGContext, self).linearGradient(startPoint, endPoint, colors, locations)
+        objc.super(SVGContext, self).linearGradient(startPoint, endPoint, colors, locations)
         if self._state.gradient is not None:
             self._state.gradient.writeDefs(self._svgContext)
 
     def radialGradient(self, startPoint=None, endPoint=None, colors=None, locations=None, startRadius=0, endRadius=100):
-        super(SVGContext, self).radialGradient(startPoint, endPoint, colors, locations, startRadius, endRadius)
+        objc.super(SVGContext, self).radialGradient(startPoint, endPoint, colors, locations, startRadius, endRadius)
         if startRadius != 0:
             warnings.warn("radialGradient will clip the startRadius to '0' in a svg context.")
         if self._state.gradient is not None:

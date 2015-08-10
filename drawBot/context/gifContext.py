@@ -1,3 +1,4 @@
+import objc
 import AppKit
 import Quartz
 
@@ -23,7 +24,7 @@ class GifContext(ImageContext):
     _delay = 10
 
     def __init__(self):
-        super(GifContext, self).__init__()
+        objc.super(GifContext, self).__init__()
         self._delayData = []
 
     def _frameDuration(self, seconds):
@@ -31,7 +32,7 @@ class GifContext(ImageContext):
         self._delayData[-1] = int(seconds * 100)
 
     def _newPage(self, width, height):
-        super(GifContext, self)._newPage(width, height)
+        objc.super(GifContext, self)._newPage(width, height)
         self._delayData.append(self._delay)
 
     def _writeDataToFile(self, data, path, multipage):
@@ -43,7 +44,7 @@ class GifContext(ImageContext):
         if shouldBeAnimated:
             tempPath = tempfile.mkstemp(suffix=".gif")[1]
 
-        inputPaths = super(GifContext, self)._writeDataToFile(data, tempPath, shouldBeAnimated)
+        inputPaths = objc.super(GifContext, self)._writeDataToFile(data, tempPath, shouldBeAnimated)
 
         if shouldBeAnimated:
             cmds = [
