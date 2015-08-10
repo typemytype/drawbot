@@ -1,5 +1,9 @@
-from AppKit import *
-from PyObjCTools import AppHelper
+
+import Foundation
+import AppKit
+
+import PyObjCTools
+import PyObjCTools.AppHelper
 
 import os
 from random import randint
@@ -15,7 +19,7 @@ import objc
 
 objc.setVerbose(True)
 
-class DrawBotDocument(NSDocument):
+class DrawBotDocument(AppKit.NSDocument):
 
     def readFromFile_ofType_(self, path, tp):
         return True, None
@@ -61,12 +65,12 @@ class DrawBotDocument(NSDocument):
             return self.vanillaWindowController.pdfData() is not None
         return True
 
-class DrawBotAppDelegate(NSObject):
+class DrawBotAppDelegate(Foundation.NSObject):
 
     def init(self):
-        self = super(DrawBotAppDelegate, self).init()
+        self = objc.super(DrawBotAppDelegate, self).init()
         code = stringToInt("GURL")
-        NSAppleEventManager.sharedAppleEventManager().setEventHandler_andSelector_forEventClass_andEventID_(self, "getUrl:withReplyEvent:", code, code)
+        AppKit.NSAppleEventManager.sharedAppleEventManager().setEventHandler_andSelector_forEventClass_andEventID_(self, "getUrl:withReplyEvent:", code, code)
         return self
 
     def applicationDidFinishLaunching_(self, notification):
@@ -81,18 +85,18 @@ class DrawBotAppDelegate(NSObject):
 
     def sheduleIconTimer(self):
         if getDefault("DrawBotAnimateIcon", True):
-            self._iconTimer = NSTimer.scheduledTimerWithTimeInterval_target_selector_userInfo_repeats_(0.1, self, "animateApplicationIcon:", None, False)
+            self._iconTimer = Foundation.NSTimer.scheduledTimerWithTimeInterval_target_selector_userInfo_repeats_(0.1, self, "animateApplicationIcon:", None, False)
 
     def animateApplicationIcon_(self, timer):
-        if NSApp().isActive():
-            image = NSImage.imageNamed_("icon_%s" % randint(0, 20))
-            NSApp().setApplicationIconImage_(image)
+        if AppKit.NSApp().isActive():
+            image = AppKit.NSImage.imageNamed_("icon_%s" % randint(0, 20))
+            AppKit.NSApp().setApplicationIconImage_(image)
             self.sheduleIconTimer()
 
     def showDocumentation_(self, sender):
         url = "http://www.drawbot.com"
-        ws = NSWorkspace.sharedWorkspace()
-        ws.openURL_(NSURL.URLWithString_(url))
+        ws = Foundation.NSWorkspace.sharedWorkspace()
+        ws.openURL_(Foundation.NSURL.URLWithString_(url))
 
     def showPreferences_(self, sender):
         try:
@@ -108,7 +112,7 @@ class DrawBotAppDelegate(NSObject):
         code = stringToInt("----")
         url = event.paramDescriptorForKeyword_(code)
         urlString = url.stringValue()
-        documentController = NSDocumentController.sharedDocumentController()
+        documentController = AppKit.NSDocumentController.sharedDocumentController()
 
         data = urlparse.urlparse(urlString)
         if data.netloc:
@@ -144,4 +148,4 @@ class DrawBotAppDelegate(NSObject):
             )
 
 if __name__ == "__main__":
-	AppHelper.runEventLoop()
+    PyObjCTools.AppHelper.runEventLoop()
