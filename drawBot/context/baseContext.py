@@ -9,11 +9,23 @@ from tools import openType
 _FALLBACKFONT = "LucidaGrande"
 
 
+class BezierContour(list):
+
+    def __init__(self, *args, **kwargs):
+        super(BezierContour, self).__init__(*args, **kwargs)
+        self.open = True
+
+    def __repr__(self):
+        return "<BezierContour>"
+
+
 class BezierPath(object):
 
     """
     A bezier path object, if you want to draw the same over and over again.
     """
+
+    contourClass = BezierContour
 
     def __init__(self, path=None):
         if path is None:
@@ -211,8 +223,10 @@ class BezierPath(object):
         contours = []
         for index in range(self._path.elementCount()):
             instruction, pts = self._path.elementAtIndex_associatedPoints_(index)
-            if instruction == 0:
-                contours.append([])
+            if instruction == AppKit.NSMoveToBezierPathElement:
+                contours.append(self.contourClass())
+            if instruction == AppKit.NSClosePathBezierPathElement:
+                contours[-1].open = False
             if pts:
                 contours[-1].append([(p.x, p.y) for p in pts])
         if len(contours) >= 2 and len(contours[-1]) == 1 and contours[-1][0] == contours[-2][0]:
