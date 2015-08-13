@@ -289,6 +289,7 @@ class PDFContext(BaseContext):
 
     def _pdfGradient(self, gradient):
         if gradient.cmykColors:
+            # pdb.set_trace()
             colorSpace = Quartz.CGColorSpaceCreateDeviceCMYK()
             colors = []
             for color in gradient.cmykColors:
@@ -320,7 +321,31 @@ class PDFContext(BaseContext):
             return self._rgbNSColorToCGColor(c)
 
     def _cmykNSColorToCGColor(self, c):
-        return Quartz.CGColorCreateGenericCMYK(c.cyanComponent(), c.magentaComponent(), c.yellowComponent(), c.blackComponent(), c.alphaComponent())
+        convert = False
+        d = c
+        try:
+            red = c.cyanComponent()
+        except ValueError, err:
+            d = c.colorUsingColorSpaceName_(AppKit.NSDeviceCMYKColorSpace)
+
+        newcol = Quartz.CGColorCreateGenericCMYK(d.cyanComponent(),
+                                                 d.magentaComponent(),
+                                                 d.yellowComponent(),
+                                                 d.blackComponent(),
+                                                 d.alphaComponent())
+        return newcol
 
     def _rgbNSColorToCGColor(self, c):
-        return Quartz.CGColorCreateGenericRGB(c.redComponent(), c.greenComponent(), c.blueComponent(), c.alphaComponent())
+        convert = False
+        d = c
+        try:
+            red = c.redComponent()
+        except ValueError, err:
+            d = c.colorUsingColorSpaceName_(AppKit.NSCalibratedRGBColorSpace)
+        newcol = Quartz.CGColorCreateGenericRGB(d.redComponent(),
+                                                d.greenComponent(),
+                                                d.blueComponent(),
+                                                d.alphaComponent())
+            
+            # [[NSColor whiteColor] colorUsingColorSpaceName:NSCalibratedRGBColorSpace]
+        return newcol
