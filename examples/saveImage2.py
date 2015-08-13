@@ -1,4 +1,4 @@
-
+size(150,100)
 # create seven pages
 for i in range(7):
 
@@ -21,3 +21,4 @@ for i in range(7):
 
 # save each page as a separate png
 saveImage(["~/Desktop/firstImage.png"], multipage=True)
+saveImage(["~/Desktop/firstImage.gif"])

@@ -36,3 +36,4 @@ for i in range(totalFrames):
 
 # save the image as a mov on the desktop
 saveImage('~/Desktop/frameDuration.mov')
+saveImage('~/Desktop/frameDuration.gif')

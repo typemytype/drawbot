@@ -34,3 +34,4 @@ for contour in path.contours:
     for segment in contour:
         for x, y in segment:
             print x, y
+    print "is open:", contour.open

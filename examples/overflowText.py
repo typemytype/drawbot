@@ -49,5 +49,5 @@ while len(t):
     # draw the text
     textBox("%s" % pageCount(), (10, 10, 480, th), align="center")
 
-saveImage("~/Desktop/drawbot.mov")
+saveImage(["~/Desktop/drawbot.mov", "~/Desktop/drawbot.gif"])
 

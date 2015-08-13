@@ -1,5 +1,7 @@
 # DrawBot reference
 
+from drawBot import *
+
 # set a size for the canvas
 size(500, 500)
 
@@ -206,6 +208,7 @@ saveImage([
     u"~/Desktop/drawBotTest.png",
     u"~/Desktop/drawBotTest.svg",
     u"~/Desktop/drawBotTest.mov",
+    u"~/Desktop/drawBotTest.gif",
     ])
     
 print "Done"
