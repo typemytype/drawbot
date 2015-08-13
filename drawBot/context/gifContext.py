@@ -12,6 +12,11 @@ gifsiclePath = os.path.join(os.path.dirname(__file__), "tools", "gifsicle")
 if not os.path.exists(gifsiclePath):
     gifsiclePath = os.path.join(os.getcwd(), "tools", "gifsicle")
 
+# last exit, we're in an app bundle
+if not os.path.exists(gifsiclePath):
+    myBundle = AppKit.NSBundle.mainBundle()
+    gifsiclePath = myBundle.pathForResource_ofType_("gifsicle", "")
+
 
 class GifContext(ImageContext):
 

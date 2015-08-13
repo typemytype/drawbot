@@ -65,6 +65,7 @@ plist = dict(
 dataFiles = [
         "Resources/English.lproj",
         #os.path.dirname(vanilla.__file__),
+        "drawBot/context/tools/gifsicle",
         ]
 
 for fileName in os.listdir("Resources/Images"):
