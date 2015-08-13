@@ -74,6 +74,14 @@ def optimizePath(path):
     return path
 
 
+def formatNumber(value, precision=1000):
+    value = float(value)
+    if value.is_integer():
+        return "%i" % value
+    value = round(value*precision) / precision
+    return "%s" % value
+
+
 # ===============
 # = color tools =
 # ===============
