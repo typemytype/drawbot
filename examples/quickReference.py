@@ -1,7 +1,5 @@
 # DrawBot reference
 
-from drawBot import *
-
 # set a size for the canvas
 size(500, 500)
 
