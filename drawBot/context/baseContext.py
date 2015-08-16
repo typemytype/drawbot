@@ -312,7 +312,7 @@ class Color(object):
 
 class CMYKColor(Color):
 
-    colorSpace = AppKit.NSColorSpace.genericCMYKColorSpace()
+    colorSpace = AppKit.NSColorSpace.genericCMYKColorSpace
 
     def __init__(self, c=None, m=None, y=None, k=None, a=1):
         if c is None:
@@ -321,7 +321,7 @@ class CMYKColor(Color):
             self._color = c
         else:
             self._color = AppKit.NSColor.colorWithDeviceCyan_magenta_yellow_black_alpha_(c, m, y, k, a)
-        self._color = self._color.colorUsingColorSpace_(self.colorSpace)
+        self._color = self._color.colorUsingColorSpace_(self.colorSpace())
 
 
 class Shadow(object):
@@ -1007,7 +1007,7 @@ class GraphicsState(object):
 
     def setColorSpace(self, colorSpace):
         self.colorSpace = colorSpace
-        self.updateColorSpace()
+        self.updateColorSpace(None)
 
     def updateColorSpace(self, context):
         self._colorClass.colorSpace = self.colorSpace
