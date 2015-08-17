@@ -1,3 +1,4 @@
+import objc
 from AppKit import *
 from Quartz import PDFView, PDFThumbnailView, PDFDocument
 
@@ -38,7 +39,7 @@ class DrawView(Group):
     nsViewClass = PDFView
 
     def __init__(self, posSize):
-        super(DrawView, self).__init__(posSize)
+        objc.super(DrawView, self).__init__(posSize)
         pdfView = self.getNSView()
         pdfView.setAutoScales_(True)
         view = pdfView.documentView()
