@@ -1,3 +1,4 @@
+import objc
 from vanilla import *
 from defconAppKit.windows.baseWindow import BaseWindowController
 
@@ -241,7 +242,7 @@ class DrawBotController(BaseWindowController):
         # bind whenever a user moves or resizes a window
         self.w.bind("move", self.windowMoveCallback)
         self.w.bind("resize", self.windowResizeCallback)
-        super(DrawBotController, self).setUpBaseWindowBehavior()
+        objc.super(DrawBotController, self).setUpBaseWindowBehavior()
 
     def windowMoveCallback(self, sender):
         # save the frame in the defaults
@@ -255,4 +256,4 @@ class DrawBotController(BaseWindowController):
         # unbind on window close
         self.w.unbind("move", self.windowMoveCallback)
         self.w.unbind("resize", self.windowResizeCallback)
-        super(DrawBotController, self).windowCloseCallback(sender)
+        objc.super(DrawBotController, self).windowCloseCallback(sender)
