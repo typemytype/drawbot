@@ -1006,7 +1006,6 @@ class GraphicsState(object):
 
     def setColorSpace(self, colorSpace):
         self.colorSpace = colorSpace
-        print repr(colorSpace)
         self.updateColorSpace( None )
 
     def updateColorSpace(self, context):
