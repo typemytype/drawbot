@@ -1,5 +1,9 @@
-from AppKit import *
 import math
+import objc
+import AppKit
+NSMakeRange = AppKit.NSMakeRange
+NSMaxRange = AppKit.NSMaxRange
+NSLocationInRange = AppKit.NSLocationInRange
 
 
 """
@@ -8,15 +12,15 @@ http://www.noodlesoft.com/blog/2008/10/05/displaying-line-numbers-with-nstextvie
 """
 
 
-class NSLineNumberRuler(NSRulerView):
+class NSLineNumberRuler(AppKit.NSRulerView):
 
     DEFAULT_THICKNESS = 22.
     RULER_MARGIN = 5.
 
     def init(self):
-        self = super(NSLineNumberRuler, self).init()
-        self._font = NSFont.labelFontOfSize_(NSFont.systemFontSizeForControlSize_(NSMiniControlSize))
-        self._textColor = NSColor.colorWithCalibratedWhite_alpha_(.42, 1)
+        self = objc.super(NSLineNumberRuler, self).init()
+        self._font = AppKit.NSFont.labelFontOfSize_(AppKit.NSFont.systemFontSizeForControlSize_(AppKit.NSMiniControlSize))
+        self._textColor = AppKit.NSColor.colorWithCalibratedWhite_alpha_(.42, 1)
         self._rulerBackgroundColor = None
 
         self._lineIndices = None
@@ -37,8 +41,8 @@ class NSLineNumberRuler(NSRulerView):
 
     def textAttributes(self):
         return {
-                NSFontAttributeName: self.font(),
-                NSForegroundColorAttributeName: self.textColor()
+                AppKit.NSFontAttributeName: self.font(),
+                AppKit.NSForegroundColorAttributeName: self.textColor()
                 }
 
     def setRulerBackgroundColor_(self, color):
@@ -51,14 +55,14 @@ class NSLineNumberRuler(NSRulerView):
     def setClientView_(self, view):
         oldClientView = self.clientView()
 
-        if oldClientView != view and isinstance(oldClientView, NSTextView):
-            NSNotificationCenter.defaultCenter().removeObserver_name_object_(self, NSTextStorageDidProcessEditingNotification, oldClientView.textStorage())
+        if oldClientView != view and isinstance(oldClientView, AppKit.NSTextView):
+            NSNotificationCenter.defaultCenter().removeObserver_name_object_(self, AppKit.NSTextStorageDidProcessEditingNotification, oldClientView.textStorage())
 
-        super(NSLineNumberRuler, self).setClientView_(view)
+        objc.super(NSLineNumberRuler, self).setClientView_(view)
 
-        if view is not None and isinstance(view, NSTextView):
-            NSNotificationCenter.defaultCenter().addObserver_selector_name_object_(self, "textDidChange:",
-                                                    NSTextStorageDidProcessEditingNotification,
+        if view is not None and isinstance(view, AppKit.NSTextView):
+            AppKit.NSNotificationCenter.defaultCenter().addObserver_selector_name_object_(self, "textDidChange:",
+                                                    AppKit.NSTextStorageDidProcessEditingNotification,
                                                     view.textStorage())
 
     def lineIndices(self):
@@ -76,7 +80,7 @@ class NSLineNumberRuler(NSRulerView):
 
     def calculateLines(self):
         view = self.clientView()
-        if not isinstance(view, NSTextView):
+        if not isinstance(view, AppKit.NSTextView):
             return
 
         text = view.string()
@@ -106,7 +110,7 @@ class NSLineNumberRuler(NSRulerView):
         newThickness = self.requiredThickness()
 
         if abs(oldThickness - newThickness) > 1:
-            invocation = NSInvocation.invocationWithMethodSignature_(self.methodSignatureForSelector_("setRuleThickness:"))
+            invocation = AppKit.NSInvocation.invocationWithMethodSignature_(self.methodSignatureForSelector_("setRuleThickness:"))
             invocation.setSelector_("setRuleThickness:")
             invocation.setTarget_(self)
             invocation.setArgument_atIndex_(newThickness, 2)
@@ -116,7 +120,7 @@ class NSLineNumberRuler(NSRulerView):
         lineCount = len(self.lineIndices())
         digits = int(math.log10(lineCount) + 1)
 
-        sampleString = NSString.stringWithString_("8"*digits)
+        sampleString = AppKit.NSString.stringWithString_("8"*digits)
         stringSize = sampleString.sizeWithAttributes_(self.textAttributes())
         return math.ceil(max([self.DEFAULT_THICKNESS, stringSize.width + self.RULER_MARGIN*2]))
 
@@ -146,15 +150,15 @@ class NSLineNumberRuler(NSRulerView):
         rulerBackgroundColor = self.rulerBackgroundColor()
         if rulerBackgroundColor is not None:
             rulerBackgroundColor.set()
-            NSRectFill(bounds)
+            AppKit.NSRectFill(bounds)
 
-        if not isinstance(view, NSTextView):
+        if not isinstance(view, AppKit.NSTextView):
             return
 
         layoutManager = view.layoutManager()
         container = view.textContainer()
         text = view.string()
-        nullRange = NSMakeRange(NSNotFound, 0)
+        nullRange = NSMakeRange(AppKit.NSNotFound, 0)
         yinset = view.textContainerInset().height
         visibleRect = self.scrollView().contentView().bounds()
         textAttributes = self.textAttributes()
@@ -180,22 +184,22 @@ class NSLineNumberRuler(NSRulerView):
                                                     None
                                                     )
                 if rectCount > 0:
-                    ypos = yinset + NSMinY(rects[0]) - NSMinY(visibleRect)
-                    labelText = NSString.stringWithString_("%s" % (line+1))
+                    ypos = yinset + AppKit.NSMinY(rects[0]) - AppKit.NSMinY(visibleRect)
+                    labelText = AppKit.NSString.stringWithString_("%s" % (line+1))
                     stringSize = labelText.sizeWithAttributes_(textAttributes)
 
-                    x = NSWidth(bounds) - stringSize.width - self.RULER_MARGIN
-                    y = ypos + (NSHeight(rects[0]) - stringSize.height) / 2.0
-                    w = NSWidth(bounds) - self.RULER_MARGIN * 2.0
-                    h = NSHeight(rects[0])
+                    x = AppKit.NSWidth(bounds) - stringSize.width - self.RULER_MARGIN
+                    y = ypos + (AppKit.NSHeight(rects[0]) - stringSize.height) / 2.0
+                    w = AppKit.NSWidth(bounds) - self.RULER_MARGIN * 2.0
+                    h = AppKit.NSHeight(rects[0])
 
-                    labelText.drawInRect_withAttributes_(NSMakeRect(x, y, w, h), textAttributes)
+                    labelText.drawInRect_withAttributes_(AppKit.NSMakeRect(x, y, w, h), textAttributes)
 
             if index > NSMaxRange(_range):
                 break
 
-        path = NSBezierPath.bezierPath()
+        path = AppKit.NSBezierPath.bezierPath()
         path.moveToPoint_((bounds.origin.x+bounds.size.width, bounds.origin.y))
         path.lineToPoint_((bounds.origin.x+bounds.size.width, bounds.origin.y+bounds.size.height))
-        NSColor.grayColor().set()
+        AppKit.NSColor.grayColor().set()
         path.stroke()

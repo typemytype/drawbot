@@ -1,3 +1,4 @@
+import objc
 from AppKit import *
 
 from vanilla import *
@@ -12,7 +13,7 @@ from codeEditor import _textAttributesForStyle, _hexToNSColor, fallbackBackgroun
 class ColorCell(NSActionCell):
 
     def initWithDoubleClickCallack_(self, callback):
-        self = super(ColorCell, self).init()
+        self = objc.super(ColorCell, self).init()
         self._callback = callback
         return self
 
@@ -200,7 +201,7 @@ class SyntaxColors(Group):
 
     def __init__(self, posSize):
         self._initializing = True
-        super(SyntaxColors, self).__init__(posSize)
+        objc.super(SyntaxColors, self).__init__(posSize)
 
         middle = 100
         gutter = 5

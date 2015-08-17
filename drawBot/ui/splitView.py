@@ -1,20 +1,21 @@
-from AppKit import *
+import objc
+import AppKit
 
 from vanilla import *
 from vanilla.vanillaBase import VanillaBaseObject
 
 
-class SimpleNSSplitView(NSSplitView):
+class SimpleNSSplitView(AppKit.NSSplitView):
 
     def init(self):
-        self = super(SimpleNSSplitView, self).init()
+        self = objc.super(SimpleNSSplitView, self).init()
         self.__dividerThickness = 8
         self.__collapsableSubviews = []
         return self
 
     def dealloc(self):
         del self.__collapsableSubviews
-        super(SimpleNSSplitView, self).dealloc()
+        objc.super(SimpleNSSplitView, self).dealloc()
 
     def setDividerThickness_(self, value):
         self.__dividerThickness = value
@@ -35,10 +36,10 @@ class SimpleNSSplitView(NSSplitView):
 
     def drawDividerInRect_(self, rect):
         if self.dividerThickness() > 2:
-            super(SimpleNSSplitView, self).drawDividerInRect_(rect)
+            objc.super(SimpleNSSplitView, self).drawDividerInRect_(rect)
         else:
-            NSColor.colorWithCalibratedWhite_alpha_(0, .42).set()
-            NSBezierPath.bezierPathWithRect_(rect).fill()
+            AppKit.NSColor.colorWithCalibratedWhite_alpha_(0, .42).set()
+            AppKit.NSBezierPath.bezierPathWithRect_(rect).fill()
 
     # delegate
 
@@ -53,7 +54,7 @@ class SplitView(VanillaBaseObject):
 
     nsSplitView = SimpleNSSplitView
 
-    dividerStyleDict = dict(thick=NSSplitViewDividerStyleThick, thin=NSSplitViewDividerStyleThin)
+    dividerStyleDict = dict(thick=AppKit.NSSplitViewDividerStyleThick, thin=AppKit.NSSplitViewDividerStyleThin)
 
     def __init__(self, posSize,
                     paneDescriptions=list(),
