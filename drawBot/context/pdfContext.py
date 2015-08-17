@@ -346,6 +346,4 @@ class PDFContext(BaseContext):
                                                 d.greenComponent(),
                                                 d.blueComponent(),
                                                 d.alphaComponent())
-            
-            # [[NSColor whiteColor] colorUsingColorSpaceName:NSCalibratedRGBColorSpace]
         return newcol
