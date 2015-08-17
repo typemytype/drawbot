@@ -17,7 +17,7 @@ from drawBot.updater import Updater
 
 import objc
 
-# objc.setVerbose(True)
+objc.setVerbose(True)
 
 class DrawBotDocument(AppKit.NSDocument):
 
