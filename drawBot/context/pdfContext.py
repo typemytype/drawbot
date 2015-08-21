@@ -328,12 +328,12 @@ class PDFContext(BaseContext):
         except ValueError, err:
             d = c.colorUsingColorSpaceName_(AppKit.NSDeviceCMYKColorSpace)
 
-        newcol = Quartz.CGColorCreateGenericCMYK(d.cyanComponent(),
-                                                 d.magentaComponent(),
-                                                 d.yellowComponent(),
-                                                 d.blackComponent(),
-                                                 d.alphaComponent())
-        return newcol
+        return Quartz.CGColorCreateGenericCMYK(d.cyanComponent(),
+                                               d.magentaComponent(),
+                                               d.yellowComponent(),
+                                               d.blackComponent(),
+                                               d.alphaComponent())
+
 
     def _rgbNSColorToCGColor(self, c):
         convert = False
@@ -342,8 +342,7 @@ class PDFContext(BaseContext):
             red = c.redComponent()
         except ValueError, err:
             d = c.colorUsingColorSpaceName_(AppKit.NSCalibratedRGBColorSpace)
-        newcol = Quartz.CGColorCreateGenericRGB(d.redComponent(),
-                                                d.greenComponent(),
-                                                d.blueComponent(),
-                                                d.alphaComponent())
-        return newcol
+        return Quartz.CGColorCreateGenericRGB(d.redComponent(),
+                                              d.greenComponent(),
+                                              d.blueComponent(),
+                                              d.alphaComponent())
