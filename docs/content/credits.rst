@@ -14,7 +14,7 @@ Thanks Andy for the :doc:`icon<drawBotIcon>`!
 .. _John Maeda: http://www.maedastudio.com/
 .. _Design By Numbers: http://dbn.media.mit.edu
 .. _Processing: http://www.processing.org
-.. _Tal Leming: http://www.typesuplly.com/
+.. _Tal Leming: http://www.typesupply.com/
 .. _vanilla: https://github.com/typesupply/vanilla/
 
 
