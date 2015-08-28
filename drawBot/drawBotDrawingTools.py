@@ -246,14 +246,18 @@ class DrawBotDrawingTool(object):
         """
         if isinstance(paths, (str, unicode)):
             paths = [paths]
-        for path in paths:
-            path = optimizePath(path)
+        for rawPath in paths:
+            path = optimizePath(rawPath)
             dirName = os.path.dirname(path)
             if not os.path.exists(dirName):
                 raise DrawBotError("Folder '%s' doesn't exists" % dirName)
             base, ext = os.path.splitext(path)
             ext = ext.lower()[1:]
+            if not ext:
+                ext = rawPath
             context = getContextForFileExt(ext)
+            if context is None:
+                raise DrawBotError("Did not find a supported context for: '%s'" % ext)
             self._drawInContext(context)
             context.saveImage(path, multipage)
 
