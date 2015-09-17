@@ -1049,6 +1049,8 @@ class BaseContext(object):
         genericRGB=AppKit.NSColorSpace.genericRGBColorSpace,
         adobeRGB1998=AppKit.NSColorSpace.adobeRGB1998ColorSpace,
         sRGB=AppKit.NSColorSpace.sRGBColorSpace,
+        genericGray=AppKit.NSColorSpace.genericGrayColorSpace,
+        genericGamma22Gray=AppKit.NSColorSpace.genericGamma22GrayColorSpace,
         )
 
     _blendModeMap = dict(
@@ -1139,6 +1141,7 @@ class BaseContext(object):
     def reset(self):
         self._stack = []
         self._state = self._graphicsStateClass()
+        self._colorClass.colorSpace = self._colorSpaceMap['genericRGB']
         self._reset()
 
     def size(self, width=None, height=None):

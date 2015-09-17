@@ -48,7 +48,15 @@ class SVGColor(Color):
     def svgColor(self):
         c = self.getNSObject()
         if c:
-            return "rgba(%s,%s,%s,%s)" % (int(255*c.redComponent()), int(255*c.greenComponent()), int(255*c.blueComponent()), c.alphaComponent())
+            if c.numberOfComponents() == 2:
+                # gray number
+                r = g = b = int(255*c.whiteComponent())
+            else:
+                r = int(255*c.redComponent())
+                g = int(255*c.greenComponent())
+                b = int(255*c.blueComponent())
+            a = c.alphaComponent()
+            return "rgba(%s,%s,%s,%s)" % (r, g, b, a)
         return "none"
 
 

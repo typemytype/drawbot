@@ -316,4 +316,7 @@ class PDFContext(BaseContext):
         return Quartz.CGColorCreateGenericCMYK(c.cyanComponent(), c.magentaComponent(), c.yellowComponent(), c.blackComponent(), c.alphaComponent())
 
     def _rgbNSColorToCGColor(self, c):
+        if c.numberOfComponents() == 2:
+            # gray color
+            return Quartz.CGColorCreateGenericGray(c.whiteComponent(), c.alphaComponent())
         return Quartz.CGColorCreateGenericRGB(c.redComponent(), c.greenComponent(), c.blueComponent(), c.alphaComponent())
