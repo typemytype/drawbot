@@ -1,4 +1,5 @@
-from AppKit import *
+import AppKit
+import objc
 
 from keyword import kwlist
 import re
@@ -22,28 +23,28 @@ from drawBot.drawBotDrawingTools import _drawBotDrawingTool
 
 variableChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_"
 
-fallbackTextColor = NSColor.blackColor()
-fallbackBackgroundColor = NSColor.whiteColor()
-fallbackHightLightColor = NSColor.selectedTextBackgroundColor()
+fallbackTextColor = AppKit.NSColor.blackColor()
+fallbackBackgroundColor = AppKit.NSColor.whiteColor()
+fallbackHightLightColor = AppKit.NSColor.selectedTextBackgroundColor()
 
-fallbackFont = NSFont.fontWithName_size_("Menlo", 10)
+fallbackFont = AppKit.NSFont.fontWithName_size_("Menlo", 10)
 if not fallbackFont:
-    fallbackFont = NSFont.fontWithName_size_("Monaco", 10)
+    fallbackFont = AppKit.NSFont.fontWithName_size_("Monaco", 10)
 
 basicLineHeightMultiple = 1.2
-basicParagraph = NSMutableParagraphStyle.alloc().init()
+basicParagraph = AppKit.NSMutableParagraphStyle.alloc().init()
 basicParagraph.setDefaultTabInterval_(28.0)
-basicParagraph.setTabStops_(NSArray.array())
+basicParagraph.setTabStops_(AppKit.NSArray.array())
 basicParagraph.setLineHeightMultiple_(basicLineHeightMultiple)
 
 fallbackTypeAttributes = {
-              NSFontAttributeName: fallbackFont,
-              NSLigatureAttributeName: 0,
-              NSParagraphStyleAttributeName: basicParagraph
+              AppKit.NSFontAttributeName: fallbackFont,
+              AppKit.NSLigatureAttributeName: 0,
+              AppKit.NSParagraphStyleAttributeName: basicParagraph
               }
 
 fallbackTracebackAttributes = dict(fallbackTypeAttributes)
-fallbackTracebackAttributes[NSForegroundColorAttributeName] = NSColor.redColor()
+fallbackTracebackAttributes[AppKit.NSForegroundColorAttributeName] = AppKit.NSColor.redColor()
 
 fallbackStyles = [
     (Token,               '#000000'),
@@ -111,7 +112,7 @@ def outputTextAttributesForStyles(styles=None, isError=False):
     else:
         style = styles.style_for_token(Token)
     attr = _textAttributesForStyle(style)
-    for key in (NSForegroundColorAttributeName, NSUnderlineColorAttributeName):
+    for key in (AppKit.NSForegroundColorAttributeName, AppKit.NSUnderlineColorAttributeName):
         if key in attr:
             attr[key] = _hexToNSColor(attr[key])
     return attr
@@ -152,7 +153,7 @@ class _JumpToLineSheet(object):
         self.w.close()
 
 
-def _hexToNSColor(color, default=NSColor.blackColor()):
+def _hexToNSColor(color, default=AppKit.NSColor.blackColor()):
     if color is None:
         return default
     if len(color) != 6:
@@ -160,21 +161,21 @@ def _hexToNSColor(color, default=NSColor.blackColor()):
     r = int(color[0:2], 16) / 255.
     g = int(color[2:4], 16) / 255.
     b = int(color[4:6], 16) / 255.
-    return NSColor.colorWithCalibratedRed_green_blue_alpha_(r, g, b, 1)
+    return AppKit.NSColor.colorWithCalibratedRed_green_blue_alpha_(r, g, b, 1)
 
 
-def _hexStringToNSColor(txt, default=NSColor.blackColor()):
+def _hexStringToNSColor(txt, default=AppKit.NSColor.blackColor()):
     if not txt.startswith("#"):
-        raise DrawBotError, "Not a hex color, should start with '#'"
+        raise DrawBotError("Not a hex color, should start with '#'")
     return _hexToNSColor(txt[1:], default)
 
 
 def _NSColorToHexString(color):
-    color = color.colorUsingColorSpaceName_(NSCalibratedRGBColorSpace)
+    color = color.colorUsingColorSpaceName_(AppKit.NSCalibratedRGBColorSpace)
     r = color.redComponent() * 255
     g = color.greenComponent() * 255
     b = color.blueComponent() * 255
-    return "#%02X%02X%02X" %(r, g, b)
+    return "#%02X%02X%02X" % (r, g, b)
 
 
 def _reverseMap(sourceMap):
@@ -197,35 +198,35 @@ def _textAttributesForStyle(style, font=None, token=None):
     if token and token in _textAttributesForStyleCache:
         return _textAttributesForStyleCache[token]
     attr =  {
-        NSLigatureAttributeName: 0,
-        NSParagraphStyleAttributeName: basicParagraph,
+        AppKit.NSLigatureAttributeName: 0,
+        AppKit.NSParagraphStyleAttributeName: basicParagraph,
     }
 
     if style.get("italic", False) and style.get("bold", False):
-        fontManager = NSFontManager.sharedFontManager()
-        boldItalic = fontManager.convertFont_toHaveTrait_(font, NSBoldFontMask | NSItalicFontMask)
+        fontManager = AppKit.NSFontManager.sharedFontManager()
+        boldItalic = fontManager.convertFont_toHaveTrait_(font, AppKit.NSBoldFontMask | AppKit.NSItalicFontMask)
         if boldItalic is not None:
             font = boldItalic
     elif style.get("italic", False):
-        fontManager = NSFontManager.sharedFontManager()
-        italic = fontManager.convertFont_toHaveTrait_(font, NSItalicFontMask)
+        fontManager = AppKit.NSFontManager.sharedFontManager()
+        italic = fontManager.convertFont_toHaveTrait_(font, AppKit.NSItalicFontMask)
         if italic is not None:
             font = italic
     elif style.get("bold", False):
-        fontManager = NSFontManager.sharedFontManager()
-        bold = fontManager.convertFont_toHaveTrait_(font, NSBoldFontMask)
+        fontManager = AppKit.NSFontManager.sharedFontManager()
+        bold = fontManager.convertFont_toHaveTrait_(font, AppKit.NSBoldFontMask)
         if bold is not None:
             font = bold
-    attr[NSFontAttributeName] = font
+    attr[AppKit.NSFontAttributeName] = font
 
     if style.get("color", False):
-        attr[NSForegroundColorAttributeName] = style["color"]
+        attr[AppKit.NSForegroundColorAttributeName] = style["color"]
     if style.get("bgcolor", False):
-        attr[NSBackgroundColorAttributeName] = style["bgcolor"]
+        attr[AppKit.NSBackgroundColorAttributeName] = style["bgcolor"]
     if style.get("underline", False):
-        attr[NSUnderlineStyleAttributeName] = NSUnderlineStyleSingle
+        attr[AppKit.NSUnderlineStyleAttributeName] = AppKit.NSUnderlineStyleSingle
         if style["color"]:
-            attr[NSUnderlineColorAttributeName] = style["color"]
+            attr[AppKit.NSUnderlineColorAttributeName] = style["color"]
     if token:
         _textAttributesForStyleCache[token] = attr
     return attr
@@ -285,7 +286,7 @@ downArrowSelectionDirection = 0
 upArrowSelectionDirection = 1
 
 
-class CodeNSTextView(NSTextView):
+class CodeNSTextView(AppKit.NSTextView):
 
     jumpToLineWindowClass = _JumpToLineSheet
 
@@ -314,7 +315,7 @@ class CodeNSTextView(NSTextView):
         self._lexer = None
         self.highlightStyleMap = dict()
 
-        nc = NSNotificationCenter.defaultCenter()
+        nc = AppKit.NSNotificationCenter.defaultCenter()
         nc.addObserver_selector_name_object_(self, "userDefaultChanged:", "drawBotUserDefaultChanged", None)
 
         self._arrowSelectionDirection = None
@@ -325,7 +326,7 @@ class CodeNSTextView(NSTextView):
         return self
 
     def __del__(self):
-        nc = NSNotificationCenter.defaultCenter()
+        nc = AppKit.NSNotificationCenter.defaultCenter()
         nc.removeObserver_(self)
 
     def setLexer_(self, lexer):
@@ -362,7 +363,7 @@ class CodeNSTextView(NSTextView):
         backgroundColor = _hexStringToNSColor(styles.background_color, self._fallbackBackgroundColor)
         self.setBackgroundColor_(backgroundColor)
         selectionColor = _hexStringToNSColor(styles.highlight_color, self._fallbackHightLightColor)
-        self.setSelectedTextAttributes_({NSBackgroundColorAttributeName: selectionColor})
+        self.setSelectedTextAttributes_({AppKit.NSBackgroundColorAttributeName: selectionColor})
 
         self.highlightStyleMap = dict()
 
@@ -407,20 +408,20 @@ class CodeNSTextView(NSTextView):
     def setBackgroundColor_(self, color):
         # invert the insertioin pointer color
         # and the fallback text color and background color
-        color = color.colorUsingColorSpaceName_(NSCalibratedRGBColorSpace)
+        color = color.colorUsingColorSpaceName_(AppKit.NSCalibratedRGBColorSpace)
         r = color.redComponent()
         g = color.greenComponent()
         b = color.blueComponent()
         s = sum([r, g, b]) / 3.
         inverseColor = s < .6
         if inverseColor:
-            self._fallbackBackgroundColor = NSColor.blackColor()
-            self._fallbackTextColor = NSColor.whiteColor()
-            self.setInsertionPointColor_(NSColor.whiteColor())
+            self._fallbackBackgroundColor = AppKit.NSColor.blackColor()
+            self._fallbackTextColor = AppKit.NSColor.whiteColor()
+            self.setInsertionPointColor_(AppKit.NSColor.whiteColor())
         else:
-            self._fallbackBackgroundColor = NSColor.whiteColor()
-            self._fallbackTextColor = NSColor.blackColor()
-            self.setInsertionPointColor_(NSColor.blackColor())
+            self._fallbackBackgroundColor = AppKit.NSColor.whiteColor()
+            self._fallbackTextColor = AppKit.NSColor.blackColor()
+            self.setInsertionPointColor_(AppKit.NSColor.blackColor())
 
         if self.enclosingScrollView():
             self.enclosingScrollView().setBackgroundColor_(color)
@@ -490,20 +491,20 @@ class CodeNSTextView(NSTextView):
     def keyDown_(self, event):
         char = event.characters()
         selectedRange = self.selectedRange()
-        if NSEvent.modifierFlags() & NSCommandKeyMask and selectedRange and char in (NSUpArrowFunctionKey, NSDownArrowFunctionKey, NSLeftArrowFunctionKey, NSRightArrowFunctionKey):
+        if AppKit.NSEvent.modifierFlags() & AppKit.NSCommandKeyMask and selectedRange and char in (AppKit.NSUpArrowFunctionKey, AppKit.NSDownArrowFunctionKey, AppKit.NSLeftArrowFunctionKey, AppKit.NSRightArrowFunctionKey):
             value = self._getSelectedValueForRange(selectedRange)
             if value is not None:
-                altDown = NSEvent.modifierFlags() & NSAlternateKeyMask
-                shiftDown = NSEvent.modifierFlags() & NSShiftKeyMask
-                altDown = NSEvent.modifierFlags() & NSAlternateKeyMask
+                altDown = AppKit.NSEvent.modifierFlags() & AppKit.NSAlternateKeyMask
+                shiftDown = AppKit.NSEvent.modifierFlags() & AppKit.NSShiftKeyMask
+                altDown = AppKit.NSEvent.modifierFlags() & AppKit.NSAlternateKeyMask
 
                 add = 1
                 if altDown:
                     add = .1
 
-                if char == NSDownArrowFunctionKey:
+                if char == AppKit.NSDownArrowFunctionKey:
                     add *= -1
-                elif char == NSLeftArrowFunctionKey:
+                elif char == AppKit.NSLeftArrowFunctionKey:
                     add *= -1
 
                 if shiftDown and altDown:
@@ -513,7 +514,7 @@ class CodeNSTextView(NSTextView):
 
                 if isinstance(value, tuple):
                     valueX, valueY = value
-                    if char in [NSUpArrowFunctionKey, NSDownArrowFunctionKey]:
+                    if char in [AppKit.NSUpArrowFunctionKey, AppKit.NSDownArrowFunctionKey]:
                         valueY += add
                     else:
                         valueX += add
@@ -543,7 +544,7 @@ class CodeNSTextView(NSTextView):
 
     def mouseDown_(self, event):
         self._canDrag = False
-        if NSEvent.modifierFlags() & NSCommandKeyMask and self.selectedRange():
+        if AppKit.NSEvent.modifierFlags() & AppKit.NSCommandKeyMask and self.selectedRange():
             self._canDrag = True
             self.undoManager().beginUndoGrouping()
             selRng = self.selectedRange()
@@ -561,9 +562,9 @@ class CodeNSTextView(NSTextView):
                 selRng = self.selectedRange()
                 value = self._getSelectedValueForRange(selRng)
                 if value is not None:
-                    altDown = event.modifierFlags() & NSAlternateKeyMask
-                    shiftDown = event.modifierFlags() & NSShiftKeyMask
-                    altDown = event.modifierFlags() & NSAlternateKeyMask
+                    altDown = event.modifierFlags() & AppKit.NSAlternateKeyMask
+                    shiftDown = event.modifierFlags() & AppKit.NSShiftKeyMask
+                    altDown = event.modifierFlags() & AppKit.NSAlternateKeyMask
                     add = 1
                     if altDown and shiftDown:
                         add = .01
@@ -592,6 +593,17 @@ class CodeNSTextView(NSTextView):
         super(CodeNSTextView, self).mouseUp_(event)
 
     def insertTab_(self, sender):
+        string = self.string()
+        if string:
+            selectedRange = self.selectedRange()
+            try:
+                char = string[selectedRange.location-1]
+            except:
+                char = ""
+            if char == ".":
+                self.setSelectedRange_((selectedRange.location-1, 1))
+                self.insertText_("self.")
+                return
         if self.usesTabs():
             return super(CodeNSTextView, self).insertTab_(sender)
         self.insertText_(self.indent())
@@ -654,12 +666,12 @@ class CodeNSTextView(NSTextView):
             newRange = ranges[0].rangeValue()
             testLocation = -1
             if newRange.length and self._arrowSelectionDirection != downArrowSelectionDirection:
-                testLocation = self._getLeftWordRange(NSRange(newRange.location + newRange.length, 0))
-            if NSLocationInRange(testLocation, newRange) or NSMaxRange(newRange) == testLocation:
-                newRange = NSRange(newRange.location, testLocation - newRange.location)
+                testLocation = self._getLeftWordRange(AppKit.NSRange(newRange.location + newRange.length, 0))
+            if AppKit.NSLocationInRange(testLocation, newRange) or AppKit.NSMaxRange(newRange) == testLocation:
+                newRange = AppKit.NSRange(newRange.location, testLocation - newRange.location)
             else:
                 location = self._getLeftWordRange(newRange)
-                newRange = NSRange(location, newRange.location - location + newRange.length)
+                newRange = AppKit.NSRange(location, newRange.location - location + newRange.length)
             if newRange.length == 0:
                 self._arrowSelectionDirection = None
             self.setSelectedRange_(newRange)
@@ -683,12 +695,12 @@ class CodeNSTextView(NSTextView):
             newRange = ranges[0].rangeValue()
             testLocation = -1
             if newRange.length and self._arrowSelectionDirection != upArrowSelectionDirection:
-                testLocation = self._getRightWordRange(NSRange(newRange.location, 0))
-            if NSLocationInRange(testLocation, newRange) or NSMaxRange(newRange) == testLocation:
-                newRange = NSRange(testLocation, newRange.location - testLocation + newRange.length)
+                testLocation = self._getRightWordRange(AppKit.NSRange(newRange.location, 0))
+            if AppKit.NSLocationInRange(testLocation, newRange) or AppKit.NSMaxRange(newRange) == testLocation:
+                newRange = AppKit.NSRange(testLocation, newRange.location - testLocation + newRange.length)
             else:
                 location = self._getRightWordRange(newRange)
-                newRange = NSRange(newRange.location, location - newRange.location)
+                newRange = AppKit.NSRange(newRange.location, location - newRange.location)
             if newRange.length == 0:
                 self._arrowSelectionDirection = None
             self.setSelectedRange_(newRange)
@@ -725,7 +737,7 @@ class CodeNSTextView(NSTextView):
             charRange.length = len(partialString)
         for c in partialString:
             if c not in variableChars:
-                return (NSNotFound, 0)
+                return (AppKit.NSNotFound, 0)
         return charRange
 
     def completionsForPartialWordRange_indexOfSelectedItem_(self, charRange, index):
@@ -752,7 +764,7 @@ class CodeNSTextView(NSTextView):
 
     def selectionRangeForProposedRange_granularity_(self, proposedRange, granularity):
         location = proposedRange.location
-        if granularity == NSSelectByWord and proposedRange.length == 0 and location != 0:
+        if granularity == AppKit.NSSelectByWord and proposedRange.length == 0 and location != 0:
             text = self.string()
             lenText = len(text)
             length = 1
@@ -785,17 +797,17 @@ class CodeNSTextView(NSTextView):
 
     def acceptableDragTypes(self):
         acceptableDragTypes = super(CodeNSTextView, self).acceptableDragTypes()
-        return list(acceptableDragTypes) + [NSFilenamesPboardType]
+        return list(acceptableDragTypes) + [AppKit.NSFilenamesPboardType]
 
     def draggingEntered_(self, dragInfo):
         pboard = dragInfo.draggingPasteboard()
         types = pboard.types()
-        if NSFilenamesPboardType in types:
+        if AppKit.NSFilenamesPboardType in types:
             languageData = self.languagesIDEBehaviorForLanguage_(self.lexer().name)
             if languageData is not None:
                 formatter = languageData.get("dropPathFormatting")
                 if formatter:
-                    paths = pboard.propertyListForType_(NSFilenamesPboardType)
+                    paths = pboard.propertyListForType_(AppKit.NSFilenamesPboardType)
                     dropText = ""
                     if len(paths) == 1:
                         dropText = formatter % paths[0]
@@ -809,8 +821,8 @@ class CodeNSTextView(NSTextView):
                         dropText = multiLineFormater % seperator.join(formattedPaths)
 
                     if dropText:
-                        pboard.declareTypes_owner_([NSPasteboardTypeString], self)
-                        pboard.setString_forType_(dropText, NSPasteboardTypeString)
+                        pboard.declareTypes_owner_([AppKit.NSPasteboardTypeString], self)
+                        pboard.setString_forType_(dropText, AppKit.NSPasteboardTypeString)
         return super(CodeNSTextView, self).draggingEntered_(dragInfo)
 
     # menu
@@ -896,14 +908,14 @@ class CodeNSTextView(NSTextView):
         lines = 1
         string = self.string()
         length = len(string)
-        tempRange = NSMakeRange(0, length)
+        tempRange = AppKit.NSMakeRange(0, length)
         found = None
         while tempRange.location < length:
-            tempRange = string.lineRangeForRange_(NSMakeRange(tempRange.location, 0))
+            tempRange = string.lineRangeForRange_(AppKit.NSMakeRange(tempRange.location, 0))
             if lines == lineNumber:
                 found = tempRange
                 break
-            tempRange.location = NSMaxRange(tempRange)
+            tempRange.location = AppKit.NSMaxRange(tempRange)
             lines += 1
 
         if found:
@@ -955,9 +967,9 @@ class CodeNSTextView(NSTextView):
         for quoteMatch in _multiLineRE.finditer(string):
             start, end = quoteMatch.start(), quoteMatch.end()
             quoteRange = (start, end-start)
-            if NSLocationInRange(lineStart, quoteRange) or NSLocationInRange(lineStart+lineLength, quoteRange):
+            if AppKit.NSLocationInRange(lineStart, quoteRange) or AppKit.NSLocationInRange(lineStart+lineLength, quoteRange):
                 quoteStart, quoteLenght = string.lineRangeForRange_(quoteRange)
-                lineStart, lineLength = NSUnionRange(quoteRange, (lineStart, lineLength))
+                lineStart, lineLength = AppKit.NSUnionRange(quoteRange, (lineStart, lineLength))
                 break
         text = string.substringWithRange_((lineStart, lineLength))
         self._highlightSyntax(lineStart, text)
@@ -965,11 +977,11 @@ class CodeNSTextView(NSTextView):
     def viewDidMoveToWindow(self):
         self._buildhighlightStyleMap()
         self.resetHighLightSyntax()
-        notificationCenter = NSNotificationCenter.defaultCenter()
-        notificationCenter.addObserver_selector_name_object_(self, "textStorageDidProcessEditing:", NSTextStorageDidProcessEditingNotification, self.textStorage())
+        notificationCenter = AppKit.NSNotificationCenter.defaultCenter()
+        notificationCenter.addObserver_selector_name_object_(self, "textStorageDidProcessEditing:", AppKit.NSTextStorageDidProcessEditingNotification, self.textStorage())
 
     def dealloc(self):
-        notificationCenter = NSNotificationCenter.defaultCenter()
+        notificationCenter = AppKit.NSNotificationCenter.defaultCenter()
         notificationCenter.removeObserver_(self)
         super(CodeNSTextView, self).dealloc()
 
@@ -1060,14 +1072,14 @@ class CodeNSTextView(NSTextView):
             oldAttrs, effRng = self.textStorage().attributesAtIndex_effectiveRange_(found, None)
             styles = self.highlightStyle()
             selectionColor = _hexStringToNSColor(styles.highlight_color, self._fallbackHightLightColor)
-            textColor = oldAttrs.get(NSForegroundColorAttributeName, self._fallbackTextColor)
-            shadow = NSShadow.alloc().init()
+            textColor = oldAttrs.get(AppKit.NSForegroundColorAttributeName, self._fallbackTextColor)
+            shadow = AppKit.NSShadow.alloc().init()
             shadow.setShadowOffset_((0, 0))
             shadow.setShadowColor_(textColor)
             shadow.setShadowBlurRadius_(3)
             balancingAttrs = {
-                            NSBackgroundColorAttributeName: selectionColor,
-                            NSShadowAttributeName: shadow
+                            AppKit.NSBackgroundColorAttributeName: selectionColor,
+                            AppKit.NSShadowAttributeName: shadow
                             }
             self.layoutManager().setTemporaryAttributes_forCharacterRange_(balancingAttrs, (found, 1))
             self.performSelector_withObject_afterDelay_("_resetBalanceParens:", (oldAttrs, effRng), 0.2)
@@ -1157,12 +1169,12 @@ class CodeNSTextView(NSTextView):
 
     def _insertTextAndRun(self, txt, txtRange):
         self.insertText_(txt)
-        newRange = NSMakeRange(txtRange.location, len(txt))
+        newRange = AppKit.NSMakeRange(txtRange.location, len(txt))
         self.setSelectedRange_(newRange)
         return self._runInternalCode()
 
     def _runInternalCode(self):
-        pool = NSAutoreleasePool.alloc().init()
+        pool = AppKit.NSAutoreleasePool.alloc().init()
         try:
             window = self.window()
             if window is not None:
@@ -1211,7 +1223,7 @@ class CodeEditor(TextEditor):
             codeAttr["showlineNumbers"] = True
         ruler = NSLineNumberRuler.alloc().init()
         ruler.setClientView_(self.getNSTextView())
-        ruler.setRulerBackgroundColor_(NSColor.colorWithCalibratedWhite_alpha_(.95, 1))
+        ruler.setRulerBackgroundColor_(AppKit.NSColor.colorWithCalibratedWhite_alpha_(.95, 1))
         self.getNSScrollView().setVerticalRulerView_(ruler)
         self.getNSScrollView().setHasHorizontalRuler_(False)
         self.getNSScrollView().setHasVerticalRuler_(codeAttr["showlineNumbers"])
@@ -1277,7 +1289,7 @@ class OutPutCodeNSTextView(CodeNSTextView):
         attrs = self.textAttributes
         if isError:
             attrs = self.tracebackAttributes
-        text = NSAttributedString.alloc().initWithString_attributes_(text, attrs)
+        text = AppKit.NSAttributedString.alloc().initWithString_attributes_(text, attrs)
         self.textStorage().appendAttributedString_(text)
 
     def userDefaultChanged_(self, notification):
@@ -1295,7 +1307,7 @@ class OutPutCodeNSTextView(CodeNSTextView):
         backgroundColor = _hexStringToNSColor(styles.background_color, self._fallbackBackgroundColor)
         self.setBackgroundColor_(backgroundColor)
         selectionColor = _hexStringToNSColor(styles.highlight_color, self._fallbackHightLightColor)
-        self.setSelectedTextAttributes_({NSBackgroundColorAttributeName: selectionColor})
+        self.setSelectedTextAttributes_({AppKit.NSBackgroundColorAttributeName: selectionColor})
 
         self.setFont_(getFontDefault("PyDEFont", self._fallbackFont))
 
