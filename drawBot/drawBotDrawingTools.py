@@ -14,6 +14,7 @@ from context.tools import openType
 
 from misc import DrawBotError, warnings, VariableController, optimizePath
 
+
 def _getmodulecontents(module, names=None):
     d = {}
     if names is None:
