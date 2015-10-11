@@ -289,7 +289,7 @@ class PDFContext(BaseContext):
                 cgColor = self._cmykNSColorToCGColor(c)
                 colors.append(cgColor)
         else:
-            colorSpace = Quartz.CGColorSpaceCreateDeviceRGB()
+            colorSpace = self._colorClass.colorSpace().CGColorSpace()
             colors = []
             for color in gradient.colors:
                 c = color.getNSObject()
