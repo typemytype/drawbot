@@ -1246,7 +1246,8 @@ class BaseContext(object):
         else:
             self._state.cmykFillColor = self._cmykColorClass(c, m, y, k, a)
             r, g, b = cmyk2rgb(c, m, y, k)
-            self.fill(r, g, b, a)
+            self._state.fillColor = self._colorClass(r, g, b, a)
+            self._state.gradient = None
 
     def stroke(self, r, g=None, b=None, a=1):
         self._state.cmykStrokeColor = None
@@ -1261,7 +1262,7 @@ class BaseContext(object):
         else:
             self._state.cmykStrokeColor = self._cmykColorClass(c, m, y, k, a)
             r, g, b = cmyk2rgb(c, m, y, k)
-            self.stroke(r, g, b, a)
+            self._state.strokeColor = self._colorClass(r, g, b, a)
 
     def shadow(self, offset, blur, color):
         if offset is None:
