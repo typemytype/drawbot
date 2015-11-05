@@ -542,9 +542,9 @@ class FormattedString(object):
                     feature = openType.featureMap[featureTag]
                     coreTextfeatures.append(feature)
             fontDescriptor = font.fontDescriptor()
-            fontAttributes = {
-                CoreText.NSFontFeatureSettingsAttribute: coreTextfeatures,
-                }
+            fontAttributes = {}
+            if coreTextfeatures:
+                fontAttributes[CoreText.NSFontFeatureSettingsAttribute] = coreTextfeatures
             if fallbackFont:
                 fontAttributes[CoreText.NSFontCascadeListAttribute] = [AppKit.NSFontDescriptor.fontDescriptorWithName_size_(fallbackFont, fontSize)]
             fontDescriptor = fontDescriptor.fontDescriptorByAddingAttributes_(fontAttributes)
@@ -834,8 +834,19 @@ class FormattedString(object):
         if font is None:
             warnings.warn("font: %s is not installed, back to the fallback font: %s" % (self._font, _FALLBACKFONT))
             font = AppKit.NSFont.fontWithName_size_(_FALLBACKFONT, self._fontSize)
+
+        # disable calt features, as this seems to be on by default
+        # for both the font stored in the nsGlyphInfo as in the replacement character
+        fontAttributes = {}
+        fontAttributes[CoreText.NSFontFeatureSettingsAttribute] = [openType.featureMap["calt_off"]]
+        fontDescriptor = font.fontDescriptor()
+        fontDescriptor = fontDescriptor.fontDescriptorByAddingAttributes_(fontAttributes)
+        font = AppKit.NSFont.fontWithDescriptor_size_(fontDescriptor, self._fontSize)
+
         fallbackFont = self._fallbackFont
         self._fallbackFont = None
+        _openTypeFeatures = dict(self._openTypeFeatures)
+        self._openTypeFeatures = dict(calt=False)
         for glyphName in glyphNames:
             glyph = font.glyphWithName_(glyphName)
             if glyph:
@@ -844,6 +855,7 @@ class FormattedString(object):
                 self._attributedString.addAttribute_value_range_(AppKit.NSGlyphInfoAttributeName, glyphInfo, (len(self)-1, 1))
             else:
                 warnings.warn("font %s has no glyph with the name %s" % (font.fontName(), glyphName))
+        self.openTypeFeatures(**_openTypeFeatures)
         self._fallbackFont = fallbackFont
 
 
