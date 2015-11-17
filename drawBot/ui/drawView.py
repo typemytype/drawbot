@@ -52,7 +52,7 @@ class DrawView(Group):
         return pdf.dataRepresentation()
 
     def set(self, pdfData):
-        pdf = PDFDocument.alloc().initWithData_(self._pdfData)
+        pdf = PDFDocument.alloc().initWithData_(pdfData)
         self.setPDFDocument(pdf)
 
     def setPath(self, path):
