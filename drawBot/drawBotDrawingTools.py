@@ -371,6 +371,12 @@ class DrawBotDrawingTool(object):
         _deprecatedWarningLowercase("curveTo((%s, %s), (%s, %s), (%s, %s))" % (x1, y1, x2, y2, x3, y3))
         self.curveTo((x1, y1), (x2, y2), (x3, y3))
 
+    def arc(self, center, radius, startAngle, endAngle, clockwise):
+        """
+        Arc with `center` and a given `radius`, from `startAngle` to `endAngle`, going clockwise if `clockwise` is True and counter clockwise if `clockwise` is False.
+        """
+        self._addInstruction("arc", center, radius, startAngle, endAngle, clockwise)
+
     def arcTo(self, (x1, y1), (x2, y2), radius):
         """
         Arc from one point to an other point with a given `radius`.
@@ -1234,6 +1240,10 @@ class DrawBotDrawingTool(object):
 
             Curve to a point `x3`, `y3`.
             With given bezier handles `x1`, `y1` and `x2`, `y2`.
+
+        .. function:: bezierPath.arc(center, radius, startAngle, endAngle, clockwise)
+
+            Arc with `center` and a given `radius`, from `startAngle` to `endAngle`, going clockwise if `clockwise` is True and counter clockwise if `clockwise` is False.
 
         .. function:: bezierPath.arcTo((x1, y1), (x2, y2), radius)
 

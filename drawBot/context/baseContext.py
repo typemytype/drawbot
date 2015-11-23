@@ -69,6 +69,13 @@ class BezierPath(object):
 
     curveto = curveTo
 
+    def arc(self, center, radius, startAngle, endAngle, clockwise):
+        """
+        Arc with `center` and a given `radius`, from `startAngle` to `endAngle`, going clockwise if `clockwise` is True and counter clockwise if `clockwise` is False.
+        """
+        self._path.appendBezierPathWithArcWithCenter_radius_startAngle_endAngle_clockwise_(
+                    center, radius, startAngle, endAngle, clockwise)
+
     def arcTo(self, pt1, pt2, radius):
         """
         Arc from one point to an other point with a given `radius`.
@@ -1215,6 +1222,9 @@ class BaseContext(object):
 
     def curveTo(self, pt1, pt2, pt):
         self._state.path.curveTo(pt1, pt2, pt)
+
+    def arc(self, center, radius, startAngle, endAngle, clockwise):
+        self._state.path.arc(center, radius, startAngle, endAngle, clockwise)
 
     def arcTo(self, pt1, pt2, radius):
         self._state.path.arcTo(pt1, pt2, radius)
