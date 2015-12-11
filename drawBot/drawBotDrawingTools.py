@@ -1110,6 +1110,8 @@ class DrawBotDrawingTool(object):
             if path.startswith("http"):
                 url = AppKit.NSURL.URLWithString_(path)
             else:
+                if not os.path.exists(path):
+                    raise DrawBotError("Image does not exists")
                 url = AppKit.NSURL.fileURLWithPath_(path)
             source = AppKit.NSImage.alloc().initByReferencingURL_(url)
         w, h = source.size()
