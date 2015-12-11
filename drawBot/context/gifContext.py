@@ -1,6 +1,7 @@
 import AppKit
 import Quartz
 
+import sys
 import os
 import tempfile
 import subprocess
@@ -51,6 +52,8 @@ class GifContext(ImageContext):
                 gifsiclePath,
                 # optimize level
                 # "-O3",
+                # ignore warnings
+                "-w",
                 # force to 256 colors
                 "--colors", "256",
                 # make it loop
@@ -70,11 +73,25 @@ class GifContext(ImageContext):
                 "--output",
                 path
             ]
+
             # make a string of escaped commands
             cmds = subprocess.list2cmdline(cmds)
-            # go
-            popen = subprocess.Popen(cmds, shell=True)
-            popen.wait()
-            # remove the temp input gifs
-            for inputPath in inputPaths:
-                os.remove(inputPath)
+
+            gifsicleStdOut = tempfile.TemporaryFile()
+            gifsicleStdErr = tempfile.TemporaryFile()
+            try:
+                # go
+                result = subprocess.Popen(cmds, stdout=gifsicleStdOut, stderr=gifsicleStdErr, shell=True)
+                resultCode = result.wait()
+                if resultCode != 0:
+                    gifsicleStdOut.seek(0)
+                    gifsicleStdErr.seek(0)
+                    sys.stdout.write(gifsicleStdOut.read())
+                    sys.stderr.write(gifsicleStdErr.read())
+                    raise RuntimeError("gifsicle failed with error code %s" % resultCode)
+            finally:
+                gifsicleStdOut.close()
+                gifsicleStdErr.close()
+                # remove the temp input gifs
+                for inputPath in inputPaths:
+                    os.remove(inputPath)
