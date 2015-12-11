@@ -74,15 +74,11 @@ class GifContext(ImageContext):
                 path
             ]
 
-            # make a string of escaped commands
-            cmds = subprocess.list2cmdline(cmds)
-
             gifsicleStdOut = tempfile.TemporaryFile()
             gifsicleStdErr = tempfile.TemporaryFile()
             try:
                 # go
-                result = subprocess.Popen(cmds, stdout=gifsicleStdOut, stderr=gifsicleStdErr, shell=True)
-                resultCode = result.wait()
+                resultCode = subprocess.call(cmds, stdout=gifsicleStdOut, stderr=gifsicleStdErr)
                 if resultCode != 0:
                     gifsicleStdOut.seek(0)
                     gifsicleStdErr.seek(0)
