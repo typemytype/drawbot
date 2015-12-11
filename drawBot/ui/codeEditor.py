@@ -799,10 +799,8 @@ class CodeNSTextView(AppKit.NSTextView):
         acceptableDragTypes = super(CodeNSTextView, self).acceptableDragTypes()
         return list(acceptableDragTypes) + [AppKit.NSFilenamesPboardType]
 
-    def draggingEntered_(self, dragInfo):
-        pboard = dragInfo.draggingPasteboard()
-        types = pboard.types()
-        if AppKit.NSFilenamesPboardType in types:
+    def readSelectionFromPasteboard_type_(self, pboard, pbType):
+        if pbType == AppKit.NSFilenamesPboardType:
             languageData = self.languagesIDEBehaviorForLanguage_(self.lexer().name)
             if languageData is not None:
                 formatter = languageData.get("dropPathFormatting")
@@ -821,9 +819,9 @@ class CodeNSTextView(AppKit.NSTextView):
                         dropText = multiLineFormater % seperator.join(formattedPaths)
 
                     if dropText:
-                        pboard.declareTypes_owner_([AppKit.NSPasteboardTypeString], self)
-                        pboard.setString_forType_(dropText, AppKit.NSPasteboardTypeString)
-        return super(CodeNSTextView, self).draggingEntered_(dragInfo)
+                        self.insertText_(dropText)
+                        return True
+        return super(CodeNSTextView, self).readSelectionFromPasteboard_type_(pboard, pbType)
 
     # menu
 
