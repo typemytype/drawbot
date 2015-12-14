@@ -5,6 +5,7 @@ Pages
 
 .. autofunction:: drawBot.newPage
 .. autofunction:: drawBot.newDrawing
+.. autofunction:: drawBot.endDrawing
 
 Size
 ----

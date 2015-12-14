@@ -116,7 +116,8 @@ class DrawBotDrawingTool(object):
 
     def endDrawing(self):
         """
-        Explicitly tell DrawBot the drawing is done.
+        Explicitly tell drawBot the drawing is done.
+        This is advised when using drawBot as a standalone module.
         """
         self._uninstallAllFonts()
 
