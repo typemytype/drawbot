@@ -9,6 +9,8 @@ Text Properties
 .. autofunction:: drawBot.tracking
 .. autofunction:: drawBot.openTypeFeatures(frac=True, case=True, ...)
 .. autofunction:: drawBot.listOpenTypeFeatures
+.. autofunction:: drawBot.installFont
+.. autofunction:: drawBot.uninstallFont
 
 Font Properties
 ---------------

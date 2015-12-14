@@ -1218,6 +1218,7 @@ class DrawBotDrawingTool(object):
     def uninstallFont(self, path):
         """
         Uninstall a font with a given path.
+        All installed fonts will automatically be uninstalled when the script is done.
         """
         succes, error = self._dummyContext.uninstallFont(path)
         if not succes:
