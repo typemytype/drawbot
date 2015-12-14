@@ -103,6 +103,7 @@ class DrawBotDrawingTool(object):
         self._dummyContext = DummyContext()
         self._width = None
         self._height = None
+        self._installedFontPaths = set()
 
     def newDrawing(self):
         """
@@ -112,6 +113,12 @@ class DrawBotDrawingTool(object):
         """
         self._reset()
         self.installedFonts()
+
+    def endDrawing(self):
+        """
+        Explicitly tell DrawBot the drawing is done.
+        """
+        self._uninstallAllFonts()
 
     # magic variables
 
@@ -1111,7 +1118,7 @@ class DrawBotDrawingTool(object):
                 url = AppKit.NSURL.URLWithString_(path)
             else:
                 if not os.path.exists(path):
-                    raise DrawBotError("Image does not exists")
+                    raise DrawBotError("Image does not exist")
                 url = AppKit.NSURL.fileURLWithPath_(path)
             source = AppKit.NSImage.alloc().initByReferencingURL_(url)
         w, h = source.size()
@@ -1181,6 +1188,38 @@ class DrawBotDrawingTool(object):
     def installedfonts(self):
         _deprecatedWarningLowercase("installedFonts()")
         return self.installedFonts()
+
+    def installFont(self, path):
+        """
+        Install a font with a given path.
+        """
+        succes, error = self._dummyContext.installFont(path)
+        if not succes:
+            warnings.warn("install font: %s" % error)
+            return
+        self._installedFontPaths.add(path)
+        self._addInstruction("installFont", path)
+        from fontTools.ttLib import TTFont
+        font = TTFont(path)
+        psName = font["name"].getName(6, 1, 0)
+        font.close()
+        if psName:
+            psName = psName.string
+        return psName
+
+    def uninstallFont(self, path):
+        """
+        Uninstall a font with a given path.
+        """
+        succes, error = self._dummyContext.uninstallFont(path)
+        if not succes:
+            warnings.warn("uninstall font: %s" % error)
+            return
+        self._addInstruction("uninstallFont", path)
+
+    def _uninstallAllFonts(self):
+        for path in self._installedFontPaths:
+            self._dummyContext.uninstallFont(path)
 
     def fontAscender(self):
         """

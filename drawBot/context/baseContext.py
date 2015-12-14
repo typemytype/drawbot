@@ -728,7 +728,7 @@ class FormattedString(object):
         """
         Enable OpenType features.
         """
-        if args and args[0] == None:
+        if args and args[0] is None:
             self._openTypeFeatures.clear()
         else:
             self._openTypeFeatures.update(features)
@@ -1502,3 +1502,17 @@ class BaseContext(object):
 
     def image(self, path, (x, y), alpha):
         self._image(path, (x, y), alpha)
+
+    def installFont(self, path):
+        url = AppKit.NSURL.fileURLWithPath_(path)
+        succes, error = CoreText.CTFontManagerRegisterFontsForURL(url, CoreText.kCTFontManagerScopeProcess, None)
+        if not succes:
+            error = error.localizedDescription()
+        return succes, error
+
+    def uninstallFont(self, path):
+        url = AppKit.NSURL.fileURLWithPath_(path)
+        succes, error = CoreText.CTFontManagerUnregisterFontsForURL(url, CoreText.kCTFontManagerScopeProcess, None)
+        if not succes:
+            error = error.localizedDescription()
+        return succes, error
