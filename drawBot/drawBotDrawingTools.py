@@ -1191,7 +1191,11 @@ class DrawBotDrawingTool(object):
 
     def installFont(self, path):
         """
-        Install a font with a given path.
+        Install a font with a given path and the postscript font name will be returned.
+        The postscript font name can be used to set the font as the active font.
+        All installed fonts will automatically be uninstalled when the script is done.
+
+        ..showcode:: /../examples/installFont.py
         """
         success, error = self._dummyContext.installFont(path)
         self._installedFontPaths.add(path)
@@ -1218,7 +1222,6 @@ class DrawBotDrawingTool(object):
     def uninstallFont(self, path):
         """
         Uninstall a font with a given path.
-        All installed fonts will automatically be uninstalled when the script is done.
         """
         succes, error = self._dummyContext.uninstallFont(path)
         if not succes:
