@@ -1195,7 +1195,7 @@ class DrawBotDrawingTool(object):
         The postscript font name can be used to set the font as the active font.
         All installed fonts will automatically be uninstalled when the script is done.
 
-        ..showcode:: /../examples/installFont.py
+        .. showcode:: /../examples/installFont.py
         """
         success, error = self._dummyContext.installFont(path)
         self._installedFontPaths.add(path)
