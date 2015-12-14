@@ -1220,6 +1220,7 @@ class DrawBotDrawingTool(object):
     def _uninstallAllFonts(self):
         for path in self._installedFontPaths:
             self._dummyContext.uninstallFont(path)
+        self._installedFontPaths = set()
 
     def fontAscender(self):
         """
