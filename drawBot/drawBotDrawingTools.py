@@ -1193,10 +1193,10 @@ class DrawBotDrawingTool(object):
         """
         Install a font with a given path.
         """
-        succes, error = self._dummyContext.installFont(path)
-        if not succes:
+        success, error = self._dummyContext.installFont(path)
+        if not success:
             warnings.warn("install font: %s" % error)
-            return
+            return None
         self._installedFontPaths.add(path)
         self._addInstruction("installFont", path)
         from fontTools.ttLib import TTFont

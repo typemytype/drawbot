@@ -1505,14 +1505,14 @@ class BaseContext(object):
 
     def installFont(self, path):
         url = AppKit.NSURL.fileURLWithPath_(path)
-        succes, error = CoreText.CTFontManagerRegisterFontsForURL(url, CoreText.kCTFontManagerScopeProcess, None)
-        if not succes:
+        success, error = CoreText.CTFontManagerRegisterFontsForURL(url, CoreText.kCTFontManagerScopeProcess, None)
+        if not success:
             error = error.localizedDescription()
-        return succes, error
+        return success, error
 
     def uninstallFont(self, path):
         url = AppKit.NSURL.fileURLWithPath_(path)
-        succes, error = CoreText.CTFontManagerUnregisterFontsForURL(url, CoreText.kCTFontManagerScopeProcess, None)
-        if not succes:
+        success, error = CoreText.CTFontManagerUnregisterFontsForURL(url, CoreText.kCTFontManagerScopeProcess, None)
+        if not success:
             error = error.localizedDescription()
-        return succes, error
+        return success, error
