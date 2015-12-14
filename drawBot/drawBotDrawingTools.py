@@ -1194,17 +1194,25 @@ class DrawBotDrawingTool(object):
         Install a font with a given path.
         """
         success, error = self._dummyContext.installFont(path)
-        if not success:
-            warnings.warn("install font: %s" % error)
-            return None
         self._installedFontPaths.add(path)
         self._addInstruction("installFont", path)
-        from fontTools.ttLib import TTFont
-        font = TTFont(path)
-        psName = font["name"].getName(6, 1, 0)
-        font.close()
-        if psName:
-            psName = psName.string
+
+        from fontTools.ttLib import TTFont, TTLibError
+        try:
+            font = TTFont(path)
+            psName = font["name"].getName(6, 1, 0)
+            if psName is None:
+                psName = font["name"].getName(6, 3, 1)
+            font.close()
+        except IOError:
+            raise DrawBotError("Font '%s' does not exist." % path)
+        except TTLibError:
+            raise DrawBotError("Font '%s' is not a valid font." % path)
+        if psName is not None:
+            psName = psName.toUnicode()
+
+        if not success:
+            warnings.warn("install font: %s" % error)
         return psName
 
     def uninstallFont(self, path):
@@ -1214,7 +1222,6 @@ class DrawBotDrawingTool(object):
         succes, error = self._dummyContext.uninstallFont(path)
         if not succes:
             warnings.warn("uninstall font: %s" % error)
-            return
         self._addInstruction("uninstallFont", path)
 
     def _uninstallAllFonts(self):
