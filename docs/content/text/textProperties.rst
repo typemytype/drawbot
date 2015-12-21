@@ -7,6 +7,7 @@ Text Properties
 .. autofunction:: drawBot.hyphenation
 .. autofunction:: drawBot.lineHeight
 .. autofunction:: drawBot.tracking
+.. autofunction:: drawBot.baselineShift
 .. autofunction:: drawBot.openTypeFeatures(frac=True, case=True, ...)
 .. autofunction:: drawBot.listOpenTypeFeatures
 .. autofunction:: drawBot.installFont
