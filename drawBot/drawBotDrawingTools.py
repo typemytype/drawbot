@@ -850,6 +850,13 @@ class DrawBotDrawingTool(object):
         self._dummyContext.tracking(value)
         self._addInstruction("tracking", value)
 
+    def baselineShift(self, value):
+        """
+        Set the shift of the baseline.
+        """
+        self._dummyContext.baselineShift(value)
+        self._addInstruction("baselineShift", value)
+
     def hyphenation(self, value):
         """
         Set hyphenation, `True` or `False`.
@@ -1027,6 +1034,10 @@ class DrawBotDrawingTool(object):
         .. function:: formattedString.tracking(value)
 
             Set the tracking between characters.
+
+        .. function:: formattedString.baselineShift(value)
+
+            Set the shift of the baseline.
 
         .. function:: formattedString.openTypeFeatures(frac=True, case=True, ...)
 

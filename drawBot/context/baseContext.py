@@ -414,7 +414,7 @@ class FormattedString(object):
                         font=None, fontSize=10, fallbackFont=None,
                         fill=(0, 0, 0), cmykFill=None,
                         stroke=None, cmykStroke=None, strokeWidth=1,
-                        align=None, lineHeight=None, tracking=None,
+                        align=None, lineHeight=None, tracking=None, baselineShift=None,
                         openTypeFeatures=None):
         self._attributedString = AppKit.NSMutableAttributedString.alloc().init()
         self._font = font
@@ -427,6 +427,7 @@ class FormattedString(object):
         self._align = align
         self._lineHeight = lineHeight
         self._tracking = tracking
+        self._baselineShift = baselineShift
         self._fallbackFont = fallbackFont
         if openTypeFeatures is None:
             openTypeFeatures = dict()
@@ -442,7 +443,7 @@ class FormattedString(object):
                     font=None, fallbackFont=None, fontSize=None,
                     fill=None, cmykFill=None,
                     stroke=None, cmykStroke=None, strokeWidth=None,
-                    align=None, lineHeight=None, tracking=None,
+                    align=None, lineHeight=None, tracking=None, baselineShift=None,
                     openTypeFeatures=None):
         """
         Add `txt` to the formatted string with some additional text formatting attributes:
@@ -523,6 +524,11 @@ class FormattedString(object):
         else:
             self._tracking = tracking
 
+        if baselineShift is None:
+            baselineShift = self._baselineShift
+        else:
+            self._baselineShift = baselineShift
+
         if openTypeFeatures is None:
             openTypeFeatures = self._openTypeFeatures
         else:
@@ -582,6 +588,8 @@ class FormattedString(object):
             para.setMinimumLineHeight_(lineHeight)
         if tracking:
             attributes[AppKit.NSKernAttributeName] = tracking
+        if baselineShift:
+            attributes[AppKit.NSBaselineOffsetAttributeName] = baselineShift
         attributes[AppKit.NSParagraphStyleAttributeName] = para
         txt = AppKit.NSAttributedString.alloc().initWithString_attributes_(txt, attributes)
         self._attributedString.appendAttributedString_(txt)
@@ -592,7 +600,8 @@ class FormattedString(object):
                     font=self._font, fallbackFont=self._fallbackFont, fontSize=self._fontSize,
                     fill=self._fill, cmykFill=self._cmykFill,
                     stroke=self._stroke, cmykStroke=self._cmykStroke, strokeWidth=self._strokeWidth,
-                    align=self._align, lineHeight=self._lineHeight, tracking=self._tracking, openTypeFeatures=self._openTypeFeatures)
+                    align=self._align, lineHeight=self._lineHeight, tracking=self._tracking,
+                    baselineShift=self._baselineShift, openTypeFeatures=self._openTypeFeatures)
         return new
 
     def __getitem__(self, index):
@@ -723,6 +732,12 @@ class FormattedString(object):
         Set the tracking between characters.
         """
         self._tracking = tracking
+
+    def baselineShift(self, baselineShift):
+        """
+        Set the shift of the baseline.
+        """
+        self._baselineShift = baselineShift
 
     def openTypeFeatures(self, *args, **features):
         """
@@ -874,6 +889,7 @@ class Text(object):
         self._fontSize = 10
         self._lineHeight = None
         self._tracking = None
+        self._baselineShift = None
         self._hyphenation = None
         self.openTypeFeatures = dict()
 
@@ -947,6 +963,14 @@ class Text(object):
 
     tracking = property(_get_tracking, _set_tracking)
 
+    def _get_baselineShift(self):
+        return self._baselineShift
+
+    def _set_baselineShift(self, value):
+        self._baselineShift = value
+
+    baselineShift = property(_get_baselineShift, _set_baselineShift)
+
     def _get_hyphenation(self):
         return self._hyphenation
 
@@ -962,6 +986,7 @@ class Text(object):
         new.fontSize = self.fontSize
         new.lineHeight = self.lineHeight
         new.tracking = self.tracking
+        new.baseline = self.baselineShift
         new.hyphenation = self.hyphenation
         new.openTypeFeatures = dict(self.openTypeFeatures)
         return new
@@ -1357,7 +1382,7 @@ class BaseContext(object):
         self._state.lineCap = self._lineCapStylesMap[cap]
 
     def lineDash(self, dash):
-        if dash[0] == None:
+        if dash[0] is None:
             self._state.lineDash = None
             return
         self._state.lineDash = list(dash)
@@ -1382,11 +1407,14 @@ class BaseContext(object):
     def tracking(self, tracking):
         self._state.text.tracking = tracking
 
+    def baselineShift(self, baselineShift):
+        self._state.text.baselineShift = baselineShift
+
     def hyphenation(self, value):
         self._state.text.hyphenation = value
 
     def openTypeFeatures(self, *args, **features):
-        if args and args[0] == None:
+        if args and args[0] is None:
             self._state.text.openTypeFeatures.clear()
         else:
             self._state.text.openTypeFeatures.update(features)
@@ -1426,6 +1454,8 @@ class BaseContext(object):
         attributes[AppKit.NSParagraphStyleAttributeName] = para
         if self._state.text.tracking:
             attributes[AppKit.NSKernAttributeName] = self._state.text.tracking
+        if self._state.text.baselineShift:
+            attributes[AppKit.NSBaselineOffsetAttributeName] = self._state.text.baselineShift
         text = AppKit.NSAttributedString.alloc().initWithString_attributes_(txt, attributes)
         return text
 

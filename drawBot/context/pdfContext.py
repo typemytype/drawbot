@@ -149,7 +149,7 @@ class PDFContext(BaseContext):
                 fillColor = attributes.get(AppKit.NSForegroundColorAttributeName)
                 strokeColor = attributes.get(AppKit.NSStrokeColorAttributeName)
                 strokeWidth = attributes.get(AppKit.NSStrokeWidthAttributeName, self._state.strokeWidth)
-
+                baselineShift = attributes.get(AppKit.NSBaselineOffsetAttributeName, 0)
                 self._save()
                 drawingMode = None
                 if self._state.shadow is not None:
@@ -162,13 +162,13 @@ class PDFContext(BaseContext):
                         self._state.fillColor = None
                         self._state.cmykColor = None
                         Quartz.CGContextSetTextDrawingMode(self._pdfContext, Quartz.kCGTextFill)
-                        Quartz.CGContextSetTextPosition(self._pdfContext, x+originX, y+originY)
+                        Quartz.CGContextSetTextPosition(self._pdfContext, x+originX, y+originY+baselineShift)
                         CoreText.CTRunDraw(ctRun, self._pdfContext, (0, 0))
                         self._restore()
                 if canDoGradients and self._state.gradient is not None:
                     self._save()
                     Quartz.CGContextSetTextDrawingMode(self._pdfContext, Quartz.kCGTextClip)
-                    Quartz.CGContextSetTextPosition(self._pdfContext, x+originX, y+originY)
+                    Quartz.CGContextSetTextPosition(self._pdfContext, x+originX, y+originY+baselineShift)
                     CoreText.CTRunDraw(ctRun, self._pdfContext, (0, 0))
                     self._pdfGradient(self._state.gradient)
                     self._restore()
@@ -193,7 +193,7 @@ class PDFContext(BaseContext):
 
                 if drawingMode is not None:
                     Quartz.CGContextSetTextDrawingMode(self._pdfContext, drawingMode)
-                    Quartz.CGContextSetTextPosition(self._pdfContext, x+originX, y+originY)
+                    Quartz.CGContextSetTextPosition(self._pdfContext, x+originX, y+originY+baselineShift)
                     CoreText.CTRunDraw(ctRun, self._pdfContext, (0, 0))
                 self._restore()
 
