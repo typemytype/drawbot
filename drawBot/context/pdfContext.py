@@ -197,9 +197,10 @@ class PDFContext(BaseContext):
                     CoreText.CTRunDraw(ctRun, self._pdfContext, (0, 0))
                 self._restore()
 
-    def _getImageSource(self, key):
+    def _getImageSource(self, key, pageNumber):
         path = key
         image = None
+        isPDF = False
         if isinstance(key, AppKit.NSImage):
             image = key
             key = id(key)
@@ -209,23 +210,37 @@ class PDFContext(BaseContext):
                     url = AppKit.NSURL.URLWithString_(path)
                 else:
                     url = AppKit.NSURL.fileURLWithPath_(path)
-                image = AppKit.NSImage.alloc().initByReferencingURL_(url)
-            data = image.TIFFRepresentation()
-            source = Quartz.CGImageSourceCreateWithData(data, {})
-            if source is not None:
-                self._cachedImages[key] = Quartz.CGImageSourceCreateImageAtIndex(source, 0, None)
-            else:
-                raise DrawBotError("No image found at %s" % key)
+                isPDF = AppKit.PDFDocument.alloc().initWithURL_(url) is not None
+                if isPDF:
+                    pdf = Quartz.CGPDFDocumentCreateWithURL(url)
+                    if pdf is not None:
+                        if pageNumber is None:
+                            pageNumber = Quartz.CGPDFDocumentGetNumberOfPages(pdf)
+                        self._cachedImages[key] = isPDF, Quartz.CGPDFDocumentGetPage(pdf, pageNumber)
+                    else:
+                        raise DrawBotError("No pdf found at %s" % key)
+                else:
+                    image = AppKit.NSImage.alloc().initByReferencingURL_(url)
+            if image and not isPDF:
+                data = image.TIFFRepresentation()
+                source = Quartz.CGImageSourceCreateWithData(data, {})
+                if source is not None:
+                    self._cachedImages[key] = isPDF, Quartz.CGImageSourceCreateImageAtIndex(source, 0, None)
+                else:
+                    raise DrawBotError("No image found at %s" % key)
         return self._cachedImages[key]
 
-    def _image(self, path, (x, y), alpha):
+    def _image(self, path, (x, y), alpha, pageNumber):
         self._save()
-        image = self._getImageSource(path)
+        isPDF, image = self._getImageSource(path, pageNumber)
         if image is not None:
-            w = Quartz.CGImageGetWidth(image)
-            h = Quartz.CGImageGetHeight(image)
             Quartz.CGContextSetAlpha(self._pdfContext, alpha)
-            Quartz.CGContextDrawImage(self._pdfContext, Quartz.CGRectMake(x, y, w, h), image)
+            if isPDF:
+                Quartz.CGContextDrawPDFPage(self._pdfContext, image)
+            else:
+                w = Quartz.CGImageGetWidth(image)
+                h = Quartz.CGImageGetHeight(image)
+                Quartz.CGContextDrawImage(self._pdfContext, Quartz.CGRectMake(x, y, w, h), image)
         self._restore()
 
     def _transform(self, transform):

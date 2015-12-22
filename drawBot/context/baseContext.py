@@ -1165,7 +1165,7 @@ class BaseContext(object):
     def _textBox(self, txt, (x, y, w, h), align):
         pass
 
-    def _image(self, path, (x, y), alpha):
+    def _image(self, path, (x, y), alpha, pageNumber):
         pass
 
     def _frameDuration(self, seconds):
@@ -1530,8 +1530,8 @@ class BaseContext(object):
         self._state.path = None
         self._textBox(txt, (x, y, w, h), align)
 
-    def image(self, path, (x, y), alpha):
-        self._image(path, (x, y), alpha)
+    def image(self, path, (x, y), alpha, pageNumber):
+        self._image(path, (x, y), alpha, pageNumber)
 
     def installFont(self, path):
         url = AppKit.NSURL.fileURLWithPath_(path)

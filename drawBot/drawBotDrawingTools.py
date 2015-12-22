@@ -105,6 +105,8 @@ class DrawBotDrawingTool(object):
         self._height = None
         self._installedFontPaths = set()
 
+    _requiredAttributes = ["_instructionsStack", "_dummyContext", "_width", "_height", "_installedFontPaths"]
+
     def newDrawing(self):
         """
         Reset the drawing stack to the clean and empty stack.
@@ -1093,12 +1095,14 @@ class DrawBotDrawingTool(object):
 
     # images
 
-    def image(self, path, x, y=None, alpha=None):
+    def image(self, path, x, y=None, alpha=None, pageNumber=None):
         """
         Add an image from a `path` with an `offset` and an `alpha` value.
         This should accept most common file types like pdf, jpg, png, tiff and gif.
 
         Optionally an `alpha` can be provided, which is a value between 0 and 1.
+
+        Optionally a `pageNumber` can be provided when the path referes to a multi page pdf file.
 
         .. showcode:: /../examples/image.py
         """
@@ -1113,7 +1117,7 @@ class DrawBotDrawingTool(object):
             alpha = 1
         if isinstance(path, (str, unicode)):
             path = optimizePath(path)
-        self._addInstruction("image", path, (x, y), alpha)
+        self._addInstruction("image", path, (x, y), alpha, pageNumber)
 
     def imageSize(self, path):
         """
@@ -1122,7 +1126,8 @@ class DrawBotDrawingTool(object):
         .. showcode:: /../examples/imageSize.py
         """
         if isinstance(path, AppKit.NSImage):
-            source = path
+            rep = path.TIFFRepresentation()
+            isPDF = False
         else:
             if isinstance(path, (str, unicode)):
                 path = optimizePath(path)
@@ -1132,9 +1137,13 @@ class DrawBotDrawingTool(object):
                 if not os.path.exists(path):
                     raise DrawBotError("Image does not exist")
                 url = AppKit.NSURL.fileURLWithPath_(path)
-            source = AppKit.NSImage.alloc().initByReferencingURL_(url)
-        w, h = source.size()
-        return int(w), int(h)
+            isPDF = AppKit.PDFDocument.alloc().initWithURL_(url) is not None
+            rep = AppKit.NSImageRep.imageRepWithContentsOfURL_(url)
+        if isPDF:
+            w, h = rep.size()
+        else:
+            w, h = rep.pixelsWide(), rep.pixelsHigh()
+        return w, h
 
     def imagePixelColor(self, path, (x, y)):
         """
