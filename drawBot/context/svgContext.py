@@ -375,6 +375,7 @@ class SVGContext(BaseContext):
                 fillColor = attributes.get(AppKit.NSForegroundColorAttributeName)
                 strokeColor = attributes.get(AppKit.NSStrokeColorAttributeName)
                 strokeWidth = attributes.get(AppKit.NSStrokeWidthAttributeName, self._state.strokeWidth)
+                baselineShift = attributes.get(AppKit.NSBaselineOffsetAttributeName, 0)
 
                 fontName = font.fontName()
                 fontSize = font.pointSize()
@@ -405,7 +406,7 @@ class SVGContext(BaseContext):
                     runY = runPos[0].y
 
                 spanData["x"] = originX + runX + x
-                spanData["y"] = self.height - y - originY - runY
+                spanData["y"] = self.height - y - originY - runY + baselineShift
                 self._svgContext.begintag("tspan", **spanData)
                 self._svgContext.newline()
                 self._svgContext.write(runTxt)
@@ -418,7 +419,7 @@ class SVGContext(BaseContext):
         self._svgContext.newline()
         self._svgEndClipPath()
 
-    def _image(self, path, (x, y), alpha):
+    def _image(self, path, (x, y), alpha, pageNumber):
         self._svgBeginClipPath()
         if path.startswith("http"):
             url = AppKit.NSURL.URLWithString_(path)
