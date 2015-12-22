@@ -1419,8 +1419,6 @@ class DrawBotDrawingTool(object):
         Return a Image object, packed with filters.
         This is a reusable object.
         """
-        if isinstance(path, (str, unicode)):
-            path = optimizePath(path)
         return self._imageClass(path)
 
     def Variable(self, variables, workSpace):
