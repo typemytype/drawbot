@@ -11,6 +11,7 @@ from context.baseContext import BezierPath, FormattedString
 from context.dummyContext import DummyContext
 
 from context.tools import openType
+from context.tools.imageObject import ImageObject
 
 from misc import DrawBotError, warnings, VariableController, optimizePath
 
@@ -1129,6 +1130,8 @@ class DrawBotDrawingTool(object):
 
         if alpha is None:
             alpha = 1
+        if isinstance(path, self._imageClass):
+            path = path._nsImage()
         if isinstance(path, (str, unicode)):
             path = optimizePath(path)
         self._addInstruction("image", path, (x, y), alpha, pageNumber)
@@ -1139,6 +1142,8 @@ class DrawBotDrawingTool(object):
 
         .. showcode:: /../examples/imageSize.py
         """
+        if isinstance(path, self._imageClass):
+            path = path._nsImage()
         if isinstance(path, AppKit.NSImage):
             rep = path.TIFFRepresentation()
             isPDF = False
@@ -1167,7 +1172,9 @@ class DrawBotDrawingTool(object):
         """
         bitmap = _chachedPixelColorBitmaps.get(path)
         if bitmap is None:
-            if isinstance(path, AppKit.NSImage):
+            if isinstance(path, self._imageClass):
+                source = path._nsImage()
+            elif isinstance(path, AppKit.NSImage):
                 source = path
             else:
                 if isinstance(path, (str, unicode)):
@@ -1404,6 +1411,17 @@ class DrawBotDrawingTool(object):
     def Bezierpath(self):
         _deprecatedWarningLowercase("BezierPath()")
         return self.BezierPath()
+
+    _imageClass = ImageObject
+
+    def ImageObject(self, path=None):
+        """
+        Return a Image object, packed with filters.
+        This is a reusable object.
+        """
+        if isinstance(path, (str, unicode)):
+            path = optimizePath(path)
+        return self._imageClass(path)
 
     def Variable(self, variables, workSpace):
         """
