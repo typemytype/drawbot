@@ -98,14 +98,28 @@ class DrawBotDrawingTool(object):
             attr = getattr(context, callback)
             attr(*args, **kwargs)
 
-    def _reset(self):
-        self._instructionsStack = []
-        self._dummyContext = DummyContext()
-        self._width = None
-        self._height = None
-        self._installedFontPaths = set()
+    def _reset(self, other=None):
+        if other is not None:
+            self._instructionsStack = list(other._instructionsStack)
+            self._dummyContext = other._dummyContext
+            self._width = other._width
+            self._height = other._height
+            self._installedFontPaths = set(other._installedFontPaths)
+        else:
+            self._instructionsStack = []
+            self._dummyContext = DummyContext()
+            self._width = None
+            self._height = None
+            self._installedFontPaths = set()
 
-    _requiredAttributes = ["_instructionsStack", "_dummyContext", "_width", "_height", "_installedFontPaths"]
+    def _copy(self):
+        new = self.__class__()
+        new._instructionsStack = list(self._instructionsStack)
+        new._dummyContext = self._dummyContext
+        new._width = self._width
+        new._height = self._height
+        new._installedFontPaths = set(self._installedFontPaths)
+        return new
 
     def newDrawing(self):
         """
