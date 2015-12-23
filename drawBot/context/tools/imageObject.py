@@ -50,14 +50,7 @@ class ImageObject(object):
         page = data.pageAtIndex_(pageCount-1)
         im = AppKit.NSImage.alloc().initWithData_(page.dataRepresentation())
         ciImage = AppKit.CIImage.imageWithData_(im.TIFFRepresentation())
-        if hasattr(self, "_source"):
-            imObject = self.__class__()
-            imObject._source = ciImage
-            imObject.sourceOverCompositing(backgroundImage=self)
-            ciImage = imObject._ciImage()
-            if hasattr(self, "_cachedImage"):
-                del self._cachedImage
-        self._source = ciImage
+        self._merge(ciImage)
 
     def __enter__(self):
         self.lockFocus()
@@ -67,6 +60,9 @@ class ImageObject(object):
         self.unlockFocus()
 
     def open(self, path):
+        """
+        Open a image with a given `path`.
+        """
         if isinstance(path, (str, unicode)):
             path = optimizePath(path)
         if isinstance(path, AppKit.NSImage):
@@ -78,14 +74,7 @@ class ImageObject(object):
                 url = AppKit.NSURL.fileURLWithPath_(path)
             im = AppKit.NSImage.alloc().initByReferencingURL_(url)
         ciImage = AppKit.CIImage.imageWithData_(im.TIFFRepresentation())
-        if hasattr(self, "_source"):
-            imObject = self.__class__()
-            imObject._source = ciImage
-            imObject.sourceOverCompositing(backgroundImage=self)
-            ciImage = imObject._ciImage()
-            if hasattr(self, "_cachedImage"):
-                del self._cachedImage
-        self._source = ciImage
+        self._merge(ciImage)
 
     def copy(self):
         """
@@ -136,12 +125,32 @@ class ImageObject(object):
         nsImage.addRepresentation_(rep)
         return nsImage
 
+    def _merge(self, ciImage):
+        """
+        Merge with an other CIImage object by useing the sourceOverCompositing filter.
+        """
+        if hasattr(self, "_source"):
+            imObject = self.__class__()
+            imObject._source = ciImage
+            imObject.sourceOverCompositing(backgroundImage=self)
+            ciImage = imObject._ciImage()
+            if hasattr(self, "_cachedImage"):
+                del self._cachedImage
+        self._source = ciImage
+
     def _addFilter(self, filterDict):
+        """
+        Add an filter.
+        """
         self._filters.append(filterDict)
         if hasattr(self, "_cachedImage"):
             del self._cachedImage
 
     def _applyFilters(self):
+        """
+        Apply all filters on the source image.
+        Keep the _source image intact and store the result in a _cachedImage attribute.
+        """
         if not hasattr(self, "_source"):
             raise DrawBotError("Image does not contain any data. Draw into the image object first or set image data from a path.")
         self._cachedImage = self._source.copy()
@@ -2693,4 +2702,3 @@ class ImageObject(object):
             attr["inputOpacity"] = opacity
         filterDict = dict(name="CISwipeTransition", attributes=attr)
         self._addFilter(filterDict)
-
