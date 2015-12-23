@@ -17,6 +17,13 @@ class ImageObject(object):
         if path:
             self.open(path)
 
+    def __del__(self):
+        del self._filters
+        if hasattr(self, "_source"):
+            del self._source
+        if hasattr(self, "_cachedImage"):
+            del self._cachedImage
+
     def lockFocus(self):
         """
         Set focus on image.
@@ -42,7 +49,15 @@ class ImageObject(object):
         pageCount = data.pageCount()
         page = data.pageAtIndex_(pageCount-1)
         im = AppKit.NSImage.alloc().initWithData_(page.dataRepresentation())
-        self._source = AppKit.CIImage.imageWithData_(im.TIFFRepresentation())
+        ciImage = AppKit.CIImage.imageWithData_(im.TIFFRepresentation())
+        if hasattr(self, "_source"):
+            imObject = self.__class__()
+            imObject._source = ciImage
+            imObject.sourceOverCompositing(backgroundImage=self)
+            ciImage = imObject._ciImage()
+            if hasattr(self, "_cachedImage"):
+                del self._cachedImage
+        self._source = ciImage
 
     def __enter__(self):
         self.lockFocus()
@@ -62,7 +77,15 @@ class ImageObject(object):
             else:
                 url = AppKit.NSURL.fileURLWithPath_(path)
             im = AppKit.NSImage.alloc().initByReferencingURL_(url)
-        self._source = AppKit.CIImage.imageWithData_(im.TIFFRepresentation())
+        ciImage = AppKit.CIImage.imageWithData_(im.TIFFRepresentation())
+        if hasattr(self, "_source"):
+            imObject = self.__class__()
+            imObject._source = ciImage
+            imObject.sourceOverCompositing(backgroundImage=self)
+            ciImage = imObject._ciImage()
+            if hasattr(self, "_cachedImage"):
+                del self._cachedImage
+        self._source = ciImage
 
     def copy(self):
         """
