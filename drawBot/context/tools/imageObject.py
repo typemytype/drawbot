@@ -9,7 +9,11 @@ class ImageObject(object):
     """
     An image object with support for filters.
 
-    For more info see: https://developer.apple.com/library/mac/documentation/GraphicsImaging/Reference/CoreImageFilterReference/index.html
+    Optional a `path` to an existing image can be provided.
+
+    For more info see: `Core Image Filter Reference`_.
+
+    .. _Core Image Filter Reference: https://developer.apple.com/library/mac/documentation/GraphicsImaging/Reference/CoreImageFilterReference/index.html
     """
 
     def __init__(self, path=None):
@@ -23,70 +27,6 @@ class ImageObject(object):
             del self._source
         if hasattr(self, "_cachedImage"):
             del self._cachedImage
-
-    def lockFocus(self):
-        """
-        Set focus on image.
-        """
-        from drawBot.drawBotDrawingTools import _drawBotDrawingTool, DrawBotDrawingTool
-
-        self._originalTool = _drawBotDrawingTool._copy()
-        self.imageDrawingTool = DrawBotDrawingTool()
-        _drawBotDrawingTool._reset()
-        self.imageDrawingTool.newDrawing()
-
-    def unlockFocus(self):
-        """
-        Set unlock focus on image.
-        """
-        from drawBot.drawBotDrawingTools import _drawBotDrawingTool
-
-        self.imageDrawingTool.endDrawing()
-        self.imageDrawingTool._reset(_drawBotDrawingTool)
-        _drawBotDrawingTool._reset(self._originalTool)
-
-        data = self.imageDrawingTool.pdfImage()
-        pageCount = data.pageCount()
-        page = data.pageAtIndex_(pageCount-1)
-        im = AppKit.NSImage.alloc().initWithData_(page.dataRepresentation())
-        ciImage = AppKit.CIImage.imageWithData_(im.TIFFRepresentation())
-        self._merge(ciImage)
-
-    def __enter__(self):
-        self.lockFocus()
-        return self
-
-    def __exit__(self, type, value, traceback):
-        self.unlockFocus()
-
-    def open(self, path):
-        """
-        Open a image with a given `path`.
-        """
-        if isinstance(path, (str, unicode)):
-            path = optimizePath(path)
-        if isinstance(path, AppKit.NSImage):
-            im = path
-        else:
-            if path.startswith("http"):
-                url = AppKit.NSURL.URLWithString_(path)
-            else:
-                url = AppKit.NSURL.fileURLWithPath_(path)
-            im = AppKit.NSImage.alloc().initByReferencingURL_(url)
-        ciImage = AppKit.CIImage.imageWithData_(im.TIFFRepresentation())
-        self._merge(ciImage)
-
-    def copy(self):
-        """
-        Return a copy.
-        """
-        new = self.__class__()
-        new._filters = list(self._filters)
-        if hasattr(self, "_source"):
-            new._source = self._source.copy()
-        if hasattr(self, "_cachedImage"):
-            new._cachedImage = self._cachedImage.copy()
-        return new
 
     def size(self):
         """
@@ -108,6 +48,83 @@ class ImageObject(object):
         """
         self._filters = []
 
+    def open(self, path):
+        """
+        Open an image with a given `path`.
+        """
+        if isinstance(path, (str, unicode)):
+            path = optimizePath(path)
+        if isinstance(path, AppKit.NSImage):
+            im = path
+        else:
+            if path.startswith("http"):
+                url = AppKit.NSURL.URLWithString_(path)
+            else:
+                url = AppKit.NSURL.fileURLWithPath_(path)
+            im = AppKit.NSImage.alloc().initByReferencingURL_(url)
+        ciImage = AppKit.CIImage.imageWithData_(im.TIFFRepresentation())
+        self._merge(ciImage, doCrop=True)
+
+    def copy(self):
+        """
+        Return a copy.
+        """
+        new = self.__class__()
+        new._filters = list(self._filters)
+        if hasattr(self, "_source"):
+            new._source = self._source.copy()
+        if hasattr(self, "_cachedImage"):
+            new._cachedImage = self._cachedImage.copy()
+        return new
+
+    def lockFocus(self):
+        """
+        Set focus on image.
+        """
+        from drawBot.drawBotDrawingTools import _drawBotDrawingTool
+        # copy/save a state of the existing drawing tool
+        self._originalTool = _drawBotDrawingTool._copy()
+        # reset the existing one
+        _drawBotDrawingTool._reset()
+        # start a new drawing
+        _drawBotDrawingTool.newDrawing()
+        # set the size of the existing image, if there is one
+        if hasattr(self, "_source"):
+            w, h = self.size()
+            _drawBotDrawingTool.size(w, h)
+
+    def unlockFocus(self):
+        """
+        Set unlock focus on image.
+        """
+        from drawBot.drawBotDrawingTools import _drawBotDrawingTool, DrawBotDrawingTool
+        # explicit tell the drawing is done
+        _drawBotDrawingTool.endDrawing()
+        # initiate a new drawing Tool
+        self.imageDrawingTool = DrawBotDrawingTool()
+        # reset the new drawing tool from the main drawing tool
+        self.imageDrawingTool._reset(_drawBotDrawingTool)
+        # reset the main drawing tool with a saved state of the tool
+        _drawBotDrawingTool._reset(self._originalTool)
+        # get the pdf data
+        data = self.imageDrawingTool.pdfImage()
+        # get the last page
+        pageCount = data.pageCount()
+        page = data.pageAtIndex_(pageCount-1)
+        # create an image
+        im = AppKit.NSImage.alloc().initWithData_(page.dataRepresentation())
+        # create an CIImage object
+        ciImage = AppKit.CIImage.imageWithData_(im.TIFFRepresentation())
+        # merge it with the already set data, if there already an image
+        self._merge(ciImage)
+
+    def __enter__(self):
+        self.lockFocus()
+        return self
+
+    def __exit__(self, type, value, traceback):
+        self.unlockFocus()
+
     def _ciImage(self):
         """
         Return the CIImage object.
@@ -125,7 +142,7 @@ class ImageObject(object):
         nsImage.addRepresentation_(rep)
         return nsImage
 
-    def _merge(self, ciImage):
+    def _merge(self, ciImage, doCrop=False):
         """
         Merge with an other CIImage object by useing the sourceOverCompositing filter.
         """
@@ -133,6 +150,9 @@ class ImageObject(object):
             imObject = self.__class__()
             imObject._source = ciImage
             imObject.sourceOverCompositing(backgroundImage=self)
+            if doCrop:
+                (x, y), (w, h) = self._ciImage().extent()
+                imObject.crop(rectangle=(x, y, w, h))
             ciImage = imObject._ciImage()
             if hasattr(self, "_cachedImage"):
                 del self._cachedImage
@@ -151,9 +171,8 @@ class ImageObject(object):
         Apply all filters on the source image.
         Keep the _source image intact and store the result in a _cachedImage attribute.
         """
-        if not hasattr(self, "_source"):
-            raise DrawBotError("Image does not contain any data. Draw into the image object first or set image data from a path.")
-        self._cachedImage = self._source.copy()
+        if hasattr(self, "_source"):
+            self._cachedImage = self._source.copy()
         for filterDict in self._filters:
             filterName = filterDict.get("name")
             ciFilter = AppKit.CIFilter.filterWithName_(filterName)
@@ -162,8 +181,23 @@ class ImageObject(object):
             for key, value in filterDict.get("attributes", {}).items():
                 ciFilter.setValue_forKey_(value, key)
 
-            ciFilter.setValue_forKey_(self._cachedImage, "inputImage")
-            self._cachedImage = ciFilter.valueForKey_("outputImage")
+            if filterDict.get("isGenerator", False):
+                w, h = filterDict["size"]
+                dummy = AppKit.NSImage.alloc().initWithSize_((w, h))
+                generator = ciFilter.valueForKey_("outputImage")
+                dummy.lockFocus()
+                ctx = AppKit.NSGraphicsContext.currentContext()
+                ctx.setShouldAntialias_(False)
+                ctx.setImageInterpolation_(AppKit.NSImageInterpolationNone)
+                generator.drawAtPoint_fromRect_operation_fraction_((0, 0), ((0, 0), (w, h)), AppKit.NSCompositeCopy, 1)
+                dummy.unlockFocus()
+                self._cachedImage = AppKit.CIImage.imageWithData_(dummy.TIFFRepresentation())
+                del dummy
+            elif hasattr(self, "_cachedImage"):
+                ciFilter.setValue_forKey_(self._cachedImage, "inputImage")
+                self._cachedImage = ciFilter.valueForKey_("outputImage")
+        if not hasattr(self, "_cachedImage"):
+            raise DrawBotError("Image does not contain any data. Draw into the image object first or set image data from a path.")
 
     # filters
 
@@ -397,7 +431,7 @@ class ImageObject(object):
         """
         Adjusts tone response of the R, G, and B channels of an image.
 
-        Attributes: `point0` a tuple, `point1` a tuple, `point2` a tuple, `point3` a tuple, `point4` a tuple.
+        Attributes: `point0` a tuple (x, y), `point1` a tuple (x, y), `point2` a tuple (x, y), `point3` a tuple (x, y), `point4` a tuple (x, y).
         """
         attr = dict()
         if point0:
@@ -429,7 +463,7 @@ class ImageObject(object):
         """
         Adjusts the reference white point for an image and maps all colors in the source using the new reference.
 
-        Attributes: `color` RGBA tuple Color.
+        Attributes: `color` RGBA tuple Color (r, g, b, a).
         """
         attr = dict()
         if color:
@@ -477,7 +511,7 @@ class ImageObject(object):
         """
         Remaps colors so they fall within shades of a single color.
 
-        Attributes: `color` RGBA tuple Color, `intensity` a float.
+        Attributes: `color` RGBA tuple Color (r, g, b, a), `intensity` a float.
         """
         attr = dict()
         if color:
@@ -503,7 +537,7 @@ class ImageObject(object):
         """
         Maps luminance to a color ramp of two colors.
 
-        Attributes: `color0` RGBA tuple Color, `color1` RGBA tuple Color.
+        Attributes: `color0` RGBA tuple Color (r, g, b, a), `color1` RGBA tuple Color (r, g, b, a).
         """
         attr = dict()
         if color0:
@@ -729,7 +763,7 @@ class ImageObject(object):
 
     def exclusionBlendMode(self, backgroundImage=None):
         """
-        Produces an effect similar to that produced by the CIDifferenceBlendMode filter but with lower contrast.
+        Produces an effect similar to that produced by the `differenceBlendMode` filter but with lower contrast.
 
         Attributes: `backgroundImage` an Image object.
         """
@@ -1047,7 +1081,7 @@ class ImageObject(object):
         """
         Recursively draws a portion of an image in imitation of an M. C. Escher drawing.
 
-        Attributes: `insetPoint0` a tuple, `insetPoint1` a tuple, `strands` a float, `periodicity` a float, `rotation` a float, `zoom` a float.
+        Attributes: `insetPoint0` a tuple (x, y), `insetPoint1` a tuple (x, y), `strands` a float, `periodicity` a float, `rotation` a float, `zoom` a float.
         """
         attr = dict()
         if insetPoint0:
@@ -1099,7 +1133,7 @@ class ImageObject(object):
         """
         Creates a lozenge-shaped lens and distorts the portion of the image over which the lens is placed.
 
-        Attributes: `point0` a tuple, `point1` a tuple, `radius` a float, `refraction` a float.
+        Attributes: `point0` a tuple (x, y), `point1` a tuple (x, y), `radius` a float, `refraction` a float.
         """
         attr = dict()
         if point0:
@@ -1125,22 +1159,6 @@ class ImageObject(object):
         if radius:
             attr["inputRadius"] = radius
         filterDict = dict(name="CIHoleDistortion", attributes=attr)
-        self._addFilter(filterDict)
-
-    def lightTunnel(self, center=None, rotation=None, radius=None):
-        """
-        Rotates a portion of the input image specified by the center and radius parameters to give a tunneling effect.
-
-        Attributes: `center` a tuple (x, y), `rotation` a float, `radius` a float.
-        """
-        attr = dict()
-        if center:
-            attr["inputCenter"] = AppKit.CIVector.vectorWithX_Y_(center[0], center[1])
-        if rotation:
-            attr["inputRotation"] = rotation
-        if radius:
-            attr["inputRadius"] = radius
-        filterDict = dict(name="CILightTunnel", attributes=attr)
         self._addFilter(filterDict)
 
     def pinchDistortion(self, center=None, radius=None, scale=None):
@@ -1221,11 +1239,11 @@ class ImageObject(object):
         if radius:
             attr["inputRadius"] = radius
         if angle:
-            attr["inputAngle"] = radians(angle)
+            attr["inputAngle"] = angle
         filterDict = dict(name="CIVortexDistortion", attributes=attr)
         self._addFilter(filterDict)
 
-    def aztecCodeGenerator(self, message=None, correctionLevel=None, layers=None, compactStyle=None):
+    def aztecCodeGenerator(self, size, message=None, correctionLevel=None, layers=None, compactStyle=None):
         """
         Generates an Aztec code (two-dimensional barcode) from input data.
 
@@ -1233,7 +1251,7 @@ class ImageObject(object):
         """
         attr = dict()
         if message:
-            attr["inputMessage"] = message
+            attr["inputMessage"] = AppKit.NSData.dataWithBytes_length_(message, len(message))
         if correctionLevel:
             attr["inputCorrectionLevel"] = correctionLevel
         if layers:
@@ -1241,9 +1259,11 @@ class ImageObject(object):
         if compactStyle:
             attr["inputCompactStyle"] = compactStyle
         filterDict = dict(name="CIAztecCodeGenerator", attributes=attr)
+        filterDict["size"] = size
+        filterDict["isGenerator"] = True
         self._addFilter(filterDict)
 
-    def QRCodeGenerator(self, message=None, correctionLevel=None):
+    def QRCodeGenerator(self, size, message=None, correctionLevel=None):
         """
         Generates a Quick Response code (two-dimensional barcode) from input data.
 
@@ -1251,13 +1271,15 @@ class ImageObject(object):
         """
         attr = dict()
         if message:
-            attr["inputMessage"] = message
+            attr["inputMessage"] = AppKit.NSData.dataWithBytes_length_(message, len(message))
         if correctionLevel:
             attr["inputCorrectionLevel"] = correctionLevel
         filterDict = dict(name="CIQRCodeGenerator", attributes=attr)
+        filterDict["size"] = size
+        filterDict["isGenerator"] = True
         self._addFilter(filterDict)
 
-    def code128BarcodeGenerator(self, message=None, quietSpace=None):
+    def code128BarcodeGenerator(self, size, message=None, quietSpace=None):
         """
         Generates a Code 128 one-dimensional barcode from input data.
 
@@ -1265,17 +1287,19 @@ class ImageObject(object):
         """
         attr = dict()
         if message:
-            attr["inputMessage"] = message
+            attr["inputMessage"] = AppKit.NSData.dataWithBytes_length_(message, len(message))
         if quietSpace:
             attr["inputQuietSpace"] = quietSpace
         filterDict = dict(name="CICode128BarcodeGenerator", attributes=attr)
+        filterDict["size"] = size
+        filterDict["isGenerator"] = True
         self._addFilter(filterDict)
 
-    def checkerboardGenerator(self, center=None, color0=None, color1=None, width=None, sharpness=None):
+    def checkerboardGenerator(self, size, center=None, color0=None, color1=None, width=None, sharpness=None):
         """
         Generates a checkerboard pattern.
 
-        Attributes: `center` a tuple (x, y), `color0` RGBA tuple Color, `color1` RGBA tuple Color, `width` a float, `sharpness` a float.
+        Attributes: `center` a tuple (x, y), `color0` RGBA tuple Color (r, g, b, a), `color1` RGBA tuple Color (r, g, b, a), `width` a float, `sharpness` a float.
         """
         attr = dict()
         if center:
@@ -1289,25 +1313,29 @@ class ImageObject(object):
         if sharpness:
             attr["inputSharpness"] = sharpness
         filterDict = dict(name="CICheckerboardGenerator", attributes=attr)
+        filterDict["size"] = size
+        filterDict["isGenerator"] = True
         self._addFilter(filterDict)
 
-    def constantColorGenerator(self, color=None):
+    def constantColorGenerator(self, size, color=None):
         """
         Generates a solid color.
 
-        Attributes: `color` RGBA tuple Color.
+        Attributes: `color` RGBA tuple Color (r, g, b, a).
         """
         attr = dict()
         if color:
             attr["inputColor"] = AppKit.CIColor.colorWithRed_green_blue_alpha_(color[0], color[1], color[2], color[3])
         filterDict = dict(name="CIConstantColorGenerator", attributes=attr)
+        filterDict["size"] = size
+        filterDict["isGenerator"] = True
         self._addFilter(filterDict)
 
-    def lenticularHaloGenerator(self, center=None, color=None, haloRadius=None, haloWidth=None, haloOverlap=None, striationStrength=None, striationContrast=None, time=None):
+    def lenticularHaloGenerator(self, size, center=None, color=None, haloRadius=None, haloWidth=None, haloOverlap=None, striationStrength=None, striationContrast=None, time=None):
         """
         Simulates a lens flare.
 
-        Attributes: `center` a tuple (x, y), `color` RGBA tuple Color, `haloRadius` a float, `haloWidth` a float, `haloOverlap` a float, `striationStrength` a float, `striationContrast` a float, `time` a float.
+        Attributes: `center` a tuple (x, y), `color` RGBA tuple Color (r, g, b, a), `haloRadius` a float, `haloWidth` a float, `haloOverlap` a float, `striationStrength` a float, `striationContrast` a float, `time` a float.
         """
         attr = dict()
         if center:
@@ -1327,9 +1355,11 @@ class ImageObject(object):
         if time:
             attr["inputTime"] = time
         filterDict = dict(name="CILenticularHaloGenerator", attributes=attr)
+        filterDict["size"] = size
+        filterDict["isGenerator"] = True
         self._addFilter(filterDict)
 
-    def PDF417BarcodeGenerator(self, message=None, minWidth=None, maxWidth=None, minHeight=None, maxHeight=None, dataColumns=None, rows=None, preferredAspectRatio=None, compactionMode=None, compactStyle=None, correctionLevel=None, alwaysSpecifyCompaction=None):
+    def PDF417BarcodeGenerator(self, size, message=None, minWidth=None, maxWidth=None, minHeight=None, maxHeight=None, dataColumns=None, rows=None, preferredAspectRatio=None, compactionMode=None, compactStyle=None, correctionLevel=None, alwaysSpecifyCompaction=None):
         """
         Generates a PDF417 code (two-dimensional barcode) from input data.
 
@@ -1337,7 +1367,7 @@ class ImageObject(object):
         """
         attr = dict()
         if message:
-            attr["inputMessage"] = message
+            attr["inputMessage"] = AppKit.NSData.dataWithBytes_length_(message, len(message))
         if minWidth:
             attr["inputMinWidth"] = minWidth
         if maxWidth:
@@ -1361,21 +1391,25 @@ class ImageObject(object):
         if alwaysSpecifyCompaction:
             attr["inputAlwaysSpecifyCompaction"] = alwaysSpecifyCompaction
         filterDict = dict(name="CIPDF417BarcodeGenerator", attributes=attr)
+        filterDict["size"] = size
+        filterDict["isGenerator"] = True
         self._addFilter(filterDict)
 
-    def randomGenerator(self):
+    def randomGenerator(self, size):
         """
         Generates an image of infinite extent whose pixel values are made up of four independent, uniformly-distributed random numbers in the 0 to 1 range.
         """
         attr = dict()
         filterDict = dict(name="CIRandomGenerator", attributes=attr)
+        filterDict["size"] = size
+        filterDict["isGenerator"] = True
         self._addFilter(filterDict)
 
-    def starShineGenerator(self, center=None, color=None, radius=None, crossScale=None, crossAngle=None, crossOpacity=None, crossWidth=None, epsilon=None):
+    def starShineGenerator(self, size, center=None, color=None, radius=None, crossScale=None, crossAngle=None, crossOpacity=None, crossWidth=None, epsilon=None):
         """
         Generates a starburst pattern that is similar to a supernova; can be used to simulate a lens flare.
 
-        Attributes: `center` a tuple (x, y), `color` RGBA tuple Color, `radius` a float, `crossScale` a float, `crossAngle` a float in degrees, `crossOpacity` a float, `crossWidth` a float, `epsilon` a float.
+        Attributes: `center` a tuple (x, y), `color` RGBA tuple Color (r, g, b, a), `radius` a float, `crossScale` a float, `crossAngle` a float in degrees, `crossOpacity` a float, `crossWidth` a float, `epsilon` a float.
         """
         attr = dict()
         if center:
@@ -1395,13 +1429,15 @@ class ImageObject(object):
         if epsilon:
             attr["inputEpsilon"] = epsilon
         filterDict = dict(name="CIStarShineGenerator", attributes=attr)
+        filterDict["size"] = size
+        filterDict["isGenerator"] = True
         self._addFilter(filterDict)
 
-    def stripesGenerator(self, center=None, color0=None, color1=None, width=None, sharpness=None):
+    def stripesGenerator(self, size, center=None, color0=None, color1=None, width=None, sharpness=None):
         """
         Generates a stripe pattern.
 
-        Attributes: `center` a tuple (x, y), `color0` RGBA tuple Color, `color1` RGBA tuple Color, `width` a float, `sharpness` a float.
+        Attributes: `center` a tuple (x, y), `color0` RGBA tuple Color (r, g, b, a), `color1` RGBA tuple Color (r, g, b, a), `width` a float, `sharpness` a float.
         """
         attr = dict()
         if center:
@@ -1415,13 +1451,15 @@ class ImageObject(object):
         if sharpness:
             attr["inputSharpness"] = sharpness
         filterDict = dict(name="CIStripesGenerator", attributes=attr)
+        filterDict["size"] = size
+        filterDict["isGenerator"] = True
         self._addFilter(filterDict)
 
-    def sunbeamsGenerator(self, center=None, color=None, sunRadius=None, maxStriationRadius=None, striationStrength=None, striationContrast=None, time=None):
+    def sunbeamsGenerator(self, size, center=None, color=None, sunRadius=None, maxStriationRadius=None, striationStrength=None, striationContrast=None, time=None):
         """
         Generates a sun effect.
 
-        Attributes: `center` a tuple (x, y), `color` RGBA tuple Color, `sunRadius` a float, `maxStriationRadius` a float, `striationStrength` a float, `striationContrast` a float, `time` a float.
+        Attributes: `center` a tuple (x, y), `color` RGBA tuple Color (r, g, b, a), `sunRadius` a float, `maxStriationRadius` a float, `striationStrength` a float, `striationContrast` a float, `time` a float.
         """
         attr = dict()
         if center:
@@ -1439,6 +1477,8 @@ class ImageObject(object):
         if time:
             attr["inputTime"] = time
         filterDict = dict(name="CISunbeamsGenerator", attributes=attr)
+        filterDict["size"] = size
+        filterDict["isGenerator"] = True
         self._addFilter(filterDict)
 
     def crop(self, rectangle=None):
@@ -1503,26 +1543,6 @@ class ImageObject(object):
         filterDict = dict(name="CIPerspectiveTransform", attributes=attr)
         self._addFilter(filterDict)
 
-    def perspectiveTransformWithExtent(self, extent=None, topLeft=None, topRight=None, bottomRight=None, bottomLeft=None):
-        """
-        Alters the geometry of a portion of an image to simulate the observer changing viewing position.
-
-        Attributes: `extent` a tuple (x, y, w, h), `topLeft` a float, `topRight` a float, `bottomRight` a float, `bottomLeft` a float.
-        """
-        attr = dict()
-        if extent:
-            attr["inputExtent"] = AppKit.CIVector.vectorWithValues_count_(extent, 4)
-        if topLeft:
-            attr["inputTopLeft"] = topLeft
-        if topRight:
-            attr["inputTopRight"] = topRight
-        if bottomRight:
-            attr["inputBottomRight"] = bottomRight
-        if bottomLeft:
-            attr["inputBottomLeft"] = bottomLeft
-        filterDict = dict(name="CIPerspectiveTransformWithExtent", attributes=attr)
-        self._addFilter(filterDict)
-
     def straightenFilter(self, angle=None):
         """
         Rotates the source image by the specified angle in radians.
@@ -1535,11 +1555,11 @@ class ImageObject(object):
         filterDict = dict(name="CIStraightenFilter", attributes=attr)
         self._addFilter(filterDict)
 
-    def gaussianGradient(self, center=None, color0=None, color1=None, radius=None):
+    def gaussianGradient(self, size, center=None, color0=None, color1=None, radius=None):
         """
         Generates a gradient that varies from one color to another using a Gaussian distribution.
 
-        Attributes: `center` a tuple (x, y), `color0` RGBA tuple Color, `color1` RGBA tuple Color, `radius` a float.
+        Attributes: `center` a tuple (x, y), `color0` RGBA tuple Color (r, g, b, a), `color1` RGBA tuple Color (r, g, b, a), `radius` a float.
         """
         attr = dict()
         if center:
@@ -1551,13 +1571,15 @@ class ImageObject(object):
         if radius:
             attr["inputRadius"] = radius
         filterDict = dict(name="CIGaussianGradient", attributes=attr)
+        filterDict["size"] = size
+        filterDict["isGenerator"] = True
         self._addFilter(filterDict)
 
-    def linearGradient(self, point0=None, point1=None, color0=None, color1=None):
+    def linearGradient(self, size, point0=None, point1=None, color0=None, color1=None):
         """
         Generates a gradient that varies along a linear axis between two defined endpoints.
 
-        Attributes: `point0` a tuple, `point1` a tuple, `color0` RGBA tuple Color, `color1` RGBA tuple Color.
+        Attributes: `point0` a tuple (x, y), `point1` a tuple (x, y), `color0` RGBA tuple Color (r, g, b, a), `color1` RGBA tuple Color (r, g, b, a).
         """
         attr = dict()
         if point0:
@@ -1569,13 +1591,15 @@ class ImageObject(object):
         if color1:
             attr["inputColor1"] = AppKit.CIColor.colorWithRed_green_blue_alpha_(color1[0], color1[1], color1[2], color1[3])
         filterDict = dict(name="CILinearGradient", attributes=attr)
+        filterDict["size"] = size
+        filterDict["isGenerator"] = True
         self._addFilter(filterDict)
 
-    def radialGradient(self, center=None, radius0=None, radius1=None, color0=None, color1=None):
+    def radialGradient(self, size, center=None, radius0=None, radius1=None, color0=None, color1=None):
         """
         Generates a gradient that varies radially between two circles having the same center.
 
-        Attributes: `center` a tuple (x, y), `radius0` a float, `radius1` a float, `color0` RGBA tuple Color, `color1` RGBA tuple Color.
+        Attributes: `center` a tuple (x, y), `radius0` a float, `radius1` a float, `color0` RGBA tuple Color (r, g, b, a), `color1` RGBA tuple Color (r, g, b, a).
         """
         attr = dict()
         if center:
@@ -1589,24 +1613,8 @@ class ImageObject(object):
         if color1:
             attr["inputColor1"] = AppKit.CIColor.colorWithRed_green_blue_alpha_(color1[0], color1[1], color1[2], color1[3])
         filterDict = dict(name="CIRadialGradient", attributes=attr)
-        self._addFilter(filterDict)
-
-    def smoothLinearGradient(self, point0=None, point1=None, color0=None, color1=None):
-        """
-        Generates a gradient that uses an S-curve function to blend colors along a linear axis between two defined endpoints.
-
-        Attributes: `point0` a tuple, `point1` a tuple, `color0` RGBA tuple Color, `color1` RGBA tuple Color.
-        """
-        attr = dict()
-        if point0:
-            attr["inputPoint0"] = AppKit.CIVector.vectorWithValues_count_(point0, 2)
-        if point1:
-            attr["inputPoint1"] = AppKit.CIVector.vectorWithValues_count_(point1, 2)
-        if color0:
-            attr["inputColor0"] = AppKit.CIColor.colorWithRed_green_blue_alpha_(color0[0], color0[1], color0[2], color0[3])
-        if color1:
-            attr["inputColor1"] = AppKit.CIColor.colorWithRed_green_blue_alpha_(color1[0], color1[1], color1[2], color1[3])
-        filterDict = dict(name="CISmoothLinearGradient", attributes=attr)
+        filterDict["size"] = size
+        filterDict["isGenerator"] = True
         self._addFilter(filterDict)
 
     def circularScreen(self, center=None, width=None, sharpness=None):
@@ -1755,7 +1763,7 @@ class ImageObject(object):
 
     def histogramDisplayFilter(self, height=None, highLimit=None, lowLimit=None):
         """
-        Generates a histogram image from the output of the CIAreaHistogram filter.
+        Generates a histogram image from the output of the `areaHistogram` filter.
 
         Attributes: `height` a float, `highLimit` a float, `lowLimit` a float.
         """
@@ -1981,7 +1989,7 @@ class ImageObject(object):
         """
         Simulates a depth of field effect.
 
-        Attributes: `point0` a tuple, `point1` a tuple, `saturation` a float, `unsharpMaskRadius` a float, `unsharpMaskIntensity` a float, `radius` a float.
+        Attributes: `point0` a tuple (x, y), `point1` a tuple (x, y), `saturation` a float, `unsharpMaskRadius` a float, `unsharpMaskIntensity` a float, `radius` a float.
         """
         attr = dict()
         if point0:
@@ -2143,7 +2151,7 @@ class ImageObject(object):
         """
         Replaces one or more color ranges with spot colors.
 
-        Attributes: `centerColor1` RGBA tuple Color, `replacementColor1` RGBA tuple Color, `closeness1` a float, `contrast1` a float, `centerColor2` RGBA tuple Color, `replacementColor2` RGBA tuple Color, `closeness2` a float, `contrast2` a float, `centerColor3` RGBA tuple Color, `replacementColor3` RGBA tuple Color, `closeness3` a float, `contrast3` a float.
+        Attributes: `centerColor1` RGBA tuple Color (r, g, b, a), `replacementColor1` RGBA tuple Color (r, g, b, a), `closeness1` a float, `contrast1` a float, `centerColor2` RGBA tuple Color (r, g, b, a), `replacementColor2` RGBA tuple Color (r, g, b, a), `closeness2` a float, `contrast2` a float, `centerColor3` RGBA tuple Color (r, g, b, a), `replacementColor3` RGBA tuple Color (r, g, b, a), `closeness3` a float, `contrast3` a float.
         """
         attr = dict()
         if centerColor1:
@@ -2177,7 +2185,7 @@ class ImageObject(object):
         """
         Applies a directional spotlight effect to an image.
 
-        Attributes: `lightPosition` a tulple (x, y, z), `lightPointsAt` a tuple, `brightness` a float, `concentration` a float, `color` RGBA tuple Color.
+        Attributes: `lightPosition` a tulple (x, y, z), `lightPointsAt` a tuple (x, y), `brightness` a float, `concentration` a float, `color` RGBA tuple Color (r, g, b, a).
         """
         attr = dict()
         if lightPosition:
@@ -2403,24 +2411,6 @@ class ImageObject(object):
         filterDict = dict(name="CISixfoldRotatedTile", attributes=attr)
         self._addFilter(filterDict)
 
-    def triangleKaleidoscope(self, point=None, size=None, rotation=None, decay=None):
-        """
-        Maps a triangular portion of an input image to create a kaleidoscope effect.
-
-        Attributes: `point` a tuple, `size`, `rotation` a float, `decay` a float.
-        """
-        attr = dict()
-        if point:
-            attr["inputPoint"] = AppKit.CIVector.vectorWithValues_count_(point, 2)
-        if size:
-            attr["inputSize"] = size
-        if rotation:
-            attr["inputRotation"] = rotation
-        if decay:
-            attr["inputDecay"] = decay
-        filterDict = dict(name="CITriangleKaleidoscope", attributes=attr)
-        self._addFilter(filterDict)
-
     def triangleTile(self, center=None, angle=None, width=None):
         """
         Maps a triangular portion of image to a triangular area and then tiles the result.
@@ -2497,7 +2487,7 @@ class ImageObject(object):
         """
         Transitions from one image to another by simulating the effect of a copy machine.
 
-        Attributes: `targetImage` an Image object, `extent` a tuple (x, y, w, h), `color` RGBA tuple Color, `time` a float, `angle` a float in degrees, `width` a float, `opacity` a float.
+        Attributes: `targetImage` an Image object, `extent` a tuple (x, y, w, h), `color` RGBA tuple Color (r, g, b, a), `time` a float, `angle` a float in degrees, `width` a float, `opacity` a float.
         """
         attr = dict()
         if targetImage:
@@ -2521,7 +2511,7 @@ class ImageObject(object):
         """
         Transitions from one image to another using the shape defined by a mask.
 
-        Attributes: `targetImage` an Image object, `maskImage` an Image object, `time` a float, `shadowRadius` a float, `shadowDensity` a float, `shadowOffset` a tuple.
+        Attributes: `targetImage` an Image object, `maskImage` an Image object, `time` a float, `shadowRadius` a float, `shadowDensity` a float, `shadowOffset` a tuple (x, y).
         """
         attr = dict()
         if targetImage:
@@ -2557,7 +2547,7 @@ class ImageObject(object):
         """
         Transitions from one image to another by creating a flash.
 
-        Attributes: `targetImage` an Image object, `center` a tuple (x, y), `extent` a tuple (x, y, w, h), `color` RGBA tuple Color, `time` a float, `maxStriationRadius` a float, `striationStrength` a float, `striationContrast` a float, `fadeThreshold` a float.
+        Attributes: `targetImage` an Image object, `center` a tuple (x, y), `extent` a tuple (x, y, w, h), `color` RGBA tuple Color (r, g, b, a), `time` a float, `maxStriationRadius` a float, `striationStrength` a float, `striationContrast` a float, `fadeThreshold` a float.
         """
         attr = dict()
         if targetImage:
@@ -2683,7 +2673,7 @@ class ImageObject(object):
         """
         Transitions from one image to another by simulating a swiping action.
 
-        Attributes: `targetImage` an Image object, `extent` a tuple (x, y, w, h), `color` RGBA tuple Color, `time` a float, `angle` a float in degrees, `width` a float, `opacity` a float.
+        Attributes: `targetImage` an Image object, `extent` a tuple (x, y, w, h), `color` RGBA tuple Color (r, g, b, a), `time` a float, `angle` a float in degrees, `width` a float, `opacity` a float.
         """
         attr = dict()
         if targetImage:
