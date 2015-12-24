@@ -13,8 +13,6 @@ class ImageObject(object):
 
     For more info see: `Core Image Filter Reference`_.
 
-    .. showcode:: /../../../examples/imageObject.py
-
     .. _Core Image Filter Reference: https://developer.apple.com/library/mac/documentation/GraphicsImaging/Reference/CoreImageFilterReference/index.html
     """
 

@@ -1212,6 +1212,8 @@ class DrawBotDrawingTool(object):
         Return a Image object, packed with filters.
         This is a reusable object.
 
+        .. showcode:: /../examples/imageObject.py
+
         .. autoclass:: drawBot.context.tools.imageObject.ImageObject
             :members:
 
