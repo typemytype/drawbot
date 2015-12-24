@@ -11,6 +11,10 @@ _FALLBACKFONT = "LucidaGrande"
 
 class BezierContour(list):
 
+    """
+    A Bezier contour object.
+    """
+
     def __init__(self, *args, **kwargs):
         super(BezierContour, self).__init__(*args, **kwargs)
         self.open = True
@@ -198,6 +202,31 @@ class BezierPath(object):
         (x, y), (w, h) = self._path.controlPointBounds()
         return x, y, x+w, y+h
 
+    def optimizePath(self):
+        count = self._path.elementCount()
+        if self._path.elementAtIndex_(count-1) == AppKit.NSMoveToBezierPathElement:
+            optimizedPath = AppKit.NSBezierPath.bezierPath()
+            for i in range(count-1):
+                instruction, points = self._path.elementAtIndex_associatedPoints_(i)
+                if instruction == AppKit.NSMoveToBezierPathElement:
+                    optimizedPath.moveToPoint_(*points)
+                elif instruction == AppKit.NSLineToBezierPathElement:
+                    optimizedPath.lineToPoint_(*points)
+                elif instruction == AppKit.NSCurveToBezierPathElement:
+                    p1, p2, p3 = points
+                    optimizedPath.curveToPoint_controlPoint1_controlPoint2_(p3, p1, p2)
+                elif instruction == AppKit.NSClosePathBezierPathElement:
+                    optimizedPath.closePath()
+            self._path = optimizedPath
+
+    def copy(self):
+        """
+        Copy the bezier path.
+        """
+        new = self.__class__()
+        new._path = self._path.copy()
+        return new
+
     def _points(self, onCurve=True, offCurve=True):
         points = []
         if not onCurve and not offCurve:
@@ -240,32 +269,10 @@ class BezierPath(object):
             contours.pop()
         return contours
 
-    contours = property(_get_contours, doc="Return a list of contours with all point coordinates sorted in segments.")
+    contours = property(_get_contours, doc="Return a list of contours with all point coordinates sorted in segments. A contour object has an `open` attribute.")
 
-    def optimizePath(self):
-        count = self._path.elementCount()
-        if self._path.elementAtIndex_(count-1) == AppKit.NSMoveToBezierPathElement:
-            optimizedPath = AppKit.NSBezierPath.bezierPath()
-            for i in range(count-1):
-                instruction, points = self._path.elementAtIndex_associatedPoints_(i)
-                if instruction == AppKit.NSMoveToBezierPathElement:
-                    optimizedPath.moveToPoint_(*points)
-                elif instruction == AppKit.NSLineToBezierPathElement:
-                    optimizedPath.lineToPoint_(*points)
-                elif instruction == AppKit.NSCurveToBezierPathElement:
-                    p1, p2, p3 = points
-                    optimizedPath.curveToPoint_controlPoint1_controlPoint2_(p3, p1, p2)
-                elif instruction == AppKit.NSClosePathBezierPathElement:
-                    optimizedPath.closePath()
-            self._path = optimizedPath
-
-    def copy(self):
-        """
-        Copy the bezier path.
-        """
-        new = self.__class__()
-        new._path = self._path.copy()
-        return new
+    def __len__(self):
+        return len(self.contours)
 
 
 class Color(object):
@@ -395,6 +402,11 @@ class Gradient(object):
 
 class FormattedString(object):
 
+    """
+    FormattedString is a reusable object, if you want to draw the same over and over again.
+    FormattedString objects can be drawn with the `text(txt, (x, y))` and `textBox(txt, (x, y, w, h))` methods.
+    """
+
     _colorClass = Color
     _cmykColorClass = CMYKColor
 
@@ -404,11 +416,6 @@ class FormattedString(object):
         right=AppKit.NSRightTextAlignment,
         justified=AppKit.NSJustifiedTextAlignment,
         )
-
-    """
-    A formatted string object, if you want to draw the same over and over again.
-    FormattedString objects can be drawn with the `text(txt, (x, y))` and `textBox(txt, (x, y, w, h))` methods.
-    """
 
     def __init__(self, txt=None,
                         font=None, fontSize=10, fallbackFont=None,
@@ -846,7 +853,8 @@ class FormattedString(object):
 
     def appendGlyph(self, *glyphNames):
         """
-        Appends a glyph by his glyph name using the current `font`.
+        Append a glyph by his glyph name using the current `font`.
+        Multiple glyph names are possible.
         """
         # use a non breaking space as replacement character
         baseString = unichr(0x00A0)
