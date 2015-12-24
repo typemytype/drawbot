@@ -1,8 +1,10 @@
 Images
 ======
 
-.. autofunction:: drawBot.image(path, (x, y), alpha=1)
+.. toctree::
+    :titlesonly:
+    :glob:
 
-.. autofunction:: drawBot.imageSize(path)
-
-.. autofunction:: drawBot.imagePixelColor(path, (x, y))
+    image/drawingImages
+    image/imageProperties
+    image/imageObject

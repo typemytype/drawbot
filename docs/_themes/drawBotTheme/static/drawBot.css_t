@@ -307,6 +307,19 @@ p.highlight-link a:hover {
 	text-indent: 1.5em;
 }
 
+dl.class > dd {
+	border-left: 8px double {{ theme_headercolor1 }};
+	padding-left: 10px;
+}
+
+dl.class dl.attribute {
+
+	margin-left: -18px;
+	padding-left: 10px;
+
+	border-left: 8px solid {{ theme_headercolor1 }};
+}
+
 /* footer */
 
 div.footer {
@@ -369,7 +382,7 @@ div.footer a:hover {
 }
 
 @media only screen and (max-width: 479px) {
-	
+
 	h1 { font-size: 33px; line-height: 1.1em; }
 	h2 { font-size: 29px; line-height: 1.1em; }
 	h3 { font-size: 25px; line-height: 1.1em; }

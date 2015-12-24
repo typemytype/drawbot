@@ -1,0 +1,4 @@
+ImageObject
+===========
+
+.. autofunction::  drawBot.ImageObject

@@ -9,6 +9,11 @@ Colors
 	color/cmykFill
 	color/cmykStroke
 
+Color Blend
+-----------
+
+.. autofunction:: drawBot.blendMode
+
 Color Spaces
 ------------
 
