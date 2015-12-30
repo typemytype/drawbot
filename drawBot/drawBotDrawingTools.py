@@ -920,10 +920,10 @@ class DrawBotDrawingTool(object):
             txt = txt.decode("utf-8")
         except:
             pass
-        if isinstance(x, (tuple, list)):
+        if y is None:
             x, y = x
         else:
-            warnings.warn("postion must a tuple: text('%s', (%s, %s))" % (txt, x, y))
+            warnings.warn("position must a tuple: text('%s', (%s, %s))" % (txt, x, y))
         attrString = self._dummyContext.attributedString(txt)
         w, h = attrString.size()
         setter = CoreText.CTFramesetterCreateWithAttributedString(attrString)
