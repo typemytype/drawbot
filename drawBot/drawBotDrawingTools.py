@@ -905,9 +905,11 @@ class DrawBotDrawingTool(object):
         """
         List all OpenType feature tags for the current font.
 
-        Optionally a `fontName` can be given.
+        Optionally a `fontName` can be given. If a font path is given the font will be installed and used directly.
         """
-        if fontName is None:
+        if fontName:
+            fontName = self._tryInstallFontFromFontName(fontName)
+        else:
             fontName = self._dummyContext._state.text.fontName
         return openType.getFeatureTagsForFontName(fontName)
 

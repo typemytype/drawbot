@@ -773,7 +773,7 @@ class FormattedString(object):
         """
         if fontName:
             fontName = _tryInstallFontFromFontName(fontName)
-        if fontName is None:
+        else:
             fontName = self._font
         return openType.getFeatureTagsForFontName(fontName)
 
