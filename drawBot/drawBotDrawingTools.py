@@ -111,7 +111,8 @@ class DrawBotDrawingTool(object):
             self._dummyContext = DummyContext()
             self._width = None
             self._height = None
-            self._installedFontPaths = set()
+            if not hasattr(self, "_installedFontPaths"):
+                self._installedFontPaths = set()
 
     def _copy(self):
         new = self.__class__()
