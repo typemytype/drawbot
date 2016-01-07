@@ -3,6 +3,7 @@ import objc
 
 from keyword import kwlist
 import re
+import sys
 
 from pygments.lexers import PythonLexer, get_lexer_by_name
 from pygments.token import *
@@ -20,6 +21,9 @@ from vanilla import *
 from lineNumberRulerView import NSLineNumberRuler
 from drawBot.misc import getDefault, getFontDefault, getColorDefault, DrawBotError
 from drawBot.drawBotDrawingTools import _drawBotDrawingTool
+
+
+MAXFLOAT = sys.float_info.max
 
 variableChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_"
 
@@ -48,9 +52,15 @@ fallbackTracebackAttributes[AppKit.NSForegroundColorAttributeName] = AppKit.NSCo
 
 fallbackStyles = [
     (Token,               '#000000'),
+
+    (Generic.Heading,     '#813E94'),
+    (Generic.Subheading,  '#1A8BAD'),
+    (Generic.Strong,      '#6F00FF'),
+    (Generic.Emph,        '#FF00B3'),
+
     (Text,                ''),
     (Error,               '#FF0000'),
-    (Punctuation,         '#4C4C4C'),
+    (Punctuation,         '#6E6E6E'),
 
     (Keyword,             '#4978FC'),
     (Keyword.Namespace,   '#1950FD'),
@@ -71,7 +81,7 @@ fallbackStyles = [
     (Name.Builtin,        '#31A73E'),
     (Name.Builtin.Pseudo, '#FF8700'),
     (Name.Exception,      '#FF1400'),
-    (Name.Decorator,       ''),
+    (Name.Decorator,      ''),
 
     (Operator,            '#6D37C9'),
     (Operator.Word,       '#6D37C9'),
@@ -95,18 +105,15 @@ def styleFromDefault():
         if value and not value.startswith("#"):
             value = "#%s" % value
         styles[token] = value
-
     style = type('DrawBotStyle', (Style,), dict(styles=styles))
     style.background_color = _NSColorToHexString(getColorDefault("PyDEBackgroundColor", fallbackBackgroundColor))
     style.highlight_color = _NSColorToHexString(getColorDefault("PyDEHightLightColor", fallbackHightLightColor))
-
     return style
 
 
 def outputTextAttributesForStyles(styles=None, isError=False):
     if styles is None:
         styles = styleFromDefault()
-
     if isError:
         style = styles.style_for_token(Error)
     else:
@@ -197,11 +204,10 @@ def _textAttributesForStyle(style, font=None, token=None):
         font = getFontDefault("PyDEFont", fallbackFont)
     if token and token in _textAttributesForStyleCache:
         return _textAttributesForStyleCache[token]
-    attr =  {
+    attr = {
         AppKit.NSLigatureAttributeName: 0,
         AppKit.NSParagraphStyleAttributeName: basicParagraph,
     }
-
     if style.get("italic", False) and style.get("bold", False):
         fontManager = AppKit.NSFontManager.sharedFontManager()
         boldItalic = fontManager.convertFont_toHaveTrait_(font, AppKit.NSBoldFontMask | AppKit.NSItalicFontMask)
@@ -234,8 +240,8 @@ def _textAttributesForStyle(style, font=None, token=None):
 _multiLineRE = re.compile(
     r"(\'\'\'|\"\"\"|/\*|<!--)"
     r".*?"
-    r"(\'\'\'|\"\"\"|\*/|--!>)"
-    , re.DOTALL
+    r"(\'\'\'|\"\"\"|\*/|--!>)",
+    re.DOTALL
     )
 
 _whiteSpaceRE = re.compile(r"[ \t]+")
@@ -383,6 +389,27 @@ class CodeNSTextView(AppKit.NSTextView):
 
     def usesTabs(self):
         return self._usesTabs
+
+    def setWrapWord_(self, value):
+        if value:
+            self.setHorizontallyResizable_(True)
+            frame = self.visibleRect()
+            self.setMaxSize_((frame.size.width, MAXFLOAT))
+            self.textContainer().setWidthTracksTextView_(True)
+            self.textContainer().setContainerSize_((frame.size.width, MAXFLOAT))
+            if not hasattr(self.enclosingScrollView(), "placard"):
+                self.enclosingScrollView().setHasHorizontalScroller_(False)
+        else:
+            self.setHorizontallyResizable_(True)
+            self.setMaxSize_((MAXFLOAT, MAXFLOAT))
+            self.textContainer().setWidthTracksTextView_(False)
+            self.textContainer().setContainerSize_((MAXFLOAT, MAXFLOAT))
+            self.enclosingScrollView().setHasHorizontalScroller_(True)
+        if self.enclosingScrollView().hasVerticalRuler():
+            self.enclosingScrollView().verticalRulerView().textDidChange_(self)
+
+    def wrapWord(self):
+        return self.maxSize() != (MAXFLOAT, MAXFLOAT)
 
     def setIndentSize_(self, size):
         oldIndent = oldIndent = self.indent()
@@ -825,6 +852,9 @@ class CodeNSTextView(AppKit.NSTextView):
 
     # menu
 
+    def wrapWord_(self, sender):
+        self.setWrapWord_(not self.wrapWord())
+
     def indent_(self, sender):
         def indentFilter(lines):
             indent = self.indent()
@@ -948,10 +978,10 @@ class CodeNSTextView(AppKit.NSTextView):
             return
         length = len(string)
         textStorage = self.textStorage()
-        lineStart, lineLength = textStorage.editedRange()
+        _lineStart, _lineLength = textStorage.editedRange()
 
-        lineStart -= 200
-        lineLength += 200
+        lineStart = _lineStart - 200
+        lineLength = _lineLength + 200
         if lineStart <= 0:
             lineStart = 0
         if lineStart > length:
@@ -965,9 +995,9 @@ class CodeNSTextView(AppKit.NSTextView):
         for quoteMatch in _multiLineRE.finditer(string):
             start, end = quoteMatch.start(), quoteMatch.end()
             quoteRange = (start, end-start)
-            if AppKit.NSLocationInRange(lineStart, quoteRange) or AppKit.NSLocationInRange(lineStart+lineLength, quoteRange):
+            if AppKit.NSLocationInRange(_lineStart, quoteRange) or AppKit.NSLocationInRange(_lineStart+_lineLength, quoteRange):
                 quoteStart, quoteLenght = string.lineRangeForRange_(quoteRange)
-                lineStart, lineLength = AppKit.NSUnionRange(quoteRange, (lineStart, lineLength))
+                lineStart, lineLength = AppKit.NSUnionRange(quoteRange, (_lineStart, _lineLength))
                 break
         text = string.substringWithRange_((lineStart, lineLength))
         self._highlightSyntax(lineStart, text)
@@ -1268,6 +1298,9 @@ class CodeEditor(TextEditor):
 
     def toggleLineNumbers(self):
         self.getNSScrollView().setHasVerticalRuler_(not self.getNSScrollView().hasVerticalRuler())
+
+    def wrapWord(self, value):
+        self.getNSTextView().setWrapWord_(value)
 
 
 class OutPutCodeNSTextView(CodeNSTextView):
