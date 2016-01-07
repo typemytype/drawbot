@@ -801,6 +801,7 @@ class DrawBotDrawingTool(object):
     def font(self, fontName, fontSize=None):
         """
         Set a font with the name of the font.
+        If a font path is given the font will be installed and used directly.
         Optionally a `fontSize` can be set directly.
         The default font, also used as fallback font, is 'LucidaGrande'.
         The default `fontSize` is 10pt.
@@ -811,6 +812,7 @@ class DrawBotDrawingTool(object):
 
             font("Times-Italic")
         """
+        fontName = self._tryInstallFontFromFontName(fontName)
         fontName = fontName.encode("ascii", "ignore")
         self._dummyContext.font(fontName, fontSize)
         self._addInstruction("font", fontName, fontSize)
@@ -1148,6 +1150,16 @@ class DrawBotDrawingTool(object):
         for path in self._installedFontPaths:
             self._dummyContext.uninstallFont(path)
         self._installedFontPaths = set()
+
+    def _tryInstallFontFromFontName(self, fontName):
+        # check if the fontName is actually a path
+        if os.path.exists(fontName):
+            # try to install it
+            try:
+                fontName = self.installFont(fontName)
+            except:
+                pass
+        return fontName
 
     def fontAscender(self):
         """
