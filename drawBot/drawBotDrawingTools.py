@@ -1119,7 +1119,7 @@ class DrawBotDrawingTool(object):
         """
         if path in self._tempInstalledFonts:
             return self._tempInstalledFonts[path]
-        
+
         success, error = self._dummyContext.installFont(path)
         self._addInstruction("installFont", path)
 
@@ -1148,6 +1148,8 @@ class DrawBotDrawingTool(object):
         Uninstall a font with a given path.
         """
         success, error = self._dummyContext.uninstallFont(path)
+        if path in self._tempInstalledFonts:
+            del self._tempInstalledFonts[path]
         if not success:
             warnings.warn("uninstall font: %s" % error)
         self._addInstruction("uninstallFont", path)
