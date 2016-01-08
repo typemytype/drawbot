@@ -2,7 +2,7 @@ import AppKit
 import CoreText
 
 import os
-
+import base64
 import random
 
 from xmlWriter import XMLWriter
@@ -271,6 +271,9 @@ class SVGContext(BaseContext):
 
     # svg
 
+    def _reset(self):
+        self._embeddedFonts = set()
+
     def _newPage(self, width, height):
         if hasattr(self, "_svgContext"):
             self._svgContext.endtag("svg")
@@ -524,3 +527,38 @@ class SVGContext(BaseContext):
             return self._state.strokeColor.svgColor()
         else:
             return "none"
+
+    def installFont(self, path):
+        success, error = super(self.__class__, self).installFont(path)
+        if path not in self._embeddedFonts:
+            self._embeddedFonts.add(path)
+
+            f = open(path, "r")
+            fontData = f.read()
+            f.close()
+            fontName = self._fontNameForPath(path)
+
+            ctx = self._svgContext
+            ctx.begintag("defs")
+            ctx.newline()
+            ctx.begintag("style", type="text/css")
+            ctx.newline()
+            ctx.write("@font-face {")
+            ctx.newline()
+            ctx.indent()
+            ctx.write("font-family: %s;" % fontName)
+            ctx.newline()
+            if path.startswith("http"):
+                ctx.write("src: url(%s');" % path)
+            else:
+                ctx.write("src: url('data:application/font-woff;charset=utf-8;base64,%s');" % base64.b64encode(fontData))
+            ctx.newline()
+            ctx.dedent()
+            ctx.write("}")
+            ctx.newline()
+            ctx.endtag("style")
+            ctx.newline()
+            ctx.endtag("defs")
+            ctx.newline()
+
+        return success, error
