@@ -244,6 +244,14 @@ _multiLineRE = re.compile(
     re.DOTALL
     )
 
+_multiLineParts = [
+    "\'\'\'",
+    "\"\"\"",
+    "\*", "*/",
+    "<!--", "--!>"
+    "# >>>", "# <<<",
+]
+
 _whiteSpaceRE = re.compile(r"[ \t]+")
 
 
@@ -979,9 +987,14 @@ class CodeNSTextView(AppKit.NSTextView):
         length = len(string)
         textStorage = self.textStorage()
         _lineStart, _lineLength = textStorage.editedRange()
+        editedString = string.substringWithRange_((_lineStart, _lineLength))
+        for part in _multiLineParts:
+            if part in editedString:
+                _lineStart = 0
+                _lineLength = length
 
-        lineStart = _lineStart - 200
-        lineLength = _lineLength + 200
+        lineStart = _lineStart  # - 200
+        lineLength = _lineLength  # + 200
         if lineStart <= 0:
             lineStart = 0
         if lineStart > length:
