@@ -1121,7 +1121,6 @@ class DrawBotDrawingTool(object):
             return self._tempInstalledFonts[path]
 
         success, error = self._dummyContext.installFont(path)
-        print "send installfont to contexts"
         self._addInstruction("installFont", path)
 
         psName = self._dummyContext._fontNameForPath(path)
