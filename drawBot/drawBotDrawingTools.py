@@ -1242,12 +1242,10 @@ class DrawBotDrawingTool(object):
         .. showcode:: /../examples/variables.py
         """
 
-        documents = AppKit.NSApp().orderedDocuments()
-        if not documents:
+        document = AppKit.NSDocumentController.sharedDocumentController().currentDocument()
+        if not document:
             raise DrawBotError("There is no document open")
-        document = documents[0]
         controller = document.vanillaWindowController
-
         try:
             controller._variableController.buildUI(variables)
             controller._variableController.show()

@@ -193,6 +193,7 @@ class VariableController(object):
         self.w.resize(250, y)
 
     def changed(self, sender):
+        self.documentWindowToFront()
         if self._callback:
             self._callback()
 
@@ -205,3 +206,8 @@ class VariableController(object):
 
     def show(self):
         self.w.show()
+
+    def documentWindowToFront(self, sender=None):
+        document = self.w.getNSWindow().document()
+        if document:
+            document.showWindows()
