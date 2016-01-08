@@ -1121,22 +1121,10 @@ class DrawBotDrawingTool(object):
             return self._tempInstalledFonts[path]
 
         success, error = self._dummyContext.installFont(path)
+        print "send installfont to contexts"
         self._addInstruction("installFont", path)
 
-        from fontTools.ttLib import TTFont, TTLibError
-        try:
-            font = TTFont(path, fontNumber=0)  # in case of .ttc, use the first font
-            psName = font["name"].getName(6, 1, 0)
-            if psName is None:
-                psName = font["name"].getName(6, 3, 1)
-            font.close()
-        except IOError:
-            raise DrawBotError("Font '%s' does not exist." % path)
-        except TTLibError:
-            raise DrawBotError("Font '%s' is not a valid font." % path)
-        if psName is not None:
-            psName = psName.toUnicode()
-
+        psName = self._dummyContext._fontNameForPath(path)
         self._tempInstalledFonts[path] = psName
 
         if not success:

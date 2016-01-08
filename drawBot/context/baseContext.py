@@ -1566,3 +1566,19 @@ class BaseContext(object):
         if not success:
             error = error.localizedDescription()
         return success, error
+
+    def _fontNameForPath(self, path):
+        from fontTools.ttLib import TTFont, TTLibError
+        try:
+            font = TTFont(path, fontNumber=0)  # in case of .ttc, use the first font
+            psName = font["name"].getName(6, 1, 0)
+            if psName is None:
+                psName = font["name"].getName(6, 3, 1)
+            font.close()
+        except IOError:
+            raise DrawBotError("Font '%s' does not exist." % path)
+        except TTLibError:
+            raise DrawBotError("Font '%s' is not a valid font." % path)
+        if psName is not None:
+            psName = psName.toUnicode()
+        return psName
