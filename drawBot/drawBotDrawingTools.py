@@ -105,14 +105,14 @@ class DrawBotDrawingTool(object):
             self._dummyContext = other._dummyContext
             self._width = other._width
             self._height = other._height
-            self._installedFontPaths = set(other._installedFontPaths)
+            self._tempInstalledFonts = dict(other._tempInstalledFonts)
         else:
             self._instructionsStack = []
             self._dummyContext = DummyContext()
             self._width = None
             self._height = None
-            if not hasattr(self, "_installedFontPaths"):
-                self._installedFontPaths = set()
+            if not hasattr(self, "_tempInstalledFonts"):
+                self._tempInstalledFonts = dict()
 
     def _copy(self):
         new = self.__class__()
@@ -120,7 +120,7 @@ class DrawBotDrawingTool(object):
         new._dummyContext = self._dummyContext
         new._width = self._width
         new._height = self._height
-        new._installedFontPaths = set(self._installedFontPaths)
+        new._tempInstalledFonts = dict(self._tempInstalledFonts)
         return new
 
     def newDrawing(self):
@@ -1117,13 +1117,15 @@ class DrawBotDrawingTool(object):
 
         .. showcode:: /../examples/installFont.py
         """
+        if path in self._tempInstalledFonts:
+            return self._tempInstalledFonts[path]
+        
         success, error = self._dummyContext.installFont(path)
-        self._installedFontPaths.add(path)
         self._addInstruction("installFont", path)
 
         from fontTools.ttLib import TTFont, TTLibError
         try:
-            font = TTFont(path)
+            font = TTFont(path, fontNumber=0)  # in case of .ttc, use the first font
             psName = font["name"].getName(6, 1, 0)
             if psName is None:
                 psName = font["name"].getName(6, 3, 1)
@@ -1135,6 +1137,8 @@ class DrawBotDrawingTool(object):
         if psName is not None:
             psName = psName.toUnicode()
 
+        self._tempInstalledFonts[path] = psName
+
         if not success:
             warnings.warn("install font: %s" % error)
         return psName
@@ -1143,24 +1147,25 @@ class DrawBotDrawingTool(object):
         """
         Uninstall a font with a given path.
         """
-        succes, error = self._dummyContext.uninstallFont(path)
-        if not succes:
+        success, error = self._dummyContext.uninstallFont(path)
+        if not success:
             warnings.warn("uninstall font: %s" % error)
         self._addInstruction("uninstallFont", path)
 
     def _uninstallAllFonts(self):
-        for path in self._installedFontPaths:
+        for path in self._tempInstalledFonts:
             self._dummyContext.uninstallFont(path)
-        self._installedFontPaths = set()
+        self._tempInstalledFonts = dict()
 
     def _tryInstallFontFromFontName(self, fontName):
         # check if the fontName is actually a path
         if os.path.exists(fontName):
-            # try to install it
-            try:
-                fontName = self.installFont(fontName)
-            except:
-                pass
+            fontPath = fontName
+            ext = os.path.splitext(fontPath)[1]
+            if ext.lower() in [".otf", ".ttf", ".ttc"]:
+                fontName = self.installFont(fontPath)
+            else:
+                raise DrawBotError("Font '%s' is not .ttf, .otf or .ttc." % fontPath)
         return fontName
 
     def fontAscender(self):
