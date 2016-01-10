@@ -357,7 +357,8 @@ class SVGContext(BaseContext):
         defaultData = self._svgDrawingAttributes()
 
         data = {
-            "text-anchor": "start"
+            "text-anchor": "start",
+            "transform": self._svgTransform(self._state.transformMatrix.translate(x, y + self.height).scale(1, -1))
             }
         if self._state.shadow is not None:
             data["filter"] = "url(#%s_flipped)" % self._state.shadow.tagID
@@ -408,8 +409,8 @@ class SVGContext(BaseContext):
                     runX = runPos[0].x
                     runY = runPos[0].y
 
-                spanData["x"] = originX + runX + x
-                spanData["y"] = self.height - y - originY - runY + baselineShift
+                spanData["x"] = originX + runX
+                spanData["y"] = self.height - originY - runY + baselineShift
                 self._svgContext.begintag("tspan", **spanData)
                 self._svgContext.newline()
                 self._svgContext.write(runTxt)
