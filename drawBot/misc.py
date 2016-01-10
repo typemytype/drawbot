@@ -74,11 +74,15 @@ def optimizePath(path):
     return path
 
 
-def formatNumber(value, precision=1000):
+# ================
+# = number tools =
+# ================
+
+def formatNumber(value, decimals=3):
     value = float(value)
     if value.is_integer():
         return "%i" % value
-    value = round(value*precision) / precision
+    value = round(value, decimals)
     return "%s" % value
 
 
@@ -111,10 +115,16 @@ def rgb2cmyk(r, g, b):
     return c, m, y, k
 
 
+# =============
+
 def stringToInt(code):
     import struct
     return struct.unpack('>l', code)[0]
 
+
+# ============
+# = warnings =
+# ============
 
 class Warnings(object):
 
