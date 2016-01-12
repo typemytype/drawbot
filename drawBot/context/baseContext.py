@@ -129,7 +129,7 @@ class BezierPath(object):
             attributedString = txt.getNSObject()
         else:
             fontName = _tryInstallFontFromFontName(font)
-            font = AppKit.NSFont.fontWithName_size_(font, fontSize)
+            font = AppKit.NSFont.fontWithName_size_(fontName, fontSize)
             if font is None:
                 warnings.warn("font: %s is not installed, back to the fallback font: %s" % (fontName, _FALLBACKFONT))
                 font = AppKit.NSFont.fontWithName_size_(_FALLBACKFONT, fontSize)
