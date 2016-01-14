@@ -923,7 +923,7 @@ class DrawBotDrawingTool(object):
         """
         try:
             txt = txt.decode("utf-8")
-        except:
+        except UnicodeEncodeError:
             pass
         if y is None:
             x, y = x
@@ -956,7 +956,7 @@ class DrawBotDrawingTool(object):
         """
         try:
             txt = txt.decode("utf-8")
-        except:
+        except UnicodeEncodeError:
             pass
         if align is None:
             align = "left"

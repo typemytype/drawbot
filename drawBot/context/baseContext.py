@@ -123,7 +123,7 @@ class BezierPath(object):
         """
         try:
             txt = txt.decode("utf-8")
-        except:
+        except UnicodeEncodeError:
             pass
         if isinstance(txt, FormattedString):
             attributedString = txt.getNSObject()
@@ -480,7 +480,7 @@ class FormattedString(object):
         """
         try:
             txt = txt.decode("utf-8")
-        except:
+        except UnicodeEncodeError:
             pass
         if font is None:
             font = self._font
