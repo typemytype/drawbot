@@ -218,6 +218,4 @@ class VariableController(object):
         self.w.show()
 
     def documentWindowToFront(self, sender=None):
-        document = self.w.getNSWindow().document()
-        if document:
-            document.showWindows()
+        self.w.makeKey()
