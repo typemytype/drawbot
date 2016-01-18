@@ -1089,6 +1089,10 @@ class DrawBotDrawingTool(object):
         Returns the size of a text with the current settings,
         like `font`, `fontSize` and `lineHeight` as a tuple (width, height).
         """
+        try:
+            txt = txt.decode("utf-8")
+        except UnicodeEncodeError:
+            pass
         return self._dummyContext.textSize(txt, align)
 
     def textsize(self, txt, align=None):
