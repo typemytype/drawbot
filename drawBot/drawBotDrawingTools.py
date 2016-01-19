@@ -468,13 +468,15 @@ class DrawBotDrawingTool(object):
 
         .. showcode:: /../examples/polygon.py
         """
-        if isinstance(x, tuple) and isinstance(y, tuple):
+        try:
+            a, b = x
+        except TypeError:
+            args = [args[i:i+2] for i in range(0, len(args), 2)]
+            _deprecatedWarningWrapInTuple("polygon((%s, %s), %s)" % (x, y, ", ".join([str(i) for i in args])))
+        else:
             args = list(args)
             args.insert(0, y)
             x, y = x
-        else:
-            args = [args[i:i+2] for i in range(0, len(args), 2)]
-            _deprecatedWarningWrapInTuple("polygon((%s, %s), %s)" % (x, y, ", ".join([str(i) for i in args])))
         if not args:
             raise DrawBotError("polygon() expects more than a single point")
         doClose = kwargs.get("close", True)
@@ -483,8 +485,8 @@ class DrawBotDrawingTool(object):
 
         path = self._bezierPathClass()
         path.moveTo((x, y))
-        for p in args:
-            path.lineTo(p)
+        for x, y in args:
+            path.lineTo((x, y))
         if doClose:
             path.closePath()
         self.drawPath(path)
