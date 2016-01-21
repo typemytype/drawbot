@@ -174,6 +174,7 @@ class DrawBotDrawingTool(object):
         Returns the width and height of a specified canvas size.
         If no canvas size is given it will return the dictionary containing all possible page sizes.
         """
+        _paperSizes["screen"] = tuple(AppKit.NSScreen.mainScreen().frame().size)
         if paperSize:
             return _paperSizes[paperSize]
         return _paperSizes
@@ -209,7 +210,7 @@ class DrawBotDrawingTool(object):
         Set the width and height of the canvas.
         Without calling `size()` the default drawing board is 1000 by 1000 points.
 
-        Alternatively `size('A4')` can be used.
+        Alternatively `size('A4')` with a supported papersizes or `size('screen')` setting the current screen size as size, can be used.
 
         Afterwards the functions `width()` and `height()` can be used for calculations.
 
@@ -222,6 +223,8 @@ class DrawBotDrawingTool(object):
         """
         if width in _paperSizes:
             width, height = _paperSizes[width]
+        if width == "screen":
+            width, height = AppKit.NSScreen.mainScreen().frame().size
         if height is None:
             width, height = width
         self._width = width
@@ -239,7 +242,7 @@ class DrawBotDrawingTool(object):
         Optionally a `width` and `height` argument can be provided to set the size.
         If not provided the default size will be used.
 
-        Alternatively `size('A4')` can be used.
+        Alternatively `size('A4')` with a supported papersizes or `size('screen')` setting the current screen size as size, can be used.
 
         .. showcode:: /../examples/newPage.py
 
@@ -247,6 +250,8 @@ class DrawBotDrawingTool(object):
         """
         if width in _paperSizes:
             width, height = _paperSizes[width]
+        if width == "screen":
+            width, height = AppKit.NSScreen.mainScreen().frame().size
         self._width = width
         self._height = height
         self._addInstruction("newPage", width, height)
