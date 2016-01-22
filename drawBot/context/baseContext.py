@@ -121,13 +121,13 @@ class BezierPath(object):
 
         Optionally `txt` can be a `FormattedString` and be drawn inside a `box`, a tuple of (x, y, width, height).
         """
-        try:
-            txt = txt.decode("utf-8")
-        except UnicodeEncodeError:
-            pass
         if isinstance(txt, FormattedString):
             attributedString = txt.getNSObject()
         else:
+            try:
+                txt = txt.decode("utf-8")
+            except UnicodeEncodeError:
+                pass
             fontName = _tryInstallFontFromFontName(font)
             font = AppKit.NSFont.fontWithName_size_(fontName, fontSize)
             if font is None:
@@ -478,10 +478,12 @@ class FormattedString(object):
 
         Text can also be added with `formattedString += "hello"`. It will append the text with the current settings of the formatted string.
         """
-        try:
-            txt = txt.decode("utf-8")
-        except UnicodeEncodeError:
-            pass
+
+        if isinstance(txt, (str, unicode)):
+            try:
+                txt = txt.decode("utf-8")
+            except UnicodeEncodeError:
+                pass
         if font is None:
             font = self._font
         else:

@@ -928,10 +928,11 @@ class DrawBotDrawingTool(object):
 
         .. showcode:: /../examples/text.py
         """
-        try:
-            txt = txt.decode("utf-8")
-        except UnicodeEncodeError:
-            pass
+        if isinstance(txt, (str, unicode)):
+            try:
+                txt = txt.decode("utf-8")
+            except UnicodeEncodeError:
+                pass
         if y is None:
             x, y = x
         else:
@@ -961,10 +962,11 @@ class DrawBotDrawingTool(object):
 
         .. showcode:: /../examples/textBox.py
         """
-        try:
-            txt = txt.decode("utf-8")
-        except UnicodeEncodeError:
-            pass
+        if isinstance(txt, (str, unicode)):
+            try:
+                txt = txt.decode("utf-8")
+            except UnicodeEncodeError:
+                pass
         if align is None:
             align = "left"
         elif align not in self._dummyContext._textAlignMap.keys():
@@ -1096,10 +1098,11 @@ class DrawBotDrawingTool(object):
         Returns the size of a text with the current settings,
         like `font`, `fontSize` and `lineHeight` as a tuple (width, height).
         """
-        try:
-            txt = txt.decode("utf-8")
-        except UnicodeEncodeError:
-            pass
+        if isinstance(txt, (str, unicode)):
+            try:
+                txt = txt.decode("utf-8")
+            except UnicodeEncodeError:
+                pass
         return self._dummyContext.textSize(txt, align)
 
     def textsize(self, txt, align=None):
