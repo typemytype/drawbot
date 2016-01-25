@@ -1,5 +1,6 @@
 import AppKit
 import objc
+from objc import super
 
 from keyword import kwlist
 import re
