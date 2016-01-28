@@ -175,7 +175,7 @@ class VariableController(object):
             height = 19
             if uiElement == "RadioGroup":
                 if args.get("isVertical", True):
-                    height = 19 * len(args.get("titles", 1))
+                    height = 19 * len(args.get("titles", [""]))
             # create a label for every ui element except a checkbox
             if uiElement != "CheckBox":
                 # create the label view
