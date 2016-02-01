@@ -236,7 +236,10 @@ class PDFContext(BaseContext):
         if image is not None:
             Quartz.CGContextSetAlpha(self._pdfContext, alpha)
             if isPDF:
+                Quartz.CGContextSaveGState(self._pdfContext)
+                Quartz.CGContextTranslateCTM(self._pdfContext, x, y)
                 Quartz.CGContextDrawPDFPage(self._pdfContext, image)
+                Quartz.CGContextRestoreGState(self._pdfContext)
             else:
                 w = Quartz.CGImageGetWidth(image)
                 h = Quartz.CGImageGetHeight(image)
