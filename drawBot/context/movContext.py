@@ -32,8 +32,13 @@ class MOVContext(PDFContext):
         self.restore()
 
     def _frameDuration(self, seconds):
-        length = seconds * self._frameScale
-        self._frameDurationData[-1] = length, self._frameScale
+        if type(seconds) is tuple:
+            # Duration as a ratio
+            self._frameDurationData[-1] = seconds
+        else:
+            # Duration as a fraction of a second, turn it into a ratio of _frameScale
+            length = seconds * self._frameScale
+            self._frameDurationData[-1] = length, self._frameScale
 
     def _writeDataToFile(self, data, path, multipage):
         if os.path.exists(path):
