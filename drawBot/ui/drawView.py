@@ -36,11 +36,13 @@ class ThumbnailView(Group):
 class DrawBotPDFView(PDFView):
 
     def performKeyEquivalent_(self, event):
-        # ignore cmd + ` as the PDFView has a bug here
+        # catch a bug in PDFView
+        # cmd + ` causes a traceback
         # DrawBot[15705]: -[__NSCFConstantString characterAtIndex:]: Range or index out of bounds
-        if event.modifierFlags() & NSCommandKeyMask and event.keyCode() == 42:
+        try:
+            return super(DrawBotPDFView, self).performKeyEquivalent_(event)
+        except:
             return False
-        return super(DrawBotPDFView, self).performKeyEquivalent_(event)
 
 
 class DrawView(Group):
