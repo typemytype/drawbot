@@ -16,6 +16,7 @@ import pygments
 
 from drawBotSettings import __version__, appName
 
+
 def getValueFromSysArgv(key, default=None):
     if key in sys.argv:
         try:
@@ -35,35 +36,39 @@ ftpPath = getValueFromSysArgv("--ftppath")
 ftpLogin = getValueFromSysArgv("--ftplogin")
 ftpPassword = getValueFromSysArgv("--ftppassword")
 
+osxMinVersion = "10.9.0"
+
 plist = dict(
 
-	CFBundleDocumentTypes = [
-	dict(
-		CFBundleTypeExtensions = ["py"],
-		CFBundleTypeName = "Python Source File",
-		CFBundleTypeRole = "Editor",
-        CFBundleTypeIconFile = "pythonIcon.icns",
-		NSDocumentClass = "DrawBotDocument",
-	    ),
-
-		],
-	CFBundleIdentifier = "com.drawbot",
-	LSMinimumSystemVersion = "10.9.0",
-	CFBundleShortVersionString = __version__,
-	CFBundleVersion = __version__,
-	CFBundleIconFile = "DrawBot.icns",
-	NSHumanReadableCopyright = "Copyright by Just van Rossum and Frederik Berlaen.",
-    CFBundleURLTypes = [
-            dict(
-                CFBundleURLName = "com.drawbot",
-                CFBundleURLSchemes = [appName.lower()])
+    CFBundleDocumentTypes=[
+        dict(
+            CFBundleTypeExtensions=["py"],
+            CFBundleTypeName="Python Source File",
+            CFBundleTypeRole="Editor",
+            CFBundleTypeIconFile="pythonIcon.icns",
+            NSDocumentClass="DrawBotDocument",
+            ),
         ],
-	)
+    CFBundleIdentifier="com.drawbot",
+    LSMinimumSystemVersion=osxMinVersion,
+    LSApplicationCategoryType="public.app-category.graphics-design",
+    LSMinimumSystemVersionByArchitecture=dict(i386=osxMinVersion, x86_64=osxMinVersion),
+    LSArchitecturePriority=["x86_64", "i386"],
+    CFBundleShortVersionString=__version__,
+    CFBundleVersion=__version__,
+    CFBundleIconFile="DrawBot.icns",
+    NSHumanReadableCopyright="Copyright by Just van Rossum and Frederik Berlaen.",
+    CFBundleURLTypes=[
+            dict(
+                CFBundleURLName="com.drawbot",
+                CFBundleURLSchemes=[appName.lower()])
+        ],
+    )
 
 
 dataFiles = [
         "Resources/English.lproj",
-        #os.path.dirname(vanilla.__file__),
+        # os.path.dirname(vanilla.__file__),
         ]
 
 for fileName in os.listdir("Resources/Images"):
@@ -76,7 +81,7 @@ for fileName in os.listdir("Resources/Images"):
 setup(
     data_files=dataFiles,
     app=[dict(script="DrawBot.py", plist=plist)],
-    options = dict(py2app=dict(
+    options=dict(py2app=dict(
                     packages=[
                         'vanilla',
                         'defcon',
@@ -162,16 +167,16 @@ if "-A" not in sys.argv and codeSignDeveloperName:
         os.remove(existingDmgLocation)
 
     os.mkdir(imgLocation)
-    os.rename(os.path.join(distLocation, "%s.app" %appName), os.path.join(imgLocation, "%s.app" %appName))
-    tempDmgName = "%s.tmp.dmg" %appName
+    os.rename(os.path.join(distLocation, "%s.app" % appName), os.path.join(imgLocation, "%s.app" % appName))
+    tempDmgName = "%s.tmp.dmg" % appName
 
-    os.system("hdiutil create -srcfolder \"%s\" -volname %s -format UDZO \"%s\"" %(imgLocation, appName, os.path.join(distLocation, tempDmgName)))
+    os.system("hdiutil create -srcfolder \"%s\" -volname %s -format UDZO \"%s\"" % (imgLocation, appName, os.path.join(distLocation, tempDmgName)))
 
-    os.system("hdiutil convert -format UDZO -imagekey zlib-level=9 -o \"%s\" \"%s\"" %(dmgLocation, os.path.join(distLocation, tempDmgName)))
+    os.system("hdiutil convert -format UDZO -imagekey zlib-level=9 -o \"%s\" \"%s\"" % (dmgLocation, os.path.join(distLocation, tempDmgName)))
 
     os.remove(os.path.join(distLocation, tempDmgName))
 
-    os.rename(os.path.join(imgLocation, "%s.app" %appName), os.path.join(distLocation, "%s.app" %appName))
+    os.rename(os.path.join(imgLocation, "%s.app" % appName), os.path.join(distLocation, "%s.app" % appName))
 
     shutil.rmtree(imgLocation)
 
@@ -185,7 +190,7 @@ if "-A" not in sys.argv and codeSignDeveloperName:
         session = ftplib.FTP(ftpHost, ftpLogin, ftpPassword)
         session.cwd(ftpPath)
 
-        dmgFile = open(existingDmgLocation,'rb')
+        dmgFile = open(existingDmgLocation, 'rb')
         fileName = os.path.basename(existingDmgLocation)
 
         session.storbinary('STOR %s' % fileName, dmgFile)
@@ -193,7 +198,3 @@ if "-A" not in sys.argv and codeSignDeveloperName:
         print "- done uploading to ftp -"
         print "-------------------------"
         session.quit()
-
-
-
-
