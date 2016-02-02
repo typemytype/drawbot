@@ -33,9 +33,17 @@ class ThumbnailView(Group):
         return -1
 
 
+class DrawBotPDFView(PDFView):
+
+    def performKeyEquivalent_(self, event):
+        if event.modifierFlags() & NSCommandKeyMask and event.keyCode() == 42:
+            return False
+        return super(DrawBotPDFView, self).performKeyEquivalent_(event)
+
+
 class DrawView(Group):
 
-    nsViewClass = PDFView
+    nsViewClass = DrawBotPDFView
 
     def __init__(self, posSize):
         super(DrawView, self).__init__(posSize)
