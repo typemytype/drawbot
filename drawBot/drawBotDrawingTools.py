@@ -1040,7 +1040,12 @@ class DrawBotDrawingTool(object):
                     raise DrawBotError("Image does not exist")
                 url = AppKit.NSURL.fileURLWithPath_(path)
             isPDF = AppKit.PDFDocument.alloc().initWithURL_(url) is not None
-            rep = AppKit.NSImageRep.imageRepWithContentsOfURL_(url)
+            # check if the file is an .eps
+            rep = AppKit.NSEPSImageRep.imageRepWithContentsOfURL_(url)
+            if rep is not None:
+                isPDF = True
+            else:
+                rep = AppKit.NSImageRep.imageRepWithContentsOfURL_(url)
         if isPDF:
             w, h = rep.size()
         else:
