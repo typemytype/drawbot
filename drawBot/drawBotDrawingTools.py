@@ -1058,6 +1058,8 @@ class DrawBotDrawingTool(object):
 
         .. showcode:: /../examples/pixelColor.py
         """
+        if isinstance(path, (str, unicode)):
+            path = optimizePath(path)
         bitmap = _chachedPixelColorBitmaps.get(path)
         if bitmap is None:
             if isinstance(path, self._imageClass):
@@ -1065,8 +1067,6 @@ class DrawBotDrawingTool(object):
             elif isinstance(path, AppKit.NSImage):
                 source = path
             else:
-                if isinstance(path, (str, unicode)):
-                    path = optimizePath(path)
                 if path.startswith("http"):
                     url = AppKit.NSURL.URLWithString_(path)
                 else:
