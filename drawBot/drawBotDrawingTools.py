@@ -13,7 +13,7 @@ from context.dummyContext import DummyContext
 from context.tools import openType
 from context.tools.imageObject import ImageObject
 
-from misc import DrawBotError, warnings, VariableController, optimizePath
+from misc import DrawBotError, warnings, VariableController, optimizePath, isPDF, isEPS
 
 
 def _getmodulecontents(module, names=None):
@@ -1029,7 +1029,7 @@ class DrawBotDrawingTool(object):
             path = path._nsImage()
         if isinstance(path, AppKit.NSImage):
             rep = path.TIFFRepresentation()
-            isPDF = False
+            _isPDF = False
         else:
             if isinstance(path, (str, unicode)):
                 path = optimizePath(path)
@@ -1039,14 +1039,15 @@ class DrawBotDrawingTool(object):
                 if not os.path.exists(path):
                     raise DrawBotError("Image does not exist")
                 url = AppKit.NSURL.fileURLWithPath_(path)
-            isPDF = AppKit.PDFDocument.alloc().initWithURL_(url) is not None
+            _isPDF, _ = isPDF(url)
             # check if the file is an .eps
-            rep = AppKit.NSEPSImageRep.imageRepWithContentsOfURL_(url)
-            if rep is not None:
-                isPDF = True
+            _isEPS, epsRep = isEPS(url)
+            if _isEPS:
+                _isPDF = True
+                rep = epsRep
             else:
                 rep = AppKit.NSImageRep.imageRepWithContentsOfURL_(url)
-        if isPDF:
+        if _isPDF:
             w, h = rep.size()
         else:
             w, h = rep.pixelsWide(), rep.pixelsHigh()

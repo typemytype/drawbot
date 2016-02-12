@@ -1,4 +1,6 @@
 import AppKit
+import Quartz
+
 import sys
 import os
 
@@ -113,6 +115,26 @@ def rgb2cmyk(r, g, b):
     y = min(1, max(0, y-k))
     k = min(1, max(0, k))
     return c, m, y, k
+
+
+# ==============
+# = file tools =
+# ==============
+
+def isPDF(url):
+    if not isinstance(url, AppKit.NSURL):
+        url = AppKit.NSURL.fileURLWithPath_(url)
+    if url.pathExtension().lower() != "pdf":
+        return False
+    return AppKit.PDFDocument.alloc().initWithURL_(url) is not None
+
+
+def isEPS(url):
+    if not isinstance(url, AppKit.NSURL):
+        url = AppKit.NSURL.fileURLWithPath_(url)
+    if url.pathExtension().lower() != "eps":
+        return False
+    return AppKit.NSEPSImageRep.imageRepWithContentsOfURL_(url) is not None
 
 
 # =============

@@ -3,7 +3,7 @@ import CoreText
 import Quartz
 
 from baseContext import BaseContext, FormattedString
-from drawBot.misc import DrawBotError
+from drawBot.misc import DrawBotError, isPDF
 
 
 def sendPDFtoPrinter(pdfDocument):
@@ -200,7 +200,7 @@ class PDFContext(BaseContext):
     def _getImageSource(self, key, pageNumber):
         path = key
         image = None
-        isPDF = False
+        _isPDF = False
         if isinstance(key, AppKit.NSImage):
             image = key
             key = id(key)
@@ -210,32 +210,32 @@ class PDFContext(BaseContext):
                     url = AppKit.NSURL.URLWithString_(path)
                 else:
                     url = AppKit.NSURL.fileURLWithPath_(path)
-                isPDF = AppKit.PDFDocument.alloc().initWithURL_(url) is not None
-                if isPDF:
+                _isPDF, _ = isPDF(url)
+                if _isPDF:
                     pdf = Quartz.CGPDFDocumentCreateWithURL(url)
                     if pdf is not None:
                         if pageNumber is None:
                             pageNumber = Quartz.CGPDFDocumentGetNumberOfPages(pdf)
-                        self._cachedImages[key] = isPDF, Quartz.CGPDFDocumentGetPage(pdf, pageNumber)
+                        self._cachedImages[key] = _isPDF, Quartz.CGPDFDocumentGetPage(pdf, pageNumber)
                     else:
                         raise DrawBotError("No pdf found at %s" % key)
                 else:
                     image = AppKit.NSImage.alloc().initByReferencingURL_(url)
-            if image and not isPDF:
+            if image and not _isPDF:
                 data = image.TIFFRepresentation()
                 source = Quartz.CGImageSourceCreateWithData(data, {})
                 if source is not None:
-                    self._cachedImages[key] = isPDF, Quartz.CGImageSourceCreateImageAtIndex(source, 0, None)
+                    self._cachedImages[key] = _isPDF, Quartz.CGImageSourceCreateImageAtIndex(source, 0, None)
                 else:
                     raise DrawBotError("No image found at %s" % key)
         return self._cachedImages[key]
 
     def _image(self, path, (x, y), alpha, pageNumber):
         self._save()
-        isPDF, image = self._getImageSource(path, pageNumber)
+        _isPDF, image = self._getImageSource(path, pageNumber)
         if image is not None:
             Quartz.CGContextSetAlpha(self._pdfContext, alpha)
-            if isPDF:
+            if _isPDF:
                 Quartz.CGContextSaveGState(self._pdfContext)
                 Quartz.CGContextTranslateCTM(self._pdfContext, x, y)
                 Quartz.CGContextDrawPDFPage(self._pdfContext, image)
