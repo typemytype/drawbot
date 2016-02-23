@@ -78,6 +78,45 @@ class BezierPath(object):
 
     curveto = curveTo
 
+    def _qCurveToOne(self, pt1, pt2):
+        # taken from fontTools.pens.basePen
+        pt0x, pt0y = self._path.currentPoint()
+        pt1x, pt1y = pt1
+        pt2x, pt2y = pt2
+        mid1x = pt0x + 0.66666666666666667 * (pt1x - pt0x)
+        mid1y = pt0y + 0.66666666666666667 * (pt1y - pt0y)
+        mid2x = pt2x + 0.66666666666666667 * (pt1x - pt2x)
+        mid2y = pt2y + 0.66666666666666667 * (pt1y - pt2y)
+        self.curveTo((mid1x, mid1y), (mid2x, mid2y), pt2)
+
+    def qCurveTo(self, *points):
+        from fontTools.pens.basePen import decomposeQuadraticSegment
+        # taken from fontTools.pens.basePen
+        n = len(points) - 1
+        assert n >= 0
+        if points[-1] is None:
+            # Special case for TrueType quadratics: it is possible to
+            # define a contour with NO on-curve points. BasePen supports
+            # this by allowing the final argument (the expected on-curve
+            # point) to be None. We simulate the feature by making the implied
+            # on-curve point between the last and the first off-curve points
+            # explicit.
+            x, y = points[-2]  # last off-curve point
+            nx, ny = points[0]  # first off-curve point
+            impliedStartPoint = (0.5 * (x + nx), 0.5 * (y + ny))
+            self.moveTo(impliedStartPoint)
+            points = points[:-1] + (impliedStartPoint,)
+        if n > 0:
+            # Split the string of points into discrete quadratic curve
+            # segments. Between any two consecutive off-curve points
+            # there's an implied on-curve point exactly in the middle.
+            # This is where the segment splits.
+            _qCurveToOne = self._qCurveToOne
+            for pt1, pt2 in decomposeQuadraticSegment(points):
+                _qCurveToOne(pt1, pt2)
+        else:
+            self.lineTo(points[0])
+
     def arc(self, center, radius, startAngle, endAngle, clockwise):
         """
         Arc with `center` and a given `radius`, from `startAngle` to `endAngle`, going clockwise if `clockwise` is True and counter clockwise if `clockwise` is False.
