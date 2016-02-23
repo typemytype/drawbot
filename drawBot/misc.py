@@ -125,16 +125,18 @@ def isPDF(url):
     if not isinstance(url, AppKit.NSURL):
         url = AppKit.NSURL.fileURLWithPath_(url)
     if url.pathExtension().lower() != "pdf":
-        return False
-    return AppKit.PDFDocument.alloc().initWithURL_(url) is not None
+        return False, None
+    doc = AppKit.PDFDocument.alloc().initWithURL_(url)
+    return doc is not None, doc
 
 
 def isEPS(url):
     if not isinstance(url, AppKit.NSURL):
         url = AppKit.NSURL.fileURLWithPath_(url)
     if url.pathExtension().lower() != "eps":
-        return False
-    return AppKit.NSEPSImageRep.imageRepWithContentsOfURL_(url) is not None
+        return False, None
+    rep = AppKit.NSEPSImageRep.imageRepWithContentsOfURL_(url)
+    return rep is not None, rep
 
 
 # =============
