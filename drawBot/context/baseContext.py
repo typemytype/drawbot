@@ -2,6 +2,8 @@ import AppKit
 import CoreText
 import Quartz
 
+from fontTools.pens.basePen import BasePen
+
 from drawBot.misc import DrawBotError, cmyk2rgb, warnings
 
 from tools import openType
@@ -28,7 +30,7 @@ class BezierContour(list):
         return "<BezierContour>"
 
 
-class BezierPath(object):
+class BezierPath(BasePen):
 
     """
     A bezier path object, if you want to draw the same over and over again.
@@ -36,86 +38,82 @@ class BezierPath(object):
 
     contourClass = BezierContour
 
-    def __init__(self, path=None):
+    _instructionSegmentTypeMap = {
+            AppKit.NSMoveToBezierPathElement: "move",
+            AppKit.NSLineToBezierPathElement: "line",
+            AppKit.NSCurveToBezierPathElement: "curve"
+        }
+
+    def __init__(self, path=None, glyphSet=None):
         if path is None:
             self._path = AppKit.NSBezierPath.bezierPath()
         else:
             self._path = path
+        BasePen.__init__(self, glyphSet)
 
     def __repr__(self):
         return "<BezierPath>"
 
-    def moveTo(self, x, y=None):
+    # pen support
+
+    def _moveTo(self, pt):
         """
         Move to a point `x`, `y`.
         """
-        if y is None:
-            x, y = x
-        self._path.moveToPoint_((x, y))
+        self._path.moveToPoint_(pt)
 
-    moveto = moveTo
-
-    def lineTo(self, x, y=None):
+    def _lineTo(self, pt):
         """
         Line to a point `x`, `y`.
         """
-        if y is None:
-            x, y = x
-        self._path.lineToPoint_((x, y))
+        self._path.lineToPoint_(pt)
 
-    lineto = lineTo
-
-    def curveTo(self, x1, y1, x2, y2=None, x3=None, y3=None):
+    def _curveToOne(self, pt1, pt2, pt3):
         """
         Curve to a point `x3`, `y3`.
         With given bezier handles `x1`, `y1` and `x2`, `y2`.
         """
-        if y2 is None and x3 is None and y3 is None:
-            x3, y3 = x2
-            x2, y2 = y1
-            x1, y1 = x1
-        self._path.curveToPoint_controlPoint1_controlPoint2_((x3, y3), (x1, y1), (x2, y2))
+        self._path.curveToPoint_controlPoint1_controlPoint2_(pt3, pt1, pt2)
 
-    curveto = curveTo
+    def closePath(self):
+        """
+        Close the path.
+        """
+        self._path.closePath()
 
-    def _qCurveToOne(self, pt1, pt2):
-        # taken from fontTools.pens.basePen
-        pt0x, pt0y = self._path.currentPoint()
-        pt1x, pt1y = pt1
-        pt2x, pt2y = pt2
-        mid1x = pt0x + 0.66666666666666667 * (pt1x - pt0x)
-        mid1y = pt0y + 0.66666666666666667 * (pt1y - pt0y)
-        mid2x = pt2x + 0.66666666666666667 * (pt1x - pt2x)
-        mid2y = pt2y + 0.66666666666666667 * (pt1y - pt2y)
-        self.curveTo((mid1x, mid1y), (mid2x, mid2y), pt2)
+    def endPath(self):
+        pass
 
-    def qCurveTo(self, *points):
-        from fontTools.pens.basePen import decomposeQuadraticSegment
-        # taken from fontTools.pens.basePen
-        n = len(points) - 1
-        assert n >= 0
-        if points[-1] is None:
-            # Special case for TrueType quadratics: it is possible to
-            # define a contour with NO on-curve points. BasePen supports
-            # this by allowing the final argument (the expected on-curve
-            # point) to be None. We simulate the feature by making the implied
-            # on-curve point between the last and the first off-curve points
-            # explicit.
-            x, y = points[-2]  # last off-curve point
-            nx, ny = points[0]  # first off-curve point
-            impliedStartPoint = (0.5 * (x + nx), 0.5 * (y + ny))
-            self.moveTo(impliedStartPoint)
-            points = points[:-1] + (impliedStartPoint,)
-        if n > 0:
-            # Split the string of points into discrete quadratic curve
-            # segments. Between any two consecutive off-curve points
-            # there's an implied on-curve point exactly in the middle.
-            # This is where the segment splits.
-            _qCurveToOne = self._qCurveToOne
-            for pt1, pt2 in decomposeQuadraticSegment(points):
-                _qCurveToOne(pt1, pt2)
-        else:
-            self.lineTo(points[0])
+    def drawToPen(self, pen):
+        contours = self.contours
+        for contour in contours:
+            for i, segment in enumerate(contour):
+                if i == 0:
+                    pen.moveTo(*segment)
+                elif len(segment) == 1:
+                    pen.lineTo(*segment)
+                else:
+                    pen.curveTo(*segment)
+            if contour.open:
+                pen.endPath()
+            else:
+                pen.closePath()
+
+    def drawToPointPen(self, pointPen):
+        contours = self.contours
+        for contour in contours:
+            pointPen.beginPath()
+            for i, segment in enumerate(contour):
+                if len(segment) == 1:
+                    segmentType = "line"
+                    if i == 0 and contour.open:
+                        segmentType = "move"
+                    pointPen.addPoint(segment[0], segmentType=segmentType)
+                else:
+                    pointPen.addPoint(segment[0])
+                    pointPen.addPoint(segment[1])
+                    pointPen.addPoint(segment[2], segmentType="curve")
+            pointPen.endPath()
 
     def arc(self, center, radius, startAngle, endAngle, clockwise):
         """
@@ -129,17 +127,6 @@ class BezierPath(object):
         Arc from one point to an other point with a given `radius`.
         """
         self._path.appendBezierPathWithArcFromPoint_toPoint_radius_(pt1, pt2, radius)
-
-    def closePath(self):
-        """
-        Close the path.
-        """
-        self._path.closePath()
-
-    closepath = closePath
-
-    def endPath(self):
-        pass
 
     def rect(self, x, y, w, h):
         """
