@@ -8,6 +8,7 @@ from drawBot.ui.drawBotController import DrawBotController
 from drawBot.ui.preferencesController import PreferencesController
 from drawBot.ui.debug import DebugWindowController
 
+import drawBot.drawBotDrawingTools
 from drawBot.misc import getDefault, stringToInt
 from drawBot.updater import Updater
 
@@ -77,6 +78,7 @@ class DrawBotAppDelegate(AppKit.NSObject):
 
     def applicationDidBecomeActive_(self, notification):
         self.sheduleIconTimer()
+        drawBot.drawBotDrawingTools._chachedPixelColorBitmaps.clear()
 
     def applicationShouldOpenUntitledFile_(self, sender):
         return True
