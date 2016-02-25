@@ -2,6 +2,8 @@ import AppKit
 import CoreText
 import Quartz
 
+import math
+
 from baseContext import BaseContext, FormattedString
 from drawBot.misc import DrawBotError, isPDF
 
@@ -295,8 +297,15 @@ class PDFContext(BaseContext):
         else:
             c = shadow.color.getNSObject()
             color = self._rgbNSColorToCGColor(c)
-
-        Quartz.CGContextSetShadowWithColor(self._pdfContext, self._state.shadow.offset, self._state.shadow.blur, color)
+        currentTransformation = Quartz.CGContextGetUserSpaceToDeviceSpaceTransform(self._pdfContext)
+        scaleX = math.sqrt(currentTransformation[0] * currentTransformation[0] + currentTransformation[1] * currentTransformation[1])
+        scaleY = math.sqrt(currentTransformation[2] * currentTransformation[2] + currentTransformation[3] * currentTransformation[3])
+        x, y = self._state.shadow.offset
+        x *= scaleX
+        y *= scaleY
+        blur = self._state.shadow.blur
+        blur *= (scaleX + scaleY) / 2.
+        Quartz.CGContextSetShadowWithColor(self._pdfContext, (x, y), self._state.shadow.blur, color)
 
     def _pdfGradient(self, gradient):
         if gradient.cmykColors:
