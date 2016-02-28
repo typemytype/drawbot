@@ -582,6 +582,8 @@ class DrawBotDrawingTool(object):
         """
         Adds a shadow with an `offset` (x, y), `blur` and a `color`.
         The `color` argument must be a tuple similarly as `fill`.
+        The `offset`and `blur` argument will be drawn indepeneded of the current
+        context transformations.
 
         .. showcode:: /../examples/shadow.py
         """
