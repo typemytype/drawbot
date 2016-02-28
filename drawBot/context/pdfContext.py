@@ -297,15 +297,18 @@ class PDFContext(BaseContext):
         else:
             c = shadow.color.getNSObject()
             color = self._rgbNSColorToCGColor(c)
-        currentTransformation = Quartz.CGContextGetUserSpaceToDeviceSpaceTransform(self._pdfContext)
-        scaleX = math.sqrt(currentTransformation[0] * currentTransformation[0] + currentTransformation[1] * currentTransformation[1])
-        scaleY = math.sqrt(currentTransformation[2] * currentTransformation[2] + currentTransformation[3] * currentTransformation[3])
+        # XXX
+        # needs to be solved
+        # for now adjust the documentation
+        # currentTransformation = Quartz.CGContextGetUserSpaceToDeviceSpaceTransform(self._pdfContext)
+        # scaleX = math.sqrt(currentTransformation[0] * currentTransformation[0] + currentTransformation[1] * currentTransformation[1])
+        # scaleY = math.sqrt(currentTransformation[2] * currentTransformation[2] + currentTransformation[3] * currentTransformation[3])
         x, y = self._state.shadow.offset
-        x *= scaleX
-        y *= scaleY
+        # x *= scaleX
+        # y *= scaleY
         blur = self._state.shadow.blur
-        blur *= (scaleX + scaleY) / 2.
-        Quartz.CGContextSetShadowWithColor(self._pdfContext, (x, y), self._state.shadow.blur, color)
+        # blur *= (scaleX + scaleY) / 2.
+        Quartz.CGContextSetShadowWithColor(self._pdfContext, (x, y), blur, color)
 
     def _pdfGradient(self, gradient):
         if gradient.cmykColors:
