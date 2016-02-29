@@ -1,4 +1,6 @@
 import AppKit
+import Quartz
+
 import sys
 import os
 
@@ -74,11 +76,15 @@ def optimizePath(path):
     return path
 
 
-def formatNumber(value, precision=1000):
+# ================
+# = number tools =
+# ================
+
+def formatNumber(value, decimals=3):
     value = float(value)
     if value.is_integer():
         return "%i" % value
-    value = round(value*precision) / precision
+    value = round(value, decimals)
     return "%s" % value
 
 
@@ -111,10 +117,38 @@ def rgb2cmyk(r, g, b):
     return c, m, y, k
 
 
+# ==============
+# = file tools =
+# ==============
+
+def isPDF(url):
+    if not isinstance(url, AppKit.NSURL):
+        url = AppKit.NSURL.fileURLWithPath_(url)
+    if url.pathExtension().lower() != "pdf":
+        return False, None
+    doc = AppKit.PDFDocument.alloc().initWithURL_(url)
+    return doc is not None, doc
+
+
+def isEPS(url):
+    if not isinstance(url, AppKit.NSURL):
+        url = AppKit.NSURL.fileURLWithPath_(url)
+    if url.pathExtension().lower() != "eps":
+        return False, None
+    rep = AppKit.NSEPSImageRep.imageRepWithContentsOfURL_(url)
+    return rep is not None, rep
+
+
+# =============
+
 def stringToInt(code):
     import struct
     return struct.unpack('>l', code)[0]
 
+
+# ============
+# = warnings =
+# ============
 
 class Warnings(object):
 
@@ -163,6 +197,10 @@ class VariableController(object):
             name = attribute["name"]
             args = dict(attribute.get("args", {}))
             height = 19
+            # adjust the height if a radioGroup is vertical
+            if uiElement == "RadioGroup":
+                if args.get("isVertical", True):
+                    height = height * len(args.get("titles", [""]))
             # create a label for every ui element except a checkbox
             if uiElement != "CheckBox":
                 # create the label view
@@ -193,6 +231,7 @@ class VariableController(object):
         self.w.resize(250, y)
 
     def changed(self, sender):
+        self.documentWindowToFront()
         if self._callback:
             self._callback()
 
@@ -205,3 +244,6 @@ class VariableController(object):
 
     def show(self):
         self.w.show()
+
+    def documentWindowToFront(self, sender=None):
+        self.w.makeKey()

@@ -93,7 +93,7 @@ class Updater(object):
         self.w.close()
 
     def openInBrowserCallback(self, sender):
-        url = "http://drawbot.readthedocs.org/en/latest/content/download.html"
+        url = "http://www.drawbot.com/content/download.html"
         url = AppKit.NSURL.URLWithString_(url)
         AppKit.NSWorkspace.sharedWorkspace().openURL_(url)
         self.w.close()
