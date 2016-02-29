@@ -3,7 +3,7 @@ import AppKit
 import CoreText
 
 import os
-
+import base64
 import random
 
 from xmlWriter import XMLWriter
@@ -49,10 +49,23 @@ class SVGColor(Color):
     def svgColor(self):
         c = self.getNSObject()
         if c:
-            return "rgba(%s,%s,%s,%s)" % (int(255*c.redComponent()),
-                                          int(255*c.greenComponent()),
-                                          int(255*c.blueComponent()),
-                                          c.alphaComponent())
+            if c.numberOfComponents() == 2:
+                try:
+                    w = c.whiteComponent()
+                except ValueError, err:
+                    c = c.colorUsingColorSpaceName_(AppKit.NSCalibratedWhiteColorSpace)
+                # gray number
+                r = g = b = int(255*c.whiteComponent())
+            else:
+                try:
+                    red = c.redComponent()
+                except (AttributeError,ValueError), err:
+                    c = c.colorUsingColorSpaceName_(AppKit.NSCalibratedRGBColorSpace)
+                r = int(255 * c.redComponent())
+                g = int(255 * c.greenComponent())
+                b = int(255 * c.blueComponent())
+            a = c.alphaComponent()
+            return "rgba(%s,%s,%s,%s)" % (r, g, b, a)
         return "none"
 
 
@@ -267,6 +280,9 @@ class SVGContext(BaseContext):
 
     # svg
 
+    def _reset(self):
+        self._embeddedFonts = set()
+
     def _newPage(self, width, height):
         if hasattr(self, "_svgContext"):
             self._svgContext.endtag("svg")
@@ -350,7 +366,8 @@ class SVGContext(BaseContext):
         defaultData = self._svgDrawingAttributes()
 
         data = {
-            "text-anchor": "start"
+            "text-anchor": "start",
+            "transform": self._svgTransform(self._state.transformMatrix.translate(x, y + self.height).scale(1, -1))
             }
         if self._state.shadow is not None:
             data["filter"] = "url(#%s_flipped)" % self._state.shadow.tagID
@@ -371,6 +388,7 @@ class SVGContext(BaseContext):
                 fillColor = attributes.get(AppKit.NSForegroundColorAttributeName)
                 strokeColor = attributes.get(AppKit.NSStrokeColorAttributeName)
                 strokeWidth = attributes.get(AppKit.NSStrokeWidthAttributeName, self._state.strokeWidth)
+                baselineShift = attributes.get(AppKit.NSBaselineOffsetAttributeName, 0)
 
                 fontName = font.fontName()
                 fontSize = font.pointSize()
@@ -400,8 +418,8 @@ class SVGContext(BaseContext):
                     runX = runPos[0].x
                     runY = runPos[0].y
 
-                spanData["x"] = originX + runX + x
-                spanData["y"] = self.height - y - originY - runY
+                spanData["x"] = originX + runX
+                spanData["y"] = self.height - originY - runY + baselineShift
                 self._svgContext.begintag("tspan", **spanData)
                 self._svgContext.newline()
                 self._svgContext.write(runTxt)
@@ -414,7 +432,7 @@ class SVGContext(BaseContext):
         self._svgContext.newline()
         self._svgEndClipPath()
 
-    def _image(self, path, (x, y), alpha):
+    def _image(self, path, (x, y), alpha, pageNumber):
         self._svgBeginClipPath()
         if path.startswith("http"):
             url = AppKit.NSURL.URLWithString_(path)
@@ -519,3 +537,39 @@ class SVGContext(BaseContext):
             return self._state.strokeColor.svgColor()
         else:
             return "none"
+
+    def installFont(self, path):
+        success, error = super(self.__class__, self).installFont(path)
+        # if path not in self._embeddedFonts:
+        #     warnings.warn("Your font will be embedded and accessibele")
+        #     self._embeddedFonts.add(path)
+
+        #     f = open(path, "r")
+        #     fontData = f.read()
+        #     f.close()
+        #     fontName = self._fontNameForPath(path)
+
+        #     ctx = self._svgContext
+        #     ctx.begintag("defs")
+        #     ctx.newline()
+        #     ctx.begintag("style", type="text/css")
+        #     ctx.newline()
+        #     ctx.write("@font-face {")
+        #     ctx.newline()
+        #     ctx.indent()
+        #     ctx.write("font-family: %s;" % fontName)
+        #     ctx.newline()
+        #     if path.startswith("http"):
+        #         ctx.write("src: url(%s');" % path)
+        #     else:
+        #         ctx.write("src: url('data:application/font-woff;charset=utf-8;base64,%s');" % base64.b64encode(fontData))
+        #     ctx.newline()
+        #     ctx.dedent()
+        #     ctx.write("}")
+        #     ctx.newline()
+        #     ctx.endtag("style")
+        #     ctx.newline()
+        #     ctx.endtag("defs")
+        #     ctx.newline()
+
+        return success, error
