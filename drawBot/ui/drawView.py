@@ -34,9 +34,21 @@ class ThumbnailView(Group):
         return -1
 
 
+class DrawBotPDFView(PDFView):
+
+    def performKeyEquivalent_(self, event):
+        # catch a bug in PDFView
+        # cmd + ` causes a traceback
+        # DrawBot[15705]: -[__NSCFConstantString characterAtIndex:]: Range or index out of bounds
+        try:
+            return super(DrawBotPDFView, self).performKeyEquivalent_(event)
+        except:
+            return False
+
+
 class DrawView(Group):
 
-    nsViewClass = PDFView
+    nsViewClass = DrawBotPDFView
 
     def __init__(self, posSize):
         objc.super(DrawView, self).__init__(posSize)
@@ -53,7 +65,7 @@ class DrawView(Group):
         return pdf.dataRepresentation()
 
     def set(self, pdfData):
-        pdf = PDFDocument.alloc().initWithData_(self._pdfData)
+        pdf = PDFDocument.alloc().initWithData_(pdfData)
         self.setPDFDocument(pdf)
 
     def setPath(self, path):

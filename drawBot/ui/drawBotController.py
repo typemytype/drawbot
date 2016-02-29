@@ -109,7 +109,7 @@ class DrawBotController(BaseWindowController):
                 _drawBotDrawingTool._drawInContext(context)
             # create a context to draw in
             context = DrawBotContext()
-            # savely run the callback and track all traceback back the the output
+            # savely run the callback and track all traceback back the output
             CallbackRunner(createContext, stdout=self.stdout, stderr=self.stderr, args=[context])
             # get the pdf document and set in the draw view
             pdfDocument = context.getNSPDFDocument()
@@ -121,7 +121,8 @@ class DrawBotController(BaseWindowController):
         else:
             # if the panes are not visible, clear the draw view
             self.drawView.setPDFDocument(None)
-
+        # drawing is done
+        _drawBotDrawingTool.endDrawing()
         # set the catched print statements and tracebacks in the the output text view
         for text, isError in self.output:
             if liveCoding and isError:
