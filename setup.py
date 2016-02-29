@@ -36,7 +36,7 @@ ftpPath = getValueFromSysArgv("--ftppath")
 ftpLogin = getValueFromSysArgv("--ftplogin")
 ftpPassword = getValueFromSysArgv("--ftppassword")
 
-osxMinVersion = "10.9.0"
+osxMinVersion = "10.6.8"
 
 plist = dict(
 

@@ -8,6 +8,7 @@ import PyObjCTools.AppHelper
 import os
 from random import randint
 
+import drawBot
 from drawBot.ui.drawBotController import DrawBotController
 from drawBot.ui.preferencesController import PreferencesController
 from drawBot.ui.debug import DebugWindowController
@@ -17,8 +18,7 @@ from drawBot.updater import Updater
 
 import objc
 
-objc.setVerbose(True)
-
+objc.setVerbose(0)
 
 class DrawBotDocument(AppKit.NSDocument):
 
@@ -67,12 +67,15 @@ class DrawBotDocument(AppKit.NSDocument):
         return True
 
 
-class DrawBotAppDelegate(AppKit.NSObject):
+class DrawBotAppDelegate(Foundation.NSObject):
 
     def init(self):
+        
         self = objc.super(DrawBotAppDelegate, self).init()
         code = stringToInt("GURL")
-        AppKit.NSAppleEventManager.sharedAppleEventManager().setEventHandler_andSelector_forEventClass_andEventID_(self, "getUrl:withReplyEvent:", code, code)
+        ae = AppKit.NSAppleEventManager.sharedAppleEventManager()
+        ae.setEventHandler_andSelector_forEventClass_andEventID_(
+                                    self, "getUrl:withReplyEvent:", code, code)
         return self
 
     def applicationDidFinishLaunching_(self, notification):
@@ -88,7 +91,7 @@ class DrawBotAppDelegate(AppKit.NSObject):
 
     def sheduleIconTimer(self):
         if getDefault("DrawBotAnimateIcon", True):
-            self._iconTimer = AppKit.NSTimer.scheduledTimerWithTimeInterval_target_selector_userInfo_repeats_(0.1, self, "animateApplicationIcon:", None, False)
+            self._iconTimer = Foundation.NSTimer.scheduledTimerWithTimeInterval_target_selector_userInfo_repeats_(0.1, self, "animateApplicationIcon:", None, False)
 
     def animateApplicationIcon_(self, timer):
         if AppKit.NSApp().isActive():

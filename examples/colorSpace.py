@@ -9,7 +9,7 @@ w = width() / len(colorSpaces)
 
 # start loop
 for space in colorSpaces:
-
+    print space
     # set a color space
     colorSpace(space)
     # set the color
