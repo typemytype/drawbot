@@ -475,7 +475,7 @@ class FormattedString(object):
             self.append(txt, font=font, fontSize=fontSize, fallbackFont=fallbackFont,
                         fill=fill, cmykFill=cmykFill,
                         stroke=stroke, cmykStroke=cmykStroke, strokeWidth=strokeWidth,
-                        align=align, lineHeight=lineHeight,
+                        align=align, lineHeight=lineHeight, tracking=tracking, baselineShift=baselineShift,
                         openTypeFeatures=openTypeFeatures)
 
     def append(self, txt,
@@ -613,6 +613,10 @@ class FormattedString(object):
             elif cmykFill:
                 fillColor = self._cmykColorClass.getColor(cmykFill).getNSObject()
             attributes[AppKit.NSForegroundColorAttributeName] = fillColor
+        else:
+            # seems like the default foreground color is black
+            # set clear color when the fill is None
+            attributes[AppKit.NSForegroundColorAttributeName] = AppKit.NSColor.clearColor()
         if stroke or cmykStroke:
             if stroke:
                 strokeColor = self._colorClass.getColor(stroke).getNSObject()
@@ -724,6 +728,8 @@ class FormattedString(object):
         Sets the fill color with a `red`, `green`, `blue` and `alpha` value.
         Each argument must a value float between 0 and 1.
         """
+        if fill and fill[0] is None:
+            fill = None
         self._fill = fill
         self._cmykFill = None
 
@@ -732,6 +738,8 @@ class FormattedString(object):
         Sets the stroke color with a `red`, `green`, `blue` and `alpha` value.
         Each argument must a value float between 0 and 1.
         """
+        if stroke and stroke[0] is None:
+            stroke = None
         self._stroke = stroke
         self._cmykStroke = None
 
@@ -741,6 +749,8 @@ class FormattedString(object):
 
         Sets the CMYK fill color. Each value must be a float between 0.0 and 1.0.
         """
+        if cmykFill and cmykFill[0] is None:
+            cmykFill = None
         self._cmykFill = cmykFill
         self._fill = None
 
@@ -750,6 +760,8 @@ class FormattedString(object):
 
         Sets the CMYK stroke color. Each value must be a float between 0.0 and 1.0.
         """
+        if cmykStroke and cmykStroke[0] is None:
+            cmykStroke = None
         self._cmykStroke = cmykStroke
         self._stroke = None
 
@@ -818,7 +830,13 @@ class FormattedString(object):
         """
         Copy the formatted string.
         """
-        new = self.__class__()
+        new = self.__class__(
+            font=self._font, fontSize=self._fontSize, fallbackFont=self._fallbackFont,
+            fill=self._fill, cmykFill=self._cmykFill,
+            stroke=self._stroke, cmykStroke=self._cmykStroke, strokeWidth=self._strokeWidth,
+            align=self._align, lineHeight=self._lineHeight, tracking=self._tracking, baselineShift=self._baselineShift,
+            openTypeFeatures=self._openTypeFeatures
+            )
         new._attributedString = self._attributedString.mutableCopy()
         return new
 
