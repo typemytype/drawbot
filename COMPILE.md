@@ -6,7 +6,6 @@ drawBot.app
 
 ### Required packages:
 
-
 * [vanilla](https://github.com/typesupply/vanilla)
 * [defcon](https://github.com/typesupply/defcon)
 * [defconAppKit](https://github.com/typesupply/defconAppKit)
@@ -14,7 +13,13 @@ drawBot.app
 * [fontTools](https://github.com/behdad/fonttools)
 * [pygments](http://pygments.org)
 * [jedi](http://jedi.jedidjah.ch/en/latest/)
-
+* [booleanGlyph](https://github.com/typemytype/booleanOperations)
+* [mutatorMath](https://github.com/LettError/MutatorMath)
+* [woffTools](https://github.com/typesupply/woffTools)
+* [compositor](https://github.com/typesupply/compositor)
+* [feaTools2](https://github.com/typesupply/feaTools2)
+* [ufo2svg](https://github.com/typesupply/ufo2svg)
+* [fontTools](https://github.com/behdad/fontTools)
 
 ### Compile:
 
