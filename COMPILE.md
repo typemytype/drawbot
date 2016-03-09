@@ -13,7 +13,7 @@ drawBot.app
 * [fontTools](https://github.com/behdad/fonttools)
 * [pygments](http://pygments.org)
 * [jedi](http://jedi.jedidjah.ch/en/latest/)
-* [booleanGlyph](https://github.com/typemytype/booleanOperations)
+* [booleanOperations](https://github.com/typemytype/booleanOperations)
 * [mutatorMath](https://github.com/LettError/MutatorMath)
 * [woffTools](https://github.com/typesupply/woffTools)
 * [compositor](https://github.com/typesupply/compositor)
