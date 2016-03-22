@@ -1257,7 +1257,7 @@ class DrawBotDrawingTool(object):
 
     _bezierPathClass = BezierPath
 
-    def BezierPath(self, path=None):
+    def BezierPath(self, path=None, glyphSet=None):
         """
         Return a BezierPath object.
         This is a reusable object, if you want to draw the same over and over again.
@@ -1267,7 +1267,7 @@ class DrawBotDrawingTool(object):
         .. autoclass:: drawBot.context.baseContext.BezierPath
             :members:
         """
-        return self._bezierPathClass(path)
+        return self._bezierPathClass(path, glyphSet)
 
     def Bezierpath(self, path=None):
         _deprecatedWarningLowercase("BezierPath()")
