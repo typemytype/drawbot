@@ -1,6 +1,6 @@
 DrawBot Icon
 ============
 
-The making off (by Andy Clymer)
+The making of (by Andy Clymer)
 
 .. showcode:: /../examples/drawBotIcon.py
