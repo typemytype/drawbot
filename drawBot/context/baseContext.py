@@ -449,12 +449,18 @@ class FormattedString(object):
         justified=AppKit.NSJustifiedTextAlignment,
         )
 
+    _textTabAlignMap = dict(
+        center=AppKit.NSCenterTextAlignment,
+        left=AppKit.NSLeftTextAlignment,
+        right=AppKit.NSRightTextAlignment,
+        )
+
     def __init__(self, txt=None,
                         font=_FALLBACKFONT, fontSize=10, fallbackFont=None,
                         fill=(0, 0, 0), cmykFill=None,
                         stroke=None, cmykStroke=None, strokeWidth=1,
                         align=None, lineHeight=None, tracking=None, baselineShift=None,
-                        openTypeFeatures=None):
+                        openTypeFeatures=None, tabs=None):
         self._attributedString = AppKit.NSMutableAttributedString.alloc().init()
         self._font = font
         self._fontSize = fontSize
@@ -471,19 +477,20 @@ class FormattedString(object):
         if openTypeFeatures is None:
             openTypeFeatures = dict()
         self._openTypeFeatures = openTypeFeatures
+        self._tabs = tabs
         if txt:
             self.append(txt, font=font, fontSize=fontSize, fallbackFont=fallbackFont,
                         fill=fill, cmykFill=cmykFill,
                         stroke=stroke, cmykStroke=cmykStroke, strokeWidth=strokeWidth,
                         align=align, lineHeight=lineHeight, tracking=tracking, baselineShift=baselineShift,
-                        openTypeFeatures=openTypeFeatures)
+                        openTypeFeatures=openTypeFeatures, tabs=tabs)
 
     def append(self, txt,
                     font=None, fallbackFont=None, fontSize=None,
                     fill=None, cmykFill=None,
                     stroke=None, cmykStroke=None, strokeWidth=None,
                     align=None, lineHeight=None, tracking=None, baselineShift=None,
-                    openTypeFeatures=None):
+                    openTypeFeatures=None, tabs=None):
         """
         Add `txt` to the formatted string with some additional text formatting attributes:
 
@@ -575,6 +582,11 @@ class FormattedString(object):
         else:
             self._openTypeFeatures = openTypeFeatures
 
+        if tabs is None:
+            tabs = self._tabs
+        else:
+            self._tabs = tabs
+
         if isinstance(txt, FormattedString):
             self._attributedString.appendAttributedString_(txt.getNSObject())
             return
@@ -627,6 +639,12 @@ class FormattedString(object):
         para = AppKit.NSMutableParagraphStyle.alloc().init()
         if align:
             para.setAlignment_(self._textAlignMap[align])
+        if tabs:
+            for tabStop in para.tabStops():
+                para.removeTabStop_(tabStop)
+            for tab, tabAlign in tabs:
+                tabStop = AppKit.NSTextTab.alloc().initWithTextAlignment_location_options_(self._textTabAlignMap[tabAlign], tab, None)
+                para.addTabStop_(tabStop)
         if lineHeight:
             # para.setLineSpacing_(lineHeight)
             para.setMaximumLineHeight_(lineHeight)
@@ -646,7 +664,7 @@ class FormattedString(object):
                     fill=self._fill, cmykFill=self._cmykFill,
                     stroke=self._stroke, cmykStroke=self._cmykStroke, strokeWidth=self._strokeWidth,
                     align=self._align, lineHeight=self._lineHeight, tracking=self._tracking,
-                    baselineShift=self._baselineShift, openTypeFeatures=self._openTypeFeatures)
+                    baselineShift=self._baselineShift, openTypeFeatures=self._openTypeFeatures, tabs=self._tabs)
         return new
 
     def __getitem__(self, index):
@@ -817,6 +835,19 @@ class FormattedString(object):
             fontName = self._font
         return openType.getFeatureTagsForFontName(fontName)
 
+    def tabs(self, *tabs):
+        """
+        Set tabs,tuples of (`float`, `alignment`)
+        Aligment can be `"left"`, `"center"` and `"right"`.
+        """
+        if tabs and tabs[0] is None:
+            self._tabs = None
+        else:
+            for tab, align in tabs:
+                if align not in self._textTabAlignMap.keys():
+                    raise DrawBotError("align must be %s" % (", ".join(self._textTabAlignMap.keys())))
+            self._tabs = tabs
+
     def size(self):
         """
         Return the size of the text.
@@ -957,6 +988,7 @@ class Text(object):
         self._tracking = None
         self._baselineShift = None
         self._hyphenation = None
+        self._tabs = []
         self.openTypeFeatures = dict()
 
     def _get_font(self):
@@ -1045,6 +1077,14 @@ class Text(object):
 
     hyphenation = property(_get_hyphenation, _set_hyphenation)
 
+    def _get_tabs(self):
+        return self._tabs
+
+    def _set_tabs(self, value):
+        self._tabs = value
+
+    tabs = property(_get_tabs, _set_tabs)
+
     def copy(self):
         new = self.__class__()
         new.fontName = self.fontName
@@ -1055,6 +1095,7 @@ class Text(object):
         new.baseline = self.baselineShift
         new.hyphenation = self.hyphenation
         new.openTypeFeatures = dict(self.openTypeFeatures)
+        new.tabs = list(self.tabs)
         return new
 
 
@@ -1153,6 +1194,12 @@ class BaseContext(object):
         left=AppKit.NSLeftTextAlignment,
         right=AppKit.NSRightTextAlignment,
         justified=AppKit.NSJustifiedTextAlignment,
+        )
+
+    _textTabAlignMap = dict(
+        center=AppKit.NSCenterTextAlignment,
+        left=AppKit.NSLeftTextAlignment,
+        right=AppKit.NSRightTextAlignment,
         )
 
     _colorSpaceMap = dict(
@@ -1479,6 +1526,12 @@ class BaseContext(object):
     def hyphenation(self, value):
         self._state.text.hyphenation = value
 
+    def tabs(self, *tabs):
+        if tabs and tabs[0] is None:
+            self._state.text.tabs = []
+        else:
+            self._state.text.tabs = tabs
+
     def openTypeFeatures(self, *args, **features):
         if args and args[0] is None:
             self._state.text.openTypeFeatures.clear()
@@ -1517,6 +1570,12 @@ class BaseContext(object):
             # para.setLineSpacing_(self._state.text.lineHeight)
             para.setMaximumLineHeight_(self._state.text.lineHeight)
             para.setMinimumLineHeight_(self._state.text.lineHeight)
+        if self._state.text.tabs:
+            for tabStop in para.tabStops():
+                para.removeTabStop_(tabStop)
+            for tab, tabAlign in self._state.text.tabs:
+                tabStop = AppKit.NSTextTab.alloc().initWithTextAlignment_location_options_(self._textTabAlignMap[tabAlign], tab, None)
+                para.addTabStop_(tabStop)
         attributes[AppKit.NSParagraphStyleAttributeName] = para
         if self._state.text.tracking:
             attributes[AppKit.NSKernAttributeName] = self._state.text.tracking

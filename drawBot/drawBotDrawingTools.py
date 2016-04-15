@@ -929,6 +929,23 @@ class DrawBotDrawingTool(object):
         self._dummyContext.hyphenation(value)
         self._addInstruction("hyphenation", value)
 
+    def tabs(self, *tabs):
+        """
+        Set tabs, tuples of (`float`, `alignment`)
+        Aligment can be `"left"`, `"center"` and `"right"`.
+
+        .. showcode:: /../examples/tabs.py
+        """
+        if tabs and tabs[0] is None:
+            self._dummyContext.tabs(None)
+            self._addInstruction("tabs", None)
+            return
+        for tab, align in tabs:
+            if align not in self._dummyContext._textTabAlignMap.keys():
+                raise DrawBotError("align must be %s" % (", ".join(self._dummyContext._textTabAlignMap.keys())))
+        self._dummyContext.tabs(*tabs)
+        self._addInstruction("tabs", *tabs)
+
     def openTypeFeatures(self, *args, **features):
         """
         Enable OpenType features.
