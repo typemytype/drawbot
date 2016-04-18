@@ -643,7 +643,14 @@ class FormattedString(object):
             for tabStop in para.tabStops():
                 para.removeTabStop_(tabStop)
             for tab, tabAlign in tabs:
-                tabStop = AppKit.NSTextTab.alloc().initWithTextAlignment_location_options_(self._textTabAlignMap[tabAlign], tab, None)
+                tabOptions = None
+                if tabAlign in self._textTabAlignMap:
+                    tabAlign = self._textTabAlignMap[tabAlign]
+                else:
+                    tabCharSet = AppKit.NSCharacterSet.characterSetWithCharactersInString_(tabAlign)
+                    tabOptions = {AppKit.NSTabColumnTerminatorsAttributeName: tabCharSet}
+                    tabAlign = self._textAlignMap["right"]
+                tabStop = AppKit.NSTextTab.alloc().initWithTextAlignment_location_options_(tabAlign, tab, tabOptions)
                 para.addTabStop_(tabStop)
         if lineHeight:
             # para.setLineSpacing_(lineHeight)
@@ -838,14 +845,12 @@ class FormattedString(object):
     def tabs(self, *tabs):
         """
         Set tabs,tuples of (`float`, `alignment`)
-        Aligment can be `"left"`, `"center"` and `"right"`.
+        Aligment can be `"left"`, `"center"`, `"right"` or any other character.
+        If a character is provided the alignment will be `right` and centered on the specified character.
         """
         if tabs and tabs[0] is None:
             self._tabs = None
         else:
-            for tab, align in tabs:
-                if align not in self._textTabAlignMap.keys():
-                    raise DrawBotError("align must be %s" % (", ".join(self._textTabAlignMap.keys())))
             self._tabs = tabs
 
     def size(self):
@@ -1574,7 +1579,14 @@ class BaseContext(object):
             for tabStop in para.tabStops():
                 para.removeTabStop_(tabStop)
             for tab, tabAlign in self._state.text.tabs:
-                tabStop = AppKit.NSTextTab.alloc().initWithTextAlignment_location_options_(self._textTabAlignMap[tabAlign], tab, None)
+                tabOptions = None
+                if tabAlign in self._textTabAlignMap:
+                    tabAlign = self._textTabAlignMap[tabAlign]
+                else:
+                    tabCharSet = AppKit.NSCharacterSet.characterSetWithCharactersInString_(tabAlign)
+                    tabOptions = {AppKit.NSTabColumnTerminatorsAttributeName: tabCharSet}
+                    tabAlign = self._textAlignMap["right"]
+                tabStop = AppKit.NSTextTab.alloc().initWithTextAlignment_location_options_(tabAlign, tab, tabOptions)
                 para.addTabStop_(tabStop)
         attributes[AppKit.NSParagraphStyleAttributeName] = para
         if self._state.text.tracking:

@@ -932,7 +932,8 @@ class DrawBotDrawingTool(object):
     def tabs(self, *tabs):
         """
         Set tabs, tuples of (`float`, `alignment`)
-        Aligment can be `"left"`, `"center"` and `"right"`.
+        Aligment can be `"left"`, `"center"`, `"right"` or any other character.
+        If a character is provided the alignment will be `right` and centered on the specified character.
 
         .. showcode:: /../examples/tabs.py
         """
@@ -940,9 +941,6 @@ class DrawBotDrawingTool(object):
             self._dummyContext.tabs(None)
             self._addInstruction("tabs", None)
             return
-        for tab, align in tabs:
-            if align not in self._dummyContext._textTabAlignMap.keys():
-                raise DrawBotError("align must be %s" % (", ".join(self._dummyContext._textTabAlignMap.keys())))
         self._dummyContext.tabs(*tabs)
         self._addInstruction("tabs", *tabs)
 
