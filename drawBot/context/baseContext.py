@@ -2,6 +2,8 @@ import AppKit
 import CoreText
 import Quartz
 
+import math
+
 from fontTools.pens.basePen import BasePen
 
 from drawBot.misc import DrawBotError, cmyk2rgb, warnings
@@ -258,6 +260,68 @@ class BezierPath(BasePen):
         new = self.__class__()
         new._path = self._path.copy()
         return new
+
+    def reverse(self):
+        """
+        Reverse the path direction
+        """
+        self._path = self._path.bezierPathByReversingPath()
+
+    def appendPath(self, otherPath):
+        """
+        Append a path.
+        """
+        self._path.appendBezierPath_(otherPath.getNSBezierPath())
+
+    def __add__(self, otherPath):
+        new = self.copy()
+        new.appendPath(otherPath)
+        return new
+
+    # transformations
+
+    def translate(self, x=0, y=0):
+        """
+        Translate the path with a given offset.
+        """
+        self.transform((1, 0, 0, 1, x, y))
+
+    def rotate(self, angle):
+        """
+        Rotate the path around the origin point with a given angle in degrees.
+        """
+        angle = math.radians(angle)
+        c = math.cos(angle)
+        s = math.sin(angle)
+        self.transform((c, s, -s, c, 0, 0))
+
+    def scale(self,  x=1, y=None):
+        """
+        Scale the path with a given `x` (horizontal scale) and `y` (vertical scale).
+
+        If only 1 argument is provided a proportional scale is applied.
+        """
+        if y is None:
+            y = x
+        self.transform((x, 0, 0, y, 0, 0))
+
+    def skew(self, angle1, angle2=0):
+        """
+        Skew the path with given `angle1` and `angle2`.
+
+        If only one argument is provided a proportional skew is applied.
+        """
+        angle1 = math.radians(angle1)
+        angle2 = math.radians(angle2)
+        self.transform((1, math.tan(angle2), math.tan(angle1), 1, 0, 0))
+
+    def transform(self, transformMatrix):
+        """
+        Transform a path with a transform matrix (xy, xx, yy, yx, x, y).
+        """
+        aT = AppKit.NSAffineTransform.transform()
+        aT.setTransformStruct_(transformMatrix[:])
+        self._path.transformUsingAffineTransform_(aT)
 
     def _points(self, onCurve=True, offCurve=True):
         points = []
