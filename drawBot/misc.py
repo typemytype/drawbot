@@ -202,9 +202,9 @@ class VariableController(object):
                 if args.get("isVertical", True):
                     height = height * len(args.get("titles", [""]))
             # create a label for every ui element except a checkbox
-            if uiElement != "CheckBox":
+            if uiElement not in ("CheckBox", "Button"):
                 # create the label view
-                label = vanilla.TextBox((0, y+2, labelSize-gutter, height), "%s:" % name, alignment="right", sizeStyle="small")
+                label = vanilla.TextBox((0, y + 2, labelSize - gutter, height), "%s:" % name, alignment="right", sizeStyle="small")
                 # set the label view
                 setattr(ui, "%sLabel" % name, label)
             else:
@@ -238,6 +238,8 @@ class VariableController(object):
     def get(self):
         data = {}
         for attribute in self._attributes:
+            if attribute["ui"] in ("Button", ):
+                continue
             name = attribute["name"]
             data[name] = getattr(self.w.ui, name).get()
         return data
