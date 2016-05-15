@@ -445,6 +445,8 @@ class DrawBotDrawingTool(object):
         """
         if isinstance(path, AppKit.NSBezierPath):
             path = self._bezierPathClass(path)
+        if isinstance(path, self._bezierPathClass):
+            path = path.copy()
         self._requiresNewFirstPage = True
         self._addInstruction("drawPath", path)
 
