@@ -16,8 +16,8 @@ class MOVContext(PDFContext):
         QTKit.QTAddImageCodecType: "png "
         }
 
-    _frameLength = 100
-    _frameScale = 1000
+    _frameLength = 3000
+    _frameScale = 30000
 
     def __init__(self):
         super(MOVContext, self).__init__()
