@@ -1361,6 +1361,13 @@ class BaseContext(object):
 
     def _printImage(self, pdf=None):
         pass
+    
+    def _linkDestination(self, name, (x, y)):
+        pass
+
+    def _linkRect(self, name, (x, y, w, h)):
+        pass
+    
 
     ###
 
@@ -1763,3 +1770,9 @@ class BaseContext(object):
         if psName is not None:
             psName = psName.toUnicode()
         return psName
+
+    def linkDestination(self, name, (x, y)):
+        self._linkDestination(name, (x, y))
+    
+    def linkRect(self, name, (x, y, w, h)):
+        self._linkRect(name, (x, y, w, h))

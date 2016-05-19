@@ -1152,6 +1152,28 @@ class DrawBotDrawingTool(object):
     def frameduration(self, seconds):
         _deprecatedWarningLowercase("frameDuration(%s)" % seconds)
         self.frameDuration(seconds)
+        
+        
+    # pdf links
+    
+    def linkDestination(self, name, x=None, y=None):
+        """
+        Add a destination point for a link within a PDF.
+        """
+        if x:
+            if len(x) == 2:
+                x, y = x
+            else: x, y = (None, None)
+        self._requiresNewFirstPage = True
+        self._addInstruction("linkDestination", name, (x, y))
+    
+    def linkRect(self, name, (x, y, w, h)):
+        """
+        Add a rect for a link within a PDF.
+        """
+        self._requiresNewFirstPage = True
+        self._addInstruction("linkRect", name, (x, y, w, h))
+        
 
     # helpers
 
