@@ -5,6 +5,7 @@ from drawBotSettings import __version__
 
 try:
     import fontTools
+    from xmlWriter import XMLWriter
 except:
     print "*** Warning: drawBot requires FontTools, see:"
     print "    https://github.com/behdad/fonttools"
