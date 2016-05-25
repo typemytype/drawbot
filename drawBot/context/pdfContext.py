@@ -206,6 +206,8 @@ class PDFContext(BaseContext):
         if isinstance(key, AppKit.NSImage):
             image = key
             key = id(key)
+        if pageNumber is not None:
+            key = "%s-%s" % (key, pageNumber)
         if key not in self._cachedImages:
             if image is None:
                 if path.startswith("http"):
