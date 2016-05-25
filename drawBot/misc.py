@@ -139,6 +139,15 @@ def isEPS(url):
     return rep is not None, rep
 
 
+def isGIF(url):
+    if not isinstance(url, AppKit.NSURL):
+        url = AppKit.NSURL.fileURLWithPath_(url)
+    if url.pathExtension().lower() != "gif":
+        return False, None
+    rep = AppKit.NSImageRep.imageRepWithContentsOfURL_(url)
+    return rep is not None, rep
+
+
 # =============
 
 def stringToInt(code):
