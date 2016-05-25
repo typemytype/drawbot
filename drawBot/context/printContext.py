@@ -29,8 +29,8 @@ class PrintContext(BaseContext):
     def _textBox(self, txt, (x, y, w, h), align):
         print "textBox", txt, (x, y, w, h), align
 
-    def _image(self, path, (x, y), alpha):
-        print "image", path, x, y, alpha
+    def _image(self, path, (x, y), alpha, pageNumber):
+        print "image", path, x, y, alpha, pageNumber
 
     def _frameDuration(self, seconds):
         print "frameDuration", seconds
