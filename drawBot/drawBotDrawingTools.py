@@ -1074,7 +1074,7 @@ class DrawBotDrawingTool(object):
         self._requiresNewFirstPage = True
         self._addInstruction("image", path, (x, y), alpha, pageNumber)
 
-    def imageSize(self, path):
+    def imageSize(self, path, pageNumber=None):
         """
         Return the `width` and `height` of an image.
 
@@ -1094,12 +1094,20 @@ class DrawBotDrawingTool(object):
                 if not os.path.exists(path):
                     raise DrawBotError("Image does not exist")
                 url = AppKit.NSURL.fileURLWithPath_(path)
-            _isPDF, _ = isPDF(url)
+            _isPDF, pdfDocument = isPDF(url)
             # check if the file is an .eps
             _isEPS, epsRep = isEPS(url)
             if _isEPS:
                 _isPDF = True
                 rep = epsRep
+            elif _isPDF and pageNumber is not None:
+                if pageNumber > pdfDocument.pageCount():
+                    pageNumber = pdfDocument.pageCount()
+                elif pageNumber <= 0:
+                    pageNumber = 1
+                page = pdfDocument.pageAtIndex_(pageNumber-1)
+                # this is probably not the fastest method...
+                rep = AppKit.NSImage.alloc().initWithData_(page.dataRepresentation())
             else:
                 rep = AppKit.NSImageRep.imageRepWithContentsOfURL_(url)
         if _isPDF:
@@ -1137,6 +1145,17 @@ class DrawBotDrawingTool(object):
             return None
         color = color.colorUsingColorSpaceName_("NSCalibratedRGBColorSpace")
         return color.redComponent(), color.greenComponent(), color.blueComponent(), color.alphaComponent()
+
+    def numberOfPages(self, path):
+        path = optimizePath(path)
+        if path.startswith("http"):
+            url = AppKit.NSURL.URLWithString_(path)
+        else:
+            url = AppKit.NSURL.fileURLWithPath_(path)
+        pdf = Quartz.CGPDFDocumentCreateWithURL(url)
+        if pdf:
+            return Quartz.CGPDFDocumentGetNumberOfPages(pdf)
+        return None
 
     # mov
 
