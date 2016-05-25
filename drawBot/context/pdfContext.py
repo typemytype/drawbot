@@ -4,8 +4,10 @@ import Quartz
 
 import math
 
+from tools import gifTools
+
 from baseContext import BaseContext, FormattedString
-from drawBot.misc import DrawBotError, isPDF
+from drawBot.misc import DrawBotError, isPDF, isGIF
 
 
 def sendPDFtoPrinter(pdfDocument):
@@ -215,6 +217,7 @@ class PDFContext(BaseContext):
                 else:
                     url = AppKit.NSURL.fileURLWithPath_(path)
                 _isPDF, _ = isPDF(url)
+                _isGIF, _ = isGIF(url)
                 if _isPDF:
                     pdf = Quartz.CGPDFDocumentCreateWithURL(url)
                     if pdf is not None:
@@ -223,6 +226,16 @@ class PDFContext(BaseContext):
                         self._cachedImages[key] = _isPDF, Quartz.CGPDFDocumentGetPage(pdf, pageNumber)
                     else:
                         raise DrawBotError("No pdf found at %s" % key)
+                elif _isGIF:
+                    if pageNumber is None:
+                        pageNumber = gifTools.gifFrameCount(url)
+                    image = gifTools.gifFrameAtIndex(url, pageNumber-1)
+                    data = image.TIFFRepresentation()
+                    source = Quartz.CGImageSourceCreateWithData(data, {})
+                    if source is not None:
+                        self._cachedImages[key] = False, Quartz.CGImageSourceCreateImageAtIndex(source, 0, None)
+                    else:
+                        raise DrawBotError("No image found at frame %s in %s" % (pageNumber, key))
                 else:
                     image = AppKit.NSImage.alloc().initByReferencingURL_(url)
             if image and not _isPDF:
