@@ -424,6 +424,9 @@ class SVGContext(BaseContext):
         self._svgEndClipPath()
 
     def _image(self, path, (x, y), alpha, pageNumber):
+        # todo:
+        # support embedding of images when the source is not a path but
+        # a nsimage or a pdf / gif with a pageNumber
         self._svgBeginClipPath()
         if path.startswith("http"):
             url = AppKit.NSURL.URLWithString_(path)
