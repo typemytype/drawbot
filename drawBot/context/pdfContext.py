@@ -365,3 +365,15 @@ class PDFContext(BaseContext):
             # gray color
             return Quartz.CGColorCreateGenericGray(c.whiteComponent(), c.alphaComponent())
         return Quartz.CGColorCreateGenericRGB(c.redComponent(), c.greenComponent(), c.blueComponent(), c.alphaComponent())
+    
+    def _linkDestination(self, name, (x, y)):
+        if (x, y) == (None, None):
+            x, y = self.width * 0.5, self.height * 0.5
+        x = max(0, min(x, self.width))
+        y = max(0, min(y, self.height))
+        centerPoint = Quartz.CGPoint(x, y)
+        Quartz.CGPDFContextAddDestinationAtPoint(self._pdfContext, name, centerPoint)
+
+    def _linkRect(self, name, (x, y, w, h)):
+        rectBox = Quartz.CGRectMake(x, y, w, h)
+        Quartz.CGPDFContextSetDestinationForRect(self._pdfContext, name, rectBox)
