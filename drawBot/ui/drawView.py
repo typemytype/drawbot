@@ -54,8 +54,9 @@ class DrawView(Group):
         pdfView = self.getNSView()
         pdfView.setAutoScales_(True)
         view = pdfView.documentView()
-        scrollview = view.enclosingScrollView()
-        scrollview.setBorderType_(NSBezelBorder)
+        if view is not None:
+            scrollview = view.enclosingScrollView()
+            scrollview.setBorderType_(NSBezelBorder)
 
     def get(self):
         pdf = self.getNSView().document()
