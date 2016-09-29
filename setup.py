@@ -119,44 +119,46 @@ appPlist = readPlist(path)
 appPlist["CFBundleIconFile"] = "DrawBot.icns"
 writePlist(appPlist, path)
 
-if "-A" not in sys.argv and codeSignDeveloperName:
+if "-A" not in sys.argv:
     # get relevant paths
     distLocation = os.path.join(os.getcwd(), "dist")
     appLocation = os.path.join(distLocation, "%s.app" % appName)
-    imgLocation = os.path.join(distLocation,  "img")
-    existingDmgLocation = os.path.join(distLocation,  "%s.dmg" % appName)
-    dmgLocation = os.path.join(distLocation,  appName)
+    imgLocation = os.path.join(distLocation, "img")
+    existingDmgLocation = os.path.join(distLocation, "%s.dmg" % appName)
+    dmgLocation = os.path.join(distLocation, appName)
 
     # copy external tools into the resources folder (gifsicle)
-    resourcesPath = os.path.join(appLocation, "contents", "Resources", "tools")
-    toolsSourcePath = os.path.join(os.getcwd(), "drawBot", "context", "tools")
-    print "copy", toolsSourcePath, resourcesPath
-    shutil.copytree(toolsSourcePath, resourcesPath)
+    gifsiclePathSource = os.path.join(os.getcwd(), "drawBot", "context", "tools", "gifsicle")
+    gifsiclePathDest = os.path.join(appLocation, "contents", "Resources", "gifsicle")
+    print "copy", gifsiclePathSource, gifsiclePathDest
+    shutil.copyfile(gifsiclePathSource, gifsiclePathDest)
+    os.chmod(gifsiclePathDest, 0775)
 
-    # ================
-    # = code singing =
-    # ================
-    print "---------------------"
-    print "-   code signing    -"
-    cmds = ["codesign", "--force", "--deep", "--sign", "Developer ID Application: %s" % codeSignDeveloperName, appLocation]
-    popen = subprocess.Popen(cmds)
-    popen.wait()
-    print "- done code singing -"
-    print "---------------------"
+    if codeSignDeveloperName:
+        # ================
+        # = code singing =
+        # ================
+        print "---------------------"
+        print "-   code signing    -"
+        cmds = ["codesign", "--force", "--deep", "--sign", "Developer ID Application: %s" % codeSignDeveloperName, appLocation]
+        popen = subprocess.Popen(cmds)
+        popen.wait()
+        print "- done code singing -"
+        print "---------------------"
 
-    print "------------------------------"
-    print "- verifying with codesign... -"
-    cmds = ["codesign", "--verify", "--verbose=4", appLocation]
-    popen = subprocess.Popen(cmds)
-    popen.wait()
-    print "------------------------------"
+        print "------------------------------"
+        print "- verifying with codesign... -"
+        cmds = ["codesign", "--verify", "--verbose=4", appLocation]
+        popen = subprocess.Popen(cmds)
+        popen.wait()
+        print "------------------------------"
 
-    print "---------------------------"
-    print "- verifying with spctl... -"
-    cmds = ["spctl", "--verbose=4", "--raw", "--assess", "--type", "execute", appLocation]
-    popen = subprocess.Popen(cmds)
-    popen.wait()
-    print "---------------------------"
+        print "---------------------------"
+        print "- verifying with spctl... -"
+        cmds = ["spctl", "--verbose=4", "--raw", "--assess", "--type", "execute", appLocation]
+        popen = subprocess.Popen(cmds)
+        popen.wait()
+        print "---------------------------"
 
     # ================
     # = creating dmg =
