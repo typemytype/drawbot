@@ -80,7 +80,7 @@ def optimizePath(path):
 # = number tools =
 # ================
 
-def formatNumber(value, decimals=3):
+def formatNumber(value, decimals=2):
     value = float(value)
     if value.is_integer():
         return "%i" % value
