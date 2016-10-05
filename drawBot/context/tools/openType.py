@@ -470,11 +470,22 @@ for key, value in _featureMap.items():
     reversedFeatureMap[(featureType, featureSelector)] = key
 
 
-def getFeatureTagsForFontName(fontName):
-    descriptor = CoreText.NSFontDescriptor.fontDescriptorWithName_size_(fontName, 12)
-    featureDescriptions = CoreText.CTFontDescriptorCopyAttribute(descriptor, CoreText.kCTFontFeaturesAttribute)
-    if featureDescriptions is None:
-        return []
+def getFeatureTagForFontAttribute(attribute):
+    featureType = attribute.get(CoreText.NSFontFeatureTypeIdentifierKey)
+    featureSelector = attribute.get(CoreText.NSFontFeatureSelectorIdentifierKey)
+    return reversedFeatureMap.get((featureType, featureSelector))
+
+
+def getFeatureTagsForFontAttributes(attributes):
+    featureTags = list()
+    for attribute in attributes:
+        tag = getFeatureTagForFontAttribute(attribute)
+        if tag:
+            featureTags.append(tag)
+    return featureTags
+
+
+def getFeatureTagsForDescriptions(featureDescriptions):
     featureTags = list()
     for featureDescription in featureDescriptions:
         featureType = featureDescription[CoreText.NSFontFeatureTypeIdentifierKey]
@@ -486,3 +497,10 @@ def getFeatureTagsForFontName(fontName):
                 if featureTag not in featureTags:
                     featureTags.append(featureTag)
     return featureTags
+
+def getFeatureTagsForFontName(fontName):
+    descriptor = CoreText.NSFontDescriptor.fontDescriptorWithName_size_(fontName, 12)
+    featureDescriptions = CoreText.CTFontDescriptorCopyAttribute(descriptor, CoreText.kCTFontFeaturesAttribute)
+    if featureDescriptions is None:
+        return []
+    return getFeatureTagsForDescriptions(featureDescriptions)
