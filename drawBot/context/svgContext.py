@@ -5,7 +5,7 @@ import os
 import base64
 import random
 
-from xmlWriter import XMLWriter
+from fontTools.misc.xmlWriter import XMLWriter
 
 from fontTools.misc.transform import Transform
 
