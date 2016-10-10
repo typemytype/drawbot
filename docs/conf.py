@@ -280,10 +280,10 @@ class Mock(object):
 
 MOCK_MODULES = ['py2app',
         'AppKit', 'Quartz', 'CoreText', 'QTKit',
-        'xmlWriter',
         'fontTools',
         'fontTools.misc',
         'fontTools.misc.transform',
+        'fontTools.misc.xmlWriter',
         'fontTools.pens',
         'fontTools.pens.basePen',
         'vanilla']
