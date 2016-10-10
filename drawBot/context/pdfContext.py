@@ -4,6 +4,8 @@ import Quartz
 
 import math
 
+from vanilla.vanillaBase import osVersion10_11, osVersionCurrent
+
 from tools import gifTools
 
 from baseContext import BaseContext, FormattedString
@@ -194,6 +196,14 @@ class PDFContext(BaseContext):
                         Quartz.CGContextSetLineJoin(self._pdfContext, self._state.lineJoin)
                 if fillColor is not None and strokeColor is not None:
                     drawingMode = Quartz.kCGTextFillStroke
+                    if osVersionCurrent >= osVersion10_11:
+                        # solve bug in OSX where the stroke color is the same as the fill color
+                        # simple solution: draw it twice...
+                        drawingMode = Quartz.kCGTextFill
+                        Quartz.CGContextSetTextDrawingMode(self._pdfContext, drawingMode)
+                        Quartz.CGContextSetTextPosition(self._pdfContext, x+originX, y+originY+baselineShift)
+                        CoreText.CTRunDraw(ctRun, self._pdfContext, (0, 0))
+                        drawingMode = Quartz.kCGTextStroke
 
                 if drawingMode is not None:
                     Quartz.CGContextSetTextDrawingMode(self._pdfContext, drawingMode)
@@ -365,7 +375,7 @@ class PDFContext(BaseContext):
             # gray color
             return Quartz.CGColorCreateGenericGray(c.whiteComponent(), c.alphaComponent())
         return Quartz.CGColorCreateGenericRGB(c.redComponent(), c.greenComponent(), c.blueComponent(), c.alphaComponent())
-    
+
     def _linkDestination(self, name, (x, y)):
         if (x, y) == (None, None):
             x, y = self.width * 0.5, self.height * 0.5
