@@ -286,7 +286,9 @@ MOCK_MODULES = ['py2app',
         'fontTools.misc.xmlWriter',
         'fontTools.pens',
         'fontTools.pens.basePen',
-        'vanilla']
+        'vanilla',
+        'vanilla.vanillaBase']
+
 for mod_name in MOCK_MODULES:
     sys.modules[mod_name] = Mock()
 
