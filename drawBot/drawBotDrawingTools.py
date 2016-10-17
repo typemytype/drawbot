@@ -1288,40 +1288,38 @@ class DrawBotDrawingTool(object):
         """
         Returns the current font ascender, based on the current `font` and `fontSize`.
         """
-        return self._dummyContext._state.text.font.ascender()
+        return self._dummyContext._state.text.ascender()
 
     def fontDescender(self):
         """
         Returns the current font descender, based on the current `font` and `fontSize`.
         """
-        return self._dummyContext._state.text.font.descender()
+        return self._dummyContext._state.text.descender()
 
     def fontXHeight(self):
         """
         Returns the current font x-height, based on the current `font` and `fontSize`.
         """
-        return self._dummyContext._state.text.font.xHeight()
+        return self._dummyContext._state.text.xHeight()
 
     def fontCapHeight(self):
         """
         Returns the current font cap height, based on the current `font` and `fontSize`.
         """
-        return self._dummyContext._state.text.font.capHeight()
+        return self._dummyContext._state.text.capHeight()
 
     def fontLeading(self):
         """
         Returns the current font leading, based on the current `font` and `fontSize`.
         """
-        return self._dummyContext._state.text.font.leading()
+        return self._dummyContext._state.text.leading()
 
     def fontLineHeight(self):
         """
         Returns the current line height, based on the current `font` and `fontSize`.
         If a `lineHeight` is set, this value will be returned.
         """
-        if self._dummyContext._state.text._lineHeight is not None:
-            return self._dummyContext._state.text._lineHeight
-        return self._dummyContext._state.text.font.defaultLineHeightForFont()
+        return self._dummyContext._state.text.fontLineHeight()
 
     _bezierPathClass = BezierPath
 
