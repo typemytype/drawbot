@@ -498,6 +498,7 @@ def getFeatureTagsForDescriptions(featureDescriptions):
                     featureTags.append(featureTag)
     return featureTags
 
+
 def getFeatureTagsForFontName(fontName):
     descriptor = CoreText.NSFontDescriptor.fontDescriptorWithName_size_(fontName, 12)
     featureDescriptions = CoreText.CTFontDescriptorCopyAttribute(descriptor, CoreText.kCTFontFeaturesAttribute)
