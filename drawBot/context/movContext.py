@@ -14,7 +14,7 @@ class MOVContext(PDFContext):
 
     _saveMovieAttributes = {
         QTKit.QTAddImageCodecType: "png "
-        }
+    }
 
     _frameLength = 3000
     _frameScale = 30000

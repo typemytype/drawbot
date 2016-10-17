@@ -16,7 +16,7 @@ class ImageContext(PDFContext):
         # "gif": AppKit.NSGIFFileType,
         "png": AppKit.NSPNGFileType,
         "bmp": AppKit.NSBMPFileType
-        }
+    }
 
     fileExtensions = _saveImageFileTypes.keys()
 

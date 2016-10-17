@@ -12,7 +12,7 @@ class GifContext(ImageContext):
 
     _saveImageFileTypes = {
         "gif": AppKit.NSGIFFileType,
-        }
+    }
 
     fileExtensions = _saveImageFileTypes.keys()
 
