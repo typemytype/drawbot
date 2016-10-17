@@ -41,10 +41,10 @@ class BezierPath(BasePen):
     contourClass = BezierContour
 
     _instructionSegmentTypeMap = {
-            AppKit.NSMoveToBezierPathElement: "move",
-            AppKit.NSLineToBezierPathElement: "line",
-            AppKit.NSCurveToBezierPathElement: "curve"
-        }
+        AppKit.NSMoveToBezierPathElement: "move",
+        AppKit.NSLineToBezierPathElement: "line",
+        AppKit.NSCurveToBezierPathElement: "curve"
+    }
 
     def __init__(self, path=None, glyphSet=None):
         if path is None:
@@ -122,7 +122,7 @@ class BezierPath(BasePen):
         Arc with `center` and a given `radius`, from `startAngle` to `endAngle`, going clockwise if `clockwise` is True and counter clockwise if `clockwise` is False.
         """
         self._path.appendBezierPathWithArcWithCenter_radius_startAngle_endAngle_clockwise_(
-                    center, radius, startAngle, endAngle, clockwise)
+            center, radius, startAngle, endAngle, clockwise)
 
     def arcTo(self, pt1, pt2, radius):
         """
@@ -295,7 +295,7 @@ class BezierPath(BasePen):
         s = math.sin(angle)
         self.transform((c, s, -s, c, 0, 0))
 
-    def scale(self,  x=1, y=None):
+    def scale(self, x=1, y=None):
         """
         Scale the path with a given `x` (horizontal scale) and `y` (vertical scale).
 
@@ -413,7 +413,9 @@ class Color(object):
 
     @classmethod
     def getColor(self, color):
-        if isinstance(color, (tuple, list)):
+        if isinstance(color, self.__class__):
+            return color
+        elif isinstance(color, (tuple, list)):
             return self(*color)
         elif isinstance(color, AppKit.NSColor):
             return self(color)
@@ -432,6 +434,7 @@ class CMYKColor(Color):
         else:
             self._color = AppKit.NSColor.colorWithDeviceCyan_magenta_yellow_black_alpha_(c, m, y, k, a)
         self._color = self._color.colorUsingColorSpace_(self.colorSpace())
+        self._cmyka = c, m, y, k, a
 
 
 class Shadow(object):
@@ -465,7 +468,7 @@ class Gradient(object):
         if gradientType is None:
             return
         if gradientType not in ("linear", "radial"):
-            raise DrawBotError("Gradient type must be either line or circle")
+            raise DrawBotError("Gradient type must be either 'linear' or 'radial'")
         if not colors or len(colors) < 2:
             raise DrawBotError("Gradient needs at least 2 colors")
         if positions is None:
@@ -511,50 +514,55 @@ class FormattedString(object):
         left=AppKit.NSLeftTextAlignment,
         right=AppKit.NSRightTextAlignment,
         justified=AppKit.NSJustifiedTextAlignment,
-        )
+    )
 
     _textTabAlignMap = dict(
         center=AppKit.NSCenterTextAlignment,
         left=AppKit.NSLeftTextAlignment,
         right=AppKit.NSRightTextAlignment,
-        )
+    )
 
-    def __init__(self, txt=None,
-                        font=_FALLBACKFONT, fontSize=10, fallbackFont=None,
-                        fill=(0, 0, 0), cmykFill=None,
-                        stroke=None, cmykStroke=None, strokeWidth=1,
-                        align=None, lineHeight=None, tracking=None, baselineShift=None,
-                        openTypeFeatures=None, tabs=None):
-        self._attributedString = AppKit.NSMutableAttributedString.alloc().init()
-        self._font = font
-        self._fontSize = fontSize
-        self._fill = fill
-        self._cmykFill = cmykFill
-        self._stroke = stroke
-        self._cmykStroke = cmykStroke
-        self._strokeWidth = strokeWidth
-        self._align = align
-        self._lineHeight = lineHeight
-        self._tracking = tracking
-        self._baselineShift = baselineShift
-        self._fallbackFont = fallbackFont
-        if openTypeFeatures is None:
-            openTypeFeatures = dict()
-        self._openTypeFeatures = openTypeFeatures
-        self._tabs = tabs
+    _formattedAttributes = dict(
+        font=_FALLBACKFONT,
+        fallbackFont=None,
+        fontSize=10,
+
+        fill=(0, 0, 0),
+        cmykFill=None,
+        stroke=None,
+        cmykStroke=None,
+        strokeWidth=1,
+
+        align=None,
+        lineHeight=None,
+        tracking=None,
+        baselineShift=None,
+        openTypeFeatures=dict(),
+        tabs=None
+    )
+
+    def __init__(self, txt=None, **kwargs):
+        attributes = self._validateAttributes(kwargs)
+        self.clear()
+        for key, value in attributes.items():
+            setattr(self, "_%s" % key, value)
         if txt:
-            self.append(txt, font=font, fontSize=fontSize, fallbackFont=fallbackFont,
-                        fill=fill, cmykFill=cmykFill,
-                        stroke=stroke, cmykStroke=cmykStroke, strokeWidth=strokeWidth,
-                        align=align, lineHeight=lineHeight, tracking=tracking, baselineShift=baselineShift,
-                        openTypeFeatures=openTypeFeatures, tabs=tabs)
+            self.append(txt, **attributes)
 
-    def append(self, txt,
-                    font=None, fallbackFont=None, fontSize=None,
-                    fill=None, cmykFill=None,
-                    stroke=None, cmykStroke=None, strokeWidth=None,
-                    align=None, lineHeight=None, tracking=None, baselineShift=None,
-                    openTypeFeatures=None, tabs=None):
+    def _validateAttributes(self, attributes, addDefaults=True):
+        for attribute in attributes:
+            if attribute not in self._formattedAttributes:
+                raise TypeError("got an unexpected keyword argument '%s'" % attribute)
+        result = dict()
+        if addDefaults:
+            result.update(self._formattedAttributes)
+        result.update(attributes)
+        return result
+
+    def clear(self):
+        self._attributedString = AppKit.NSMutableAttributedString.alloc().init()
+
+    def append(self, txt, **kwargs):
         """
         Add `txt` to the formatted string with some additional text formatting attributes:
 
@@ -568,7 +576,10 @@ class FormattedString(object):
         * `strokeWidth`: the strokeWidth to be used for the given text
         * `align`: the alignment to be used for the given text
         * `lineHeight`: the lineHeight to be used for the given text
+        * `tracking`: set tracking for the given text
+        * `baselineShift`: set base line shift for the given text
         * `openTypeFeatures`: enable OpenType features
+        * `tabs`: enable tabs
 
         All formatting attributes follow the same notation as other similar DrawBot methods.
         A color is a tuple of `(r, g, b, alpha)`, and a cmykColor is a tuple of `(c, m, y, k, alpha)`.
@@ -581,91 +592,36 @@ class FormattedString(object):
                 txt = txt.decode("utf-8")
             except UnicodeEncodeError:
                 pass
-        if font is None:
-            font = self._font
-        else:
-            self._font = font
+        attributes = self._validateAttributes(kwargs, addDefaults=False)
+        for key, value in attributes.items():
+            if value is not None:
+                setattr(self, "_%s" % key, value)
 
-        if fallbackFont is None:
-            fallbackFont = self._fallbackFont
-        else:
-            self._fallbackFont = fallbackFont
-
-        if fontSize is None:
-            fontSize = self._fontSize
-        else:
-            self._fontSize = fontSize
-
-        if fill is None and cmykFill is None:
-            fill = self._fill
-            cmykFill = self._cmykFill
-        elif fill is not None:
-            self._fill = fill
+        if self._fill:
             self._cmykFill = None
-        elif cmykFill is not None:
-            self._cmykFill = cmykFill
+        elif self._cmykFill:
             self._fill = None
 
-        if stroke is None and cmykStroke is None:
-            stroke = self._stroke
-            cmykStroke = self._cmykStroke
-        elif stroke is not None:
-            self._stroke = stroke
+        if self._stroke:
             self._cmykStroke = None
-        elif cmykStroke is not None:
-            self._cmykStroke = cmykStroke
+        elif self._cmykStroke:
             self._stroke = None
-
-        if strokeWidth is None:
-            strokeWidth = self._strokeWidth
-        else:
-            self._strokeWidth = strokeWidth
-
-        if align is None:
-            align = self._align
-        else:
-            self._align = align
-
-        if lineHeight is None:
-            lineHeight = self._lineHeight
-        else:
-            self._lineHeight = lineHeight
-
-        if tracking is None:
-            tracking = self._tracking
-        else:
-            self._tracking = tracking
-
-        if baselineShift is None:
-            baselineShift = self._baselineShift
-        else:
-            self._baselineShift = baselineShift
-
-        if openTypeFeatures is None:
-            openTypeFeatures = self._openTypeFeatures
-        else:
-            self._openTypeFeatures = openTypeFeatures
-
-        if tabs is None:
-            tabs = self._tabs
-        else:
-            self._tabs = tabs
 
         if isinstance(txt, FormattedString):
             self._attributedString.appendAttributedString_(txt.getNSObject())
             return
         attributes = {}
-        if font:
-            fontName = _tryInstallFontFromFontName(font)
-            font = AppKit.NSFont.fontWithName_size_(fontName, fontSize)
+        if self._font:
+            fontName = _tryInstallFontFromFontName(self._font)
+            font = AppKit.NSFont.fontWithName_size_(fontName, self._fontSize)
             if font is None:
-                ff = fallbackFont
+                ff = self._fallbackFont
                 if ff is None:
                     ff = _FALLBACKFONT
                 warnings.warn("font: %s is not installed, back to the fallback font: %s" % (fontName, ff))
-                font = AppKit.NSFont.fontWithName_size_(ff, fontSize)
+                font = AppKit.NSFont.fontWithName_size_(ff, self._fontSize)
             coreTextfeatures = []
-            for featureTag, value in openTypeFeatures.items():
+            for featureTag, value in self._openTypeFeatures.items():
                 if not value:
                     featureTag = "%s_off" % featureTag
                 if featureTag in openType.featureMap:
@@ -675,38 +631,38 @@ class FormattedString(object):
             fontAttributes = {}
             if coreTextfeatures:
                 fontAttributes[CoreText.NSFontFeatureSettingsAttribute] = coreTextfeatures
-            if fallbackFont:
-                fontAttributes[CoreText.NSFontCascadeListAttribute] = [AppKit.NSFontDescriptor.fontDescriptorWithName_size_(fallbackFont, fontSize)]
+            if self._fallbackFont:
+                fontAttributes[CoreText.NSFontCascadeListAttribute] = [AppKit.NSFontDescriptor.fontDescriptorWithName_size_(self._fallbackFont, self._fontSize)]
             fontDescriptor = fontDescriptor.fontDescriptorByAddingAttributes_(fontAttributes)
-            font = AppKit.NSFont.fontWithDescriptor_size_(fontDescriptor, fontSize)
+            font = AppKit.NSFont.fontWithDescriptor_size_(fontDescriptor, self._fontSize)
             attributes[AppKit.NSFontAttributeName] = font
-        elif fontSize:
-            font = AppKit.NSFont.fontWithName_size_(_FALLBACKFONT, fontSize)
+        elif self._fontSize:
+            font = AppKit.NSFont.fontWithName_size_(_FALLBACKFONT, self._fontSize)
             attributes[AppKit.NSFontAttributeName] = font
-        if fill or cmykFill:
-            if fill:
-                fillColor = self._colorClass.getColor(fill).getNSObject()
-            elif cmykFill:
-                fillColor = self._cmykColorClass.getColor(cmykFill).getNSObject()
+        if self._fill or self._cmykFill:
+            if self._fill:
+                fillColor = self._colorClass.getColor(self._fill).getNSObject()
+            elif self._cmykFill:
+                fillColor = self._cmykColorClass.getColor(self._cmykFill).getNSObject()
             attributes[AppKit.NSForegroundColorAttributeName] = fillColor
         else:
             # seems like the default foreground color is black
             # set clear color when the fill is None
             attributes[AppKit.NSForegroundColorAttributeName] = AppKit.NSColor.clearColor()
-        if stroke or cmykStroke:
-            if stroke:
-                strokeColor = self._colorClass.getColor(stroke).getNSObject()
-            elif cmykStroke:
-                strokeColor = self._cmykColorClass.getColor(cmykStroke).getNSObject()
+        if self._stroke or self._cmykStroke:
+            if self._stroke:
+                strokeColor = self._colorClass.getColor(self._stroke).getNSObject()
+            elif self._cmykStroke:
+                strokeColor = self._cmykColorClass.getColor(self._cmykStroke).getNSObject()
             attributes[AppKit.NSStrokeColorAttributeName] = strokeColor
-            attributes[AppKit.NSStrokeWidthAttributeName] = -abs(strokeWidth)
+            attributes[AppKit.NSStrokeWidthAttributeName] = -abs(self._strokeWidth)
         para = AppKit.NSMutableParagraphStyle.alloc().init()
-        if align:
-            para.setAlignment_(self._textAlignMap[align])
-        if tabs:
+        if self._align:
+            para.setAlignment_(self._textAlignMap[self._align])
+        if self._tabs:
             for tabStop in para.tabStops():
                 para.removeTabStop_(tabStop)
-            for tab, tabAlign in tabs:
+            for tab, tabAlign in self._tabs:
                 tabOptions = None
                 if tabAlign in self._textTabAlignMap:
                     tabAlign = self._textTabAlignMap[tabAlign]
@@ -716,26 +672,22 @@ class FormattedString(object):
                     tabAlign = self._textAlignMap["right"]
                 tabStop = AppKit.NSTextTab.alloc().initWithTextAlignment_location_options_(tabAlign, tab, tabOptions)
                 para.addTabStop_(tabStop)
-        if lineHeight:
+        if self._lineHeight:
             # para.setLineSpacing_(lineHeight)
-            para.setMaximumLineHeight_(lineHeight)
-            para.setMinimumLineHeight_(lineHeight)
-        if tracking:
-            attributes[AppKit.NSKernAttributeName] = tracking
-        if baselineShift:
-            attributes[AppKit.NSBaselineOffsetAttributeName] = baselineShift
+            para.setMaximumLineHeight_(self._lineHeight)
+            para.setMinimumLineHeight_(self._lineHeight)
+        if self._tracking:
+            attributes[AppKit.NSKernAttributeName] = self._tracking
+        if self._baselineShift:
+            attributes[AppKit.NSBaselineOffsetAttributeName] = self._baselineShift
         attributes[AppKit.NSParagraphStyleAttributeName] = para
         txt = AppKit.NSAttributedString.alloc().initWithString_attributes_(txt, attributes)
         self._attributedString.appendAttributedString_(txt)
 
     def __add__(self, txt):
+        attributes = {key: getattr(self, "_%s" % key) for key in self._formattedAttributes}
         new = self.copy()
-        new.append(txt,
-                    font=self._font, fallbackFont=self._fallbackFont, fontSize=self._fontSize,
-                    fill=self._fill, cmykFill=self._cmykFill,
-                    stroke=self._stroke, cmykStroke=self._cmykStroke, strokeWidth=self._strokeWidth,
-                    align=self._align, lineHeight=self._lineHeight, tracking=self._tracking,
-                    baselineShift=self._baselineShift, openTypeFeatures=self._openTypeFeatures, tabs=self._tabs)
+        new.append(txt, **attributes)
         return new
 
     def __getitem__(self, index):
@@ -930,13 +882,8 @@ class FormattedString(object):
         """
         Copy the formatted string.
         """
-        new = self.__class__(
-            font=self._font, fontSize=self._fontSize, fallbackFont=self._fallbackFont,
-            fill=self._fill, cmykFill=self._cmykFill,
-            stroke=self._stroke, cmykStroke=self._cmykStroke, strokeWidth=self._strokeWidth,
-            align=self._align, lineHeight=self._lineHeight, tracking=self._tracking, baselineShift=self._baselineShift,
-            openTypeFeatures=self._openTypeFeatures
-            )
+        attributes = {key: getattr(self, "_%s" % key) for key in self._formattedAttributes}
+        new = self.__class__(**attributes)
         new._attributedString = self._attributedString.mutableCopy()
         return new
 
@@ -1047,130 +994,9 @@ class FormattedString(object):
         self._fallbackFont = fallbackFont
 
 
-class Text(object):
-
-    def __init__(self):
-        self._fontName = _FALLBACKFONT
-        self._fallbackFontName = None
-        self._fontSize = 10
-        self._lineHeight = None
-        self._tracking = None
-        self._baselineShift = None
-        self._hyphenation = None
-        self._tabs = []
-        self.openTypeFeatures = dict()
-
-    def _get_font(self):
-        _font = AppKit.NSFont.fontWithName_size_(self._fontName, self.fontSize)
-        if _font is None:
-            ff = self._fallbackFontName or _FALLBACKFONT
-            warnings.warn("font: %s is not installed, back to the fallback font: %s" % (self._fontName, ff))
-            self._fontName = ff
-            _font = AppKit.NSFont.fontWithName_size_(ff, self.fontSize)
-        coreTextfeatures = []
-        for featureTag, value in self.openTypeFeatures.items():
-            if not value:
-                featureTag = "%s_off" % featureTag
-            if featureTag in openType.featureMap:
-                feature = openType.featureMap[featureTag]
-                coreTextfeatures.append(feature)
-        fontDescriptor = _font.fontDescriptor()
-        fontAttributes = {
-            CoreText.NSFontFeatureSettingsAttribute: coreTextfeatures,
-            }
-        if self._fallbackFontName:
-            fontAttributes[CoreText.NSFontCascadeListAttribute] = [AppKit.NSFontDescriptor.fontDescriptorWithName_size_(self._fallbackFontName, self.fontSize)]
-        fontDescriptor = fontDescriptor.fontDescriptorByAddingAttributes_(fontAttributes)
-        _font = AppKit.NSFont.fontWithDescriptor_size_(fontDescriptor, self.fontSize)
-        return _font
-
-    font = property(_get_font)
-
-    def _get_fontName(self):
-        return self._fontName
-
-    def _set_fontName(self, fontName):
-        self._fontName = fontName
-
-    fontName = property(_get_fontName, _set_fontName)
-
-    def _get_fallbackFontName(self):
-        return self._fallbackFontName
-
-    def _set_fallbackFontName(self, fontName):
-        if fontName:
-            dummyFont = AppKit.NSFont.fontWithName_size_(fontName, 10)
-            if dummyFont is None:
-                raise DrawBotError("Fallback font '%s' is not available" % fontName)
-        self._fallbackFontName = fontName
-
-    fallbackFontName = property(_get_fallbackFontName, _set_fallbackFontName)
-
-    def _get_fontSize(self):
-        return self._fontSize
-
-    def _set_fontSize(self, value):
-        self._fontSize = value
-
-    fontSize = property(_get_fontSize, _set_fontSize)
-
-    def _get_lineHeight(self):
-        return self._lineHeight
-
-    def _set_lineHeight(self, value):
-        self._lineHeight = value
-
-    lineHeight = property(_get_lineHeight, _set_lineHeight)
-
-    def _get_tracking(self):
-        return self._tracking
-
-    def _set_tracking(self, value):
-        self._tracking = value
-
-    tracking = property(_get_tracking, _set_tracking)
-
-    def _get_baselineShift(self):
-        return self._baselineShift
-
-    def _set_baselineShift(self, value):
-        self._baselineShift = value
-
-    baselineShift = property(_get_baselineShift, _set_baselineShift)
-
-    def _get_hyphenation(self):
-        return self._hyphenation
-
-    def _set_hyphenation(self, value):
-        self._hyphenation = value
-
-    hyphenation = property(_get_hyphenation, _set_hyphenation)
-
-    def _get_tabs(self):
-        return self._tabs
-
-    def _set_tabs(self, value):
-        self._tabs = value
-
-    tabs = property(_get_tabs, _set_tabs)
-
-    def copy(self):
-        new = self.__class__()
-        new.fontName = self.fontName
-        new.fallbackFontName = self.fallbackFontName
-        new.fontSize = self.fontSize
-        new.lineHeight = self.lineHeight
-        new.tracking = self.tracking
-        new.baseline = self.baselineShift
-        new.hyphenation = self.hyphenation
-        new.openTypeFeatures = dict(self.openTypeFeatures)
-        new.tabs = list(self.tabs)
-        return new
-
-
 class GraphicsState(object):
 
-    _textClass = Text
+    _textClass = FormattedString
     _colorClass = Color
 
     def __init__(self):
@@ -1188,6 +1014,7 @@ class GraphicsState(object):
         self.lineJoin = None
         self.miterLimit = 10
         self.text = self._textClass()
+        self.hyphenation = None
         self.path = None
 
     def copy(self):
@@ -1211,7 +1038,7 @@ class GraphicsState(object):
         if self.path is not None:
             new.path = self.path.copy()
         new.text = self.text.copy()
-
+        new.hyphenation = self.hyphenation
         new.strokeWidth = self.strokeWidth
         new.lineCap = self.lineCap
         if self.lineDash is not None:
@@ -1239,7 +1066,7 @@ class BaseContext(object):
 
     _cmykColorClass = CMYKColor
     _colorClass = Color
-    _textClass = Text
+    _textClass = FormattedString
     _shadowClass = Shadow
     _bezierPathClass = BezierPath
     _gradientClass = Gradient
@@ -1250,26 +1077,26 @@ class BaseContext(object):
         miter=Quartz.kCGLineJoinMiter,
         round=Quartz.kCGLineJoinRound,
         bevel=Quartz.kCGLineJoinBevel
-        )
+    )
 
     _lineCapStylesMap = dict(
         butt=Quartz.kCGLineCapButt,
         square=Quartz.kCGLineCapSquare,
         round=Quartz.kCGLineCapRound,
-        )
+    )
 
     _textAlignMap = dict(
         center=AppKit.NSCenterTextAlignment,
         left=AppKit.NSLeftTextAlignment,
         right=AppKit.NSRightTextAlignment,
         justified=AppKit.NSJustifiedTextAlignment,
-        )
+    )
 
     _textTabAlignMap = dict(
         center=AppKit.NSCenterTextAlignment,
         left=AppKit.NSLeftTextAlignment,
         right=AppKit.NSRightTextAlignment,
-        )
+    )
 
     _colorSpaceMap = dict(
         genericRGB=AppKit.NSColorSpace.genericRGBColorSpace,
@@ -1277,7 +1104,7 @@ class BaseContext(object):
         sRGB=AppKit.NSColorSpace.sRGBColorSpace,
         genericGray=AppKit.NSColorSpace.genericGrayColorSpace,
         genericGamma22Gray=AppKit.NSColorSpace.genericGamma22GrayColorSpace,
-        )
+    )
 
     _blendModeMap = dict(
         normal=Quartz.kCGBlendModeNormal,
@@ -1308,7 +1135,7 @@ class BaseContext(object):
         xOR=Quartz.kCGBlendModeXOR,
         plusDarker=Quartz.kCGBlendModePlusDarker,
         plusLighter=Quartz.kCGBlendModePlusLighter,
-        )
+    )
 
     _softHypen = 0x00AD
 
@@ -1361,15 +1188,14 @@ class BaseContext(object):
 
     def _printImage(self, pdf=None):
         pass
-    
+
     def _linkDestination(self, name, (x, y)):
         pass
 
     def _linkRect(self, name, (x, y, w, h)):
         pass
-    
 
-    ###
+    #
 
     def reset(self):
         self._stack = []
@@ -1469,6 +1295,7 @@ class BaseContext(object):
         self._blendMode(operation)
 
     def fill(self, r, g=None, b=None, a=1):
+        self._state.text.fill(r, g, b, a)
         self._state.cmykFillColor = None
         if r is None:
             self._state.fillColor = None
@@ -1477,6 +1304,7 @@ class BaseContext(object):
         self._state.gradient = None
 
     def cmykFill(self, c, m, y, k, a=1):
+        self._state.text.cmykFill(c, m, y, k, a)
         if c is None:
             self.fill(None)
         else:
@@ -1486,6 +1314,7 @@ class BaseContext(object):
             self._state.gradient = None
 
     def stroke(self, r, g=None, b=None, a=1):
+        self._state.text.stroke(r, g, b, a)
         self._state.cmykStrokeColor = None
         if r is None:
             self._state.strokeColor = None
@@ -1493,6 +1322,7 @@ class BaseContext(object):
         self._state.strokeColor = self._colorClass(r, g, b, a)
 
     def cmykStroke(self, c, m, y, k, a=1):
+        self._state.text.cmykStroke(c, m, y, k, a)
         if c is None:
             self.stroke(None)
         else:
@@ -1551,6 +1381,7 @@ class BaseContext(object):
         self.fill(None)
 
     def strokeWidth(self, value):
+        self._state.text.strokeWidth(value)
         self._state.strokeWidth = value
 
     def miterLimit(self, value):
@@ -1580,92 +1411,38 @@ class BaseContext(object):
         self._transform(matrix)
 
     def font(self, fontName, fontSize):
-        self._state.text.fontName = fontName
-        if fontSize is not None:
-            self.fontSize(fontSize)
+        self._state.text.font(fontName, fontSize)
 
     def fallbackFont(self, fontName):
-        self._state.text.fallbackFontName = fontName
+        self._state.text.fallbackFont(fontName)
 
     def fontSize(self, fontSize):
-        self._state.text.fontSize = fontSize
+        self._state.text.fontSize(fontSize)
 
     def lineHeight(self, lineHeight):
-        self._state.text.lineHeight = lineHeight
+        self._state.text.lineHeight(lineHeight)
 
     def tracking(self, tracking):
-        self._state.text.tracking = tracking
+        self._state.text.tracking(tracking)
 
     def baselineShift(self, baselineShift):
-        self._state.text.baselineShift = baselineShift
+        self._state.text.baselineShift(baselineShift)
 
     def hyphenation(self, value):
-        self._state.text.hyphenation = value
+        self._state.hyphenation = value
 
     def tabs(self, *tabs):
-        if tabs and tabs[0] is None:
-            self._state.text.tabs = []
-        else:
-            self._state.text.tabs = tabs
+        self._state.text.tabs(*tabs)
 
     def openTypeFeatures(self, *args, **features):
-        if args and args[0] is None:
-            self._state.text.openTypeFeatures.clear()
-        else:
-            self._state.text.openTypeFeatures.update(features)
+        self._state.text.openTypeFeatures(*args, **features)
 
     def attributedString(self, txt, align=None):
         if isinstance(txt, FormattedString):
             return txt.getNSObject()
-        attributes = {AppKit.NSFontAttributeName: self._state.text.font}
-        if self._state.fillColor is not None:
-            if self._state.cmykFillColor:
-                c = self._state.cmykFillColor
-            else:
-                c = self._state.fillColor
-            extra = {
-                AppKit.NSForegroundColorAttributeName: c.getNSObject(),
-                }
-            attributes.update(extra)
-        if self._state.strokeColor is not None:
-            if self._state.cmykStrokeColor:
-                c = self._state.cmykStrokeColor
-            else:
-                c = self._state.strokeColor
-            # strokeWidth = -abs(self._state.strokeWidth)
-            extra = {
-                    # AppKit.NSStrokeWidthAttributeName: strokeWidth,
-                    AppKit.NSStrokeColorAttributeName: c.getNSObject(),
-                    }
-
-            attributes.update(extra)
-        para = AppKit.NSMutableParagraphStyle.alloc().init()
-        if align:
-            para.setAlignment_(self._textAlignMap[align])
-        if self._state.text.lineHeight:
-            # para.setLineSpacing_(self._state.text.lineHeight)
-            para.setMaximumLineHeight_(self._state.text.lineHeight)
-            para.setMinimumLineHeight_(self._state.text.lineHeight)
-        if self._state.text.tabs:
-            for tabStop in para.tabStops():
-                para.removeTabStop_(tabStop)
-            for tab, tabAlign in self._state.text.tabs:
-                tabOptions = None
-                if tabAlign in self._textTabAlignMap:
-                    tabAlign = self._textTabAlignMap[tabAlign]
-                else:
-                    tabCharSet = AppKit.NSCharacterSet.characterSetWithCharactersInString_(tabAlign)
-                    tabOptions = {AppKit.NSTabColumnTerminatorsAttributeName: tabCharSet}
-                    tabAlign = self._textAlignMap["right"]
-                tabStop = AppKit.NSTextTab.alloc().initWithTextAlignment_location_options_(tabAlign, tab, tabOptions)
-                para.addTabStop_(tabStop)
-        attributes[AppKit.NSParagraphStyleAttributeName] = para
-        if self._state.text.tracking:
-            attributes[AppKit.NSKernAttributeName] = self._state.text.tracking
-        if self._state.text.baselineShift:
-            attributes[AppKit.NSBaselineOffsetAttributeName] = self._state.text.baselineShift
-        text = AppKit.NSAttributedString.alloc().initWithString_attributes_(txt, attributes)
-        return text
+        self._state.text.clear()
+        self._state.text.append(txt, align=align)
+        return self._state.text.getNSObject()
 
     def hyphenateAttributedString(self, attrString, width):
         attrString = attrString.mutableCopy()
@@ -1710,7 +1487,7 @@ class BaseContext(object):
 
     def clippedText(self, txt, (x, y, w, h), align):
         attrString = self.attributedString(txt, align=align)
-        if self._state.text.hyphenation:
+        if self._state.hyphenation:
             hyphenIndexes = [i for i, c in enumerate(attrString.string()) if c == "-"]
             attrString = self.hyphenateAttributedString(attrString, w)
         setter = CoreText.CTFramesetterCreateWithAttributedString(attrString)
@@ -1719,7 +1496,7 @@ class BaseContext(object):
         box = CoreText.CTFramesetterCreateFrame(setter, (0, 0), path, None)
         visibleRange = CoreText.CTFrameGetVisibleStringRange(box)
         clip = visibleRange.length
-        if self._state.text.hyphenation:
+        if self._state.hyphenation:
             subString = attrString.string()[:clip]
             for i in hyphenIndexes:
                 if i < clip:
@@ -1773,6 +1550,6 @@ class BaseContext(object):
 
     def linkDestination(self, name, (x, y)):
         self._linkDestination(name, (x, y))
-    
+
     def linkRect(self, name, (x, y, w, h)):
         self._linkRect(name, (x, y, w, h))

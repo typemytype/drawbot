@@ -338,11 +338,11 @@ class SVGContext(BaseContext):
         self._state.clipPathID = uniqueID
 
     def _textBox(self, txt, (x, y, w, h), align):
-        canDoGradients = not isinstance(txt, FormattedString)
+        canDoGradients = True
         if align == "justified":
             warnings.warn("justified text is not supported in a svg context")
         attrString = self.attributedString(txt, align=align)
-        if self._state.text.hyphenation:
+        if self._state.hyphenation:
             attrString = self.hyphenateAttributedString(attrString, w)
         txt = attrString.string()
 

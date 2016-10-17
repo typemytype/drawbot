@@ -132,9 +132,9 @@ class PDFContext(BaseContext):
             Quartz.CGContextClip(self._pdfContext)
 
     def _textBox(self, txt, (x, y, w, h), align):
-        canDoGradients = not isinstance(txt, FormattedString)
+        canDoGradients = True
         attrString = self.attributedString(txt, align=align)
-        if self._state.text.hyphenation:
+        if self._state.hyphenation:
             attrString = self.hyphenateAttributedString(attrString, w)
 
         setter = CoreText.CTFramesetterCreateWithAttributedString(attrString)
