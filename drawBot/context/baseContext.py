@@ -1168,9 +1168,6 @@ class BaseContext(object):
     def _transform(self, matrix):
         pass
 
-    def _text(self, txt, (x, y)):
-        pass
-
     def _textBox(self, txt, (x, y, w, h), align):
         pass
 
