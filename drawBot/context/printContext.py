@@ -8,9 +8,6 @@ class PrintContext(BaseContext):
     def _newPage(self, width, height):
         print "newPage", width, height
 
-    def _saveImage(self, paths, multipage):
-        print "saveImage", paths, multipage
-
     def _save(self):
         print "save"
 
@@ -23,6 +20,9 @@ class PrintContext(BaseContext):
     def _drawPath(self):
         print "drawPath", self._state.path
 
+    def _clipPath(self):
+        print "clipPath", self._state.path
+
     def _transform(self, matrix):
         print "transform", matrix
 
@@ -34,3 +34,18 @@ class PrintContext(BaseContext):
 
     def _frameDuration(self, seconds):
         print "frameDuration", seconds
+
+    def _reset(self):
+        print "reset"
+
+    def _saveImage(self, path, multipage):
+        print "saveImage", path, multipage
+
+    def _printImage(self, pdf=None):
+        print "printImage", path, multipage
+
+    def _linkDestination(self, name, (x, y)):
+        print "linkDestination", name, (x, y)
+
+    def _linkRect(self, name, (x, y, w, h)):
+        print "linkRect", name, (x, y, w, h)
