@@ -35,8 +35,8 @@ class PrintContext(BaseContext):
     def _frameDuration(self, seconds):
         print "frameDuration", seconds
 
-    def _reset(self):
-        print "reset"
+    def _reset(self, other=None):
+        print "reset", other
 
     def _saveImage(self, path, multipage):
         print "saveImage", path, multipage

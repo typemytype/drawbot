@@ -1177,7 +1177,7 @@ class BaseContext(object):
     def _frameDuration(self, seconds):
         pass
 
-    def _reset(self):
+    def _reset(self, other=None):
         pass
 
     def _saveImage(self, path, multipage):

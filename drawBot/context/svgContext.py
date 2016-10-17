@@ -269,7 +269,7 @@ class SVGContext(BaseContext):
 
     # svg
 
-    def _reset(self):
+    def _reset(self, other=None):
         self._embeddedFonts = set()
 
     def _newPage(self, width, height):
