@@ -539,8 +539,8 @@ class FormattedString(object):
         baselineShift=None,
         openTypeFeatures=dict(),
         tabs=None,
-        leftIndent=None,
-        rightIndent=None,
+        indent=None,
+        tailIndent=None,
         firstLineIndent=None,
         paragraphTopSpacing=None,
         paragraphBottomSpacing=None,
@@ -587,8 +587,8 @@ class FormattedString(object):
         * `baselineShift`: set base line shift for the given text
         * `openTypeFeatures`: enable OpenType features
         * `tabs`: enable tabs
-        * `leftIndent`: the indent of a paragraph
-        * `rightIndent`: the tail indent of a paragraph
+        * `indent`: the indent of a paragraph
+        * `tailIndent`: the tail indent of a paragraph
         * `firstLineIndent`: the first line indent of a paragraph
         * `paragraphTopSpacing`: the spacing at the top of a paragraph
         * `paragraphBottomSpacing`: the spacing at the bottom of a paragraph
@@ -690,9 +690,9 @@ class FormattedString(object):
             para.setMaximumLineHeight_(self._lineHeight)
             para.setMinimumLineHeight_(self._lineHeight)
 
-        if self._leftIndent:
-            para.setHeadIndent_(self._leftIndent)
-            para.setFirstLineHeadIndent_(self._leftIndent)
+        if self._indent:
+            para.setHeadIndent_(self._indent)
+            para.setFirstLineHeadIndent_(self._indent)
         if self._rightIndent:
             para.setTailIndent_(self._rightIndent)
         if self._firstLineIndent:
@@ -898,17 +898,17 @@ class FormattedString(object):
         else:
             self._tabs = tabs
 
-    def leftIndent(self, indent):
+    def indent(self, indent):
         """
         Set indent of text left of the paragraph.
         """
-        self._leftIndent = indent
+        self._indent = indent
 
-    def rightIndent(self, indent):
+    def tailIndent(self, indent):
         """
         Set indent of text right of the paragraph.
         """
-        self._rightIndent = indent
+        self._tailIndent = indent
 
     def firstLineIndent(self, indent):
         """
@@ -1536,6 +1536,13 @@ class BaseContext(object):
             subString = sub.string()
             if subString[-1] == unichr(self._softHypen):
                 subAttr, _ = sub.attributesAtIndex_effectiveRange_(0, None)
+                para = subAttr.get(AppKit.NSParagraphStyleAttributeName)
+                indent = 0
+                tailIndent = width
+                if para:
+                    indent =
+                    tailIndent =
+
                 hyphenAttrString = AppKit.NSAttributedString.alloc().initWithString_attributes_("-", subAttr)
                 hyphenWidth = hyphenAttrString.size().width
                 if sub.size().width + hyphenWidth < width:
