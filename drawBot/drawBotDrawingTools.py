@@ -932,6 +932,7 @@ class DrawBotDrawingTool(object):
         .. showcode:: /../examples/hyphenation.py
         """
         self._dummyContext.hyphenation(value)
+        self._checkLanguageHyphenation()
         self._addInstruction("hyphenation", value)
 
     def tabs(self, *tabs):
@@ -948,6 +949,30 @@ class DrawBotDrawingTool(object):
             return
         self._dummyContext.tabs(*tabs)
         self._addInstruction("tabs", *tabs)
+
+    def language(self, language):
+        """
+        Set the preferred language as language tag or None to use the default language.
+
+        Support is depending on local OS.
+        """
+        self._dummyContext.language(language)
+        self._checkLanguageHyphenation()
+        self._addInstruction("language", language)
+
+    def listLanguages(self):
+        """
+        List all available languages as dictionary mapped to a readable language/dialect name.
+        """
+        loc = AppKit.NSLocale.currentLocale()
+        return {tag: loc.displayNameForKey_value_(AppKit.NSLocaleIdentifier, tag) for tag in AppKit.NSLocale.availableLocaleIdentifiers()}
+
+    def _checkLanguageHyphenation(self):
+        language = self._dummyContext._state.text._language
+        if language and self._dummyContext._state.hyphenation:
+            locale = CoreText.CFLocaleCreate(None, language)
+            if not CoreText.CFStringIsHyphenationAvailableForLocale(locale):
+                warnings.warn("Language '%s' has no hyphenation available." % language)
 
     def openTypeFeatures(self, *args, **features):
         """
@@ -1032,8 +1057,8 @@ class DrawBotDrawingTool(object):
         return self._dummyContext.clippedText(txt, (x, y, w, h), align)
 
     def textbox(self, txt, x, y, w, h, align=None):
-        _deprecatedWarningLowercase("textbox(%s, (%s, %s, %s, %s), align=%s)" % (txt, x, y, y, w, align))
-        self.textbox(txt, (x, y, w, h), align)
+        _deprecatedWarningLowercase("textBox(%s, (%s, %s, %s, %s), align=%s)" % (txt, x, y, y, w, align))
+        return self.textBox(txt, (x, y, w, h), align)
 
     _formattedStringClass = FormattedString
 
@@ -1288,31 +1313,31 @@ class DrawBotDrawingTool(object):
         """
         Returns the current font ascender, based on the current `font` and `fontSize`.
         """
-        return self._dummyContext._state.text.ascender()
+        return self._dummyContext._state.text.fontAscender()
 
     def fontDescender(self):
         """
         Returns the current font descender, based on the current `font` and `fontSize`.
         """
-        return self._dummyContext._state.text.descender()
+        return self._dummyContext._state.text.fontDescender()
 
     def fontXHeight(self):
         """
         Returns the current font x-height, based on the current `font` and `fontSize`.
         """
-        return self._dummyContext._state.text.xHeight()
+        return self._dummyContext._state.text.fontXHeight()
 
     def fontCapHeight(self):
         """
         Returns the current font cap height, based on the current `font` and `fontSize`.
         """
-        return self._dummyContext._state.text.capHeight()
+        return self._dummyContext._state.text.fontCapHeight()
 
     def fontLeading(self):
         """
         Returns the current font leading, based on the current `font` and `fontSize`.
         """
-        return self._dummyContext._state.text.leading()
+        return self._dummyContext._state.text.fontLeading()
 
     def fontLineHeight(self):
         """

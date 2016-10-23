@@ -538,7 +538,9 @@ class FormattedString(object):
         tracking=None,
         baselineShift=None,
         openTypeFeatures=dict(),
-        tabs=None
+        tabs=None,
+
+        language=None,
     )
 
     def __init__(self, txt=None, **kwargs):
@@ -680,6 +682,8 @@ class FormattedString(object):
             attributes[AppKit.NSKernAttributeName] = self._tracking
         if self._baselineShift:
             attributes[AppKit.NSBaselineOffsetAttributeName] = self._baselineShift
+        if self._language:
+            attributes["NSLanguage"] = self._language
         attributes[AppKit.NSParagraphStyleAttributeName] = para
         txt = AppKit.NSAttributedString.alloc().initWithString_attributes_(txt, attributes)
         self._attributedString.appendAttributedString_(txt)
@@ -868,6 +872,12 @@ class FormattedString(object):
             self._tabs = None
         else:
             self._tabs = tabs
+
+    def language(self, language=None):
+        """
+        Set the preferred language as language tag or None to use the default language.
+        """
+        self._language = language
 
     def size(self):
         """
@@ -1430,6 +1440,9 @@ class BaseContext(object):
 
     def tabs(self, *tabs):
         self._state.text.tabs(*tabs)
+
+    def language(self, language):
+        self._state.text.language(language)
 
     def openTypeFeatures(self, *args, **features):
         self._state.text.openTypeFeatures(*args, **features)
