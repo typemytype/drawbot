@@ -539,6 +539,11 @@ class FormattedString(object):
         baselineShift=None,
         openTypeFeatures=dict(),
         tabs=None,
+        leftIndent=None,
+        rightIndent=None,
+        firstLineIndent=None,
+        paragraphTopSpacing=None,
+        paragraphBottomSpacing=None,
 
         language=None,
     )
@@ -582,6 +587,12 @@ class FormattedString(object):
         * `baselineShift`: set base line shift for the given text
         * `openTypeFeatures`: enable OpenType features
         * `tabs`: enable tabs
+        * `leftIndent`: the indent of a paragraph
+        * `rightIndent`: the tail indent of a paragraph
+        * `firstLineIndent`: the first line indent of a paragraph
+        * `paragraphTopSpacing`: the spacing at the top of a paragraph
+        * `paragraphBottomSpacing`: the spacing at the bottom of a paragraph
+        * `language`: the language of the text
 
         All formatting attributes follow the same notation as other similar DrawBot methods.
         A color is a tuple of `(r, g, b, alpha)`, and a cmykColor is a tuple of `(c, m, y, k, alpha)`.
@@ -678,6 +689,20 @@ class FormattedString(object):
             # para.setLineSpacing_(lineHeight)
             para.setMaximumLineHeight_(self._lineHeight)
             para.setMinimumLineHeight_(self._lineHeight)
+
+        if self._leftIndent:
+            para.setHeadIndent_(self._leftIndent)
+            para.setFirstLineHeadIndent_(self._leftIndent)
+        if self._rightIndent:
+            para.setTailIndent_(self._rightIndent)
+        if self._firstLineIndent:
+            para.setFirstLineHeadIndent_(self._firstLineIndent)
+
+        if self._paragraphTopSpacing:
+            para.setParagraphSpacing_(self._paragraphTopSpacing)
+        if self._paragraphBottomSpacing:
+            para.setParagraphSpacingBefore_(self._paragraphBottomSpacing)
+
         if self._tracking:
             attributes[AppKit.NSKernAttributeName] = self._tracking
         if self._baselineShift:
@@ -872,6 +897,36 @@ class FormattedString(object):
             self._tabs = None
         else:
             self._tabs = tabs
+
+    def leftIndent(self, indent):
+        """
+        Set indent of text left of the paragraph.
+        """
+        self._leftIndent = indent
+
+    def rightIndent(self, indent):
+        """
+        Set indent of text right of the paragraph.
+        """
+        self._rightIndent = indent
+
+    def firstLineIndent(self, indent):
+        """
+        Set indent of the text only for the first line.
+        """
+        self._firstLineIndent = indent
+
+    def paragraphTopSpacing(self, value):
+        """
+        set paragraph spacing at the top.
+        """
+        self._paragraphTopSpacing = value
+
+    def paragraphBottomSpacing(self, value):
+        """
+        set paragraph spacing at the bottom.
+        """
+        self._paragraphBottomSpacing = value
 
     def language(self, language=None):
         """

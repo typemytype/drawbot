@@ -151,6 +151,8 @@ class PDFContext(BaseContext):
                 continue
             ctRuns = CoreText.CTLineGetGlyphRuns(ctLine)
             for ctRun in ctRuns:
+                print originX, originY
+                print ctRun
                 attributes = CoreText.CTRunGetAttributes(ctRun)
                 fillColor = attributes.get(AppKit.NSForegroundColorAttributeName)
                 strokeColor = attributes.get(AppKit.NSStrokeColorAttributeName)
