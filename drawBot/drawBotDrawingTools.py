@@ -955,6 +955,8 @@ class DrawBotDrawingTool(object):
         Set the preferred language as language tag or None to use the default language.
 
         Support is depending on local OS.
+
+        .. showcode:: /../examples/language.py
         """
         self._dummyContext.language(language)
         self._checkLanguageHyphenation()
@@ -1030,6 +1032,26 @@ class DrawBotDrawingTool(object):
             x -= origins[-1][0]
             y -= origins[-1][1]
         self.textBox(txt, (x, y-h, w*2, h*2))
+
+    def textOverflow(self, txt, (x, y, w, h), align=None):
+        """
+        Returns the overlowed text without drawing the text.
+
+        Optionally an alignment can be set.
+        Possible `align` values are: `"left"`, `"center"`, `"right"` and `"justified"`.
+
+        The default alignment is `left`.
+        """
+        if isinstance(txt, (str, unicode)):
+            try:
+                txt = txt.decode("utf-8")
+            except UnicodeEncodeError:
+                pass
+        if align is None:
+            align = "left"
+        elif align not in self._dummyContext._textAlignMap.keys():
+            raise DrawBotError("align must be %s" % (", ".join(self._dummyContext._textAlignMap.keys())))
+        return self._dummyContext.clippedText(txt, (x, y, w, h), align)
 
     def textBox(self, txt, (x, y, w, h), align=None):
         """
