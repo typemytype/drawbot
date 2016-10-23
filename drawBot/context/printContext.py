@@ -42,7 +42,7 @@ class PrintContext(BaseContext):
         print "saveImage", path, multipage
 
     def _printImage(self, pdf=None):
-        print "printImage", path, multipage
+        print "printImage", pdf
 
     def _linkDestination(self, name, (x, y)):
         print "linkDestination", name, (x, y)
