@@ -885,6 +885,8 @@ class FormattedString(object):
     def openTypeFeatures(self, *args, **features):
         """
         Enable OpenType features.
+
+        .. showcode:: /../examples/openTypeFeaturesFromattedString.py
         """
         if args and args[0] is None:
             self._openTypeFeatures.clear()
@@ -908,6 +910,8 @@ class FormattedString(object):
         Set tabs,tuples of (`float`, `alignment`)
         Aligment can be `"left"`, `"center"`, `"right"` or any other character.
         If a character is provided the alignment will be `right` and centered on the specified character.
+
+        .. showcode:: /../examples/tabsFromattedString.py
         """
         if tabs and tabs[0] is None:
             self._tabs = None
@@ -917,6 +921,8 @@ class FormattedString(object):
     def indent(self, indent):
         """
         Set indent of text left of the paragraph.
+
+        .. showcode:: /../examples/indent.py
         """
         self._indent = indent
 
