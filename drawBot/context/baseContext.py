@@ -928,7 +928,7 @@ class FormattedString(object):
         """
         self._paragraphBottomSpacing = value
 
-    def language(self, language=None):
+    def language(self, language):
         """
         Set the preferred language as language tag or None to use the default language.
         """
