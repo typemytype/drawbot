@@ -209,6 +209,7 @@ class BezierPath(BasePen):
         Convert a given image to a vector outline.
 
         Optionally some tracing options can be provide:
+
         * `threshold`: the threshold used to bitmap an image
         * `blur`: the image can be blurred
         * `invert`: invert to the image
