@@ -699,9 +699,9 @@ class FormattedString(object):
             para.setFirstLineHeadIndent_(self._firstLineIndent)
 
         if self._paragraphTopSpacing:
-            para.setParagraphSpacing_(self._paragraphTopSpacing)
+            para.setParagraphSpacingBefore_(self._paragraphTopSpacing)
         if self._paragraphBottomSpacing:
-            para.setParagraphSpacingBefore_(self._paragraphBottomSpacing)
+            para.setParagraphSpacing_(self._paragraphBottomSpacing)
 
         if self._tracking:
             attributes[AppKit.NSKernAttributeName] = self._tracking
