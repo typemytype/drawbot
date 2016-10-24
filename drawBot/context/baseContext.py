@@ -693,8 +693,8 @@ class FormattedString(object):
         if self._indent:
             para.setHeadIndent_(self._indent)
             para.setFirstLineHeadIndent_(self._indent)
-        if self._rightIndent:
-            para.setTailIndent_(self._rightIndent)
+        if self._tailIndent:
+            para.setTailIndent_(self._tailIndent)
         if self._firstLineIndent:
             para.setFirstLineHeadIndent_(self._firstLineIndent)
 
@@ -1525,9 +1525,21 @@ class BaseContext(object):
 
         setter = CoreText.CTTypesetterCreateWithAttributedString(attrString)
         location = 0
-
+        firstLine = True
         while location < textLength:
-            breakIndex = CoreText.CTTypesetterSuggestLineBreak(setter, location, width)
+            para, _ = attrString.attribute_atIndex_effectiveRange_(AppKit.NSParagraphStyleAttributeName, location, None)
+            lineWidth = width
+            if para:
+                lineWidth = para.tailIndent()
+                if lineWidth <= 0:
+                    lineWidth = width + lineWidth
+
+                if firstLine:
+                    lineWidth -= para.firstLineHeadIndent()
+                else:
+                    lineWidth -= para.headIndent()
+
+            breakIndex = CoreText.CTTypesetterSuggestLineBreak(setter, location, lineWidth)
             sub = attrString.attributedSubstringFromRange_((location, breakIndex))
             location += breakIndex
             subString = sub.string()
@@ -1535,17 +1547,10 @@ class BaseContext(object):
                 break
             subString = sub.string()
             if subString[-1] == unichr(self._softHypen):
-                subAttr, _ = sub.attributesAtIndex_effectiveRange_(0, None)
-                para = subAttr.get(AppKit.NSParagraphStyleAttributeName)
-                indent = 0
-                tailIndent = width
-                if para:
-                    indent =
-                    tailIndent =
-
-                hyphenAttrString = AppKit.NSAttributedString.alloc().initWithString_attributes_("-", subAttr)
+                hyphenAttr, _ = sub.attributesAtIndex_effectiveRange_(0, None)
+                hyphenAttrString = AppKit.NSAttributedString.alloc().initWithString_attributes_("-", hyphenAttr)
                 hyphenWidth = hyphenAttrString.size().width
-                if sub.size().width + hyphenWidth < width:
+                if sub.size().width + hyphenWidth < lineWidth:
                     mutString.insertString_atIndex_("-", location)
                     setter = CoreText.CTTypesetterCreateWithAttributedString(attrString)
                     location += 1
@@ -1553,6 +1558,8 @@ class BaseContext(object):
                     attrString.deleteCharactersInRange_((location-1, 1))
                     setter = CoreText.CTTypesetterCreateWithAttributedString(attrString)
                     location -= breakIndex
+                    textLength = attrString.length()
+            firstLine = False
 
         mutString.replaceOccurrencesOfString_withString_options_range_(unichr(self._softHypen), "", AppKit.NSLiteralSearch, (0, mutString.length()))
         return attrString
