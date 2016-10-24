@@ -1,5 +1,6 @@
 import AppKit
 from math import radians
+import os
 
 from drawBot.misc import DrawBotError, optimizePath
 
@@ -60,6 +61,8 @@ class ImageObject(object):
             if path.startswith("http"):
                 url = AppKit.NSURL.URLWithString_(path)
             else:
+                if not os.path.exists(path):
+                    raise DrawBotError("Image path '%s' does not exists." % path)
                 url = AppKit.NSURL.fileURLWithPath_(path)
             im = AppKit.NSImage.alloc().initByReferencingURL_(url)
         ciImage = AppKit.CIImage.imageWithData_(im.TIFFRepresentation())
