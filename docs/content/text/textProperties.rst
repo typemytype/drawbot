@@ -11,6 +11,7 @@ Text Properties
 .. autofunction:: drawBot.openTypeFeatures(frac=True, case=True, ...)
 .. autofunction:: drawBot.listOpenTypeFeatures
 .. autofunction:: drawBot.tabs
+.. autofunction:: drawBot.language
 
 Font Properties
 ---------------
