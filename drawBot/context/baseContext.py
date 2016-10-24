@@ -9,6 +9,8 @@ from fontTools.pens.basePen import BasePen
 from drawBot.misc import DrawBotError, cmyk2rgb, warnings
 
 from tools import openType
+from tools import traceImage
+
 
 _FALLBACKFONT = "LucidaGrande"
 
@@ -201,6 +203,20 @@ class BezierPath(BasePen):
                         self._path.moveToPoint_((x+originX+ax, y+originY+ay))
                         self._path.appendBezierPathWithGlyph_inFont_(glyph, font)
         self.optimizePath()
+
+    def traceImage(self, path, threshold=.2, blur=None, invert=False, turd=2, tolerance=0.2, offset=None):
+        """
+        Convert a given image to a vector outline.
+
+        Optionally some tracing options can be provide:
+        * `threshold`: the threshold used to bitmap an image
+        * `blur`: the image can be blurred
+        * `invert`: invert to the image
+        * `turd`: the size of small turd that can be ignored
+        * `tolerance`: the precision tolerance of the vector outline
+        * `offset`: add the traced vector outline with an offset to the BezierPath
+        """
+        traceImage.TraceImage(path, self, threshold, blur, invert, turd, tolerance, offset)
 
     def getNSBezierPath(self):
         """

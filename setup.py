@@ -134,6 +134,19 @@ if "-A" not in sys.argv:
     shutil.copyfile(gifsiclePathSource, gifsiclePathDest)
     os.chmod(gifsiclePathDest, 0775)
 
+    mkbitmapPathSource = os.path.join(os.getcwd(), "drawBot", "context", "tools", "mkbitmap")
+    mkbitmapPathDest = os.path.join(appLocation, "contents", "Resources", "mkbitmap")
+    print "copy", mkbitmapPathSource, mkbitmapPathDest
+    shutil.copyfile(mkbitmapPathSource, mkbitmapPathDest)
+    os.chmod(mkbitmapPathDest, 0775)
+
+    potracePathSource = os.path.join(os.getcwd(), "drawBot", "context", "tools", "potrace")
+    potracePathDest = os.path.join(appLocation, "contents", "Resources", "potrace")
+    print "copy", potracePathSource, potracePathDest
+    shutil.copyfile(potracePathSource, potracePathDest)
+    os.chmod(potracePathDest, 0775)
+
+
     if codeSignDeveloperName:
         # ================
         # = code singing =
