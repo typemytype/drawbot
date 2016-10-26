@@ -36,7 +36,7 @@ class BezierContour(list):
     def __repr__(self):
         return "<BezierContour>"
 
-    def drawToPointsPen(self, pointPen):
+    def drawToPointPen(self, pointPen):
         pointPen.beginPath()
         for i, segment in enumerate(self):
             if len(segment) == 1:
@@ -149,13 +149,13 @@ class BezierPath(BasePen):
         for contour in contours:
             contour.drawToPen(pen)
 
-    def drawToPointsPen(self, pointPen):
+    def drawToPointPen(self, pointPen):
         """
         Draw the bezier path into a point pen.
         """
         contours = self.contours
         for contour in contours:
-            contour.drawToPointsPen(pointPen)
+            contour.drawToPointPen(pointPen)
 
     def arc(self, center, radius, startAngle, endAngle, clockwise):
         """
@@ -263,6 +263,32 @@ class BezierPath(BasePen):
         Return the nsBezierPath.
         """
         return self._path
+
+    def _getCGPath(self):
+        path = Quartz.CGPathCreateMutable()
+        count = self._path.elementCount()
+        for i in range(count):
+            instruction, points = self._path.elementAtIndex_associatedPoints_(i)
+            if instruction == AppKit.NSMoveToBezierPathElement:
+                Quartz.CGPathMoveToPoint(path, None, points[0].x, points[0].y)
+            elif instruction == AppKit.NSLineToBezierPathElement:
+                Quartz.CGPathAddLineToPoint(path, None, points[0].x, points[0].y)
+            elif instruction == AppKit.NSCurveToBezierPathElement:
+                Quartz.CGPathAddCurveToPoint(
+                    path, None,
+                    points[0].x, points[0].y,
+                    points[1].x, points[1].y,
+                    points[2].x, points[2].y
+                )
+            elif instruction == AppKit.NSClosePathBezierPathElement:
+                Quartz.CGPathCloseSubpath(path)
+        # hacking to get a proper close path at the end of the path
+        Quartz.CGPathMoveToPoint(path, None, 0, 0)
+        Quartz.CGPathAddLineToPoint(path, None, 0, 0)
+        Quartz.CGPathAddLineToPoint(path, None, 0, 0)
+        Quartz.CGPathAddLineToPoint(path, None, 0, 0)
+        Quartz.CGPathCloseSubpath(path)
+        return path
 
     def setNSBezierPath(self, path):
         """
@@ -383,10 +409,10 @@ class BezierPath(BasePen):
 
     def _contoursForBooleanOperations(self):
         # contours are very temporaly objects
-        # redirect drawToPointsPen to drawPoints
+        # redirect drawToPointPen to drawPoints
         contours = self.contours
         for contour in contours:
-            contour.drawPoints = contour.drawToPointsPen
+            contour.drawPoints = contour.drawToPointPen
         return contours
 
     def union(self, other):
@@ -1408,7 +1434,7 @@ class BaseContext(object):
     def _transform(self, matrix):
         pass
 
-    def _textBox(self, txt, (x, y, w, h), align):
+    def _textBox(self, txt, box, align):
         pass
 
     def _image(self, path, (x, y), alpha, pageNumber):
@@ -1717,7 +1743,6 @@ class BaseContext(object):
             breakIndex = CoreText.CTTypesetterSuggestLineBreak(setter, location, lineWidth)
             sub = attrString.attributedSubstringFromRange_((location, breakIndex))
             location += breakIndex
-            subString = sub.string()
             if breakIndex == 0:
                 break
             subString = sub.string()
@@ -1739,18 +1764,26 @@ class BaseContext(object):
         mutString.replaceOccurrencesOfString_withString_options_range_(unichr(self._softHypen), "", AppKit.NSLiteralSearch, (0, mutString.length()))
         return attrString
 
-    def clippedText(self, txt, (x, y, w, h), align):
+    def clippedText(self, txt, box, align):
+        canHyphenate = True
+        if isinstance(box, self._bezierPathClass):
+            canHyphenate = False
+            path = box._getCGPath()
+            (x, y), (w, h) = CoreText.CGPathGetPathBoundingBox(path)
+        else:
+            x, y, w, h = box
+            path = CoreText.CGPathCreateMutable()
+            CoreText.CGPathAddRect(path, None, CoreText.CGRectMake(x, y, w, h))
+
         attrString = self.attributedString(txt, align=align)
-        if self._state.hyphenation:
+        if canHyphenate and self._state.hyphenation:
             hyphenIndexes = [i for i, c in enumerate(attrString.string()) if c == "-"]
             attrString = self.hyphenateAttributedString(attrString, w)
         setter = CoreText.CTFramesetterCreateWithAttributedString(attrString)
-        path = CoreText.CGPathCreateMutable()
-        CoreText.CGPathAddRect(path, None, CoreText.CGRectMake(x, y, w, h))
         box = CoreText.CTFramesetterCreateFrame(setter, (0, 0), path, None)
         visibleRange = CoreText.CTFrameGetVisibleStringRange(box)
         clip = visibleRange.length
-        if self._state.hyphenation:
+        if canHyphenate and self._state.hyphenation:
             subString = attrString.string()[:clip]
             for i in hyphenIndexes:
                 if i < clip:
@@ -1760,14 +1793,24 @@ class BaseContext(object):
             clip -= subString.count("-")
         return txt[clip:]
 
-    def textSize(self, txt, align):
-        text = self.attributedString(txt, align)
-        w, h = text.size()
+    def textSize(self, txt, align, width, height):
+        attrString = self.attributedString(txt, align)
+        if width is None:
+            w, h = attrString.size()
+        else:
+            if width is None:
+                width = CoreText.CGFLOAT_MAX
+            if height is None:
+                height = CoreText.CGFLOAT_MAX
+            if self._state.hyphenation:
+                attrString = self.hyphenateAttributedString(attrString, width)
+            setter = CoreText.CTFramesetterCreateWithAttributedString(attrString)
+            (w, h), _ = CoreText.CTFramesetterSuggestFrameSizeWithConstraints(setter, (0, 0), None, (width, height), None)
         return w, h
 
-    def textBox(self, txt, (x, y, w, h), align="left"):
+    def textBox(self, txt, box, align="left"):
         self._state.path = None
-        self._textBox(txt, (x, y, w, h), align)
+        self._textBox(txt, box, align)
 
     def image(self, path, (x, y), alpha, pageNumber):
         self._image(path, (x, y), alpha, pageNumber)

@@ -131,15 +131,23 @@ class PDFContext(BaseContext):
             self._pdfPath(self._state.path)
             Quartz.CGContextClip(self._pdfContext)
 
-    def _textBox(self, txt, (x, y, w, h), align):
+    def _textBox(self, txt, box, align):
+        canHyphenate = True
+        if isinstance(box, self._bezierPathClass):
+            canHyphenate = False
+            path = box._getCGPath()
+            (x, y), (w, h) = CoreText.CGPathGetPathBoundingBox(path)
+        else:
+            x, y, w, h = box
+            path = CoreText.CGPathCreateMutable()
+            CoreText.CGPathAddRect(path, None, CoreText.CGRectMake(x, y, w, h))
+
         canDoGradients = True
         attrString = self.attributedString(txt, align=align)
-        if self._state.hyphenation:
+        if canHyphenate and self._state.hyphenation:
             attrString = self.hyphenateAttributedString(attrString, w)
 
         setter = CoreText.CTFramesetterCreateWithAttributedString(attrString)
-        path = Quartz.CGPathCreateMutable()
-        Quartz.CGPathAddRect(path, None, Quartz.CGRectMake(x, y, w, h))
         box = CoreText.CTFramesetterCreateFrame(setter, (0, 0), path, None)
 
         ctLines = CoreText.CTFrameGetLines(box)
