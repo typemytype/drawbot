@@ -1257,6 +1257,9 @@ class DrawBotDrawingTool(object):
         """
         Returns the size of a text with the current settings,
         like `font`, `fontSize` and `lineHeight` as a tuple (width, height).
+
+        Optionally a `width` constrain or `height` constrain can be provided
+        to calculate the lenght or width of text with the given constrain.
         """
         if isinstance(txt, (str, unicode)):
             try:
