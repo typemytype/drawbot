@@ -5,6 +5,9 @@ import Quartz
 import math
 
 from fontTools.pens.basePen import BasePen
+from ufoLib.pointPen import PointToSegmentPen
+
+import booleanOperations
 
 from drawBot.misc import DrawBotError, cmyk2rgb, warnings
 
@@ -32,6 +35,33 @@ class BezierContour(list):
 
     def __repr__(self):
         return "<BezierContour>"
+
+    def drawToPointsPen(self, pointPen):
+        pointPen.beginPath()
+        for i, segment in enumerate(self):
+            if len(segment) == 1:
+                segmentType = "line"
+                if i == 0 and self.open:
+                    segmentType = "move"
+                pointPen.addPoint(segment[0], segmentType=segmentType)
+            else:
+                pointPen.addPoint(segment[0])
+                pointPen.addPoint(segment[1])
+                pointPen.addPoint(segment[2], segmentType="curve")
+        pointPen.endPath()
+
+    def drawToPen(self, pen):
+        for i, segment in enumerate(self):
+            if i == 0:
+                pen.moveTo(*segment)
+            elif len(segment) == 1:
+                pen.lineTo(*segment)
+            else:
+                pen.curveTo(*segment)
+        if self.open:
+            pen.endPath()
+        else:
+            pen.closePath()
 
 
 class BezierPath(BasePen):
@@ -85,39 +115,47 @@ class BezierPath(BasePen):
         """
         self._path.closePath()
 
+    def beginPath(self):
+        """
+        Begin path.
+        """
+        self._pointToSegmentPen = PointToSegmentPen(self)
+        self._pointToSegmentPen.beginPath()
+
+    def addPoint(self, *args, **kwargs):
+        """
+        Add a point to the path.
+        """
+        self._pointToSegmentPen.addPoint(*args, **kwargs)
+
     def endPath(self):
-        pass
+        """
+        End the path.
+
+        When the bezier path is used as a pen, the path will be open.
+
+        When the bezier path is used as a point pen, the path will process all the points added with `addPoints`.
+        """
+        if hasattr(self, "_pointToSegmentPen"):
+            # its been uses in a point pen world
+            self._pointToSegmentPen.endPath()
+            del self._pointToSegmentPen
 
     def drawToPen(self, pen):
+        """
+        Draw the bezier path into a pen
+        """
         contours = self.contours
         for contour in contours:
-            for i, segment in enumerate(contour):
-                if i == 0:
-                    pen.moveTo(*segment)
-                elif len(segment) == 1:
-                    pen.lineTo(*segment)
-                else:
-                    pen.curveTo(*segment)
-            if contour.open:
-                pen.endPath()
-            else:
-                pen.closePath()
+            contour.drawToPen(pen)
 
-    def drawToPointPen(self, pointPen):
+    def drawToPointsPen(self, pointPen):
+        """
+        Draw the bezier path into a point pen.
+        """
         contours = self.contours
         for contour in contours:
-            pointPen.beginPath()
-            for i, segment in enumerate(contour):
-                if len(segment) == 1:
-                    segmentType = "line"
-                    if i == 0 and contour.open:
-                        segmentType = "move"
-                    pointPen.addPoint(segment[0], segmentType=segmentType)
-                else:
-                    pointPen.addPoint(segment[0])
-                    pointPen.addPoint(segment[1])
-                    pointPen.addPoint(segment[2], segmentType="curve")
-            pointPen.endPath()
+            contour.drawToPointsPen(pointPen)
 
     def arc(self, center, radius, startAngle, endAngle, clockwise):
         """
@@ -143,6 +181,7 @@ class BezierPath(BasePen):
         Add a oval at possition `x`, `y` with a size of `w`, `h`
         """
         self._path.appendBezierPathWithOvalInRect_(((x, y), (w, h)))
+        self.closePath()
 
     def text(self, txt, font=_FALLBACKFONT, fontSize=10, offset=None, box=None):
         """
@@ -340,6 +379,107 @@ class BezierPath(BasePen):
         aT.setTransformStruct_(transformMatrix[:])
         self._path.transformUsingAffineTransform_(aT)
 
+    # boolean operations
+
+    def _contoursForBooleanOperations(self):
+        # contours are very temporaly objects
+        # redirect drawToPointsPen to drawPoints
+        contours = self.contours
+        for contour in contours:
+            contour.drawPoints = contour.drawToPointsPen
+        return contours
+
+    def union(self, other):
+        """
+        Return the union between two bezier paths.
+        """
+        if isinstance(other, self.__class__):
+            self.appendPath(other)
+        contours = self._contoursForBooleanOperations()
+        result = self.__class__()
+        booleanOperations.union(contours, result)
+        return result
+
+    def removeOverlap(self):
+        """
+        Remove all overlaps in a bezier path.
+        """
+        contours = self._contoursForBooleanOperations()
+        result = self.__class__()
+        booleanOperations.union(contours, result)
+        self.setNSBezierPath(result.getNSBezierPath())
+        return self
+
+    def difference(self, other):
+        """
+        Return the difference between two bezier paths.
+        """
+        subjectContours = self._contoursForBooleanOperations()
+        clipContours = other._contoursForBooleanOperations()
+        result = self.__class__()
+        booleanOperations.difference(subjectContours, clipContours, result)
+        return result
+
+    def intersection(self, other):
+        """
+        Return the intersection between two bezier paths.
+        """
+        subjectContours = self._contoursForBooleanOperations()
+        clipContours = other._contoursForBooleanOperations()
+        result = self.__class__()
+        booleanOperations.intersection(subjectContours, clipContours, result)
+        return result
+
+    def xor(self, other):
+        """
+        Return the xor between two bezier paths.
+        """
+        subjectContours = self._contoursForBooleanOperations()
+        clipContours = other._contoursForBooleanOperations()
+        result = self.__class__()
+        booleanOperations.xor(subjectContours, clipContours, result)
+        return result
+
+    def __mod__(self, other):
+        return self.difference(other)
+
+    __rmod__ = __mod__
+
+    def __imod__(self, other):
+        result = self.difference(other)
+        self.setNSBezierPath(result.getNSBezierPath())
+        return self
+
+    def __or__(self, other):
+        return self.union(other)
+
+    __ror__ = __or__
+
+    def __ior__(self, other):
+        result = self.union(other)
+        self.setNSBezierPath(result.getNSBezierPath())
+        return self
+
+    def __and__(self, other):
+        return self.intersection(other)
+
+    __rand__ = __and__
+
+    def __iand__(self, other):
+        result = self.intersection(other)
+        self.setNSBezierPath(result.getNSBezierPath())
+        return self
+
+    def __xor__(self, other):
+        return self.xor(other)
+
+    __rxor__ = __xor__
+
+    def __ixor__(self, other):
+        result = self.xor(other)
+        self.setNSBezierPath(result.getNSBezierPath())
+        return self
+
     def _points(self, onCurve=True, offCurve=True):
         points = []
         if not onCurve and not offCurve:
@@ -386,6 +526,18 @@ class BezierPath(BasePen):
 
     def __len__(self):
         return len(self.contours)
+
+    def __getitem__(self, index):
+        return self.contours[index]
+
+    def __iter__(self):
+        contours = self.contours
+        count = len(contours)
+        index = 0
+        while index < count:
+            contour = contours[index]
+            yield contour
+            index += 1
 
 
 class Color(object):
