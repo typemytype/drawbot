@@ -880,27 +880,27 @@ class FormattedString(object):
                     tabAlign = self._textAlignMap["right"]
                 tabStop = AppKit.NSTextTab.alloc().initWithTextAlignment_location_options_(tabAlign, tab, tabOptions)
                 para.addTabStop_(tabStop)
-        if self._lineHeight:
+        if self._lineHeight is not None:
             # para.setLineSpacing_(lineHeight)
             para.setMaximumLineHeight_(self._lineHeight)
             para.setMinimumLineHeight_(self._lineHeight)
 
-        if self._indent:
+        if self._indent is not None:
             para.setHeadIndent_(self._indent)
             para.setFirstLineHeadIndent_(self._indent)
-        if self._tailIndent:
+        if self._tailIndent is not None:
             para.setTailIndent_(self._tailIndent)
-        if self._firstLineIndent:
+        if self._firstLineIndent is not None:
             para.setFirstLineHeadIndent_(self._firstLineIndent)
 
-        if self._paragraphTopSpacing:
+        if self._paragraphTopSpacing is not None:
             para.setParagraphSpacingBefore_(self._paragraphTopSpacing)
-        if self._paragraphBottomSpacing:
+        if self._paragraphBottomSpacing is not None:
             para.setParagraphSpacing_(self._paragraphBottomSpacing)
 
-        if self._tracking:
+        if self._tracking is not None:
             attributes[AppKit.NSKernAttributeName] = self._tracking
-        if self._baselineShift:
+        if self._baselineShift is not None:
             attributes[AppKit.NSBaselineOffsetAttributeName] = self._baselineShift
         if self._language:
             attributes["NSLanguage"] = self._language
