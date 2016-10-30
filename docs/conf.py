@@ -286,6 +286,8 @@ MOCK_MODULES = ['py2app',
         'fontTools.misc.xmlWriter',
         'fontTools.pens',
         'fontTools.pens.basePen',
+        'ufoLib',
+        'ufoLib.pointPen',
         'vanilla',
         'vanilla.vanillaBase']
 
