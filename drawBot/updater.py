@@ -20,7 +20,7 @@ def getCurrentVersion():
         return ""
     path = "https://raw.github.com/typemytype/drawbot/master/drawBotSettings.py"
     try:
-        response = urllib2.urlopen(path)
+        response = urllib2.urlopen(path, timeout=5)
         code = response.read()
         response.close()
         exec(code)
