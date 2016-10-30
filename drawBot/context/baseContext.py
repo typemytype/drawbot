@@ -956,7 +956,8 @@ class FormattedString(object):
                 length = 0
 
             rng = location, length
-            new = self.__class__()
+            attributes = {key: getattr(self, "_%s" % key) for key in self._formattedAttributes}
+            new = self.__class__(**attributes)
             try:
                 new._attributedString = self._attributedString.attributedSubstringFromRange_(rng)
             except:
