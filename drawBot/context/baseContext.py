@@ -928,24 +928,34 @@ class FormattedString(object):
         if isinstance(index, slice):
             start = index.start
             stop = index.stop
-            textLenght = len(self)
+            textLength = len(self)
 
             if start is None:
                 start = 0
             elif start < 0:
-                start = textLenght + start
-            elif start > textLenght:
-                start = textLenght
+                start = textLength + start
+            elif start > textLength:
+                start = textLength
 
             if stop is None:
-                stop = textLenght
+                stop = textLength
             elif stop < 0:
-                stop = textLenght + stop
+                stop = textLength + stop
 
-            if start + (stop-start) > textLenght:
-                stop = textLenght - stop
+            if start + (stop-start) > textLength:
+                stop = textLength
 
-            rng = (start, stop-start)
+            location = start
+            length = stop-start
+
+            if location < 0:
+                location = 0
+            if length > textLength:
+                length = textLength
+            elif length < 0:
+                length = 0
+
+            rng = location, length
             new = self.__class__()
             try:
                 new._attributedString = self._attributedString.attributedSubstringFromRange_(rng)
