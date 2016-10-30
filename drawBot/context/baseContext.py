@@ -805,6 +805,16 @@ class FormattedString(object):
             if value is not None:
                 setattr(self, "_%s" % key, value)
 
+        if self._fill is not None:
+            try:
+                len(self._fill)
+            except:
+                self._fill = (self._fill,)
+        if self._stroke is not None:
+            try:
+                len(self._stroke)
+            except:
+                self._stroke = (self._stroke,)
         if self._fill:
             self._cmykFill = None
         elif self._cmykFill:
