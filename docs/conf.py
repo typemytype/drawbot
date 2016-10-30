@@ -288,6 +288,7 @@ MOCK_MODULES = ['py2app',
         'fontTools.pens.basePen',
         'ufoLib',
         'ufoLib.pointPen',
+        'booleanOperations',
         'vanilla',
         'vanilla.vanillaBase']
 
