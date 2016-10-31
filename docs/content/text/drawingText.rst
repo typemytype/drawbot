@@ -8,6 +8,7 @@ Helpers
 -------
 
 .. autofunction:: drawBot.textSize
+.. autofunction:: drawBot.textOverflow
 .. autofunction:: drawBot.installedFonts
 .. autofunction:: drawBot.installFont
 .. autofunction:: drawBot.uninstallFont
