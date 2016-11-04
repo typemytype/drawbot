@@ -234,12 +234,13 @@ class BezierPath(BasePen):
             for ctRun in ctRuns:
                 attributes = CoreText.CTRunGetAttributes(ctRun)
                 font = attributes.get(AppKit.NSFontAttributeName)
+                baselineShift = attributes.get(AppKit.NSBaselineOffsetAttributeName, 0)
                 glyphCount = CoreText.CTRunGetGlyphCount(ctRun)
                 for i in range(glyphCount):
                     glyph = CoreText.CTRunGetGlyphs(ctRun, (i, 1), None)[0]
                     ax, ay = CoreText.CTRunGetPositions(ctRun, (i, 1), None)[0]
                     if glyph:
-                        self._path.moveToPoint_((x+originX+ax, y+originY+ay))
+                        self._path.moveToPoint_((x+originX+ax, y+originY+ay+baselineShift))
                         self._path.appendBezierPathWithGlyph_inFont_(glyph, font)
         self.optimizePath()
 
