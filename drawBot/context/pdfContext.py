@@ -148,10 +148,10 @@ class PDFContext(BaseContext):
             attrString = self.hyphenateAttributedString(attrString, w)
 
         setter = CoreText.CTFramesetterCreateWithAttributedString(attrString)
-        box = CoreText.CTFramesetterCreateFrame(setter, (0, 0), path, None)
+        frame = CoreText.CTFramesetterCreateFrame(setter, (0, 0), path, None)
 
-        ctLines = CoreText.CTFrameGetLines(box)
-        origins = CoreText.CTFrameGetLineOrigins(box, (0, len(ctLines)), None)
+        ctLines = CoreText.CTFrameGetLines(frame)
+        origins = CoreText.CTFrameGetLineOrigins(frame, (0, len(ctLines)), None)
         for i, (originX, originY) in enumerate(origins):
             ctLine = ctLines[i]
             bounds = CoreText.CTLineGetImageBounds(ctLine, self._pdfContext)
