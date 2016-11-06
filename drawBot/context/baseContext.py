@@ -5,6 +5,8 @@ import Quartz
 import math
 
 from fontTools.pens.basePen import BasePen
+from fontTools.pens.areaPen import AreaPen
+
 from ufoLib.pointPen import PointToSegmentPen
 
 import booleanOperations
@@ -35,6 +37,14 @@ class BezierContour(list):
 
     def __repr__(self):
         return "<BezierContour>"
+
+    def _get_clockwise(self):
+        pen = AreaPen()
+        pen.endPath = pen.closePath
+        self.drawToPen(pen)
+        return pen.value < 0
+
+    clockwise = property(_get_clockwise, doc="A boolean representing if the contour has a clockwise direction.")
 
     def drawToPointPen(self, pointPen):
         pointPen.beginPath()
