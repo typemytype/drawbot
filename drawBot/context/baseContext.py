@@ -965,7 +965,7 @@ class FormattedString(object):
                 pass
             return new
         else:
-            text = str(self)
+            text = self._attributedString.string()
             return text[index]
 
     def __len__(self):
