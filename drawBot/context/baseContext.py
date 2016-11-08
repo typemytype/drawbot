@@ -1016,6 +1016,7 @@ class FormattedString(object):
             if testFont is None:
                 raise DrawBotError("Fallback font '%s' is not available" % font)
         self._fallbackFont = font
+        return font
 
     def fontSize(self, fontSize):
         """

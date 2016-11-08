@@ -877,12 +877,14 @@ class DrawBotDrawingTool(object):
 
             fallbackFont("Times")
         """
+        fontName = self._tryInstallFontFromFontName(fontName)
         fontName = fontName.encode("ascii", "ignore")
         dummyFont = AppKit.NSFont.fontWithName_size_(fontName, 10)
         if dummyFont is None:
             raise DrawBotError("Fallback font '%s' is not available" % fontName)
         self._dummyContext.fallbackFont(fontName)
         self._addInstruction("fallbackFont", fontName)
+        return fontName
 
     def fontSize(self, fontSize):
         """
