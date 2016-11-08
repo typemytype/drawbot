@@ -856,6 +856,9 @@ class DrawBotDrawingTool(object):
 
         The name of the font relates to the font's postscript name.
 
+        The font name is returned, which is handy when the font was loaded
+        from a path.
+
         ::
 
             font("Times-Italic")
@@ -864,6 +867,7 @@ class DrawBotDrawingTool(object):
         fontName = fontName.encode("ascii", "ignore")
         self._dummyContext.font(fontName, fontSize)
         self._addInstruction("font", fontName, fontSize)
+        return fontName
 
     def fallbackFont(self, fontName):
         """

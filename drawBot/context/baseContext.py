@@ -993,12 +993,16 @@ class FormattedString(object):
         The default `fontSize` is 10pt.
 
         The name of the font relates to the font's postscript name.
+
+        The font name is returned, which is handy when the font was loaded
+        from a path.
         """
         font = _tryInstallFontFromFontName(font)
         font = font.encode("ascii", "ignore")
         self._font = font
         if fontSize is not None:
             self._fontSize = fontSize
+        return font
 
     def fallbackFont(self, font):
         """
@@ -1706,7 +1710,7 @@ class BaseContext(object):
         self._transform(matrix)
 
     def font(self, fontName, fontSize):
-        self._state.text.font(fontName, fontSize)
+        return self._state.text.font(fontName, fontSize)
 
     def fallbackFont(self, fontName):
         self._state.text.fallbackFont(fontName)
