@@ -294,10 +294,11 @@ class BezierPath(BasePen):
             elif instruction == AppKit.NSClosePathBezierPathElement:
                 Quartz.CGPathCloseSubpath(path)
         # hacking to get a proper close path at the end of the path
-        Quartz.CGPathMoveToPoint(path, None, 0, 0)
-        Quartz.CGPathAddLineToPoint(path, None, 0, 0)
-        Quartz.CGPathAddLineToPoint(path, None, 0, 0)
-        Quartz.CGPathAddLineToPoint(path, None, 0, 0)
+        x, y, _, _ = self.bounds()
+        Quartz.CGPathMoveToPoint(path, None, x, y)
+        Quartz.CGPathAddLineToPoint(path, None, x, y)
+        Quartz.CGPathAddLineToPoint(path, None, x, y)
+        Quartz.CGPathAddLineToPoint(path, None, x, y)
         Quartz.CGPathCloseSubpath(path)
         return path
 
@@ -805,7 +806,6 @@ class FormattedString(object):
 
         Text can also be added with `formattedString += "hello"`. It will append the text with the current settings of the formatted string.
         """
-
         if isinstance(txt, (str, unicode)):
             try:
                 txt = txt.decode("utf-8")
@@ -1186,6 +1186,7 @@ class FormattedString(object):
         Copy the formatted string.
         """
         attributes = {key: getattr(self, "_%s" % key) for key in self._formattedAttributes}
+        print attributes
         new = self.__class__(**attributes)
         new._attributedString = self._attributedString.mutableCopy()
         return new
@@ -1747,7 +1748,8 @@ class BaseContext(object):
         self._state.text.append(txt, align=align)
         return self._state.text.getNSObject()
 
-    def hyphenateAttributedString(self, attrString, width):
+    def hyphenateAttributedString(self, attrString, path):
+        # add soft hyphens
         attrString = attrString.mutableCopy()
         mutString = attrString.mutableString()
         wordRange = AppKit.NSMakeRange(mutString.length(), 0)
@@ -1759,52 +1761,75 @@ class BaseContext(object):
                 if hyphenIndex != AppKit.NSNotFound:
                     mutString.insertString_atIndex_(unichr(self._softHypen), hyphenIndex)
 
-        textLength = attrString.length()
+        # get the lines
+        lines = self._getTypesetterLinesWithPath(attrString, path)
+        # get all lines justified
+        justifiedLines = self._getTypesetterLinesWithPath(self._justifyAttributedString(attrString), path)
 
-        setter = CoreText.CTTypesetterCreateWithAttributedString(attrString)
-        location = 0
-        firstLine = True
-        while location < textLength:
-            para, _ = attrString.attribute_atIndex_effectiveRange_(AppKit.NSParagraphStyleAttributeName, location, None)
-            lineWidth = width
-            if para:
-                lineWidth = para.tailIndent()
-                if lineWidth <= 0:
-                    lineWidth = width + lineWidth
-
-                if firstLine:
-                    lineWidth -= para.firstLineHeadIndent()
-                else:
-                    lineWidth -= para.headIndent()
-
-            breakIndex = CoreText.CTTypesetterSuggestLineBreak(setter, location, lineWidth)
-            sub = attrString.attributedSubstringFromRange_((location, breakIndex))
-            location += breakIndex
-            if breakIndex == 0:
-                break
-            subString = sub.string()
-            if subString[-1] == unichr(self._softHypen):
-                hyphenAttr, _ = sub.attributesAtIndex_effectiveRange_(0, None)
+        # loop over all lines
+        i = 0
+        while i < len(lines):
+            # get the current line
+            line = lines[i]
+            # get the range in the text for the current line
+            rng = CoreText.CTLineGetStringRange(line)
+            # get the substring from the range
+            subString = attrString.attributedSubstringFromRange_(rng)
+            # get the string
+            subStringText = subString.string()
+            # check if the line ends with a softhypen
+            if len(subStringText) and subStringText[-1] == unichr(self._softHypen):
+                # here we go
+                # get the justified line and get the max line width
+                maxLineWidth, a, d, l = CoreText.CTLineGetTypographicBounds(justifiedLines[i], None, None, None)
+                # get the last attributes
+                hyphenAttr, _ = subString.attributesAtIndex_effectiveRange_(0, None)
+                # create a hyphen string
                 hyphenAttrString = AppKit.NSAttributedString.alloc().initWithString_attributes_("-", hyphenAttr)
+                # get the width of the hyphen
                 hyphenWidth = hyphenAttrString.size().width
-                if sub.size().width + hyphenWidth < lineWidth:
-                    mutString.insertString_atIndex_("-", location)
-                    setter = CoreText.CTTypesetterCreateWithAttributedString(attrString)
-                    location += 1
-                else:
-                    attrString.deleteCharactersInRange_((location-1, 1))
-                    setter = CoreText.CTTypesetterCreateWithAttributedString(attrString)
-                    location -= breakIndex
-                    textLength = attrString.length()
-            firstLine = False
+                # get all line break location of that line
+                lineBreakLocation = len(subString)
+                possibleLineBreaks = [lineBreakLocation]
+                while lineBreakLocation:
+                    lineBreakLocation = subString.lineBreakBeforeIndex_withinRange_(lineBreakLocation, (0, len(subString)))
+                    if lineBreakLocation:
+                        possibleLineBreaks.append(lineBreakLocation)
+                breakFound = False
+                # loop over all possible line breaks
+                while possibleLineBreaks:
+                    lineBreak = possibleLineBreaks.pop(0)
+                    # get a possible line
+                    breakString = subString.attributedSubstringFromRange_((0, lineBreak))
+                    # get the width
+                    stringWidth = breakString.size().width
+                    # add hyphen width if required
+                    if breakString.string()[-1] == unichr(self._softHypen):
+                        stringWidth += hyphenWidth
+                    # found a break
+                    if stringWidth <= maxLineWidth:
+                        breakFound = True
+                        break
 
+                if breakFound and len(breakString.string()) > 2 and breakString.string()[-1] == unichr(self._softHypen):
+                    # if the break line ends with a soft hyphen
+                    # add a hyphen
+                    attrString.replaceCharactersInRange_withString_((rng.location + lineBreak, 0), "-")
+                # remove all soft hyphens for the range of that line
+                mutString.replaceOccurrencesOfString_withString_options_range_(unichr(self._softHypen), "", AppKit.NSLiteralSearch, rng)
+                # reset the lines, from the adjusted attribute string
+                lines = self._getTypesetterLinesWithPath(attrString, path)
+                # reset the justifed lines form the adjusted attributed string
+                justifiedLines = self._getTypesetterLinesWithPath(self._justifyAttributedString(attrString), path)
+            # next line
+            i += 1
+        # remove all soft hyphen
         mutString.replaceOccurrencesOfString_withString_options_range_(unichr(self._softHypen), "", AppKit.NSLiteralSearch, (0, mutString.length()))
+        # done!
         return attrString
 
     def clippedText(self, txt, box, align):
-        canHyphenate = True
         if isinstance(box, self._bezierPathClass):
-            canHyphenate = False
             path = box._getCGPath()
             (x, y), (w, h) = CoreText.CGPathGetPathBoundingBox(path)
         else:
@@ -1813,14 +1838,14 @@ class BaseContext(object):
             CoreText.CGPathAddRect(path, None, CoreText.CGRectMake(x, y, w, h))
 
         attrString = self.attributedString(txt, align=align)
-        if canHyphenate and self._state.hyphenation:
+        if self._state.hyphenation:
             hyphenIndexes = [i for i, c in enumerate(attrString.string()) if c == "-"]
-            attrString = self.hyphenateAttributedString(attrString, w)
+            attrString = self.hyphenateAttributedString(attrString, path)
         setter = CoreText.CTFramesetterCreateWithAttributedString(attrString)
         box = CoreText.CTFramesetterCreateFrame(setter, (0, 0), path, None)
         visibleRange = CoreText.CTFrameGetVisibleStringRange(box)
         clip = visibleRange.length
-        if canHyphenate and self._state.hyphenation:
+        if self._state.hyphenation:
             subString = attrString.string()[:clip]
             for i in hyphenIndexes:
                 if i < clip:
@@ -1829,6 +1854,26 @@ class BaseContext(object):
                     break
             clip -= subString.count("-")
         return txt[clip:]
+
+    def _justifyAttributedString(self, attr):
+        # create a justified copy of the attributed string
+        attr = attr.mutableCopy()
+
+        def changeParaAttribute(para, rng, _):
+            para = para.mutableCopy()
+            para.setAlignment_(AppKit.NSJustifiedTextAlignment)
+            attr.addAttribute_value_range_(AppKit.NSParagraphStyleAttributeName, para, rng)
+
+        attr.enumerateAttribute_inRange_options_usingBlock_(AppKit.NSParagraphStyleAttributeName, (0, len(attr)), 0, changeParaAttribute)
+        return attr
+
+    def _getTypesetterLinesWithPath(self, attrString, path, offset=None):
+        # get lines for an attribute string with a given path
+        if offset is None:
+            offset = 0, 0
+        setter = CoreText.CTFramesetterCreateWithAttributedString(attrString)
+        frame = CoreText.CTFramesetterCreateFrame(setter, offset, path, None)
+        return CoreText.CTFrameGetLines(frame)
 
     def textSize(self, txt, align, width, height):
         attrString = self.attributedString(txt, align)
@@ -1840,7 +1885,9 @@ class BaseContext(object):
             if height is None:
                 height = CoreText.CGFLOAT_MAX
             if self._state.hyphenation:
-                attrString = self.hyphenateAttributedString(attrString, width)
+                path = CoreText.CGPathCreateMutable()
+                CoreText.CGPathAddRect(path, None, CoreText.CGRectMake(0, 0, width, height))
+                attrString = self.hyphenateAttributedString(attrString, path)
             setter = CoreText.CTFramesetterCreateWithAttributedString(attrString)
             (w, h), _ = CoreText.CTFramesetterSuggestFrameSizeWithConstraints(setter, (0, 0), None, (width, height), None)
         return w, h
