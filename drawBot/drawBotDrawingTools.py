@@ -91,7 +91,7 @@ class DrawBotDrawingTool(object):
     def _addInstruction(self, callback, *args, **kwargs):
         if self._requiresNewFirstPage and not self._hasPage:
             self._hasPage = True
-            self._instructionsStack.append(("newPage", [self.width(), self.height()], {}))
+            self._instructionsStack.insert(0, ("newPage", [self.width(), self.height()], {}))
         self._instructionsStack.append((callback, args, kwargs))
 
     def _drawInContext(self, context):
