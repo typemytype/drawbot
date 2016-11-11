@@ -431,9 +431,7 @@ class BezierPath(BasePen):
         """
         Return the union between two bezier paths.
         """
-        if isinstance(other, self.__class__):
-            self.appendPath(other)
-        contours = self._contoursForBooleanOperations()
+        contours = self._contoursForBooleanOperations() + other._contoursForBooleanOperations()
         result = self.__class__()
         booleanOperations.union(contours, result)
         return result
