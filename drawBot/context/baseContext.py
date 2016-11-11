@@ -1184,7 +1184,6 @@ class FormattedString(object):
         Copy the formatted string.
         """
         attributes = {key: getattr(self, "_%s" % key) for key in self._formattedAttributes}
-        print attributes
         new = self.__class__(**attributes)
         new._attributedString = self._attributedString.mutableCopy()
         return new
