@@ -397,7 +397,7 @@ class SVGContext(BaseContext):
                 stroke = self._colorClass(strokeColor).svgColor()
                 if stroke:
                     spanData["stroke"] = stroke
-                    spanData["stroke-width"] = formatNumber(abs(strokeWidth * .5))
+                    spanData["stroke-width"] = formatNumber(abs(strokeWidth))
                 spanData["font-family"] = fontName
                 spanData["font-size"] = formatNumber(fontSize)
 
@@ -526,7 +526,7 @@ class SVGContext(BaseContext):
         stroke = self._svgStrokeColor()
         if stroke:
             data["stroke"] = stroke
-            data["stroke-width"] = formatNumber(abs(self._state.strokeWidth * .5))
+            data["stroke-width"] = formatNumber(abs(self._state.strokeWidth))
         if self._state.lineDash:
             data["stroke-dasharray"] = ",".join([str(i) for i in self._state.lineDash])
         if self._state.lineJoin in self._svgLineJoinStylesMap:
