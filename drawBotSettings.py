@@ -1,4 +1,4 @@
 
 appName = "DrawBot"
 
-__version__ = "3.87"
+__version__ = "3.88"
