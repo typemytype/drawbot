@@ -93,7 +93,7 @@ setup(
                         'feaTools2',
                         'ufo2svg',
                         'booleanOperations',
-                        'pyclipper',
+                        #'pyclipper',
                         'pygments',
                         'jedi',
                         'fontTools',
