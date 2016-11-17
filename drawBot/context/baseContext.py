@@ -73,6 +73,11 @@ class BezierContour(list):
         else:
             pen.closePath()
 
+    def _get_points(self):
+        return [point for segment in self for point in segment]
+
+    points = property(_get_points, doc="Return a list of all the points making up this contour, regardless of whether they are on curve or off curve.")
+
 
 class BezierPath(BasePen):
 
