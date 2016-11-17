@@ -1826,14 +1826,7 @@ class BaseContext(object):
         return attrString
 
     def clippedText(self, txt, box, align):
-        if isinstance(box, self._bezierPathClass):
-            path = box._getCGPath()
-            (x, y), (w, h) = CoreText.CGPathGetPathBoundingBox(path)
-        else:
-            x, y, w, h = box
-            path = CoreText.CGPathCreateMutable()
-            CoreText.CGPathAddRect(path, None, CoreText.CGRectMake(x, y, w, h))
-
+        path, origin = self._getPathForFrameSetter(box)
         attrString = self.attributedString(txt, align=align)
         if self._state.hyphenation:
             hyphenIndexes = [i for i, c in enumerate(attrString.string()) if c == "-"]
@@ -1871,6 +1864,16 @@ class BaseContext(object):
         setter = CoreText.CTFramesetterCreateWithAttributedString(attrString)
         frame = CoreText.CTFramesetterCreateFrame(setter, offset, path, None)
         return CoreText.CTFrameGetLines(frame)
+
+    def _getPathForFrameSetter(self, box):
+        if isinstance(box, self._bezierPathClass):
+            path = box._getCGPath()
+            (x, y), (w, h) = CoreText.CGPathGetPathBoundingBox(path)
+        else:
+            x, y, w, h = box
+            path = CoreText.CGPathCreateMutable()
+            CoreText.CGPathAddRect(path, None, CoreText.CGRectMake(x, y, w, h))
+        return path, (x, y)
 
     def textSize(self, txt, align, width, height):
         attrString = self.attributedString(txt, align)

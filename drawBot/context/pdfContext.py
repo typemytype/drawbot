@@ -132,13 +132,7 @@ class PDFContext(BaseContext):
             Quartz.CGContextClip(self._pdfContext)
 
     def _textBox(self, txt, box, align):
-        if isinstance(box, self._bezierPathClass):
-            path = box._getCGPath()
-            (x, y), (w, h) = CoreText.CGPathGetPathBoundingBox(path)
-        else:
-            x, y, w, h = box
-            path = CoreText.CGPathCreateMutable()
-            CoreText.CGPathAddRect(path, None, CoreText.CGRectMake(x, y, w, h))
+        path, (x, y) = self._getPathForFrameSetter(box)
 
         canDoGradients = True
         attrString = self.attributedString(txt, align=align)

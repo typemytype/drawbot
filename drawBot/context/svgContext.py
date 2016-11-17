@@ -338,14 +338,7 @@ class SVGContext(BaseContext):
         self._state.clipPathID = uniqueID
 
     def _textBox(self, txt, box, align):
-        if isinstance(box, self._bezierPathClass):
-            path = box._getCGPath()
-            (x, y), (w, h) = CoreText.CGPathGetPathBoundingBox(path)
-        else:
-            x, y, w, h = box
-            path = CoreText.CGPathCreateMutable()
-            CoreText.CGPathAddRect(path, None, CoreText.CGRectMake(x, y, w, h))
-
+        path, (x, y) = self._getPathForFrameSetter(box)
         canDoGradients = True
         if align == "justified":
             warnings.warn("justified text is not supported in a svg context")
