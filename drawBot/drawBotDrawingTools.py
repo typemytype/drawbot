@@ -1043,6 +1043,8 @@ class DrawBotDrawingTool(object):
         """
         Returns the overlowed text without drawing the text.
 
+        A `box` could be a `(x, y, w, h)` or a bezierPath object.
+
         Optionally an alignment can be set.
         Possible `align` values are: `"left"`, `"center"`, `"right"` and `"justified"`.
 
@@ -1062,6 +1064,9 @@ class DrawBotDrawingTool(object):
     def textBox(self, txt, box, align=None):
         """
         Draw a text in a provided rectangle.
+
+        A `box` could be a `(x, y, w, h)` or a bezierPath object.
+
         Optionally an alignment can be set.
         Possible `align` values are: `"left"`, `"center"`, `"right"` and `"justified"`.
 
@@ -1087,6 +1092,30 @@ class DrawBotDrawingTool(object):
     def textbox(self, txt, x, y, w, h, align=None):
         _deprecatedWarningLowercase("textBox('%s', (%s, %s, %s, %s), align=%s)" % (txt, x, y, y, w, align))
         return self.textBox(txt, (x, y, w, h), align)
+
+    def textBoxBaselines(self, txt, box, align=None):
+        """
+        Returns a list of `x, y` coordinates
+        indicating the start of each line
+        for a given `text` in a given `box`.
+
+        A `box` could be a `(x, y, w, h)` or a bezierPath object.
+
+        Optionally an alignment can be set.
+        Possible `align` values are: `"left"`, `"center"`, `"right"` and `"justified"`.
+        """
+        if isinstance(txt, (str, unicode)):
+            try:
+                txt = txt.decode("utf-8")
+            except UnicodeEncodeError:
+                pass
+        path, (x, y) = self._getPathForFrameSetter(box)
+        attrString = self._dummyContext.attributedString(txt)
+        setter = CoreText.CTFramesetterCreateWithAttributedString(attrString)
+        box = CoreText.CTFramesetterCreateFrame(setter, (0, 0), path, None)
+        ctLines = CoreText.CTFrameGetLines(box)
+        origins = CoreText.CTFrameGetLineOrigins(box, (0, len(ctLines)), None)
+        return [(x + o.x, y + o.y) for o in origins]
 
     _formattedStringClass = FormattedString
 
