@@ -377,6 +377,10 @@ class BezierPath(BasePen):
         new.appendPath(otherPath)
         return new
 
+    def __iadd__(self, other):
+        self.appendPath(other)
+        return self
+
     # transformations
 
     def translate(self, x=0, y=0):
