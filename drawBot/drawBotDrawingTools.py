@@ -296,7 +296,7 @@ class DrawBotDrawingTool(object):
                 ext = rawPath
             context = getContextForFileExt(ext)
             if context is None:
-                raise DrawBotError("Did not found a supported context for: '%s'" % ext)
+                raise DrawBotError("Could not find a supported context for: '%s'" % ext)
             self._drawInContext(context)
             context.saveImage(path, multipage)
 
