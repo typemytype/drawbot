@@ -926,7 +926,7 @@ class FormattedString(object):
         if self._paragraphBottomSpacing is not None:
             para.setParagraphSpacing_(self._paragraphBottomSpacing)
 
-        if self._tracking is not None:
+        if self._tracking:
             attributes[AppKit.NSKernAttributeName] = self._tracking
         if self._baselineShift is not None:
             attributes[AppKit.NSBaselineOffsetAttributeName] = self._baselineShift
