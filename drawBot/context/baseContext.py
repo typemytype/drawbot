@@ -5,16 +5,10 @@ import Quartz
 import math
 
 from fontTools.pens.basePen import BasePen
-from fontTools.pens.areaPen import AreaPen
-
-from ufoLib.pointPen import PointToSegmentPen
-
-import booleanOperations
 
 from drawBot.misc import DrawBotError, cmyk2rgb, warnings
 
 from tools import openType
-from tools import traceImage
 
 
 _FALLBACKFONT = "LucidaGrande"
@@ -39,6 +33,7 @@ class BezierContour(list):
         return "<BezierContour>"
 
     def _get_clockwise(self):
+        from fontTools.pens.areaPen import AreaPen
         pen = AreaPen()
         pen.endPath = pen.closePath
         self.drawToPen(pen)
@@ -134,6 +129,7 @@ class BezierPath(BasePen):
         """
         Begin path.
         """
+        from ufoLib.pointPen import PointToSegmentPen
         self._pointToSegmentPen = PointToSegmentPen(self)
         self._pointToSegmentPen.beginPath()
 
@@ -272,6 +268,7 @@ class BezierPath(BasePen):
         * `tolerance`: the precision tolerance of the vector outline
         * `offset`: add the traced vector outline with an offset to the BezierPath
         """
+        from tools import traceImage
         traceImage.TraceImage(path, self, threshold, blur, invert, turd, tolerance, offset)
 
     def getNSBezierPath(self):
@@ -440,6 +437,7 @@ class BezierPath(BasePen):
         """
         Return the union between two bezier paths.
         """
+        import booleanOperations
         contours = self._contoursForBooleanOperations() + other._contoursForBooleanOperations()
         result = self.__class__()
         booleanOperations.union(contours, result)
@@ -449,6 +447,7 @@ class BezierPath(BasePen):
         """
         Remove all overlaps in a bezier path.
         """
+        import booleanOperations
         contours = self._contoursForBooleanOperations()
         result = self.__class__()
         booleanOperations.union(contours, result)
@@ -459,6 +458,7 @@ class BezierPath(BasePen):
         """
         Return the difference between two bezier paths.
         """
+        import booleanOperations
         subjectContours = self._contoursForBooleanOperations()
         clipContours = other._contoursForBooleanOperations()
         result = self.__class__()
@@ -469,6 +469,7 @@ class BezierPath(BasePen):
         """
         Return the intersection between two bezier paths.
         """
+        import booleanOperations
         subjectContours = self._contoursForBooleanOperations()
         clipContours = other._contoursForBooleanOperations()
         result = self.__class__()
@@ -479,6 +480,7 @@ class BezierPath(BasePen):
         """
         Return the xor between two bezier paths.
         """
+        import booleanOperations
         subjectContours = self._contoursForBooleanOperations()
         clipContours = other._contoursForBooleanOperations()
         result = self.__class__()
