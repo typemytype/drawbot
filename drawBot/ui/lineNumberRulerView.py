@@ -74,6 +74,13 @@ class NSLineNumberRuler(NSRulerView):
         self.invalidateLineIndices()
         self.setNeedsDisplay_(True)
 
+    def dealloc(self):
+        # make sure we remove ourselves as an observer of the text storage
+        view = self.clientView()
+        if view is not None:
+            NSNotificationCenter.defaultCenter().removeObserver_name_object_(self, NSTextStorageDidProcessEditingNotification, view.textStorage())
+        super(NSLineNumberRuler, self).dealloc()
+
     def calculateLines(self):
         view = self.clientView()
         if not isinstance(view, NSTextView):
