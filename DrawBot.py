@@ -144,7 +144,7 @@ class DrawBotAppDelegate(AppKit.NSObject):
         document.vanillaWindowController.showAskYesNo("Download External Script",
             "You opened '%s' from '%s'.\n\n"
             "Read the code before running it so you know what it will do. If you don't understand it, don't run it.\n\n"
-            "Do you want to open this Script?" % (fileName, data.netloc),
+            "Do you want to open this Script?" % (fileName, domain),
             result
             )
 
