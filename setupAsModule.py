@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-from distutils.core import setup
+from setuptools import setup
 
 from drawBotSettings import __version__
 
@@ -36,6 +36,6 @@ setup(name="drawBot",
         "drawBot.context",
         "drawBot.context.tools",
         "drawBot.ui"
-        ],
-    package_dir={"": ""}
+        ], 
+    include_package_data=True,              
     )
