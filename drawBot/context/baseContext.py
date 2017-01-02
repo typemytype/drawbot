@@ -768,6 +768,10 @@ class FormattedString(object):
         attributes = self._validateAttributes(kwargs)
         self.clear()
         for key, value in attributes.items():
+            if isinstance(value, dict):
+                value = dict(value)
+            elif isinstance(value, list):
+                value = list(value)
             setattr(self, "_%s" % key, value)
         if txt:
             self.append(txt, **attributes)
