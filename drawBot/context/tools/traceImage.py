@@ -10,10 +10,10 @@ from drawBot.scriptTools import _execute
 
 potrace = os.path.join(os.path.dirname(__file__), "potrace")
 if not os.path.exists(potrace):
-    potrace = os.path.join(os.getcwd(), "potrace")
+    potrace = AppKit.NSBundle.mainBundle().pathForResource_ofType_("potrace", None)
 mkbitmap = os.path.join(os.path.dirname(__file__), "mkbitmap")
 if not os.path.exists(mkbitmap):
-    mkbitmap = os.path.join(os.getcwd(), "mkbitmap")
+    mkbitmap = AppKit.NSBundle.mainBundle().pathForResource_ofType_("mkbitmap", None)
 
 
 def _getPath(element, path=None, pathItems=None):

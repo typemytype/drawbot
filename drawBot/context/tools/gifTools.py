@@ -9,7 +9,7 @@ import sys
 
 gifsiclePath = os.path.join(os.path.dirname(__file__), "gifsicle")
 if not os.path.exists(gifsiclePath):
-    gifsiclePath = os.path.join(os.getcwd(), "gifsicle")
+    gifsiclePath = AppKit.NSBundle.mainBundle().pathForResource_ofType_("gifsicle", None)
 
 
 def _executeCommand(cmds, cwd=None):
