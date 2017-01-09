@@ -1075,6 +1075,8 @@ class DrawBotDrawingTool(object):
         The default alignment is `left`.
 
         .. showcode:: /../examples/textBox.py
+
+        .. showcode:: /../examples/textBoxInPath.py
         """
         if isinstance(txt, (str, unicode)):
             try:
