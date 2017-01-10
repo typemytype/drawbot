@@ -36,6 +36,13 @@ setup(name="drawBot",
         "drawBot.context",
         "drawBot.context.tools",
         "drawBot.ui"
-        ], 
-    include_package_data=True,              
+        ],
+    package_data = {
+        "drawBot" : [
+            "context/tools/gifsicle",
+            "context/tools/mkbitmap",
+            "context/tools/potrace"
+            ]
+        },
+    include_package_data=True,
     )
