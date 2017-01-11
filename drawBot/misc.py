@@ -4,7 +4,6 @@ import Quartz
 import sys
 import os
 
-import vanilla
 
 
 # ==========
@@ -182,6 +181,7 @@ warnings = Warnings()
 class VariableController(object):
 
     def __init__(self, attributes, callback, document=None):
+        import vanilla
         self._callback = callback
         self._attributes = None
         self.w = vanilla.FloatingWindow((250, 50))
@@ -192,6 +192,7 @@ class VariableController(object):
         self.w.setTitle("Variables")
 
     def buildUI(self, attributes):
+        import vanilla
         if self._attributes == attributes:
             return
         self._attributes = attributes

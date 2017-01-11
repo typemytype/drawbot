@@ -1,10 +1,13 @@
+import platform
+from distutils.version import StrictVersion
 import AppKit
 import CoreText
 import Quartz
 
 import math
 
-from vanilla.vanillaBase import osVersion10_11, osVersionCurrent
+osVersionCurrent = StrictVersion(platform.mac_ver()[0])
+osVersion10_11 = StrictVersion("10.11")
 
 from tools import gifTools
 
