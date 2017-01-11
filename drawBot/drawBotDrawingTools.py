@@ -1031,16 +1031,14 @@ class DrawBotDrawingTool(object):
             warnings.warn("position must a tuple: text('%s', (%s, %s))" % (txt, x, y))
         if align is None:
             align = "left"
+        elif align not in ("left", "center", "right"):
+            raise DrawBotError("align must be left, right, center")
+        attrString = self._dummyContext.attributedString(txt, align=align)
+        w, h = attrString.size()
         if align == "right":
             x -= w
         elif align == "center":
             x -= w * .5
-        elif align == "left":
-            pass
-        else:
-            raise DrawBotError("align must be left, right, center")
-        attrString = self._dummyContext.attributedString(txt, align=align)
-        w, h = attrString.size()
         setter = CoreText.CTFramesetterCreateWithAttributedString(attrString)
         path = Quartz.CGPathCreateMutable()
         Quartz.CGPathAddRect(path, None, Quartz.CGRectMake(x, y, w*2, h))
