@@ -1011,7 +1011,7 @@ class DrawBotDrawingTool(object):
 
     # drawing text
 
-    def text(self, txt, x, y=None):
+    def text(self, txt, x, y=None, align=None):
         """
         Draw a text at a provided position.
 
@@ -1037,7 +1037,7 @@ class DrawBotDrawingTool(object):
         if origins:
             x -= origins[-1][0]
             y -= origins[-1][1]
-        self.textBox(txt, (x, y-h, w*2, h*2))
+        self.textBox(txt, (x, y-h, w*2, h*2), align=align)
 
     def textOverflow(self, txt, box, align=None):
         """
