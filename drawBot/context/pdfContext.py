@@ -6,13 +6,14 @@ import Quartz
 
 import math
 
-osVersionCurrent = StrictVersion(platform.mac_ver()[0])
-osVersion10_11 = StrictVersion("10.11")
-
 from tools import gifTools
 
 from baseContext import BaseContext, FormattedString
 from drawBot.misc import DrawBotError, isPDF, isGIF
+
+
+osVersionCurrent = StrictVersion(platform.mac_ver()[0])
+osVersion10_11 = StrictVersion("10.11")
 
 
 def sendPDFtoPrinter(pdfDocument):
