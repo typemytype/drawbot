@@ -1011,9 +1011,12 @@ class DrawBotDrawingTool(object):
 
     # drawing text
 
-    def text(self, txt, x, y=None):
+    def text(self, txt, x, y=None, align=None):
         """
         Draw a text at a provided position.
+
+        Optionally an alignment can be set.
+        Possible `align` values are: `"left"`, `"center"` and `"right"`.
 
         .. showcode:: /../examples/text.py
         """
@@ -1026,8 +1029,18 @@ class DrawBotDrawingTool(object):
             x, y = x
         else:
             warnings.warn("position must a tuple: text('%s', (%s, %s))" % (txt, x, y))
-        attrString = self._dummyContext.attributedString(txt)
+        if align is None:
+            align = "left"
+        attrString = self._dummyContext.attributedString(txt, align=align)
         w, h = attrString.size()
+        if align == "right":
+            x -= w
+        elif align == "center":
+            x -= w * .5
+        elif align == "left":
+            pass
+        else:
+            raise DrawBotError("align must be left, right, center")
         setter = CoreText.CTFramesetterCreateWithAttributedString(attrString)
         path = Quartz.CGPathCreateMutable()
         Quartz.CGPathAddRect(path, None, Quartz.CGRectMake(x, y, w*2, h))
@@ -1037,7 +1050,7 @@ class DrawBotDrawingTool(object):
         if origins:
             x -= origins[-1][0]
             y -= origins[-1][1]
-        self.textBox(txt, (x, y-h, w*2, h*2))
+        self.textBox(txt, (x, y-h, w*2, h*2), align=align)
 
     def textOverflow(self, txt, box, align=None):
         """
