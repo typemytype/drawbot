@@ -81,7 +81,7 @@ class DrawBotAppDelegate(AppKit.NSObject):
         drawBot.drawBotDrawingTools._chachedPixelColorBitmaps.clear()
 
     def applicationShouldOpenUntitledFile_(self, sender):
-        return True
+        return getDefault("shouldOpenUntitledFile", True)
 
     def sheduleIconTimer(self):
         if getDefault("DrawBotAnimateIcon", True):
