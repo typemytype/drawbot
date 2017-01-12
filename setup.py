@@ -14,7 +14,7 @@ import robofab
 import fontTools
 import pygments
 
-from drawBotSettings import __version__, appName
+from drawBot.drawBotSettings import __version__, appName
 
 
 def getValueFromSysArgv(key, default=None):
@@ -97,13 +97,14 @@ setup(
                         'pygments',
                         'jedi',
                         'fontTools',
-                        'xml'
+                        # 'xml'
                         ],
                     includes=[
-                        'csv',
-                        'this'
+                        # 'csv',
+                        # 'this'
                         ],
                     excludes=[
+                        "numpy",
                         "scipy",
                         "mathplitlib",
                         "PIL",
@@ -208,8 +209,14 @@ if "-A" not in sys.argv:
 
         dmgFile = open(existingDmgLocation, 'rb')
         fileName = os.path.basename(existingDmgLocation)
-
         session.storbinary('STOR %s' % fileName, dmgFile)
+
+        # store a version
+        session.cwd("versionHistory")
+        fileName, ext = os.path.splitext(fileName)
+        fileName = fileName + __version__ + ext
+        session.storbinary('STOR %s' % fileName, dmgFile)
+
         dmgFile.close()
         print "- done uploading to ftp -"
         print "-------------------------"
