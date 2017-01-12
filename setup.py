@@ -6,6 +6,7 @@ import sys
 import subprocess
 import shutil
 import tempfile
+import datetime
 from plistlib import readPlist, writePlist
 
 import vanilla
@@ -16,6 +17,8 @@ import pygments
 
 from drawBot.drawBotSettings import __version__, appName
 
+rawTimeStamp = datetime.datetime.today()
+timeStamp = rawTimeStamp.strftime("%y%m%d%H%M")
 
 def getValueFromSysArgv(key, default=None):
     if key in sys.argv:
@@ -214,7 +217,7 @@ if "-A" not in sys.argv:
         # store a version
         session.cwd("versionHistory")
         fileName, ext = os.path.splitext(fileName)
-        fileName = fileName + __version__ + ext
+        fileName = fileName + timeStamp + ext
         session.storbinary('STOR %s' % fileName, dmgFile)
 
         dmgFile.close()
