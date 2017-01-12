@@ -28,6 +28,7 @@ class DrawBotDocument(AppKit.NSDocument):
         f = file(path, "w")
         f.write(code.encode("utf8"))
         f.close()
+        self._modDate = self.getModificationDate()
         return True, None
 
     def makeWindowControllers(self):
@@ -40,6 +41,7 @@ class DrawBotDocument(AppKit.NSDocument):
         if url:
             self.vanillaWindowController.setPath(url.path())
         self.vanillaWindowController.open()
+        self._modDate = self.getModificationDate()
 
     # main menu callbacks
 
@@ -63,6 +65,38 @@ class DrawBotDocument(AppKit.NSDocument):
             return self.vanillaWindowController.pdfData() is not None
         return True
 
+    def testForExternalChanges(self):
+        if self._modDate is None:
+            return
+        url = self.fileURL()
+        if url is None:
+            return
+        path = url.path()
+
+        modDate = self.getModificationDate()
+
+        if modDate > self._modDate:
+            def _update(value):
+                if value:
+                    self.vanillaWindowController.setPath(path)
+
+            if self.isDocumentEdited():
+                self.vanillaWindowController.showAskYesNo("External Change", "Update this un-saved document.", _update)
+            else:
+                _update(True)
+            self._modDate = modDate
+
+    def getModificationDate(self):
+        url = self.fileURL()
+        if url is None:
+            return None
+        path = url.path()
+        fm = AppKit.NSFileManager.defaultManager()
+        attr, error = fm.attributesOfItemAtPath_error_(path, None)
+        if attr is None:
+            return None
+        return attr.fileModificationDate()
+
 
 class DrawBotAppDelegate(AppKit.NSObject):
 
@@ -77,6 +111,8 @@ class DrawBotAppDelegate(AppKit.NSObject):
         Updater()
 
     def applicationDidBecomeActive_(self, notification):
+        for document in AppKit.NSApp().orderedDocuments():
+            document.testForExternalChanges()
         self.sheduleIconTimer()
         drawBot.drawBotDrawingTools._chachedPixelColorBitmaps.clear()
 
