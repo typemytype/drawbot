@@ -18,7 +18,7 @@ def getCurrentVersion():
     """
     if not getDefault("checkForUpdatesAtStartup", True):
         return ""
-    path = "https://raw.github.com/typemytype/drawbot/master/drawBotSettings.py"
+    path = "https://raw.github.com/typemytype/drawbot/master/drawBot/drawBotSettings.py"
     try:
         response = urllib2.urlopen(path, timeout=5)
         code = response.read()
