@@ -1,14 +1,13 @@
 import AppKit
-import Quartz
 
 import sys
 import os
 
 
-
 # ==========
 # = errors =
 # ==========
+
 
 class DrawBotError(TypeError):
     pass
@@ -174,6 +173,7 @@ class Warnings(object):
             return
         sys.stderr.write("*** DrawBot warning: %s ***\n" % message)
         self._warnMessages.add(message)
+
 
 warnings = Warnings()
 
