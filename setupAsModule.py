@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 from setuptools import setup
 
-from drawBotSettings import __version__
+from drawBot.drawBotSettings import __version__
 
 try:
     import fontTools

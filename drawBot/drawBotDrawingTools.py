@@ -76,9 +76,7 @@ class DrawBotDrawingTool(object):
             import drawBotSettings
             return drawBotSettings.__version__
         except:
-            # DrawBot is installed as a module
-            import pkg_resources
-            return pkg_resources.require("drawBot")[0].version
+            pass
         return ""
 
     __version__ = property(_get_version)
