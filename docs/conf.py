@@ -14,6 +14,51 @@
 import sys, os
 import time
 
+### some hacking
+
+# read the docs hacking
+
+class MetaMock(type):
+
+    def __getattr__(self, name):
+        return self
+
+class Mock(object):
+
+    __metaclass__ = MetaMock
+
+    def __init__(self, *args, **kwargs):
+        pass
+
+    def __call__(self, *args, **kwargs):
+        return Mock()
+
+    @classmethod
+    def __getattr__(cls, name):
+        if name in ('__file__', '__path__'):
+            return '/dev/null'
+        else:
+            return Mock
+
+MOCK_MODULES = ['py2app',
+        'AppKit', 'Quartz', 'CoreText', 'QTKit',
+        'fontTools',
+        'fontTools.misc',
+        'fontTools.misc.transform',
+        'fontTools.misc.xmlWriter',
+        'fontTools.pens',
+        'fontTools.pens.basePen',
+        'fontTools.pens.areaPen',
+        'ufoLib',
+        'ufoLib.pointPen',
+        'booleanOperations',
+        'vanilla',
+        'vanilla.vanillaBase']
+
+for mod_name in MOCK_MODULES:
+    sys.modules[mod_name] = Mock()
+
+
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
@@ -251,51 +296,6 @@ texinfo_documents = [
 
 add_module_names = False
 autodoc_member_order = 'bysource'
-
-### some hacking
-
-# read the docs hacking
-
-class MetaMock(type):
-
-    def __getattr__(self, name):
-        return self
-
-class Mock(object):
-
-    __metaclass__ = MetaMock
-
-    def __init__(self, *args, **kwargs):
-        pass
-
-    def __call__(self, *args, **kwargs):
-        return Mock()
-
-    @classmethod
-    def __getattr__(cls, name):
-        if name in ('__file__', '__path__'):
-            return '/dev/null'
-        else:
-            return Mock
-
-MOCK_MODULES = ['py2app',
-        'AppKit', 'Quartz', 'CoreText', 'QTKit',
-        'fontTools',
-        'fontTools.misc',
-        'fontTools.misc.transform',
-        'fontTools.misc.xmlWriter',
-        'fontTools.pens',
-        'fontTools.pens.basePen',
-        'fontTools.pens.areaPen',
-        'ufoLib',
-        'ufoLib.pointPen',
-        'booleanOperations',
-        'vanilla',
-        'vanilla.vanillaBase']
-
-for mod_name in MOCK_MODULES:
-    sys.modules[mod_name] = Mock()
-
 
 # sphinx hacking
 
