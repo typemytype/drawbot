@@ -184,5 +184,6 @@ class DrawBotAppDelegate(AppKit.NSObject):
             result
             )
 
+
 if __name__ == "__main__":
     AppHelper.runEventLoop()

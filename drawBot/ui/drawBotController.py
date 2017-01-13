@@ -1,3 +1,4 @@
+import AppKit
 from vanilla import *
 from defconAppKit.windows.baseWindow import BaseWindowController
 
@@ -32,7 +33,7 @@ class DrawBotController(BaseWindowController):
             pass
 
         # the code editor
-        self.codeView = CodeEditor((0, 0, -0, -0))
+        self.codeView = CodeEditor((0, 0, -0, -0), callback=self.codeViewCallback)
         # the output view (will catch all stdout and stderr)
         self.outPutView = OutPutEditor((0, 0, -0, -0), readOnly=True)
         # the view to draw in
@@ -66,6 +67,10 @@ class DrawBotController(BaseWindowController):
         self.w.split.setDividerPosition(0, 0)
         self.w.split.setDividerPosition(1, windowWidth * .6)
         self.codeSplit.setDividerPosition(0, windowHeight * .7)
+
+    def codeViewCallback(self, sender):
+        document = self.w.getNSWindowController().document()
+        document.updateChangeCount_(AppKit.NSChangeDone)
 
     def runCode(self, liveCoding=False):
         # get the code
