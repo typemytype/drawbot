@@ -28,7 +28,7 @@ class DrawBotDocument(AppKit.NSDocument):
         f = file(path, "w")
         f.write(code.encode("utf8"))
         f.close()
-        self._modDate = self.getModificationDate()
+        self._modDate = self.getModificationDate(path)
         return True, None
 
     def makeWindowControllers(self):
@@ -74,7 +74,6 @@ class DrawBotDocument(AppKit.NSDocument):
         path = url.path()
 
         modDate = self.getModificationDate()
-
         if modDate > self._modDate:
             def _update(value):
                 if value:
@@ -86,11 +85,12 @@ class DrawBotDocument(AppKit.NSDocument):
                 _update(True)
             self._modDate = modDate
 
-    def getModificationDate(self):
-        url = self.fileURL()
-        if url is None:
-            return None
-        path = url.path()
+    def getModificationDate(self, path=None):
+        if path is None:
+            url = self.fileURL()
+            if url is None:
+                return None
+            path = url.path()
         fm = AppKit.NSFileManager.defaultManager()
         attr, error = fm.attributesOfItemAtPath_error_(path, None)
         if attr is None:
