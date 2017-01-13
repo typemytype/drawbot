@@ -3,7 +3,7 @@ Download
 
 .. cssclass:: app-download-link
 
-`Download DrawBot`_
+> `Download DrawBot`_
 
 requirements: osX 10.9+
 
