@@ -213,14 +213,16 @@ if "-A" not in sys.argv:
         dmgFile = open(existingDmgLocation, 'rb')
         fileName = os.path.basename(existingDmgLocation)
         session.storbinary('STOR %s' % fileName, dmgFile)
+        dmgFile.close()
 
         # store a version
         session.cwd("versionHistory")
+        dmgFile = open(existingDmgLocation, 'rb')
         fileName, ext = os.path.splitext(fileName)
         fileName = fileName + timeStamp + ext
         session.storbinary('STOR %s' % fileName, dmgFile)
-
         dmgFile.close()
+
         print "- done uploading to ftp -"
         print "-------------------------"
         session.quit()
