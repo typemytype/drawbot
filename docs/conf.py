@@ -344,6 +344,11 @@ class ShowCode(LiteralInclude):
         return nodes
 
 
+downloadCodeRoot = os.path.join(os.path.dirname(__file__), "downloads")
+if not os.path.exists(downloadCodeRoot):
+    os.mkdir(downloadCodeRoot)
+
+
 class DownloadCode(CodeBlock):
 
     def run(self):
@@ -358,7 +363,7 @@ class DownloadCode(CodeBlock):
         # get the content
         code = u'\n'.join(self.content)
         # get the path
-        path = os.path.join(os.path.dirname(__file__), "examples", fileName)
+        path = os.path.join(downloadCodeRoot, fileName)
         # check the path on duplicates
         path = self.checkPath(path)
         # the filename could be changed
@@ -370,7 +375,7 @@ class DownloadCode(CodeBlock):
         f.close()
         # add download links
         node = addnodes.download_reference()
-        node['reftarget'] = "/examples/" + fileName
+        node['reftarget'] = "/downloads/" + fileName
         nodes.append(node)
         return nodes
 
