@@ -304,10 +304,11 @@ import posixpath
 import inspect
 
 from sphinx import addnodes
-from sphinx.directives.code import LiteralInclude
+from sphinx.directives.code import LiteralInclude, CodeBlock
 from sphinx.util.inspect import getargspec
 from sphinx.ext import autodoc
 from sphinx.writers.html import HTMLTranslator
+
 
 def visit_download_reference(self, node):
     if node.hasattr('filename'):
@@ -320,11 +321,14 @@ def visit_download_reference(self, node):
 
         node.clear()
 
+
 def depart_download_reference(self, node):
     pass
 
+
 HTMLTranslator.visit_download_reference = visit_download_reference
 HTMLTranslator.depart_download_reference = depart_download_reference
+
 
 class ShowCode(LiteralInclude):
 
@@ -339,7 +343,49 @@ class ShowCode(LiteralInclude):
         nodes.append(node)
         return nodes
 
+
+class DownloadCode(CodeBlock):
+
+    def run(self):
+        # get the argument
+        fileName = self.arguments[0]
+        # set the required language argument back
+        self.arguments[0] = os.path.splitext(fileName)[1][1:]
+        # set it as filename
+        self.options['filename'] = fileName
+        # call parent class
+        nodes = super(DownloadCode, self).run()
+        # get the content
+        code = u'\n'.join(self.content)
+        # get the path
+        path = os.path.join(os.path.dirname(__file__), "examples", fileName)
+        # check the path on duplicates
+        path = self.checkPath(path)
+        # the filename could be changed
+        fileName = os.path.basename(path)
+        self.options["filename"] = fileName
+        # write to disk
+        f = open(path, "w")
+        f.write(code)
+        f.close()
+        # add download links
+        node = addnodes.download_reference()
+        node['reftarget'] = "/examples/" + fileName
+        nodes.append(node)
+        return nodes
+
+    def checkPath(self, path, sourcePath=None, add=1):
+        if sourcePath is None:
+            sourcePath = path
+        if os.path.exists(path):
+            fileName, ext = os.path.splitext(sourcePath)
+            path = fileName + str(add) + ext
+            return self.checkPath(path, sourcePath=sourcePath, add=add+1)
+        return path
+
+
 class DrawBotDocumenter(autodoc.FunctionDocumenter):
+
     objtype = "function"
 
     def format_args(self):
@@ -369,4 +415,5 @@ class DrawBotDocumenter(autodoc.FunctionDocumenter):
 
 def setup(app):
     app.add_directive('showcode', ShowCode)
+    app.add_directive('downloadcode', DownloadCode)
     app.add_autodocumenter(DrawBotDocumenter)

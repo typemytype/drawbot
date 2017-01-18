@@ -354,7 +354,11 @@ class DrawBotDrawingTool(object):
         """
         Draw a rectangle from position x, y with the given width and height.
 
-        .. showcode:: /../examples/rect.py
+        .. downloadcode:: rect.py
+
+            # draw a rectangle
+            #    x    y    w    h
+            rect(100, 100, 200, 200)
         """
         self._requiresNewFirstPage = True
         self._addInstruction("rect", x, y, w, h)
@@ -363,7 +367,11 @@ class DrawBotDrawingTool(object):
         """
         Draw an oval from position x, y with the given width and height.
 
-        .. showcode:: /../examples/oval.py
+        .. downloadcode:: oval.py
+
+            # draw an oval
+            #    x    y    w    h
+            oval(100, 100, 200, 200)
         """
         self._requiresNewFirstPage = True
         self._addInstruction("oval", x, y, w, h)
