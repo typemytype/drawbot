@@ -12,5 +12,3 @@ path.closePath()
 clipPath(path)
 # the oval will be clipped inside the path
 oval(100, 100, 100, 100)
-
-

@@ -1,4 +1,3 @@
-
 txt = "Hello World"
 x, y = 10, 100
 
@@ -18,4 +17,3 @@ stroke(1, 0, 0)
 for metric in (0, fontDescender(), fontAscender(), fontXHeight(), fontCapHeight()):
     # draw a red line with the size of the drawn text
     line((x, y+metric), (x+textWidth, y+metric))
-

@@ -1,11 +1,11 @@
-# setting some varialbes
+# setting some variables
 # size of the pages / frames
 w, h = 200, 200
 # frame per seconds
 fps = 30
 # duration of the movie
 seconds = 3
-# calculate the lenght of a single frame 
+# calculate the lenght of a single frame
 duration = 1 / fps
 # calculate the amount of frames needed
 totalFrames = seconds * fps

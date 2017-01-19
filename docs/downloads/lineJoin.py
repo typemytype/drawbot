@@ -1,6 +1,6 @@
 # set no fill
 fill(None)
-# set the strok color to black
+# set the stroke color to black
 stroke(0)
 # set a stroke width
 strokeWidth(10)

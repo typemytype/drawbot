@@ -1,4 +1,4 @@
-# set a color 
+# set a color
 r, g, b, a = 0.74, 0.51, 1.04, 1
 
 # get all available color spaces
