@@ -11,17 +11,19 @@
 # All configuration values have a default; values that are commented out
 # serve to show the default.
 
-import sys, os
+import sys
+import os
 import time
 
-### some hacking
 
-# read the docs hacking
+# some hacking
+# support read the docs and the missing packages
 
 class MetaMock(type):
 
     def __getattr__(self, name):
         return self
+
 
 class Mock(object):
 
@@ -39,6 +41,7 @@ class Mock(object):
             return '/dev/null'
         else:
             return Mock
+
 
 MOCK_MODULES = ['py2app',
         'AppKit', 'Quartz', 'CoreText', 'QTKit',
@@ -63,6 +66,7 @@ for mod_name in MOCK_MODULES:
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 sys.path.insert(0, os.path.abspath('../'))
+
 
 import drawBot.drawBotSettings as drawBotSettings
 
