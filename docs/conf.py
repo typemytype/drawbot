@@ -13,6 +13,7 @@
 
 import sys
 import os
+import shutil
 import time
 
 
@@ -168,7 +169,7 @@ html_short_title = drawBotSettings.appName
 # The name of an image file (within the static path) to use as favicon of the
 # docs.  This file should be a Windows icon file (.ico) being 16x16 or 32x32
 # pixels large.
-html_favicon = "favicon.ico"
+# html_favicon = "favicon.ico"
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
@@ -349,8 +350,10 @@ class ShowCode(LiteralInclude):
 
 
 downloadCodeRoot = os.path.join(os.path.dirname(__file__), "downloads")
-if not os.path.exists(downloadCodeRoot):
-    os.mkdir(downloadCodeRoot)
+if os.path.exists(downloadCodeRoot):
+    shutil.rmtree(downloadCodeRoot)
+
+os.mkdir(downloadCodeRoot)
 
 
 class DownloadCode(CodeBlock):
