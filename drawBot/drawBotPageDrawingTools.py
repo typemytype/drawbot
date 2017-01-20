@@ -1,4 +1,4 @@
-from drawBotDrawingTools import _drawBotDrawingTool, DrawBotError, DrawBotDrawingTool
+from drawBotDrawingTools import _drawBotDrawingTool, DrawBotDrawingTool
 
 
 class DummyDrawBotDrawingTool(DrawBotDrawingTool):
