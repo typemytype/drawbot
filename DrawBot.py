@@ -158,16 +158,18 @@ class DrawBotAppDelegate(AppKit.NSObject):
             response = urllib2.urlopen(pythonPath)
             code = response.read()
             response.close()
-            document, error = documentController.openUntitledDocumentAndDisplay_error_(True, None)
-            document.vanillaWindowController.setCode(code)
         else:
             # local
             pythonPath = data.path
             f = open(pythonPath, "rb")
             code = f.read()
             f.close()
-            document, error = documentController.openUntitledDocumentAndDisplay_error_(True, None)
-            document.vanillaWindowController.setCode(code)
+        document, error = documentController.openUntitledDocumentAndDisplay_error_(True, None)
+        try:
+            code = code.decode("utf-8")
+        except:
+            pass
+        document.vanillaWindowController.setCode(code)
 
         def result(shouldOpen):
             if not shouldOpen:
