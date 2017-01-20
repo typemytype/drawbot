@@ -1241,7 +1241,6 @@ class FormattedString(object):
             t += txt
             # draw formatted string in a text box
             textBox(t, (x, y, w, h))
-
         """
         self._indent = indent
 
@@ -1366,6 +1365,19 @@ class FormattedString(object):
         """
         Append a glyph by his glyph name using the current `font`.
         Multiple glyph names are possible.
+
+        .. downloadcode:: appendGlyphFormattedString.py
+
+            # create an empty formatted string object
+            t = FormattedString()
+            # set a font
+            t.font("Menlo-Regular")
+            # set a font size
+            t.fontSize(60)
+            # add some glyphs
+            t.appendGlyph("Eng", "Eng.alt")
+            # draw the formatted string
+            text(t, (10, 100))
         """
         # use a non breaking space as replacement character
         baseString = unichr(0x00A0)
