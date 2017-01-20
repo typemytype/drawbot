@@ -1,10 +1,10 @@
 from drawBotDrawingTools import _drawBotDrawingTool, DrawBotError, DrawBotDrawingTool
 
 
-class DrawBotDrawingToolPage(DrawBotDrawingTool):
+class DummyDrawBotDrawingTool(DrawBotDrawingTool):
 
     def __init__(self, instructionSet):
-        super(DrawBotDrawingToolPage, self).__init__()
+        super(DummyDrawBotDrawingTool, self).__init__()
         # add the instruction set
         self._instructionsStack.append(instructionSet)
         # draw all instructions into it self
@@ -25,11 +25,10 @@ class DrawBotPage(object):
     def __enter__(self):
         # copy/save a state of the existing drawing tool
         self._originalTool = _drawBotDrawingTool._copy()
-        # overwrite the globals newPage and size
-        globals()["newPage"] = self._newPage
-        globals()["size"] = self._size
         # load the instructions
-        pageTool = DrawBotDrawingToolPage(self._instructionSet)
+        pageTool = DummyDrawBotDrawingTool(self._instructionSet)
+        # overwrite the globals newPage and size
+        _drawBotDrawingTool._isSinglePage = True
         # reset the existing one, with the page tool
         _drawBotDrawingTool._reset(pageTool)
         return self
@@ -38,13 +37,4 @@ class DrawBotPage(object):
         # reset the main drawing tool with a saved state of the tool
         _drawBotDrawingTool._reset(self._originalTool)
         # reset the globals newPage and size
-        globals()["newPage"] = _drawBotDrawingTool.newPage
-        globals()["size"] = _drawBotDrawingTool.size
-
-    def _newPage(self, width, height=None):
-        # dont allow to add a page
-        raise DrawBotError("A Page cannot add a 'newPage'")
-
-    def _size(self, width, height=None):
-        # dont allow to set a page size
-        raise DrawBotError("A Page cannot set a 'size'")
+        _drawBotDrawingTool._isSinglePage = False

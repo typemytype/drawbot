@@ -65,6 +65,7 @@ class DrawBotDrawingTool(object):
 
     def __init__(self):
         self._reset()
+        self._isSinglePage = False
 
     def _get__all__(self):
         return [i for i in dir(self) if not i.startswith("_")] + ["__version__"]
@@ -252,6 +253,9 @@ class DrawBotDrawingTool(object):
 
         All supported papersizes: 10x14, 10x14Landscape, A0, A0Landscape, A1, A1Landscape, A2, A2Landscape, A3, A3Landscape, A4, A4Landscape, A4Small, A4SmallLandscape, A5, A5Landscape, B4, B4Landscape, B5, B5Landscape, Executive, ExecutiveLandscape, Folio, FolioLandscape, Ledger, LedgerLandscape, Legal, LegalLandscape, Letter, LetterLandscape, LetterSmall, LetterSmallLandscape, Quarto, QuartoLandscape, Statement, StatementLandscape, Tabloid, TabloidLandscape.
         """
+        if self._isSinglePage:
+            # dont allow to set a page size
+            raise DrawBotError("Cannot set 'size' into a single page.")
         if width in _paperSizes:
             width, height = _paperSizes[width]
         if width == "screen":
@@ -288,6 +292,9 @@ class DrawBotDrawingTool(object):
 
         All supported papersizes: 10x14, 10x14Landscape, A0, A0Landscape, A1, A1Landscape, A2, A2Landscape, A3, A3Landscape, A4, A4Landscape, A4Small, A4SmallLandscape, A5, A5Landscape, B4, B4Landscape, B5, B5Landscape, Executive, ExecutiveLandscape, Folio, FolioLandscape, Ledger, LedgerLandscape, Legal, LegalLandscape, Letter, LetterLandscape, LetterSmall, LetterSmallLandscape, Quarto, QuartoLandscape, Statement, StatementLandscape, Tabloid, TabloidLandscape.
         """
+        if self._isSinglePage:
+            # dont allow to add a page
+            raise DrawBotError("Cannot add a 'newPage' into a single page.")
         if width in _paperSizes:
             width, height = _paperSizes[width]
         if width == "screen":
@@ -1724,18 +1731,34 @@ class DrawBotDrawingTool(object):
         """
         Return a string object that can handle text formatting.
 
-        .. downloadcode:: appendGlyphFormattedString.py
+        .. downloadcode:: formattedString.py
 
-            # create an empty formatted string object
-            t = FormattedString()
-            # set a font
-            t.font("Menlo-Regular")
-            # set a font size
-            t.fontSize(60)
-            # add some glyphs
-            t.appendGlyph("Eng", "Eng.alt")
-            # draw the formatted string
-            text(t, (10, 100))
+            # create a formatted string
+            txt = FormattedString()
+
+            # adding some text with some formatting
+            txt.append("hello", font="Helvetica", fontSize=100, fill=(1, 0, 0))
+            # adding more text
+            txt.append("world", font="Times-Italic", fontSize=50, fill=(0, 1, 0))
+
+            # setting a font
+            txt.font("Helvetica-Bold")
+            txt.fontSize(75)
+            txt += "hello again"
+
+            # drawing the formatted string
+            text(txt, (10, 10))
+
+
+            # create a formatted string
+            txt = FormattedString()
+
+            # adding some text with some formatting
+            txt.append("hello", font="ACaslonPro-Regular", fontSize=50)
+            # adding more text with an
+            txt.append("world", font="ACaslonPro-Regular", fontSize=50, openTypeFeatures=dict(smcp=True))
+
+            text(txt, (10, 110))
 
         .. autoclass:: drawBot.context.baseContext.FormattedString
             :members:
@@ -2252,8 +2275,30 @@ class DrawBotDrawingTool(object):
             fontSize(h)
             # draw some text
             text("Hello Variable", (w, h))
-        """
 
+        .. dowloadcode:: vanillaVariables.py
+
+            # Variable == vanilla power in DrawBot
+            from AppKit import NSColor
+            # create a color
+            _color = NSColor.colorWithCalibratedRed_green_blue_alpha_(0, .5, 1, .8)
+            # setup variables useing different vanilla ui elements.
+            Variable([
+                dict(name="aList", ui="PopUpButton", args=dict(items=['a', 'b', 'c', 'd'])),
+                dict(name="aText", ui="EditText", args=dict(text='hello world')),
+                dict(name="aSlider", ui="Slider", args=dict(value=100, minValue=50, maxValue=300)),
+                dict(name="aCheckBox", ui="CheckBox", args=dict(value=True)),
+                dict(name="aColorWell", ui="ColorWell", args=dict(color=_color)),
+                dict(name="aRadioGroup", ui="RadioGroup", args=dict(titles=['I', 'II', 'III'], isVertical=False)),
+            ], globals())
+
+            print aList
+            print aText
+            print aSlider
+            print aCheckBox
+            print aColorWell
+            print aRadioGroup
+        """
         document = AppKit.NSDocumentController.sharedDocumentController().currentDocument()
         if not document:
             raise DrawBotError("There is no document open")
