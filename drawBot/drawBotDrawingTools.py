@@ -87,17 +87,22 @@ class DrawBotDrawingTool(object):
         namespace.update(_getmodulecontents(math))
 
     def _addInstruction(self, callback, *args, **kwargs):
+        if callback == "newPage":
+            self._instructionsStack.append([])
+        if not self._instructionsStack:
+            self._instructionsStack.append([])
         if self._requiresNewFirstPage and not self._hasPage:
             self._hasPage = True
-            self._instructionsStack.insert(0, ("newPage", [self.width(), self.height()], {}))
-        self._instructionsStack.append((callback, args, kwargs))
+            self._instructionsStack[-1].insert(0, ("newPage", [self.width(), self.height()], {}))
+        self._instructionsStack[-1].append((callback, args, kwargs))
 
     def _drawInContext(self, context):
         if not self._instructionsStack:
             return
-        for callback, args, kwargs in self._instructionsStack:
-            attr = getattr(context, callback)
-            attr(*args, **kwargs)
+        for instructionSet in self._instructionsStack:
+            for callback, args, kwargs in instructionSet:
+                attr = getattr(context, callback)
+                attr(*args, **kwargs)
 
     def _reset(self, other=None):
         if other is not None:
@@ -168,7 +173,7 @@ class DrawBotDrawingTool(object):
         return self._width
 
     def _get_width(self):
-        warnings.warn("Magic variables are deprecated.'")
+        warnings.warn("Magic variables are deprecated.")
         return self.width()
 
     WIDTH = property(_get_width)
@@ -182,7 +187,7 @@ class DrawBotDrawingTool(object):
         return self._height
 
     def _get_height(self):
-        warnings.warn("Magic variables are deprecated.'")
+        warnings.warn("Magic variables are deprecated.")
         return self.height()
 
     HEIGHT = property(_get_height)
@@ -286,6 +291,17 @@ class DrawBotDrawingTool(object):
     def newpage(self, width=None, height=None):
         _deprecatedWarningLowercase("newPage(%s, %s)" % (width, height))
         self.newPage(width, height)
+
+    def pages(self):
+        """
+        Return all pages
+
+        .. downloadcode:: pages.py
+
+            # write example
+        """
+        from drawBotPageDrawingTools import DrawBotPage
+        return tuple(DrawBotPage(instructionSet) for instructionSet in self._instructionsStack)
 
     def saveImage(self, paths, multipage=None):
         """
@@ -1489,6 +1505,8 @@ class DrawBotDrawingTool(object):
                 txt = txt.decode("utf-8")
             except UnicodeEncodeError:
                 pass
+        if isinstance(txt, self._formattedStringClass):
+            txt = txt.copy()
         if align is None:
             align = "left"
         elif align not in self._dummyContext._textAlignMap.keys():
@@ -2205,5 +2223,6 @@ class DrawBotDrawingTool(object):
         data = controller._variableController.get()
         for v, value in data.items():
             workSpace[v] = value
+
 
 _drawBotDrawingTool = DrawBotDrawingTool()
