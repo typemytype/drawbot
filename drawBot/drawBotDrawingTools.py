@@ -2276,7 +2276,7 @@ class DrawBotDrawingTool(object):
             # draw some text
             text("Hello Variable", (w, h))
 
-        .. dowloadcode:: vanillaVariables.py
+        .. downloadcode:: vanillaVariables.py
 
             # Variable == vanilla power in DrawBot
             from AppKit import NSColor
