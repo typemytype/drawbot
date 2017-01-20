@@ -1163,7 +1163,7 @@ class FormattedString(object):
             # set some tabs
             t.tabs((85, "center"), (232, "right"), (300, "left"))
             # add text with tabs
-            t += " hello w o r l d".replace(" ", "\t")
+            t += " hello w o r l d".replace(" ", "\\t")
             # draw the string
             text(t, (10, 10))
         """
@@ -1218,7 +1218,7 @@ class FormattedString(object):
             # add text
             t += txt
             # add hard return
-            t += "\n"
+            t += "\\n"
             # set style for indented text
             t.fontSize(6)
             t.paragraphTopSpacing(paragraphTop)
@@ -1229,7 +1229,7 @@ class FormattedString(object):
             # add text
             t += txt
             # add hard return
-            t += "\n"
+            t += "\\n"
             # reset style
             t.fontSize(10)
             t.indent(None)

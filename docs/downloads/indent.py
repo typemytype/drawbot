@@ -38,4 +38,26 @@ t.align("justified")
 # add text
 t += txt
 # add hard return
-t += "
+t += "\n"
+# set style for indented text
+t.fontSize(6)
+t.paragraphTopSpacing(paragraphTop)
+t.paragraphBottomSpacing(paragraphBottom)
+t.firstLineIndent(txtFirstLineIndent)
+t.indent(txtIndent)
+t.tailIndent(txtTailIndent)
+# add text
+t += txt
+# add hard return
+t += "\n"
+# reset style
+t.fontSize(10)
+t.indent(None)
+t.tailIndent(None)
+t.firstLineIndent(None)
+t.paragraphTopSpacing(None)
+t.paragraphBottomSpacing(None)
+# add text
+t += txt
+# draw formatted string in a text box
+textBox(t, (x, y, w, h))

@@ -1269,7 +1269,7 @@ class DrawBotDrawingTool(object):
         .. downloadcode:: lineHeight.py
 
             lineHeight(20)
-            textBox("Hello\nWorld", (10, 10, 100, 100))
+            textBox("Hello\\nWorld", (10, 10, 100, 100))
         """
         self._dummyContext.lineHeight(value)
         self._addInstruction("lineHeight", value)
