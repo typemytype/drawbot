@@ -240,6 +240,16 @@ class DrawBotDrawingTool(object):
 
         .. downloadcode:: size.py
 
+            # set a canvas size
+            size(200, 200)
+            # print out the size of the page
+            print width(), height()
+
+            # set a color
+            fill(1, 0, 0)
+            # use those variables to set a background color
+            rect(0, 0, width(), height())
+
         All supported papersizes: 10x14, 10x14Landscape, A0, A0Landscape, A1, A1Landscape, A2, A2Landscape, A3, A3Landscape, A4, A4Landscape, A4Small, A4SmallLandscape, A5, A5Landscape, B4, B4Landscape, B5, B5Landscape, Executive, ExecutiveLandscape, Folio, FolioLandscape, Ledger, LedgerLandscape, Legal, LegalLandscape, Letter, LetterLandscape, LetterSmall, LetterSmallLandscape, Quarto, QuartoLandscape, Statement, StatementLandscape, Tabloid, TabloidLandscape.
         """
         if width in _paperSizes:
@@ -298,7 +308,41 @@ class DrawBotDrawingTool(object):
 
         .. downloadcode:: pages.py
 
-            # write example
+            # set a size
+            size(200, 200)
+            # draw a rectangle
+            rect(10, 10, 100, 100)
+            # create a new page
+            newPage(200, 300)
+            # set a color
+            fill(1, 0, 1)
+            # draw a rectangle
+            rect(10, 10, 100, 100)
+            # create a new page
+            newPage(200, 200)
+            # set a color
+            fill(0, 1, 0)
+            # draw a rectangle
+            rect(10, 10, 100, 100)
+
+            # get all pages
+            allPages = pages()
+            # count how many pages are available
+            print len(allPages)
+
+            # use the `with` statement
+            # to set a page as current context
+            with allPages[1]:
+                # draw into the selected page
+                fontSize(30)
+                text("Hello World", (10, 150))
+
+            # loop over allpages
+            for page in allPages:
+                # set the page as current context
+                with page:
+                    # draw an oval in each of them
+                    oval(110, 10, 30, 30)
         """
         from drawBotPageDrawingTools import DrawBotPage
         return tuple(DrawBotPage(instructionSet) for instructionSet in self._instructionsStack)
