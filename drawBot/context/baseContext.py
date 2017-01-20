@@ -864,7 +864,10 @@ class FormattedString(object):
                 warnings.warn("font: %s is not installed, back to the fallback font: %s" % (fontName, ff))
                 font = AppKit.NSFont.fontWithName_size_(ff, self._fontSize)
             coreTextfeatures = []
-            for featureTag, value in self._openTypeFeatures.items():
+            # sort features by their on/off state
+            # set all disabled features first
+            orderedOpenTypeFeatures = sorted(self._openTypeFeatures.items(), key=lambda (k, v): v)
+            for featureTag, value in orderedOpenTypeFeatures:
                 if not value:
                     featureTag = "%s_off" % featureTag
                 if featureTag in openType.featureMap:
