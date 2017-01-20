@@ -365,9 +365,11 @@ class DownloadCode(CodeBlock):
         self.arguments[0] = os.path.splitext(fileName)[1][1:]
         # set it as filename
         self.options['filename'] = fileName
+        # encode the whole content
+        self.content = [unicode(line) for line in self.content]
         # call parent class
         nodes = super(DownloadCode, self).run()
-        # get the content
+        # get the content and encode
         code = u'\n'.join(self.content)
         # get the path
         path = os.path.join(downloadCodeRoot, fileName)
@@ -378,7 +380,7 @@ class DownloadCode(CodeBlock):
         self.options["filename"] = fileName
         # write to disk
         f = open(path, "w")
-        f.write(code)
+        f.write(code.encode("utf-8"))
         f.close()
         # add download links
         node = addnodes.download_reference()
