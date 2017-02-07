@@ -1972,7 +1972,6 @@ class DrawBotDrawingTool(object):
         _deprecatedWarningLowercase("frameDuration(%s)" % seconds)
         self.frameDuration(seconds)
 
-
     # pdf links
 
     def linkDestination(self, name, x=None, y=None):
