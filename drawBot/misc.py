@@ -218,7 +218,8 @@ class VariableController(object):
                 # set the label view
                 setattr(ui, "%sLabel" % name, label)
             else:
-                args["title"] = name
+                if "title" not in args:
+                    args["title"] = name
             # check the provided args and add required keys
             if uiElement == "ColorWell":
                 # a color well needs a color to be set
