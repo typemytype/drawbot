@@ -207,11 +207,7 @@ class DrawBotDrawingTool(object):
         """
         Returns the current page count.
         """
-        pageCount = 0
-        for i in self._instructionsStack:
-            if i[0] == "newPage":
-                pageCount += 1
-        return pageCount
+        return len(self._instructionsStack)
 
     def _get_pageCount(self):
         warnings.warn("Magic variables are deprecated.'")
@@ -311,7 +307,7 @@ class DrawBotDrawingTool(object):
 
     def pages(self):
         """
-        Return all pages
+        Return all pages.
 
         .. downloadcode:: pages.py
 
