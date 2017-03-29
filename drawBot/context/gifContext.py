@@ -23,6 +23,9 @@ class GifContext(ImageContext):
         self._delayData = []
 
     def _frameDuration(self, seconds):
+        if type(seconds) is tuple:
+            # Duration as a ratio, turn it into a fraction of a second
+            seconds = seconds[0] / seconds[1]
         # gifsicle -h: Set frame delay to TIME (in 1/100sec).
         self._delayData[-1] = int(seconds * 100)
 
