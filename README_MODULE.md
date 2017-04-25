@@ -7,6 +7,9 @@ DrawBot can also be installed as a module, the app is not required.
 Install 
 -------
 
+download: https://github.com/typemytype/drawbot/archive/master.zip
+
+run `cd <path/where/you/have/downloaded/and/unzipped/drawBot>`
 run `python setupAsModule.py install`
 
 Usage
