@@ -348,7 +348,13 @@ class DrawBotDrawingTool(object):
                     oval(110, 10, 30, 30)
         """
         from drawBotPageDrawingTools import DrawBotPage
-        return tuple(DrawBotPage(instructionSet) for instructionSet in self._instructionsStack)
+        instructions = []
+        for instructionSet in self._instructionsStack:
+            for callback, _, _ in instructionSet:
+                if callback == "newPage":
+                    instructions.append(instructionSet)
+                    break
+        return tuple(DrawBotPage(instructionSet) for instructionSet in instructions)
 
     def saveImage(self, paths, multipage=None):
         """
@@ -1368,6 +1374,22 @@ class DrawBotDrawingTool(object):
         self._dummyContext.baselineShift(value)
         self._addInstruction("baselineShift", value)
 
+    def underline(self, value):
+        """
+        Set the underline value.
+        Underline must be `single` or `None.
+
+        .. downloadcode:: underline.py
+
+            underline("single")
+            fontSize(140)
+            text("hello underline", (50, 50))
+        """
+        if value is not None and value not in self._dummyContext._textUnderlineMap:
+            raise DrawBotError("underline must be %s" % (", ".join(sorted(self._dummyContext._textUnderlineMap.keys()))))
+        self._dummyContext.underline(value)
+        self._addInstruction("underline", value)
+
     def hyphenation(self, value):
         """
         Set hyphenation, `True` or `False`.
@@ -1713,7 +1735,7 @@ class DrawBotDrawingTool(object):
                 txt = txt.decode("utf-8")
             except UnicodeEncodeError:
                 pass
-        path, (x, y) = self._getPathForFrameSetter(box)
+        path, (x, y) = self._dummyContext._getPathForFrameSetter(box)
         attrString = self._dummyContext.attributedString(txt)
         setter = CoreText.CTFramesetterCreateWithAttributedString(attrString)
         box = CoreText.CTFramesetterCreateFrame(setter, (0, 0), path, None)
