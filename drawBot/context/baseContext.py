@@ -738,6 +738,18 @@ class FormattedString(object):
         right=AppKit.NSRightTextAlignment,
     )
 
+    _textUnderlineMap = dict(
+        single=AppKit.NSUnderlineStyleSingle,
+        # thick=AppKit.NSUnderlineStyleThick,
+        # double=AppKit.NSUnderlineStyleDouble,
+        # solid=AppKit.NSUnderlinePatternSolid,
+        # dotted=AppKit.NSUnderlinePatternDot,
+        # dashed=AppKit.NSUnderlinePatternDash,
+        # dotDashed=AppKit.NSUnderlinePatternDashDot,
+        # dotDotted=AppKit.NSUnderlinePatternDashDotDot,
+        # byWord=0x8000 # AppKit.NSUnderlineByWord,
+    )
+
     _formattedAttributes = dict(
         font=_FALLBACKFONT,
         fallbackFont=None,
@@ -753,6 +765,7 @@ class FormattedString(object):
         lineHeight=None,
         tracking=None,
         baselineShift=None,
+        underline=None,
         openTypeFeatures=dict(),
         tabs=None,
         indent=None,
@@ -940,6 +953,8 @@ class FormattedString(object):
             attributes[AppKit.NSKernAttributeName] = self._tracking
         if self._baselineShift is not None:
             attributes[AppKit.NSBaselineOffsetAttributeName] = self._baselineShift
+        if self._underline in self._textUnderlineMap:
+            attributes[AppKit.NSUnderlineStyleAttributeName] = self._textUnderlineMap[self._underline]
         if self._language:
             attributes["NSLanguage"] = self._language
         attributes[AppKit.NSParagraphStyleAttributeName] = para
@@ -1114,6 +1129,13 @@ class FormattedString(object):
         Set the shift of the baseline.
         """
         self._baselineShift = baselineShift
+
+    def underline(self, underline):
+        """
+        Set the underline value.
+        Underline must be `single` or `None`.
+        """
+        self._underline = underline
 
     def openTypeFeatures(self, *args, **features):
         """
@@ -1408,7 +1430,7 @@ class FormattedString(object):
             if glyph:
                 self.append(baseString)
                 glyphInfo = AppKit.NSGlyphInfo.glyphInfoWithGlyph_forFont_baseString_(glyph, font, baseString)
-                self._attributedString.addAttribute_value_range_(AppKit.NSGlyphInfoAttributeName, glyphInfo, (len(self)-1, 1))
+                self._attributedString.addAttribute_value_range_(AppKit.NSGlyphInfoAttributeName, glyphInfo, (len(self) - 1, 1))
             else:
                 warnings.warn("font %s has no glyph with the name %s" % (font.fontName(), glyphName))
         self.openTypeFeatures(**_openTypeFeatures)
@@ -1506,18 +1528,9 @@ class BaseContext(object):
         round=Quartz.kCGLineCapRound,
     )
 
-    _textAlignMap = dict(
-        center=AppKit.NSCenterTextAlignment,
-        left=AppKit.NSLeftTextAlignment,
-        right=AppKit.NSRightTextAlignment,
-        justified=AppKit.NSJustifiedTextAlignment,
-    )
-
-    _textTabAlignMap = dict(
-        center=AppKit.NSCenterTextAlignment,
-        left=AppKit.NSLeftTextAlignment,
-        right=AppKit.NSRightTextAlignment,
-    )
+    _textAlignMap = FormattedString._textAlignMap
+    _textTabAlignMap = FormattedString._textTabAlignMap
+    _textUnderlineMap = FormattedString._textUnderlineMap
 
     _colorSpaceMap = dict(
         genericRGB=AppKit.NSColorSpace.genericRGBColorSpace,
@@ -1845,6 +1858,9 @@ class BaseContext(object):
 
     def baselineShift(self, baselineShift):
         self._state.text.baselineShift(baselineShift)
+
+    def underline(self, underline):
+        self._state.text.underline(underline)
 
     def hyphenation(self, value):
         self._state.hyphenation = value
