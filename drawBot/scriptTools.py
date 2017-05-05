@@ -174,7 +174,10 @@ class ScriptRunner(object):
             text = f.read()
             f.close()
         source = text.replace('\r\n', '\n').replace('\r', '\n')
-
+        try:
+            source = source.encode("utf-8")
+        except:
+            pass
         compileFlags = 0
         if getDefault("DrawBotUseFutureDivision", True):
             compileFlags |= __future__.CO_FUTURE_DIVISION
