@@ -1511,7 +1511,7 @@ class DrawBotDrawingTool(object):
         if fontName:
             fontName = self._tryInstallFontFromFontName(fontName)
         else:
-            fontName = self._dummyContext._state.text.fontName
+            fontName = self._dummyContext._state.text._font
         return openType.getFeatureTagsForFontName(fontName)
 
     # drawing text
