@@ -186,6 +186,16 @@ class DrawBotAppDelegate(AppKit.NSObject):
             result
             )
 
+    def performFindPanelAction_(self, action):
+        try:
+            # a bug somewhere in OSX
+            # the short cuts (fe cmd+g) arent redirected properly to the text views
+            view = AppKit.NSApp().keyWindow().firstResponder()
+            dest = view.superview().superview().superview()._contentView().documentView()
+            dest.performFindPanelAction_(action)
+        except:
+            pass
+
 
 if __name__ == "__main__":
     AppHelper.runEventLoop()
