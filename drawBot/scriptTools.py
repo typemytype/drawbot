@@ -5,6 +5,7 @@ import sys
 import traceback
 import site
 import tempfile
+import re
 
 from drawBot.misc import getDefault
 
@@ -131,6 +132,20 @@ class _Helper(object):
         return pydoc.help(*args, **kwds)
 
 
+# Regex taken from http://legacy.python.org/dev/peps/pep-0263/
+_encodingDeclarationPattern = re.compile(r"^[ \t\v]*#.*?coding[:=][ \t]*([-_.a-zA-Z0-9]+)")
+
+def hasEncodingDeclaration(source):
+    # An encoding declaration must occur within the first two lines of the source code
+    if _encodingDeclarationPattern.match(source) is not None:
+        return True
+    pos = source.find("\n")
+    if pos >= 0:
+        if _encodingDeclarationPattern.match(source[pos+1:]) is not None:
+            return True
+    return False
+
+    
 class ScriptRunner(object):
 
     def __init__(self, text=None, path=None, stdout=None, stderr=None, namespace=None, checkSyntaxOnly=False):
@@ -174,10 +189,11 @@ class ScriptRunner(object):
             text = f.read()
             f.close()
         source = text.replace('\r\n', '\n').replace('\r', '\n')
-        try:
-            source = source.encode("utf-8")
-        except:
-            pass
+        if hasEncodingDeclaration(source):
+            try:
+                source = source.encode("utf-8")
+            except:
+                pass
         compileFlags = 0
         if getDefault("DrawBotUseFutureDivision", True):
             compileFlags |= __future__.CO_FUTURE_DIVISION
