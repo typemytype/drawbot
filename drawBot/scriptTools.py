@@ -190,6 +190,8 @@ class ScriptRunner(object):
             f.close()
         source = text.replace('\r\n', '\n').replace('\r', '\n')
         if hasEncodingDeclaration(source):
+            # compile() complains when an encoding declaration is found in a unicode string.
+            # As a workaround, we'll just encode it back as a utf-8 string and all is good.
             try:
                 source = source.encode("utf-8")
             except:
