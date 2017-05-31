@@ -194,30 +194,25 @@ class BezierPath(BasePen):
         self._path.appendBezierPathWithOvalInRect_(((x, y), (w, h)))
         self.closePath()
 
-    def text(self, txt, font=_FALLBACKFONT, fontSize=10, offset=None, box=None):
+    def text(self, txt, font=_FALLBACKFONT, fontSize=10, align=None, offset=None, box=None):
         """
         Draws a `txt` with a `font` and `fontSize` at an `offset` in the bezier path.
         If a font path is given the font will be installed and used directly.
 
         Optionally `txt` can be a `FormattedString` and be drawn inside a `box`, a tuple of (x, y, width, height).
         """
-        if isinstance(txt, FormattedString):
-            attributedString = txt.getNSObject()
-        else:
+        if not isinstance(txt, FormattedString):
             try:
                 txt = txt.decode("utf-8")
             except UnicodeEncodeError:
                 pass
-            fontName = _tryInstallFontFromFontName(font)
-            font = AppKit.NSFont.fontWithName_size_(fontName, fontSize)
-            if font is None:
-                warnings.warn("font: %s is not installed, back to the fallback font: %s" % (fontName, _FALLBACKFONT))
-                font = AppKit.NSFont.fontWithName_size_(_FALLBACKFONT, fontSize)
+            formattedString = FormattedString()
+            formattedString.font(font, fontSize)
+            formattedString.append(txt, align=align)
+            txt = formattedString
 
-            attributes = {
-                AppKit.NSFontAttributeName: font
-            }
-            attributedString = AppKit.NSAttributedString.alloc().initWithString_attributes_(txt, attributes)
+        attributedString = txt.getNSObject()
+
         w, h = attributedString.size()
         setter = CoreText.CTFramesetterCreateWithAttributedString(attributedString)
         path = Quartz.CGPathCreateMutable()
@@ -225,20 +220,23 @@ class BezierPath(BasePen):
             x, y = offset
         else:
             x = y = 0
+        if align == "right":
+            x -= w
+        elif align == "center":
+            x -= w * .5
         if box:
             bx, by, w, h = box
             x += bx
             y += by
             Quartz.CGPathAddRect(path, None, Quartz.CGRectMake(0, 0, w, h))
         else:
-            Quartz.CGPathAddRect(path, None, Quartz.CGRectMake(0, -h, w*2, h*2))
+            Quartz.CGPathAddRect(path, None, Quartz.CGRectMake(0, -h, w, h))
         box = CoreText.CTFramesetterCreateFrame(setter, (0, 0), path, None)
         ctLines = CoreText.CTFrameGetLines(box)
         origins = CoreText.CTFrameGetLineOrigins(box, (0, len(ctLines)), None)
 
         if origins and box is not None:
-            x -= origins[-1][0]
-            y -= origins[-1][1]
+            y -= origins[0][1]
         for i, (originX, originY) in enumerate(origins):
             ctLine = ctLines[i]
             ctRuns = CoreText.CTLineGetGlyphRuns(ctLine)
