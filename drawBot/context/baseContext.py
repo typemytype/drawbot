@@ -125,7 +125,7 @@ class BezierPath(BasePen):
         """
         self._path.closePath()
 
-    def beginPath(self):
+    def beginPath(self, identifier=None):
         """
         Begin path.
         """
