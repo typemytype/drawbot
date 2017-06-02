@@ -206,6 +206,8 @@ class BezierPath(BasePen):
 
         Optionally `txt` can be a `FormattedString`.
         """
+        if align and align not in BaseContext._textAlignMap.keys():
+            raise DrawBotError("align must be %s" % (", ".join(BaseContext._textAlignMap.keys())))
         context = BaseContext()
         context.font(font, fontSize)
 
@@ -244,6 +246,8 @@ class BezierPath(BasePen):
         Optionally `txt` can be a `FormattedString`.
         Optionally `box` can be a `BezierPath`.
         """
+        if align and align not in BaseContext._textAlignMap.keys():
+            raise DrawBotError("align must be %s" % (", ".join(BaseContext._textAlignMap.keys())))
         context = BaseContext()
         context.font(font, fontSize)
         context.hyphenation(hyphenation)
