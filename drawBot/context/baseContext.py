@@ -194,28 +194,23 @@ class BezierPath(BasePen):
         self._path.appendBezierPathWithOvalInRect_(((x, y), (w, h)))
         self.closePath()
 
-    def text(self, txt, font=_FALLBACKFONT, fontSize=10, align=None, offset=None, box=None):
+    def text(self, txt, offset=None, font=_FALLBACKFONT, fontSize=10, align=None):
         """
         Draws a `txt` with a `font` and `fontSize` at an `offset` in the bezier path.
         If a font path is given the font will be installed and used directly.
 
-        Optionally `txt` can be a `FormattedString` and be drawn inside a `box`, a tuple of (x, y, width, height).
+        Optionally an alignment can be set.
+        Possible `align` values are: `"left"`, `"center"` and `"right"`.
+
+        The default alignment is `left`.
+
+        Optionally `txt` can be a `FormattedString`.
         """
-        if not isinstance(txt, FormattedString):
-            try:
-                txt = txt.decode("utf-8")
-            except UnicodeEncodeError:
-                pass
-            formattedString = FormattedString()
-            formattedString.font(font, fontSize)
-            formattedString.append(txt, align=align)
-            txt = formattedString
+        context = BaseContext()
+        context.font(font, fontSize)
 
-        attributedString = txt.getNSObject()
-
+        attributedString = context.attributedString(txt, align)
         w, h = attributedString.size()
-        setter = CoreText.CTFramesetterCreateWithAttributedString(attributedString)
-        path = Quartz.CGPathCreateMutable()
         if offset:
             x, y = offset
         else:
@@ -224,19 +219,43 @@ class BezierPath(BasePen):
             x -= w
         elif align == "center":
             x -= w * .5
-        if box:
-            bx, by, w, h = box
-            x += bx
-            y += by
-            Quartz.CGPathAddRect(path, None, Quartz.CGRectMake(0, 0, w, h))
-        else:
-            Quartz.CGPathAddRect(path, None, Quartz.CGRectMake(0, -h, w, h))
-        box = CoreText.CTFramesetterCreateFrame(setter, (0, 0), path, None)
-        ctLines = CoreText.CTFrameGetLines(box)
-        origins = CoreText.CTFrameGetLineOrigins(box, (0, len(ctLines)), None)
-
-        if origins and box is not None:
+        setter = CoreText.CTFramesetterCreateWithAttributedString(attributedString)
+        path = Quartz.CGPathCreateMutable()
+        Quartz.CGPathAddRect(path, None, Quartz.CGRectMake(x, y, w, h))
+        frame = CoreText.CTFramesetterCreateFrame(setter, (0, 0), path, None)
+        ctLines = CoreText.CTFrameGetLines(frame)
+        origins = CoreText.CTFrameGetLineOrigins(frame, (0, len(ctLines)), None)
+        if origins:
             y -= origins[0][1]
+        self.textBox(txt, box=(x, y-h, w, h*2), font=font, fontSize=fontSize, align=align)
+
+    def textBox(self, txt, box, font=_FALLBACKFONT, fontSize=10, align=None, hyphenation=None):
+        """
+        Draws a `txt` with a `font` and `fontSize` in a `box` in the bezier path.
+        If a font path is given the font will be installed and used directly.
+
+        Optionally an alignment can be set.
+        Possible `align` values are: `"left"`, `"center"` and `"right"`.
+
+        The default alignment is `left`.
+
+        Optionally `hyphenation` can be provided.
+
+        Optionally `txt` can be a `FormattedString`.
+        Optionally `box` can be a `BezierPath`.
+        """
+        context = BaseContext()
+        context.font(font, fontSize)
+        context.hyphenation(hyphenation)
+
+        path, (x, y) = context._getPathForFrameSetter(box)
+        attributedString = context.attributedString(txt, align)
+
+        setter = CoreText.CTFramesetterCreateWithAttributedString(attributedString)
+        frame = CoreText.CTFramesetterCreateFrame(setter, (0, 0), path, None)
+        ctLines = CoreText.CTFrameGetLines(frame)
+        origins = CoreText.CTFrameGetLineOrigins(frame, (0, len(ctLines)), None)
+
         for i, (originX, originY) in enumerate(origins):
             ctLine = ctLines[i]
             ctRuns = CoreText.CTLineGetGlyphRuns(ctLine)
@@ -252,6 +271,7 @@ class BezierPath(BasePen):
                         self._path.moveToPoint_((x+originX+ax, y+originY+ay+baselineShift))
                         self._path.appendBezierPathWithGlyph_inFont_(glyph, font)
         self.optimizePath()
+        return context.clippedText(txt, box, align)
 
     def traceImage(self, path, threshold=.2, blur=None, invert=False, turd=2, tolerance=0.2, offset=None):
         """

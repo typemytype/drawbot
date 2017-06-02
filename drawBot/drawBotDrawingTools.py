@@ -1523,6 +1523,10 @@ class DrawBotDrawingTool(object):
         Optionally an alignment can be set.
         Possible `align` values are: `"left"`, `"center"` and `"right"`.
 
+        The default alignment is `left`.
+
+        Optionally `txt` can be a `FormattedString`.
+
         .. downloadcode:: text.py
 
             font("Times-Italic")
@@ -1567,6 +1571,9 @@ class DrawBotDrawingTool(object):
         Possible `align` values are: `"left"`, `"center"`, `"right"` and `"justified"`.
 
         The default alignment is `left`.
+
+        Optionally `txt` can be a `FormattedString`.
+        Optionally `box` can be a `BezierPath`.
         """
         if isinstance(txt, (str, unicode)):
             try:
