@@ -2368,17 +2368,17 @@ class ImageObject(object):
         """
         Applies a perspective transform to an image and then tiles the result.
 
-        Attributes: `topLeft` a float, `topRight` a float, `bottomRight` a float, `bottomLeft` a float.
+        Attributes: `topLeft` a tuple (x, y), `topRight` a tuple (x, y), `bottomRight` a tuple (x, y), `bottomLeft` a tuple (x, y).
         """
         attr = dict()
         if topLeft:
-            attr["inputTopLeft"] = topLeft
+            attr["inputTopLeft"] = AppKit.CIVector.vectorWithValues_count_(topLeft, 2)
         if topRight:
-            attr["inputTopRight"] = topRight
+            attr["inputTopRight"] = AppKit.CIVector.vectorWithValues_count_(topRight, 2)
         if bottomRight:
-            attr["inputBottomRight"] = bottomRight
+            attr["inputBottomRight"] = AppKit.CIVector.vectorWithValues_count_(bottomRight, 2)
         if bottomLeft:
-            attr["inputBottomLeft"] = bottomLeft
+            attr["inputBottomLeft"] = AppKit.CIVector.vectorWithValues_count_(bottomLeft, 2)
         filterDict = dict(name="CIPerspectiveTile", attributes=attr)
         self._addFilter(filterDict)
 
