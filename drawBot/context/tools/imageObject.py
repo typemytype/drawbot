@@ -1518,13 +1518,13 @@ class ImageObject(object):
         """
         attr = dict()
         if topLeft:
-            attr["inputTopLeft"] = topLeft
+            attr["inputTopLeft"] = AppKit.CIVector.vectorWithValues_count_(topLeft, 2)
         if topRight:
-            attr["inputTopRight"] = topRight
+            attr["inputTopRight"] = AppKit.CIVector.vectorWithValues_count_(topRight, 2)
         if bottomRight:
-            attr["inputBottomRight"] = bottomRight
+            attr["inputBottomRight"] = AppKit.CIVector.vectorWithValues_count_(bottomRight, 2)
         if bottomLeft:
-            attr["inputBottomLeft"] = bottomLeft
+            attr["inputBottomLeft"] = AppKit.CIVector.vectorWithValues_count_(bottomLeft, 2)
         filterDict = dict(name="CIPerspectiveCorrection", attributes=attr)
         self._addFilter(filterDict)
 
@@ -1536,13 +1536,13 @@ class ImageObject(object):
         """
         attr = dict()
         if topLeft:
-            attr["inputTopLeft"] = topLeft
+            attr["inputTopLeft"] = AppKit.CIVector.vectorWithValues_count_(topLeft, 2)
         if topRight:
-            attr["inputTopRight"] = topRight
+            attr["inputTopRight"] = AppKit.CIVector.vectorWithValues_count_(topRight, 2)
         if bottomRight:
-            attr["inputBottomRight"] = bottomRight
+            attr["inputBottomRight"] = AppKit.CIVector.vectorWithValues_count_(bottomRight, 2)
         if bottomLeft:
-            attr["inputBottomLeft"] = bottomLeft
+            attr["inputBottomLeft"] = AppKit.CIVector.vectorWithValues_count_(bottomLeft, 2)
         filterDict = dict(name="CIPerspectiveTransform", attributes=attr)
         self._addFilter(filterDict)
 
