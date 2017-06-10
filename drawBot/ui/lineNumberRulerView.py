@@ -112,7 +112,7 @@ class NSLineNumberRuler(NSRulerView):
         oldThickness = self.ruleThickness()
         newThickness = self.requiredThickness()
 
-        if abs(oldThickness - newThickness) > 1:
+        if abs(oldThickness - newThickness) > 0:
             invocation = NSInvocation.invocationWithMethodSignature_(self.methodSignatureForSelector_("setRuleThickness:"))
             invocation.setSelector_("setRuleThickness:")
             invocation.setTarget_(self)
