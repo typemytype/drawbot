@@ -57,10 +57,12 @@ class PDFContext(BaseContext):
         self._hasContext = False
 
     def _saveImage(self, path, multipage):
+        pool = AppKit.NSAutoreleasePool.alloc().init()
         self._closeContext()
         self._writeDataToFile(self._pdfData, path, multipage)
         self._pdfContext = None
         self._pdfData = None
+        del pool
 
     def _writeDataToFile(self, data, path, multipage):
         if multipage is None:
