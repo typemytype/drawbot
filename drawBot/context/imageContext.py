@@ -34,6 +34,7 @@ class ImageContext(PDFContext):
             pathAdd = ""
         outputPaths = []
         for index in range(firstPage, pageCount):
+            pool = AppKit.NSAutoreleasePool.alloc().init()
             page = pdfDocument.pageAtIndex_(index)
             image = AppKit.NSImage.alloc().initWithData_(page.dataRepresentation())
             imageRep = AppKit.NSBitmapImageRep.imageRepWithData_(image.TIFFRepresentation())
@@ -42,4 +43,6 @@ class ImageContext(PDFContext):
             imageData.writeToFile_atomically_(imagePath, True)
             pathAdd = "_%s" % (index + 2)
             outputPaths.append(imagePath)
+            del page, imageRep, imageData
+            del pool
         return outputPaths
