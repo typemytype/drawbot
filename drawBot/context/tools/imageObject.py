@@ -19,7 +19,7 @@ class ImageObject(object):
 
     def __init__(self, path=None):
         self._filters = []
-        if path:
+        if path is not None:
             self.open(path)
 
     def __del__(self):
@@ -53,11 +53,10 @@ class ImageObject(object):
         """
         Open an image with a given `path`.
         """
-        if isinstance(path, (str, unicode)):
-            path = optimizePath(path)
         if isinstance(path, AppKit.NSImage):
             im = path
-        else:
+        elif isinstance(path, (str, unicode)):
+            path = optimizePath(path)
             if path.startswith("http"):
                 url = AppKit.NSURL.URLWithString_(path)
             else:
@@ -65,6 +64,8 @@ class ImageObject(object):
                     raise DrawBotError("Image path '%s' does not exists." % path)
                 url = AppKit.NSURL.fileURLWithPath_(path)
             im = AppKit.NSImage.alloc().initByReferencingURL_(url)
+        else:
+            raise DrawBotError("Cannot read image path '%s'." % path)
         ciImage = AppKit.CIImage.imageWithData_(im.TIFFRepresentation())
         self._merge(ciImage, doCrop=True)
 
