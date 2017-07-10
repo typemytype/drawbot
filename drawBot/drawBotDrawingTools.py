@@ -130,6 +130,8 @@ class DrawBotDrawingTool(object):
         new._dummyContext = self._dummyContext
         new._width = self._width
         new._height = self._height
+        new._hasPage = self._hasPage
+        new._requiresNewFirstPage = self._requiresNewFirstPage
         new._tempInstalledFonts = dict(self._tempInstalledFonts)
         return new
 
