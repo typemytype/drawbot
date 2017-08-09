@@ -1430,10 +1430,14 @@ class FormattedString(object):
         baseString = unichr(0x00A0)
         font = None
         if self._font:
-            font = AppKit.NSFont.fontWithName_size_(self._font, self._fontSize)
-        if font is None:
-            warnings.warn("font: %s is not installed, back to the fallback font: %s" % (self._font, _FALLBACKFONT))
-            font = AppKit.NSFont.fontWithName_size_(_FALLBACKFONT, self._fontSize)
+            fontName = _tryInstallFontFromFontName(self._font)
+            font = AppKit.NSFont.fontWithName_size_(fontName, self._fontSize)
+            if font is None:
+                ff = self._fallbackFont
+                if ff is None:
+                    ff = _FALLBACKFONT
+                warnings.warn("font: %s is not installed, back to the fallback font: %s" % (fontName, ff))
+                font = AppKit.NSFont.fontWithName_size_(ff, self._fontSize)
 
         # disable calt features, as this seems to be on by default
         # for both the font stored in the nsGlyphInfo as in the replacement character
