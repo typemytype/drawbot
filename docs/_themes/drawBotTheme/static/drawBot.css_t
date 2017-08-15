@@ -58,17 +58,17 @@ h1 a, h1 a, h2 a, h3 a, h4 a {
 	color: {{ theme_headerlinkcolor }};
 }
 
-a.headerlink, a.headerlink:visited  {
+.no-touch a.headerlink, .no-touch a.headerlink:visited  {
 	visibility: hidden;
 }
 
-.no-touch h1:hover > a.headerlink,
-.no-touch h2:hover > a.headerlink,
-.no-touch h3:hover > a.headerlink,
-.no-touch h4:hover > a.headerlink,
-.no-touch h5:hover > a.headerlink,
-.no-touch h6:hover > a.headerlink,
-.no-touch dt:hover > a.headerlink {
+h1:hover > a.headerlink,
+h2:hover > a.headerlink,
+h3:hover > a.headerlink,
+h4:hover > a.headerlink,
+h5:hover > a.headerlink,
+h6:hover > a.headerlink,
+dt:hover > a.headerlink {
     visibility: visible;
     color: {{ theme_linkcolor }};
 }
