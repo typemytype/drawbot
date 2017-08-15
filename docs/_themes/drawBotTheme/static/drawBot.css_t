@@ -28,7 +28,7 @@ a, a:visited, a.drawbotlink, a.drawbotlink:visited {
 	text-decoration: none;
 }
 
-a:hover, a.drawbotlink:hover, a:focus, a.drawbotlink:focus {
+a:hover, a.drawbotlink:hover {
 	color: {{ theme_textcolor }};
 }
 
@@ -62,20 +62,13 @@ a.headerlink, a.headerlink:visited  {
 	visibility: hidden;
 }
 
-h1:hover > a.headerlink,
-h2:hover > a.headerlink,
-h3:hover > a.headerlink,
-h4:hover > a.headerlink,
-h5:hover > a.headerlink,
-h6:hover > a.headerlink,
-dt:hover > a.headerlink,
-h1:focus > a.headerlink,
-h2:focus > a.headerlink,
-h3:focus > a.headerlink,
-h4:focus > a.headerlink,
-h5:focus > a.headerlink,
-h6:focus > a.headerlink,
-dt:focus > a.headerlink {
+.no-touch h1:hover > a.headerlink,
+.no-touch h2:hover > a.headerlink,
+.no-touch h3:hover > a.headerlink,
+.no-touch h4:hover > a.headerlink,
+.no-touch h5:hover > a.headerlink,
+.no-touch h6:hover > a.headerlink,
+.no-touch dt:hover > a.headerlink {
     visibility: visible;
     color: {{ theme_linkcolor }};
 }
@@ -177,7 +170,7 @@ div.header a {
 	color: {{ theme_textcolor }};
 }
 
-div.header a:hover, div.header a:focus {
+div.header a:hover {
 	font-weight: normal;
 }
 
@@ -219,7 +212,7 @@ div.navbar li a {
 	color: white;
 }
 
-div.navbar li a:hover, div.navbar li a:focus {
+div.navbar li a:hover {
 	font-weight: normal;
 }
 
@@ -244,7 +237,7 @@ p.highlight-link a {
 	color: white;
 }
 
-p.highlight-link a:hover, p.highlight-link a:focus {
+p.highlight-link a:hover {
 	font-weight: normal;
 }
 .container .body img {
@@ -354,7 +347,7 @@ div.footer a {
 	color: white;
 }
 
-div.footer a:hover, div.footer a:focus {
+div.footer a:hover {
 	font-weight: normal;
 }
 
