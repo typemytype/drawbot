@@ -2,8 +2,9 @@ import AppKit
 import CoreText
 
 import os
-import base64
+# import base64
 import random
+import uuid
 
 from fontTools.misc.xmlWriter import XMLWriter
 
@@ -67,7 +68,7 @@ class SVGGradient(Gradient):
 
     def __init__(self, *args, **kwargs):
         super(SVGGradient, self).__init__(*args, **kwargs)
-        self.tagID = id(self)
+        self.tagID = uuid.uuid4().hex
 
     def copy(self):
         new = super(SVGShadow, self).copy()
@@ -132,7 +133,7 @@ class SVGShadow(Shadow):
 
     def __init__(self, *args, **kwargs):
         super(SVGShadow, self).__init__(*args, **kwargs)
-        self.tagID = id(self)
+        self.tagID = uuid.uuid4()
 
     def copy(self):
         new = super(SVGShadow, self).copy()
@@ -461,9 +462,10 @@ class SVGContext(BaseContext):
     # helpers
 
     def _getUniqueID(self):
-        b = [chr(random.randrange(256)) for i in range(16)]
-        i = long(('%02x'*16) % tuple(map(ord, b)), 16)
-        return '%032x' % i
+        return uuid.uuid4().hex
+        # b = [chr(random.randrange(256)) for i in range(16)]
+        # i = long(('%02x'*16) % tuple(map(ord, b)), 16)
+        # return '%032x' % i
 
     def _svgTransform(self, transform):
         return "matrix(%s)" % (",".join([str(s) for s in transform]))
