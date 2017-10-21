@@ -9,6 +9,7 @@ from fontTools.pens.basePen import BasePen
 from drawBot.misc import DrawBotError, cmyk2rgb, warnings
 
 from tools import openType
+from tools import variation
 
 
 _FALLBACKFONT = "LucidaGrande"
@@ -710,7 +711,7 @@ class Gradient(object):
         if not colors or len(colors) < 2:
             raise DrawBotError("Gradient needs at least 2 colors")
         if positions is None:
-            positions = [i / float(len(colors)-1) for i in range(len(colors))]
+            positions = [i / float(len(colors) - 1) for i in range(len(colors))]
         if len(colors) != len(positions):
             raise DrawBotError("Gradient needs a correct position for each color")
         self.gradientType = gradientType
@@ -789,6 +790,7 @@ class FormattedString(object):
         baselineShift=None,
         underline=None,
         openTypeFeatures=dict(),
+        fontVariations=dict(),
         tabs=None,
         indent=None,
         tailIndent=None,
@@ -868,12 +870,12 @@ class FormattedString(object):
         if self._fill is not None:
             try:
                 len(self._fill)
-            except:
+            except Exception:
                 self._fill = (self._fill,)
         if self._stroke is not None:
             try:
                 len(self._stroke)
-            except:
+            except Exception:
                 self._stroke = (self._stroke,)
         if self._fill:
             self._cmykFill = None
@@ -909,6 +911,17 @@ class FormattedString(object):
                     feature = openType.featureMap[featureTag]
                     coreTextfeatures.append(feature)
             fontDescriptor = font.fontDescriptor()
+            if self._fontVariations:
+                existingAxes = variation.getVariationAxesForFontName(fontName)
+                for axis, value in self._fontVariations.items():
+                    if axis in existingAxes:
+                        existinsAxis = existingAxes[axis]
+                        # clip variation value within the min max value
+                        if value < existinsAxis["minValue"]:
+                            value = existinsAxis["minValue"]
+                        if value > existinsAxis["maxValue"]:
+                            value = existinsAxis["maxValue"]
+                        fontDescriptor = CoreText.CTFontDescriptorCreateCopyWithVariation(fontDescriptor, variation.convertVariationTagToInt(axis), value)
             fontAttributes = {}
             if coreTextfeatures:
                 fontAttributes[CoreText.NSFontFeatureSettingsAttribute] = coreTextfeatures
@@ -1007,11 +1020,11 @@ class FormattedString(object):
             elif stop < 0:
                 stop = textLength + stop
 
-            if start + (stop-start) > textLength:
+            if start + (stop - start) > textLength:
                 stop = textLength
 
             location = start
-            length = stop-start
+            length = stop - start
 
             if location < 0:
                 location = 0
@@ -1025,7 +1038,7 @@ class FormattedString(object):
             new = self.__class__(**attributes)
             try:
                 new._attributedString = self._attributedString.attributedSubstringFromRange_(rng)
-            except:
+            except Exception:
                 pass
             return new
         else:
@@ -1196,6 +1209,27 @@ class FormattedString(object):
         else:
             fontName = self._font
         return openType.getFeatureTagsForFontName(fontName)
+
+    def fontVariations(self, *args, **axes):
+        """
+        Pick a variation by an axis value.
+        """
+        if args and args[0] is None:
+            self._fontVariations.clear()
+        else:
+            self._fontVariations.update(axes)
+
+    def listFontVariations(self, fontName):
+        """
+        List all variation axes for the current font.
+
+        Optionally a `fontName` can be given. If a font path is given the font will be installed and used directly.
+        """
+        if fontName:
+            fontName = _tryInstallFontFromFontName(fontName)
+        else:
+            fontName = self._font
+        return variation.getVariationAxesForFontName(fontName)
 
     def tabs(self, *tabs):
         """
@@ -1895,6 +1929,9 @@ class BaseContext(object):
 
     def openTypeFeatures(self, *args, **features):
         self._state.text.openTypeFeatures(*args, **features)
+
+    def fontVariations(self, *args, **axes):
+        self._state.text.fontVariations(*args, **axes)
 
     def attributedString(self, txt, align=None):
         if isinstance(txt, FormattedString):

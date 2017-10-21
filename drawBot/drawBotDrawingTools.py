@@ -1510,11 +1510,22 @@ class DrawBotDrawingTool(object):
 
         Optionally a `fontName` can be given. If a font path is given the font will be installed and used directly.
         """
-        if fontName:
-            fontName = self._tryInstallFontFromFontName(fontName)
-        else:
-            fontName = self._dummyContext._state.text._font
-        return openType.getFeatureTagsForFontName(fontName)
+        return self._dummyContext._state.text.listOpenTypeFeatures(fontName)
+
+    def fontVariations(self, *args, **axes):
+        """
+        Pick a variation by the normalised axis value.
+        """
+        self._dummyContext.fontVariations(*args, **axes)
+        self._addInstruction("fontVariations", *args, **axes)
+
+    def listFontVariations(self, fontName=None):
+        """
+        List all variation axes for the current font.
+
+        Optionally a `fontName` can be given. If a font path is given the font will be installed and used directly.
+        """
+        return self._dummyContext._state.text.listFontVariations(fontName)
 
     # drawing text
 
