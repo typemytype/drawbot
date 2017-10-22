@@ -898,18 +898,24 @@ class FormattedString(object):
                 ff = self._fallbackFont
                 if ff is None:
                     ff = _FALLBACKFONT
-                warnings.warn("font: %s is not installed, back to the fallback font: %s" % (fontName, ff))
+                warnings.warn("font: '%s' is not installed, back to the fallback font: '%s'" % (fontName, ff))
                 font = AppKit.NSFont.fontWithName_size_(ff, self._fontSize)
             coreTextfeatures = []
-            # sort features by their on/off state
-            # set all disabled features first
-            orderedOpenTypeFeatures = sorted(self._openTypeFeatures.items(), key=lambda (k, v): v)
-            for featureTag, value in orderedOpenTypeFeatures:
-                if not value:
-                    featureTag = "%s_off" % featureTag
-                if featureTag in openType.featureMap:
-                    feature = openType.featureMap[featureTag]
-                    coreTextfeatures.append(feature)
+            if self._openTypeFeatures:
+                existingOpenTypeFeatures = openType.getFeatureTagsForFontName(fontName)
+                # sort features by their on/off state
+                # set all disabled features first
+                orderedOpenTypeFeatures = sorted(self._openTypeFeatures.items(), key=lambda (k, v): v)
+                for featureTag, value in orderedOpenTypeFeatures:
+                    if not value:
+                        featureTag = "%s_off" % featureTag
+                    if featureTag in openType.featureMap:
+                        if featureTag not in existingOpenTypeFeatures:
+                            warnings.warn("OpenType feature '%s' not available for '%s'" % (featureTag, fontName))
+                        feature = openType.featureMap[featureTag]
+                        coreTextfeatures.append(feature)
+                    else:
+                        warnings.warn("OpenType feature '%s' not available" % (featureTag))
             fontDescriptor = font.fontDescriptor()
             if self._fontVariations:
                 existingAxes = variation.getVariationAxesForFontName(fontName)
@@ -922,6 +928,8 @@ class FormattedString(object):
                         if value > existinsAxis["maxValue"]:
                             value = existinsAxis["maxValue"]
                         fontDescriptor = CoreText.CTFontDescriptorCreateCopyWithVariation(fontDescriptor, variation.convertVariationTagToInt(axis), value)
+                    else:
+                        warnings.warn("variation axis '%s' not available for '%s'" % (axis, fontName))
             fontAttributes = {}
             if coreTextfeatures:
                 fontAttributes[CoreText.NSFontFeatureSettingsAttribute] = coreTextfeatures
@@ -1380,7 +1388,7 @@ class FormattedString(object):
         font = AppKit.NSFont.fontWithName_size_(self._font, self._fontSize)
         if font is None:
             ff = self._fallbackFont or _FALLBACKFONT
-            warnings.warn("font: %s is not installed, back to the fallback font: %s" % (self._font, ff))
+            warnings.warn("font: '%s' is not installed, back to the fallback font: '%s'" % (self._font, ff))
             font = AppKit.NSFont.fontWithName_size_(ff, self._fontSize)
         return font.ascender()
 
@@ -1391,7 +1399,7 @@ class FormattedString(object):
         font = AppKit.NSFont.fontWithName_size_(self._font, self._fontSize)
         if font is None:
             ff = self._fallbackFont or _FALLBACKFONT
-            warnings.warn("font: %s is not installed, back to the fallback font: %s" % (self._font, ff))
+            warnings.warn("font: '%s' is not installed, back to the fallback font: '%s'" % (self._font, ff))
             font = AppKit.NSFont.fontWithName_size_(ff, self._fontSize)
         return font.descender()
 
@@ -1402,7 +1410,7 @@ class FormattedString(object):
         font = AppKit.NSFont.fontWithName_size_(self._font, self._fontSize)
         if font is None:
             ff = self._fallbackFont or _FALLBACKFONT
-            warnings.warn("font: %s is not installed, back to the fallback font: %s" % (self._font, ff))
+            warnings.warn("font: '%s' is not installed, back to the fallback font: '%s'" % (self._font, ff))
             font = AppKit.NSFont.fontWithName_size_(ff, self._fontSize)
         return font.xHeight()
 
@@ -1413,7 +1421,7 @@ class FormattedString(object):
         font = AppKit.NSFont.fontWithName_size_(self._font, self._fontSize)
         if font is None:
             ff = self._fallbackFont or _FALLBACKFONT
-            warnings.warn("font: %s is not installed, back to the fallback font: %s" % (self._font, ff))
+            warnings.warn("font: '%s' is not installed, back to the fallback font: '%s'" % (self._font, ff))
             font = AppKit.NSFont.fontWithName_size_(ff, self._fontSize)
         return font.capHeight()
 
@@ -1424,7 +1432,7 @@ class FormattedString(object):
         font = AppKit.NSFont.fontWithName_size_(self._font, self._fontSize)
         if font is None:
             ff = self._fallbackFont or _FALLBACKFONT
-            warnings.warn("font: %s is not installed, back to the fallback font: %s" % (self._font, ff))
+            warnings.warn("font: '%s' is not installed, back to the fallback font: '%s'" % (self._font, ff))
             font = AppKit.NSFont.fontWithName_size_(ff, self._fontSize)
         return font.leading()
 
@@ -1438,7 +1446,7 @@ class FormattedString(object):
         font = AppKit.NSFont.fontWithName_size_(self._font, self._fontSize)
         if font is None:
             ff = self._fallbackFont or _FALLBACKFONT
-            warnings.warn("font: %s is not installed, back to the fallback font: %s" % (self._font, ff))
+            warnings.warn("font: '%s' is not installed, back to the fallback font: '%s'" % (self._font, ff))
             font = AppKit.NSFont.fontWithName_size_(ff, self._fontSize)
         return font.defaultLineHeightForFont()
 
@@ -1466,7 +1474,7 @@ class FormattedString(object):
         if self._font:
             font = AppKit.NSFont.fontWithName_size_(self._font, self._fontSize)
         if font is None:
-            warnings.warn("font: %s is not installed, back to the fallback font: %s" % (self._font, _FALLBACKFONT))
+            warnings.warn("font: '%s' is not installed, back to the fallback font: '%s'" % (self._font, _FALLBACKFONT))
             font = AppKit.NSFont.fontWithName_size_(_FALLBACKFONT, self._fontSize)
 
         # disable calt features, as this seems to be on by default
@@ -1488,7 +1496,7 @@ class FormattedString(object):
                 glyphInfo = AppKit.NSGlyphInfo.glyphInfoWithGlyph_forFont_baseString_(glyph, font, baseString)
                 self._attributedString.addAttribute_value_range_(AppKit.NSGlyphInfoAttributeName, glyphInfo, (len(self) - 1, 1))
             else:
-                warnings.warn("font %s has no glyph with the name %s" % (font.fontName(), glyphName))
+                warnings.warn("font '%s' has no glyph with the name '%s'" % (font.fontName(), glyphName))
         self.openTypeFeatures(**_openTypeFeatures)
         self._fallbackFont = fallbackFont
 
