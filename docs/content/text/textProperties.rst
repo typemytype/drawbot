@@ -10,6 +10,8 @@ Text Properties
 .. autofunction:: drawBot.baselineShift
 .. autofunction:: drawBot.openTypeFeatures(frac=True, case=True, ...)
 .. autofunction:: drawBot.listOpenTypeFeatures
+.. autofunction:: drawBot.fontVariations(wdth=0.6, wght=0.1, ...)
+.. autofunction:: drawBot.listFontVariations
 .. autofunction:: drawBot.tabs
 .. autofunction:: drawBot.language
 
