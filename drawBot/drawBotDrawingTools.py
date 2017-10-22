@@ -1515,6 +1515,24 @@ class DrawBotDrawingTool(object):
     def fontVariations(self, *args, **axes):
         """
         Pick a variation by the normalised axis value.
+
+        .. downloadcode:: fontVariations.py
+
+            # pick a font
+            font("Skia")
+            # pick a font size
+            fontSize(200)
+            # list all axis from the current font
+            for axis, data in listFontVariations().items():
+                print axis, data
+            # pick a variation from the current font
+            fontVariations(wght=.6)
+            # draw text!!
+            text("Hello Q", (100, 100))
+            # pick a variation from the current font
+            fontVariations(wght=3, wdth=1.2)
+            # draw text!!
+            text("Hello Q", (100, 300))
         """
         self._dummyContext.fontVariations(*args, **axes)
         self._addInstruction("fontVariations", *args, **axes)
