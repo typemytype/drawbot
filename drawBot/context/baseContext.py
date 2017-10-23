@@ -916,7 +916,7 @@ class FormattedString(object):
                         coreTextfeatures.append(feature)
                     else:
                         warnings.warn("OpenType feature '%s' not available" % (featureTag))
-            fontDescriptor = font.fontDescriptor()
+            coreTextFontVariations = dict()
             if self._fontVariations:
                 existingAxes = variation.getVariationAxesForFontName(fontName)
                 for axis, value in self._fontVariations.items():
@@ -927,14 +927,17 @@ class FormattedString(object):
                             value = existinsAxis["minValue"]
                         if value > existinsAxis["maxValue"]:
                             value = existinsAxis["maxValue"]
-                        fontDescriptor = CoreText.CTFontDescriptorCreateCopyWithVariation(fontDescriptor, variation.convertVariationTagToInt(axis), value)
+                        coreTextFontVariations[variation.convertVariationTagToInt(axis)] = value
                     else:
                         warnings.warn("variation axis '%s' not available for '%s'" % (axis, fontName))
             fontAttributes = {}
             if coreTextfeatures:
                 fontAttributes[CoreText.NSFontFeatureSettingsAttribute] = coreTextfeatures
+            if coreTextFontVariations:
+                fontAttributes[CoreText.NSFontVariationAttribute] = coreTextFontVariations
             if self._fallbackFont:
                 fontAttributes[CoreText.NSFontCascadeListAttribute] = [AppKit.NSFontDescriptor.fontDescriptorWithName_size_(self._fallbackFont, self._fontSize)]
+            fontDescriptor = font.fontDescriptor()
             fontDescriptor = fontDescriptor.fontDescriptorByAddingAttributes_(fontAttributes)
             font = AppKit.NSFont.fontWithDescriptor_size_(fontDescriptor, self._fontSize)
             attributes[AppKit.NSFontAttributeName] = font
