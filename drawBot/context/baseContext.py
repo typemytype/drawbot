@@ -907,12 +907,13 @@ class FormattedString(object):
                 # set all disabled features first
                 orderedOpenTypeFeatures = sorted(self._openTypeFeatures.items(), key=lambda (k, v): v)
                 for featureTag, value in orderedOpenTypeFeatures:
+                    coreTextFeatureTag = featureTag
                     if not value:
-                        featureTag = "%s_off" % featureTag
-                    if featureTag in openType.featureMap:
+                        coreTextFeatureTag = "%s_off" % featureTag
+                    if coreTextFeatureTag in openType.featureMap:
                         if featureTag not in existingOpenTypeFeatures:
                             warnings.warn("OpenType feature '%s' not available for '%s'" % (featureTag, fontName))
-                        feature = openType.featureMap[featureTag]
+                        feature = openType.featureMap[coreTextFeatureTag]
                         coreTextfeatures.append(feature)
                     else:
                         warnings.warn("OpenType feature '%s' not available" % (featureTag))
