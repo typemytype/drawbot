@@ -43,7 +43,7 @@ __Required packages:__
 * [vanilla](https://github.com/typesupply/vanilla)
 * [defcon](https://github.com/typesupply/defcon)
 * [defconAppKit](https://github.com/typesupply/defconAppKit)
-* [robofab](https://github.com/robofab-developers/robofab)
+* ~~[robofab](https://github.com/robofab-developers/robofab)~~ (not used anymore)
 * [fontTools](https://github.com/behdad/fonttools)
 * [pygments](http://pygments.org)
 * [jedi](http://jedi.jedidjah.ch/en/latest/)

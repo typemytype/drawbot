@@ -11,7 +11,7 @@ from plistlib import readPlist, writePlist
 
 import vanilla
 import defconAppKit
-import robofab
+# import robofab
 import fontTools
 import pygments
 
