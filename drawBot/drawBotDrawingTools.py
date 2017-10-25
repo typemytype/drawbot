@@ -1861,10 +1861,14 @@ class DrawBotDrawingTool(object):
             print imageSize("http://f.cl.ly/items/1T3x1y372J371p0v1F2Z/drawBot.jpg")
         """
         if isinstance(path, self._imageClass):
-            path = path._nsImage()
+            # its an drawBot.ImageObject, just return the size from that obj
+            return path.size()
+
+        _hasPixels = False
+
         if isinstance(path, AppKit.NSImage):
-            rep = path.TIFFRepresentation()
-            _isPDF = False
+            # its an NSImage
+            rep = path
         else:
             if isinstance(path, (str, unicode)):
                 path = optimizePath(path)
@@ -1874,14 +1878,16 @@ class DrawBotDrawingTool(object):
                 if not os.path.exists(path):
                     raise DrawBotError("Image does not exist")
                 url = AppKit.NSURL.fileURLWithPath_(path)
+            # check if the file is an .pdf
             _isPDF, pdfDocument = isPDF(url)
             # check if the file is an .eps
             _isEPS, epsRep = isEPS(url)
             # check if the file is an .gif
             _isGIF, gifRep = isGIF(url)
             if _isEPS:
-                _isPDF = True
                 rep = epsRep
+            elif _isPDF and pageNumber is None:
+                rep = AppKit.NSImage.alloc().initByReferencingURL_(url)
             elif _isGIF and pageNumber is not None:
                 rep = gifTools.gifFrameAtIndex(url, pageNumber-1)
             elif _isPDF and pageNumber is not None:
@@ -1889,13 +1895,13 @@ class DrawBotDrawingTool(object):
                 # this is probably not the fastest method...
                 rep = AppKit.NSImage.alloc().initWithData_(page.dataRepresentation())
             else:
+                _hasPixels = True
                 rep = AppKit.NSImageRep.imageRepWithContentsOfURL_(url)
-        if _isPDF:
-            w, h = rep.size()
-        elif _isGIF:
-            w, h = rep.size()
-        else:
+
+        if _hasPixels:
             w, h = rep.pixelsWide(), rep.pixelsHigh()
+        else:
+            w, h = rep.size()
         return w, h
 
     def imagePixelColor(self, path, (x, y)):
