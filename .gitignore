@@ -42,3 +42,4 @@ docs/downloads
 local
 
 *.command
+env/*

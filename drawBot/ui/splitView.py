@@ -1,4 +1,5 @@
 from AppKit import *
+from objc import super
 
 from vanilla import *
 from vanilla.vanillaBase import VanillaBaseObject
