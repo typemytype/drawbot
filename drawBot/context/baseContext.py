@@ -859,7 +859,7 @@ class FormattedString(object):
         * `tracking`: set tracking for the given text
         * `baselineShift`: set base line shift for the given text
         * `openTypeFeatures`: enable OpenType features
-        * `fontVariations`: pick a variation by an axes values
+        * `fontVariations`: pick a variation by axes values
         * `tabs`: enable tabs
         * `indent`: the indent of a paragraph
         * `tailIndent`: the tail indent of a paragraph
@@ -1219,7 +1219,7 @@ class FormattedString(object):
 
     def fontVariations(self, *args, **axes):
         """
-        Pick a variation by an axes values.
+        Pick a variation by axes values.
         """
         if args and args[0] is None:
             self._fontVariations.clear()

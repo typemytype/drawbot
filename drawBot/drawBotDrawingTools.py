@@ -1514,7 +1514,7 @@ class DrawBotDrawingTool(object):
 
     def fontVariations(self, *args, **axes):
         """
-        Pick a variation by the axis value.
+        Pick a variation by axes values.
 
         .. downloadcode:: fontVariations.py
 
