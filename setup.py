@@ -20,17 +20,19 @@ from drawBot.drawBotSettings import __version__, appName
 rawTimeStamp = datetime.datetime.today()
 timeStamp = rawTimeStamp.strftime("%y%m%d%H%M")
 
+
 def getValueFromSysArgv(key, default=None):
     if key in sys.argv:
         try:
             i = sys.argv.index(key)
-            value = sys.argv[i+1]
+            value = sys.argv[i + 1]
             sys.argv.remove(key)
             sys.argv.remove(value)
             return value
-        except:
+        except Exception:
             pass
     return default
+
 
 codeSignDeveloperName = getValueFromSysArgv("--codesign")
 
@@ -50,8 +52,8 @@ plist = dict(
             CFBundleTypeRole="Editor",
             CFBundleTypeIconFile="pythonIcon.icns",
             NSDocumentClass="DrawBotDocument",
-            ),
-        ],
+        ),
+    ],
     CFBundleIdentifier="com.drawbot",
     LSMinimumSystemVersion=osxMinVersion,
     LSApplicationCategoryType="public.app-category.graphics-design",
@@ -62,17 +64,17 @@ plist = dict(
     CFBundleIconFile="DrawBot.icns",
     NSHumanReadableCopyright="Copyright by Just van Rossum and Frederik Berlaen.",
     CFBundleURLTypes=[
-            dict(
-                CFBundleURLName="com.drawbot",
-                CFBundleURLSchemes=[appName.lower()])
-        ],
-    )
+        dict(
+            CFBundleURLName="com.drawbot",
+            CFBundleURLSchemes=[appName.lower()])
+    ],
+)
 
 
 dataFiles = [
-        "Resources/English.lproj",
-        # os.path.dirname(vanilla.__file__),
-        ]
+    "Resources/English.lproj",
+    # os.path.dirname(vanilla.__file__),
+]
 
 for fileName in os.listdir("Resources/Images"):
     baseName, extension = os.path.splitext(fileName)
@@ -84,40 +86,41 @@ for fileName in os.listdir("Resources/Images"):
 setup(
     data_files=dataFiles,
     app=[dict(script="DrawBot.py", plist=plist)],
-    options=dict(py2app=dict(
-                    packages=[
-                        'vanilla',
-                        'defcon',
-                        'defconAppKit',
-                        # 'robofab',
-                        'fontParts',
-                        'mutatorMath',
-                        'woffTools',
-                        'compositor',
-                        'feaTools2',
-                        'ufo2svg',
-                        'booleanOperations',
-                        #'pyclipper',
-                        'pygments',
-                        'jedi',
-                        'fontTools',
-                        # 'xml'
-                        ],
-                    includes=[
-                        # 'csv',
-                        # 'this'
-                        ],
-                    excludes=[
-                        "numpy",
-                        "scipy",
-                        "mathplitlib",
-                        "PIL",
-                        "pygame",
-                        "wx"
-                        ]
-                    )
-                )
-            )
+    options=dict(
+        py2app=dict(
+            packages=[
+                'vanilla',
+                'defcon',
+                'defconAppKit',
+                # 'robofab',
+                'fontParts',
+                'mutatorMath',
+                'woffTools',
+                'compositor',
+                'feaTools2',
+                'ufo2svg',
+                'booleanOperations',
+                # 'pyclipper',
+                'pygments',
+                'jedi',
+                'fontTools',
+                # 'xml'
+            ],
+            includes=[
+                # 'csv',
+                # 'this'
+            ],
+            excludes=[
+                "numpy",
+                "scipy",
+                "mathplitlib",
+                "PIL",
+                "pygame",
+                "wx"
+            ]
+        )
+    )
+)
 
 # fix the icon
 path = os.path.join(os.path.dirname(__file__), "dist", "DrawBot.app", "Contents", "Info.plist")
@@ -151,7 +154,6 @@ if "-A" not in sys.argv:
     print "copy", potracePathSource, potracePathDest
     shutil.copyfile(potracePathSource, potracePathDest)
     os.chmod(potracePathDest, 0775)
-
 
     if codeSignDeveloperName:
         # ================

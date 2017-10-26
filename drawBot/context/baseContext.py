@@ -230,7 +230,7 @@ class BezierPath(BasePen):
         origins = CoreText.CTFrameGetLineOrigins(frame, (0, len(ctLines)), None)
         if origins:
             y -= origins[0][1]
-        self.textBox(txt, box=(x, y-h, w, h*2), font=font, fontSize=fontSize, align=align)
+        self.textBox(txt, box=(x, y - h, w, h * 2), font=font, fontSize=fontSize, align=align)
 
     def textBox(self, txt, box, font=_FALLBACKFONT, fontSize=10, align=None, hyphenation=None):
         """
@@ -273,7 +273,7 @@ class BezierPath(BasePen):
                     glyph = CoreText.CTRunGetGlyphs(ctRun, (i, 1), None)[0]
                     ax, ay = CoreText.CTRunGetPositions(ctRun, (i, 1), None)[0]
                     if glyph:
-                        self._path.moveToPoint_((x+originX+ax, y+originY+ay+baselineShift))
+                        self._path.moveToPoint_((x + originX + ax, y + originY + ay + baselineShift))
                         self._path.appendBezierPathWithGlyph_inFont_(glyph, font)
         self.optimizePath()
         return context.clippedText(txt, box, align)
@@ -346,20 +346,20 @@ class BezierPath(BasePen):
         if self._path.isEmpty():
             return None
         (x, y), (w, h) = self._path.bounds()
-        return x, y, x+w, y+h
+        return x, y, x + w, y + h
 
     def controlPointBounds(self):
         """
         Return the bounding box of the path including the offcurve points.
         """
         (x, y), (w, h) = self._path.controlPointBounds()
-        return x, y, x+w, y+h
+        return x, y, x + w, y + h
 
     def optimizePath(self):
         count = self._path.elementCount()
-        if self._path.elementAtIndex_(count-1) == AppKit.NSMoveToBezierPathElement:
+        if self._path.elementAtIndex_(count - 1) == AppKit.NSMoveToBezierPathElement:
             optimizedPath = AppKit.NSBezierPath.bezierPath()
-            for i in range(count-1):
+            for i in range(count - 1):
                 instruction, points = self._path.elementAtIndex_associatedPoints_(i)
                 if instruction == AppKit.NSMoveToBezierPathElement:
                     optimizedPath.moveToPoint_(*points)

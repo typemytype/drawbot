@@ -137,7 +137,7 @@ class DrawBotAppDelegate(AppKit.NSObject):
     def showPreferences_(self, sender):
         try:
             self.preferencesController.show()
-        except:
+        except Exception:
             self.preferencesController = PreferencesController()
 
     def showDebug_(self, sender):
@@ -167,7 +167,7 @@ class DrawBotAppDelegate(AppKit.NSObject):
         document, error = documentController.openUntitledDocumentAndDisplay_error_(True, None)
         try:
             code = code.decode("utf-8")
-        except:
+        except Exception:
             pass
         document.vanillaWindowController.setCode(code)
 
@@ -184,7 +184,7 @@ class DrawBotAppDelegate(AppKit.NSObject):
             "Read the code before running it so you know what it will do. If you don't understand it, don't run it.\n\n"
             "Do you want to open this Script?" % (fileName, domain),
             result
-            )
+        )
 
     def performFindPanelAction_(self, action):
         try:
@@ -193,7 +193,7 @@ class DrawBotAppDelegate(AppKit.NSObject):
             view = AppKit.NSApp().keyWindow().firstResponder()
             dest = view.superview().superview().superview()._contentView().documentView()
             dest.performFindPanelAction_(action)
-        except:
+        except Exception:
             pass
 
 

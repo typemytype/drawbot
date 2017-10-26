@@ -208,25 +208,25 @@ class SyntaxColors(Group):
         x = 10
         y = 10
         self.fontText = TextBox((x, y, middle, 22), "Font:", alignment="right")
-        self.font = EditText((x+middle+gutter, y, -100, 22), readOnly=True)
+        self.font = EditText((x + middle + gutter, y, -100, 22), readOnly=True)
         self.font.getNSTextField().setAlignment_(NSCenterTextAlignment)
         self.selectFont = Button((-90, y, -10, 22), "Select...", callback=self.selectFontCallback)
         y += 30
         self.backgroundColorText = TextBox((x, y, middle, 22), "Background:", alignment="right")
-        self.backgroundColor = ColorWell((x+middle+gutter, y-2, 50, 25), callback=self.setToDefaults)
+        self.backgroundColor = ColorWell((x + middle + gutter, y - 2, 50, 25), callback=self.setToDefaults)
 
         x = -255
         self.hightLightColorText = TextBox((x, y, middle, 22), "Text Selection:", alignment="right")
-        self.hightLightColor = ColorWell((x+middle+gutter, y-2, 50, 25), callback=self.setToDefaults)
+        self.hightLightColor = ColorWell((x + middle + gutter, y - 2, 50, 25), callback=self.setToDefaults)
         y += 30
 
         columnDescriptions = [
-                dict(title="Element", key="tokenString", width=170, cell=PreviewTokeCell.alloc().init()),
-                dict(title="Color", key="color", width=100, cell=ColorCell.alloc().initWithDoubleClickCallack_(self.colorDoubleClickCallback), editable=True),
-                dict(title="", key="bold", width=50, cell=CheckBoxListCell("Bold")),
-                dict(title="", key="italic", width=50, cell=CheckBoxListCell("Italic")),
-                dict(title="", key="underline", width=90, cell=CheckBoxListCell("Underline")),
-            ]
+            dict(title="Element", key="tokenString", width=170, cell=PreviewTokeCell.alloc().init()),
+            dict(title="Color", key="color", width=100, cell=ColorCell.alloc().initWithDoubleClickCallack_(self.colorDoubleClickCallback), editable=True),
+            dict(title="", key="bold", width=50, cell=CheckBoxListCell("Bold")),
+            dict(title="", key="italic", width=50, cell=CheckBoxListCell("Italic")),
+            dict(title="", key="underline", width=90, cell=CheckBoxListCell("Underline")),
+        ]
 
         self.tokenList = List((10, y, -10, -10), [],
                               columnDescriptions=columnDescriptions,

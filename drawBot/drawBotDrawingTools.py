@@ -10,7 +10,6 @@ from context import getContextForFileExt
 from context.baseContext import BezierPath, FormattedString
 from context.dummyContext import DummyContext
 
-from context.tools import openType
 from context.tools.imageObject import ImageObject
 from context.tools import gifTools
 
@@ -33,7 +32,9 @@ def _deprecatedWarningLowercase(txt):
 def _deprecatedWarningWrapInTuple(txt):
     warnings.warn("deprecated syntax, wrap x and y values in a tuple: '%s'" % txt)
 
+
 _chachedPixelColorBitmaps = {}
+
 
 _paperSizes = {
     'Letter'      : (612, 792),
@@ -76,7 +77,7 @@ class DrawBotDrawingTool(object):
         try:
             import drawBotSettings
             return drawBotSettings.__version__
-        except:
+        except Exception:
             pass
         return ""
 
@@ -625,7 +626,7 @@ class DrawBotDrawingTool(object):
         try:
             a, b = x
         except TypeError:
-            args = [args[i:i+2] for i in range(0, len(args), 2)]
+            args = [args[i:i + 2] for i in range(0, len(args), 2)]
             _deprecatedWarningWrapInTuple("polygon((%s, %s), %s)" % (x, y, ", ".join([str(i) for i in args])))
         else:
             args = list(args)
@@ -818,7 +819,7 @@ class DrawBotDrawingTool(object):
         self._requiresNewFirstPage = True
         self._addInstruction("cmykFill", c, m, y, k, alpha)
 
-    def cmykfill(self, c,  m=None, y=None, k=None, alpha=1):
+    def cmykfill(self, c, m=None, y=None, k=None, alpha=1):
         _deprecatedWarningLowercase("cmykFill(%s, %s, %s, %s, alpha=%s)" % (c, m, y, k, alpha))
         self.cmykFill(c, m, y, k)
 
@@ -845,7 +846,7 @@ class DrawBotDrawingTool(object):
         self._requiresNewFirstPage = True
         self._addInstruction("cmykStroke", c, m, y, k, alpha)
 
-    def cmykstroke(self, c,  m=None, y=None, k=None, alpha=1):
+    def cmykstroke(self, c, m=None, y=None, k=None, alpha=1):
         _deprecatedWarningLowercase("cmykStroke(%s, %s, %s, %s, alpha=%s)" % (c, m, y, k, alpha))
         self.cmykStroke(c, m, y, k)
 
@@ -1590,7 +1591,7 @@ class DrawBotDrawingTool(object):
         origins = CoreText.CTFrameGetLineOrigins(box, (0, len(ctLines)), None)
         if origins:
             y -= origins[0][1]
-        self.textBox(txt, (x, y-h, w, h*2), align=align)
+        self.textBox(txt, (x, y - h, w, h * 2), align=align)
 
     def textOverflow(self, txt, box, align=None):
         """
@@ -1889,9 +1890,9 @@ class DrawBotDrawingTool(object):
             elif _isPDF and pageNumber is None:
                 rep = AppKit.NSImage.alloc().initByReferencingURL_(url)
             elif _isGIF and pageNumber is not None:
-                rep = gifTools.gifFrameAtIndex(url, pageNumber-1)
+                rep = gifTools.gifFrameAtIndex(url, pageNumber - 1)
             elif _isPDF and pageNumber is not None:
-                page = pdfDocument.pageAtIndex_(pageNumber-1)
+                page = pdfDocument.pageAtIndex_(pageNumber - 1)
                 # this is probably not the fastest method...
                 rep = AppKit.NSImage.alloc().initWithData_(page.dataRepresentation())
             else:
@@ -2366,7 +2367,7 @@ class DrawBotDrawingTool(object):
         try:
             controller._variableController.buildUI(variables)
             controller._variableController.show()
-        except:
+        except Exception:
             controller._variableController = VariableController(variables, controller.runCode, document)
 
         data = controller._variableController.get()

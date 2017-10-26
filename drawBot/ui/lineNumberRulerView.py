@@ -37,9 +37,9 @@ class NSLineNumberRuler(NSRulerView):
 
     def textAttributes(self):
         return {
-                NSFontAttributeName: self.font(),
-                NSForegroundColorAttributeName: self.textColor()
-                }
+            NSFontAttributeName: self.font(),
+            NSForegroundColorAttributeName: self.textColor()
+        }
 
     def setRulerBackgroundColor_(self, color):
         self._rulerBackgroundColor = color
@@ -123,9 +123,9 @@ class NSLineNumberRuler(NSRulerView):
         lineCount = len(self.lineIndices())
         digits = int(math.log10(lineCount) + 1)
 
-        sampleString = NSString.stringWithString_("8"*digits)
+        sampleString = NSString.stringWithString_("8" * digits)
         stringSize = sampleString.sizeWithAttributes_(self.textAttributes())
-        return math.ceil(max([self.DEFAULT_THICKNESS, stringSize.width + self.RULER_MARGIN*2]))
+        return math.ceil(max([self.DEFAULT_THICKNESS, stringSize.width + self.RULER_MARGIN * 2]))
 
     def lineNumberForCharacterIndex_inText_(self, index, text):
         lines = self.lineIndices()
@@ -181,14 +181,14 @@ class NSLineNumberRuler(NSRulerView):
             index = lines[line]
             if NSLocationInRange(index, _range):
                 rects, rectCount = layoutManager.rectArrayForCharacterRange_withinSelectedCharacterRange_inTextContainer_rectCount_(
-                                                    NSMakeRange(index, 0),
-                                                    nullRange,
-                                                    container,
-                                                    None
-                                                    )
+                    NSMakeRange(index, 0),
+                    nullRange,
+                    container,
+                    None
+                )
                 if rectCount > 0:
                     ypos = yinset + NSMinY(rects[0]) - NSMinY(visibleRect)
-                    labelText = NSString.stringWithString_("%s" % (line+1))
+                    labelText = NSString.stringWithString_("%s" % (line + 1))
                     stringSize = labelText.sizeWithAttributes_(textAttributes)
 
                     x = NSWidth(bounds) - stringSize.width - self.RULER_MARGIN
@@ -202,7 +202,7 @@ class NSLineNumberRuler(NSRulerView):
                 break
 
         path = NSBezierPath.bezierPath()
-        path.moveToPoint_((bounds.origin.x+bounds.size.width, bounds.origin.y))
-        path.lineToPoint_((bounds.origin.x+bounds.size.width, bounds.origin.y+bounds.size.height))
+        path.moveToPoint_((bounds.origin.x + bounds.size.width, bounds.origin.y))
+        path.lineToPoint_((bounds.origin.x + bounds.size.width, bounds.origin.y + bounds.size.height))
         NSColor.grayColor().set()
         path.stroke()
