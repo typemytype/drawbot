@@ -802,17 +802,32 @@ class FormattedString(object):
     )
 
     def __init__(self, txt=None, **kwargs):
-        attributes = self._validateAttributes(kwargs)
         self.clear()
-        for key, value in attributes.items():
+        # create all _<attributes> in the formatted text object
+        # with default values
+        for key, value in self._formattedAttributes.items():
             setattr(self, "_%s" % key, value)
+        attributes = self._validateAttributes(kwargs, addDefaults=False)
         if txt:
             self.append(txt, **attributes)
+        else:
+            # call each method with the provided value
+            for key, value in attributes.items():
+                self._setAttribute(key, value)
+
+    def _setAttribute(self, attribute, value):
+        method = getattr(self, attribute)
+        if isinstance(value, (list, tuple)):
+            method(*value)
+        elif isinstance(value, dict):
+            method(**value)
+        else:
+            method(value)
 
     def _validateAttributes(self, attributes, addDefaults=True):
         for attribute in attributes:
             if attribute not in self._formattedAttributes:
-                raise TypeError("got an unexpected keyword argument '%s'" % attribute)
+                raise TypeError("FormattedString got an unexpected keyword argument '%s'" % attribute)
         result = dict()
         if addDefaults:
             for key, value in self._formattedAttributes.items():
@@ -844,6 +859,7 @@ class FormattedString(object):
         * `tracking`: set tracking for the given text
         * `baselineShift`: set base line shift for the given text
         * `openTypeFeatures`: enable OpenType features
+        * `fontVariations`: pick a variation by an axes values
         * `tabs`: enable tabs
         * `indent`: the indent of a paragraph
         * `tailIndent`: the tail indent of a paragraph
@@ -864,45 +880,23 @@ class FormattedString(object):
                 pass
         attributes = self._validateAttributes(kwargs, addDefaults=False)
         for key, value in attributes.items():
-            if value is not None:
-                setattr(self, "_%s" % key, value)
-
-        if self._fill is not None:
-            try:
-                len(self._fill)
-            except Exception:
-                self._fill = (self._fill,)
-        if self._stroke is not None:
-            try:
-                len(self._stroke)
-            except Exception:
-                self._stroke = (self._stroke,)
-        if self._fill:
-            self._cmykFill = None
-        elif self._cmykFill:
-            self._fill = None
-
-        if self._stroke:
-            self._cmykStroke = None
-        elif self._cmykStroke:
-            self._stroke = None
+            self._setAttribute(key, value)
 
         if isinstance(txt, FormattedString):
             self._attributedString.appendAttributedString_(txt.getNSObject())
             return
         attributes = {}
         if self._font:
-            fontName = _tryInstallFontFromFontName(self._font)
-            font = AppKit.NSFont.fontWithName_size_(fontName, self._fontSize)
+            font = AppKit.NSFont.fontWithName_size_(self._font, self._fontSize)
             if font is None:
                 ff = self._fallbackFont
                 if ff is None:
                     ff = _FALLBACKFONT
-                warnings.warn("font: '%s' is not installed, back to the fallback font: '%s'" % (fontName, ff))
+                warnings.warn("font: '%s' is not installed, back to the fallback font: '%s'" % (self._font, ff))
                 font = AppKit.NSFont.fontWithName_size_(ff, self._fontSize)
             coreTextfeatures = []
             if self._openTypeFeatures:
-                existingOpenTypeFeatures = openType.getFeatureTagsForFontName(fontName)
+                existingOpenTypeFeatures = openType.getFeatureTagsForFontName(self._font)
                 # sort features by their on/off state
                 # set all disabled features first
                 orderedOpenTypeFeatures = sorted(self._openTypeFeatures.items(), key=lambda (k, v): v)
@@ -913,14 +907,14 @@ class FormattedString(object):
                     if coreTextFeatureTag in openType.featureMap:
                         if value and featureTag not in existingOpenTypeFeatures:
                             # only warn when the feature is on and not existing for the current font
-                            warnings.warn("OpenType feature '%s' not available for '%s'" % (featureTag, fontName))
+                            warnings.warn("OpenType feature '%s' not available for '%s'" % (featureTag, self._font))
                         feature = openType.featureMap[coreTextFeatureTag]
                         coreTextfeatures.append(feature)
                     else:
                         warnings.warn("OpenType feature '%s' not available" % (featureTag))
             coreTextFontVariations = dict()
             if self._fontVariations:
-                existingAxes = variation.getVariationAxesForFontName(fontName)
+                existingAxes = variation.getVariationAxesForFontName(self._font)
                 for axis, value in self._fontVariations.items():
                     if axis in existingAxes:
                         existinsAxis = existingAxes[axis]
@@ -931,7 +925,7 @@ class FormattedString(object):
                             value = existinsAxis["maxValue"]
                         coreTextFontVariations[variation.convertVariationTagToInt(axis)] = value
                     else:
-                        warnings.warn("variation axis '%s' not available for '%s'" % (axis, fontName))
+                        warnings.warn("variation axis '%s' not available for '%s'" % (axis, self._font))
             fontAttributes = {}
             if coreTextfeatures:
                 fontAttributes[CoreText.NSFontFeatureSettingsAttribute] = coreTextfeatures
@@ -1225,7 +1219,7 @@ class FormattedString(object):
 
     def fontVariations(self, *args, **axes):
         """
-        Pick a variation by an axis value.
+        Pick a variation by an axes values.
         """
         if args and args[0] is None:
             self._fontVariations.clear()
