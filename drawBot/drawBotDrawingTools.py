@@ -2039,6 +2039,8 @@ class DrawBotDrawingTool(object):
     def linkDestination(self, name, x=None, y=None):
         """
         Add a destination point for a link within a PDF.
+
+        The destination position will be set independent of the current context transformations.
         """
         if x:
             if len(x) == 2:
@@ -2051,6 +2053,8 @@ class DrawBotDrawingTool(object):
     def linkRect(self, name, (x, y, w, h)):
         """
         Add a rect for a link within a PDF.
+
+        The link rectangle will be set independent of the current context transformations.
         """
         self._requiresNewFirstPage = True
         self._addInstruction("linkRect", name, (x, y, w, h))
