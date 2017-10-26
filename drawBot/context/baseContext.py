@@ -814,6 +814,7 @@ class FormattedString(object):
             # call each method with the provided value
             for key, value in attributes.items():
                 self._setAttribute(key, value)
+            self._setColorAttributes(attributes)
 
     def _setAttribute(self, attribute, value):
         method = getattr(self, attribute)
@@ -823,6 +824,33 @@ class FormattedString(object):
             method(**value)
         else:
             method(value)
+
+    def _setColorAttributes(self, attributes):
+        colorAttributeNames = ("fill", "stroke", "cmykFill", "cmykStroke")
+        for key in colorAttributeNames:
+            value = attributes.get(key)
+            if value is not None:
+                setattr(self, "_%s" % key, value)
+
+        if self._fill is not None:
+            try:
+                len(self._fill)
+            except Exception:
+                self._fill = (self._fill,)
+        if self._stroke is not None:
+            try:
+                len(self._stroke)
+            except Exception:
+                self._stroke = (self._stroke,)
+        if self._fill:
+            self._cmykFill = None
+        elif self._cmykFill:
+            self._fill = None
+
+        if self._stroke:
+            self._cmykStroke = None
+        elif self._cmykStroke:
+            self._stroke = None
 
     def _validateAttributes(self, attributes, addDefaults=True):
         for attribute in attributes:
@@ -881,6 +909,7 @@ class FormattedString(object):
         attributes = self._validateAttributes(kwargs, addDefaults=False)
         for key, value in attributes.items():
             self._setAttribute(key, value)
+        self._setColorAttributes(attributes)
 
         if isinstance(txt, FormattedString):
             self._attributedString.appendAttributedString_(txt.getNSObject())
@@ -1004,9 +1033,13 @@ class FormattedString(object):
         self._attributedString.appendAttributedString_(txt)
 
     def __add__(self, txt):
-        attributes = {key: getattr(self, "_%s" % key) for key in self._formattedAttributes}
         new = self.copy()
-        new.append(txt, **attributes)
+        if isinstance(txt, self.__class__):
+            new.getNSObject().appendAttributedString_(txt.getNSObject())
+        else:
+            if not isinstance(txt, (str, unicode)):
+                raise TypeError("FormattedString requires a str or unicode, got '%s'" % type(txt))
+            new.append(txt)
         return new
 
     def __getitem__(self, index):
