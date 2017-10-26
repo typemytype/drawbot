@@ -911,7 +911,8 @@ class FormattedString(object):
                     if not value:
                         coreTextFeatureTag = "%s_off" % featureTag
                     if coreTextFeatureTag in openType.featureMap:
-                        if featureTag not in existingOpenTypeFeatures:
+                        if value and featureTag not in existingOpenTypeFeatures:
+                            # only warn when the feature is on and not existing for the current font
                             warnings.warn("OpenType feature '%s' not available for '%s'" % (featureTag, fontName))
                         feature = openType.featureMap[coreTextFeatureTag]
                         coreTextfeatures.append(feature)
