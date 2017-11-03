@@ -1259,7 +1259,7 @@ class FormattedString(object):
         else:
             self._fontVariations.update(axes)
 
-    def listFontVariations(self, fontName):
+    def listFontVariations(self, fontName=None):
         """
         List all variation axes for the current font.
 
