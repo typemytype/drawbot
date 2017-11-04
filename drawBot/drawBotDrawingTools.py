@@ -2082,10 +2082,22 @@ class DrawBotDrawingTool(object):
         _deprecatedWarningLowercase("textSize(%s, %s)" % (txt, align))
         return self.textSize(txt, align)
 
-    def installedFonts(self):
+    def installedFonts(self, supportsCharacters=None):
         """
         Returns a list of all installed fonts.
+
+        Optionally a string with `supportsCharacters` can be provided,
+        the list of available installed fonts will be filterd by
+        support of these characters,
         """
+        if supportsCharacters is not None:
+            if len(supportsCharacters) == 0:
+                raise DrawBotError("supportsCharacters must contain at least one character")
+            characterSet = AppKit.NSCharacterSet.characterSetWithCharactersInString_(supportsCharacters)
+            fontAttributes = {CoreText.NSFontCharacterSetAttribute: characterSet}
+            fontDescriptor = CoreText.CTFontDescriptorCreateWithAttributes(fontAttributes)
+            descriptions = fontDescriptor.matchingFontDescriptorsWithMandatoryKeys_(None)
+            return [str(description[CoreText.NSFontNameAttribute]) for description in descriptions]
         return [str(f) for f in AppKit.NSFontManager.sharedFontManager().availableFonts()]
 
     def installedfonts(self):
@@ -2154,6 +2166,31 @@ class DrawBotDrawingTool(object):
             else:
                 raise DrawBotError("Font '%s' is not .ttf, .otf or .ttc." % fontPath)
         return fontName
+
+    def fontContainsCharacters(self, characters):
+        """
+        Return a bool if the current font contains the provided `characters`.
+        Characters is a string containing one or more characters.
+        """
+        return self._dummyContext._state.text.fontContainsCharacters(characters)
+
+    def fontContainsGlyph(self, glyphName):
+        """
+        Return a bool if the current font contains a provided glyph name.
+        """
+        return self._dummyContext._state.text.fontContainsGlyph(glyphName)
+
+    def fontFilePath(self):
+        """
+        Return the path to the file of the current font.
+        """
+        return self._dummyContext._state.fontFilePath()
+
+    def listFontGlyphNames(self):
+        """
+        Return a list of glyph names supported by the current font.
+        """
+        return self._dummyContext._state.listFontGlyphNames()
 
     def fontAscender(self):
         """
