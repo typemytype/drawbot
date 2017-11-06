@@ -2184,13 +2184,13 @@ class DrawBotDrawingTool(object):
         """
         Return the path to the file of the current font.
         """
-        return self._dummyContext._state.fontFilePath()
+        return self._dummyContext._state.text.fontFilePath()
 
     def listFontGlyphNames(self):
         """
         Return a list of glyph names supported by the current font.
         """
-        return self._dummyContext._state.listFontGlyphNames()
+        return self._dummyContext._state.text.listFontGlyphNames()
 
     def fontAscender(self):
         """
