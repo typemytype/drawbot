@@ -454,6 +454,8 @@ class BezierPath(BasePen):
         contours = self.contours
         for contour in contours:
             contour.drawPoints = contour.drawToPointPen
+            if contour.open:
+                raise DrawBotError("open contours are not supported during boolean operations")
         return contours
 
     def union(self, other):
