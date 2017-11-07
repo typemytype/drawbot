@@ -1,11 +1,14 @@
 # -*- coding: UTF-8 -*-
 import __future__
+import AppKit
 import os
 import sys
 import traceback
 import site
 import tempfile
 import re
+
+from vanilla.vanillaBase import osVersion10_10, osVersionCurrent
 
 from drawBot.misc import getDefault
 
@@ -25,8 +28,10 @@ class StdOutput(object):
                 data = "XXX " + repr(data)
         if self.outputView is not None:
             self.outputView.append(data, self.isError)
-            self.outputView.forceUpdate()
+            # self.outputView.forceUpdate()
             self.outputView.scrollToEnd()
+            if osVersionCurrent >= osVersion10_10:
+                AppKit.NSRunLoop.mainRunLoop().runUntilDate_(AppKit.NSDate.dateWithTimeIntervalSinceNow_(0.0001))
         else:
             self.data.append((data, self.isError))
 
@@ -145,7 +150,7 @@ def hasEncodingDeclaration(source):
             return True
     return False
 
-    
+
 class ScriptRunner(object):
 
     def __init__(self, text=None, path=None, stdout=None, stderr=None, namespace=None, checkSyntaxOnly=False):
