@@ -1456,7 +1456,7 @@ class FormattedString(object):
             # provide a fontNumber as lots of fonts are .ttc font files.
             fontToolsFont = TTFont(path, lazy=True, fontNumber=0)
         except TTLibError:
-            warnings.warn("Cannot read the '%s' at the path '%s'" % (self._font, path))
+            warnings.warn("Cannot read the font file for '%s' at the path '%s'" % (self._font, path))
             return []
         glyphNames = fontToolsFont.getGlyphNames()
         fontToolsFont.close()
