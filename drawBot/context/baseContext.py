@@ -1415,6 +1415,58 @@ class FormattedString(object):
         new._attributedString = self._attributedString.mutableCopy()
         return new
 
+    def fontContainsCharacters(self, characters):
+        """
+        Return a bool if the current font contains the provided `characters`.
+        Characters is a string containing one or more characters.
+        """
+        font = AppKit.NSFont.fontWithName_size_(self._font, self._fontSize)
+        if font is None:
+            return False
+        result, glyphs = CoreText.CTFontGetGlyphsForCharacters(font, characters, None, len(characters))
+        return result
+
+    def fontContainsGlyph(self, glyphName):
+        font = AppKit.NSFont.fontWithName_size_(self._font, self._fontSize)
+        if font is None:
+            return False
+        glyph = font.glyphWithName_(glyphName)
+        return bool(glyph)
+
+    def fontFilePath(self):
+        """
+        Return the path to the file of the current font.
+        """
+        font = AppKit.NSFont.fontWithName_size_(self._font, self._fontSize)
+        if font is not None:
+            url = CoreText.CTFontDescriptorCopyAttribute(font.fontDescriptor(), CoreText.kCTFontURLAttribute)
+            if url:
+                return url.path()
+        warnings.warn("Cannot find the path to the font '%s'." % self._font)
+        return None
+
+    def listFontGlyphNames(self):
+        """
+        Return a list of glyph names supported by the current font.
+        """
+        from fontTools.ttLib import TTFont, TTLibError
+        path = self.fontFilePath()
+        if path is None:
+            return []
+        try:
+            # load the font with fontTools
+            # provide a fontNumber as lots of fonts are .ttc font files.
+            fontToolsFont = TTFont(path, lazy=True, fontNumber=0)
+        except TTLibError:
+            warnings.warn("Cannot read the font file for '%s' at the path '%s'" % (self._font, path))
+            return []
+        glyphNames = fontToolsFont.getGlyphNames()
+        fontToolsFont.close()
+        # remove .notdef from glyph names
+        if ".notdef" in glyphNames:
+            glyphNames.remove(".notdef")
+        return glyphNames
+
     def fontAscender(self):
         """
         Returns the current font ascender, based on the current `font` and `fontSize`.

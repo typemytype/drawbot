@@ -18,6 +18,10 @@ Text Properties
 Font Properties
 ---------------
 
+.. autofunction:: drawBot.fontContainsCharacters
+.. autofunction:: drawBot.fontContainsGlyph
+.. autofunction:: drawBot.fontFilePath
+.. autofunction:: drawBot.listFontGlyphNames
 .. autofunction:: drawBot.fontDescender
 .. autofunction:: drawBot.fontAscender
 .. autofunction:: drawBot.fontXHeight
