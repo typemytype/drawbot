@@ -145,7 +145,7 @@ def hasEncodingDeclaration(source):
             return True
     return False
 
-    
+
 class ScriptRunner(object):
 
     def __init__(self, text=None, path=None, stdout=None, stderr=None, namespace=None, checkSyntaxOnly=False):
