@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+
 import platform
 from distutils.version import StrictVersion
 import AppKit
@@ -6,9 +8,9 @@ import Quartz
 
 import math
 
-from tools import gifTools
+from .tools import gifTools
 
-from baseContext import BaseContext, FormattedString
+from .baseContext import BaseContext, FormattedString
 from drawBot.misc import DrawBotError, isPDF, isGIF
 
 
@@ -263,7 +265,8 @@ class PDFContext(BaseContext):
                     raise DrawBotError("No image found at %s" % key)
         return self._cachedImages[key]
 
-    def _image(self, path, (x, y), alpha, pageNumber):
+    def _image(self, path, xy, alpha, pageNumber):
+        x, y = xy
         self._save()
         _isPDF, image = self._getImageSource(path, pageNumber)
         if image is not None:
@@ -382,7 +385,8 @@ class PDFContext(BaseContext):
             return Quartz.CGColorCreateGenericGray(c.whiteComponent(), c.alphaComponent())
         return Quartz.CGColorCreateGenericRGB(c.redComponent(), c.greenComponent(), c.blueComponent(), c.alphaComponent())
 
-    def _linkDestination(self, name, (x, y)):
+    def _linkDestination(self, name, xy):
+        x, y = xy
         if (x, y) == (None, None):
             x, y = self.width * 0.5, self.height * 0.5
         x = max(0, min(x, self.width))
@@ -390,6 +394,7 @@ class PDFContext(BaseContext):
         centerPoint = Quartz.CGPoint(x, y)
         Quartz.CGPDFContextAddDestinationAtPoint(self._pdfContext, name, centerPoint)
 
-    def _linkRect(self, name, (x, y, w, h)):
+    def _linkRect(self, name, xywh):
+        x, y, w, h = xywh
         rectBox = Quartz.CGRectMake(x, y, w, h)
         Quartz.CGPDFContextSetDestinationForRect(self._pdfContext, name, rectBox)

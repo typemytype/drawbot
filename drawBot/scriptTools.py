@@ -13,6 +13,8 @@ from vanilla.vanillaBase import osVersion10_10, osVersionCurrent
 
 from drawBot.misc import getDefault
 
+from fontTools.misc.py23 import PY2
+
 
 class StdOutput(object):
 
@@ -23,7 +25,7 @@ class StdOutput(object):
         self._previousFlush = time.time()
 
     def write(self, data):
-        if isinstance(data, str):
+        if PY2 and isinstance(data, str):
             try:
                 data = unicode(data, "utf-8", "replace")
             except UnicodeDecodeError:
@@ -219,7 +221,7 @@ class ScriptRunner(object):
                 if not checkSyntaxOnly:
                     self._scriptDone = False
                     try:
-                        exec code in namespace
+                        exec(code, namespace)
                     except KeyboardInterrupt:
                         pass
                     except:

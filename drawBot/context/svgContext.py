@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+
 import AppKit
 import CoreText
 
@@ -10,8 +12,8 @@ from fontTools.misc.xmlWriter import XMLWriter
 
 from fontTools.misc.transform import Transform
 
-from tools.openType import getFeatureTagsForFontAttributes
-from baseContext import BaseContext, GraphicsState, Shadow, Color, FormattedString, Gradient
+from .tools.openType import getFeatureTagsForFontAttributes
+from .baseContext import BaseContext, GraphicsState, Shadow, Color, FormattedString, Gradient
 
 from drawBot.misc import warnings, formatNumber
 
@@ -433,10 +435,11 @@ class SVGContext(BaseContext):
         self._svgContext.newline()
         self._svgEndClipPath()
 
-    def _image(self, path, (x, y), alpha, pageNumber):
+    def _image(self, path, xy, alpha, pageNumber):
         # todo:
         # support embedding of images when the source is not a path but
         # a nsimage or a pdf / gif with a pageNumber
+        x, y = xy
         self._svgBeginClipPath()
         if path.startswith("http"):
             url = AppKit.NSURL.URLWithString_(path)

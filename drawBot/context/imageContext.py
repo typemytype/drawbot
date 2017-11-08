@@ -1,9 +1,11 @@
+from __future__ import absolute_import
+
 import AppKit
 import Quartz
 
 import os
 
-from pdfContext import PDFContext
+from .pdfContext import PDFContext
 
 
 class ImageContext(PDFContext):

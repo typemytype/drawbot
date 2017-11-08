@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+
 import AppKit
 import CoreText
 import Quartz
@@ -6,14 +8,16 @@ import math
 import os
 import random
 
-from context import getContextForFileExt
-from context.baseContext import BezierPath, FormattedString
-from context.dummyContext import DummyContext
+from .context import getContextForFileExt
+from .context.baseContext import BezierPath, FormattedString
+from .context.dummyContext import DummyContext
 
-from context.tools.imageObject import ImageObject
-from context.tools import gifTools
+from .context.tools.imageObject import ImageObject
+from .context.tools import gifTools
 
-from misc import DrawBotError, warnings, VariableController, optimizePath, isPDF, isEPS, isGIF
+from .misc import DrawBotError, warnings, VariableController, optimizePath, isPDF, isEPS, isGIF
+
+from fontTools.misc.py23 import basestring
 
 
 def _getmodulecontents(module, names=None):
@@ -58,7 +62,7 @@ _paperSizes = {
     '10x14'       : (720, 1008),
 }
 
-for key, (w, h) in _paperSizes.items():
+for key, (w, h) in list(_paperSizes.items()):
     _paperSizes["%sLandscape" % key] = (h, w)
 
 
@@ -388,7 +392,7 @@ class DrawBotDrawingTool(object):
             # save it as a png and pdf on the current users desktop
             saveImage(["~/Desktop/firstImage.png", "~/Desktop/firstImage.pdf"])
         """
-        if isinstance(paths, (str, unicode)):
+        if isinstance(paths, basestring):
             paths = [paths]
         for rawPath in paths:
             path = optimizePath(rawPath)
@@ -503,10 +507,11 @@ class DrawBotDrawingTool(object):
         _deprecatedWarningLowercase("newPath()")
         self.newPath()
 
-    def moveTo(self, (x, y)):
+    def moveTo(self, xy):
         """
         Move to a point `x`, `y`.
         """
+        x, y = xy
         self._requiresNewFirstPage = True
         self._addInstruction("moveTo", (x, y))
 
@@ -514,10 +519,11 @@ class DrawBotDrawingTool(object):
         _deprecatedWarningLowercase("moveTo((%s, %s))" % (x, y))
         self.moveTo((x, y))
 
-    def lineTo(self, (x, y)):
+    def lineTo(self, xy):
         """
         Line to a point `x`, `y`.
         """
+        x, y = xy
         self._requiresNewFirstPage = True
         self._addInstruction("lineTo", (x, y))
 
@@ -525,11 +531,14 @@ class DrawBotDrawingTool(object):
         _deprecatedWarningLowercase("lineTo((%s, %s))" % (x, y))
         self.lineTo((x, y))
 
-    def curveTo(self, (x1, y1), (x2, y2), (x3, y3)):
+    def curveTo(self, xy1, xy2, xy3):
         """
         Curve to a point `x3`, `y3`.
         With given bezier handles `x1`, `y1` and `x2`, `y2`.
         """
+        x1, y1 = xy1
+        x2, y2 = xy2
+        x3, y3 = xy3
         self._requiresNewFirstPage = True
         self._addInstruction("curveTo", (x1, y1), (x2, y2), (x3, y3))
 
@@ -544,10 +553,12 @@ class DrawBotDrawingTool(object):
         self._requiresNewFirstPage = True
         self._addInstruction("arc", center, radius, startAngle, endAngle, clockwise)
 
-    def arcTo(self, (x1, y1), (x2, y2), radius):
+    def arcTo(self, xy1, xy2, radius):
         """
         Arc from one point to an other point with a given `radius`.
         """
+        x1, y1 = xy1
+        x2, y2 = xy2
         self._requiresNewFirstPage = True
         self._addInstruction("arcTo", (x1, y1), (x2, y2), radius)
 
@@ -1905,7 +1916,7 @@ class DrawBotDrawingTool(object):
             w, h = rep.size()
         return w, h
 
-    def imagePixelColor(self, path, (x, y)):
+    def imagePixelColor(self, path, xy):
         """
         Return the color `r, g, b, a` of an image at a specified `x`, `y` possition.
 
@@ -1940,6 +1951,7 @@ class DrawBotDrawingTool(object):
                         # draw some text
                         text("W", (x, y))
         """
+        x, y = xy
         if isinstance(path, (str, unicode)):
             path = optimizePath(path)
         bitmap = _chachedPixelColorBitmaps.get(path)
@@ -2050,12 +2062,13 @@ class DrawBotDrawingTool(object):
         self._requiresNewFirstPage = True
         self._addInstruction("linkDestination", name, (x, y))
 
-    def linkRect(self, name, (x, y, w, h)):
+    def linkRect(self, name, xywh):
         """
         Add a rect for a link within a PDF.
 
         The link rectangle will be set independent of the current context transformations.
         """
+        x, y, w, h = (x, y, w, h)
         self._requiresNewFirstPage = True
         self._addInstruction("linkRect", name, (x, y, w, h))
 

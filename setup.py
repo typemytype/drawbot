@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 from distutils.core import setup
 from distutils import sysconfig
 import py2app
@@ -139,53 +141,53 @@ if "-A" not in sys.argv:
     # copy external tools into the resources folder (gifsicle)
     gifsiclePathSource = os.path.join(os.getcwd(), "drawBot", "context", "tools", "gifsicle")
     gifsiclePathDest = os.path.join(appLocation, "contents", "Resources", "gifsicle")
-    print "copy", gifsiclePathSource, gifsiclePathDest
+    print("copy", gifsiclePathSource, gifsiclePathDest)
     shutil.copyfile(gifsiclePathSource, gifsiclePathDest)
-    os.chmod(gifsiclePathDest, 0775)
+    os.chmod(gifsiclePathDest, 0o775)
 
     mkbitmapPathSource = os.path.join(os.getcwd(), "drawBot", "context", "tools", "mkbitmap")
     mkbitmapPathDest = os.path.join(appLocation, "contents", "Resources", "mkbitmap")
-    print "copy", mkbitmapPathSource, mkbitmapPathDest
+    print("copy", mkbitmapPathSource, mkbitmapPathDest)
     shutil.copyfile(mkbitmapPathSource, mkbitmapPathDest)
-    os.chmod(mkbitmapPathDest, 0775)
+    os.chmod(mkbitmapPathDest, 0o775)
 
     potracePathSource = os.path.join(os.getcwd(), "drawBot", "context", "tools", "potrace")
     potracePathDest = os.path.join(appLocation, "contents", "Resources", "potrace")
-    print "copy", potracePathSource, potracePathDest
+    print("copy", potracePathSource, potracePathDest)
     shutil.copyfile(potracePathSource, potracePathDest)
-    os.chmod(potracePathDest, 0775)
+    os.chmod(potracePathDest, 0o775)
 
     if codeSignDeveloperName:
         # ================
         # = code singing =
         # ================
-        print "---------------------"
-        print "-   code signing    -"
+        print("---------------------")
+        print("-   code signing    -")
         cmds = ["codesign", "--force", "--deep", "--sign", "Developer ID Application: %s" % codeSignDeveloperName, appLocation]
         popen = subprocess.Popen(cmds)
         popen.wait()
-        print "- done code singing -"
-        print "---------------------"
+        print("- done code singing -")
+        print("---------------------")
 
-        print "------------------------------"
-        print "- verifying with codesign... -"
+        print("------------------------------")
+        print("- verifying with codesign... -")
         cmds = ["codesign", "--verify", "--verbose=4", appLocation]
         popen = subprocess.Popen(cmds)
         popen.wait()
-        print "------------------------------"
+        print("------------------------------")
 
-        print "---------------------------"
-        print "- verifying with spctl... -"
+        print("---------------------------")
+        print("- verifying with spctl... -")
         cmds = ["spctl", "--verbose=4", "--raw", "--assess", "--type", "execute", appLocation]
         popen = subprocess.Popen(cmds)
         popen.wait()
-        print "---------------------------"
+        print("---------------------------")
 
     # ================
     # = creating dmg =
     # ================
-    print "------------------------"
-    print "-    building dmg...   -"
+    print("------------------------")
+    print("-    building dmg...   -")
     if os.path.exists(existingDmgLocation):
         os.remove(existingDmgLocation)
 
@@ -203,13 +205,13 @@ if "-A" not in sys.argv:
 
     shutil.rmtree(imgLocation)
 
-    print "- done building dmg... -"
-    print "------------------------"
+    print("- done building dmg... -")
+    print("------------------------")
 
     if ftpHost and ftpPath and ftpLogin and ftpPassword:
         import ftplib
-        print "-------------------------"
-        print "-    uploading to ftp   -"
+        print("-------------------------")
+        print("-    uploading to ftp   -")
         session = ftplib.FTP(ftpHost, ftpLogin, ftpPassword)
         session.cwd(ftpPath)
 
@@ -226,6 +228,6 @@ if "-A" not in sys.argv:
         session.storbinary('STOR %s' % fileName, dmgFile)
         dmgFile.close()
 
-        print "- done uploading to ftp -"
-        print "-------------------------"
+        print("- done uploading to ftp -")
+        print("-------------------------")
         session.quit()

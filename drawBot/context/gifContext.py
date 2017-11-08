@@ -1,11 +1,13 @@
+from __future__ import absolute_import
+
 import AppKit
 import Quartz
 
 import tempfile
 
-from imageContext import ImageContext
+from .imageContext import ImageContext
 
-from tools.gifTools import generateGif
+from .tools.gifTools import generateGif
 
 
 class GifContext(ImageContext):

@@ -1,6 +1,8 @@
+from __future__ import absolute_import
+
 import Quartz
 
-from pdfContext import PDFContext
+from .pdfContext import PDFContext
 
 
 class DrawBotContext(PDFContext):

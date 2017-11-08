@@ -102,7 +102,7 @@ class DrawBotAppDelegate(AppKit.NSObject):
 
     def init(self):
         self = super(DrawBotAppDelegate, self).init()
-        code = stringToInt("GURL")
+        code = stringToInt(b"GURL")
         AppKit.NSAppleEventManager.sharedAppleEventManager().setEventHandler_andSelector_forEventClass_andEventID_(self, "getUrl:withReplyEvent:", code, code)
         return self
 
@@ -146,7 +146,7 @@ class DrawBotAppDelegate(AppKit.NSObject):
     def getUrl_withReplyEvent_(self, event, reply):
         import urlparse
         import urllib2
-        code = stringToInt("----")
+        code = stringToInt(b"----")
         url = event.paramDescriptorForKeyword_(code)
         urlString = url.stringValue()
         documentController = AppKit.NSDocumentController.sharedDocumentController()

@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+
 from AppKit import *
 
 from vanilla import *
@@ -6,7 +8,7 @@ from defconAppKit.windows.baseWindow import BaseWindowController
 
 from drawBot.misc import getDefault, setDefault, getFontDefault, setFontDefault, getColorDefault, setColorDefault
 
-from codeEditor import _textAttributesForStyle, _hexToNSColor, fallbackBackgroundColor, fallbackHightLightColor, fallbackFont, styleFromDefault, fallbackStyles
+from .codeEditor import _textAttributesForStyle, _hexToNSColor, fallbackBackgroundColor, fallbackHightLightColor, fallbackFont, styleFromDefault, fallbackStyles
 
 
 class ColorCell(NSActionCell):

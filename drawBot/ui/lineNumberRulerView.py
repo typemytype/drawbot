@@ -134,7 +134,7 @@ class NSLineNumberRuler(NSRulerView):
         right = len(lines)
 
         while (right - left) > 1:
-            mid = (right + left) / 2
+            mid = (right + left) // 2
             lineStart = lines[mid]
 
             if index < lineStart:

@@ -1,10 +1,12 @@
+from __future__ import absolute_import
+
 from AppKit import *
 
 import sys
 
 from vanilla import *
 
-from codeEditor import OutPutEditor
+from .codeEditor import OutPutEditor
 
 
 class ShowHideNSPanel(NSPanel):
