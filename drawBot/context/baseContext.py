@@ -1421,7 +1421,7 @@ class FormattedString(object):
         font = AppKit.NSFont.fontWithName_size_(self._font, self._fontSize)
         if font is None:
             return False
-        result, glyphs = CoreText.CTFontGetGlyphsForCharacters(font.fontDescriptor(), characters, None, len(characters))
+        result, glyphs = CoreText.CTFontGetGlyphsForCharacters(font, characters, None, len(characters))
         return result
 
     def fontContainsGlyph(self, glyphName):
