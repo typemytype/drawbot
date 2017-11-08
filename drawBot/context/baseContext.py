@@ -1443,7 +1443,7 @@ class FormattedString(object):
         """
         Return a list of glyph names supported by the current font.
         """
-        from fontTools.TTLib import TTFont, TTLibError
+        from fontTools.ttLib import TTFont, TTLibError
         path = self.fontPath()
         if path is None:
             return []
