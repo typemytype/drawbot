@@ -1,6 +1,7 @@
 # -*- coding: UTF-8 -*-
 import __future__
 import AppKit
+import time
 import os
 import sys
 import traceback
@@ -19,6 +20,7 @@ class StdOutput(object):
         self.data = output
         self.isError = isError
         self.outputView = outputView
+        self._previousFlush = time.time()
 
     def write(self, data):
         if isinstance(data, str):
@@ -29,9 +31,12 @@ class StdOutput(object):
         if self.outputView is not None:
             self.outputView.append(data, self.isError)
             # self.outputView.forceUpdate()
-            self.outputView.scrollToEnd()
-            if osVersionCurrent >= osVersion10_10:
-                AppKit.NSRunLoop.mainRunLoop().runUntilDate_(AppKit.NSDate.dateWithTimeIntervalSinceNow_(0.0001))
+            t = time.time()
+            if t - self._previousFlush > 0.2:
+                self.outputView.scrollToEnd()
+                if osVersionCurrent >= osVersion10_10:
+                    AppKit.NSRunLoop.mainRunLoop().runUntilDate_(AppKit.NSDate.dateWithTimeIntervalSinceNow_(0.0001))
+                self._previousFlush = t
         else:
             self.data.append((data, self.isError))
 
