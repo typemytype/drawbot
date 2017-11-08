@@ -1418,12 +1418,16 @@ class FormattedString(object):
         Return a bool if the current font contains the provided `characters`.
         Characters is a string containing one or more characters.
         """
-        fontDescriptor = CoreText.CTFontCreateWithName(self._font, self._fontSize, None)
-        result, glyphs = CoreText.CTFontGetGlyphsForCharacters(fontDescriptor, characters, None, len(characters))
+        font = AppKit.NSFont.fontWithName_size_(self._font, self._fontSize)
+        if font is None:
+            return False
+        result, glyphs = CoreText.CTFontGetGlyphsForCharacters(font.fontDescriptor(), characters, None, len(characters))
         return result
 
     def fontContainsGlyph(self, glyphName):
         font = AppKit.NSFont.fontWithName_size_(self._font, self._fontSize)
+        if font is None:
+            return False
         glyph = font.glyphWithName_(glyphName)
         return bool(glyph)
 
@@ -1431,9 +1435,9 @@ class FormattedString(object):
         """
         Return the path to the file of the current font.
         """
-        fontDescriptor = CoreText.CTFontCreateWithName(self._font, self._fontSize, None)
-        if fontDescriptor:
-            url = CoreText.CTFontDescriptorCopyAttribute(fontDescriptor, CoreText.kCTFontURLAttribute)
+        font = AppKit.NSFont.fontWithName_size_(self._font, self._fontSize)
+        if font is not None:
+            url = CoreText.CTFontDescriptorCopyAttribute(font.fontDescriptor(), CoreText.kCTFontURLAttribute)
             if url:
                 return url.path()
         warnings.warn("Cannot find the path to the font '%s'." % self._font)
