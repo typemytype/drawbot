@@ -1220,7 +1220,7 @@ class CodeNSTextView(AppKit.NSTextView):
             for c in txt:
                 if c not in "0123456789.,- ":
                     raise DrawBotError("No dragging possible")
-            exec("value = %s" % txt)
+            value = eval(txt)
         except Exception:
             pass
         return value
