@@ -184,7 +184,7 @@ class DrawBotController(BaseWindowController):
         Sets the content of a file into the code view.
         """
         # open a file
-        f = open(path)
+        f = open(path, "rb")
         # read the content
         code = f.read().decode("utf-8")
         # close the file

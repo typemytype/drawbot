@@ -25,7 +25,7 @@ class DrawBotDocument(AppKit.NSDocument):
     def writeSafelyToURL_ofType_forSaveOperation_error_(self, url, fileType, saveOperation, error):
         path = url.path()
         code = self.vanillaWindowController.code()
-        f = file(path, "w")
+        f = open(path, "wb")
         f.write(code.encode("utf8"))
         f.close()
         self._modDate = self.getModificationDate(path)
