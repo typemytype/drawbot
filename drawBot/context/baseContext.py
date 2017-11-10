@@ -7,6 +7,7 @@ import Quartz
 import math
 
 from fontTools.pens.basePen import BasePen
+from fontTools.misc.py23 import basestring, PY2
 
 from drawBot.misc import DrawBotError, cmyk2rgb, warnings
 
@@ -906,7 +907,7 @@ class FormattedString(object):
 
         Text can also be added with `formattedString += "hello"`. It will append the text with the current settings of the formatted string.
         """
-        if isinstance(txt, (str, unicode)):
+        if PY2 and isinstance(txt, basestring):
             try:
                 txt = txt.decode("utf-8")
             except UnicodeEncodeError:
@@ -1042,7 +1043,7 @@ class FormattedString(object):
         if isinstance(txt, self.__class__):
             new.getNSObject().appendAttributedString_(txt.getNSObject())
         else:
-            if not isinstance(txt, (str, unicode)):
+            if not isinstance(txt, basestring):
                 raise TypeError("FormattedString requires a str or unicode, got '%s'" % type(txt))
             new.append(txt)
         return new
@@ -1110,7 +1111,7 @@ class FormattedString(object):
         from a path.
         """
         font = _tryInstallFontFromFontName(font)
-        font = font.encode("ascii", "ignore")
+        font = font.encode("ascii", "ignore").decode("ascii")
         self._font = font
         if fontSize is not None:
             self._fontSize = fontSize
@@ -1123,7 +1124,7 @@ class FormattedString(object):
         """
         if font:
             font = _tryInstallFontFromFontName(font)
-            font = font.encode("ascii", "ignore")
+            font = font.encode("ascii", "ignore").decode("ascii")
             testFont = AppKit.NSFont.fontWithName_size_(font, self._fontSize)
             if testFont is None:
                 raise DrawBotError("Fallback font '%s' is not available" % font)

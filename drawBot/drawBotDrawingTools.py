@@ -17,7 +17,7 @@ from .context.tools import gifTools
 
 from .misc import DrawBotError, warnings, VariableController, optimizePath, isPDF, isEPS, isGIF
 
-from fontTools.misc.py23 import basestring
+from fontTools.misc.py23 import basestring, PY2
 
 
 def _getmodulecontents(module, names=None):
@@ -1307,7 +1307,7 @@ class DrawBotDrawingTool(object):
             font("Times-Italic")
         """
         fontName = self._tryInstallFontFromFontName(fontName)
-        fontName = fontName.encode("ascii", "ignore")
+        fontName = fontName.encode("ascii", "ignore").decode("ascii")
         self._dummyContext.font(fontName, fontSize)
         self._addInstruction("font", fontName, fontSize)
         return fontName
@@ -1321,7 +1321,7 @@ class DrawBotDrawingTool(object):
             fallbackFont("Times")
         """
         fontName = self._tryInstallFontFromFontName(fontName)
-        fontName = fontName.encode("ascii", "ignore")
+        fontName = fontName.encode("ascii", "ignore").decode("ascii")
         dummyFont = AppKit.NSFont.fontWithName_size_(fontName, 10)
         if dummyFont is None:
             raise DrawBotError("Fallback font '%s' is not available" % fontName)
@@ -1575,7 +1575,7 @@ class DrawBotDrawingTool(object):
             font("Times-Italic")
             text("hallo, I'm Times", (100, 100))
         """
-        if isinstance(txt, (str, unicode)):
+        if PY2 and isinstance(txt, basestring):
             try:
                 txt = txt.decode("utf-8")
             except UnicodeEncodeError:
@@ -1618,7 +1618,7 @@ class DrawBotDrawingTool(object):
         Optionally `txt` can be a `FormattedString`.
         Optionally `box` can be a `BezierPath`.
         """
-        if isinstance(txt, (str, unicode)):
+        if PY2 and isinstance(txt, basestring):
             try:
                 txt = txt.decode("utf-8")
             except UnicodeEncodeError:
@@ -1751,7 +1751,7 @@ class DrawBotDrawingTool(object):
             # draw some text in the path
             textBox("abcdefghijklmnopqrstuvwxyz"*30000, path)
         """
-        if isinstance(txt, (str, unicode)):
+        if PY2 and isinstance(txt, basestring):
             try:
                 txt = txt.decode("utf-8")
             except UnicodeEncodeError:
@@ -1779,7 +1779,7 @@ class DrawBotDrawingTool(object):
         Optionally an alignment can be set.
         Possible `align` values are: `"left"`, `"center"`, `"right"` and `"justified"`.
         """
-        if isinstance(txt, (str, unicode)):
+        if PY2 and isinstance(txt, basestring):
             try:
                 txt = txt.decode("utf-8")
             except UnicodeEncodeError:
@@ -1859,7 +1859,7 @@ class DrawBotDrawingTool(object):
             alpha = 1
         if isinstance(path, self._imageClass):
             path = path._nsImage()
-        if isinstance(path, (str, unicode)):
+        if isinstance(path, basestring):
             path = optimizePath(path)
         self._requiresNewFirstPage = True
         self._addInstruction("image", path, (x, y), alpha, pageNumber)
@@ -1882,7 +1882,7 @@ class DrawBotDrawingTool(object):
             # its an NSImage
             rep = path
         else:
-            if isinstance(path, (str, unicode)):
+            if isinstance(path, basestring):
                 path = optimizePath(path)
             if path.startswith("http"):
                 url = AppKit.NSURL.URLWithString_(path)
@@ -1952,7 +1952,7 @@ class DrawBotDrawingTool(object):
                         text("W", (x, y))
         """
         x, y = xy
-        if isinstance(path, (str, unicode)):
+        if isinstance(path, basestring):
             path = optimizePath(path)
         bitmap = _chachedPixelColorBitmaps.get(path)
         if bitmap is None:
@@ -2082,7 +2082,7 @@ class DrawBotDrawingTool(object):
         Optionally a `width` constrain or `height` constrain can be provided
         to calculate the lenght or width of text with the given constrain.
         """
-        if isinstance(txt, (str, unicode)):
+        if PY2 and isinstance(txt, basestring):
             try:
                 txt = txt.decode("utf-8")
             except UnicodeEncodeError:
