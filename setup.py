@@ -86,6 +86,7 @@ for fileName in os.listdir("Resources/Images"):
 
 # build
 setup(
+    name=appName,
     data_files=dataFiles,
     app=[dict(script="DrawBot.py", plist=plist)],
     options=dict(
@@ -125,7 +126,7 @@ setup(
 )
 
 # fix the icon
-path = os.path.join(os.path.dirname(__file__), "dist", "DrawBot.app", "Contents", "Info.plist")
+path = os.path.join(os.path.dirname(__file__), "dist", "%s.app" % appName, "Contents", "Info.plist")
 appPlist = readPlist(path)
 appPlist["CFBundleIconFile"] = "DrawBot.icns"
 writePlist(appPlist, path)
