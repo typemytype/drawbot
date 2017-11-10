@@ -277,7 +277,7 @@ def _pythonWordCompletions(text, charRange):
                 while text[charRange.location - columns] != "\n":
                     columns += 1
         script = jedi.api.Script(source=text, line=lines, column=columns)
-        keyWords += [c.word for c in script.complete()]
+        keyWords += [c.name for c in script.completions()]
     except Exception:
         pass
     keyWords = [word for word in sorted(keyWords) if word.startswith(partialString)]
