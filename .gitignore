@@ -42,3 +42,6 @@ docs/downloads
 local
 
 *.command
+
+# Finder turds
+.DS_Store
