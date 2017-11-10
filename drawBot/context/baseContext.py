@@ -1111,7 +1111,7 @@ class FormattedString(object):
         from a path.
         """
         font = _tryInstallFontFromFontName(font)
-        font = font.encode("ascii", "ignore").decode("ascii")
+        font = str(font)
         self._font = font
         if fontSize is not None:
             self._fontSize = fontSize
@@ -1124,7 +1124,7 @@ class FormattedString(object):
         """
         if font:
             font = _tryInstallFontFromFontName(font)
-            font = font.encode("ascii", "ignore").decode("ascii")
+            font = str(font)
             testFont = AppKit.NSFont.fontWithName_size_(font, self._fontSize)
             if testFont is None:
                 raise DrawBotError("Fallback font '%s' is not available" % font)
