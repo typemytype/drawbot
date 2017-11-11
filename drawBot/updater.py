@@ -16,6 +16,8 @@ from defconAppKit.windows.progressWindow import ProgressWindow
 from drawBot import __version__
 from .misc import DrawBotError, getDefault
 
+from fontTools.misc.py23 import unichr
+
 
 def getCurrentVersion():
     """
