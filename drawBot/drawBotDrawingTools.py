@@ -79,7 +79,7 @@ class DrawBotDrawingTool(object):
 
     def _get_version(self):
         try:
-            import drawBotSettings
+            from drawBot import drawBotSettings
             return drawBotSettings.__version__
         except Exception:
             pass
@@ -354,7 +354,7 @@ class DrawBotDrawingTool(object):
                     # draw an oval in each of them
                     oval(110, 10, 30, 30)
         """
-        from drawBotPageDrawingTools import DrawBotPage
+        from .drawBotPageDrawingTools import DrawBotPage
         instructions = []
         for instructionSet in self._instructionsStack:
             for callback, _, _ in instructionSet:
@@ -439,7 +439,7 @@ class DrawBotDrawingTool(object):
         """
         Return the image as a pdf document object.
         """
-        from context.drawBotContext import DrawBotContext
+        from .context.drawBotContext import DrawBotContext
         context = DrawBotContext()
         self._drawInContext(context)
         return context.getNSPDFDocument()
