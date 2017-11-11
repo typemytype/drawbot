@@ -19,7 +19,7 @@ except Exception:
 
 from vanilla import *
 from vanilla.py23 import python_method
-from fontTools.misc.py23 import PY3
+from fontTools.misc.py23 import PY3, unichr
 
 from .lineNumberRulerView import NSLineNumberRuler
 from drawBot.misc import getDefault, getFontDefault, getColorDefault, DrawBotError

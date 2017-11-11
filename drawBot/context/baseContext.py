@@ -7,7 +7,7 @@ import Quartz
 import math
 
 from fontTools.pens.basePen import BasePen
-from fontTools.misc.py23 import basestring, PY2
+from fontTools.misc.py23 import basestring, PY2, unichr
 
 from drawBot.misc import DrawBotError, cmyk2rgb, warnings
 
