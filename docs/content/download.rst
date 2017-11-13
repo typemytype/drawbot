@@ -5,6 +5,8 @@ Download
 
 > `Download DrawBot`_
 
+.. cssclass:: app-download-link
+
 > `Download DrawBot Python 3`_
 
 requirements: osX 10.9+
