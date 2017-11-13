@@ -225,7 +225,7 @@ if "-A" not in sys.argv:
         session.cwd("versionHistory")
         dmgFile = open(existingDmgLocation, 'rb')
         fileName, ext = os.path.splitext(fileName)
-        fileName = fileName + timeStamp + ext
+        fileName = fileName + "_" + timeStamp + ext
         session.storbinary('STOR %s' % fileName, dmgFile)
         dmgFile.close()
 
