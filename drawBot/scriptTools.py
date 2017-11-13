@@ -13,7 +13,7 @@ from vanilla.vanillaBase import osVersion10_10, osVersionCurrent
 
 from drawBot.misc import getDefault
 
-from fontTools.misc.py23 import PY2
+from fontTools.misc.py23 import PY2, PY3
 
 
 class StdOutput(object):
@@ -103,9 +103,23 @@ def getLocalPythonVersionDirName(standardLib=True):
     else:
         return None
 
+def getLocalPython3Paths():
+    if PY3:
+        version = "%s.%s" % (sys.version_info.major, sys.version_info.minor)
+        paths = [
+            # add local stdlib and site-packages; TODO: this needs editing once we embed the full stdlib
+            '/Library/Frameworks/Python.framework/Versions/%s/lib/python%s' % (version, version),
+            '/Library/Frameworks/Python.framework/Versions/%s/lib/python%s/lib-dynload' % (version, version),
+            '/Library/Frameworks/Python.framework/Versions/%s/lib/python%s/site-packages' % (version, version),
+            '/Library/Python/%s/site-packages' % version,
+        ]
+        return paths
+    else:
+        return []
 
 localStandardLibPath = getLocalPythonVersionDirName(standardLib=True)
 localSitePackagesPath = getLocalPythonVersionDirName(standardLib=False)
+localPy3Paths = getLocalPython3Paths()
 
 
 class DrawBotNamespace(dict):
@@ -186,6 +200,9 @@ class ScriptRunner(object):
             site.addsitedir(localStandardLibPath)
         if localSitePackagesPath and localSitePackagesPath not in sys.path:
             site.addsitedir(localSitePackagesPath)
+        for path in localPy3Paths:
+            if path not in sys.path and os.path.exists(path):
+                site.addsitedir(path)
         # here we go
         if text is None:
             f = open(path, 'rb')
