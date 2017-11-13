@@ -88,14 +88,12 @@ def _execute(cmds):
 
 
 def getLocalPythonVersionDirName(standardLib=True):
+    if PY3:
+        return None
     argument = ""
     if standardLib:
         argument = "standard_lib=True"
-    if PY2:
-        python = "python"
-    else:
-        python = "python3"
-    commands = [python, "-c", "from distutils import sysconfig; print(sysconfig.get_python_lib(%s))" % argument]
+    commands = ["python", "-c", "from distutils import sysconfig; print(sysconfig.get_python_lib(%s))" % argument]
     err, out = _execute(commands)
     sitePackages = out.split("\n")[0]
     if os.path.exists(sitePackages):
