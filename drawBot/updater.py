@@ -1,4 +1,9 @@
-import urllib2
+from __future__ import absolute_import, print_function
+
+try:
+    from urllib2 import urlopen
+except ImportError:
+    from urllib.request import urlopen
 import subprocess
 import plistlib
 import AppKit
@@ -9,7 +14,9 @@ import vanilla
 from defconAppKit.windows.progressWindow import ProgressWindow
 
 from drawBot import __version__
-from misc import DrawBotError, getDefault
+from .misc import DrawBotError, getDefault
+
+from fontTools.misc.py23 import unichr, PY2
 
 
 def getCurrentVersion():
@@ -20,7 +27,7 @@ def getCurrentVersion():
         return ""
     path = "https://raw.github.com/typemytype/drawbot/master/drawBot/drawBotSettings.py"
     try:
-        response = urllib2.urlopen(path, timeout=5)
+        response = urlopen(path, timeout=5)
         code = response.read()
         response.close()
         exec(code)
@@ -33,7 +40,10 @@ def downloadCurrentVersion():
     """
     Download the current version (dmg) and mount it
     """
-    path = "http://static.typemytype.com/drawBot/DrawBot.dmg"
+    if PY2:
+        path = "http://static.typemytype.com/drawBot/DrawBot.dmg"
+    else:
+        path = "http://static.typemytype.com/drawBot/DrawBotPy3.dmg"
     try:
         # download and mount
         cmds = ["hdiutil", "attach", "-plist", path]
@@ -49,7 +59,7 @@ def downloadCurrentVersion():
                 break
         AppKit.NSWorkspace.sharedWorkspace().openFile_(dmgPath)
     except:
-        print "Something went wrong while downloading %s" % path
+        print("Something went wrong while downloading %s" % path)
 
 
 class Updater(object):

@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+
 import AppKit
 import CoreText
 import Quartz
@@ -5,11 +7,12 @@ import Quartz
 import math
 
 from fontTools.pens.basePen import BasePen
+from fontTools.misc.py23 import basestring, PY2, unichr
 
 from drawBot.misc import DrawBotError, cmyk2rgb, warnings
 
-from tools import openType
-from tools import variation
+from .tools import openType
+from .tools import variation
 
 
 _FALLBACKFONT = "LucidaGrande"
@@ -333,10 +336,11 @@ class BezierPath(BasePen):
         """
         self._path = path
 
-    def pointInside(self, (x, y)):
+    def pointInside(self, xy):
         """
         Check if a point `x`, `y` is inside a path.
         """
+        x, y = xy
         return self._path.containsPoint_((x, y))
 
     def bounds(self):
@@ -903,7 +907,7 @@ class FormattedString(object):
 
         Text can also be added with `formattedString += "hello"`. It will append the text with the current settings of the formatted string.
         """
-        if isinstance(txt, (str, unicode)):
+        if PY2 and isinstance(txt, basestring):
             try:
                 txt = txt.decode("utf-8")
             except UnicodeEncodeError:
@@ -930,7 +934,7 @@ class FormattedString(object):
                 existingOpenTypeFeatures = openType.getFeatureTagsForFontName(self._font)
                 # sort features by their on/off state
                 # set all disabled features first
-                orderedOpenTypeFeatures = sorted(self._openTypeFeatures.items(), key=lambda (k, v): v)
+                orderedOpenTypeFeatures = sorted(self._openTypeFeatures.items(), key=lambda kv: kv[1])
                 for featureTag, value in orderedOpenTypeFeatures:
                     coreTextFeatureTag = featureTag
                     if not value:
@@ -1039,7 +1043,7 @@ class FormattedString(object):
         if isinstance(txt, self.__class__):
             new.getNSObject().appendAttributedString_(txt.getNSObject())
         else:
-            if not isinstance(txt, (str, unicode)):
+            if not isinstance(txt, basestring):
                 raise TypeError("FormattedString requires a str or unicode, got '%s'" % type(txt))
             new.append(txt)
         return new
@@ -1107,7 +1111,7 @@ class FormattedString(object):
         from a path.
         """
         font = _tryInstallFontFromFontName(font)
-        font = font.encode("ascii", "ignore")
+        font = str(font)
         self._font = font
         if fontSize is not None:
             self._fontSize = fontSize
@@ -1120,7 +1124,7 @@ class FormattedString(object):
         """
         if font:
             font = _tryInstallFontFromFontName(font)
-            font = font.encode("ascii", "ignore")
+            font = str(font)
             testFont = AppKit.NSFont.fontWithName_size_(font, self._fontSize)
             if testFont is None:
                 raise DrawBotError("Fallback font '%s' is not available" % font)
@@ -1755,7 +1759,7 @@ class BaseContext(object):
     def _textBox(self, txt, box, align):
         pass
 
-    def _image(self, path, (x, y), alpha, pageNumber):
+    def _image(self, path, xy, alpha, pageNumber):
         pass
 
     def _frameDuration(self, seconds):
@@ -1770,10 +1774,10 @@ class BaseContext(object):
     def _printImage(self, pdf=None):
         pass
 
-    def _linkDestination(self, name, (x, y)):
+    def _linkDestination(self, name, xy):
         pass
 
-    def _linkRect(self, name, (x, y, w, h)):
+    def _linkRect(self, name, xywh):
         pass
 
     #
@@ -2185,7 +2189,8 @@ class BaseContext(object):
         self._state.path = None
         self._textBox(txt, box, align)
 
-    def image(self, path, (x, y), alpha, pageNumber):
+    def image(self, path, xy, alpha, pageNumber):
+        x, y = xy
         self._image(path, (x, y), alpha, pageNumber)
 
     def installFont(self, path):
@@ -2218,8 +2223,10 @@ class BaseContext(object):
             psName = psName.toUnicode()
         return psName
 
-    def linkDestination(self, name, (x, y)):
+    def linkDestination(self, name, xy):
+        x, y = xy
         self._linkDestination(name, (x, y))
 
-    def linkRect(self, name, (x, y, w, h)):
+    def linkRect(self, name, xywh):
+        x, y, w, h = xywh
         self._linkRect(name, (x, y, w, h))

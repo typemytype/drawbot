@@ -1,9 +1,11 @@
-from pdfContext import PDFContext
-from imageContext import ImageContext
-from gifContext import GifContext
-from svgContext import SVGContext
-from movContext import MOVContext
-from printContext import PrintContext
+from __future__ import absolute_import
+
+from .pdfContext import PDFContext
+from .imageContext import ImageContext
+from .gifContext import GifContext
+from .svgContext import SVGContext
+from .movContext import MOVContext
+from .printContext import PrintContext
 
 
 allContexts = [PDFContext, ImageContext, SVGContext, MOVContext, PrintContext, GifContext]

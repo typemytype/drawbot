@@ -3,6 +3,7 @@ from math import radians
 import os
 
 from drawBot.misc import DrawBotError, optimizePath
+from fontTools.misc.py23 import basestring
 
 
 class ImageObject(object):
@@ -55,7 +56,7 @@ class ImageObject(object):
         """
         if isinstance(path, AppKit.NSImage):
             im = path
-        elif isinstance(path, (str, unicode)):
+        elif isinstance(path, basestring):
             path = optimizePath(path)
             if path.startswith("http"):
                 url = AppKit.NSURL.URLWithString_(path)

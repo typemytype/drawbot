@@ -13,6 +13,8 @@ from vanilla.vanillaBase import osVersion10_10, osVersionCurrent
 
 from drawBot.misc import getDefault
 
+from fontTools.misc.py23 import PY2
+
 
 class StdOutput(object):
 
@@ -23,7 +25,7 @@ class StdOutput(object):
         self._previousFlush = time.time()
 
     def write(self, data):
-        if isinstance(data, str):
+        if PY2 and isinstance(data, str):
             try:
                 data = unicode(data, "utf-8", "replace")
             except UnicodeDecodeError:
@@ -85,30 +87,21 @@ def _execute(cmds):
     return stderr, stdout
 
 
-getLocalPythonPathCode = u"""
-from distutils import sysconfig
-
-_path = sysconfig.get_python_lib(%s)
-
-print _path
-"""
-
-
 def getLocalPythonVersionDirName(standardLib=True):
-    tempFile = tempfile.mkstemp(".py")[1]
     argument = ""
     if standardLib:
         argument = "standard_lib=True"
-    f = open(tempFile, "w")
-    f.write(getLocalPythonPathCode % argument)
-    f.close()
-    log = _execute(["python", tempFile])[1]
-    sitePackages = log.split("\n")[0]
-    os.remove(tempFile)
+    if PY2:
+        python = "python"
+    else:
+        python = "python3"
+    commands = [python, "-c", "from distutils import sysconfig; print(sysconfig.get_python_lib(%s))" % argument]
+    err, out = _execute(commands)
+    sitePackages = out.split("\n")[0]
     if os.path.exists(sitePackages):
         return sitePackages
     else:
-        return False
+        return None
 
 
 localStandardLibPath = getLocalPythonVersionDirName(standardLib=True)
@@ -161,7 +154,7 @@ class ScriptRunner(object):
     def __init__(self, text=None, path=None, stdout=None, stderr=None, namespace=None, checkSyntaxOnly=False):
         from threading import Thread
         if path:
-            if isinstance(path, unicode):
+            if PY2 and isinstance(path, unicode):
                 path = path.encode("utf-8")
             curDir, fileName = os.path.split(path)
         else:
@@ -219,7 +212,7 @@ class ScriptRunner(object):
                 if not checkSyntaxOnly:
                     self._scriptDone = False
                     try:
-                        exec code in namespace
+                        exec(code, namespace)
                     except KeyboardInterrupt:
                         pass
                     except:

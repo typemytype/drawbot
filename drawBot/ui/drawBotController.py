@@ -1,16 +1,18 @@
+from __future__ import absolute_import
+
 import AppKit
 from vanilla import *
 from defconAppKit.windows.baseWindow import BaseWindowController
 
-from codeEditor import CodeEditor, OutPutEditor
-from drawView import DrawView, ThumbnailView
+from .codeEditor import CodeEditor, OutPutEditor
+from .drawView import DrawView, ThumbnailView
 
 from drawBot.scriptTools import ScriptRunner, CallbackRunner, DrawBotNamespace, StdOutput
 from drawBot.drawBotDrawingTools import _drawBotDrawingTool
 from drawBot.context.drawBotContext import DrawBotContext
 from drawBot.misc import getDefault, setDefault, warnings
 
-from splitView import SplitView
+from .splitView import SplitView
 
 
 class DrawBotController(BaseWindowController):
@@ -182,7 +184,7 @@ class DrawBotController(BaseWindowController):
         Sets the content of a file into the code view.
         """
         # open a file
-        f = open(path)
+        f = open(path, "rb")
         # read the content
         code = f.read().decode("utf-8")
         # close the file

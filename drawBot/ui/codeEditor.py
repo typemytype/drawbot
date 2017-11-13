@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+
 import AppKit
 
 from keyword import kwlist
@@ -16,8 +18,10 @@ except Exception:
     hasJedi = False
 
 from vanilla import *
+from vanilla.py23 import python_method
+from fontTools.misc.py23 import PY3, unichr
 
-from lineNumberRulerView import NSLineNumberRuler
+from .lineNumberRulerView import NSLineNumberRuler
 from drawBot.misc import getDefault, getFontDefault, getColorDefault, DrawBotError
 from drawBot.drawBotDrawingTools import _drawBotDrawingTool
 
@@ -178,9 +182,9 @@ def _hexStringToNSColor(txt, default=AppKit.NSColor.blackColor()):
 
 def _NSColorToHexString(color):
     color = color.colorUsingColorSpaceName_(AppKit.NSCalibratedRGBColorSpace)
-    r = color.redComponent() * 255
-    g = color.greenComponent() * 255
-    b = color.blueComponent() * 255
+    r = round(color.redComponent() * 255)
+    g = round(color.greenComponent() * 255)
+    b = round(color.blueComponent() * 255)
     return "#%02X%02X%02X" % (r, g, b)
 
 
@@ -296,6 +300,8 @@ languagesIDEBehavior = {
         "dropPathsSeperator": ", "
     },
 }
+if PY3:
+    languagesIDEBehavior["Python"]["dropPathFormatting"] = '%r'
 
 downArrowSelectionDirection = 0
 upArrowSelectionDirection = 1
@@ -500,6 +506,7 @@ class CodeNSTextView(AppKit.NSTextView):
         self._highlightSyntax(0, self.string())
         self._ignoreProcessEditing = False
 
+    @python_method
     def _highlightSyntax(self, location, text):
         if self.lexer() is None:
             return
@@ -784,6 +791,7 @@ class CodeNSTextView(AppKit.NSTextView):
         func = languageData.get("wordCompletions", self._genericCompletions)
         return func(text, charRange)
 
+    @python_method
     def _genericCompletions(self, text, charRange):
         partialString = text.substringWithRange_(charRange)
         keyWords = list()
@@ -941,6 +949,7 @@ class CodeNSTextView(AppKit.NSTextView):
             return commentedLines
         self._filterLines(uncommentFilter)
 
+    @python_method
     def _jumpToLine(self, lineNumber):
         lines = 1
         string = self.string()
@@ -1049,6 +1058,7 @@ class CodeNSTextView(AppKit.NSTextView):
                 backgroundColor = _hexStringToNSColor(styles.background_color, self._fallbackBackgroundColor)
                 ruler.setRulerBackgroundColor_(backgroundColor)
 
+    @python_method
     def _deleteIndentation(self, sender, isForward, superFunc):
         selectedRange = self.selectedRange()
         if self.usesTabs() or selectedRange.length:
@@ -1074,6 +1084,7 @@ class CodeNSTextView(AppKit.NSTextView):
         else:
             superFunc(sender)
 
+    @python_method
     def _findMatchingParen(self, location, char, matchChar, end):
         add = 1
         if end:
@@ -1095,6 +1106,7 @@ class CodeNSTextView(AppKit.NSTextView):
             location += add
         return found
 
+    @python_method
     def _balanceParenForChar(self, char, location):
         if self.lexer() is None:
             return
@@ -1108,6 +1120,7 @@ class CodeNSTextView(AppKit.NSTextView):
             openToCloseMap = _reverseMap(openToCloseMap)
             self._balanceParens(location=location, char=char, matchChar=openToCloseMap[char], end=True)
 
+    @python_method
     def _balanceParens(self, location, char, matchChar, end):
         found = self._findMatchingParen(location, char, matchChar, end)
         if found is not None:
@@ -1126,9 +1139,11 @@ class CodeNSTextView(AppKit.NSTextView):
             self.layoutManager().setTemporaryAttributes_forCharacterRange_(balancingAttrs, (found, 1))
             self.performSelector_withObject_afterDelay_("_resetBalanceParens:", (oldAttrs, effRng), 0.2)
 
-    def _resetBalanceParens_(self, (attrs, rng)):
+    def _resetBalanceParens_(self, attrs_rng):
+        attrs, rng = attrs_rng
         self.layoutManager().setTemporaryAttributes_forCharacterRange_(attrs, rng)
 
+    @python_method
     def _filterLines(self, filterFunc):
         selectedRange = self.selectedRange()
         lines, linesRange = self._getTextForRange(selectedRange)
@@ -1143,6 +1158,7 @@ class CodeNSTextView(AppKit.NSTextView):
         newSelRng = linesRange.location, len(filteredLines)
         self.setSelectedRange_(newSelRng)
 
+    @python_method
     def _getLeftWordRange(self, newRange):
         if newRange.location == 0:
             return 0
@@ -1169,6 +1185,7 @@ class CodeNSTextView(AppKit.NSTextView):
 
         return location
 
+    @python_method
     def _getRightWordRange(self, newRange):
         text = self.string()
         lenText = len(text)
@@ -1192,11 +1209,13 @@ class CodeNSTextView(AppKit.NSTextView):
                     isChar = not isChar
         return location
 
+    @python_method
     def _getTextForRange(self, lineRange):
         string = self.string()
         lineRange = string.lineRangeForRange_(lineRange)
         return string.substringWithRange_(lineRange), lineRange
 
+    @python_method
     def _getSelectedValueForRange(self, selectedRange):
         value = None
         try:
@@ -1204,17 +1223,19 @@ class CodeNSTextView(AppKit.NSTextView):
             for c in txt:
                 if c not in "0123456789.,- ":
                     raise DrawBotError("No dragging possible")
-            exec("value = %s" % txt)
+            value = eval(txt)
         except Exception:
             pass
         return value
 
+    @python_method
     def _insertTextAndRun(self, txt, txtRange):
         self.insertText_(txt)
         newRange = AppKit.NSMakeRange(txtRange.location, len(txt))
         self.setSelectedRange_(newRange)
         return self._runInternalCode()
 
+    @python_method
     def _runInternalCode(self):
         pool = AppKit.NSAutoreleasePool.alloc().init()
         try:

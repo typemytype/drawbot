@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+
 import AppKit
 import QTKit
 import Quartz
@@ -5,7 +7,7 @@ import Quartz
 import os
 
 from drawBot.misc import DrawBotError
-from pdfContext import PDFContext
+from .pdfContext import PDFContext
 
 
 class MOVContext(PDFContext):

@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+
 import AppKit
 import CoreText
 import Quartz
@@ -6,14 +8,16 @@ import math
 import os
 import random
 
-from context import getContextForFileExt
-from context.baseContext import BezierPath, FormattedString
-from context.dummyContext import DummyContext
+from .context import getContextForFileExt
+from .context.baseContext import BezierPath, FormattedString
+from .context.dummyContext import DummyContext
 
-from context.tools.imageObject import ImageObject
-from context.tools import gifTools
+from .context.tools.imageObject import ImageObject
+from .context.tools import gifTools
 
-from misc import DrawBotError, warnings, VariableController, optimizePath, isPDF, isEPS, isGIF
+from .misc import DrawBotError, warnings, VariableController, optimizePath, isPDF, isEPS, isGIF
+
+from fontTools.misc.py23 import basestring, PY2
 
 
 def _getmodulecontents(module, names=None):
@@ -58,7 +62,7 @@ _paperSizes = {
     '10x14'       : (720, 1008),
 }
 
-for key, (w, h) in _paperSizes.items():
+for key, (w, h) in list(_paperSizes.items()):
     _paperSizes["%sLandscape" % key] = (h, w)
 
 
@@ -75,7 +79,7 @@ class DrawBotDrawingTool(object):
 
     def _get_version(self):
         try:
-            import drawBotSettings
+            from drawBot import drawBotSettings
             return drawBotSettings.__version__
         except Exception:
             pass
@@ -350,7 +354,7 @@ class DrawBotDrawingTool(object):
                     # draw an oval in each of them
                     oval(110, 10, 30, 30)
         """
-        from drawBotPageDrawingTools import DrawBotPage
+        from .drawBotPageDrawingTools import DrawBotPage
         instructions = []
         for instructionSet in self._instructionsStack:
             for callback, _, _ in instructionSet:
@@ -388,7 +392,7 @@ class DrawBotDrawingTool(object):
             # save it as a png and pdf on the current users desktop
             saveImage(["~/Desktop/firstImage.png", "~/Desktop/firstImage.pdf"])
         """
-        if isinstance(paths, (str, unicode)):
+        if isinstance(paths, basestring):
             paths = [paths]
         for rawPath in paths:
             path = optimizePath(rawPath)
@@ -435,7 +439,7 @@ class DrawBotDrawingTool(object):
         """
         Return the image as a pdf document object.
         """
-        from context.drawBotContext import DrawBotContext
+        from .context.drawBotContext import DrawBotContext
         context = DrawBotContext()
         self._drawInContext(context)
         return context.getNSPDFDocument()
@@ -503,10 +507,11 @@ class DrawBotDrawingTool(object):
         _deprecatedWarningLowercase("newPath()")
         self.newPath()
 
-    def moveTo(self, (x, y)):
+    def moveTo(self, xy):
         """
         Move to a point `x`, `y`.
         """
+        x, y = xy
         self._requiresNewFirstPage = True
         self._addInstruction("moveTo", (x, y))
 
@@ -514,10 +519,11 @@ class DrawBotDrawingTool(object):
         _deprecatedWarningLowercase("moveTo((%s, %s))" % (x, y))
         self.moveTo((x, y))
 
-    def lineTo(self, (x, y)):
+    def lineTo(self, xy):
         """
         Line to a point `x`, `y`.
         """
+        x, y = xy
         self._requiresNewFirstPage = True
         self._addInstruction("lineTo", (x, y))
 
@@ -525,11 +531,14 @@ class DrawBotDrawingTool(object):
         _deprecatedWarningLowercase("lineTo((%s, %s))" % (x, y))
         self.lineTo((x, y))
 
-    def curveTo(self, (x1, y1), (x2, y2), (x3, y3)):
+    def curveTo(self, xy1, xy2, xy3):
         """
         Curve to a point `x3`, `y3`.
         With given bezier handles `x1`, `y1` and `x2`, `y2`.
         """
+        x1, y1 = xy1
+        x2, y2 = xy2
+        x3, y3 = xy3
         self._requiresNewFirstPage = True
         self._addInstruction("curveTo", (x1, y1), (x2, y2), (x3, y3))
 
@@ -544,10 +553,12 @@ class DrawBotDrawingTool(object):
         self._requiresNewFirstPage = True
         self._addInstruction("arc", center, radius, startAngle, endAngle, clockwise)
 
-    def arcTo(self, (x1, y1), (x2, y2), radius):
+    def arcTo(self, xy1, xy2, radius):
         """
         Arc from one point to an other point with a given `radius`.
         """
+        x1, y1 = xy1
+        x2, y2 = xy2
         self._requiresNewFirstPage = True
         self._addInstruction("arcTo", (x1, y1), (x2, y2), radius)
 
@@ -1296,7 +1307,7 @@ class DrawBotDrawingTool(object):
             font("Times-Italic")
         """
         fontName = self._tryInstallFontFromFontName(fontName)
-        fontName = fontName.encode("ascii", "ignore")
+        fontName = str(fontName)
         self._dummyContext.font(fontName, fontSize)
         self._addInstruction("font", fontName, fontSize)
         return fontName
@@ -1310,7 +1321,7 @@ class DrawBotDrawingTool(object):
             fallbackFont("Times")
         """
         fontName = self._tryInstallFontFromFontName(fontName)
-        fontName = fontName.encode("ascii", "ignore")
+        fontName = str(fontName)
         dummyFont = AppKit.NSFont.fontWithName_size_(fontName, 10)
         if dummyFont is None:
             raise DrawBotError("Fallback font '%s' is not available" % fontName)
@@ -1564,7 +1575,7 @@ class DrawBotDrawingTool(object):
             font("Times-Italic")
             text("hallo, I'm Times", (100, 100))
         """
-        if isinstance(txt, (str, unicode)):
+        if PY2 and isinstance(txt, basestring):
             try:
                 txt = txt.decode("utf-8")
             except UnicodeEncodeError:
@@ -1607,7 +1618,7 @@ class DrawBotDrawingTool(object):
         Optionally `txt` can be a `FormattedString`.
         Optionally `box` can be a `BezierPath`.
         """
-        if isinstance(txt, (str, unicode)):
+        if PY2 and isinstance(txt, basestring):
             try:
                 txt = txt.decode("utf-8")
             except UnicodeEncodeError:
@@ -1740,7 +1751,7 @@ class DrawBotDrawingTool(object):
             # draw some text in the path
             textBox("abcdefghijklmnopqrstuvwxyz"*30000, path)
         """
-        if isinstance(txt, (str, unicode)):
+        if PY2 and isinstance(txt, basestring):
             try:
                 txt = txt.decode("utf-8")
             except UnicodeEncodeError:
@@ -1768,7 +1779,7 @@ class DrawBotDrawingTool(object):
         Optionally an alignment can be set.
         Possible `align` values are: `"left"`, `"center"`, `"right"` and `"justified"`.
         """
-        if isinstance(txt, (str, unicode)):
+        if PY2 and isinstance(txt, basestring):
             try:
                 txt = txt.decode("utf-8")
             except UnicodeEncodeError:
@@ -1848,7 +1859,7 @@ class DrawBotDrawingTool(object):
             alpha = 1
         if isinstance(path, self._imageClass):
             path = path._nsImage()
-        if isinstance(path, (str, unicode)):
+        if isinstance(path, basestring):
             path = optimizePath(path)
         self._requiresNewFirstPage = True
         self._addInstruction("image", path, (x, y), alpha, pageNumber)
@@ -1871,7 +1882,7 @@ class DrawBotDrawingTool(object):
             # its an NSImage
             rep = path
         else:
-            if isinstance(path, (str, unicode)):
+            if isinstance(path, basestring):
                 path = optimizePath(path)
             if path.startswith("http"):
                 url = AppKit.NSURL.URLWithString_(path)
@@ -1905,7 +1916,7 @@ class DrawBotDrawingTool(object):
             w, h = rep.size()
         return w, h
 
-    def imagePixelColor(self, path, (x, y)):
+    def imagePixelColor(self, path, xy):
         """
         Return the color `r, g, b, a` of an image at a specified `x`, `y` possition.
 
@@ -1940,7 +1951,8 @@ class DrawBotDrawingTool(object):
                         # draw some text
                         text("W", (x, y))
         """
-        if isinstance(path, (str, unicode)):
+        x, y = xy
+        if isinstance(path, basestring):
             path = optimizePath(path)
         bitmap = _chachedPixelColorBitmaps.get(path)
         if bitmap is None:
@@ -2050,12 +2062,13 @@ class DrawBotDrawingTool(object):
         self._requiresNewFirstPage = True
         self._addInstruction("linkDestination", name, (x, y))
 
-    def linkRect(self, name, (x, y, w, h)):
+    def linkRect(self, name, xywh):
         """
         Add a rect for a link within a PDF.
 
         The link rectangle will be set independent of the current context transformations.
         """
+        x, y, w, h = (x, y, w, h)
         self._requiresNewFirstPage = True
         self._addInstruction("linkRect", name, (x, y, w, h))
 
@@ -2069,7 +2082,7 @@ class DrawBotDrawingTool(object):
         Optionally a `width` constrain or `height` constrain can be provided
         to calculate the lenght or width of text with the given constrain.
         """
-        if isinstance(txt, (str, unicode)):
+        if PY2 and isinstance(txt, basestring):
             try:
                 txt = txt.decode("utf-8")
             except UnicodeEncodeError:
