@@ -16,7 +16,7 @@ from defconAppKit.windows.progressWindow import ProgressWindow
 from drawBot import __version__
 from .misc import DrawBotError, getDefault
 
-from fontTools.misc.py23 import unichr
+from fontTools.misc.py23 import unichr, PY2
 
 
 def getCurrentVersion():
@@ -40,7 +40,10 @@ def downloadCurrentVersion():
     """
     Download the current version (dmg) and mount it
     """
-    path = "http://static.typemytype.com/drawBot/DrawBot.dmg"
+    if PY2:
+        path = "http://static.typemytype.com/drawBot/DrawBot.dmg"
+    else:
+        path = "http://static.typemytype.com/drawBot/DrawBotPy3.dmg"
     try:
         # download and mount
         cmds = ["hdiutil", "attach", "-plist", path]
