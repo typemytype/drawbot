@@ -7,6 +7,7 @@ except ImportError:
 import subprocess
 import plistlib
 import AppKit
+import re
 
 from distutils.version import StrictVersion
 
@@ -17,6 +18,9 @@ from drawBot import __version__
 from .misc import DrawBotError, getDefault
 
 from fontTools.misc.py23 import unichr, PY2
+
+
+_versionRE = re.compile(r'__version__\s*=\s*\"([^\"]+)\"')
 
 
 def getCurrentVersion():
@@ -31,17 +35,18 @@ def getCurrentVersion():
     try:
         response = urlopen(path, timeout=5)
         code = response.read()
-        code = code.decode("utf-8")
+        # convert to ascii and stri
+        # in py3 this are bytes and a string object is needed
+        code = str(code.decode("ascii"))
         response.close()
-    except:
+    except Exception:
         # just silently fail, its not so important
         pass
     if code:
-        exec(code)
-        return __version__
-    else:
-        return __fallback_version__
-
+        found = _versionRE.search(code)
+        if found:
+            return found.group(1)
+    return __fallback_version__
 
 
 def downloadCurrentVersion():
