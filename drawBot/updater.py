@@ -32,7 +32,7 @@ def getCurrentVersion():
         response.close()
         exec(code)
     except:
-        __version__ = ""
+        __version__ = "0.0"
     return __version__
 
 
