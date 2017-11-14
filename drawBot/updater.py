@@ -23,17 +23,25 @@ def getCurrentVersion():
     """
     Return the newest version number from github.
     """
+    __fallback_version__ = "0.0"
     if not getDefault("checkForUpdatesAtStartup", True):
-        return ""
+        return __fallback_version__
     path = "https://raw.github.com/typemytype/drawbot/master/drawBot/drawBotSettings.py"
+    code = None
     try:
         response = urlopen(path, timeout=5)
         code = response.read()
+        code = code.decode("utf-8")
         response.close()
-        exec(code)
     except:
-        __version__ = "0.0"
-    return __version__
+        # just silently fail, its not so important
+        pass
+    if code:
+        exec(code)
+        return __version__
+    else:
+        return __fallback_version__
+
 
 
 def downloadCurrentVersion():
