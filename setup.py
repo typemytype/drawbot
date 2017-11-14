@@ -108,6 +108,7 @@ setup(
                 'jedi',
                 'fontTools',
                 # 'xml'
+                'pkg_resources'
             ],
             includes=[
                 # 'csv',
