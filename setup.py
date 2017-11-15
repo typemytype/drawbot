@@ -15,6 +15,7 @@ import vanilla
 import defconAppKit
 # import robofab
 import fontTools
+from fontTools.misc.py23 import PY2, PY3
 import pygments
 
 from drawBot.drawBotSettings import __version__, appName
@@ -45,6 +46,11 @@ ftpPassword = getValueFromSysArgv("--ftppassword")
 
 osxMinVersion = "10.9.0"
 
+if PY3:
+    iconFile = "DrawBotPy3.icns"
+else:
+    iconFile = "DrawBot.icns"
+
 plist = dict(
 
     CFBundleDocumentTypes=[
@@ -63,7 +69,7 @@ plist = dict(
     LSArchitecturePriority=["x86_64", "i386"],
     CFBundleShortVersionString=__version__,
     CFBundleVersion=__version__,
-    CFBundleIconFile="DrawBot.icns",
+    CFBundleIconFile=iconFile,
     NSHumanReadableCopyright="Copyright by Just van Rossum and Frederik Berlaen.",
     CFBundleURLTypes=[
         dict(
@@ -129,7 +135,7 @@ setup(
 # fix the icon
 path = os.path.join(os.path.dirname(__file__), "dist", "%s.app" % appName, "Contents", "Info.plist")
 appPlist = readPlist(path)
-appPlist["CFBundleIconFile"] = "DrawBot.icns"
+appPlist["CFBundleIconFile"] = iconFile
 writePlist(appPlist, path)
 
 if "-A" not in sys.argv:

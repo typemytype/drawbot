@@ -4,6 +4,8 @@ from PyObjCTools import AppHelper
 import os
 from random import randint
 
+from fontTools.misc.py23 import PY3
+
 from drawBot.ui.drawBotController import DrawBotController
 from drawBot.ui.preferencesController import PreferencesController
 from drawBot.ui.debug import DebugWindowController
@@ -15,6 +17,12 @@ from drawBot.updater import Updater
 import objc
 
 objc.setVerbose(True)
+
+
+if PY3:
+    iconAnimationFormatter = "icon_py3_%s"
+else:
+    iconAnimationFormatter = "icon_%s"
 
 
 class DrawBotDocument(AppKit.NSDocument):
@@ -125,7 +133,7 @@ class DrawBotAppDelegate(AppKit.NSObject):
 
     def animateApplicationIcon_(self, timer):
         if AppKit.NSApp().isActive():
-            image = AppKit.NSImage.imageNamed_("icon_%s" % randint(0, 20))
+            image = AppKit.NSImage.imageNamed_(iconAnimationFormatter % randint(0, 20))
             AppKit.NSApp().setApplicationIconImage_(image)
             self.sheduleIconTimer()
 
