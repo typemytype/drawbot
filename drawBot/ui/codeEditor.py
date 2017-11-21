@@ -306,6 +306,16 @@ if PY3:
 downArrowSelectionDirection = 0
 upArrowSelectionDirection = 1
 
+if PY3:
+    def _floatRepr(f):
+        """In Python 3, we may get float representations that are too precise,
+        like 0.199999999999999. That is not nice for our interactive number
+        editing."""
+        return str(round(f, 8))
+else:
+    def _floatRepr(f):
+        return f
+
 
 class CodeNSTextView(AppKit.NSTextView):
 
@@ -561,9 +571,10 @@ class CodeNSTextView(AppKit.NSTextView):
                         valueY += add
                     else:
                         valueX += add
-                    value = "%s, %s" % (valueX, valueY)
+                    value = "%s, %s" % (_floatRepr(valueX), _floatRepr(valueY))
                 else:
                     value += add
+                    value = _floatRepr(value)
                 self._insertTextAndRun("%s" % value, selectedRange)
                 return
 
@@ -620,10 +631,10 @@ class CodeNSTextView(AppKit.NSTextView):
                         valueX, valueY = value
                         valueX += int(event.deltaX() * 2) * add
                         valueY -= int(event.deltaY() * 2) * add
-                        txtValue = "%s, %s" % (valueX, valueY)
+                        txtValue = "%s, %s" % (_floatRepr(valueX), _floatRepr(valueY))
                     else:
                         value += int(event.deltaX() * 2) * add
-                        txtValue = "%s" % value
+                        txtValue = "%s" % _floatRepr(value)
 
                     self._insertTextAndRun(txtValue, selRng)
             except Exception:
