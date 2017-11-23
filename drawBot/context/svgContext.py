@@ -33,12 +33,12 @@ class SVGFile(object):
 
     def writeToFile(self, path):
         data = self.read()
-        f = open(path, "w")
+        f = open(path, "wb")
         f.write(data)
         f.close()
 
     def read(self):
-        return "".join(self._svgdata)
+        return b"".join(self._svgdata)
 
     def close(self):
         pass
