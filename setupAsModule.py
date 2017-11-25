@@ -39,6 +39,7 @@ setup(name="drawBot",
         ],
     package_data = {
         "drawBot" : [
+            "context/tools/ffmpeg",
             "context/tools/gifsicle",
             "context/tools/mkbitmap",
             "context/tools/potrace"

@@ -146,7 +146,13 @@ if "-A" not in sys.argv:
     existingDmgLocation = os.path.join(distLocation, "%s.dmg" % appName)
     dmgLocation = os.path.join(distLocation, appName)
 
-    # copy external tools into the resources folder (gifsicle)
+    # copy external tools into the resources folder (ffmpeg, gifsicle, mkbitmap, potrace)
+    ffmpegPathSource = os.path.join(os.getcwd(), "drawBot", "context", "tools", "ffmpeg")
+    ffmpegPathDest = os.path.join(appLocation, "contents", "Resources", "ffmpeg")
+    print("copy", ffmpegPathSource, ffmpegPathDest)
+    shutil.copyfile(ffmpegPathSource, ffmpegPathDest)
+    os.chmod(ffmpegPathDest, 0o775)
+
     gifsiclePathSource = os.path.join(os.getcwd(), "drawBot", "context", "tools", "gifsicle")
     gifsiclePathDest = os.path.join(appLocation, "contents", "Resources", "gifsicle")
     print("copy", gifsiclePathSource, gifsiclePathDest)
