@@ -13,8 +13,8 @@ if not os.path.exists(gifsiclePath):
 
 
 def _executeCommand(cmds, cwd=None):
-    gifsicleStdOut = tempfile.TemporaryFile()
-    gifsicleStdErr = tempfile.TemporaryFile()
+    gifsicleStdOut = tempfile.TemporaryFile(mode="w+")
+    gifsicleStdErr = tempfile.TemporaryFile(mode="w+")
     try:
         # go
         resultCode = subprocess.call(cmds, stdout=gifsicleStdOut, stderr=gifsicleStdErr, cwd=cwd)
