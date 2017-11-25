@@ -6,9 +6,10 @@ from .gifContext import GifContext
 from .svgContext import SVGContext
 from .movContext import MOVContext
 from .printContext import PrintContext
+from .mp4Context import MP4Context
 
 
-allContexts = [PDFContext, ImageContext, SVGContext, MOVContext, PrintContext, GifContext]
+allContexts = [PDFContext, ImageContext, SVGContext, MOVContext, PrintContext, GifContext, MP4Context]
 
 
 def subscribeContext(context):
