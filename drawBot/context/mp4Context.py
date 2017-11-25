@@ -74,7 +74,7 @@ class MP4Context(ImageContext):
         frameRate = round(1.0 / self._frameDurations[0], 3)
         frameDurations = set(self._frameDurations)
         if len(frameDurations) > 1:
-            warnings.warn("Exporting to mp4 doesn't support varying frame durations")
+            warnings.warn("Exporting to mp4 doesn't support varying frame durations, only the first value was used.")
 
         tempDir = tempfile.mkdtemp(suffix=".mp4tmp")
         try:
