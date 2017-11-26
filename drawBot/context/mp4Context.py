@@ -17,21 +17,15 @@ if not os.path.exists(ffmpegPath):
     ffmpegPath = AppKit.NSBundle.mainBundle().pathForResource_ofType_("ffmpeg", None)
 
 
-def _executeCommand(cmds, cwd=None):
-    stdout = tempfile.TemporaryFile(mode="w+")
-    stderr = tempfile.TemporaryFile(mode="w+")
-    try:
-        # go
-        resultCode = subprocess.call(cmds, stdout=stdout, stderr=stderr, cwd=cwd)
-        if resultCode != 0:
-            stdout.seek(0)
-            stderr.seek(0)
-            sys.stdout.write(stdout.read())
-            sys.stderr.write(stderr.read())
-            raise RuntimeError("ffmpeg failed with error code %s" % resultCode)
-    finally:
-        stdout.close()
-        stderr.close()
+def executeExternalProcess(cmds, cwd=None):
+    p = subprocess.Popen(cmds, stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=cwd)
+    stdoutdata, stderrdata = p.communicate()
+    assert p.returncode is not None
+    if p.returncode != 0:
+        sys.stdout.write(stdoutdata)
+        sys.stderr.write(stderrdata)
+        raise RuntimeError("%s failed with error code %s" % (os.path.basename(cmds[0]), p.returncode))
+    return stdoutdata, stderrdata
 
 
 def generateMP4(imageTemplate, mp4path, frameRate):
@@ -46,7 +40,7 @@ def generateMP4(imageTemplate, mp4path, frameRate):
         "-crf", "20", "-pix_fmt", "yuv420p",  # dunno
         mp4path,                # output path
     ]
-    _executeCommand(cmds)
+    executeExternalProcess(cmds)
 
 
 class MP4Context(ImageContext):
