@@ -1,22 +1,15 @@
 from __future__ import print_function
 
-from distutils.core import setup
-from distutils import sysconfig
 import py2app
+from distutils.core import setup
 import os
 import sys
 import subprocess
 import shutil
-import tempfile
 import datetime
 from plistlib import readPlist, writePlist
 
-import vanilla
-import defconAppKit
-# import robofab
-import fontTools
-from fontTools.misc.py23 import PY2, PY3
-import pygments
+from fontTools.misc.py23 import PY3
 
 from drawBot.drawBotSettings import __version__, appName
 
@@ -84,11 +77,17 @@ dataFiles = [
     # os.path.dirname(vanilla.__file__),
 ]
 
+# add all images
 for fileName in os.listdir("Resources/Images"):
     baseName, extension = os.path.splitext(fileName)
     if extension.lower() in [".png", ".icns"]:
         fullPath = os.path.join("Resources/Images", fileName)
         dataFiles.append(fullPath)
+
+# add all external tools
+for fileName in os.listdir("Resources/externalTools"):
+    fullPath = os.path.join("Resources/externalTools", fileName)
+    dataFiles.append(fullPath)
 
 # build
 setup(
@@ -101,7 +100,6 @@ setup(
                 'vanilla',
                 'defcon',
                 'defconAppKit',
-                # 'robofab',
                 'fontParts',
                 'mutatorMath',
                 'woffTools',
@@ -114,7 +112,7 @@ setup(
                 'jedi',
                 'fontTools',
                 # 'xml'
-                'pkg_resources'
+                'pkg_resources',
             ],
             includes=[
                 # 'csv',
@@ -146,30 +144,11 @@ if "-A" not in sys.argv:
     existingDmgLocation = os.path.join(distLocation, "%s.dmg" % appName)
     dmgLocation = os.path.join(distLocation, appName)
 
-    # copy external tools into the resources folder (ffmpeg, gifsicle, mkbitmap, potrace)
-    ffmpegPathSource = os.path.join(os.getcwd(), "drawBot", "context", "tools", "ffmpeg")
-    ffmpegPathDest = os.path.join(appLocation, "contents", "Resources", "ffmpeg")
-    print("copy", ffmpegPathSource, ffmpegPathDest)
-    shutil.copyfile(ffmpegPathSource, ffmpegPathDest)
-    os.chmod(ffmpegPathDest, 0o775)
-
-    gifsiclePathSource = os.path.join(os.getcwd(), "drawBot", "context", "tools", "gifsicle")
-    gifsiclePathDest = os.path.join(appLocation, "contents", "Resources", "gifsicle")
-    print("copy", gifsiclePathSource, gifsiclePathDest)
-    shutil.copyfile(gifsiclePathSource, gifsiclePathDest)
-    os.chmod(gifsiclePathDest, 0o775)
-
-    mkbitmapPathSource = os.path.join(os.getcwd(), "drawBot", "context", "tools", "mkbitmap")
-    mkbitmapPathDest = os.path.join(appLocation, "contents", "Resources", "mkbitmap")
-    print("copy", mkbitmapPathSource, mkbitmapPathDest)
-    shutil.copyfile(mkbitmapPathSource, mkbitmapPathDest)
-    os.chmod(mkbitmapPathDest, 0o775)
-
-    potracePathSource = os.path.join(os.getcwd(), "drawBot", "context", "tools", "potrace")
-    potracePathDest = os.path.join(appLocation, "contents", "Resources", "potrace")
-    print("copy", potracePathSource, potracePathDest)
-    shutil.copyfile(potracePathSource, potracePathDest)
-    os.chmod(potracePathDest, 0o775)
+    # make sure the external tools have the correct permissions
+    externalTools = ("ffmpeg", "gifsicle", "mkbitmap", "potrace")
+    for externalTool in externalTools:
+        externalToolPath = os.path.join(appLocation, "contents", "Resources", externalTool)
+        os.chmod(externalToolPath, 0o775)
 
     if codeSignDeveloperName:
         # ================
