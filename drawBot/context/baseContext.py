@@ -294,7 +294,7 @@ class BezierPath(BasePen):
         * `tolerance`: the precision tolerance of the vector outline
         * `offset`: add the traced vector outline with an offset to the BezierPath
         """
-        from tools import traceImage
+        from .tools import traceImage
         traceImage.TraceImage(path, self, threshold, blur, invert, turd, tolerance, offset)
 
     def getNSBezierPath(self):
