@@ -1,3 +1,5 @@
+from __future__ import division, absolute_import, print_function
+
 import AppKit
 import tempfile
 from xml.dom import minidom
@@ -5,7 +7,7 @@ import os
 
 from fontTools.misc.transform import Transform
 
-from imageObject import ImageObject
+from .imageObject import ImageObject
 from drawBot.scriptTools import executeExternalProcess
 
 
@@ -310,6 +312,7 @@ def TraceImage(path, outPen, threshold=.2, blur=None, invert=False, turd=2, tole
 
     saveImageAsBitmap(image, imagePath)
 
+    assert mkbitmap is not None
     cmds = [mkbitmap, "-x", "-t", str(threshold)]
     if blur:
         cmds.extend(["-b", str(blur)])
@@ -324,8 +327,9 @@ def TraceImage(path, outPen, threshold=.2, blur=None, invert=False, turd=2, tole
     ])
     log = executeExternalProcess(cmds)
     if log != ('', ''):
-        print log
+        print(log)
 
+    assert potrace is not None
     cmds = [potrace, "-s"]
     cmds.extend(["-t", str(turd)])
     cmds.extend(["-O", str(tolerance)])
@@ -333,7 +337,7 @@ def TraceImage(path, outPen, threshold=.2, blur=None, invert=False, turd=2, tole
 
     log = executeExternalProcess(cmds)
     if log != ('', ''):
-        print log
+        print(log)
 
     importSVGWithPen(svgPath, outPen, (x, y, w, h), offset)
 
