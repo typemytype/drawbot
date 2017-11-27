@@ -18,13 +18,23 @@ if not os.path.exists(ffmpegPath):
 
 
 def executeExternalProcess(cmds, cwd=None):
-    p = subprocess.Popen(cmds, stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=cwd)
+    r"""
+        >>> stdout, stderr = executeExternalProcess(["which", "ls"])
+        >>> stdout
+        '/bin/ls\n'
+        >>> assert stdout == '/bin/ls\n'
+        >>> executeExternalProcess(["which", "fooooo"])
+        Traceback (most recent call last):
+            ...
+        RuntimeError: 'which' failed with error code 1
+    """
+    p = subprocess.Popen(cmds, stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=cwd, universal_newlines=True)
     stdoutdata, stderrdata = p.communicate()
     assert p.returncode is not None
     if p.returncode != 0:
-        sys.stdout.write(stdoutdata.decode("utf-8"))
-        sys.stderr.write(stderrdata.decode("utf-8"))
-        raise RuntimeError("%s failed with error code %s" % (os.path.basename(cmds[0]), p.returncode))
+        sys.stdout.write(stdoutdata)
+        sys.stderr.write(stderrdata)
+        raise RuntimeError("%r failed with error code %s" % (os.path.basename(cmds[0]), p.returncode))
     return stdoutdata, stderrdata
 
 
@@ -76,3 +86,8 @@ class MP4Context(ImageContext):
             generateMP4(os.path.join(tempDir, "frame_%d.png"), path, frameRate)
         finally:
             shutil.rmtree(tempDir)
+
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod()
