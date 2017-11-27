@@ -22,8 +22,8 @@ def executeExternalProcess(cmds, cwd=None):
     stdoutdata, stderrdata = p.communicate()
     assert p.returncode is not None
     if p.returncode != 0:
-        sys.stdout.write(stdoutdata)
-        sys.stderr.write(stderrdata)
+        sys.stdout.write(stdoutdata.decode("utf-8"))
+        sys.stderr.write(stderrdata.decode("utf-8"))
         raise RuntimeError("%s failed with error code %s" % (os.path.basename(cmds[0]), p.returncode))
     return stdoutdata, stderrdata
 
