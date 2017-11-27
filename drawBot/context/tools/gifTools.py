@@ -5,7 +5,7 @@ import shutil
 import os
 import tempfile
 
-from drawBot.scriptTools import executeExternalProcess
+from drawBot.misc import executeExternalProcess
 
 
 gifsiclePath = os.path.join(os.path.dirname(__file__), "gifsicle")

@@ -8,7 +8,7 @@ import os
 from fontTools.misc.transform import Transform
 
 from .imageObject import ImageObject
-from drawBot.scriptTools import executeExternalProcess
+from drawBot.misc import executeExternalProcess
 
 
 potrace = os.path.join(os.path.dirname(__file__), "potrace")

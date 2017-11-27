@@ -2,6 +2,7 @@ import AppKit
 
 import sys
 import os
+import subprocess
 
 
 # ==========
@@ -260,3 +261,32 @@ class VariableController(object):
 
     def documentWindowToFront(self, sender=None):
         self.w.makeKey()
+
+
+def executeExternalProcess(cmds, cwd=None):
+    r"""
+        >>> stdout, stderr = executeExternalProcess(["which", "ls"])
+        >>> stdout
+        '/bin/ls\n'
+        >>> assert stdout == '/bin/ls\n'
+        >>> executeExternalProcess(["which", "fooooo"])
+        Traceback (most recent call last):
+            ...
+        RuntimeError: 'which' failed with error code 1
+        >>> stdout, stderr = executeExternalProcess(["python", "-c", "print('hello')"])
+        >>> stdout
+        'hello\n'
+    """
+    p = subprocess.Popen(cmds, stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=cwd, universal_newlines=True)
+    stdoutdata, stderrdata = p.communicate()
+    assert p.returncode is not None
+    if p.returncode != 0:
+        sys.stdout.write(stdoutdata)
+        sys.stderr.write(stderrdata)
+        raise RuntimeError("%r failed with error code %s" % (os.path.basename(cmds[0]), p.returncode))
+    return stdoutdata, stderrdata
+
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod()

@@ -9,37 +9,12 @@ import sys
 import traceback
 import site
 import re
-import subprocess
 
 from vanilla.vanillaBase import osVersion10_10, osVersionCurrent
 
 from fontTools.misc.py23 import PY2, PY3
 
 from drawBot.misc import getDefault
-
-
-def executeExternalProcess(cmds, cwd=None):
-    r"""
-        >>> stdout, stderr = executeExternalProcess(["which", "ls"])
-        >>> stdout
-        '/bin/ls\n'
-        >>> assert stdout == '/bin/ls\n'
-        >>> executeExternalProcess(["which", "fooooo"])
-        Traceback (most recent call last):
-            ...
-        RuntimeError: 'which' failed with error code 1
-        >>> stdout, stderr = executeExternalProcess(["python", "-c", "print('hello')"])
-        >>> stdout
-        'hello\n'
-    """
-    p = subprocess.Popen(cmds, stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=cwd, universal_newlines=True)
-    stdoutdata, stderrdata = p.communicate()
-    assert p.returncode is not None
-    if p.returncode != 0:
-        sys.stdout.write(stdoutdata)
-        sys.stderr.write(stderrdata)
-        raise RuntimeError("%r failed with error code %s" % (os.path.basename(cmds[0]), p.returncode))
-    return stdoutdata, stderrdata
 
 
 class StdOutput(object):
@@ -267,8 +242,3 @@ def CallbackRunner(callback, stdout=None, stderr=None, args=[], kwargs={}, fallb
         sys.stderr = saveStderr
 
     return result
-
-
-if __name__ == "__main__":
-    import doctest
-    doctest.testmod()

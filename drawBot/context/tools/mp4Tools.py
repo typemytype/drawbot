@@ -3,7 +3,7 @@ from __future__ import division, absolute_import, print_function
 import os
 import AppKit
 
-from drawBot.scriptTools import executeExternalProcess
+from drawBot.misc import executeExternalProcess
 
 
 ffmpegPath = os.path.join(os.path.dirname(__file__), "ffmpeg")
