@@ -1,59 +1,15 @@
 from __future__ import division, absolute_import, print_function
 
-import sys
 import os
 import tempfile
 import shutil
-import subprocess
 from drawBot.misc import warnings
 
 import AppKit
 
 from .imageContext import ImageContext
 
-
-ffmpegPath = os.path.join(os.path.dirname(__file__), "tools", "ffmpeg")
-if not os.path.exists(ffmpegPath):
-    ffmpegPath = AppKit.NSBundle.mainBundle().pathForResource_ofType_("ffmpeg", None)
-
-
-def executeExternalProcess(cmds, cwd=None):
-    r"""
-        >>> stdout, stderr = executeExternalProcess(["which", "ls"])
-        >>> stdout
-        '/bin/ls\n'
-        >>> assert stdout == '/bin/ls\n'
-        >>> executeExternalProcess(["which", "fooooo"])
-        Traceback (most recent call last):
-            ...
-        RuntimeError: 'which' failed with error code 1
-        >>> stdout, stderr = executeExternalProcess(["python", "-c", "print('hello')"])
-        >>> stdout
-        'hello\n'
-    """
-    p = subprocess.Popen(cmds, stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=cwd, universal_newlines=True)
-    stdoutdata, stderrdata = p.communicate()
-    assert p.returncode is not None
-    if p.returncode != 0:
-        sys.stdout.write(stdoutdata)
-        sys.stderr.write(stderrdata)
-        raise RuntimeError("%r failed with error code %s" % (os.path.basename(cmds[0]), p.returncode))
-    return stdoutdata, stderrdata
-
-
-def generateMP4(imageTemplate, mp4path, frameRate):
-    cmds = [
-        # ffmpeg path
-        ffmpegPath,
-        "-y",                   # overwrite existing files
-        "-loglevel", "0",       # quiet
-        "-r", str(frameRate),   # frame rate
-        "-i", imageTemplate,    # input sequence
-        "-c:v", "libx264",      # codec
-        "-crf", "20", "-pix_fmt", "yuv420p",  # dunno
-        mp4path,                # output path
-    ]
-    executeExternalProcess(cmds)
+from .tools.mp4Tools import generateMP4
 
 
 class MP4Context(ImageContext):
@@ -64,7 +20,7 @@ class MP4Context(ImageContext):
 
     fileExtensions = ["mp4"]
 
-    _defaultFrameDuration = 1/10
+    _defaultFrameDuration = 1 / 10
 
     def __init__(self):
         super(MP4Context, self).__init__()
