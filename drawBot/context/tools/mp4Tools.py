@@ -1,3 +1,5 @@
+from __future__ import division, absolute_import, print_function
+
 import os
 import AppKit
 
@@ -10,6 +12,7 @@ if not os.path.exists(ffmpegPath):
 
 
 def generateMP4(imageTemplate, mp4path, frameRate):
+    assert ffmpegPath is not None
     cmds = [
         # ffmpeg path
         ffmpegPath,

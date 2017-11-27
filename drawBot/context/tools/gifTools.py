@@ -1,5 +1,6 @@
-import AppKit
+from __future__ import division, absolute_import, print_function
 
+import AppKit
 import shutil
 import os
 import tempfile
@@ -13,6 +14,7 @@ if not os.path.exists(gifsiclePath):
 
 
 def generateGif(sourcePaths, destPath, delays):
+    assert gifsiclePath is not None
     cmds = [
         # gifsicle path
         gifsiclePath,
