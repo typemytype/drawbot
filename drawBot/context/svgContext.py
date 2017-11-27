@@ -521,6 +521,8 @@ class SVGContext(BaseContext):
         fill = self._svgFillColor()
         if fill:
             data["fill"] = fill
+        else:
+            data["fill"] = "none"
         stroke = self._svgStrokeColor()
         if stroke:
             data["stroke"] = stroke
