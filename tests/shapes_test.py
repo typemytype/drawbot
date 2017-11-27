@@ -19,7 +19,7 @@ class ShapesTestCase(unittest.TestCase):
         size(200, 200)
         fill(0)
         rect(10, 10, 100, 100)
-        fill(0, 1, 0)
+        fill(None)
         stroke(1, 0, 0)
         strokeWidth(5)
         oval(50, 50, 100, 100)
