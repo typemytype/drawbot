@@ -27,6 +27,9 @@ def executeExternalProcess(cmds, cwd=None):
         Traceback (most recent call last):
             ...
         RuntimeError: 'which' failed with error code 1
+        >>> stdout, stderr = executeExternalProcess(["python", "-c", "print('hello')"])
+        >>> stdout
+        'hello\n'
     """
     p = subprocess.Popen(cmds, stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=cwd, universal_newlines=True)
     stdoutdata, stderrdata = p.communicate()
