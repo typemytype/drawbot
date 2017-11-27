@@ -37,14 +37,16 @@ class ImageContext(PDFContext):
         outputPaths = []
         for index in range(firstPage, pageCount):
             pool = AppKit.NSAutoreleasePool.alloc().init()
-            page = pdfDocument.pageAtIndex_(index)
-            image = AppKit.NSImage.alloc().initWithData_(page.dataRepresentation())
-            imageRep = AppKit.NSBitmapImageRep.imageRepWithData_(image.TIFFRepresentation())
-            imageData = imageRep.representationUsingType_properties_(self._saveImageFileTypes[ext], None)
-            imagePath = fileName + pathAdd + fileExt
-            imageData.writeToFile_atomically_(imagePath, True)
-            pathAdd = "_%s" % (index + 2)
-            outputPaths.append(imagePath)
-            del page, imageRep, imageData
-            del pool
+            try:
+                page = pdfDocument.pageAtIndex_(index)
+                image = AppKit.NSImage.alloc().initWithData_(page.dataRepresentation())
+                imageRep = AppKit.NSBitmapImageRep.imageRepWithData_(image.TIFFRepresentation())
+                imageData = imageRep.representationUsingType_properties_(self._saveImageFileTypes[ext], None)
+                imagePath = fileName + pathAdd + fileExt
+                imageData.writeToFile_atomically_(imagePath, True)
+                pathAdd = "_%s" % (index + 2)
+                outputPaths.append(imagePath)
+                del page, imageRep, imageData
+            finally:
+                del pool
         return outputPaths

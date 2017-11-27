@@ -48,10 +48,12 @@ class MOVContext(PDFContext):
 
         for index in range(pdfDocument.pageCount()):
             pool = AppKit.NSAutoreleasePool.alloc().init()
-            frameLength, frameScale = self._frameDurationData[index]
-            duration = QTKit.QTMakeTime(frameLength, frameScale)
-            page = pdfDocument.pageAtIndex_(index)
-            image = AppKit.NSImage.alloc().initWithData_(page.dataRepresentation())
-            movie.addImage_forDuration_withAttributes_(image, duration, self._saveMovieAttributes)
-            del pool
+            try:
+                frameLength, frameScale = self._frameDurationData[index]
+                duration = QTKit.QTMakeTime(frameLength, frameScale)
+                page = pdfDocument.pageAtIndex_(index)
+                image = AppKit.NSImage.alloc().initWithData_(page.dataRepresentation())
+                movie.addImage_forDuration_withAttributes_(image, duration, self._saveMovieAttributes)
+            finally:
+                del pool
         movie.updateMovieFile()

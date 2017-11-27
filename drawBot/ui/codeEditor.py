@@ -1250,14 +1250,17 @@ class CodeNSTextView(AppKit.NSTextView):
     def _runInternalCode(self):
         pool = AppKit.NSAutoreleasePool.alloc().init()
         try:
-            window = self.window()
-            if window is not None:
-                doc = window.document()
-                if doc is not None:
-                    doc.runCode_(self)
-                    return True
-        except Exception:
-            return False
+            try:
+                window = self.window()
+                if window is not None:
+                    doc = window.document()
+                    if doc is not None:
+                        doc.runCode_(self)
+                        return True
+            except Exception:
+                return False
+        finally:
+            del pool
 
 
 class CodeEditor(TextEditor):
