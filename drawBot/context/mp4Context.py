@@ -45,8 +45,3 @@ class MP4Context(ImageContext):
             generateMP4(os.path.join(tempDir, "frame_%d.png"), path, frameRate)
         finally:
             shutil.rmtree(tempDir)
-
-
-if __name__ == "__main__":
-    import doctest
-    doctest.testmod()

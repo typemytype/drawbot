@@ -265,3 +265,8 @@ def CallbackRunner(callback, stdout=None, stderr=None, args=[], kwargs={}, fallb
         sys.stderr = saveStderr
 
     return result
+
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod()
