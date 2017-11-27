@@ -6,14 +6,38 @@ import os
 import sys
 import traceback
 import site
-import tempfile
 import re
+import subprocess
 
 from vanilla.vanillaBase import osVersion10_10, osVersionCurrent
 
+from fontTools.misc.py23 import PY2, PY3
+
 from drawBot.misc import getDefault
 
-from fontTools.misc.py23 import PY2, PY3
+
+def executeExternalProcess(cmds, cwd=None):
+    r"""
+        >>> stdout, stderr = executeExternalProcess(["which", "ls"])
+        >>> stdout
+        '/bin/ls\n'
+        >>> assert stdout == '/bin/ls\n'
+        >>> executeExternalProcess(["which", "fooooo"])
+        Traceback (most recent call last):
+            ...
+        RuntimeError: 'which' failed with error code 1
+        >>> stdout, stderr = executeExternalProcess(["python", "-c", "print('hello')"])
+        >>> stdout
+        'hello\n'
+    """
+    p = subprocess.Popen(cmds, stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=cwd, universal_newlines=True)
+    stdoutdata, stderrdata = p.communicate()
+    assert p.returncode is not None
+    if p.returncode != 0:
+        sys.stdout.write(stdoutdata)
+        sys.stderr.write(stderrdata)
+        raise RuntimeError("%r failed with error code %s" % (os.path.basename(cmds[0]), p.returncode))
+    return stdoutdata, stderrdata
 
 
 class StdOutput(object):
@@ -58,35 +82,6 @@ def _makeEnviron():
     return env
 
 
-def _execute(cmds):
-    import subprocess
-    stderrPath = tempfile.mkstemp()[1]
-    stdoutPath = tempfile.mkstemp()[1]
-    stderrFile = open(stderrPath, "w")
-    stdoutFile = open(stdoutPath, "w")
-    # get the os.environ
-    env = _makeEnviron()
-    # make a string of escaped commands
-    cmds = subprocess.list2cmdline(cmds)
-    # go
-    popen = subprocess.Popen(cmds, stderr=stderrFile, stdout=stdoutFile, env=env, shell=True)
-    popen.wait()
-    # get the output
-    stderrFile.close()
-    stdoutFile.close()
-    stderrFile = open(stderrPath, "r")
-    stdoutFile = open(stdoutPath, "r")
-    stderr = stderrFile.read()
-    stdout = stdoutFile.read()
-    stderrFile.close()
-    stdoutFile.close()
-    # trash the temp files
-    os.remove(stderrPath)
-    os.remove(stdoutPath)
-    # done
-    return stderr, stdout
-
-
 def getLocalPythonVersionDirName(standardLib=True):
     if PY3:
         return None
@@ -94,12 +89,13 @@ def getLocalPythonVersionDirName(standardLib=True):
     if standardLib:
         argument = "standard_lib=True"
     commands = ["python", "-c", "from distutils import sysconfig; print(sysconfig.get_python_lib(%s))" % argument]
-    err, out = _execute(commands)
+    out, err = executeExternalProcess(commands)
     sitePackages = out.split("\n")[0]
     if os.path.exists(sitePackages):
         return sitePackages
     else:
         return None
+
 
 def getLocalPython3Paths():
     if PY3:
@@ -114,6 +110,7 @@ def getLocalPython3Paths():
         return paths
     else:
         return []
+
 
 localStandardLibPath = getLocalPythonVersionDirName(standardLib=True)
 localSitePackagesPath = getLocalPythonVersionDirName(standardLib=False)
