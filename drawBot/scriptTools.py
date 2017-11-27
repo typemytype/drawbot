@@ -14,7 +14,7 @@ from vanilla.vanillaBase import osVersion10_10, osVersionCurrent
 
 from fontTools.misc.py23 import PY2, PY3
 
-from drawBot.misc import getDefault
+from drawBot.misc import getDefault, executeExternalProcess
 
 
 class StdOutput(object):
