@@ -370,10 +370,10 @@ class DrawBotDrawingTool(object):
 
         The file extension is important because it will determine the format in which the image will be exported.
 
-        All supported file extensions: `pdf`, `svg`, `png`, `jpg`, `jpeg`, `tiff`, `tif`, `gif`, `bmp` and `mov`.
+        All supported file extensions: `pdf`, `svg`, `png`, `jpg`, `jpeg`, `tiff`, `tif`, `gif`, `bmp`, `mov` and `mp4`.
 
         * A `pdf` can be multipage. If `multipage` is `False` only the current page is saved.
-        * A `mov` will use each page as a frame.
+        * A `mov` and `mp4` will use each page as a frame.
         * A `gif` can be animated when there are multiple pages and it will use each page as a frame.
         * All images and `svg` formats will only save the current page. If `multipage` is `True` all pages are saved to disk (a page index will be added to the file name).
 
