@@ -3,30 +3,13 @@ import AppKit
 import shutil
 import os
 import tempfile
-import subprocess
-import sys
+
+from drawBot.scriptTools import executeExternalProcess
 
 
 gifsiclePath = os.path.join(os.path.dirname(__file__), "gifsicle")
 if not os.path.exists(gifsiclePath):
     gifsiclePath = AppKit.NSBundle.mainBundle().pathForResource_ofType_("gifsicle", None)
-
-
-def _executeCommand(cmds, cwd=None):
-    gifsicleStdOut = tempfile.TemporaryFile(mode="w+")
-    gifsicleStdErr = tempfile.TemporaryFile(mode="w+")
-    try:
-        # go
-        resultCode = subprocess.call(cmds, stdout=gifsicleStdOut, stderr=gifsicleStdErr, cwd=cwd)
-        if resultCode != 0:
-            gifsicleStdOut.seek(0)
-            gifsicleStdErr.seek(0)
-            sys.stdout.write(gifsicleStdOut.read())
-            sys.stderr.write(gifsicleStdErr.read())
-            raise RuntimeError("gifsicle failed with error code %s" % resultCode)
-    finally:
-        gifsicleStdOut.close()
-        gifsicleStdErr.close()
 
 
 def generateGif(sourcePaths, destPath, delays):
@@ -56,7 +39,7 @@ def generateGif(sourcePaths, destPath, delays):
         "--output",
         destPath
     ]
-    _executeCommand(cmds)
+    executeExternalProcess(cmds)
     # remove the temp input gifs
     for inputPath in sourcePaths:
         os.remove(inputPath)
@@ -76,7 +59,7 @@ def _explodeGif(path):
         # source path
         path
         ]
-    _executeCommand(cmds, cwd=destRoot)
+    executeExternalProcess(cmds, cwd=destRoot)
     files = os.listdir(destRoot)
     _explodedGifCache[path] = dict(
             source=destRoot,

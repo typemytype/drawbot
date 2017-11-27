@@ -6,7 +6,8 @@ import os
 from fontTools.misc.transform import Transform
 
 from imageObject import ImageObject
-from drawBot.scriptTools import _execute
+from drawBot.scriptTools import executeExternalProcess
+
 
 potrace = os.path.join(os.path.dirname(__file__), "potrace")
 if not os.path.exists(potrace):
@@ -321,7 +322,7 @@ def TraceImage(path, outPen, threshold=.2, blur=None, invert=False, turd=2, tole
         bitmapPath,
         imagePath
     ])
-    log = _execute(cmds)
+    log = executeExternalProcess(cmds)
     if log != ('', ''):
         print log
 
@@ -330,7 +331,7 @@ def TraceImage(path, outPen, threshold=.2, blur=None, invert=False, turd=2, tole
     cmds.extend(["-O", str(tolerance)])
     cmds.extend(["-o", svgPath, bitmapPath])
 
-    log = _execute(cmds)
+    log = executeExternalProcess(cmds)
     if log != ('', ''):
         print log
 
