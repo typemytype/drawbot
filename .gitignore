@@ -45,3 +45,6 @@ local
 
 # Finder turds
 .DS_Store
+
+# DrawBot tests
+tests/temp_data/*
