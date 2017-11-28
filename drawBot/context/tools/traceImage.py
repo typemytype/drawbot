@@ -8,15 +8,11 @@ import os
 from fontTools.misc.transform import Transform
 
 from .imageObject import ImageObject
-from drawBot.misc import executeExternalProcess
+from drawBot.misc import executeExternalProcess, getExternalToolPath
 
 
-potrace = os.path.join(os.path.dirname(__file__), "potrace")
-if not os.path.exists(potrace):
-    potrace = AppKit.NSBundle.mainBundle().pathForResource_ofType_("potrace", None)
-mkbitmap = os.path.join(os.path.dirname(__file__), "mkbitmap")
-if not os.path.exists(mkbitmap):
-    mkbitmap = AppKit.NSBundle.mainBundle().pathForResource_ofType_("mkbitmap", None)
+potrace = getExternalToolPath(os.path.dirname(__file__), "potrace")
+mkbitmap = getExternalToolPath(os.path.dirname(__file__), "mkbitmap")
 
 
 def _getPath(element, path=None, pathItems=None):

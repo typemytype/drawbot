@@ -5,12 +5,10 @@ import shutil
 import os
 import tempfile
 
-from drawBot.misc import executeExternalProcess
+from drawBot.misc import executeExternalProcess, getExternalToolPath
 
 
-gifsiclePath = os.path.join(os.path.dirname(__file__), "gifsicle")
-if not os.path.exists(gifsiclePath):
-    gifsiclePath = AppKit.NSBundle.mainBundle().pathForResource_ofType_("gifsicle", None)
+gifsiclePath = getExternalToolPath(os.path.dirname(__file__), "gifsicle")
 
 
 def generateGif(sourcePaths, destPath, delays):
@@ -60,13 +58,13 @@ def _explodeGif(path):
         "--explode",
         # source path
         path
-        ]
+    ]
     executeExternalProcess(cmds, cwd=destRoot)
     files = os.listdir(destRoot)
     _explodedGifCache[path] = dict(
-            source=destRoot,
-            fileNames=files,
-        )
+        source=destRoot,
+        fileNames=files,
+    )
 
 
 def clearExplodedGifCache():

@@ -1,14 +1,11 @@
 from __future__ import division, absolute_import, print_function
 
 import os
-import AppKit
 
-from drawBot.misc import executeExternalProcess
+from drawBot.misc import executeExternalProcess, getExternalToolPath
 
 
-ffmpegPath = os.path.join(os.path.dirname(__file__), "ffmpeg")
-if not os.path.exists(ffmpegPath):
-    ffmpegPath = AppKit.NSBundle.mainBundle().pathForResource_ofType_("ffmpeg", None)
+ffmpegPath = getExternalToolPath(os.path.dirname(__file__), "ffmpeg")
 
 
 def generateMP4(imageTemplate, mp4path, frameRate):
