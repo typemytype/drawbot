@@ -58,7 +58,7 @@ class SVGColor(Color):
                 g = int(255 * c.greenComponent())
                 b = int(255 * c.blueComponent())
             a = c.alphaComponent()
-            return "rgba(%s,%s,%s,%s)" % (r, g, b, a)
+            return "rgb(%s,%s,%s)" % (r, g, b), a
         return None
 
 
@@ -102,7 +102,10 @@ class SVGGradient(Gradient):
         ctx.newline()
         for i, color in enumerate(self.colors):
             position = self.positions[i]
-            stopData = {"offset": position, "stop-color": color.svgColor()}
+            c, a = color.svgColor()
+            stopData = {"offset": position, "stop-color": c}
+            if a != 1:
+                stopData["stop-opacity"] = a
             ctx.simpletag("stop", **stopData)
             ctx.newline()
         ctx.endtag("linearGradient")
@@ -120,7 +123,10 @@ class SVGGradient(Gradient):
         ctx.newline()
         for i, color in enumerate(self.colors):
             position = self.positions[i]
-            stopData = {"offset": position, "stop-color": color.svgColor()}
+            c, a = color.svgColor()
+            stopData = {"offset": position, "stop-color": c}
+            if a != 1:
+                stopData["stop-opacity"] = a
             ctx.simpletag("stop", **stopData)
             ctx.newline()
         ctx.endtag("radialGradient")
@@ -165,7 +171,10 @@ class SVGShadow(Shadow):
         offsetData = {"dx": dx, "dy": dy, "result": "offsetblur"}
         ctx.simpletag("feOffset", **offsetData)
         ctx.newline()
-        colorData = {"flood-color": self.color.svgColor()}
+        c, a = self.color.svgColor()
+        colorData = {"flood-color": c}
+        if a != 1:
+            colorData["flood-opacity"] = a
         ctx.simpletag("feFlood", **colorData)
         ctx.newline()
         ctx.simpletag("feComposite", in2="offsetblur", operator="in")
@@ -387,10 +396,16 @@ class SVGContext(BaseContext):
                 spanData = dict(defaultData)
                 fill = self._colorClass(fillColor).svgColor()
                 if fill:
-                    spanData["fill"] = fill
+                    c, a = fill
+                    spanData["fill"] = c
+                    if a != 1:
+                        spanData["fill-opacity"] = a
                 stroke = self._colorClass(strokeColor).svgColor()
                 if stroke:
-                    spanData["stroke"] = stroke
+                    c, a = stroke
+                    spanData["stroke"] = c
+                    if a != 1:
+                        spanData["stroke-opacity"] = a
                     spanData["stroke-width"] = formatNumber(abs(strokeWidth) * .5)
                 spanData["font-family"] = fontName
                 spanData["font-size"] = formatNumber(fontSize)
@@ -515,12 +530,18 @@ class SVGContext(BaseContext):
         data = dict()
         fill = self._svgFillColor()
         if fill:
-            data["fill"] = fill
+            c, a = fill
+            data["fill"] = c
+            if a != 1:
+                data["fill-opacity"] = a
         else:
             data["fill"] = "none"
         stroke = self._svgStrokeColor()
         if stroke:
-            data["stroke"] = stroke
+            c, a = stroke
+            data["stroke"] = c
+            if a != 1:
+                data["stroke-opacity"] = a
             data["stroke-width"] = formatNumber(abs(self._state.strokeWidth))
         if self._state.lineDash:
             data["stroke-dasharray"] = ",".join([str(i) for i in self._state.lineDash])
