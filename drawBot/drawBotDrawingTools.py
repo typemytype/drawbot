@@ -402,7 +402,7 @@ class DrawBotDrawingTool(object):
             base, ext = os.path.splitext(path)
             ext = ext.lower()[1:]
             if not ext:
-                ext = rawPath
+                path = ext = rawPath
             context = getContextForFileExt(ext)
             if context is None:
                 raise DrawBotError("Could not find a supported context for: '%s'" % ext)
