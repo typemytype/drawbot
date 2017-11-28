@@ -393,7 +393,7 @@ class SVGContext(BaseContext):
                 stroke = self._colorClass(strokeColor).svgColor()
                 if stroke:
                     spanData["stroke"] = stroke
-                    spanData["stroke-width"] = formatNumber(abs(strokeWidth))
+                    spanData["stroke-width"] = formatNumber(abs(strokeWidth) * .5)
                 spanData["font-family"] = fontName
                 spanData["font-size"] = formatNumber(fontSize)
 
