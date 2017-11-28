@@ -4,8 +4,6 @@ import AppKit
 import CoreText
 
 import os
-# import base64
-import random
 import uuid
 
 from fontTools.misc.xmlWriter import XMLWriter
@@ -13,7 +11,7 @@ from fontTools.misc.xmlWriter import XMLWriter
 from fontTools.misc.transform import Transform
 
 from .tools.openType import getFeatureTagsForFontAttributes
-from .baseContext import BaseContext, GraphicsState, Shadow, Color, FormattedString, Gradient
+from .baseContext import BaseContext, GraphicsState, Shadow, Color, Gradient
 
 from drawBot.misc import warnings, formatNumber
 
@@ -54,11 +52,11 @@ class SVGColor(Color):
         if c:
             if c.numberOfComponents() == 2:
                 # gray number
-                r = g = b = int(255*c.whiteComponent())
+                r = g = b = int(255 * c.whiteComponent())
             else:
-                r = int(255*c.redComponent())
-                g = int(255*c.greenComponent())
-                b = int(255*c.blueComponent())
+                r = int(255 * c.redComponent())
+                g = int(255 * c.greenComponent())
+                b = int(255 * c.blueComponent())
             a = c.alphaComponent()
             return "rgba(%s,%s,%s,%s)" % (r, g, b, a)
         return None
@@ -213,13 +211,13 @@ class SVGContext(BaseContext):
     _svgTagArguments = {
         "version": "1.1",
         "xmlns": "http://www.w3.org/2000/svg",
-        }
+    }
 
     _svgLineJoinStylesMap = {
-                    AppKit.NSMiterLineJoinStyle: "miter",
-                    AppKit.NSRoundLineJoinStyle: "round",
-                    AppKit.NSBevelLineJoinStyle: "bevel"
-                    }
+        AppKit.NSMiterLineJoinStyle: "miter",
+        AppKit.NSRoundLineJoinStyle: "round",
+        AppKit.NSBevelLineJoinStyle: "bevel"
+    }
 
     _svgLineCapStylesMap = {
         AppKit.NSButtLineCapStyle: "butt",
@@ -358,7 +356,7 @@ class SVGContext(BaseContext):
         data = {
             "text-anchor": "start",
             "transform": self._svgTransform(self._state.transformMatrix.translate(x, y + self.height).scale(1, -1))
-            }
+        }
         if self._state.shadow is not None:
             data["filter"] = "url(#%s_flipped)" % self._state.shadow.tagID
         self._svgContext.begintag("text", **data)
@@ -466,9 +464,6 @@ class SVGContext(BaseContext):
 
     def _getUniqueID(self):
         return uuid.uuid4().hex
-        # b = [chr(random.randrange(256)) for i in range(16)]
-        # i = long(('%02x'*16) % tuple(map(ord, b)), 16)
-        # return '%032x' % i
 
     def _svgTransform(self, transform):
         return "matrix(%s)" % (",".join([str(s) for s in transform]))
