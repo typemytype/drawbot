@@ -1,104 +1,104 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg height="100" version="1.1" width="100" xmlns="http://www.w3.org/2000/svg">
- <path d="M85.36,14.64 c19.53,19.53,19.53,51.18,0,70.71 c-19.53,19.53,-51.18,19.53,-70.71,0 c-19.53,-19.53,-19.53,-51.18,-0.0,-70.71 c19.53,-19.53,51.18,-19.53,70.71,-0.0 Z M85.36,14.64 " fill="rgb(127,127,127)" fill-opacity="0.5" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M0,0 l10,0 l0,10 l-10,0 Z M0,0 " fill="rgb(0,255,0)" fill-opacity="0.5" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M0,10 l10,0 l0,10 l-10,0 Z M0,10 " fill="rgb(0,229,25)" fill-opacity="0.55" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M0,20 l10,0 l0,10 l-10,0 Z M0,20 " fill="rgb(0,204,51)" fill-opacity="0.6" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M0,30 l10,0 l0,10 l-10,0 Z M0,30 " fill="rgb(0,178,76)" fill-opacity="0.65" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M0,40 l10,0 l0,10 l-10,0 Z M0,40 " fill="rgb(0,153,102)" fill-opacity="0.7" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M0,50 l10,0 l0,10 l-10,0 Z M0,50 " fill="rgb(0,127,127)" fill-opacity="0.75" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M0,60 l10,0 l0,10 l-10,0 Z M0,60 " fill="rgb(0,102,153)" fill-opacity="0.8" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M0,70 l10,0 l0,10 l-10,0 Z M0,70 " fill="rgb(0,76,178)" fill-opacity="0.85" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M0,80 l10,0 l0,10 l-10,0 Z M0,80 " fill="rgb(0,50,204)" fill-opacity="0.9" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M0,90 l10,0 l0,10 l-10,0 Z M0,90 " fill="rgb(0,25,229)" fill-opacity="0.95" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M10,0 l10,0 l0,10 l-10,0 Z M10,0 " fill="rgb(25,255,0)" fill-opacity="0.5" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M10,10 l10,0 l0,10 l-10,0 Z M10,10 " fill="rgb(25,229,25)" fill-opacity="0.55" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M10,20 l10,0 l0,10 l-10,0 Z M10,20 " fill="rgb(25,204,51)" fill-opacity="0.6" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M10,30 l10,0 l0,10 l-10,0 Z M10,30 " fill="rgb(25,178,76)" fill-opacity="0.65" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M10,40 l10,0 l0,10 l-10,0 Z M10,40 " fill="rgb(25,153,102)" fill-opacity="0.7" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M10,50 l10,0 l0,10 l-10,0 Z M10,50 " fill="rgb(25,127,127)" fill-opacity="0.75" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M10,60 l10,0 l0,10 l-10,0 Z M10,60 " fill="rgb(25,102,153)" fill-opacity="0.8" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M10,70 l10,0 l0,10 l-10,0 Z M10,70 " fill="rgb(25,76,178)" fill-opacity="0.85" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M10,80 l10,0 l0,10 l-10,0 Z M10,80 " fill="rgb(25,50,204)" fill-opacity="0.9" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M10,90 l10,0 l0,10 l-10,0 Z M10,90 " fill="rgb(25,25,229)" fill-opacity="0.95" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M20,0 l10,0 l0,10 l-10,0 Z M20,0 " fill="rgb(51,255,0)" fill-opacity="0.5" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M20,10 l10,0 l0,10 l-10,0 Z M20,10 " fill="rgb(51,229,25)" fill-opacity="0.55" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M20,20 l10,0 l0,10 l-10,0 Z M20,20 " fill="rgb(51,204,51)" fill-opacity="0.6" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M20,30 l10,0 l0,10 l-10,0 Z M20,30 " fill="rgb(51,178,76)" fill-opacity="0.65" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M20,40 l10,0 l0,10 l-10,0 Z M20,40 " fill="rgb(51,153,102)" fill-opacity="0.7" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M20,50 l10,0 l0,10 l-10,0 Z M20,50 " fill="rgb(51,127,127)" fill-opacity="0.75" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M20,60 l10,0 l0,10 l-10,0 Z M20,60 " fill="rgb(51,102,153)" fill-opacity="0.8" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M20,70 l10,0 l0,10 l-10,0 Z M20,70 " fill="rgb(51,76,178)" fill-opacity="0.85" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M20,80 l10,0 l0,10 l-10,0 Z M20,80 " fill="rgb(51,50,204)" fill-opacity="0.9" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M20,90 l10,0 l0,10 l-10,0 Z M20,90 " fill="rgb(51,25,229)" fill-opacity="0.95" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M30,0 l10,0 l0,10 l-10,0 Z M30,0 " fill="rgb(76,255,0)" fill-opacity="0.5" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M30,10 l10,0 l0,10 l-10,0 Z M30,10 " fill="rgb(76,229,25)" fill-opacity="0.55" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M30,20 l10,0 l0,10 l-10,0 Z M30,20 " fill="rgb(76,204,51)" fill-opacity="0.6" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M30,30 l10,0 l0,10 l-10,0 Z M30,30 " fill="rgb(76,178,76)" fill-opacity="0.65" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M30,40 l10,0 l0,10 l-10,0 Z M30,40 " fill="rgb(76,153,102)" fill-opacity="0.7" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M30,50 l10,0 l0,10 l-10,0 Z M30,50 " fill="rgb(76,127,127)" fill-opacity="0.75" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M30,60 l10,0 l0,10 l-10,0 Z M30,60 " fill="rgb(76,102,153)" fill-opacity="0.8" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M30,70 l10,0 l0,10 l-10,0 Z M30,70 " fill="rgb(76,76,178)" fill-opacity="0.85" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M30,80 l10,0 l0,10 l-10,0 Z M30,80 " fill="rgb(76,50,204)" fill-opacity="0.9" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M30,90 l10,0 l0,10 l-10,0 Z M30,90 " fill="rgb(76,25,229)" fill-opacity="0.95" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M40,0 l10,0 l0,10 l-10,0 Z M40,0 " fill="rgb(102,255,0)" fill-opacity="0.5" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M40,10 l10,0 l0,10 l-10,0 Z M40,10 " fill="rgb(102,229,25)" fill-opacity="0.55" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M40,20 l10,0 l0,10 l-10,0 Z M40,20 " fill="rgb(102,204,51)" fill-opacity="0.6" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M40,30 l10,0 l0,10 l-10,0 Z M40,30 " fill="rgb(102,178,76)" fill-opacity="0.65" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M40,40 l10,0 l0,10 l-10,0 Z M40,40 " fill="rgb(102,153,102)" fill-opacity="0.7" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M40,50 l10,0 l0,10 l-10,0 Z M40,50 " fill="rgb(102,127,127)" fill-opacity="0.75" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M40,60 l10,0 l0,10 l-10,0 Z M40,60 " fill="rgb(102,102,153)" fill-opacity="0.8" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M40,70 l10,0 l0,10 l-10,0 Z M40,70 " fill="rgb(102,76,178)" fill-opacity="0.85" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M40,80 l10,0 l0,10 l-10,0 Z M40,80 " fill="rgb(102,50,204)" fill-opacity="0.9" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M40,90 l10,0 l0,10 l-10,0 Z M40,90 " fill="rgb(102,25,229)" fill-opacity="0.95" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M50,0 l10,0 l0,10 l-10,0 Z M50,0 " fill="rgb(127,255,0)" fill-opacity="0.5" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M50,10 l10,0 l0,10 l-10,0 Z M50,10 " fill="rgb(127,229,25)" fill-opacity="0.55" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M50,20 l10,0 l0,10 l-10,0 Z M50,20 " fill="rgb(127,204,51)" fill-opacity="0.6" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M50,30 l10,0 l0,10 l-10,0 Z M50,30 " fill="rgb(127,178,76)" fill-opacity="0.65" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M50,40 l10,0 l0,10 l-10,0 Z M50,40 " fill="rgb(127,153,102)" fill-opacity="0.7" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M50,50 l10,0 l0,10 l-10,0 Z M50,50 " fill="rgb(127,127,127)" fill-opacity="0.75" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M50,60 l10,0 l0,10 l-10,0 Z M50,60 " fill="rgb(127,102,153)" fill-opacity="0.8" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M50,70 l10,0 l0,10 l-10,0 Z M50,70 " fill="rgb(127,76,178)" fill-opacity="0.85" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M50,80 l10,0 l0,10 l-10,0 Z M50,80 " fill="rgb(127,50,204)" fill-opacity="0.9" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M50,90 l10,0 l0,10 l-10,0 Z M50,90 " fill="rgb(127,25,229)" fill-opacity="0.95" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M60,0 l10,0 l0,10 l-10,0 Z M60,0 " fill="rgb(153,255,0)" fill-opacity="0.5" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M60,10 l10,0 l0,10 l-10,0 Z M60,10 " fill="rgb(153,229,25)" fill-opacity="0.55" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M60,20 l10,0 l0,10 l-10,0 Z M60,20 " fill="rgb(153,204,51)" fill-opacity="0.6" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M60,30 l10,0 l0,10 l-10,0 Z M60,30 " fill="rgb(153,178,76)" fill-opacity="0.65" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M60,40 l10,0 l0,10 l-10,0 Z M60,40 " fill="rgb(153,153,102)" fill-opacity="0.7" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M60,50 l10,0 l0,10 l-10,0 Z M60,50 " fill="rgb(153,127,127)" fill-opacity="0.75" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M60,60 l10,0 l0,10 l-10,0 Z M60,60 " fill="rgb(153,102,153)" fill-opacity="0.8" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M60,70 l10,0 l0,10 l-10,0 Z M60,70 " fill="rgb(153,76,178)" fill-opacity="0.85" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M60,80 l10,0 l0,10 l-10,0 Z M60,80 " fill="rgb(153,50,204)" fill-opacity="0.9" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M60,90 l10,0 l0,10 l-10,0 Z M60,90 " fill="rgb(153,25,229)" fill-opacity="0.95" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M70,0 l10,0 l0,10 l-10,0 Z M70,0 " fill="rgb(178,255,0)" fill-opacity="0.5" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M70,10 l10,0 l0,10 l-10,0 Z M70,10 " fill="rgb(178,229,25)" fill-opacity="0.55" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M70,20 l10,0 l0,10 l-10,0 Z M70,20 " fill="rgb(178,204,51)" fill-opacity="0.6" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M70,30 l10,0 l0,10 l-10,0 Z M70,30 " fill="rgb(178,178,76)" fill-opacity="0.65" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M70,40 l10,0 l0,10 l-10,0 Z M70,40 " fill="rgb(178,153,102)" fill-opacity="0.7" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M70,50 l10,0 l0,10 l-10,0 Z M70,50 " fill="rgb(178,127,127)" fill-opacity="0.75" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M70,60 l10,0 l0,10 l-10,0 Z M70,60 " fill="rgb(178,102,153)" fill-opacity="0.8" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M70,70 l10,0 l0,10 l-10,0 Z M70,70 " fill="rgb(178,76,178)" fill-opacity="0.85" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M70,80 l10,0 l0,10 l-10,0 Z M70,80 " fill="rgb(178,50,204)" fill-opacity="0.9" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M70,90 l10,0 l0,10 l-10,0 Z M70,90 " fill="rgb(178,25,229)" fill-opacity="0.95" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M80,0 l10,0 l0,10 l-10,0 Z M80,0 " fill="rgb(204,255,0)" fill-opacity="0.5" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M80,10 l10,0 l0,10 l-10,0 Z M80,10 " fill="rgb(204,229,25)" fill-opacity="0.55" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M80,20 l10,0 l0,10 l-10,0 Z M80,20 " fill="rgb(204,204,51)" fill-opacity="0.6" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M80,30 l10,0 l0,10 l-10,0 Z M80,30 " fill="rgb(204,178,76)" fill-opacity="0.65" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M80,40 l10,0 l0,10 l-10,0 Z M80,40 " fill="rgb(204,153,102)" fill-opacity="0.7" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M80,50 l10,0 l0,10 l-10,0 Z M80,50 " fill="rgb(204,127,127)" fill-opacity="0.75" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M80,60 l10,0 l0,10 l-10,0 Z M80,60 " fill="rgb(204,102,153)" fill-opacity="0.8" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M80,70 l10,0 l0,10 l-10,0 Z M80,70 " fill="rgb(204,76,178)" fill-opacity="0.85" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M80,80 l10,0 l0,10 l-10,0 Z M80,80 " fill="rgb(204,50,204)" fill-opacity="0.9" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M80,90 l10,0 l0,10 l-10,0 Z M80,90 " fill="rgb(204,25,229)" fill-opacity="0.95" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M90,0 l10,0 l0,10 l-10,0 Z M90,0 " fill="rgb(229,255,0)" fill-opacity="0.5" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M90,10 l10,0 l0,10 l-10,0 Z M90,10 " fill="rgb(229,229,25)" fill-opacity="0.55" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M90,20 l10,0 l0,10 l-10,0 Z M90,20 " fill="rgb(229,204,51)" fill-opacity="0.6" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M90,30 l10,0 l0,10 l-10,0 Z M90,30 " fill="rgb(229,178,76)" fill-opacity="0.65" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M90,40 l10,0 l0,10 l-10,0 Z M90,40 " fill="rgb(229,153,102)" fill-opacity="0.7" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M90,50 l10,0 l0,10 l-10,0 Z M90,50 " fill="rgb(229,127,127)" fill-opacity="0.75" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M90,60 l10,0 l0,10 l-10,0 Z M90,60 " fill="rgb(229,102,153)" fill-opacity="0.8" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M90,70 l10,0 l0,10 l-10,0 Z M90,70 " fill="rgb(229,76,178)" fill-opacity="0.85" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M90,80 l10,0 l0,10 l-10,0 Z M90,80 " fill="rgb(229,50,204)" fill-opacity="0.9" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M90,90 l10,0 l0,10 l-10,0 Z M90,90 " fill="rgb(229,25,229)" fill-opacity="0.95" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M85.36,14.64 c19.53,19.53,19.53,51.18,0,70.71 c-19.53,19.53,-51.18,19.53,-70.71,0 c-19.53,-19.53,-19.53,-51.18,-0.0,-70.71 c19.53,-19.53,51.18,-19.53,70.71,-0.0 Z M85.36,14.64" fill="rgb(127,127,127)" fill-opacity="0.5" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M0,0 l10,0 l0,10 l-10,0 Z M0,0" fill="rgb(0,255,0)" fill-opacity="0.5" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M0,10 l10,0 l0,10 l-10,0 Z M0,10" fill="rgb(0,229,25)" fill-opacity="0.55" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M0,20 l10,0 l0,10 l-10,0 Z M0,20" fill="rgb(0,204,51)" fill-opacity="0.6" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M0,30 l10,0 l0,10 l-10,0 Z M0,30" fill="rgb(0,178,76)" fill-opacity="0.65" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M0,40 l10,0 l0,10 l-10,0 Z M0,40" fill="rgb(0,153,102)" fill-opacity="0.7" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M0,50 l10,0 l0,10 l-10,0 Z M0,50" fill="rgb(0,127,127)" fill-opacity="0.75" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M0,60 l10,0 l0,10 l-10,0 Z M0,60" fill="rgb(0,102,153)" fill-opacity="0.8" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M0,70 l10,0 l0,10 l-10,0 Z M0,70" fill="rgb(0,76,178)" fill-opacity="0.85" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M0,80 l10,0 l0,10 l-10,0 Z M0,80" fill="rgb(0,50,204)" fill-opacity="0.9" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M0,90 l10,0 l0,10 l-10,0 Z M0,90" fill="rgb(0,25,229)" fill-opacity="0.95" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M10,0 l10,0 l0,10 l-10,0 Z M10,0" fill="rgb(25,255,0)" fill-opacity="0.5" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M10,10 l10,0 l0,10 l-10,0 Z M10,10" fill="rgb(25,229,25)" fill-opacity="0.55" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M10,20 l10,0 l0,10 l-10,0 Z M10,20" fill="rgb(25,204,51)" fill-opacity="0.6" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M10,30 l10,0 l0,10 l-10,0 Z M10,30" fill="rgb(25,178,76)" fill-opacity="0.65" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M10,40 l10,0 l0,10 l-10,0 Z M10,40" fill="rgb(25,153,102)" fill-opacity="0.7" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M10,50 l10,0 l0,10 l-10,0 Z M10,50" fill="rgb(25,127,127)" fill-opacity="0.75" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M10,60 l10,0 l0,10 l-10,0 Z M10,60" fill="rgb(25,102,153)" fill-opacity="0.8" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M10,70 l10,0 l0,10 l-10,0 Z M10,70" fill="rgb(25,76,178)" fill-opacity="0.85" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M10,80 l10,0 l0,10 l-10,0 Z M10,80" fill="rgb(25,50,204)" fill-opacity="0.9" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M10,90 l10,0 l0,10 l-10,0 Z M10,90" fill="rgb(25,25,229)" fill-opacity="0.95" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M20,0 l10,0 l0,10 l-10,0 Z M20,0" fill="rgb(51,255,0)" fill-opacity="0.5" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M20,10 l10,0 l0,10 l-10,0 Z M20,10" fill="rgb(51,229,25)" fill-opacity="0.55" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M20,20 l10,0 l0,10 l-10,0 Z M20,20" fill="rgb(51,204,51)" fill-opacity="0.6" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M20,30 l10,0 l0,10 l-10,0 Z M20,30" fill="rgb(51,178,76)" fill-opacity="0.65" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M20,40 l10,0 l0,10 l-10,0 Z M20,40" fill="rgb(51,153,102)" fill-opacity="0.7" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M20,50 l10,0 l0,10 l-10,0 Z M20,50" fill="rgb(51,127,127)" fill-opacity="0.75" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M20,60 l10,0 l0,10 l-10,0 Z M20,60" fill="rgb(51,102,153)" fill-opacity="0.8" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M20,70 l10,0 l0,10 l-10,0 Z M20,70" fill="rgb(51,76,178)" fill-opacity="0.85" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M20,80 l10,0 l0,10 l-10,0 Z M20,80" fill="rgb(51,50,204)" fill-opacity="0.9" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M20,90 l10,0 l0,10 l-10,0 Z M20,90" fill="rgb(51,25,229)" fill-opacity="0.95" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M30,0 l10,0 l0,10 l-10,0 Z M30,0" fill="rgb(76,255,0)" fill-opacity="0.5" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M30,10 l10,0 l0,10 l-10,0 Z M30,10" fill="rgb(76,229,25)" fill-opacity="0.55" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M30,20 l10,0 l0,10 l-10,0 Z M30,20" fill="rgb(76,204,51)" fill-opacity="0.6" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M30,30 l10,0 l0,10 l-10,0 Z M30,30" fill="rgb(76,178,76)" fill-opacity="0.65" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M30,40 l10,0 l0,10 l-10,0 Z M30,40" fill="rgb(76,153,102)" fill-opacity="0.7" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M30,50 l10,0 l0,10 l-10,0 Z M30,50" fill="rgb(76,127,127)" fill-opacity="0.75" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M30,60 l10,0 l0,10 l-10,0 Z M30,60" fill="rgb(76,102,153)" fill-opacity="0.8" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M30,70 l10,0 l0,10 l-10,0 Z M30,70" fill="rgb(76,76,178)" fill-opacity="0.85" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M30,80 l10,0 l0,10 l-10,0 Z M30,80" fill="rgb(76,50,204)" fill-opacity="0.9" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M30,90 l10,0 l0,10 l-10,0 Z M30,90" fill="rgb(76,25,229)" fill-opacity="0.95" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M40,0 l10,0 l0,10 l-10,0 Z M40,0" fill="rgb(102,255,0)" fill-opacity="0.5" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M40,10 l10,0 l0,10 l-10,0 Z M40,10" fill="rgb(102,229,25)" fill-opacity="0.55" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M40,20 l10,0 l0,10 l-10,0 Z M40,20" fill="rgb(102,204,51)" fill-opacity="0.6" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M40,30 l10,0 l0,10 l-10,0 Z M40,30" fill="rgb(102,178,76)" fill-opacity="0.65" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M40,40 l10,0 l0,10 l-10,0 Z M40,40" fill="rgb(102,153,102)" fill-opacity="0.7" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M40,50 l10,0 l0,10 l-10,0 Z M40,50" fill="rgb(102,127,127)" fill-opacity="0.75" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M40,60 l10,0 l0,10 l-10,0 Z M40,60" fill="rgb(102,102,153)" fill-opacity="0.8" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M40,70 l10,0 l0,10 l-10,0 Z M40,70" fill="rgb(102,76,178)" fill-opacity="0.85" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M40,80 l10,0 l0,10 l-10,0 Z M40,80" fill="rgb(102,50,204)" fill-opacity="0.9" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M40,90 l10,0 l0,10 l-10,0 Z M40,90" fill="rgb(102,25,229)" fill-opacity="0.95" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M50,0 l10,0 l0,10 l-10,0 Z M50,0" fill="rgb(127,255,0)" fill-opacity="0.5" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M50,10 l10,0 l0,10 l-10,0 Z M50,10" fill="rgb(127,229,25)" fill-opacity="0.55" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M50,20 l10,0 l0,10 l-10,0 Z M50,20" fill="rgb(127,204,51)" fill-opacity="0.6" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M50,30 l10,0 l0,10 l-10,0 Z M50,30" fill="rgb(127,178,76)" fill-opacity="0.65" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M50,40 l10,0 l0,10 l-10,0 Z M50,40" fill="rgb(127,153,102)" fill-opacity="0.7" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M50,50 l10,0 l0,10 l-10,0 Z M50,50" fill="rgb(127,127,127)" fill-opacity="0.75" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M50,60 l10,0 l0,10 l-10,0 Z M50,60" fill="rgb(127,102,153)" fill-opacity="0.8" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M50,70 l10,0 l0,10 l-10,0 Z M50,70" fill="rgb(127,76,178)" fill-opacity="0.85" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M50,80 l10,0 l0,10 l-10,0 Z M50,80" fill="rgb(127,50,204)" fill-opacity="0.9" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M50,90 l10,0 l0,10 l-10,0 Z M50,90" fill="rgb(127,25,229)" fill-opacity="0.95" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M60,0 l10,0 l0,10 l-10,0 Z M60,0" fill="rgb(153,255,0)" fill-opacity="0.5" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M60,10 l10,0 l0,10 l-10,0 Z M60,10" fill="rgb(153,229,25)" fill-opacity="0.55" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M60,20 l10,0 l0,10 l-10,0 Z M60,20" fill="rgb(153,204,51)" fill-opacity="0.6" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M60,30 l10,0 l0,10 l-10,0 Z M60,30" fill="rgb(153,178,76)" fill-opacity="0.65" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M60,40 l10,0 l0,10 l-10,0 Z M60,40" fill="rgb(153,153,102)" fill-opacity="0.7" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M60,50 l10,0 l0,10 l-10,0 Z M60,50" fill="rgb(153,127,127)" fill-opacity="0.75" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M60,60 l10,0 l0,10 l-10,0 Z M60,60" fill="rgb(153,102,153)" fill-opacity="0.8" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M60,70 l10,0 l0,10 l-10,0 Z M60,70" fill="rgb(153,76,178)" fill-opacity="0.85" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M60,80 l10,0 l0,10 l-10,0 Z M60,80" fill="rgb(153,50,204)" fill-opacity="0.9" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M60,90 l10,0 l0,10 l-10,0 Z M60,90" fill="rgb(153,25,229)" fill-opacity="0.95" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M70,0 l10,0 l0,10 l-10,0 Z M70,0" fill="rgb(178,255,0)" fill-opacity="0.5" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M70,10 l10,0 l0,10 l-10,0 Z M70,10" fill="rgb(178,229,25)" fill-opacity="0.55" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M70,20 l10,0 l0,10 l-10,0 Z M70,20" fill="rgb(178,204,51)" fill-opacity="0.6" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M70,30 l10,0 l0,10 l-10,0 Z M70,30" fill="rgb(178,178,76)" fill-opacity="0.65" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M70,40 l10,0 l0,10 l-10,0 Z M70,40" fill="rgb(178,153,102)" fill-opacity="0.7" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M70,50 l10,0 l0,10 l-10,0 Z M70,50" fill="rgb(178,127,127)" fill-opacity="0.75" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M70,60 l10,0 l0,10 l-10,0 Z M70,60" fill="rgb(178,102,153)" fill-opacity="0.8" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M70,70 l10,0 l0,10 l-10,0 Z M70,70" fill="rgb(178,76,178)" fill-opacity="0.85" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M70,80 l10,0 l0,10 l-10,0 Z M70,80" fill="rgb(178,50,204)" fill-opacity="0.9" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M70,90 l10,0 l0,10 l-10,0 Z M70,90" fill="rgb(178,25,229)" fill-opacity="0.95" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M80,0 l10,0 l0,10 l-10,0 Z M80,0" fill="rgb(204,255,0)" fill-opacity="0.5" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M80,10 l10,0 l0,10 l-10,0 Z M80,10" fill="rgb(204,229,25)" fill-opacity="0.55" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M80,20 l10,0 l0,10 l-10,0 Z M80,20" fill="rgb(204,204,51)" fill-opacity="0.6" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M80,30 l10,0 l0,10 l-10,0 Z M80,30" fill="rgb(204,178,76)" fill-opacity="0.65" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M80,40 l10,0 l0,10 l-10,0 Z M80,40" fill="rgb(204,153,102)" fill-opacity="0.7" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M80,50 l10,0 l0,10 l-10,0 Z M80,50" fill="rgb(204,127,127)" fill-opacity="0.75" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M80,60 l10,0 l0,10 l-10,0 Z M80,60" fill="rgb(204,102,153)" fill-opacity="0.8" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M80,70 l10,0 l0,10 l-10,0 Z M80,70" fill="rgb(204,76,178)" fill-opacity="0.85" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M80,80 l10,0 l0,10 l-10,0 Z M80,80" fill="rgb(204,50,204)" fill-opacity="0.9" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M80,90 l10,0 l0,10 l-10,0 Z M80,90" fill="rgb(204,25,229)" fill-opacity="0.95" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M90,0 l10,0 l0,10 l-10,0 Z M90,0" fill="rgb(229,255,0)" fill-opacity="0.5" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M90,10 l10,0 l0,10 l-10,0 Z M90,10" fill="rgb(229,229,25)" fill-opacity="0.55" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M90,20 l10,0 l0,10 l-10,0 Z M90,20" fill="rgb(229,204,51)" fill-opacity="0.6" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M90,30 l10,0 l0,10 l-10,0 Z M90,30" fill="rgb(229,178,76)" fill-opacity="0.65" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M90,40 l10,0 l0,10 l-10,0 Z M90,40" fill="rgb(229,153,102)" fill-opacity="0.7" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M90,50 l10,0 l0,10 l-10,0 Z M90,50" fill="rgb(229,127,127)" fill-opacity="0.75" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M90,60 l10,0 l0,10 l-10,0 Z M90,60" fill="rgb(229,102,153)" fill-opacity="0.8" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M90,70 l10,0 l0,10 l-10,0 Z M90,70" fill="rgb(229,76,178)" fill-opacity="0.85" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M90,80 l10,0 l0,10 l-10,0 Z M90,80" fill="rgb(229,50,204)" fill-opacity="0.9" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M90,90 l10,0 l0,10 l-10,0 Z M90,90" fill="rgb(229,25,229)" fill-opacity="0.95" transform="matrix(1,0,0,-1,0,100)"/>
 </svg>
