@@ -4,6 +4,7 @@ from fontTools.misc.py23 import *
 import AppKit
 import unittest
 import os
+import sys
 import glob
 
 
@@ -13,6 +14,25 @@ drawBotScriptDir = os.path.join(testRoot, "drawBotScripts")
 tempDataDir = os.path.join(testRoot, "temp_data")
 if not os.path.exists(tempDataDir):
     os.mkdir(tempDataDir)
+
+
+class PrintStatement(list):
+
+    def __enter__(self):
+        self.out = sys.stdout
+        sys.stdout = self
+        return self
+
+    def __exit__(self, type, value, traceback):
+        sys.stdout = self.out
+
+    def write(self, txt):
+        txt = txt.strip()
+        if txt:
+            self.append(txt)
+
+    def flush(self):
+        pass
 
 
 class DrawBotTest(unittest.TestCase):
@@ -72,6 +92,44 @@ class DrawBotTest(unittest.TestCase):
         # read content of py file and exec it
         with open(path) as f:
             exec(f.read(), {})
+
+    def test_instructionStack(self):
+        excepted = [
+            "reset None",
+            "newPage 200 200",
+            "save",
+            "clipPath moveTo 5.0 5.0 lineTo 15.0 5.0 lineTo 15.0 15.0 lineTo 5.0 15.0 closePath",
+            "restore",
+            "image Image Object 10 10 0.5 None",
+            "blendMode saturation",
+            "transform 1 0 0 1 10 10",
+            "drawPath moveTo 10.0 10.0 lineTo 110.0 10.0 lineTo 110.0 110.0 lineTo 10.0 110.0 closePath",
+            "textBox foo bar 82.4829101562 84.0 35.0341796875 26.0 center",
+            "frameDuration 10",
+            "saveImage * None"
+        ]
+        with PrintStatement() as output:
+            import drawBot
+            drawBot.newDrawing()
+            drawBot.size(200, 200)
+            drawBot.save()
+            path = drawBot.BezierPath()
+            path.rect(5, 5, 10, 10)
+            drawBot.clipPath(path)
+            drawBot.restore()
+            im = drawBot.ImageObject()
+            with im:
+                drawBot.size(20, 20)
+                drawBot.rect(5, 5, 10, 10)
+            drawBot.image(im, (10, 10), alpha=.5)
+            drawBot.blendMode("saturation")
+            drawBot.translate(10, 10)
+            drawBot.rect(10, 10, 100, 100)
+            drawBot.text("foo bar", (100, 100), align="center")
+            drawBot.frameDuration(10)
+            drawBot.saveImage("*")
+            drawBot.endDrawing()
+            self.assertEqual(output, excepted)
 
 
 def makeTestCase(path, ext):
