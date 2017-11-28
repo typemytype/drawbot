@@ -47,7 +47,7 @@ class DrawBotTest(unittest.TestCase):
         if pdf2 is None:
             # path2 is not a pdf document
             self.assertIsNone(pdf2)
-        assert pdf1.pageCount() == pdf2.pageCount(), "PDFs has not the same amount of pages"
+        self.assertTrue(pdf1.pageCount() == pdf2.pageCount(), "PDFs has not the same amount of pages")
         # loop over all pages
         for pageIndex in range(pdf1.pageCount()):
             # get the pages
@@ -58,7 +58,7 @@ class DrawBotTest(unittest.TestCase):
             image2 = AppKit.NSImage.alloc().initWithData_(page2.dataRepresentation())
             # compare the image tiff data
             # no use to show the complete diff of the binary data
-            assert image1.TIFFRepresentation() == image2.TIFFRepresentation(), "PDF data on page %s is not the same" % (pageIndex + 1)
+            self.assertTrue(image1.TIFFRepresentation() == image2.TIFFRepresentation(), "PDF data on page %s is not the same" % (pageIndex + 1))
 
     def assertSVGFiles(self, path1, path2):
         # compare the content by line
@@ -67,7 +67,7 @@ class DrawBotTest(unittest.TestCase):
     def assertImageFiles(self, path1, path2):
         # compare the data and assert with a simple message
         # no use to show the complete diff of the binary file
-        assert self.readData(path1) == self.readData(path2), "Images are not the same"
+        self.assertTrue(self.readData(path1) == self.readData(path2), "Images are not the same")
 
     def assertGenericFiles(self, path1, path2):
         self.assertEqual(self.readData(path1), self.readData(path2))
@@ -169,5 +169,4 @@ for path in glob.glob(drawBotScriptDir + "/*.py"):
 
 
 if __name__ == '__main__':
-    import sys
     sys.exit(unittest.main())
