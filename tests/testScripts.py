@@ -37,6 +37,7 @@ class DrawBotTest(unittest.TestCase):
             image1 = AppKit.NSImage.alloc().initWithData_(page1.dataRepresentation())
             image2 = AppKit.NSImage.alloc().initWithData_(page2.dataRepresentation())
             # compare the image tiff data
+            # no use to show the complete diff of the binary data
             assert image1.TIFFRepresentation() == image2.TIFFRepresentation(), "PDF data on page %s is not the same" % (pageIndex + 1)
 
     def assertSVGFiles(self, path1, path2):
