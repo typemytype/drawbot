@@ -94,7 +94,7 @@ class DrawBotTest(unittest.TestCase):
             exec(f.read(), {})
 
     def test_instructionStack(self):
-        excepted = [
+        expected = [
             "reset None",
             "newPage 200 200",
             "save",
@@ -129,7 +129,7 @@ class DrawBotTest(unittest.TestCase):
             drawBot.frameDuration(10)
             drawBot.saveImage("*")
             drawBot.endDrawing()
-            self.assertEqual(output, excepted)
+            self.assertEqual(output, expected)
 
 
 def makeTestCase(path, ext):
