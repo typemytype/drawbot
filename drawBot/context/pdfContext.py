@@ -6,11 +6,9 @@ import AppKit
 import CoreText
 import Quartz
 
-import math
-
 from .tools import gifTools
 
-from .baseContext import BaseContext, FormattedString
+from .baseContext import BaseContext
 from drawBot.misc import DrawBotError, isPDF, isGIF
 
 
