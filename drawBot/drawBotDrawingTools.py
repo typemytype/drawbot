@@ -2068,7 +2068,7 @@ class DrawBotDrawingTool(object):
 
         The link rectangle will be set independent of the current context transformations.
         """
-        x, y, w, h = (x, y, w, h)
+        x, y, w, h = xywh
         self._requiresNewFirstPage = True
         self._addInstruction("linkRect", name, (x, y, w, h))
 
