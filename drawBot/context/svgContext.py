@@ -512,7 +512,7 @@ class SVGContext(BaseContext):
                 previousPoint = points[-1]
             elif instruction == AppKit.NSClosePathBezierPathElement:
                 svg += "Z "
-        return svg
+        return svg.strip()
 
     def _svgBeginClipPath(self):
         if self._state.clipPathID:
