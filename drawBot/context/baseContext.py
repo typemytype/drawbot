@@ -991,6 +991,10 @@ class FormattedString(object):
             elif self._cmykStroke:
                 strokeColor = self._cmykColorClass.getColor(self._cmykStroke).getNSObject()
             attributes[AppKit.NSStrokeColorAttributeName] = strokeColor
+            # stroke width must be negative
+            # Supply a negative value for NSStrokeWidthAttributeName
+            # when you wish to draw a string that is both filled and stroked.
+            # see https://developer.apple.com/library/content/qa/qa1531/_index.html
             attributes[AppKit.NSStrokeWidthAttributeName] = -abs(self._strokeWidth)
         para = AppKit.NSMutableParagraphStyle.alloc().init()
         if self._align:
