@@ -149,7 +149,7 @@ def makeTestCase(path, ext):
         drawBot.saveImage(testPath)
         # tell drawBot drawing is done
         drawBot.endDrawing()
-        self.assertForFileExtension(ext, testPath, expectedPath)
+        self.assertForFileExtension(ext, expectedPath, testPath)
 
     return test
 
