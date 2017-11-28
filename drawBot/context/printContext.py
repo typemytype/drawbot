@@ -1,6 +1,40 @@
 from __future__ import absolute_import, print_function
+import AppKit
+from fontTools.pens.basePen import AbstractPen
 
 from .baseContext import BaseContext
+
+
+class StringPen(AbstractPen):
+
+    def __init__(self, seperator=None):
+        self.data = []
+        if seperator is None:
+            seperator = " "
+        self.seperator = seperator
+
+    def moveTo(self, pt):
+        x, y = pt
+        self.data.append("moveTo %s %s" % (x, y))
+
+    def lineTo(self, pt):
+        x, y = pt
+        self.data.append("lineTo %s %s" % (x, y))
+
+    def curveTo(self, *pts):
+        self.data.append("curveTo %s" % " ".join(["%s %s" % (x, y) for x, y in pts]))
+
+    def qCurveTo(self, *pts):
+        self.data.append("qCurveTo %s" % " ".join(["%s %s" % (x, y) for x, y in pts]))
+
+    def closePath(self):
+        self.data.append("closePath")
+
+    def endPath(self):
+        self.data.append("endPath")
+
+    def __repr__(self):
+        return self.seperator.join(self.data)
 
 
 class PrintContext(BaseContext):
@@ -8,7 +42,7 @@ class PrintContext(BaseContext):
     fileExtensions = ["*"]
 
     def _newPage(self, width, height):
-        print("newPage", width, height)
+        print("newPage %s %s" % (width, height))
 
     def _save(self):
         print("save")
@@ -17,41 +51,49 @@ class PrintContext(BaseContext):
         print("restore")
 
     def _blendMode(self, operation):
-        print("blend mode", operation)
+        print("blendMode %s" % operation)
 
     def _drawPath(self):
-        print("drawPath", self._state.path)
+        pen = StringPen()
+        self._state.path.drawToPen(pen)
+        print("drawPath %s" % pen)
 
     def _clipPath(self):
-        print("clipPath", self._state.path)
+        pen = StringPen()
+        self._state.path.drawToPen(pen)
+        print("clipPath %s" % pen)
 
     def _transform(self, matrix):
-        print("transform", matrix)
+        print("transform %s" % " ".join(["%s" % i for i in matrix]))
 
     def _textBox(self, txt, xywh, align):
+        # XXX
+        # should a formatted string be printed in parts???
         x, y, w, h = xywh
-        print("textBox", txt, (x, y, w, h), align)
+        print("textBox %s %s %s %s %s %s" % (txt, x, y, w, h, align))
 
     def _image(self, path, xy, alpha, pageNumber):
         x, y = xy
-        print("image", path, x, y, alpha, pageNumber)
+        if isinstance(path, AppKit.NSImage):
+            path = "Image Object"
+        print("image %s %s %s %s %s" % (path, x, y, alpha, pageNumber))
 
     def _frameDuration(self, seconds):
-        print("frameDuration", seconds)
+        print("frameDuration %s" % seconds)
 
     def _reset(self, other=None):
-        print("reset", other)
+        print("reset %s" % other)
 
     def _saveImage(self, path, multipage):
-        print("saveImage", path, multipage)
+        print("saveImage %s %s" % (path, multipage))
 
     def _printImage(self, pdf=None):
-        print("printImage", pdf)
+        print("printImage %s" % pdf)
 
     def _linkDestination(self, name, xy):
         x, y = xy
-        print("linkDestination", name, (x, y))
+        print("linkDestination %s %s %s" % (name, x, y))
 
     def _linkRect(self, name, xywh):
         x, y, w, h = xywh
-        print("linkRect", name, (x, y, w, h))
+        print("linkRect %s %s %s %s %s" % (name, x, y, w, h))
