@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg height="200" version="1.1" width="200" xmlns="http://www.w3.org/2000/svg">
+ <path d="M10,10 l50,0 l0,50 l-50,0 Z M10,10 " fill="rgba(0,255,0,1.0)" transform="matrix(1,0,0,-1,0,200)"/>
+ <path d="M10,10 l50,0 l0,50 l-50,0 Z M10,10 " fill="rgba(18,236,0,1.0)" transform="matrix(1,0,0,-1,10,190)"/>
+ <path d="M10,10 l50,0 l0,50 l-50,0 Z M10,10 " fill="rgba(36,218,0,1.0)" transform="matrix(1,0,0,-1,20,180)"/>
+ <path d="M10,10 l50,0 l0,50 l-50,0 Z M10,10 " fill="rgba(54,200,0,1.0)" transform="matrix(1,0,0,-1,30,170)"/>
+ <path d="M10,10 l50,0 l0,50 l-50,0 Z M10,10 " fill="rgba(72,182,0,1.0)" transform="matrix(1,0,0,-1,40,160)"/>
+ <path d="M10,10 l50,0 l0,50 l-50,0 Z M10,10 " fill="rgba(91,163,0,1.0)" transform="matrix(1,0,0,-1,50,150)"/>
+ <path d="M10,10 l50,0 l0,50 l-50,0 Z M10,10 " fill="rgba(109,145,0,1.0)" transform="matrix(1,0,0,-1,60,140)"/>
+ <path d="M10,10 l50,0 l0,50 l-50,0 Z M10,10 " fill="rgba(127,127,0,1.0)" transform="matrix(1,0,0,-1,70,130)"/>
+ <path d="M10,10 l50,0 l0,50 l-50,0 Z M10,10 " fill="rgba(145,109,0,1.0)" transform="matrix(1,0,0,-1,80,120)"/>
+ <path d="M10,10 l50,0 l0,50 l-50,0 Z M10,10 " fill="rgba(163,91,0,1.0)" transform="matrix(1,0,0,-1,90,110)"/>
+ <path d="M10,10 l50,0 l0,50 l-50,0 Z M10,10 " fill="rgba(182,72,0,1.0)" transform="matrix(1,0,0,-1,100,100)"/>
+ <path d="M10,10 l50,0 l0,50 l-50,0 Z M10,10 " fill="rgba(200,54,0,1.0)" transform="matrix(1,0,0,-1,110,90)"/>
+ <path d="M10,10 l50,0 l0,50 l-50,0 Z M10,10 " fill="rgba(218,36,0,1.0)" transform="matrix(1,0,0,-1,120,80)"/>
+ <path d="M10,10 l50,0 l0,50 l-50,0 Z M10,10 " fill="rgba(236,18,0,1.0)" transform="matrix(1,0,0,-1,130,70)"/>
+</svg>
