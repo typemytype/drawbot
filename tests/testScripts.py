@@ -19,7 +19,13 @@ if not os.path.exists(tempDataDir):
 
 class StdOutCollector(list):
 
-    def __init__(self, captureStdErr=False):
+    def __init__(self, **kwargs):
+        # force captureStdErr to be a keyword argument
+        if kwargs:
+            captureStdErr = kwargs["captureStdErr"]
+            assert len(kwargs) == 1
+        else:
+            captureStdErr = False
         self.captureStdErr = captureStdErr
         super(StdOutCollector, self).__init__()
 
