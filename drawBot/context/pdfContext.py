@@ -14,6 +14,7 @@ from drawBot.misc import DrawBotError, isPDF, isGIF
 
 osVersionCurrent = StrictVersion(platform.mac_ver()[0])
 osVersion10_11 = StrictVersion("10.11")
+osVersion10_13 = StrictVersion("10.13")
 
 
 def sendPDFtoPrinter(pdfDocument):
@@ -204,7 +205,7 @@ class PDFContext(BaseContext):
                         Quartz.CGContextSetLineJoin(self._pdfContext, self._state.lineJoin)
                 if fillColor is not None and strokeColor is not None:
                     drawingMode = Quartz.kCGTextFillStroke
-                    if osVersionCurrent >= osVersion10_11:
+                    if osVersionCurrent >= osVersion10_11 and osVersion10_11 < osVersion10_13:
                         # solve bug in OSX where the stroke color is the same as the fill color
                         # simple solution: draw it twice...
                         drawingMode = Quartz.kCGTextFill
