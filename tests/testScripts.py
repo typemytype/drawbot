@@ -99,7 +99,10 @@ class DrawBotTest(unittest.TestCase):
     def executeScriptPath(self, path):
         # read content of py file and exec it
         with open(path) as f:
-            exec(f.read(), {})
+            source = f.read()
+        code = compile(source, path, "exec")
+        namespace = {"__name__": "__main__", "__file__": path}
+        exec(code, namespace)
 
     def test_instructionStack(self):
         expected = [
