@@ -153,7 +153,7 @@ class DrawBotTest(unittest.TestCase):
             drawBot.frameDuration(10)
             drawBot.saveImage("*")
             drawBot.endDrawing()
-            self.assertEqual(output, expected)
+        self.assertEqual(output, expected)
 
 
 def cleanupTraceback(lines):
