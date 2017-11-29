@@ -6,6 +6,7 @@ import unittest
 import os
 import sys
 import glob
+import traceback
 
 
 testRoot = os.path.dirname(os.path.abspath(__file__))
@@ -102,7 +103,13 @@ class DrawBotTest(unittest.TestCase):
             source = f.read()
         code = compile(source, path, "exec")
         namespace = {"__name__": "__main__", "__file__": path}
-        exec(code, namespace)
+
+        with PrintStatement(captureStdErr=True) as output:
+            try:
+                exec(code, namespace)
+            except:
+                traceback.print_exc()
+        return output
 
     def test_instructionStack(self):
         expected = [
@@ -143,6 +150,29 @@ class DrawBotTest(unittest.TestCase):
             self.assertEqual(output, expected)
 
 
+def cleanupTraceback(lines):
+    """Strips the trace lines from a traceback. This assumes there is only one
+    traceback in the list of lines.
+    """
+    tracebackIndex = None
+    for i in range(len(lines)):
+        if lines[i].startswith("Traceback (most recent call last):"):
+            tracebackIndex = i
+            break
+    if tracebackIndex is not None:
+        return lines[:tracebackIndex+1] + [lines[-1]]
+    else:
+        return lines
+
+
+def readExpectedOutput(path):
+    if os.path.exists(path):
+        with open(path, "r") as f:
+            return [l.strip() for l in f.read().splitlines()]
+    else:
+        return []
+
+
 def makeTestCase(path, ext):
     module = os.path.basename(path)[:-3]
 
@@ -150,12 +180,15 @@ def makeTestCase(path, ext):
         # get the paths
         testPath = os.path.join(tempDataDir, "%s.%s" % (module, ext))
         expectedPath = os.path.join(dataDir, "expected_%s.%s" % (module, ext))
+        expectedOutputPath = os.path.join(dataDir, "expected_%s.txt" % module)
+        expectedOutput = readExpectedOutput(expectedOutputPath)
         # get drawBot
         import drawBot
         # start a new drawing
         drawBot.newDrawing()
         # execute the script in place
-        self.executeScriptPath(path)
+        output = self.executeScriptPath(path)
+        self.assertEqual(cleanupTraceback(output), cleanupTraceback(expectedOutput))
         # save the iamge
         drawBot.saveImage(testPath)
         # tell drawBot drawing is done
