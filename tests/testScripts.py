@@ -18,13 +18,21 @@ if not os.path.exists(tempDataDir):
 
 class PrintStatement(list):
 
+    def __init__(self, captureStdErr=False):
+        self.captureStdErr = captureStdErr
+        super(PrintStatement, self).__init__()
+
     def __enter__(self):
         self.out = sys.stdout
+        self.err = sys.stderr
         sys.stdout = self
+        if self.captureStdErr:
+            sys.stderr = self
         return self
 
     def __exit__(self, type, value, traceback):
         sys.stdout = self.out
+        sys.stderr = self.err
 
     def write(self, txt):
         txt = txt.strip()
