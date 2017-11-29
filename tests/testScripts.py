@@ -17,11 +17,11 @@ if not os.path.exists(tempDataDir):
     os.mkdir(tempDataDir)
 
 
-class PrintStatement(list):
+class StdOutCollector(list):
 
     def __init__(self, captureStdErr=False):
         self.captureStdErr = captureStdErr
-        super(PrintStatement, self).__init__()
+        super(StdOutCollector, self).__init__()
 
     def __enter__(self):
         self.out = sys.stdout
@@ -104,7 +104,7 @@ class DrawBotTest(unittest.TestCase):
         code = compile(source, path, "exec")
         namespace = {"__name__": "__main__", "__file__": path}
 
-        with PrintStatement(captureStdErr=True) as output:
+        with StdOutCollector(captureStdErr=True) as output:
             try:
                 exec(code, namespace)
             except:
@@ -126,7 +126,7 @@ class DrawBotTest(unittest.TestCase):
             "frameDuration 10",
             "saveImage * None"
         ]
-        with PrintStatement() as output:
+        with StdOutCollector() as output:
             import drawBot
             drawBot.newDrawing()
             drawBot.size(200, 200)
