@@ -194,7 +194,7 @@ class PDFContext(BaseContext):
                 if strokeColor is not None:
                     drawingMode = Quartz.kCGTextStroke
                     self._pdfStrokeColor(strokeColor)
-                    Quartz.CGContextSetLineWidth(self._pdfContext, strokeWidth)
+                    Quartz.CGContextSetLineWidth(self._pdfContext, abs(strokeWidth))
                     if self._state.lineDash is not None:
                         Quartz.CGContextSetLineDash(self._pdfContext, 0, self._state.lineDash, len(self._state.lineDash))
                     if self._state.miterLimit is not None:
