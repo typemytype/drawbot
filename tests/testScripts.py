@@ -180,13 +180,13 @@ def readExpectedOutput(path):
 
 
 def makeTestCase(path, ext):
-    module = os.path.basename(path)[:-3]
+    scriptName = os.path.basename(path)[:-3]
 
     def test(self):
         # get the paths
-        testPath = os.path.join(tempDataDir, "%s.%s" % (module, ext))
-        expectedPath = os.path.join(dataDir, "expected_%s.%s" % (module, ext))
-        expectedOutputPath = os.path.join(dataDir, "expected_%s.txt" % module)
+        testPath = os.path.join(tempDataDir, "%s.%s" % (scriptName, ext))
+        expectedPath = os.path.join(dataDir, "expected_%s.%s" % (scriptName, ext))
+        expectedOutputPath = os.path.join(dataDir, "expected_%s.txt" % scriptName)
         expectedOutput = readExpectedOutput(expectedOutputPath)
         # get drawBot
         import drawBot
@@ -210,12 +210,15 @@ testExt = [
     "pdf"
 ]
 
+def _addTests():
+    for path in glob.glob(os.path.join(drawBotScriptDir, "*.py")):
+        scriptName = os.path.splitext(os.path.basename(path))[0]
+        for ext in testExt:
+            testMethod = makeTestCase(path, ext)
+            testMethod.__name__ = "test_%s_%s" % (ext, scriptName)
+            setattr(DrawBotTest, testMethod.__name__, testMethod)
 
-for path in glob.glob(drawBotScriptDir + "/*.py"):
-    for ext in testExt:
-        testMethod = makeTestCase(path, ext)
-        testMethod.__name__ = "test_%s_%s" % (ext, os.path.basename(path)[:-3])
-        setattr(DrawBotTest, testMethod.__name__, testMethod)
+_addTests()
 
 
 if __name__ == '__main__':
