@@ -16,4 +16,7 @@ for fileName in files:
     moduleName, ext = os.path.splitext(fileName)
     suite.addTest(loader.loadTestsFromName(moduleName))
 
+# TODO: add support for doctests
+
 unittest.TextTestRunner(verbosity=1).run(suite)
+# TODO: call sys.exit() with result code if we're not in DB
