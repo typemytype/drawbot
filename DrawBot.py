@@ -119,7 +119,7 @@ class DrawBotAppDelegate(AppKit.NSObject):
         self._debugger = DebugWindowController()
         Updater()
         if sys.argv[1:]:
-            import re, traceback
+            import re
             pat = re.compile("--testScript=(.*)")
             for arg in sys.argv[1:]:
                 m = pat.match(arg)
@@ -131,6 +131,7 @@ class DrawBotAppDelegate(AppKit.NSObject):
             AppKit.NSApp().terminate_(None)
 
     def _runTestScript_(self, testScript):
+        import traceback
         assert os.path.exists(testScript), "%r cannot be found" % testScript
         with open(testScript) as f:
             source = f.read()
