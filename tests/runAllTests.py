@@ -23,6 +23,5 @@ for moduleName in modulesWithDocTests:
     m = importlib.import_module(moduleName)
     suite.addTest(doctest.DocTestSuite(m))
 
-import drawBot.misc as m
 unittest.TextTestRunner(verbosity=1).run(suite)
 # TODO: call sys.exit() with result code if we're not in DB
