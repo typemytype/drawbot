@@ -1,6 +1,7 @@
 import AppKit
 from PyObjCTools import AppHelper
 
+import sys
 import os
 from random import randint
 
@@ -117,6 +118,26 @@ class DrawBotAppDelegate(AppKit.NSObject):
     def applicationDidFinishLaunching_(self, notification):
         self._debugger = DebugWindowController()
         Updater()
+        if sys.argv[1:]:
+            import re, traceback
+            pat = re.compile("--testScript=(.*)")
+            for arg in sys.argv[1:]:
+                m = pat.match(arg)
+                if m is None:
+                    print("invalid command line argument: %r" % arg)
+                    continue
+                testScript = m.group(1)
+                self._runTestScript_(testScript)
+            AppKit.NSApp().terminate_(None)
+
+    def _runTestScript_(self, testScript):
+        assert os.path.exists(testScript), "%r cannot be found" % testScript
+        with open(testScript) as f:
+            source = f.read()
+        try:
+            exec(source, {"__name__": "__main__", "__file__": testScript})
+        except:
+            traceback.print_exc()
 
     def applicationDidBecomeActive_(self, notification):
         for document in AppKit.NSApp().orderedDocuments():
