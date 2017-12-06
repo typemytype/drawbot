@@ -812,6 +812,10 @@ class FormattedString(object):
         # create all _<attributes> in the formatted text object
         # with default values
         for key, value in self._formattedAttributes.items():
+            if isinstance(value, dict):
+                value = dict(value)
+            if isinstance(value, list):
+                value = list(value)
             setattr(self, "_%s" % key, value)
         attributes = self._validateAttributes(kwargs, addDefaults=False)
         if txt:
