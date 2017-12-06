@@ -50,48 +50,29 @@ class StdOutput(object):
         pass
 
 
-def _makeEnviron():
-    env = dict(os.environ)
-    kill = ["ARGVZERO", "EXECUTABLEPATH", "PYTHONHOME", "PYTHONPATH", "RESOURCEPATH"]
-    for key in kill:
-        if key in env:
-            del env[key]
-    return env
-
-
-def getLocalPythonVersionDirName(standardLib=True):
+def _addLocalSysPaths():
+    version = "%s.%s" % (sys.version_info.major, sys.version_info.minor)
     if PY3:
-        return None
-    argument = ""
-    if standardLib:
-        argument = "standard_lib=True"
-    commands = ["python", "-c", "from distutils import sysconfig; print(sysconfig.get_python_lib(%s))" % argument]
-    out, err = executeExternalProcess(commands)
-    sitePackages = out.split("\n")[0]
-    if os.path.exists(sitePackages):
-        return sitePackages
-    else:
-        return None
-
-
-def getLocalPython3Paths():
-    if PY3:
-        version = "%s.%s" % (sys.version_info.major, sys.version_info.minor)
         paths = [
             # add local stdlib and site-packages; TODO: this needs editing once we embed the full stdlib
             '/Library/Frameworks/Python.framework/Versions/%s/lib/python%s' % (version, version),
             '/Library/Frameworks/Python.framework/Versions/%s/lib/python%s/lib-dynload' % (version, version),
             '/Library/Frameworks/Python.framework/Versions/%s/lib/python%s/site-packages' % (version, version),
-            '/Library/Python/%s/site-packages' % version,
         ]
-        return paths
     else:
-        return []
+        paths = [
+            '/System/Library/Frameworks/Python.framework/Versions/%s/lib/python%s' % (version, version),
+            '/System/Library/Frameworks/Python.framework/Versions/%s/lib/python%s/lib-dynload' % (version, version),
+            '/System/Library/Frameworks/Python.framework/Versions/%s/lib/python%s/site-packages' % (version, version),
+        ]
 
+    paths.append('/Library/Python/%s/site-packages' % version)
 
-localStandardLibPath = getLocalPythonVersionDirName(standardLib=True)
-localSitePackagesPath = getLocalPythonVersionDirName(standardLib=False)
-localPy3Paths = getLocalPython3Paths()
+    for path in paths:
+        if path not in sys.path and os.path.exists(path):
+            site.addsitedir(path)
+
+_addLocalSysPaths()
 
 
 class DrawBotNamespace(dict):
@@ -168,13 +149,6 @@ class ScriptRunner(object):
         sys.argv = [fileName]
         os.chdir(curDir)
         sys.path.insert(0, curDir)
-        if localStandardLibPath and localStandardLibPath not in sys.path:
-            site.addsitedir(localStandardLibPath)
-        if localSitePackagesPath and localSitePackagesPath not in sys.path:
-            site.addsitedir(localSitePackagesPath)
-        for path in localPy3Paths:
-            if path not in sys.path and os.path.exists(path):
-                site.addsitedir(path)
         # here we go
         if text is None:
             f = open(path, 'rb')
