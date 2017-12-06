@@ -139,7 +139,7 @@ class SVGShadow(Shadow):
 
     def __init__(self, *args, **kwargs):
         super(SVGShadow, self).__init__(*args, **kwargs)
-        self.tagID = uuid.uuid4()
+        self.tagID = uuid.uuid4().hex
 
     def copy(self):
         new = super(SVGShadow, self).copy()
