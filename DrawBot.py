@@ -124,11 +124,10 @@ class DrawBotAppDelegate(AppKit.NSObject):
             for arg in sys.argv[1:]:
                 m = pat.match(arg)
                 if m is None:
-                    print("invalid command line argument: %r" % arg)
                     continue
                 testScript = m.group(1)
                 self._runTestScript_(testScript)
-            AppKit.NSApp().terminate_(None)
+                AppKit.NSApp().terminate_(None)
 
     def _runTestScript_(self, testScript):
         import traceback
