@@ -5,10 +5,8 @@ import os
 from drawBot.misc import executeExternalProcess, getExternalToolPath
 
 
-ffmpegPath = getExternalToolPath(os.path.dirname(__file__), "ffmpeg")
-
-
 def generateMP4(imageTemplate, mp4path, frameRate):
+    ffmpegPath = getExternalToolPath(os.path.dirname(__file__), "ffmpeg")
     assert ffmpegPath is not None
     cmds = [
         # ffmpeg path

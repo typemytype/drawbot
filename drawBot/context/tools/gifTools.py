@@ -8,10 +8,8 @@ import tempfile
 from drawBot.misc import executeExternalProcess, getExternalToolPath
 
 
-gifsiclePath = getExternalToolPath(os.path.dirname(__file__), "gifsicle")
-
-
 def generateGif(sourcePaths, destPath, delays):
+    gifsiclePath = getExternalToolPath(os.path.dirname(__file__), "gifsicle")
     assert gifsiclePath is not None
     cmds = [
         # gifsicle path
@@ -49,6 +47,7 @@ _explodedGifCache = {}
 
 
 def _explodeGif(path):
+    gifsiclePath = getExternalToolPath(os.path.dirname(__file__), "gifsicle")
     if isinstance(path, AppKit.NSURL):
         path = path.path()
     destRoot = tempfile.mkdtemp()

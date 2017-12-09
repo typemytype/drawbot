@@ -11,10 +11,6 @@ from .imageObject import ImageObject
 from drawBot.misc import executeExternalProcess, getExternalToolPath
 
 
-potrace = getExternalToolPath(os.path.dirname(__file__), "potrace")
-mkbitmap = getExternalToolPath(os.path.dirname(__file__), "mkbitmap")
-
-
 def _getPath(element, path=None, pathItems=None):
     if pathItems is None:
         pathItems = list()
@@ -294,6 +290,9 @@ def saveImageAsBitmap(image, bitmapPath):
 
 
 def TraceImage(path, outPen, threshold=.2, blur=None, invert=False, turd=2, tolerance=0.2, offset=None):
+    potrace = getExternalToolPath(os.path.dirname(__file__), "potrace")
+    mkbitmap = getExternalToolPath(os.path.dirname(__file__), "mkbitmap")
+
     if isinstance(path, ImageObject):
         image = path
     else:
