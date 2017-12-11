@@ -22,36 +22,36 @@ How do numbers look in Python? how to write simple sums, multiplication, substra
 
     # this is a comment
 
-    print "some basic numbers:"
-    print 12  # this is an integer number
-    print 12.5  # this is a floating point
+    print("some basic numbers:")
+    print(12)  # this is an integer number
+    print(12.5)  # this is a floating point
 
-    print "results of adding:"
-    print 12 + 13  # results in an integer
-    print 12 + 0.5  # results in a float
-    print 0.5 + 12  # ditto
+    print("results of adding:")
+    print(12 + 13)  # results in an integer
+    print(12 + 0.5)  # results in a float
+    print(0.5 + 12)  # ditto
 
-    print "results of subtracting:"
-    print 12 - 8
-    print 12 - 25
+    print("results of subtracting:")
+    print(12 - 8)
+    print(12 - 25)
 
-    print "results of multiplication:"
-    print 12 * 8
-    print 12 * -25
+    print("results of multiplication:")
+    print(12 * 8)
+    print(12 * -25)
 
-    print "results of dividing:"
-    print 12 / 2
-    print 11 / 2
-    print 11 // 2  # integer division
-    print 11 % 2   # modulo
+    print("results of dividing:")
+    print(12 / 2)
+    print(11 / 2)
+    print(11 // 2)  # integer division
+    print(11 % 2)   # modulo
 
-    print "results of 'the power of':"
-    print 2 ** 8
-    print 10 ** 2
-    print 2 ** 0.5
+    print("results of 'the power of':")
+    print(2 ** 8)
+    print(10 ** 2)
+    print(2 ** 0.5)
 
-    print "let's cause an error:"
-    print 1 / 0
+    print("let's cause an error:")
+    print(1 / 0)
 
 Strings
 -------
@@ -60,25 +60,24 @@ Strings contain text, a sequence of letters like beads on a string. This script 
 
 .. downloadcode:: strings.py
 
-    print 'this is a so called "string"'
-    print "this is a so called 'string'"
-    print "this is a so called \"string\""
+    print('this is a so called "string"')
+    print("this is a so called 'string'")
+    print("this is a so called \"string\"")
 
-
-    print "one string " + "another string"
+    print("one string " + "another string")
 
     a = "one string"
     b = "another string"
 
-    print a + " " + b
+    print(a + " " + b)
 
-    print "many " * 10
+    print("many " * 10)
 
 
-    print "non-ascii should generally work:"
-    print "Åbenrå © Ђ ק"
-    print "and now an error:"
-    print "many " * 10.0
+    print("non-ascii should generally work:")
+    print("Åbenrå © Ђ ק")
+    print("and now an error:")
+    print("many " * 10.0)
     # string multiplication really wants an
     # integer number; a float that happens to
     # be a whole number is not good enough
@@ -95,9 +94,9 @@ Variables are similar to storage boxes, they need to have a name and contain som
     c = a * b
     CAP = "a string"
 
-    print c
+    print(c)
 
-    print CAP
+    print(CAP)
 
     # variable names cannot start with a
     # number:
@@ -123,11 +122,11 @@ Variables are similar to storage boxes, they need to have a name and contain som
     x = 12
     # is a different variable from
     X = 13
-    print x, X
+    print(x, X)
 
     y = 102
     # so this is an error:
-    print Y
+    print(Y)
 
 Lists and loops
 ---------------
@@ -140,87 +139,87 @@ each one of the items. Loops are a powerful and fast way to work with lots of it
     # let's introduce 'lists' (or 'arrays' as
     # they are called in some other languages)
     alist = [1, -2, "asdsd", 4, 50]
-    print alist
+    print(alist)
     alist.append(1234)
-    print alist
+    print(alist)   
     # fetching an item from the list:
-    print alist[0]  # the first item
-    print alist[1]  # the second
+    print(alist[0])  # the first item
+    print(alist[1])  # the second
     # negative numbers start from the end:
-    print alist[-1]  # the last item
-    print alist[-2]  # the one before last
+    print(alist[-1])  # the last item
+    print(alist[-2])  # the one before last
 
-    print "nested lists:"
-    print [1, 2, 3, ["a", "b", "c"]]
-    print [1, 2, 3, ["a", ["deeper"]]]
+    print("nested lists:")
+    print([1, 2, 3, ["a", "b", "c"]])
+    print([1, 2, 3, ["a", ["deeper"]]])
 
     # assigning a list to another name does
     # not make a copy: you just create another
     # reference to the same object
     anotherlist = alist
     anotherlist.append(-9999)
-    print anotherlist
-    print alist
+    print(anotherlist)
+    print(alist)
     acopy = list(alist)
     acopy.append(9999)
-    print acopy
-    print alist
+    print(acopy)
+    print(alist)
 
     # strings are also sequences:
     astring = "abcdefg"
-    print astring[2]
-    print astring[-1]  # from the end
+    print(astring[2])
+    print(astring[-1])  # from the end
 
-    print "getting 'slices' from a list:"
-    print alist
-    print alist[2:5]
+    print("getting 'slices' from a list:")
+    print(alist)
+    print(alist[2:5])
 
 
-    print "there's a nice builtin function that"
-    print "creates a list of numbers:"
-    print range(10)  # from 0 to 10 (not incl. 10!)
-    print range(5, 10)  # from 5 to 10 (not incl. 10!)
-    print range(1, 19, 3) # from 1 to 19 in steps of 3
+    print("there's a nice builtin function that")
+    print("creates a list of numbers:")
+    print(range(10))  # from 0 to 10 (not incl. 10!)
+    print(range(5, 10))  # from 5 to 10 (not incl. 10!)
+    print(range(1, 19, 3)) # from 1 to 19 in steps of 3
 
-    print "let's loop over this list:"
-    print alist
+    print("let's loop over this list:")
+    print(alist)
     for item in alist:
         # this is the body of the "for" loop
-        print item
+        print(item)
         # more lines following can follow
         # you need to indent consistently,
         # this would not work:
-    #        print "hello"
+    #        print("hello")
         # also: use the tab key to manually
         # indent. There are shortcuts to indent
         # or dedent blocks of code: cmd-[ and cmd-]
 
-    print "loop over some numbers:"
+    print("loop over some numbers:")
     for item in range(10):
-        print item
+        print(item)
 
-    print "loop over some numbers, doing 'math':"
+    print("loop over some numbers, doing 'math':")
     for i in range(10):
-        print i, i * 0.5
+        print(i, i * 0.5)
 
-    print "nested loops:"
+    print("nested loops:")
     for x in range(1, 5):  # outer loop
-        print "---"
+        print("---")
         for y in range(x, x + 5):  # inner loop
-            print x, "*", y, "=", x * y
+            print(x, "*", y, "=", x * y)
 
-    print "three loops:"
+    print("three loops:")
     for x in range(2):
         for y in range(2):
             for z in range(2):
-                print x, y, z
+                print(x, y, z)
 
-    print "three loops with a counter:"
+    print("three loops with a counter:")
     count = 1
     for x in range(2):
         for y in range(2):
             for z in range(2):
-                print x, y, z, "count =", count
+                print(x, y, z, "count =", count)
                 count = count + 1
                 # alternate spelling:
                 #count += 1
@@ -234,7 +233,7 @@ Functions are small programs with the program. Rather than write something over 
 
     # defining a function:
     def myfunction():
-        print "hello!"
+        print("hello!")
 
     # calling the function:
     myfunction()
@@ -247,7 +246,7 @@ Functions are small programs with the program. Rather than write something over 
     # defining a function that takes an
     # 'argument' (or 'parameter')
     def mysecondfunction(x, y):
-        print "hello!", x, y
+        print("hello!", x, y)
 
     # calling the function with 2 arguments
     mysecondfunction(123, 456)
@@ -255,25 +254,25 @@ Functions are small programs with the program. Rather than write something over 
 
     def add2numbers(x, y):
         # you can see 'global' vars
-        print aglobalvariable
+        print(aglobalvariable)
         result = x + y
         return result
 
     aglobalvariable = "hi!"
     thereturnedvalue = add2numbers(1, 2)
-    print thereturnedvalue
+    print(thereturnedvalue)
     # 'result' was a local name inside
     # add2number, so it is not visible at the
     # top level. So the next line would cause
     # an error:
-    #print result
+    #print(result)
 
 
     def anotherfunc(x, y):
         # calling add2numbers function:
         return add2numbers(x, y)
 
-    print anotherfunc(1, 2)
+    print(anotherfunc(1, 2))
 
 Conditions
 ----------
@@ -287,91 +286,91 @@ Sometimes your program needs to respond to particular values or situations. If t
     # let's define some variables
     a = 12
     b = 20
-    print "a =", a, "and b =", b
+    print("a =", a, "and b =", b)
 
-    print "are a and b equal?"
-    print a == b
+    print("are a and b equal?")
+    print(a == b)
 
-    print "are a and b not equal?"
-    print a != b
+    print("are a and b not equal?")
+    print(a != b)
 
-    print "is a greater than b?"
-    print a > b
+    print("is a greater than b?")
+    print(a > b)
 
-    print "is a less than b?"
-    print a < b
+    print("is a less than b?")
+    print(a < b)
 
-    print "is a greater than or equal to b?"
-    print a >= b
+    print("is a greater than or equal to b?")
+    print(a >= b)
 
-    print "is a less than or equal to b?"
-    print a <= b
+    print("is a less than or equal to b?")
+    print(a <= b)
 
     result = a < b
-    print "result is:", result
+    print("result is:", result)
 
-    print "these are the 'boolean' values:"
-    print "the True value:", True
-    print "the False value:", False
+    print("these are the 'boolean' values:")
+    print("the True value:", True)
+    print("the False value:", False)
 
     if a < b:
-        print "a is less than b"
+        print("a is less than b")
 
     if a > b:
-        print "a is greater than b"
+        print("a is greater than b")
 
-    print "if/else"
+    print("if/else")
     if a < b:
-        print "A"
+        print("A")
     else:
-        print "B"
+        print("B")
 
-    print "if/elif/else"
+    print("if/elif/else")
     if a > b:
-        print "A"
+        print("A")
     elif a == 12:
-        print "B"
+        print("B")
     else:
-        print "C"
+        print("C")
 
-    print "if/elif/elif/.../else"
+    print("if/elif/elif/.../else")
     if a > b:
-        print "A"
+        print("A")
     elif a == 10:
-        print "B 10"
+        print("B 10")
     elif a == 11:
-        print "B 11"
+        print("B 11")
     elif a == 12:
-        print "B 12"
+        print("B 12")
     elif a == 13:
-        print "B 13"
+        print("B 13")
     else:
-        print "C"
+        print("C")
 
     # boolean logic
     if a > 15 and b > 15:
-        print "both a and b are greater than 15"
+        print("both a and b are greater than 15")
     else:
-        print "either one of a and b is NOT greater than 15"
+        print("either one of a and b is NOT greater than 15")
 
     if a > 15 or b > 15:
-        print "a OR b are greater than 15"
+        print("a OR b are greater than 15")
     else:
-        print "neither a or b ate greater than 15"
+        print("neither a or b ate greater than 15")
 
-    print "a result:", a > 15 or b > 15
+    print("a result:", a > 15 or b > 15)
 
     # inversing a truth value:
-    print "not True:", not True
-    print "not False:", not False
-    print "not not False:", not not False
-    print "not not not False:", not not not False
+    print("not True:", not True)
+    print("not False:", not False)
+    print("not not False:", not not False)
+    print("not not not False:", not not not False)
 
     # grouping subexpressions by using parentheses:
     if (a > b and b == 13) or b == 25:
-        print "..."
+        print("...")
     if a > b and (b == 13 or b == 25):
-        print "..."
+        print("...")
     # parentheses nest:
     #if a > b and (b == 13 or (b == 25 and a == 12)):
     #   ...
@@ -386,25 +385,25 @@ Fun things to do with random numbers. The computer is full of them.
 
     # the random() function returns a pseudo-
     # random number between zero and one
-    print "a random number between 0.0 and 1.0:"
-    print random()
+    print("a random number between 0.0 and 1.0:")
+    print(random())
 
     # the randint() function returns a pseudo-
     # random integer number in the range you
     # specify.
-    print "a random integer between 0 and 4:"
-    print randint(0, 4)
-    print "a random integer between 10 and 20:"
-    print randint(10, 20)
+    print("a random integer between 0 and 4:")
+    print(randint(0, 4))
+    print("a random integer between 10 and 20:")
+    print(randint(10, 20))
 
     # use a random number to do different
     # things.
-    print "choose randomly between A and B, 6 times:"
+    print("choose randomly between A and B, 6 times:")
     for i in range(6):
         if random() > 0.5:
-            print "A"
+            print("A")
         else:
-            print "B"
+            print("B")
 
 Shapes
 ------
