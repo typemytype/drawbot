@@ -122,7 +122,6 @@ class ExportTest(unittest.TestCase):
         tmp = tempfile.mktemp(suffix=".gif")
         try:
             drawBot.saveImage(tmp)
-            assert os.path.exists(tmp)
             self.assertEqual(gifFrameCount(tmp), 5)
         finally:
             os.remove(tmp)
