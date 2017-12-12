@@ -8,17 +8,28 @@ import os
 from .pdfContext import PDFContext
 
 
+def _nsDataConverter(value):
+    if isinstance(value, AppKit.NSData):
+        return value
+    return AppKit.NSData.dataWithBytes_length_(value, len(value))
+
+def _nsColorConverter(color):
+    if isinstance(color, AppKit.NSColor):
+        return color
+    r, g, b = color
+    return AppKit.NSColor.colorWithCalibratedRed_green_blue_alpha_(r, g, b, 1.0)
+
 _nsImageOptions = {
-    "imageColorSyncProfileData": AppKit.NSImageColorSyncProfileData,  # NSData
-    "imageJPEGCompressionFactor": AppKit.NSImageCompressionFactor,  # number
-    "imageTIFFCompressionMethod": AppKit.NSImageCompressionMethod,  # number
-    "imageGIFDitherTransparency": AppKit.NSImageDitherTransparency,  # boolean
-    #"imageJPEGEXIFData": AppKit.NSImageEXIFData,  # dict  XXX Doesn't seem to work
-    "imageFallbackBackgroundColor": AppKit.NSImageFallbackBackgroundColor,  # NSColor
-    "imagePNGGamma": AppKit.NSImageGamma,  # number
-    "imagePNGInterlaced": AppKit.NSImageInterlaced,  # boolean
-    "imageJPEGProgressive": AppKit.NSImageProgressive,  # boolean
-    "imageGIFRGBColorTable": AppKit.NSImageRGBColorTable,  # NSData
+    "imageColorSyncProfileData": (AppKit.NSImageColorSyncProfileData, _nsDataConverter),  # NSData
+    "imageJPEGCompressionFactor": (AppKit.NSImageCompressionFactor, None),  # number
+    "imageTIFFCompressionMethod": (AppKit.NSImageCompressionMethod, None),  # number
+    "imageGIFDitherTransparency": (AppKit.NSImageDitherTransparency, None),  # boolean
+    #"imageJPEGEXIFData": (AppKit.NSImageEXIFData, None),  # dict  XXX Doesn't seem to work
+    "imageFallbackBackgroundColor": (AppKit.NSImageFallbackBackgroundColor, _nsColorConverter),  # NSColor
+    "imagePNGGamma": (AppKit.NSImageGamma, None),  # number
+    "imagePNGInterlaced": (AppKit.NSImageInterlaced, None),  # boolean
+    "imageJPEGProgressive": (AppKit.NSImageProgressive, None),  # boolean
+    "imageGIFRGBColorTable": (AppKit.NSImageRGBColorTable, _nsDataConverter),  # NSData
 }
 
 
@@ -51,9 +62,12 @@ class ImageContext(PDFContext):
         outputPaths = []
         imageResolution = options.get("imageResolution", 72.0)
         properties = {}
-        for dbKey, nsKey in _nsImageOptions.items():
+        for dbKey, (nsKey, converter) in _nsImageOptions.items():
             if dbKey in options:
-                properties[nsKey] = options[dbKey]
+                value = options[dbKey]
+                if converter is not None:
+                    value = converter(value)
+                properties[nsKey] = value
         for index in range(firstPage, pageCount):
             pool = AppKit.NSAutoreleasePool.alloc().init()
             try:
