@@ -273,7 +273,7 @@ def executeExternalProcess(cmds, cwd=None):
         Traceback (most recent call last):
             ...
         RuntimeError: 'which' failed with error code 1
-        >>> stdout, stderr = executeExternalProcess(["python", "-c", "print('hello')"])
+        >>> stdout, stderr = executeExternalProcess(["python", "-S", "-c", "print('hello')"])
         >>> stdout
         'hello\n'
     """
