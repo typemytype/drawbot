@@ -39,8 +39,8 @@ class MP4Context(ImageContext):
         if len(frameDurations) > 1:
             warnings.warn("Exporting to mp4 doesn't support varying frame durations, only the first value was used.")
 
-        tempDir = tempfile.mkdtemp(suffix=".mp4tmp")
         codec = options.get("ffmpegCodec", "libx264")
+        tempDir = tempfile.mkdtemp(suffix=".mp4tmp")
         try:
             super(MP4Context, self)._writeDataToFile(data, os.path.join(tempDir, "frame.png"), True, options)
             generateMP4(os.path.join(tempDir, "frame_%d.png"), path, frameRate, codec)
