@@ -49,7 +49,8 @@ class ImageContext(PDFContext):
 
     fileExtensions = _saveImageFileTypes.keys()
 
-    def _writeDataToFile(self, data, path, multipage, options):
+    def _writeDataToFile(self, data, path, options):
+        multipage = options.get("multipage")
         if multipage is None:
             multipage = False
         fileName, fileExt = os.path.splitext(path)

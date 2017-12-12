@@ -296,7 +296,8 @@ class SVGContext(BaseContext):
         self._svgContext.newline()
         self._state.transformMatrix = self._state.transformMatrix.scale(1, -1).translate(0, -self.height)
 
-    def _saveImage(self, path, multipage, options):
+    def _saveImage(self, path, options):
+        multipage = options.get("multipage")
         if multipage is None:
             multipage = False
         self._svgContext.endtag("svg")

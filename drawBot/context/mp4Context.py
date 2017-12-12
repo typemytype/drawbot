@@ -33,16 +33,17 @@ class MP4Context(ImageContext):
         super(MP4Context, self)._newPage(width, height)
         self._frameDurations.append(self._defaultFrameDuration)
 
-    def _writeDataToFile(self, data, path, multipage, options):
+    def _writeDataToFile(self, data, path, options):
         frameRate = round(1.0 / self._frameDurations[0], 3)
         frameDurations = set(self._frameDurations)
         if len(frameDurations) > 1:
             warnings.warn("Exporting to mp4 doesn't support varying frame durations, only the first value was used.")
 
+        options["multipage"] = True
         codec = options.get("ffmpegCodec", "libx264")
         tempDir = tempfile.mkdtemp(suffix=".mp4tmp")
         try:
-            super(MP4Context, self)._writeDataToFile(data, os.path.join(tempDir, "frame.png"), True, options)
+            super(MP4Context, self)._writeDataToFile(data, os.path.join(tempDir, "frame.png"), options)
             generateMP4(os.path.join(tempDir, "frame_%d.png"), path, frameRate, codec)
         finally:
             shutil.rmtree(tempDir)

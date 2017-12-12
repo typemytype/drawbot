@@ -407,7 +407,9 @@ class DrawBotDrawingTool(object):
             if context is None:
                 raise DrawBotError("Could not find a supported context for: '%s'" % ext)
             self._drawInContext(context)
-            context.saveImage(path, multipage, options)
+            if multipage is not None:
+                options["multipage"] = multipage
+            context.saveImage(path, options)
 
     def saveimage(self, paths):
         _deprecatedWarningLowercase("saveImage()")

@@ -9,6 +9,7 @@ import glob
 import drawBot
 import random
 import AppKit
+from drawBot.context.tools.gifTools import gifFrameCount
 
 
 class ExportTest(unittest.TestCase):
@@ -115,6 +116,16 @@ class ExportTest(unittest.TestCase):
             os.remove(tmp)
             for path in glob.glob(pattern):
                 os.remove(path)
+
+    def test_animatedGIF(self):
+        self.makeTestAnimation(5)
+        tmp = tempfile.mktemp(suffix=".gif")
+        try:
+            drawBot.saveImage(tmp)
+            assert os.path.exists(tmp)
+            self.assertEqual(gifFrameCount(tmp), 5)
+        finally:
+            os.remove(tmp)
 
 
 if __name__ == '__main__':
