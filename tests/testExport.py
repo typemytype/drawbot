@@ -63,6 +63,10 @@ class ExportTest(unittest.TestCase):
             self.assertEqual(drawBot.imageSize(tmp), (500, 500))
             drawBot.saveImage(tmp, imageResolution=144)
             self.assertEqual(drawBot.imageSize(tmp), (1000, 1000))
+            drawBot.saveImage(tmp, imageResolution=36)
+            self.assertEqual(drawBot.imageSize(tmp), (250, 250))
+            drawBot.saveImage(tmp, imageResolution=18)
+            self.assertEqual(drawBot.imageSize(tmp), (125, 125))
         finally:
             os.remove(tmp)
 
