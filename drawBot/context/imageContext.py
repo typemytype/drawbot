@@ -20,16 +20,17 @@ def _nsColorConverter(color):
     return AppKit.NSColor.colorWithCalibratedRed_green_blue_alpha_(r, g, b, 1.0)
 
 _nsImageOptions = {
-    "imageColorSyncProfileData": (AppKit.NSImageColorSyncProfileData, _nsDataConverter),  # NSData
-    "imageJPEGCompressionFactor": (AppKit.NSImageCompressionFactor, None),  # number
-    "imageTIFFCompressionMethod": (AppKit.NSImageCompressionMethod, None),  # number
-    "imageGIFDitherTransparency": (AppKit.NSImageDitherTransparency, None),  # boolean
-    #"imageJPEGEXIFData": (AppKit.NSImageEXIFData, None),  # dict  XXX Doesn't seem to work
-    "imageFallbackBackgroundColor": (AppKit.NSImageFallbackBackgroundColor, _nsColorConverter),  # NSColor
-    "imagePNGGamma": (AppKit.NSImageGamma, None),  # number
-    "imagePNGInterlaced": (AppKit.NSImageInterlaced, None),  # boolean
-    "imageJPEGProgressive": (AppKit.NSImageProgressive, None),  # boolean
-    "imageGIFRGBColorTable": (AppKit.NSImageRGBColorTable, _nsDataConverter),  # NSData
+    # DrawBot Key                   NSImage property key                    converter func or None
+    "imageColorSyncProfileData":    (AppKit.NSImageColorSyncProfileData,    _nsDataConverter),
+    "imageJPEGCompressionFactor":   (AppKit.NSImageCompressionFactor,       None),  # number
+    "imageTIFFCompressionMethod":   (AppKit.NSImageCompressionMethod,       None),  # number
+    "imageGIFDitherTransparency":   (AppKit.NSImageDitherTransparency,      None),  # boolean
+    #"imageJPEGEXIFData":           (AppKit.NSImageEXIFData,                None),  # dict  XXX Doesn't seem to work
+    "imageFallbackBackgroundColor": (AppKit.NSImageFallbackBackgroundColor, _nsColorConverter),
+    "imagePNGGamma":                (AppKit.NSImageGamma,                   None),  # number
+    "imagePNGInterlaced":           (AppKit.NSImageInterlaced,              None),  # boolean
+    "imageJPEGProgressive":         (AppKit.NSImageProgressive,             None),  # boolean
+    "imageGIFRGBColorTable":        (AppKit.NSImageRGBColorTable,           _nsDataConverter),
 }
 
 
