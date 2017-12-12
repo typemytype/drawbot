@@ -56,7 +56,7 @@ class ExportTest(unittest.TestCase):
         self._saveImageAndReturnSize(".gif")
 
     def test_imageResolution(self):
-        self.makeTestAnimation(1)
+        self.makeTestDrawing()
         fd, tmp = tempfile.mkstemp(suffix=".png")
         try:
             drawBot.saveImage(tmp)
