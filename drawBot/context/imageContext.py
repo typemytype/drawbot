@@ -6,6 +6,7 @@ import Quartz
 import os
 
 from .pdfContext import PDFContext
+from .baseContext import Color
 
 
 def _nsDataConverter(value):
@@ -16,8 +17,8 @@ def _nsDataConverter(value):
 def _nsColorConverter(color):
     if isinstance(color, AppKit.NSColor):
         return color
-    r, g, b = color
-    return AppKit.NSColor.colorWithDeviceRed_green_blue_alpha_(r, g, b, 1.0)
+    color = Color(*color)
+    return color.getNSObject()
 
 _nsImageOptions = {
     # DrawBot Key                   NSImage property key                    converter func or None

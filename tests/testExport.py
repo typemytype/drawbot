@@ -89,7 +89,7 @@ class ExportTest(unittest.TestCase):
             self.assertEqual(drawBot.imagePixelColor(tmp1, (5, 5)), (1.0, 1.0, 1.0, 1.0))
             drawBot.saveImage(tmp2, imageJPEGCompressionFactor=1.0, imageFallbackBackgroundColor=(0, 1, 0))
             r, g, b, a = drawBot.imagePixelColor(tmp2, (5, 5))
-            self.assertEqual((round(r, 2), round(g, 2), round(b, 2)), (0, 1, 0))
+            self.assertEqual((round(r, 2), round(g, 2), round(b, 2)), (0, 0.97, 0))  # XXX 0.97 vs 1.0 "calibrated" vs "device"
             drawBot.saveImage(tmp3, imageJPEGCompressionFactor=1.0, imageFallbackBackgroundColor=AppKit.NSColor.redColor())
             r, g, b, a = drawBot.imagePixelColor(tmp3, (5, 5))
             self.assertEqual((round(r, 2), round(g, 2), round(b, 2)), (1, 0.15, 0))
