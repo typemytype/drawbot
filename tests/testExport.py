@@ -22,49 +22,32 @@ class ExportTest(unittest.TestCase):
             drawBot.fill(0)
             drawBot.rect(random.randint(0, 100), random.randint(0, 100), 400, 400)
 
+    def _saveImageAndReturnSize(self, extension, **options):
+        fd, tmp = tempfile.mkstemp(suffix=extension)
+        try:
+            drawBot.saveImage(tmp, **options)
+            fileSize = os.stat(tmp).st_size
+        finally:
+            os.remove(tmp)
+        return fileSize
+
     def test_ffmpegCodec(self):
         self.makeTestAnimation()
-        fd, mp4_tmp = tempfile.mkstemp(suffix=".mp4")
-
-        try:
-            drawBot.saveImage(mp4_tmp)
-            s = os.stat(mp4_tmp)
-            size_h264 = s.st_size
-        finally:
-            os.remove(mp4_tmp)
-
-        try:
-            drawBot.saveImage(mp4_tmp, ffmpegCodec="mpeg4")
-            s = os.stat(mp4_tmp)
-            size_mpeg4 = s.st_size
-        finally:
-            os.remove(mp4_tmp)
-
+        size_h264 = self._saveImageAndReturnSize(".mp4")
+        size_mpeg4 = self._saveImageAndReturnSize(".mp4", ffmpegCodec="mpeg4")
         self.assertLess(size_h264, size_mpeg4, "encoded with h264 is expected to be smaller than with mpeg4")
 
     def test_arbitraryOption(self):
         self.makeTestAnimation(1)
-        fd, png_tmp = tempfile.mkstemp(suffix=".png")
-        try:
-            drawBot.saveImage(png_tmp, someArbitraryOption="foo")
-        finally:
-            os.remove(png_tmp)
+        self._saveImageAndReturnSize(".png", someArbitraryOption="foo")
 
     def test_export_mov(self):
         self.makeTestAnimation(5)
-        fd, mov_tmp = tempfile.mkstemp(suffix=".mov")
-        try:
-            drawBot.saveImage(mov_tmp)
-        finally:
-            os.remove(mov_tmp)
+        self._saveImageAndReturnSize(".mov")
 
     def test_export_gif(self):
         self.makeTestAnimation(5)
-        fd, gif_tmp = tempfile.mkstemp(suffix=".gif")
-        try:
-            drawBot.saveImage(gif_tmp)
-        finally:
-            os.remove(gif_tmp)
+        self._saveImageAndReturnSize(".gif")
 
 
 if __name__ == '__main__':
