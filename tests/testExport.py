@@ -99,9 +99,9 @@ class ExportTest(unittest.TestCase):
             os.remove(tmp2)
             os.remove(tmp3)
 
-    def test_multipage(self):
+    def _testMultipage(self, extension, expectedMultipageCount):
         self.makeTestAnimation(5)
-        tmp = tempfile.mktemp(suffix=".jpg")
+        tmp = tempfile.mktemp(suffix=extension)
         base, ext = os.path.splitext(tmp)
         pattern = base + "_*" + ext
         self.assertEqual(len(glob.glob(pattern)), 0)
@@ -111,11 +111,26 @@ class ExportTest(unittest.TestCase):
             drawBot.saveImage(tmp, multipage=False)
             self.assertEqual(len(glob.glob(pattern)), 0)
             drawBot.saveImage(tmp, multipage=True)
-            self.assertEqual(len(glob.glob(pattern)), 5)
+            self.assertEqual(len(glob.glob(pattern)), expectedMultipageCount)
         finally:
             os.remove(tmp)
             for path in glob.glob(pattern):
                 os.remove(path)
+
+    def test_multipage_jpg(self):
+        self._testMultipage(".png", 5)
+
+    def test_multipage_jpg(self):
+        self._testMultipage(".jpg", 5)
+
+    def test_multipage_svg(self):
+        self._testMultipage(".svg", 5)
+
+    def test_multipage_gif(self):
+        self._testMultipage(".gif", 0)
+
+    def test_multipage_pdf(self):
+        self._testMultipage(".pdf", 0)
 
     def test_animatedGIF(self):
         self.makeTestAnimation(5)
