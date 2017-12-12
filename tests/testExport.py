@@ -40,7 +40,7 @@ class ExportTest(unittest.TestCase):
         finally:
             os.remove(mp4_tmp)
 
-        self.assertLess(size_h264, size_mpeg4)
+        self.assertLess(size_h264, size_mpeg4, "encoded with h264 is expected to be smaller than with mpeg4")
 
     def test_arbitraryOption(self):
         self.makeTestAnimation(1)
