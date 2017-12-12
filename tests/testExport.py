@@ -42,6 +42,14 @@ class ExportTest(unittest.TestCase):
 
         self.assertLess(size_h264, size_mpeg4)
 
+    def test_arbitraryOption(self):
+        self.makeTestAnimation(1)
+        fd, png_tmp = tempfile.mkstemp(suffix=".png")
+        try:
+            drawBot.saveImage(png_tmp, someArbitraryOption="foo")
+        finally:
+            os.remove(png_tmp)
+
     def test_export_mov(self):
         self.makeTestAnimation(5)
         fd, mov_tmp = tempfile.mkstemp(suffix=".mov")
