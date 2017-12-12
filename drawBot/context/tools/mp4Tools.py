@@ -5,7 +5,7 @@ import os
 from drawBot.misc import executeExternalProcess, getExternalToolPath
 
 
-def generateMP4(imageTemplate, mp4path, frameRate):
+def generateMP4(imageTemplate, mp4path, frameRate, codec="libx264"):
     ffmpegPath = getExternalToolPath(os.path.dirname(__file__), "ffmpeg")
     assert ffmpegPath is not None
     cmds = [
@@ -15,7 +15,7 @@ def generateMP4(imageTemplate, mp4path, frameRate):
         "-loglevel", "16",      # 'error, 16' Show all errors, including ones which can be recovered from.
         "-r", str(frameRate),   # frame rate
         "-i", imageTemplate,    # input sequence
-        "-c:v", "libx264",      # codec
+        "-c:v", codec,          # codec
         "-crf", "20",           # Constant Rate Factor
         "-pix_fmt", "yuv420p",  # pixel format
         mp4path,                # output path
