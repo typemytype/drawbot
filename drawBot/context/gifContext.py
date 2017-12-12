@@ -32,7 +32,7 @@ class GifContext(ImageContext):
         super(GifContext, self)._newPage(width, height)
         self._delayData.append(self._delay)
 
-    def _writeDataToFile(self, data, path, multipage):
+    def _writeDataToFile(self, data, path, multipage, options):
         pdfDocument = Quartz.PDFDocument.alloc().initWithData_(data)
         pageCount = pdfDocument.pageCount()
         shouldBeAnimated = pageCount > 1
@@ -41,7 +41,7 @@ class GifContext(ImageContext):
         if shouldBeAnimated:
             tempPath = tempfile.mkstemp(suffix=".gif")[1]
 
-        inputPaths = super(GifContext, self)._writeDataToFile(data, tempPath, shouldBeAnimated)
+        inputPaths = super(GifContext, self)._writeDataToFile(data, tempPath, shouldBeAnimated, options)
 
         if shouldBeAnimated:
             generateGif(inputPaths, path, self._delayData)

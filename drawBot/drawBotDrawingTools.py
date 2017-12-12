@@ -363,7 +363,7 @@ class DrawBotDrawingTool(object):
                     break
         return tuple(DrawBotPage(instructionSet) for instructionSet in instructions)
 
-    def saveImage(self, paths, multipage=None):
+    def saveImage(self, paths, multipage=None, **options):
         """
         Save or export the canvas to a specified format.
         The argument `paths` can either be a single path or a list of paths.
@@ -407,7 +407,7 @@ class DrawBotDrawingTool(object):
             if context is None:
                 raise DrawBotError("Could not find a supported context for: '%s'" % ext)
             self._drawInContext(context)
-            context.saveImage(path, multipage)
+            context.saveImage(path, multipage, options)
 
     def saveimage(self, paths):
         _deprecatedWarningLowercase("saveImage()")

@@ -37,7 +37,7 @@ class MOVContext(PDFContext):
         length = seconds * self._frameScale
         self._frameDurationData[-1] = length, self._frameScale
 
-    def _writeDataToFile(self, data, path, multipage):
+    def _writeDataToFile(self, data, path, multipage, options):
         if os.path.exists(path):
             os.remove(path)
         movie, error = QTKit.QTMovie.alloc().initToWritableFile_error_(path, None)

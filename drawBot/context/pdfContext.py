@@ -57,17 +57,17 @@ class PDFContext(BaseContext):
         Quartz.CGPDFContextClose(self._pdfContext)
         self._hasContext = False
 
-    def _saveImage(self, path, multipage):
+    def _saveImage(self, path, multipage, options):
         pool = AppKit.NSAutoreleasePool.alloc().init()
         try:
             self._closeContext()
-            self._writeDataToFile(self._pdfData, path, multipage)
+            self._writeDataToFile(self._pdfData, path, multipage, options)
             self._pdfContext = None
             self._pdfData = None
         finally:
             del pool
 
-    def _writeDataToFile(self, data, path, multipage):
+    def _writeDataToFile(self, data, path, multipage, options):
         if multipage is None:
             multipage = True
         if not multipage:

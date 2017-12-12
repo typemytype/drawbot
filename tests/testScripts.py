@@ -130,7 +130,7 @@ class DrawBotTest(unittest.TestCase):
             "drawPath moveTo 10.0 10.0 lineTo 110.0 10.0 lineTo 110.0 110.0 lineTo 10.0 110.0 closePath",
             "textBox foo bar 82.4829101562 84.0 35.0341796875 26.0 center",
             "frameDuration 10",
-            "saveImage * None"
+            "saveImage * None {}"
         ]
         with StdOutCollector() as output:
             import drawBot

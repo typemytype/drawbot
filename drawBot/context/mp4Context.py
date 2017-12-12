@@ -33,7 +33,7 @@ class MP4Context(ImageContext):
         super(MP4Context, self)._newPage(width, height)
         self._frameDurations.append(self._defaultFrameDuration)
 
-    def _writeDataToFile(self, data, path, multipage):
+    def _writeDataToFile(self, data, path, multipage, options):
         frameRate = round(1.0 / self._frameDurations[0], 3)
         frameDurations = set(self._frameDurations)
         if len(frameDurations) > 1:
@@ -41,7 +41,7 @@ class MP4Context(ImageContext):
 
         tempDir = tempfile.mkdtemp(suffix=".mp4tmp")
         try:
-            super(MP4Context, self)._writeDataToFile(data, os.path.join(tempDir, "frame.png"), True)
+            super(MP4Context, self)._writeDataToFile(data, os.path.join(tempDir, "frame.png"), True, options)
             generateMP4(os.path.join(tempDir, "frame_%d.png"), path, frameRate)
         finally:
             shutil.rmtree(tempDir)
