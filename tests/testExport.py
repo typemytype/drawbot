@@ -5,6 +5,7 @@ import sys
 import os
 import unittest
 import tempfile
+import glob
 import drawBot
 import random
 import AppKit
@@ -96,6 +97,24 @@ class ExportTest(unittest.TestCase):
             os.remove(tmp1)
             os.remove(tmp2)
             os.remove(tmp3)
+
+    def test_multipage(self):
+        self.makeTestAnimation(5)
+        tmp = tempfile.mktemp(suffix=".jpg")
+        base, ext = os.path.splitext(tmp)
+        pattern = base + "_*" + ext
+        self.assertEqual(len(glob.glob(pattern)), 0)
+        try:
+            drawBot.saveImage(tmp)
+            self.assertEqual(len(glob.glob(pattern)), 0)
+            drawBot.saveImage(tmp, multipage=False)
+            self.assertEqual(len(glob.glob(pattern)), 0)
+            drawBot.saveImage(tmp, multipage=True)
+            self.assertEqual(len(glob.glob(pattern)), 5)
+        finally:
+            os.remove(tmp)
+            for path in glob.glob(pattern):
+                os.remove(path)
 
 
 if __name__ == '__main__':
