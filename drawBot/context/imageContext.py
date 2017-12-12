@@ -8,6 +8,20 @@ import os
 from .pdfContext import PDFContext
 
 
+_nsImageOptions = {
+    "imageColorSyncProfileData": AppKit.NSImageColorSyncProfileData,  # NSData
+    "imageJPEGCompressionFactor": AppKit.NSImageCompressionFactor,  # number
+    "imageTIFFCompressionMethod": AppKit.NSImageCompressionMethod,  # number
+    "imageGIFDitherTransparency": AppKit.NSImageDitherTransparency,  # boolean
+    #"imageJPEGEXIFData": AppKit.NSImageEXIFData,  # dict  XXX Doesn't seem to work
+    "imageFallbackBackgroundColor": AppKit.NSImageFallbackBackgroundColor,  # NSColor
+    "imagePNGGamma": AppKit.NSImageGamma,  # number
+    "imagePNGInterlaced": AppKit.NSImageInterlaced,  # boolean
+    "imageJPEGProgressive": AppKit.NSImageProgressive,  # boolean
+    "imageGIFRGBColorTable": AppKit.NSImageRGBColorTable,  # NSData
+}
+
+
 class ImageContext(PDFContext):
 
     _saveImageFileTypes = {
@@ -36,13 +50,17 @@ class ImageContext(PDFContext):
             pathAdd = ""
         outputPaths = []
         imageResolution = options.get("imageResolution", 72.0)
+        properties = {}
+        for dbKey, nsKey in _nsImageOptions.items():
+            if dbKey in options:
+                properties[nsKey] = options[dbKey]
         for index in range(firstPage, pageCount):
             pool = AppKit.NSAutoreleasePool.alloc().init()
             try:
                 page = pdfDocument.pageAtIndex_(index)
                 image = AppKit.NSImage.alloc().initWithData_(page.dataRepresentation())
                 imageRep = _makeBitmapImageRep(image, imageResolution)
-                imageData = imageRep.representationUsingType_properties_(self._saveImageFileTypes[ext], None)
+                imageData = imageRep.representationUsingType_properties_(self._saveImageFileTypes[ext], properties)
                 imagePath = fileName + pathAdd + fileExt
                 imageData.writeToFile_atomically_(imagePath, True)
                 pathAdd = "_%s" % (index + 2)
