@@ -1,4 +1,4 @@
-from __future__ import absolute_import
+from __future__ import absolute_import, division
 
 import AppKit
 import Quartz
@@ -35,12 +35,13 @@ class ImageContext(PDFContext):
             firstPage = pageCount - 1
             pathAdd = ""
         outputPaths = []
+        scaleFactor = max(1.0, options.get("imageResolution", 72.0)) / 72.0
         for index in range(firstPage, pageCount):
             pool = AppKit.NSAutoreleasePool.alloc().init()
             try:
                 page = pdfDocument.pageAtIndex_(index)
                 image = AppKit.NSImage.alloc().initWithData_(page.dataRepresentation())
-                imageRep = _unscaledBitmapImageRep(image)
+                imageRep = _scaledBitmapImageRep(image, scaleFactor)
                 imageData = imageRep.representationUsingType_properties_(self._saveImageFileTypes[ext], None)
                 imagePath = fileName + pathAdd + fileExt
                 imageData.writeToFile_atomically_(imagePath, True)
@@ -52,19 +53,19 @@ class ImageContext(PDFContext):
         return outputPaths
 
 
-def _unscaledBitmapImageRep(image):
+def _scaledBitmapImageRep(image, scaleFactor=1.0):
     """Construct a bitmap image representation of 72 DPI, regardless of what kind of display is active."""
     rep = AppKit.NSBitmapImageRep.alloc().initWithBitmapDataPlanes_pixelsWide_pixelsHigh_bitsPerSample_samplesPerPixel_hasAlpha_isPlanar_colorSpaceName_bytesPerRow_bitsPerPixel_(
-        None,                         # planes
-        int(image.size().width),      # pixelsWide
-        int(image.size().height),     # pixelsHigh
-        8,                            # bitsPerSample
-        4,                            # samplesPerPixel
-        True,                         # hasAlpha
-        False,                        # isPlanar
-        AppKit.NSDeviceRGBColorSpace, # colorSpaceName
-        0,                            # bytesPerRow
-        0                             # bitsPerPixel
+        None,                                   # planes
+        int(image.size().width * scaleFactor),  # pixelsWide
+        int(image.size().height * scaleFactor), # pixelsHigh
+        8,                                      # bitsPerSample
+        4,                                      # samplesPerPixel
+        True,                                   # hasAlpha
+        False,                                  # isPlanar
+        AppKit.NSDeviceRGBColorSpace,           # colorSpaceName
+        0,                                      # bytesPerRow
+        0                                       # bitsPerPixel
     )
     rep.setSize_(image.size())
 
