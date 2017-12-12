@@ -35,13 +35,13 @@ class ImageContext(PDFContext):
             firstPage = pageCount - 1
             pathAdd = ""
         outputPaths = []
-        scaleFactor = max(1.0, options.get("imageResolution", 72.0)) / 72.0
+        imageResolution = options.get("imageResolution", 72.0)
         for index in range(firstPage, pageCount):
             pool = AppKit.NSAutoreleasePool.alloc().init()
             try:
                 page = pdfDocument.pageAtIndex_(index)
                 image = AppKit.NSImage.alloc().initWithData_(page.dataRepresentation())
-                imageRep = _scaledBitmapImageRep(image, scaleFactor)
+                imageRep = _makeBitmapImageRep(image, imageResolution)
                 imageData = imageRep.representationUsingType_properties_(self._saveImageFileTypes[ext], None)
                 imagePath = fileName + pathAdd + fileExt
                 imageData.writeToFile_atomically_(imagePath, True)
@@ -53,8 +53,9 @@ class ImageContext(PDFContext):
         return outputPaths
 
 
-def _scaledBitmapImageRep(image, scaleFactor=1.0):
-    """Construct a bitmap image representation of 72 DPI, regardless of what kind of display is active."""
+def _makeBitmapImageRep(image, imageResolution=72.0):
+    """Construct a bitmap image representation at a given resolution."""
+    scaleFactor = max(1.0, imageResolution) / 72.0
     rep = AppKit.NSBitmapImageRep.alloc().initWithBitmapDataPlanes_pixelsWide_pixelsHigh_bitsPerSample_samplesPerPixel_hasAlpha_isPlanar_colorSpaceName_bytesPerRow_bitsPerPixel_(
         None,                                   # planes
         int(image.size().width * scaleFactor),  # pixelsWide
