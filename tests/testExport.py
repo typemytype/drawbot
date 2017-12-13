@@ -81,6 +81,20 @@ class ExportTest(unittest.TestCase):
         self.assertGreater(lowCompressionSize, mediumCompressionSize)
         self.assertGreater(mediumCompressionSize, highCompressionSize)
 
+    def test_imageTIFFCompressionMethod(self):
+        self.makeTestDrawing()
+        defaultCompressionSize = self._saveImageAndReturnSize(".tif")
+        noCompressionSize = self._saveImageAndReturnSize(".tif", imageTIFFCompressionMethod=None)
+        packbitsCompressionSize = self._saveImageAndReturnSize(".tif", imageTIFFCompressionMethod="packbits")
+        packbits2CompressionSize = self._saveImageAndReturnSize(".tif", imageTIFFCompressionMethod=32773)
+        packbits3CompressionSize = self._saveImageAndReturnSize(".tif", imageTIFFCompressionMethod="PACKBITS")
+        lzwCompressionSize = self._saveImageAndReturnSize(".tif", imageTIFFCompressionMethod="lzw")
+        self.assertEqual(defaultCompressionSize, noCompressionSize)
+        self.assertEqual(packbitsCompressionSize, packbits2CompressionSize)
+        self.assertEqual(packbitsCompressionSize, packbits3CompressionSize)
+        self.assertGreater(noCompressionSize, packbitsCompressionSize)
+        self.assertGreater(packbitsCompressionSize, lzwCompressionSize)
+
     def test_imageFallbackBackgroundColor(self):
         self.makeTestDrawing()
         fd, tmp1 = tempfile.mkstemp(suffix=".jpg")
