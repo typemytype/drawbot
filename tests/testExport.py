@@ -151,7 +151,7 @@ class ExportTest(unittest.TestCase):
             for path in glob.glob(pattern):
                 os.remove(path)
 
-    def test_multipage_jpg(self):
+    def test_multipage_png(self):
         self._testMultipage(".png", 5)
 
     def test_multipage_jpg(self):
