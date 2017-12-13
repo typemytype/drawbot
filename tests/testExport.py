@@ -133,8 +133,8 @@ class ExportTest(unittest.TestCase):
             os.remove(tmp2)
             os.remove(tmp3)
 
-    def _testMultipage(self, extension, expectedMultipageCount):
-        self.makeTestAnimation(5)
+    def _testMultipage(self, extension, numFrames, expectedMultipageCount):
+        self.makeTestAnimation(numFrames)
         tmp = tempfile.mktemp(suffix=extension)
         base, ext = os.path.splitext(tmp)
         pattern = base + "_*" + ext
@@ -152,19 +152,19 @@ class ExportTest(unittest.TestCase):
                 os.remove(path)
 
     def test_multipage_png(self):
-        self._testMultipage(".png", 5)
+        self._testMultipage(".png", numFrames=5, expectedMultipageCount=5)
 
     def test_multipage_jpg(self):
-        self._testMultipage(".jpg", 5)
+        self._testMultipage(".jpg", numFrames=5, expectedMultipageCount=5)
 
     def test_multipage_svg(self):
-        self._testMultipage(".svg", 5)
+        self._testMultipage(".svg", numFrames=5, expectedMultipageCount=5)
 
     def test_multipage_gif(self):
-        self._testMultipage(".gif", 0)
+        self._testMultipage(".gif", numFrames=5, expectedMultipageCount=0)
 
     def test_multipage_pdf(self):
-        self._testMultipage(".pdf", 0)
+        self._testMultipage(".pdf", numFrames=5, expectedMultipageCount=0)
 
     def test_animatedGIF(self):
         self.makeTestAnimation(5)
