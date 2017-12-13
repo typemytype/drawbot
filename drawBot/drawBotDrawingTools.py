@@ -8,7 +8,7 @@ import math
 import os
 import random
 
-from .context import getContextForFileExt
+from .context import getContextForFileExt, getFileExtensions, getContextOptionsDocs
 from .context.baseContext import BezierPath, FormattedString
 from .context.dummyContext import DummyContext
 
@@ -370,12 +370,11 @@ class DrawBotDrawingTool(object):
 
         The file extension is important because it will determine the format in which the image will be exported.
 
-        All supported file extensions: `pdf`, `svg`, `png`, `jpg`, `jpeg`, `tiff`, `tif`, `gif`, `bmp`, `mov` and `mp4`.
+        All supported file extensions: %(supporttedExtensions)s.
 
-        * A `pdf` can be multipage. If `multipage` is `False` only the current page is saved.
-        * A `mov` and `mp4` will use each page as a frame.
-        * A `gif` can be animated when there are multiple pages and it will use each page as a frame.
-        * All images and `svg` formats will only save the current page. If `multipage` is `True` all pages are saved to disk (a page index will be added to the file name).
+        Options can be set by adding arguments. Supported option arguments:
+
+        %(supportedOptions)s
 
         .. downloadcode:: saveImage.py
 
@@ -414,6 +413,12 @@ class DrawBotDrawingTool(object):
             if multipage is not None:
                 options["multipage"] = multipage
             context.saveImage(path, options)
+
+    # filling docs with content from all possible and installed contexts
+    saveImage.__doc__ = saveImage.__doc__ % dict(
+        supporttedExtensions="`%s`" % "`, `".join(getFileExtensions()),
+        supportedOptions="\n        ".join(getContextOptionsDocs())
+    )
 
     def saveimage(self, paths):
         _deprecatedWarningLowercase("saveImage()")
