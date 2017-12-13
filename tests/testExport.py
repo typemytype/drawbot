@@ -47,7 +47,7 @@ class ExportTest(unittest.TestCase):
 
     def test_arbitraryOption(self):
         self.makeTestAnimation(1)
-        # This issues a warning, but unittest is either suppressing that or fine with it.
+        # This issues a warning (as it should), but unittest is either suppressing that or fine with it.
         self._saveImageAndReturnSize(".png", someArbitraryOption="foo")
 
     def test_export_mov(self):
