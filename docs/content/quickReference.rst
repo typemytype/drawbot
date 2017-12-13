@@ -205,11 +205,9 @@ Quick Reference
 
     oval(200, 20, 50, 50)
 
-    saveImage([
-        u"~/Desktop/drawBotTest.pdf",
-        u"~/Desktop/drawBotTest.png",
-        u"~/Desktop/drawBotTest.svg",
-        u"~/Desktop/drawBotTest.mov",
-        ])
+    saveImage(u"~/Desktop/drawBotTest.pdf")
+    saveImage(u"~/Desktop/drawBotTest.png")
+    saveImage(u"~/Desktop/drawBotTest.svg")
+    saveImage(u"~/Desktop/drawBotTest.mov")
 
     print "Done"
