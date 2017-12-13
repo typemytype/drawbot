@@ -9,7 +9,7 @@ from .printContext import PrintContext
 from .mp4Context import MP4Context
 
 
-allContexts = [PDFContext, ImageContext, SVGContext, MOVContext, PrintContext, GifContext, MP4Context]
+allContexts = [PDFContext, ImageContext, SVGContext, MOVContext, GifContext, MP4Context, PrintContext]
 
 
 def subscribeContext(context):
