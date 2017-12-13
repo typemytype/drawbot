@@ -8,7 +8,7 @@ import math
 import os
 import random
 
-from .context import getContextForFileExt, getFileExtensions, getContextOptionsDocs
+from .context import getContextForFileExt, getContextOptions, getFileExtensions, getContextOptionsDocs
 from .context.baseContext import BezierPath, FormattedString
 from .context.dummyContext import DummyContext
 
@@ -393,6 +393,10 @@ class DrawBotDrawingTool(object):
         """
         if isinstance(paths, basestring):
             paths = [paths]
+        allowedSaveImageOptions = getContextOptions()
+        for optionName in options:
+            if optionName not in allowedSaveImageOptions:
+                warnings.warn("Unrecognized saveImage() option found '%s'." % optionName)
         for rawPath in paths:
             path = optimizePath(rawPath)
             dirName = os.path.dirname(path)
@@ -405,10 +409,6 @@ class DrawBotDrawingTool(object):
             context = getContextForFileExt(ext)
             if context is None:
                 raise DrawBotError("Could not find a supported context for: '%s'" % ext)
-            allowedSaveImageOptions = set(optionName for optionName, optionDoc in context.saveImageOptions)
-            for optionName in options:
-                if optionName not in allowedSaveImageOptions:
-                    warnings.warn("Unrecognized saveImage() option found for %s: %s" % (context.__class__.__name__, optionName))
             self._drawInContext(context)
             if multipage is not None:
                 options["multipage"] = multipage

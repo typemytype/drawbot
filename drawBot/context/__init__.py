@@ -26,6 +26,14 @@ def getContextForFileExt(ext):
     return None
 
 
+def getContextOptions():
+    options = set()
+    for context in allContexts:
+        for key, _ in context.saveImageOptions:
+            options.add(key)
+    return options
+
+
 def getFileExtensions():
     extensions = []
     for context in allContexts:
