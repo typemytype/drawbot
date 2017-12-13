@@ -373,6 +373,8 @@ class DrawBotDrawingTool(object):
         All supported file extensions: %(supporttedExtensions)s.
         (`*` will print out all actions.)
 
+        In an animation / movie export each page relfects a frame.
+
         .. downloadcode:: saveImage.py
 
             # set the canvas size
@@ -389,24 +391,18 @@ class DrawBotDrawingTool(object):
             saveImage("~/Desktop/firstImage.png")
             saveImage("~/Desktop/firstImage.pdf")
 
-        Options can be set by adding arguments. Supported option arguments:
+        saveImage options can be set by adding arguments. Supported option arguments:
 
         %(supportedOptions)s
 
-        .. downloadcode:: saveImage.py
+        .. downloadcode:: saveImageResolutionExample.py
 
-            # set the canvas size
+            # same example but we just change the image resolution
             size(150, 100)
-
-            # draw a background
             rect(10, 10, width()-20, height()-20)
-
-            # set a fill
             fill(1)
-            # draw some text
             text("Hello World!", (20, 40))
-            # save it as a png on the current users desktop
-            # with as option a resolution of 300 PPI
+            # save it with an option that controls the resolution (300 PPI)
             saveImage("~/Desktop/firstImage.png", imageResolution=300)
 
         """

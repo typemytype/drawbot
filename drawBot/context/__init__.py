@@ -59,27 +59,9 @@ def getContextOptionsDocs(formatter="* `%s`: %s"):
     for context in allContexts:
         if context.saveImageOptions:
             ext = ", ".join(context.fileExtensions)
-            docs.append("*%s*:" % ext)
+            docs.append("*%s options:*" % ext)
             docs.append("")
             for key, doc in context.saveImageOptions:
                 docs.append(formatter % (key, doc))
             docs.append("")
     return docs
-
-# def getContextOptionsDocs():
-#     docs = []
-#     done = set()
-#     formatter = "* `%s`: %s"
-#     emptyDocFormatter = "* `%s`"
-#     for context in allContexts:
-#         if context.saveImageOptions:
-#             for key, doc in context.saveImageOptions:
-#                 if key in done:
-#                     continue
-#                 if doc:
-#                     value = formatter % (key, doc)
-#                 else:
-#                     value = emptyDocFormatter % key
-#                 docs.append(value)
-#                 done.add(key)
-#     return docs
