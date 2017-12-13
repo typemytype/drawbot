@@ -155,16 +155,16 @@ class ExportTest(unittest.TestCase):
         self._testMultipage(".png", numFrames=5, expectedMultipageCount=5)
 
     def test_multipage_jpg(self):
-        self._testMultipage(".jpg", numFrames=5, expectedMultipageCount=5)
+        self._testMultipage(".jpg", numFrames=6, expectedMultipageCount=6)
 
     def test_multipage_svg(self):
-        self._testMultipage(".svg", numFrames=5, expectedMultipageCount=5)
+        self._testMultipage(".svg", numFrames=7, expectedMultipageCount=7)
 
     def test_multipage_gif(self):
-        self._testMultipage(".gif", numFrames=5, expectedMultipageCount=0)
+        self._testMultipage(".gif", numFrames=8, expectedMultipageCount=0)
 
     def test_multipage_pdf(self):
-        self._testMultipage(".pdf", numFrames=5, expectedMultipageCount=0)
+        self._testMultipage(".pdf", numFrames=9, expectedMultipageCount=0)
 
     def test_animatedGIF(self):
         self.makeTestAnimation(5)
