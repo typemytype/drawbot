@@ -1,11 +1,8 @@
 from __future__ import absolute_import
 
 from .pdfContext import PDFContext
-from .pngContext import PNGContext
-from .jpegContext import JPEGContext
-from .tiffContext import TIFFContext
+from .imageContext import PNGContext, JPEGContext, TIFFContext, BMPContext
 from .gifContext import GIFContext
-from .bmpContext import BMPContext
 from .svgContext import SVGContext
 from .movContext import MOVContext
 from .printContext import PrintContext

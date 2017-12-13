@@ -136,3 +136,42 @@ def _makeBitmapImageRep(image, imageResolution=72.0):
     finally:
         AppKit.NSGraphicsContext.restoreGraphicsState()
     return rep
+
+
+# ================================
+# = contexts for file extensions =
+# ================================
+
+class JPEGContext(ImageContext):
+
+    fileExtensions = ["jpg", "jgeg"]
+
+    saveImageOptions = getSaveImageOptions([
+        "imageJPEGCompressionFactor",
+        "imageJPEGProgressive",
+        "imageFallbackBackgroundColor"
+    ])
+
+
+class BMPContext(ImageContext):
+
+    fileExtensions = ["bmp"]
+
+
+class PNGContext(ImageContext):
+
+    fileExtensions = ["png"]
+
+    saveImageOptions = getSaveImageOptions([
+        "imagePNGGamma",
+        "imagePNGInterlaced"
+    ])
+
+
+class TIFFContext(ImageContext):
+
+    fileExtensions = ["tif", "tiff"]
+
+    saveImageOptions = getSaveImageOptions([
+        "imageTIFFCompressionMethod"
+    ])
