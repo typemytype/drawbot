@@ -205,6 +205,28 @@ class ExportTest(unittest.TestCase):
             os.remove(tmp)
         self.assertEqual(output, ['*** DrawBot warning: Unrecognized saveImage() option found for GIFContext: foo ***'])
 
+    def test_saveImage_warningsContext(self):
+        self.makeTestDrawing()
+        oldWarningsSetting = warnings.shouldShowWarnings
+        warnings.shouldShowWarnings = True
+        tmp = tempfile.mktemp(suffix=".mp4")
+        try:
+            with StdOutCollector(captureStdErr=True) as output:
+                drawBot.saveImage(tmp, ffmpegCodec="mpeg4")
+            self.assertEqual(output, [])
+            with StdOutCollector(captureStdErr=True) as output:
+                drawBot.saveImage(tmp, imageResolution=36)
+            self.assertEqual(output, [])
+            with StdOutCollector(captureStdErr=True) as output:
+                drawBot.saveImage(tmp, imagePNGGamma=0.5)
+            self.assertEqual(output, [])
+            with StdOutCollector(captureStdErr=True) as output:
+                drawBot.saveImage(tmp, imageJPEGCompressionFactor=0.5)
+            self.assertEqual(output, ['*** DrawBot warning: Unrecognized saveImage() option found for MP4Context: imageJPEGCompressionFactor ***'])
+        finally:
+            warnings.shouldShowWarnings = oldWarningsSetting
+            os.remove(tmp)
+
 
 if __name__ == '__main__':
     sys.exit(unittest.main())
