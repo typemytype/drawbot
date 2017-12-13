@@ -33,13 +33,13 @@ _nsImageOptions = [
     # DrawBot Key                    NSImage property key                   converter or None   doc
     ("imageColorSyncProfileData",    AppKit.NSImageColorSyncProfileData,    _nsDataConverter,   "A bytes or NSData object containing the ColorSync profile data."),
     ("imageJPEGCompressionFactor",   AppKit.NSImageCompressionFactor,       None,               "A float between 0.0 and 1.0, with 1.0 resulting in no compression and 0.0 resulting in the maximum compression possible"),  # number
-    ("imageTIFFCompressionMethod",   AppKit.NSImageCompressionMethod,       _tiffCompressionConverter,  "None, or 'lzw' or 'packbits', or an NSTIFFCompression constant"),  # number
-    ("imageGIFDitherTransparency",   AppKit.NSImageDitherTransparency,      None,               "Boolean that indicates whether the image is dithered"),  # boolean
+    ("imageTIFFCompressionMethod",   AppKit.NSImageCompressionMethod,       _tiffCompressionConverter,  "None, or 'lzw' or 'packbits', or an NSTIFFCompression constant"),
+    ("imageGIFDitherTransparency",   AppKit.NSImageDitherTransparency,      None,               "Boolean that indicates whether the image is dithered"),
     #("imageJPEGEXIFData",           AppKit.NSImageEXIFData,                None,               ""),  # dict  XXX Doesn't seem to work
     ("imageFallbackBackgroundColor", AppKit.NSImageFallbackBackgroundColor, _nsColorConverter,  "The background color to use when writing to an image format (such as JPEG) that doesn't support alpha. The color's alpha value is ignored. The default background color, when this property is not specified, is white. The value of the property should be an NSColor object or a DrawBot RGB color tuple."),
-    ("imagePNGGamma",                AppKit.NSImageGamma,                   None,               "The gamma value for the image. It is a floating-point number between 0.0 and 1.0, with 0.0 being black and 1.0 being the maximum color."),  # number
-    ("imagePNGInterlaced",           AppKit.NSImageInterlaced,              None,               "Boolean value that indicates whether the image should be interlaced."),  # boolean
-    ("imageJPEGProgressive",         AppKit.NSImageProgressive,             None,               "Boolean that indicates whether the image should use progressive encoding."),  # boolean
+    ("imagePNGGamma",                AppKit.NSImageGamma,                   None,               "The gamma value for the image. It is a floating-point number between 0.0 and 1.0, with 0.0 being black and 1.0 being the maximum color."),
+    ("imagePNGInterlaced",           AppKit.NSImageInterlaced,              None,               "Boolean value that indicates whether the image should be interlaced."),  # XXX doesn't seem to work
+    ("imageJPEGProgressive",         AppKit.NSImageProgressive,             None,               "Boolean that indicates whether the image should use progressive encoding."),
     ("imageGIFRGBColorTable",        AppKit.NSImageRGBColorTable,           _nsDataConverter,   "A bytes or NSData object containing the RGB color table."),
 ]
 
