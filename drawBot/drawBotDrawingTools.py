@@ -443,7 +443,7 @@ class DrawBotDrawingTool(object):
         context = getContextForFileExt(ext)
         if context is None:
             raise DrawBotError("Could not find a supported context for: '%s'" % ext)
-        if not context.lazySaveImageOptions:
+        if not context.validateSaveImageOptions:
             allowedSaveImageOptions = set(optionName for optionName, optionDoc in context.saveImageOptions)
             for optionName in options:
                 if optionName not in allowedSaveImageOptions:

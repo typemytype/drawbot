@@ -1678,7 +1678,7 @@ class BaseContext(object):
 
     fileExtensions = []
     saveImageOptions = []
-    lazySaveImageOptions = False
+    validateSaveImageOptions = True
 
     _lineJoinStylesMap = dict(
         miter=Quartz.kCGLineJoinMiter,

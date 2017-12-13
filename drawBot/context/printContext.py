@@ -40,7 +40,7 @@ class StringPen(AbstractPen):
 class PrintContext(BaseContext):
 
     fileExtensions = ["*"]
-    lazySaveImageOptions = True
+    validateSaveImageOptions = False
 
     def _newPage(self, width, height):
         print("newPage %s %s" % (width, height))
