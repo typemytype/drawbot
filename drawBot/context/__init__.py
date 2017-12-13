@@ -24,3 +24,24 @@ def getContextForFileExt(ext):
         if ext in context.fileExtensions:
             return context()
     return None
+
+
+def getFileExtensions():
+    extensions = []
+    for context in allContexts:
+        for ext in context.fileExtensions:
+            if ext not in extensions:
+                extensions.append(ext)
+    return extensions
+
+
+def getContextOptionsDocs(formatter="* `%s`: %s"):
+    docs = []
+    done = set()
+    for context in allContexts:
+        for key, doc in context.saveImageOptions:
+            if key in done:
+                continue
+            docs.append(formatter % (key, doc))
+            done.add(key)
+    return docs
