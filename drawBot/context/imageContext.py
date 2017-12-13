@@ -61,7 +61,7 @@ class ImageContext(PDFContext):
 
     fileExtensions = _saveImageFileTypes.keys()
 
-    saveImageOptions = PDFContext.saveImageOptions + [
+    saveImageOptions = [
         ("imageResolution", "The resolution of the output image in PPI. Default is 72."),
     ]
     saveImageOptions.extend((dbKey, doc) for dbKey, nsKey, converter, doc in _nsImageOptions)

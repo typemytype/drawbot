@@ -20,7 +20,7 @@ class MP4Context(ImageContext):
 
     fileExtensions = ["mp4"]
 
-    saveImageOptions = ImageContext.saveImageOptions + [
+    saveImageOptions = [
         ("ffmpegCodec", "The codec to be used by ffmpeg. By default it is 'libx264' (for H.264). The 'mpeg4' codec gives better results when importing the movie into After Effects, at the expense of a larger file size."),
     ]
 
