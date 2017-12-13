@@ -9,7 +9,7 @@ from .imageContext import ImageContext, getSaveImageOptions
 from .tools.gifTools import generateGif
 
 
-class GifContext(ImageContext):
+class GIFContext(ImageContext):
 
     fileExtensions = ["gif"]
 
@@ -21,7 +21,7 @@ class GifContext(ImageContext):
     _delay = 10
 
     def __init__(self):
-        super(GifContext, self).__init__()
+        super(GIFContext, self).__init__()
         self._delayData = []
 
     def _frameDuration(self, seconds):
@@ -29,7 +29,7 @@ class GifContext(ImageContext):
         self._delayData[-1] = int(seconds * 100)
 
     def _newPage(self, width, height):
-        super(GifContext, self)._newPage(width, height)
+        super(GIFContext, self)._newPage(width, height)
         self._delayData.append(self._delay)
 
     def _writeDataToFile(self, data, path, options):
@@ -42,7 +42,7 @@ class GifContext(ImageContext):
             options["multipage"] = True
             tempPath = tempfile.mkstemp(suffix=".gif")[1]
 
-        inputPaths = super(GifContext, self)._writeDataToFile(data, tempPath, options)
+        inputPaths = super(GIFContext, self)._writeDataToFile(data, tempPath, options)
 
         if shouldBeAnimated:
             generateGif(inputPaths, path, self._delayData)

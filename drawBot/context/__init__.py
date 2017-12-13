@@ -1,11 +1,11 @@
 from __future__ import absolute_import
 
 from .pdfContext import PDFContext
-from .pngContext import PngContext
-from .jpegContext import JpegContext
-from .tiffContext import TiffContext
-from .gifContext import GifContext
-from .bmpContext import BmpContext
+from .pngContext import PNGContext
+from .jpegContext import JPEGContext
+from .tiffContext import TIFFContext
+from .gifContext import GIFContext
+from .bmpContext import BMPContext
 from .svgContext import SVGContext
 from .movContext import MOVContext
 from .printContext import PrintContext
@@ -14,12 +14,12 @@ from .mp4Context import MP4Context
 
 allContexts = [
     PDFContext,
-    PngContext,
-    JpegContext,
-    TiffContext,
+    PNGContext,
+    JPEGContext,
+    TIFFContext,
     SVGContext,
-    GifContext,
-    BmpContext,
+    GIFContext,
+    BMPContext,
     MP4Context,
     MOVContext,
     PrintContext

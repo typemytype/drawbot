@@ -3,7 +3,7 @@ from __future__ import absolute_import
 from .imageContext import ImageContext, getSaveImageOptions
 
 
-class JpegContext(ImageContext):
+class JPEGContext(ImageContext):
 
     fileExtensions = ["jpg", "jgeg"]
 

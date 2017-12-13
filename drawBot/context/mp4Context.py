@@ -5,18 +5,18 @@ import tempfile
 import shutil
 from drawBot.misc import warnings
 
-from .pngContext import PngContext
+from .pngContext import PNGContext
 
 from .tools.mp4Tools import generateMP4
 
 
-class MP4Context(PngContext):
+class MP4Context(PNGContext):
 
     fileExtensions = ["mp4"]
 
     saveImageOptions = [
         ("ffmpegCodec", "The codec to be used by ffmpeg. By default it is 'libx264' (for H.264). The 'mpeg4' codec gives better results when importing the movie into After Effects, at the expense of a larger file size."),
-    ] + PngContext.saveImageOptions
+    ] + PNGContext.saveImageOptions
 
     _defaultFrameDuration = 1 / 10
 
