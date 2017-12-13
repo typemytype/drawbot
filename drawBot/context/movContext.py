@@ -13,6 +13,7 @@ from .pdfContext import PDFContext
 class MOVContext(PDFContext):
 
     fileExtensions = ["mov"]
+    saveImageOptions = []
 
     _saveMovieAttributes = {
         QTKit.QTAddImageCodecType: "png "
