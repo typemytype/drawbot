@@ -84,6 +84,9 @@ class ExportTest(unittest.TestCase):
         self.makeTestDrawing()
         self._saveImageAndReturnSize(".tiff")
 
+    def test_export_bmp(self):
+        self.makeTestDrawing()
+        self._saveImageAndReturnSize(".bmp")
 
     def test_imageResolution(self):
         self.makeTestDrawing()
