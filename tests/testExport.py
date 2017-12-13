@@ -14,6 +14,9 @@ from drawBot.misc import DrawBotError, warnings
 from testScripts import StdOutCollector
 
 
+warnings.shouldShowWarnings = True
+
+
 class ExportTest(unittest.TestCase):
 
     def makeTestAnimation(self, numFrames=25):
@@ -49,8 +52,9 @@ class ExportTest(unittest.TestCase):
 
     def test_arbitraryOption(self):
         self.makeTestAnimation(1)
-        # This issues a warning (as it should), but unittest is either suppressing that or fine with it.
-        self._saveImageAndReturnSize(".png", someArbitraryOption="foo")
+        with StdOutCollector(captureStdErr=True) as output:
+            self._saveImageAndReturnSize(".png", someArbitraryOption="foo")
+        self.assertEqual(output, ['*** DrawBot warning: Unrecognized saveImage() option found for PNGContext: someArbitraryOption ***'])
 
     def test_export_mov(self):
         self.makeTestAnimation(5)
@@ -183,7 +187,9 @@ class ExportTest(unittest.TestCase):
             drawBot.saveImage("foo.abcde")
         self.assertEqual(cm.exception.args[0], "Could not find a supported context for: 'abcde'")
         with self.assertRaises(DrawBotError) as cm:
-            drawBot.saveImage(["foo.abcde"])
+            with StdOutCollector(captureStdErr=True) as output:
+                drawBot.saveImage(["foo.abcde"])
+        self.assertEqual(output, ['*** DrawBot warning: saveImage([path, path, ...]) is deprecated, use multiple saveImage statements. ***'])
         self.assertEqual(cm.exception.args[0], "Could not find a supported context for: 'abcde'")
 
     def test_saveImage_pathList(self):
@@ -194,21 +200,16 @@ class ExportTest(unittest.TestCase):
 
     def test_saveImage_warnings(self):
         self.makeTestDrawing()
-        oldWarningsSetting = warnings.shouldShowWarnings
-        warnings.shouldShowWarnings = True
         tmp = tempfile.mktemp(suffix=".gif")
         try:
             with StdOutCollector(captureStdErr=True) as output:
                 drawBot.saveImage(tmp, foo=123)
         finally:
-            warnings.shouldShowWarnings = oldWarningsSetting
             os.remove(tmp)
         self.assertEqual(output, ['*** DrawBot warning: Unrecognized saveImage() option found for GIFContext: foo ***'])
 
     def test_saveImage_warningsContext(self):
         self.makeTestDrawing()
-        oldWarningsSetting = warnings.shouldShowWarnings
-        warnings.shouldShowWarnings = True
         tmp = tempfile.mktemp(suffix=".mp4")
         try:
             with StdOutCollector(captureStdErr=True) as output:
@@ -227,7 +228,6 @@ class ExportTest(unittest.TestCase):
                 drawBot.saveImage(tmp, multipage=True)
             self.assertEqual(output, ['*** DrawBot warning: Unrecognized saveImage() option found for MP4Context: multipage ***'])
         finally:
-            warnings.shouldShowWarnings = oldWarningsSetting
             os.remove(tmp)
 
 
