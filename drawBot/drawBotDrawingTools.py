@@ -372,9 +372,11 @@ class DrawBotDrawingTool(object):
 
         All supported file extensions: %(supporttedExtensions)s.
 
-        Options can be set by adding arguments. Supported option arguments:
-
-        %(supportedOptions)s
+        * A `pdf` can be multipage. If `multipage` is False only the current page is saved.
+        * A `mov` and `mp4` will use each page as a frame.
+        * A `gif` can be animated when there are multiple pages and it will use each page as a frame.
+        * All images and svg formats will only save the current page. If `multipage` is True all pages are saved to disk (a page index will be added to the file name).
+        * `*` will print out all actions.
 
         .. downloadcode:: saveImage.py
 
@@ -390,6 +392,11 @@ class DrawBotDrawingTool(object):
             text("Hello World!", (20, 40))
             # save it as a png and pdf on the current users desktop
             saveImage(["~/Desktop/firstImage.png", "~/Desktop/firstImage.pdf"])
+
+        Options can be set by adding arguments. Supported option arguments:
+
+        %(supportedOptions)s
+
         """
         if isinstance(paths, basestring):
             paths = [paths]

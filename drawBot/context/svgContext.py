@@ -236,9 +236,6 @@ class SVGContext(BaseContext):
 
     indentation = " "
     fileExtensions = ["svg"]
-    saveImageOptions = [
-        ("multipage", "Output a numbered image for each page or frame in the document."),
-    ]
 
     def __init__(self):
         super(SVGContext, self).__init__()

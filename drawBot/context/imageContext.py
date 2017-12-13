@@ -61,9 +61,8 @@ class ImageContext(PDFContext):
 
     fileExtensions = _saveImageFileTypes.keys()
 
-    saveImageOptions = [
+    saveImageOptions = PDFContext.saveImageOptions + [
         ("imageResolution", "The resolution of the output image in PPI. Default is 72."),
-        ("multipage", "Output a numbered image for each page or frame in the document."),
     ]
     saveImageOptions.extend((dbKey, doc) for dbKey, nsKey, converter, doc in _nsImageOptions)
 

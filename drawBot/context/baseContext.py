@@ -1677,7 +1677,9 @@ class BaseContext(object):
     _gradientClass = Gradient
 
     fileExtensions = []
-    saveImageOptions = []
+    saveImageOptions = [
+        ("multipage", None),
+    ]
 
     _lineJoinStylesMap = dict(
         miter=Quartz.kCGLineJoinMiter,
