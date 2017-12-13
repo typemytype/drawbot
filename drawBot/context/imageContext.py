@@ -20,19 +20,19 @@ def _nsColorConverter(color):
     color = Color(*color)
     return color.getNSObject()
 
-_nsImageOptions = {
-    # DrawBot Key                   NSImage property key                    converter func or None
-    "imageColorSyncProfileData":    (AppKit.NSImageColorSyncProfileData,    _nsDataConverter),
-    "imageJPEGCompressionFactor":   (AppKit.NSImageCompressionFactor,       None),  # number
-    "imageTIFFCompressionMethod":   (AppKit.NSImageCompressionMethod,       None),  # number
-    "imageGIFDitherTransparency":   (AppKit.NSImageDitherTransparency,      None),  # boolean
-    #"imageJPEGEXIFData":           (AppKit.NSImageEXIFData,                None),  # dict  XXX Doesn't seem to work
-    "imageFallbackBackgroundColor": (AppKit.NSImageFallbackBackgroundColor, _nsColorConverter),
-    "imagePNGGamma":                (AppKit.NSImageGamma,                   None),  # number
-    "imagePNGInterlaced":           (AppKit.NSImageInterlaced,              None),  # boolean
-    "imageJPEGProgressive":         (AppKit.NSImageProgressive,             None),  # boolean
-    "imageGIFRGBColorTable":        (AppKit.NSImageRGBColorTable,           _nsDataConverter),
-}
+_nsImageOptions = [
+    # DrawBot Key                    NSImage property key                   converter or None   doc
+    ("imageColorSyncProfileData",    AppKit.NSImageColorSyncProfileData,    _nsDataConverter,   "A bytes or NSData object containing the ColorSync profile data."),
+    ("imageJPEGCompressionFactor",   AppKit.NSImageCompressionFactor,       None,               "A float between 0.0 and 1.0, with 1.0 resulting in no compression and 0.0 resulting in the maximum compression possible"),  # number
+    ("imageTIFFCompressionMethod",   AppKit.NSImageCompressionMethod,       None,               "Corresponds to one of the NSTIFFCompression constants"),  # number
+    ("imageGIFDitherTransparency",   AppKit.NSImageDitherTransparency,      None,               "Boolean that indicates whether the image is dithered"),  # boolean
+    #("imageJPEGEXIFData",           AppKit.NSImageEXIFData,                None,               ""),  # dict  XXX Doesn't seem to work
+    ("imageFallbackBackgroundColor", AppKit.NSImageFallbackBackgroundColor, _nsColorConverter,  "The background color to use when writing to an image format (such as JPEG) that doesn't support alpha. The color's alpha value is ignored. The default background color, when this property is not specified, is white. The value of the property should be an NSColor object or a DrawBot RGB color tuple."),
+    ("imagePNGGamma",                AppKit.NSImageGamma,                   None,               "The gamma value for the image. It is a floating-point number between 0.0 and 1.0, with 0.0 being black and 1.0 being the maximum color."),  # number
+    ("imagePNGInterlaced",           AppKit.NSImageInterlaced,              None,               "Boolean value that indicates whether the image is interlaced."),  # boolean
+    ("imageJPEGProgressive",         AppKit.NSImageProgressive,             None,               "Boolean that indicates whether the image uses progressive encoding."),  # boolean
+    ("imageGIFRGBColorTable",        AppKit.NSImageRGBColorTable,           _nsDataConverter,   "A bytes or NSData object containing the RGB color table."),
+]
 
 
 class ImageContext(PDFContext):
@@ -48,6 +48,12 @@ class ImageContext(PDFContext):
     }
 
     fileExtensions = _saveImageFileTypes.keys()
+
+    saveImageOptions = [
+        ("imageResolution", "The resolution of the output image in PPI. Default is 72."),
+        ("multipage", "Output a numbered image for each page or frame in the document."),
+    ]
+    saveImageOptions.extend((dbKey, doc) for dbKey, nsKey, converter, doc in _nsImageOptions)
 
     def _writeDataToFile(self, data, path, options):
         multipage = options.get("multipage")
@@ -65,7 +71,7 @@ class ImageContext(PDFContext):
         outputPaths = []
         imageResolution = options.get("imageResolution", 72.0)
         properties = {}
-        for dbKey, (nsKey, converter) in _nsImageOptions.items():
+        for dbKey, nsKey, converter, doc in _nsImageOptions:
             if dbKey in options:
                 value = options[dbKey]
                 if converter is not None:
