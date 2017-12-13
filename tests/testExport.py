@@ -198,37 +198,47 @@ class ExportTest(unittest.TestCase):
             drawBot.saveImage(["foo.abcde"], foo=123)
         self.assertEqual(cm.exception.args[0], 'Cannot apply saveImage options to multiple output formats.')
 
-    def test_saveImage_warnings(self):
+    def test_saveImage_png_multipage(self):
         self.makeTestDrawing()
-        tmp = tempfile.mktemp(suffix=".gif")
-        try:
-            with StdOutCollector(captureStdErr=True) as output:
-                drawBot.saveImage(tmp, foo=123)
-        finally:
-            os.remove(tmp)
-        self.assertEqual(output, ['*** DrawBot warning: Unrecognized saveImage() option found for GIFContext: foo ***'])
+        with StdOutCollector(captureStdErr=True) as output:
+            self._saveImageAndReturnSize(".png", multipage=False)
+        self.assertEqual(output, [])
 
-    def test_saveImage_warningsContext(self):
+    def test_saveImage_png_ffmpegCodec(self):
         self.makeTestDrawing()
-        tmp = tempfile.mktemp(suffix=".mp4")
-        try:
-            with StdOutCollector(captureStdErr=True) as output:
-                drawBot.saveImage(tmp, ffmpegCodec="mpeg4")
-            self.assertEqual(output, [])
-            with StdOutCollector(captureStdErr=True) as output:
-                drawBot.saveImage(tmp, imageResolution=36)
-            self.assertEqual(output, [])
-            with StdOutCollector(captureStdErr=True) as output:
-                drawBot.saveImage(tmp, imagePNGGamma=0.5)
-            self.assertEqual(output, [])
-            with StdOutCollector(captureStdErr=True) as output:
-                drawBot.saveImage(tmp, imageJPEGCompressionFactor=0.5)
-            self.assertEqual(output, ['*** DrawBot warning: Unrecognized saveImage() option found for MP4Context: imageJPEGCompressionFactor ***'])
-            with StdOutCollector(captureStdErr=True) as output:
-                drawBot.saveImage(tmp, multipage=True)
-            self.assertEqual(output, ['*** DrawBot warning: Unrecognized saveImage() option found for MP4Context: multipage ***'])
-        finally:
-            os.remove(tmp)
+        with StdOutCollector(captureStdErr=True) as output:
+            self._saveImageAndReturnSize(".png", ffmpegCodec="mpeg4")
+        self.assertEqual(output, ['*** DrawBot warning: Unrecognized saveImage() option found for PNGContext: ffmpegCodec ***'])
+
+    def test_saveImage_mp4_ffmpegCodec(self):
+        self.makeTestDrawing()
+        with StdOutCollector(captureStdErr=True) as output:
+            self._saveImageAndReturnSize(".mp4", ffmpegCodec="mpeg4")
+        self.assertEqual(output, [])
+
+    def test_saveImage_mp4_imageResolution(self):
+        self.makeTestDrawing()
+        with StdOutCollector(captureStdErr=True) as output:
+            self._saveImageAndReturnSize(".mp4", imageResolution=36)
+        self.assertEqual(output, [])
+
+    def test_saveImage_mp4_imagePNGGamma(self):
+        self.makeTestDrawing()
+        with StdOutCollector(captureStdErr=True) as output:
+            self._saveImageAndReturnSize(".mp4", imagePNGGamma=0.5)
+        self.assertEqual(output, [])
+
+    def test_saveImage_mp4_imageJPEGCompressionFactor(self):
+        self.makeTestDrawing()
+        with StdOutCollector(captureStdErr=True) as output:
+            self._saveImageAndReturnSize(".mp4", imageJPEGCompressionFactor=0.5)
+        self.assertEqual(output, ['*** DrawBot warning: Unrecognized saveImage() option found for MP4Context: imageJPEGCompressionFactor ***'])
+
+    def test_saveImage_mp4_multipage(self):
+        self.makeTestDrawing()
+        with StdOutCollector(captureStdErr=True) as output:
+            self._saveImageAndReturnSize(".mp4", multipage=True)
+        self.assertEqual(output, ['*** DrawBot warning: Unrecognized saveImage() option found for MP4Context: multipage ***'])
 
 
 if __name__ == '__main__':
