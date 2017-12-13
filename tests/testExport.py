@@ -76,6 +76,8 @@ class ExportTest(unittest.TestCase):
     def test_imageJPEGCompressionFactor(self):
         self.makeTestDrawing()
         lowCompressionSize = self._saveImageAndReturnSize(".jpg", imageJPEGCompressionFactor=1.0)
+        progressiveSize = self._saveImageAndReturnSize(".jpg", imageJPEGCompressionFactor=1.0, imageJPEGProgressive=True)
+        self.assertGreater(lowCompressionSize, progressiveSize)
         mediumCompressionSize = self._saveImageAndReturnSize(".jpg", imageJPEGCompressionFactor=0.5)
         highCompressionSize = self._saveImageAndReturnSize(".jpg", imageJPEGCompressionFactor=0.0)
         self.assertGreater(lowCompressionSize, mediumCompressionSize)
