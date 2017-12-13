@@ -406,6 +406,10 @@ class DrawBotDrawingTool(object):
             context = getContextForFileExt(ext)
             if context is None:
                 raise DrawBotError("Could not find a supported context for: '%s'" % ext)
+            allowedSaveImageOptions = set(optionName for optionName, optionDoc in context.saveImageOptions)
+            for optionName in options:
+                if optionName not in allowedSaveImageOptions:
+                    warnings.warn("Unrecognized saveImage() option found for %s: %s" % (context.__class__.__name__, optionName))
             self._drawInContext(context)
             if multipage is not None:
                 options["multipage"] = multipage
