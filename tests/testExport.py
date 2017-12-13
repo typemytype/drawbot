@@ -73,6 +73,19 @@ class ExportTest(unittest.TestCase):
         finally:
             os.remove(tmp)
 
+    def test_imagePNGInterlaced(self):
+        self.makeTestDrawing()
+        defaultSize = self._saveImageAndReturnSize(".png")
+        interlacedSize = self._saveImageAndReturnSize(".png", imagePNGInterlaced=True)
+        # XXX Huh, seems to make no difference, output files are identical
+        self.assertEqual(defaultSize, interlacedSize)
+
+    def test_imagePNGGamma(self):
+        self.makeTestDrawing()
+        defaultSize = self._saveImageAndReturnSize(".png")
+        gammaSize = self._saveImageAndReturnSize(".png", imagePNGGamma=0.8)
+        self.assertLess(defaultSize, gammaSize)
+
     def test_imageJPEGProgressive(self):
         self.makeTestDrawing()
         defaultSize = self._saveImageAndReturnSize(".jpg")
