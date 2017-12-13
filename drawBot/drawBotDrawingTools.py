@@ -373,7 +373,7 @@ class DrawBotDrawingTool(object):
         All supported file extensions: %(supporttedExtensions)s.
         (`*` will print out all actions.)
 
-        In an animation / movie export each page relfects a frame.
+        When exporting an animation or movie, each page represents a frame.
 
         .. downloadcode:: saveImage.py
 
@@ -391,7 +391,8 @@ class DrawBotDrawingTool(object):
             saveImage("~/Desktop/firstImage.png")
             saveImage("~/Desktop/firstImage.pdf")
 
-        saveImage options can be set by adding arguments. Supported option arguments:
+        `saveImage()` options can be set by adding keyword arguments. Which options are recognized
+        depends on the output format.
 
         %(supportedOptions)s
 
