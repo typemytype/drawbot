@@ -10,6 +10,8 @@ import drawBot
 import random
 import AppKit
 from drawBot.context.tools.gifTools import gifFrameCount
+from drawBot.misc import DrawBotError, warnings
+from testScripts import StdOutCollector
 
 
 class ExportTest(unittest.TestCase):
@@ -174,6 +176,34 @@ class ExportTest(unittest.TestCase):
             self.assertEqual(gifFrameCount(tmp), 5)
         finally:
             os.remove(tmp)
+
+    def test_saveImage_unknownContext(self):
+        self.makeTestDrawing()
+        with self.assertRaises(DrawBotError) as cm:
+            drawBot.saveImage("foo.abcde")
+        self.assertEqual(cm.exception.args[0], "Could not find a supported context for: 'abcde'")
+        with self.assertRaises(DrawBotError) as cm:
+            drawBot.saveImage(["foo.abcde"])
+        self.assertEqual(cm.exception.args[0], "Could not find a supported context for: 'abcde'")
+
+    def test_saveImage_pathList(self):
+        self.makeTestDrawing()
+        with self.assertRaises(TypeError) as cm:
+            drawBot.saveImage(["foo.abcde"], foo=123)
+        self.assertEqual(cm.exception.args[0], 'Cannot apply saveImage options to multiple output formats.')
+
+    def test_saveImage_warnings(self):
+        self.makeTestDrawing()
+        oldWarningsSetting = warnings.shouldShowWarnings
+        warnings.shouldShowWarnings = True
+        tmp = tempfile.mktemp(suffix=".gif")
+        try:
+            with StdOutCollector(captureStdErr=True) as output:
+                drawBot.saveImage(tmp, foo=123)
+        finally:
+            warnings.shouldShowWarnings = oldWarningsSetting
+            os.remove(tmp)
+        self.assertEqual(output, ['*** DrawBot warning: Unrecognized saveImage() option found for GIFContext: foo ***'])
 
 
 if __name__ == '__main__':
