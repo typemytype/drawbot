@@ -70,7 +70,6 @@ class ImageContext(PDFContext):
         ("imageResolution", "The resolution of the output image in PPI. Default is 72."),
         ("multipage", "Output a numbered image for each page or frame in the document."),
     ]
-    saveImageOptions.append(("imageColorSyncProfileData", _nsImageOptions["imageColorSyncProfileData"][-1]))
 
     def _writeDataToFile(self, data, path, options):
         multipage = options.get("multipage")
@@ -149,7 +148,8 @@ class JPEGContext(ImageContext):
     saveImageOptions = getSaveImageOptions([
         "imageJPEGCompressionFactor",
         "imageJPEGProgressive",
-        "imageFallbackBackgroundColor"
+        "imageFallbackBackgroundColor",
+        "imageColorSyncProfileData",
     ])
 
 
@@ -164,7 +164,8 @@ class PNGContext(ImageContext):
 
     saveImageOptions = getSaveImageOptions([
         "imagePNGGamma",
-        "imagePNGInterlaced"
+        "imagePNGInterlaced",
+        "imageColorSyncProfileData",
     ])
 
 
@@ -173,5 +174,6 @@ class TIFFContext(ImageContext):
     fileExtensions = ["tif", "tiff"]
 
     saveImageOptions = getSaveImageOptions([
-        "imageTIFFCompressionMethod"
+        "imageTIFFCompressionMethod",
+        "imageColorSyncProfileData",
     ])

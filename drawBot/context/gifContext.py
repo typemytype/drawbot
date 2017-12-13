@@ -15,7 +15,8 @@ class GIFContext(ImageContext):
 
     saveImageOptions = getSaveImageOptions([
         "imageGIFDitherTransparency",
-        "imageGIFRGBColorTable"
+        "imageGIFRGBColorTable",
+        "imageColorSyncProfileData",
     ])
 
     _delay = 10
