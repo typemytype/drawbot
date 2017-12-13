@@ -28,6 +28,9 @@ def sendPDFtoPrinter(pdfDocument):
 class PDFContext(BaseContext):
 
     fileExtensions = ["pdf"]
+    saveImageOptions = [
+        ("multipage", "If False, only the last page in the document will be saved into the output PDF. This value is ignored if it is None (default)."),
+    ]
 
     def __init__(self):
         super(PDFContext, self).__init__()

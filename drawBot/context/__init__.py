@@ -1,15 +1,29 @@
 from __future__ import absolute_import
 
 from .pdfContext import PDFContext
-from .imageContext import ImageContext
+from .pngContext import PngContext
+from .jpegContext import JpegContext
+from .tiffContext import TiffContext
 from .gifContext import GifContext
+from .bmpContext import BmpContext
 from .svgContext import SVGContext
 from .movContext import MOVContext
 from .printContext import PrintContext
 from .mp4Context import MP4Context
 
 
-allContexts = [PDFContext, ImageContext, SVGContext, MOVContext, GifContext, MP4Context, PrintContext]
+allContexts = [
+    PDFContext,
+    PngContext,
+    JpegContext,
+    TiffContext,
+    SVGContext,
+    GifContext,
+    BmpContext,
+    MP4Context,
+    MOVContext,
+    PrintContext
+]
 
 
 def subscribeContext(context):
@@ -43,32 +57,32 @@ def getFileExtensions():
     return extensions
 
 
-# def getContextOptionsDocs(formatter="* `%s`: %s"):
-#     docs = []
-#     for context in allContexts:
-#         if context.saveImageOptions:
-#             ext = ", ".join(context.fileExtensions)
-#             docs.append("*%s*:" % ext)
-#             docs.append("")
-#             for key, doc in context.saveImageOptions:
-#                 docs.append(formatter % (key, doc))
-#             docs.append("")
-#     return docs
-
-def getContextOptionsDocs():
+def getContextOptionsDocs(formatter="* `%s`: %s"):
     docs = []
-    done = set()
-    formatter = "* `%s`: %s"
-    emptyDocFormatter = "* `%s`"
     for context in allContexts:
         if context.saveImageOptions:
+            ext = ", ".join(context.fileExtensions)
+            docs.append("*%s*:" % ext)
+            docs.append("")
             for key, doc in context.saveImageOptions:
-                if key in done:
-                    continue
-                if doc:
-                    value = formatter % (key, doc)
-                else:
-                    value = emptyDocFormatter % key
-                docs.append(value)
-                done.add(key)
+                docs.append(formatter % (key, doc))
+            docs.append("")
     return docs
+
+# def getContextOptionsDocs():
+#     docs = []
+#     done = set()
+#     formatter = "* `%s`: %s"
+#     emptyDocFormatter = "* `%s`"
+#     for context in allContexts:
+#         if context.saveImageOptions:
+#             for key, doc in context.saveImageOptions:
+#                 if key in done:
+#                     continue
+#                 if doc:
+#                     value = formatter % (key, doc)
+#                 else:
+#                     value = emptyDocFormatter % key
+#                 docs.append(value)
+#                 done.add(key)
+#     return docs

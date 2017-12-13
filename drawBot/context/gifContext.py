@@ -1,22 +1,22 @@
 from __future__ import absolute_import
 
-import AppKit
 import Quartz
 
 import tempfile
 
-from .imageContext import ImageContext
+from .imageContext import ImageContext, getSaveImageOptions
 
 from .tools.gifTools import generateGif
 
 
 class GifContext(ImageContext):
 
-    _saveImageFileTypes = {
-        "gif": AppKit.NSGIFFileType,
-    }
+    fileExtensions = ["gif"]
 
-    fileExtensions = _saveImageFileTypes.keys()
+    saveImageOptions = getSaveImageOptions([
+        "imageGIFDitherTransparency",
+        "imageGIFRGBColorTable"
+    ])
 
     _delay = 10
 
