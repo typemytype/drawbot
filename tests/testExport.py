@@ -64,6 +64,27 @@ class ExportTest(unittest.TestCase):
         self.makeTestAnimation(5)
         self._saveImageAndReturnSize(".gif")
 
+    def test_export_png(self):
+        self.makeTestDrawing()
+        self._saveImageAndReturnSize(".png")
+
+    def test_export_jpg(self):
+        self.makeTestDrawing()
+        self._saveImageAndReturnSize(".jpg")
+
+    def test_export_jpeg(self):
+        self.makeTestDrawing()
+        self._saveImageAndReturnSize(".jpeg")
+
+    def test_export_tif(self):
+        self.makeTestDrawing()
+        self._saveImageAndReturnSize(".tif")
+
+    def test_export_tiff(self):
+        self.makeTestDrawing()
+        self._saveImageAndReturnSize(".tiff")
+
+
     def test_imageResolution(self):
         self.makeTestDrawing()
         fd, tmp = tempfile.mkstemp(suffix=".png")

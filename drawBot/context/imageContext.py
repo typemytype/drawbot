@@ -144,7 +144,7 @@ def _makeBitmapImageRep(image, imageResolution=72.0):
 
 class JPEGContext(ImageContext):
 
-    fileExtensions = ["jpg", "jgeg"]
+    fileExtensions = ["jpg", "jpeg"]
 
     saveImageOptions = getSaveImageOptions([
         "imageJPEGCompressionFactor",
