@@ -406,7 +406,7 @@ class DrawBotDrawingTool(object):
             # draw some text
             text("Hello World!", (20, 40))
             # save it as a png on the current users desktop
-            # with as option a resolution of 300 dpi
+            # with as option a resolution of 300 PPI
             saveImage("~/Desktop/firstImage.png", imageResolution=300)
 
         """
