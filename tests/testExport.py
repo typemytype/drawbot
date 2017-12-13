@@ -223,6 +223,9 @@ class ExportTest(unittest.TestCase):
             with StdOutCollector(captureStdErr=True) as output:
                 drawBot.saveImage(tmp, imageJPEGCompressionFactor=0.5)
             self.assertEqual(output, ['*** DrawBot warning: Unrecognized saveImage() option found for MP4Context: imageJPEGCompressionFactor ***'])
+            with StdOutCollector(captureStdErr=True) as output:
+                drawBot.saveImage(tmp, multipage=True)
+            self.assertEqual(output, ['*** DrawBot warning: Unrecognized saveImage() option found for MP4Context: multipage ***'])
         finally:
             warnings.shouldShowWarnings = oldWarningsSetting
             os.remove(tmp)
