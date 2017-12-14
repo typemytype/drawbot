@@ -1,4 +1,4 @@
-from __future__ import absolute_import
+from __future__ import absolute_import, division
 
 import AppKit
 import Quartz
@@ -6,6 +6,51 @@ import Quartz
 import os
 
 from .pdfContext import PDFContext
+from .baseContext import Color
+
+
+def _nsDataConverter(value):
+    if isinstance(value, AppKit.NSData):
+        return value
+    return AppKit.NSData.dataWithBytes_length_(value, len(value))
+
+
+def _nsColorConverter(color):
+    if isinstance(color, AppKit.NSColor):
+        return color
+    color = Color(*color)
+    return color.getNSObject()
+
+
+def _tiffCompressionConverter(value):
+    if value is None:
+        return AppKit.NSTIFFCompressionNone
+    elif isinstance(value, int):
+        return value
+    else:
+        t = dict(lzw=AppKit.NSTIFFCompressionLZW, packbits=AppKit.NSTIFFCompressionPackBits)
+        return t.get(value.lower(), AppKit.NSTIFFCompressionNone)
+
+
+_nsImageOptions = {
+    # DrawBot Key                   NSImage property key                    converter or None          doc
+    "imageColorSyncProfileData":    (AppKit.NSImageColorSyncProfileData,    _nsDataConverter,          "A bytes or NSData object containing the ColorSync profile data."),
+    "imageTIFFCompressionMethod":   (AppKit.NSImageCompressionMethod,       _tiffCompressionConverter, "None, or 'lzw' or 'packbits', or an NSTIFFCompression constant"),
+    "imagePNGGamma":                (AppKit.NSImageGamma,                   None,                      "The gamma value for the image. It is a floating-point number between 0.0 and 1.0, with 0.0 being black and 1.0 being the maximum color."),
+    "imagePNGInterlaced":           (AppKit.NSImageInterlaced,              None,                      "Boolean value that indicates whether the image should be interlaced."),  # XXX doesn't seem to work
+    "imageJPEGCompressionFactor":   (AppKit.NSImageCompressionFactor,       None,                      "A float between 0.0 and 1.0, with 1.0 resulting in no compression and 0.0 resulting in the maximum compression possible"),  # number
+    "imageJPEGProgressive":         (AppKit.NSImageProgressive,             None,                      "Boolean that indicates whether the image should use progressive encoding."),
+    # "imageJPEGEXIFData":          (AppKit.NSImageEXIFData,                None,                      ""),  # dict  XXX Doesn't seem to work
+    "imageFallbackBackgroundColor": (AppKit.NSImageFallbackBackgroundColor, _nsColorConverter,         "The background color to use when writing to an image format (such as JPEG) that doesn't support alpha. The color's alpha value is ignored. The default background color, when this property is not specified, is white. The value of the property should be an NSColor object or a DrawBot RGB color tuple."),
+    "imageGIFDitherTransparency":   (AppKit.NSImageDitherTransparency,      None,                      "Boolean that indicates whether the image is dithered"),
+    "imageGIFRGBColorTable":        (AppKit.NSImageRGBColorTable,           _nsDataConverter,          "A bytes or NSData object containing the RGB color table."),
+}
+
+
+def getSaveImageOptions(options):
+    return ImageContext.saveImageOptions + [
+        (dbKey, _nsImageOptions[dbKey][-1]) for dbKey in options if dbKey in _nsImageOptions
+    ]
 
 
 class ImageContext(PDFContext):
@@ -15,14 +60,19 @@ class ImageContext(PDFContext):
         "jpeg": AppKit.NSJPEGFileType,
         "tiff": AppKit.NSTIFFFileType,
         "tif": AppKit.NSTIFFFileType,
-        # "gif": AppKit.NSGIFFileType,
+        "gif": AppKit.NSGIFFileType,
         "png": AppKit.NSPNGFileType,
         "bmp": AppKit.NSBMPFileType
     }
+    fileExtensions = []
 
-    fileExtensions = _saveImageFileTypes.keys()
+    saveImageOptions = [
+        ("imageResolution", "The resolution of the output image in PPI. Default is 72."),
+        ("multipage", "Output a numbered image for each page or frame in the document."),
+    ]
 
-    def _writeDataToFile(self, data, path, multipage):
+    def _writeDataToFile(self, data, path, options):
+        multipage = options.get("multipage")
         if multipage is None:
             multipage = False
         fileName, fileExt = os.path.splitext(path)
@@ -35,13 +85,21 @@ class ImageContext(PDFContext):
             firstPage = pageCount - 1
             pathAdd = ""
         outputPaths = []
+        imageResolution = options.get("imageResolution", 72.0)
+        properties = {}
+        for key, value in options.items():
+            if key in _nsImageOptions:
+                nsKey, converter, _ = _nsImageOptions[key]
+                if converter is not None:
+                    value = converter(value)
+                properties[nsKey] = value
         for index in range(firstPage, pageCount):
             pool = AppKit.NSAutoreleasePool.alloc().init()
             try:
                 page = pdfDocument.pageAtIndex_(index)
                 image = AppKit.NSImage.alloc().initWithData_(page.dataRepresentation())
-                imageRep = _unscaledBitmapImageRep(image)
-                imageData = imageRep.representationUsingType_properties_(self._saveImageFileTypes[ext], None)
+                imageRep = _makeBitmapImageRep(image, imageResolution)
+                imageData = imageRep.representationUsingType_properties_(self._saveImageFileTypes[ext], properties)
                 imagePath = fileName + pathAdd + fileExt
                 imageData.writeToFile_atomically_(imagePath, True)
                 pathAdd = "_%s" % (index + 2)
@@ -52,19 +110,20 @@ class ImageContext(PDFContext):
         return outputPaths
 
 
-def _unscaledBitmapImageRep(image):
-    """Construct a bitmap image representation of 72 DPI, regardless of what kind of display is active."""
+def _makeBitmapImageRep(image, imageResolution=72.0):
+    """Construct a bitmap image representation at a given resolution."""
+    scaleFactor = max(1.0, imageResolution) / 72.0
     rep = AppKit.NSBitmapImageRep.alloc().initWithBitmapDataPlanes_pixelsWide_pixelsHigh_bitsPerSample_samplesPerPixel_hasAlpha_isPlanar_colorSpaceName_bytesPerRow_bitsPerPixel_(
-        None,                         # planes
-        int(image.size().width),      # pixelsWide
-        int(image.size().height),     # pixelsHigh
-        8,                            # bitsPerSample
-        4,                            # samplesPerPixel
-        True,                         # hasAlpha
-        False,                        # isPlanar
-        AppKit.NSDeviceRGBColorSpace, # colorSpaceName
-        0,                            # bytesPerRow
-        0                             # bitsPerPixel
+        None,                                    # planes
+        int(image.size().width * scaleFactor),   # pixelsWide
+        int(image.size().height * scaleFactor),  # pixelsHigh
+        8,                                       # bitsPerSample
+        4,                                       # samplesPerPixel
+        True,                                    # hasAlpha
+        False,                                   # isPlanar
+        AppKit.NSDeviceRGBColorSpace,            # colorSpaceName
+        0,                                       # bytesPerRow
+        0                                        # bitsPerPixel
     )
     rep.setSize_(image.size())
 
@@ -76,3 +135,45 @@ def _unscaledBitmapImageRep(image):
     finally:
         AppKit.NSGraphicsContext.restoreGraphicsState()
     return rep
+
+
+# ================================
+# = contexts for file extensions =
+# ================================
+
+class JPEGContext(ImageContext):
+
+    fileExtensions = ["jpg", "jpeg"]
+
+    saveImageOptions = getSaveImageOptions([
+        "imageJPEGCompressionFactor",
+        "imageJPEGProgressive",
+        "imageFallbackBackgroundColor",
+        "imageColorSyncProfileData",
+    ])
+
+
+class BMPContext(ImageContext):
+
+    fileExtensions = ["bmp"]
+
+
+class PNGContext(ImageContext):
+
+    fileExtensions = ["png"]
+
+    saveImageOptions = getSaveImageOptions([
+        "imagePNGGamma",
+        "imagePNGInterlaced",
+        "imageColorSyncProfileData",
+    ])
+
+
+class TIFFContext(ImageContext):
+
+    fileExtensions = ["tif", "tiff"]
+
+    saveImageOptions = getSaveImageOptions([
+        "imageTIFFCompressionMethod",
+        "imageColorSyncProfileData",
+    ])

@@ -28,6 +28,9 @@ def sendPDFtoPrinter(pdfDocument):
 class PDFContext(BaseContext):
 
     fileExtensions = ["pdf"]
+    saveImageOptions = [
+        ("multipage", "If False, only the last page in the document will be saved into the output PDF. This value is ignored if it is None (default)."),
+    ]
 
     def __init__(self):
         super(PDFContext, self).__init__()
@@ -57,17 +60,18 @@ class PDFContext(BaseContext):
         Quartz.CGPDFContextClose(self._pdfContext)
         self._hasContext = False
 
-    def _saveImage(self, path, multipage):
+    def _saveImage(self, path, options):
         pool = AppKit.NSAutoreleasePool.alloc().init()
         try:
             self._closeContext()
-            self._writeDataToFile(self._pdfData, path, multipage)
+            self._writeDataToFile(self._pdfData, path, options)
             self._pdfContext = None
             self._pdfData = None
         finally:
             del pool
 
-    def _writeDataToFile(self, data, path, multipage):
+    def _writeDataToFile(self, data, path, options):
+        multipage = options.get("multipage")
         if multipage is None:
             multipage = True
         if not multipage:

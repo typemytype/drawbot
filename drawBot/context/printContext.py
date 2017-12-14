@@ -40,6 +40,7 @@ class StringPen(AbstractPen):
 class PrintContext(BaseContext):
 
     fileExtensions = ["*"]
+    validateSaveImageOptions = False
 
     def _newPage(self, width, height):
         print("newPage %s %s" % (width, height))
@@ -84,8 +85,8 @@ class PrintContext(BaseContext):
     def _reset(self, other=None):
         print("reset %s" % other)
 
-    def _saveImage(self, path, multipage):
-        print("saveImage %s %s" % (path, multipage))
+    def _saveImage(self, path, options):
+        print("saveImage %s %s" % (path, options))
 
     def _printImage(self, pdf=None):
         print("printImage %s" % pdf)

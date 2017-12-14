@@ -1677,6 +1677,8 @@ class BaseContext(object):
     _gradientClass = Gradient
 
     fileExtensions = []
+    saveImageOptions = []
+    validateSaveImageOptions = True
 
     _lineJoinStylesMap = dict(
         miter=Quartz.kCGLineJoinMiter,
@@ -1776,7 +1778,7 @@ class BaseContext(object):
     def _reset(self, other=None):
         pass
 
-    def _saveImage(self, path, multipage):
+    def _saveImage(self, path, options):
         pass
 
     def _printImage(self, pdf=None):
@@ -1810,10 +1812,10 @@ class BaseContext(object):
         self.hasPage = True
         self._newPage(width, height)
 
-    def saveImage(self, path, multipage):
+    def saveImage(self, path, options):
         if not self.hasPage:
             raise DrawBotError("can't save image when no page is set")
-        self._saveImage(path, multipage)
+        self._saveImage(path, options)
 
     def printImage(self, pdf=None):
         self._printImage(pdf)

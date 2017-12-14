@@ -236,6 +236,9 @@ class SVGContext(BaseContext):
 
     indentation = " "
     fileExtensions = ["svg"]
+    saveImageOptions = [
+        ("multipage", "Output a numbered svg file for each page or frame in the document."),
+    ]
 
     def __init__(self):
         super(SVGContext, self).__init__()
@@ -296,7 +299,8 @@ class SVGContext(BaseContext):
         self._svgContext.newline()
         self._state.transformMatrix = self._state.transformMatrix.scale(1, -1).translate(0, -self.height)
 
-    def _saveImage(self, path, multipage):
+    def _saveImage(self, path, options):
+        multipage = options.get("multipage")
         if multipage is None:
             multipage = False
         self._svgContext.endtag("svg")

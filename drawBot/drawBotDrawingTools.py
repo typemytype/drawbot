@@ -8,7 +8,7 @@ import math
 import os
 import random
 
-from .context import getContextForFileExt
+from .context import getContextForFileExt, getContextOptions, getFileExtensions, getContextOptionsDocs
 from .context.baseContext import BezierPath, FormattedString
 from .context.dummyContext import DummyContext
 
@@ -363,19 +363,17 @@ class DrawBotDrawingTool(object):
                     break
         return tuple(DrawBotPage(instructionSet) for instructionSet in instructions)
 
-    def saveImage(self, paths, multipage=None):
+    def saveImage(self, path, *args, **options):
         """
         Save or export the canvas to a specified format.
-        The argument `paths` can either be a single path or a list of paths.
+        The `path` argument is a single destination path to save the current drawing actions.
 
         The file extension is important because it will determine the format in which the image will be exported.
 
-        All supported file extensions: `pdf`, `svg`, `png`, `jpg`, `jpeg`, `tiff`, `tif`, `gif`, `bmp`, `mov` and `mp4`.
+        All supported file extensions: %(supporttedExtensions)s.
+        (`*` will print out all actions.)
 
-        * A `pdf` can be multipage. If `multipage` is `False` only the current page is saved.
-        * A `mov` and `mp4` will use each page as a frame.
-        * A `gif` can be animated when there are multiple pages and it will use each page as a frame.
-        * All images and `svg` formats will only save the current page. If `multipage` is `True` all pages are saved to disk (a page index will be added to the file name).
+        When exporting an animation or movie, each page represents a frame.
 
         .. downloadcode:: saveImage.py
 
@@ -390,24 +388,71 @@ class DrawBotDrawingTool(object):
             # draw some text
             text("Hello World!", (20, 40))
             # save it as a png and pdf on the current users desktop
-            saveImage(["~/Desktop/firstImage.png", "~/Desktop/firstImage.pdf"])
+            saveImage("~/Desktop/firstImage.png")
+            saveImage("~/Desktop/firstImage.pdf")
+
+        `saveImage()` options can be set by adding keyword arguments. Which options are recognized
+        depends on the output format.
+
+        %(supportedOptions)s
+
+        .. downloadcode:: saveImageResolutionExample.py
+
+            # same example but we just change the image resolution
+            size(150, 100)
+            rect(10, 10, width()-20, height()-20)
+            fill(1)
+            text("Hello World!", (20, 40))
+            # save it with an option that controls the resolution (300 PPI)
+            saveImage("~/Desktop/firstImage.png", imageResolution=300)
+
         """
-        if isinstance(paths, basestring):
-            paths = [paths]
-        for rawPath in paths:
-            path = optimizePath(rawPath)
-            dirName = os.path.dirname(path)
-            if not os.path.exists(dirName):
-                raise DrawBotError("Folder '%s' doesn't exists" % dirName)
-            base, ext = os.path.splitext(path)
-            ext = ext.lower()[1:]
-            if not ext:
-                path = ext = rawPath
-            context = getContextForFileExt(ext)
-            if context is None:
-                raise DrawBotError("Could not find a supported context for: '%s'" % ext)
-            self._drawInContext(context)
-            context.saveImage(path, multipage)
+        # args are not supported anymore
+        if args:
+            if len(args) == 1:
+                # if there is only 1 is the old multipage
+                warnings.warn("'multipage' should be a keyword argument: use 'saveImage(path, multipage=True)'")
+                options["multipage"] = args[0]
+            else:
+                # if there are more just raise a TypeError
+                raise TypeError("saveImage(path, **options) takes only keyword arguments")
+        # support for multiple paths in a single saveImage is deprecated
+        if isinstance(path, (list, tuple)):
+            if options:
+                # multiple paths with options is not possible
+                raise DrawBotError("Cannot apply saveImage options to multiple output formats.")
+            else:
+                # warn and solve when multiple paths are given
+                warnings.warn("saveImage([path, path, ...]) is deprecated, use multiple saveImage statements.")
+                for p in path:
+                    self.saveImage(p, **options)
+                return
+
+        originalPath = path
+        path = optimizePath(path)
+        dirName = os.path.dirname(path)
+        if not os.path.exists(dirName):
+            raise DrawBotError("Folder '%s' doesn't exists" % dirName)
+        base, ext = os.path.splitext(path)
+        ext = ext.lower()[1:]
+        if not ext:
+            path = ext = originalPath
+        context = getContextForFileExt(ext)
+        if context is None:
+            raise DrawBotError("Could not find a supported context for: '%s'" % ext)
+        if context.validateSaveImageOptions:
+            allowedSaveImageOptions = set(optionName for optionName, optionDoc in context.saveImageOptions)
+            for optionName in options:
+                if optionName not in allowedSaveImageOptions:
+                    warnings.warn("Unrecognized saveImage() option found for %s: %s" % (context.__class__.__name__, optionName))
+        self._drawInContext(context)
+        context.saveImage(path, options)
+
+    # filling docs with content from all possible and installed contexts
+    saveImage.__doc__ = saveImage.__doc__ % dict(
+        supporttedExtensions="`%s`" % "`, `".join(getFileExtensions()),
+        supportedOptions="\n        ".join(getContextOptionsDocs())
+    )
 
     def saveimage(self, paths):
         _deprecatedWarningLowercase("saveImage()")

@@ -1,27 +1,28 @@
 from __future__ import absolute_import
 
-import AppKit
 import Quartz
 
 import tempfile
 
-from .imageContext import ImageContext
+from .imageContext import ImageContext, getSaveImageOptions
 
 from .tools.gifTools import generateGif
 
 
-class GifContext(ImageContext):
+class GIFContext(ImageContext):
 
-    _saveImageFileTypes = {
-        "gif": AppKit.NSGIFFileType,
-    }
+    fileExtensions = ["gif"]
 
-    fileExtensions = _saveImageFileTypes.keys()
+    saveImageOptions = getSaveImageOptions([
+        "imageGIFDitherTransparency",
+        "imageGIFRGBColorTable",
+        "imageColorSyncProfileData",
+    ])
 
     _delay = 10
 
     def __init__(self):
-        super(GifContext, self).__init__()
+        super(GIFContext, self).__init__()
         self._delayData = []
 
     def _frameDuration(self, seconds):
@@ -29,19 +30,20 @@ class GifContext(ImageContext):
         self._delayData[-1] = int(seconds * 100)
 
     def _newPage(self, width, height):
-        super(GifContext, self)._newPage(width, height)
+        super(GIFContext, self)._newPage(width, height)
         self._delayData.append(self._delay)
 
-    def _writeDataToFile(self, data, path, multipage):
+    def _writeDataToFile(self, data, path, options):
         pdfDocument = Quartz.PDFDocument.alloc().initWithData_(data)
         pageCount = pdfDocument.pageCount()
         shouldBeAnimated = pageCount > 1
 
         tempPath = path
         if shouldBeAnimated:
+            options["multipage"] = True
             tempPath = tempfile.mkstemp(suffix=".gif")[1]
 
-        inputPaths = super(GifContext, self)._writeDataToFile(data, tempPath, shouldBeAnimated)
+        inputPaths = super(GIFContext, self)._writeDataToFile(data, tempPath, options)
 
         if shouldBeAnimated:
             generateGif(inputPaths, path, self._delayData)
