@@ -125,7 +125,7 @@ setup(
             excludes=[
                 "numpy",
                 "scipy",
-                "mathplitlib",
+                "matplotlib",
                 "PIL",
                 "pygame",
                 "wx",
