@@ -151,7 +151,7 @@ class ImageObject(object):
 
     def _merge(self, ciImage, doCrop=False):
         """
-        Merge with an other CIImage object by useing the sourceOverCompositing filter.
+        Merge with an other CIImage object by using the sourceOverCompositing filter.
         """
         if hasattr(self, "_source"):
             imObject = self.__class__()

@@ -2442,7 +2442,7 @@ class DrawBotDrawingTool(object):
             from AppKit import NSColor
             # create a color
             _color = NSColor.colorWithCalibratedRed_green_blue_alpha_(0, .5, 1, .8)
-            # setup variables useing different vanilla ui elements.
+            # setup variables using different vanilla ui elements.
             Variable([
                 dict(name="aList", ui="PopUpButton", args=dict(items=['a', 'b', 'c', 'd'])),
                 dict(name="aText", ui="EditText", args=dict(text='hello world')),
