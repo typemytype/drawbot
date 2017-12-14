@@ -124,7 +124,9 @@ setup(
                 "mathplitlib",
                 "PIL",
                 "pygame",
-                "wx"
+                "wx",
+                "sphinx",
+                "jinja2",
             ]
         )
     )
