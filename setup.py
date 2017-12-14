@@ -162,7 +162,7 @@ if "-A" not in sys.argv:
 
 
 if runTests:
-    appExecutable = os.path.join(drawBotRoot, "dist", appName + ".app", "Contents", "MacOS", appName)
+    appExecutable = os.path.join(appLocation, "Contents", "MacOS", appName)
     runAllTestsPath = os.path.join(drawBotRoot, "tests", "runAllTests.py")
     commands = [appExecutable, "--testScript=%s" % runAllTestsPath]
     print("Running DrawBot tests...")
