@@ -40,6 +40,7 @@ ftpPath = getValueFromSysArgv("--ftppath")
 ftpLogin = getValueFromSysArgv("--ftplogin")
 ftpPassword = getValueFromSysArgv("--ftppassword")
 buildDMG = getValueFromSysArgv("--dmg", isBooleanFlag=True)
+runTests = getValueFromSysArgv("--runTests", isBooleanFlag=True)
 
 osxMinVersion = "10.9.0"
 
@@ -142,19 +143,43 @@ appPlist = readPlist(path)
 appPlist["CFBundleIconFile"] = iconFile
 writePlist(appPlist, path)
 
-if buildDMG or ftpHost is not None:
-    # get relevant paths
-    distLocation = os.path.join(os.getcwd(), "dist")
-    appLocation = os.path.join(distLocation, "%s.app" % appName)
-    imgLocation = os.path.join(distLocation, "img")
-    existingDmgLocation = os.path.join(distLocation, "%s.dmg" % appName)
-    dmgLocation = os.path.join(distLocation, appName)
 
+# get relevant paths
+drawBotRoot = os.path.dirname(os.path.abspath(__file__))
+distLocation = os.path.join(drawBotRoot, "dist")
+appLocation = os.path.join(distLocation, "%s.app" % appName)
+imgLocation = os.path.join(distLocation, "img")
+existingDmgLocation = os.path.join(distLocation, "%s.dmg" % appName)
+dmgLocation = os.path.join(distLocation, appName)
+
+
+if "-A" not in sys.argv:
     # make sure the external tools have the correct permissions
     externalTools = ("ffmpeg", "gifsicle", "mkbitmap", "potrace")
     for externalTool in externalTools:
         externalToolPath = os.path.join(appLocation, "contents", "Resources", externalTool)
         os.chmod(externalToolPath, 0o775)
+
+
+if runTests:
+    appExecutable = os.path.join(drawBotRoot, "dist", appName + ".app", "Contents", "MacOS", appName)
+    runAllTestsPath = os.path.join(drawBotRoot, "tests", "runAllTests.py")
+    commands = [appExecutable, "--testScript=%s" % runAllTestsPath]
+    print("Running DrawBot tests...")
+    process = subprocess.Popen(commands, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, universal_newlines=True)
+    stdout, stderr = process.communicate()
+    okLine = stdout.splitlines()[-2].strip()
+    if okLine.split()[-1] != "OK":
+        print("*** TESTS FAILED ***")
+        print("Run following command to see details:")
+        print(" ".join(commands))
+        sys.exit(1)
+    else:
+        print("Tests ok.")
+
+
+if buildDMG or ftpHost is not None:
+    assert "-A" not in sys.argv, "can't build .dmg when using py2app -A"
 
     if codeSignDeveloperName:
         # ================
