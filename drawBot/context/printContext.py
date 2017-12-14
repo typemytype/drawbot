@@ -70,7 +70,7 @@ class PrintContext(BaseContext):
     def _textBox(self, txt, xywh, align):
         # XXX
         # should a formatted string be printed in parts???
-        x, y, w, h = xywh
+        x, y, w, h = (round(v, 7) for v in xywh)
         print("textBox %s %s %s %s %s %s" % (txt, x, y, w, h, align))
 
     def _image(self, path, xy, alpha, pageNumber):
