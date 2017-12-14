@@ -17,13 +17,16 @@ rawTimeStamp = datetime.datetime.today()
 timeStamp = rawTimeStamp.strftime("%y%m%d%H%M")
 
 
-def getValueFromSysArgv(key, default=None):
+def getValueFromSysArgv(key, default=None, isBooleanFlag=False):
     if key in sys.argv:
         try:
             i = sys.argv.index(key)
-            value = sys.argv[i + 1]
+            if isBooleanFlag:
+                value = True
+            else:
+                value = sys.argv[i + 1]
+                del sys.argv[i + 1]
             sys.argv.remove(key)
-            sys.argv.remove(value)
             return value
         except Exception:
             pass
@@ -36,6 +39,7 @@ ftpHost = getValueFromSysArgv("--ftphost")
 ftpPath = getValueFromSysArgv("--ftppath")
 ftpLogin = getValueFromSysArgv("--ftplogin")
 ftpPassword = getValueFromSysArgv("--ftppassword")
+buildDMG = getValueFromSysArgv("--dmg", isBooleanFlag=True)
 
 osxMinVersion = "10.9.0"
 
@@ -138,7 +142,7 @@ appPlist = readPlist(path)
 appPlist["CFBundleIconFile"] = iconFile
 writePlist(appPlist, path)
 
-if "-A" not in sys.argv:
+if buildDMG or ftpHost is not None:
     # get relevant paths
     distLocation = os.path.join(os.getcwd(), "dist")
     appLocation = os.path.join(distLocation, "%s.app" % appName)
