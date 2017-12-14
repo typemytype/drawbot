@@ -411,7 +411,7 @@ class DrawBotDrawingTool(object):
         if args:
             if len(args) == 1:
                 # if there is only 1 is the old multipage
-                warnings.warn("'multipage' but be a keyword argument: use 'saveImage(path, multipage=True)'")
+                warnings.warn("'multipage' should be a keyword argument: use 'saveImage(path, multipage=True)'")
                 options["multipage"] = args[0]
             else:
                 # if there are more just raise a TypeError
