@@ -148,7 +148,7 @@ writePlist(appPlist, path)
 drawBotRoot = os.path.dirname(os.path.abspath(__file__))
 distLocation = os.path.join(drawBotRoot, "dist")
 appLocation = os.path.join(distLocation, "%s.app" % appName)
-imgLocation = os.path.join(distLocation, "img")
+imgLocation = os.path.join(distLocation, "img_%s" % appName)
 existingDmgLocation = os.path.join(distLocation, "%s.dmg" % appName)
 dmgLocation = os.path.join(distLocation, appName)
 
