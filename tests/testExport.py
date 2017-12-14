@@ -264,6 +264,31 @@ class ExportTest(unittest.TestCase):
             self._saveImageAndReturnSize(".mp4", multipage=True)
         self.assertEqual(output, ['*** DrawBot warning: Unrecognized saveImage() option found for MP4Context: multipage ***'])
 
+    def test_saveImage_multipage_positionalArgument(self):
+        self.makeTestDrawing()
+        fd, tmp = tempfile.mkstemp(suffix=".png")
+        try:
+            with StdOutCollector(captureStdErr=True) as output:
+                drawBot.saveImage(tmp, False)
+        finally:
+            os.remove(tmp)
+        self.assertEqual(output, ["*** DrawBot warning: 'multipage' should be a keyword argument: use 'saveImage(path, multipage=True)' ***"])
+
+    def test_saveImage_multiplePositionalArguments(self):
+        self.makeTestDrawing()
+        with self.assertRaises(TypeError):
+            drawBot.saveImage("*", False, "foo")
+
+    def test_saveImage_multipage_keywordArgument(self):
+        self.makeTestDrawing()
+        fd, tmp = tempfile.mkstemp(suffix=".png")
+        try:
+            with StdOutCollector(captureStdErr=True) as output:
+                drawBot.saveImage(tmp, multipage=False)
+        finally:
+            os.remove(tmp)
+        self.assertEqual(output, [])
+
 
 if __name__ == '__main__':
     sys.exit(unittest.main())
