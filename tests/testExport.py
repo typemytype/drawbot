@@ -5,6 +5,7 @@ import sys
 import os
 import unittest
 import tempfile
+import shutil
 import glob
 import drawBot
 import random
@@ -15,6 +16,62 @@ from testScripts import StdOutCollector
 
 
 warnings.shouldShowWarnings = True
+
+
+class TempFile(object):
+
+    """This context manager will deliver a pathname for a temporary file, and will
+    remove it upon exit, if it indeed exists at that time. Note: it does _not_ 
+    _create_ the temporary file.
+
+        >>> with TempFile() as tmp:
+        ...   assert not os.path.exists(tmp.path)
+        ...   f = open(tmp.path, "wb")
+        ...   b = f.write(b"hello.")
+        ...   f.close()
+        ...   assert os.path.exists(tmp.path)
+        ...
+        >>> assert not os.path.exists(tmp.path)
+        >>> with TempFile(suffix=".png") as tmp:
+        ...   assert tmp.path.endswith(".png")
+        ...
+    """
+
+    _create = staticmethod(tempfile.mktemp)
+    _destroy = staticmethod(os.remove)
+
+    def __init__(self, suffix="", prefix="tmp", dir=None):
+        self.suffix = suffix
+        self.prefix = prefix
+        self.dir = dir
+        self.path = None
+
+    def __enter__(self):
+        self.path = self._create(suffix=self.suffix, prefix=self.prefix, dir=self.dir)
+        return self
+
+    def __exit__(self, type, value, traceback):
+        if os.path.exists(self.path):
+            self._destroy(self.path)
+
+
+class TempFolder(TempFile):
+
+    """This context manager will create a temporary folder, and will remove it upon exit.
+
+        >>> with TempFolder() as tmp:
+        ...   assert os.path.exists(tmp.path)
+        ...   assert os.listdir(tmp.path) == []
+        ...
+        >>> assert not os.path.exists(tmp.path)
+        >>> with TempFolder(suffix=".mystuff") as tmp:
+        ...   assert tmp.path.endswith(".mystuff")
+        ...
+    """
+
+    _create = staticmethod(tempfile.mkdtemp)
+    _destroy = staticmethod(shutil.rmtree)
+
 
 
 class ExportTest(unittest.TestCase):
@@ -36,12 +93,9 @@ class ExportTest(unittest.TestCase):
         drawBot.oval(100, 100, 300, 300)
 
     def _saveImageAndReturnSize(self, extension, **options):
-        fd, tmp = tempfile.mkstemp(suffix=extension)
-        try:
-            drawBot.saveImage(tmp, **options)
-            fileSize = os.stat(tmp).st_size
-        finally:
-            os.remove(tmp)
+        with TempFile(suffix=extension) as tmp:
+            drawBot.saveImage(tmp.path, **options)
+            fileSize = os.stat(tmp.path).st_size
         return fileSize
 
     def test_ffmpegCodec(self):
@@ -90,18 +144,15 @@ class ExportTest(unittest.TestCase):
 
     def test_imageResolution(self):
         self.makeTestDrawing()
-        fd, tmp = tempfile.mkstemp(suffix=".png")
-        try:
-            drawBot.saveImage(tmp)
-            self.assertEqual(drawBot.imageSize(tmp), (500, 500))
-            drawBot.saveImage(tmp, imageResolution=144)
-            self.assertEqual(drawBot.imageSize(tmp), (1000, 1000))
-            drawBot.saveImage(tmp, imageResolution=36)
-            self.assertEqual(drawBot.imageSize(tmp), (250, 250))
-            drawBot.saveImage(tmp, imageResolution=18)
-            self.assertEqual(drawBot.imageSize(tmp), (125, 125))
-        finally:
-            os.remove(tmp)
+        with TempFile(suffix=".png") as tmp:
+            drawBot.saveImage(tmp.path)
+            self.assertEqual(drawBot.imageSize(tmp.path), (500, 500))
+            drawBot.saveImage(tmp.path, imageResolution=144)
+            self.assertEqual(drawBot.imageSize(tmp.path), (1000, 1000))
+            drawBot.saveImage(tmp.path, imageResolution=36)
+            self.assertEqual(drawBot.imageSize(tmp.path), (250, 250))
+            drawBot.saveImage(tmp.path, imageResolution=18)
+            self.assertEqual(drawBot.imageSize(tmp.path), (125, 125))
 
     def test_imagePNGInterlaced(self):
         self.makeTestDrawing()
@@ -146,40 +197,32 @@ class ExportTest(unittest.TestCase):
 
     def test_imageFallbackBackgroundColor(self):
         self.makeTestDrawing()
-        fd, tmp1 = tempfile.mkstemp(suffix=".jpg")
-        fd, tmp2 = tempfile.mkstemp(suffix=".jpg")
-        fd, tmp3 = tempfile.mkstemp(suffix=".jpg")
-        try:
-            drawBot.saveImage(tmp1, imageJPEGCompressionFactor=1.0)
-            self.assertEqual(drawBot.imagePixelColor(tmp1, (5, 5)), (1.0, 1.0, 1.0, 1.0))
-            drawBot.saveImage(tmp2, imageJPEGCompressionFactor=1.0, imageFallbackBackgroundColor=(0, 1, 0))
-            r, g, b, a = drawBot.imagePixelColor(tmp2, (5, 5))
+        with TempFile(suffix=".jpg") as tmp:
+            drawBot.saveImage(tmp.path, imageJPEGCompressionFactor=1.0)
+            self.assertEqual(drawBot.imagePixelColor(tmp.path, (5, 5)), (1.0, 1.0, 1.0, 1.0))
+        with TempFile(suffix=".jpg") as tmp:
+            drawBot.saveImage(tmp.path, imageJPEGCompressionFactor=1.0, imageFallbackBackgroundColor=(0, 1, 0))
+            r, g, b, a = drawBot.imagePixelColor(tmp.path, (5, 5))
             self.assertEqual((round(r, 2), round(g, 2), round(b, 2)), (0, 0.97, 0))  # XXX 0.97 vs 1.0 "calibrated" vs "device"
-            drawBot.saveImage(tmp3, imageJPEGCompressionFactor=1.0, imageFallbackBackgroundColor=AppKit.NSColor.redColor())
-            r, g, b, a = drawBot.imagePixelColor(tmp3, (5, 5))
+        with TempFile(suffix=".jpg") as tmp:
+            drawBot.saveImage(tmp.path, imageJPEGCompressionFactor=1.0, imageFallbackBackgroundColor=AppKit.NSColor.redColor())
+            r, g, b, a = drawBot.imagePixelColor(tmp.path, (5, 5))
             self.assertEqual((round(r, 2), round(g, 2), round(b, 2)), (1, 0.15, 0))
-        finally:
-            os.remove(tmp1)
-            os.remove(tmp2)
-            os.remove(tmp3)
 
     def _testMultipage(self, extension, numFrames, expectedMultipageCount):
         self.makeTestAnimation(numFrames)
-        tmp = tempfile.mktemp(suffix=extension)
-        base, ext = os.path.splitext(tmp)
-        pattern = base + "_*" + ext
-        self.assertEqual(len(glob.glob(pattern)), 0)
-        try:
-            drawBot.saveImage(tmp)
-            self.assertEqual(len(glob.glob(pattern)), 0)
-            drawBot.saveImage(tmp, multipage=False)
-            self.assertEqual(len(glob.glob(pattern)), 0)
-            drawBot.saveImage(tmp, multipage=True)
-            self.assertEqual(len(glob.glob(pattern)), expectedMultipageCount)
-        finally:
-            os.remove(tmp)
-            for path in glob.glob(pattern):
-                os.remove(path)
+        with TempFolder() as tmpFolder:
+            with TempFile(suffix=extension, dir=tmpFolder.path) as tmp:
+                base, ext = os.path.splitext(tmp.path)
+                pattern = base + "_*" + ext
+                self.assertEqual(len(glob.glob(pattern)), 0)
+                drawBot.saveImage(tmp.path)
+                self.assertEqual(len(glob.glob(pattern)), 0)
+                drawBot.saveImage(tmp.path, multipage=False)
+                self.assertEqual(len(glob.glob(pattern)), 0)
+                drawBot.saveImage(tmp.path, multipage=True)
+                self.assertEqual(len(glob.glob(pattern)), expectedMultipageCount)
+        assert not os.path.exists(tmpFolder.path)  # verify TempFolder cleanup
 
     def test_multipage_png(self):
         self._testMultipage(".png", numFrames=5, expectedMultipageCount=5)
@@ -198,12 +241,9 @@ class ExportTest(unittest.TestCase):
 
     def test_animatedGIF(self):
         self.makeTestAnimation(5)
-        tmp = tempfile.mktemp(suffix=".gif")
-        try:
-            drawBot.saveImage(tmp)
-            self.assertEqual(gifFrameCount(tmp), 5)
-        finally:
-            os.remove(tmp)
+        with TempFile(suffix=".gif") as tmp:
+            drawBot.saveImage(tmp.path)
+            self.assertEqual(gifFrameCount(tmp.path), 5)
 
     def test_saveImage_unknownContext(self):
         self.makeTestDrawing()
@@ -266,12 +306,9 @@ class ExportTest(unittest.TestCase):
 
     def test_saveImage_multipage_positionalArgument(self):
         self.makeTestDrawing()
-        fd, tmp = tempfile.mkstemp(suffix=".png")
-        try:
+        with TempFile(suffix=".png") as tmp:
             with StdOutCollector(captureStdErr=True) as output:
-                drawBot.saveImage(tmp, False)
-        finally:
-            os.remove(tmp)
+                drawBot.saveImage(tmp.path, False)
         self.assertEqual(output, ["*** DrawBot warning: 'multipage' should be a keyword argument: use 'saveImage(path, multipage=True)' ***"])
 
     def test_saveImage_multiplePositionalArguments(self):
@@ -281,14 +318,13 @@ class ExportTest(unittest.TestCase):
 
     def test_saveImage_multipage_keywordArgument(self):
         self.makeTestDrawing()
-        fd, tmp = tempfile.mkstemp(suffix=".png")
-        try:
+        with TempFile(suffix=".png") as tmp:
             with StdOutCollector(captureStdErr=True) as output:
-                drawBot.saveImage(tmp, multipage=False)
-        finally:
-            os.remove(tmp)
+                drawBot.saveImage(tmp.path, multipage=False)
         self.assertEqual(output, [])
 
 
 if __name__ == '__main__':
+    import doctest
+    doctest.testmod()
     sys.exit(unittest.main())

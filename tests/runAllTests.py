@@ -11,7 +11,7 @@ if testRoot not in sys.path:
     sys.path.append(testRoot)
 
 files = ["testScripts.py", "testExport.py"]  # TODO automatic discovery based on naming convention
-modulesWithDocTests = ["drawBot.misc"]  # TODO: doctest discovery
+modulesWithDocTests = ["drawBot.misc", "testExport"]  # TODO: doctest discovery
 
 loader = unittest.TestLoader()
 suite = unittest.TestSuite()
