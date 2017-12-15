@@ -116,83 +116,80 @@ def hasEncodingDeclaration(source):
     return False
 
 
-class ScriptRunner(object):
+def ScriptRunner(text=None, path=None, stdout=None, stderr=None, namespace=None, checkSyntaxOnly=False):
+    if path:
+        if PY2 and isinstance(path, unicode):
+            path = path.encode("utf-8")
+        curDir, fileName = os.path.split(path)
+    else:
+        curDir = os.getenv("HOME")
+        fileName = '<untitled>'
+    # save up the important bits
+    saveStdout = sys.stdout
+    saveStderr = sys.stderr
+    saveArgv = sys.argv
+    try:
+        saveDir = os.getcwd()
+    except:
+        saveDir = None
+    # set up the name space
+    if namespace is None:
+        namespace = dict()
+    namespace["__file__"] = path
+    namespace["__name__"] = "__main__"
+    namespace["help"] = _Helper()
 
-    def __init__(self, text=None, path=None, stdout=None, stderr=None, namespace=None, checkSyntaxOnly=False):
-        from threading import Thread
-        if path:
-            if PY2 and isinstance(path, unicode):
-                path = path.encode("utf-8")
-            curDir, fileName = os.path.split(path)
-        else:
-            curDir = os.getenv("HOME")
-            fileName = '<untitled>'
-        # save up the important bits
-        saveStdout = sys.stdout
-        saveStderr = sys.stderr
-        saveArgv = sys.argv
+    if stdout:
+        sys.stdout = stdout
+    if stderr:
+        sys.stderr = stderr
+    sys.argv = [fileName]
+    os.chdir(curDir)
+    sys.path.insert(0, curDir)
+    # here we go
+    if text is None:
+        f = open(path, 'rb')
+        text = f.read()
+        f.close()
+    source = text.replace('\r\n', '\n').replace('\r', '\n')
+    if PY2 and hasEncodingDeclaration(source):
+        # Python 2 compile() complains when an encoding declaration is found in a unicode string.
+        # As a workaround, we'll just encode it back as a utf-8 string and all is good.
         try:
-            saveDir = os.getcwd()
+            source = source.encode("utf-8")
         except:
-            saveDir = None
-        # set up the name space
-        if namespace is None:
-            namespace = dict()
-        namespace["__file__"] = path
-        namespace["__name__"] = "__main__"
-        namespace["help"] = _Helper()
+            pass
+    compileFlags = 0
+    if getDefault("DrawBotUseFutureDivision", True):
+        compileFlags |= __future__.CO_FUTURE_DIVISION
 
-        if stdout:
-            sys.stdout = stdout
-        if stderr:
-            sys.stderr = stderr
-        sys.argv = [fileName]
-        os.chdir(curDir)
-        sys.path.insert(0, curDir)
-        # here we go
-        if text is None:
-            f = open(path, 'rb')
-            text = f.read()
-            f.close()
-        source = text.replace('\r\n', '\n').replace('\r', '\n')
-        if PY2 and hasEncodingDeclaration(source):
-            # Python 2 compile() complains when an encoding declaration is found in a unicode string.
-            # As a workaround, we'll just encode it back as a utf-8 string and all is good.
-            try:
-                source = source.encode("utf-8")
-            except:
-                pass
-        compileFlags = 0
-        if getDefault("DrawBotUseFutureDivision", True):
-            compileFlags |= __future__.CO_FUTURE_DIVISION
-
+    try:
         try:
-            try:
-                code = compile(source + '\n\n', fileName, "exec", compileFlags)
-            except:
-                traceback.print_exc(0)
-            else:
-                if not checkSyntaxOnly:
-                    self._scriptDone = False
-                    try:
-                        exec(code, namespace)
-                    except KeyboardInterrupt:
-                        pass
-                    except:
-                        etype, value, tb = sys.exc_info()
-                        if tb.tb_next is not None:
-                            tb = tb.tb_next
-                        traceback.print_exception(etype, value, tb)
-                        etype = value = tb = None
-        finally:
-            # reset the important bits
-            self._scriptDone = True
-            sys.stdout = saveStdout
-            sys.stderr = saveStderr
-            sys.argv = saveArgv
-            if saveDir:
-                os.chdir(saveDir)
-            sys.path.remove(curDir)
+            code = compile(source + '\n\n', fileName, "exec", compileFlags)
+        except:
+            traceback.print_exc(0)
+        else:
+            if not checkSyntaxOnly:
+                scriptDone = False
+                try:
+                    exec(code, namespace)
+                except KeyboardInterrupt:
+                    pass
+                except:
+                    etype, value, tb = sys.exc_info()
+                    if tb.tb_next is not None:
+                        tb = tb.tb_next
+                    traceback.print_exception(etype, value, tb)
+                    etype = value = tb = None
+    finally:
+        # reset the important bits
+        scriptDone = True
+        sys.stdout = saveStdout
+        sys.stderr = saveStderr
+        sys.argv = saveArgv
+        if saveDir:
+            os.chdir(saveDir)
+        sys.path.remove(curDir)
 
 
 def CallbackRunner(callback, stdout=None, stderr=None, args=[], kwargs={}, fallbackResult=None):
