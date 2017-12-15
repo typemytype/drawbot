@@ -1465,7 +1465,7 @@ class DrawBotDrawingTool(object):
         self._addInstruction("hyphenation", value)
 
     def tabs(self, *tabs):
-        """
+        r"""
         Set tabs, tuples of (`float`, `alignment`)
         Aligment can be `"left"`, `"center"`, `"right"` or any other character.
         If a character is provided the alignment will be `right` and centered on the specified character.
