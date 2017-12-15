@@ -134,8 +134,8 @@ def ScriptRunner(text=None, path=None, stdout=None, stderr=None, namespace=None,
         while not scriptDone:  # scriptDone is in the surrounding scope
             if CheckEventQueueForUserCancel():
                 # Send a SIGINT signal to ourselves.
-                # This gets delivered to the main thread,
-                # cancelling the running script.
+                # This gets delivered to the main thread as a KeyboardInterrupt
+                # exception, cancelling the running script.
                 with cancelLock:
                     os.kill(os.getpid(), SIGINT)
                 break
