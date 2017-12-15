@@ -9,12 +9,22 @@ import sys
 import traceback
 import site
 import re
+from signal import SIGINT
+import ctypes
+from ctypes.util import find_library
+import threading
 
 from vanilla.vanillaBase import osVersion10_10, osVersionCurrent
 
 from fontTools.misc.py23 import PY2, PY3
 
 from drawBot.misc import getDefault
+
+# Pulling in CheckEventQueueForUserCancel from Carbon.framework
+CheckEventQueueForUserCancel = ctypes.CFUNCTYPE(ctypes.c_bool)(('CheckEventQueueForUserCancel', ctypes.CDLL(find_library("Carbon"))))
+
+# Acquire this lock if something must not be interrupted by command-period or escape
+cancelLock = threading.Lock()
 
 
 class StdOutput(object):
@@ -32,14 +42,15 @@ class StdOutput(object):
             except UnicodeDecodeError:
                 data = "XXX " + repr(data)
         if self.outputView is not None:
-            self.outputView.append(data, self.isError)
-            # self.outputView.forceUpdate()
-            t = time.time()
-            if t - self._previousFlush > 0.2:
-                self.outputView.scrollToEnd()
-                if osVersionCurrent >= osVersion10_10:
-                    AppKit.NSRunLoop.mainRunLoop().runUntilDate_(AppKit.NSDate.dateWithTimeIntervalSinceNow_(0.0001))
-                self._previousFlush = t
+            # Better not get SIGINT/KeyboardInterrupt exceptions while we're updating the output view
+            with cancelLock:
+                self.outputView.append(data, self.isError)
+                t = time.time()
+                if t - self._previousFlush > 0.2:
+                    self.outputView.scrollToEnd()
+                    if osVersionCurrent >= osVersion10_10:
+                        AppKit.NSRunLoop.mainRunLoop().runUntilDate_(AppKit.NSDate.dateWithTimeIntervalSinceNow_(0.0001))
+                    self._previousFlush = t
         else:
             self.data.append((data, self.isError))
 
@@ -117,6 +128,19 @@ def hasEncodingDeclaration(source):
 
 
 def ScriptRunner(text=None, path=None, stdout=None, stderr=None, namespace=None, checkSyntaxOnly=False):
+
+    def userCancelledMonitor():
+        # This will be called from a thread
+        while not scriptDone:  # scriptDone is in the surrounding scope
+            if CheckEventQueueForUserCancel():
+                # Send a SIGINT signal to ourselves.
+                # This gets delivered to the main thread,
+                # cancelling the running script.
+                with cancelLock:
+                    os.kill(os.getpid(), SIGINT)
+                break
+            time.sleep(0.25)  # check at most 4 times per second
+
     if path:
         if PY2 and isinstance(path, unicode):
             path = path.encode("utf-8")
@@ -171,10 +195,12 @@ def ScriptRunner(text=None, path=None, stdout=None, stderr=None, namespace=None,
         else:
             if not checkSyntaxOnly:
                 scriptDone = False
+                t = threading.Thread(target=userCancelledMonitor, name="UserCancelledMonitor")
+                t.start()
                 try:
                     exec(code, namespace)
                 except KeyboardInterrupt:
-                    pass
+                    sys.stderr.write("Cancelled.\n")
                 except:
                     etype, value, tb = sys.exc_info()
                     if tb.tb_next is not None:
