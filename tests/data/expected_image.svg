@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg height="500" version="1.1" width="500" xmlns="http://www.w3.org/2000/svg">
+ <image height="660.0" opacity="1" transform="matrix(0.378787878788,0.0,0.0,0.378787878788,0.0,250.0)" width="660.0" x="0" xlink:href="drawBot.jpg" y="0"/>
+ <image height="660.0" opacity="0.5" transform="matrix(0.378787878788,0.0,0.0,0.378787878788,250.0,250.0)" width="660.0" x="0" xlink:href="drawBot.jpg" y="0"/>
+ <image height="660.0" opacity="0.25" transform="matrix(0.378787878788,0.0,0.0,0.378787878788,0.0,0.0)" width="660.0" x="0" xlink:href="drawBot.jpg" y="0"/>
+ <image height="660.0" opacity="0.75" transform="matrix(0.378787878788,0.0,0.0,0.378787878788,250.0,0.0)" width="660.0" x="0" xlink:href="drawBot.jpg" y="0"/>
+</svg>
