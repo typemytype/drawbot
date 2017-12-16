@@ -270,6 +270,8 @@ def _pythonWordCompletions(text, charRange):
     if not hasJedi:
         return [], 0
     partialString = text.substringWithRange_(charRange)
+    if not partialString:
+        return [], 0
     keyWords = list(_drawBotDrawingTool.__all__)
     try:
         lines = text[:charRange.location].count("\n") + 1
