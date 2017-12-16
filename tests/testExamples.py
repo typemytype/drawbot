@@ -101,7 +101,7 @@ def mockUninstallFont(path):
     pass
 
 
-def _makeTestCase(exampleName, source):
+def _makeTestCase(exampleName, source, doSaveImage):
 
     def test(self):
         import __future__
@@ -130,20 +130,22 @@ def _makeTestCase(exampleName, source):
             exec(code, namespace)
         fileName = "example_%s.pdf" % exampleName
         imagePath = os.path.join(tempDataDir, fileName)
-        drawBot.saveImage(imagePath)
-        self.assertEquals(1, 1)
+        if doSaveImage:
+            drawBot.saveImage(imagePath)
 
     return test
 
 
 skip = {}
 expectedFailures = {}
+dontSaveImage = ["test_imageSize"]
 
 def _addExampleTests():
     allExamples = _collectExamples(DrawBotDrawingTool)
     for exampleName, source in allExamples.items():
-        testMethod = _makeTestCase(exampleName, source)
-        testMethod.__name__ = "test_%s" % exampleName
+        testName = "test_%s" % exampleName
+        testMethod = _makeTestCase(exampleName, source, doSaveImage=testName not in dontSaveImage)
+        testMethod.__name__ = testName
         if testMethod.__name__ in skip:
             continue
         if testMethod.__name__ in expectedFailures:
