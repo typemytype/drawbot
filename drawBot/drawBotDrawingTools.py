@@ -239,7 +239,7 @@ class DrawBotDrawingTool(object):
             # set a canvas size
             size(200, 200)
             # print out the size of the page
-            print width(), height()
+            print((width(), height()))
 
             # set a color
             fill(1, 0, 0)
@@ -326,7 +326,7 @@ class DrawBotDrawingTool(object):
             # get all pages
             allPages = pages()
             # count how many pages are available
-            print len(allPages)
+            print(len(allPages))
 
             # use the `with` statement
             # to set a page as current context
@@ -1465,7 +1465,7 @@ class DrawBotDrawingTool(object):
             fontSize(200)
             # list all axis from the current font
             for axis, data in listFontVariations().items():
-                print axis, data
+                print((axis, data))
             # pick a variation from the current font
             fontVariations(wght=.6)
             # draw text!!
@@ -1583,7 +1583,7 @@ class DrawBotDrawingTool(object):
             fontSize(50)
             overflow = textBox("hallo, this text is a bit to long",
                             (x, y, w, h), align="center")
-            print overflow
+            print(overflow)
 
         The returned overflow can be used to add new pages until all text is set:
 
@@ -1786,7 +1786,7 @@ class DrawBotDrawingTool(object):
 
         .. downloadcode:: imageSize.py
 
-            print imageSize("http://f.cl.ly/items/1T3x1y372J371p0v1F2Z/drawBot.jpg")
+            print(imageSize("http://f.cl.ly/items/1T3x1y372J371p0v1F2Z/drawBot.jpg"))
         """
         if isinstance(path, self._imageClass):
             # its an drawBot.ImageObject, just return the size from that obj
@@ -2177,21 +2177,21 @@ class DrawBotDrawingTool(object):
 
             path.text("Hello world", font="Helvetica", fontSize=30, offset=(210, 210))
 
-            print "All Points:"
-            print path.points
+            print("All Points:")
+            print(path.points)
 
-            print "On Curve Points:"
-            print path.onCurvePoints
+            print("On Curve Points:")
+            print(path.onCurvePoints)
 
-            print "Off Curve Points:"
-            print path.offCurvePoints
+            print("Off Curve Points:")
+            print(path.offCurvePoints)
 
             # print out all points from all segments in all contours
             for contour in path.contours:
                 for segment in contour:
                     for x, y in segment:
-                        print x, y
-                print "is open:", contour.open
+                        print((x, y))
+                print(["contour is closed", "contour is open"][contour.open])
 
             # translate the path
             path.translate(0, 300)
@@ -2307,12 +2307,12 @@ class DrawBotDrawingTool(object):
                 dict(name="aRadioGroup", ui="RadioGroup", args=dict(titles=['I', 'II', 'III'], isVertical=False)),
             ], globals())
 
-            print aList
-            print aText
-            print aSlider
-            print aCheckBox
-            print aColorWell
-            print aRadioGroup
+            print(aList)
+            print(aText)
+            print(aSlider)
+            print(aCheckBox)
+            print(aColorWell)
+            print(aRadioGroup)
         """
         document = AppKit.NSDocumentController.sharedDocumentController().currentDocument()
         if not document:
