@@ -4,6 +4,7 @@ from fontTools.misc.py23 import *
 from fontTools.misc.py23 import PY3
 import sys
 import unittest
+import io
 import drawBot
 from drawBot.misc import DrawBotError, warnings
 from drawBot.scriptTools import ScriptRunner
@@ -30,13 +31,31 @@ class MiscTest(unittest.TestCase):
             drawBot.polygon((1, 2), (3, 4), closed=False, foo=123)
 
     def test_ScriptRunner_StdOutCollector(self):
-        #import io
-        #out = io.BytesIO()
-        #ScriptRunner(u"print('hey!')", stdout=out, stderr=out)
-        #self.assertEqual(out.getvalue(), "hey!\n")
         out = StdOutCollector()
         ScriptRunner("print('hey!')", stdout=out, stderr=out)
         self.assertEqual(out, ["hey!"])
+
+    def test_ScriptRunner_io(self):
+        if PY3:
+            MyStringIO = io.StringIO
+        else:
+            class MyStringIO(io.StringIO):
+                def write(self, value):
+                    if not isinstance(value, unicode):
+                        value = value.decode("utf8")
+                    super(MyStringIO, self).write(value)
+        out = MyStringIO()
+        ScriptRunner("print('hey!')", stdout=out, stderr=out)
+        self.assertEqual(out.getvalue(), u'hey!\n')
+        out = MyStringIO()
+        ScriptRunner("print(u'hey!')", stdout=out, stderr=out)
+        self.assertEqual(out.getvalue(), u'hey!\n')
+        out = MyStringIO()
+        ScriptRunner(u"print('hey!')", stdout=out, stderr=out)
+        self.assertEqual(out.getvalue(), u'hey!\n')
+        out = MyStringIO()
+        ScriptRunner(u"print(u'hey!')", stdout=out, stderr=out)
+        self.assertEqual(out.getvalue(), u'hey!\n')
 
     def test_ScriptRunner_print_function(self):
         out = StdOutCollector()
@@ -45,6 +64,11 @@ class MiscTest(unittest.TestCase):
             self.assertEqual(out[-1], "SyntaxError: Missing parentheses in call to 'print'. Did you mean print('hey!')?")
         else:
             self.assertEqual(out, ["hey!"])
+
+    def test_ScriptRunner_division(self):
+        out = StdOutCollector()
+        ScriptRunner("print(1/2)", stdout=out, stderr=out)
+        self.assertEqual(out, ["0.5"])
 
 
 if __name__ == '__main__':
