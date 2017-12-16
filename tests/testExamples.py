@@ -128,7 +128,7 @@ def _makeTestCase(exampleName, source, doSaveImage):
         drawBot.newDrawing()
         with StdOutCollector(captureStdErr=True):
             exec(code, namespace)
-        fileName = "example_%s.pdf" % exampleName
+        fileName = "example_%s.png" % exampleName
         imagePath = os.path.join(tempDataDir, fileName)
         if doSaveImage:
             drawBot.saveImage(imagePath)
