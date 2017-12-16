@@ -72,9 +72,9 @@ class MiscTest(unittest.TestCase):
 
     def test_ScriptRunner_oldDivision(self):
         realGetDefault = drawBot.scriptTools.getDefault
-        def fakeGetDefault(*args):
+        def mockedGetDefault(*args):
             return False
-        drawBot.scriptTools.getDefault = fakeGetDefault
+        drawBot.scriptTools.getDefault = mockedGetDefault
         try:
             out = StdOutCollector()
             ScriptRunner("print(1/2)", stdout=out, stderr=out)
