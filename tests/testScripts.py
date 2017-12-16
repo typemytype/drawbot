@@ -105,9 +105,11 @@ class DrawBotTest(unittest.TestCase):
 
     def executeScriptPath(self, path):
         # read content of py file and exec it
+        import __future__
         with open(path) as f:
             source = f.read()
-        code = compile(source, path, "exec")
+        compileFlags = __future__.CO_FUTURE_DIVISION
+        code = compile(source, path, "exec", flags=compileFlags, dont_inherit=True)
         namespace = {"__name__": "__main__", "__file__": path}
 
         with StdOutCollector(captureStdErr=True) as output:
