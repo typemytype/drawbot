@@ -1,4 +1,6 @@
-from drawBotDrawingTools import _drawBotDrawingTool, DrawBotDrawingTool
+from __future__ import absolute_import
+
+from .drawBotDrawingTools import _drawBotDrawingTool, DrawBotDrawingTool
 
 
 class DummyDrawBotDrawingTool(DrawBotDrawingTool):
