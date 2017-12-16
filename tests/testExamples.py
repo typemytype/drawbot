@@ -68,6 +68,7 @@ class ExampleTester(unittest.TestCase):
 
 # The examples use an http image path; let's fake it with a local jpeg
 testRoot = os.path.dirname(os.path.abspath(__file__))
+tempDataDir = os.path.join(testRoot, "temp_data")
 mockedImagePath = os.path.join(testRoot, "data", "drawBot.jpg")
 assert os.path.exists(mockedImagePath)
 
@@ -83,27 +84,60 @@ def mockImagePixelColor(path, xy):
     import drawBot
     return drawBot.imagePixelColor(mockedImagePath, xy)
 
+def mockVariable(definitions, namespace):
+    for item in definitions:
+        name = item["name"]
+        args = item.get("args", {})
+        value = args.get("value", 50)
+        namespace[name] = value
+
+def mockPrintImage(pdf=None):
+    pass
+
+def mockInstallFont(path):
+    return "Helvetica"
+
+def mockUninstallFont(path):
+    pass
+
 
 def _makeTestCase(exampleName, source):
 
     def test(self):
+        import __future__
         from drawBot.drawBotDrawingTools import _drawBotDrawingTool
-        drawBot.newDrawing()
-        code = compile(source, "<xxx>", "exec", dont_inherit=True)
+
+        compileFlags = __future__.CO_FUTURE_DIVISION
+        code = compile(source, "<%s>" % exampleName, "exec", flags=compileFlags, dont_inherit=True)
+
         namespace = {}
         _drawBotDrawingTool._addToNamespace(namespace)
+        def mockSaveImage(path, **options):
+            fileName = "example_mockSaveImage_" + os.path.basename(path)
+            path = os.path.join(tempDataDir, fileName)
+            drawBot.saveImage(path, **options)
+        namespace["saveImage"] = mockSaveImage
         namespace["image"] = mockImage
         namespace["imageSize"] = mockImageSize
         namespace["imagePixelColor"] = mockImagePixelColor
+        namespace["Variable"] = mockVariable
+        namespace["printImage"] = mockPrintImage
+        namespace["installFont"] = mockInstallFont
+        namespace["uninstallFont"] = mockUninstallFont
+
+        drawBot.newDrawing()
         with StdOutCollector(captureStdErr=True):
             exec(code, namespace)
+        fileName = "example_%s.pdf" % exampleName
+        imagePath = os.path.join(tempDataDir, fileName)
+        drawBot.saveImage(imagePath)
         self.assertEquals(1, 1)
 
     return test
 
 
-skip = {"test_variables", "test_printImage"}
-expectedFailures = {"test_installFont"}
+skip = {}
+expectedFailures = {}
 
 def _addExampleTests():
     allExamples = _collectExamples(DrawBotDrawingTool)
