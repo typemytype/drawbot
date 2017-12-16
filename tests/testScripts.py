@@ -52,7 +52,7 @@ class StdOutCollector(list):
 
 class DrawBotTest(unittest.TestCase):
 
-    def assertPDFFiles(self, path1, path2):
+    def assertPDFFilesEqual(self, path1, path2):
         # read as pdf document
         pdf1 = AppKit.PDFDocument.alloc().initWithURL_(AppKit.NSURL.fileURLWithPath_(path1))
         pdf2 = AppKit.PDFDocument.alloc().initWithURL_(AppKit.NSURL.fileURLWithPath_(path2))
@@ -75,28 +75,28 @@ class DrawBotTest(unittest.TestCase):
             # no use to show the complete diff of the binary data
             self.assertTrue(image1.TIFFRepresentation() == image2.TIFFRepresentation(), "PDF data on page %s is not the same" % (pageIndex + 1))
 
-    def assertSVGFiles(self, path1, path2):
+    def assertSVGFilesEqual(self, path1, path2):
         # compare the content by line
         self.assertEqual(self.readData(path1).splitlines(), self.readData(path2).splitlines())
 
-    def assertImageFiles(self, path1, path2):
+    def assertImageFilesEqual(self, path1, path2):
         # compare the data and assert with a simple message
         # no use to show the complete diff of the binary file
         self.assertTrue(self.readData(path1) == self.readData(path2), "Images are not the same")
 
-    def assertGenericFiles(self, path1, path2):
+    def assertGenericFilesEqual(self, path1, path2):
         self.assertEqual(self.readData(path1), self.readData(path2))
 
     def assertForFileExtension(self, ext, path1, path2):
         # based on the ext choose an assertion test
         if ext == "pdf":
-            self.assertPDFFiles(path1, path2)
+            self.assertPDFFilesEqual(path1, path2)
         elif ext == "svg":
-            self.assertSVGFiles(path1, path2)
+            self.assertSVGFilesEqual(path1, path2)
         elif ext in ("png", "tiff", "jpeg", "jpg"):
-            self.assertImageFiles(path1, path2)
+            self.assertImageFilesEqual(path1, path2)
         else:
-            self.assertGenericFiles(path1, path2)
+            self.assertGenericFilesEqual(path1, path2)
 
     def readData(self, path):
         # return the data from a path

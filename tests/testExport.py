@@ -13,6 +13,7 @@ import AppKit
 from drawBot.context.tools.gifTools import gifFrameCount
 from drawBot.misc import DrawBotError, warnings
 from testScripts import StdOutCollector
+from testSupport import randomSeed
 
 
 warnings.shouldShowWarnings = True
@@ -77,7 +78,7 @@ class TempFolder(TempFile):
 class ExportTest(unittest.TestCase):
 
     def makeTestAnimation(self, numFrames=25):
-        random.seed(0)
+        randomSeed(0)
         drawBot.newDrawing()
         for i in range(numFrames):
             drawBot.newPage(500, 500)

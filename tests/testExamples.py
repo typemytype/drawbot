@@ -5,9 +5,11 @@ import sys
 import os
 import unittest
 import re
+import random
 import drawBot
 from drawBot.drawBotDrawingTools import DrawBotDrawingTool
 from testScripts import StdOutCollector
+from testSupport import randomSeed
 
 
 _namePattern = re.compile(r"( +).. downloadcode:: ([A-Za-z0-9_]+).py\s*$")
@@ -63,11 +65,21 @@ def _collectExamples(module):
 
 
 class ExampleTester(unittest.TestCase):
-    pass
+
+    def assertFilesEqual(self, path1, path2):
+        self.assertEqual(readData(path1), readData(path2), "Files %r and %s are not the same" % (path1, path2))
+
+
+def readData(path):
+    # return the data from a path
+    with open(path, "rb") as f:
+        return f.read()
+
 
 
 # The examples use an http image path; let's fake it with a local jpeg
 testRoot = os.path.dirname(os.path.abspath(__file__))
+dataDir = os.path.join(testRoot, "data")
 tempDataDir = os.path.join(testRoot, "temp_data")
 mockedImagePath = os.path.join(testRoot, "data", "drawBot.jpg")
 assert os.path.exists(mockedImagePath)
@@ -100,6 +112,13 @@ def mockInstallFont(path):
 def mockUninstallFont(path):
     pass
 
+def mockRandInt(lo, hi):
+    # For compatibility between Python 2 and 3
+    hi += 1
+    assert lo < hi
+    extent = hi - lo
+    return int(lo + extent * random.random())
+
 
 def _makeTestCase(exampleName, source, doSaveImage):
 
@@ -124,14 +143,18 @@ def _makeTestCase(exampleName, source, doSaveImage):
         namespace["printImage"] = mockPrintImage
         namespace["installFont"] = mockInstallFont
         namespace["uninstallFont"] = mockUninstallFont
+        namespace["randint"] = mockRandInt
 
+        randomSeed(0)
         drawBot.newDrawing()
         with StdOutCollector(captureStdErr=True):
             exec(code, namespace)
         fileName = "example_%s.png" % exampleName
         imagePath = os.path.join(tempDataDir, fileName)
+        expectedImagePath = os.path.join(dataDir, fileName)
         if doSaveImage:
             drawBot.saveImage(imagePath)
+            self.assertFilesEqual(imagePath, expectedImagePath)
 
     return test
 
