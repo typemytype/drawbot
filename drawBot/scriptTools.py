@@ -24,11 +24,15 @@ osVersion10_10 = StrictVersion("10.10")
 
 
 # Pulling in CheckEventQueueForUserCancel from Carbon.framework
-_carbonPath = find_library("Carbon")
-if _carbonPath is not None and AppKit.NSApp() is not None:
-    CheckEventQueueForUserCancel = ctypes.CFUNCTYPE(ctypes.c_bool)(('CheckEventQueueForUserCancel', ctypes.CDLL(_carbonPath)))
-else:
-    CheckEventQueueForUserCancel = None
+CheckEventQueueForUserCancel = None
+
+def retrieveCheckEventQueueForUserCancelFromCarbon():
+    # call this function explicit from the app didFinishLaunching
+    global CheckEventQueueForUserCancel
+    _carbonPath = find_library("Carbon")
+    if _carbonPath is not None:
+        CheckEventQueueForUserCancel = ctypes.CFUNCTYPE(ctypes.c_bool)(('CheckEventQueueForUserCancel', ctypes.CDLL(_carbonPath)))
+
 
 # Acquire this lock if something must not be interrupted by command-period or escape
 cancelLock = threading.Lock()

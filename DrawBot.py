@@ -10,6 +10,7 @@ from fontTools.misc.py23 import PY3
 from drawBot.ui.drawBotController import DrawBotController
 from drawBot.ui.preferencesController import PreferencesController
 from drawBot.ui.debug import DebugWindowController
+from drawBot.scriptTools import retrieveCheckEventQueueForUserCancelFromCarbon
 
 import drawBot.drawBotDrawingTools
 from drawBot.misc import getDefault, stringToInt
@@ -116,6 +117,7 @@ class DrawBotAppDelegate(AppKit.NSObject):
         return self
 
     def applicationDidFinishLaunching_(self, notification):
+        retrieveCheckEventQueueForUserCancelFromCarbon()
         self._debugger = DebugWindowController()
         Updater()
         if sys.argv[1:]:
