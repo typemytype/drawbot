@@ -167,9 +167,9 @@ def ScriptRunner(text=None, path=None, stdout=None, stderr=None, namespace=None,
     namespace["__name__"] = "__main__"
     namespace["help"] = _Helper()
 
-    if stdout:
+    if stdout is not None:
         sys.stdout = stdout
-    if stderr:
+    if stderr is not None:
         sys.stderr = stderr
     sys.argv = [fileName]
     os.chdir(curDir)
