@@ -29,10 +29,6 @@ def _getmodulecontents(module, names=None):
     return d
 
 
-def _deprecatedWarningWrapInTuple(txt):
-    warnings.warn("deprecated syntax, wrap x and y values in a tuple: '%s'" % txt)
-
-
 _chachedPixelColorBitmaps = {}
 
 
@@ -605,7 +601,7 @@ class DrawBotDrawingTool(object):
         self._requiresNewFirstPage = True
         self._addInstruction("clipPath", path)
 
-    def line(self, x1, y1, x2=None, y2=None):
+    def line(self, point1, point2):
         """
         Draws a line between two given points.
 
@@ -616,16 +612,12 @@ class DrawBotDrawingTool(object):
             # draw a line between two given points
             line((100, 100), (200, 200))
         """
-        if x2 is None and y2 is None:
-            (x1, y1), (x2, y2) = x1, y1
-        else:
-            _deprecatedWarningWrapInTuple("line((%s, %s), (%s, %s))" % (x1, y1, x2, y2))
         path = self._bezierPathClass()
-        path.moveTo((x1, y1))
-        path.lineTo((x2, y2))
+        path.moveTo(point1)
+        path.lineTo(point2)
         self.drawPath(path)
 
-    def polygon(self, x, y=None, *args, **kwargs):
+    def polygon(self, *points, **kwargs):
         """
         Draws a polygon with n-amount of points.
         Optionally a `close` argument can be provided to open or close the path.
@@ -636,24 +628,15 @@ class DrawBotDrawingTool(object):
             # draw a polygon with x-amount of points
             polygon((100, 100), (100, 200), (200, 200), (120, 180), close=True)
         """
-        try:
-            a, b = x
-        except TypeError:
-            args = [args[i:i + 2] for i in range(0, len(args), 2)]
-            _deprecatedWarningWrapInTuple("polygon((%s, %s), %s)" % (x, y, ", ".join([str(i) for i in args])))
-        else:
-            args = list(args)
-            args.insert(0, y)
-            x, y = x
-        if not args:
+        if len(points) <= 1:
             raise DrawBotError("polygon() expects more than a single point")
         doClose = kwargs.get("close", True)
         if len(kwargs) > 1:
             raise DrawBotError("unexpected keyword argument for this function")
 
         path = self._bezierPathClass()
-        path.moveTo((x, y))
-        for x, y in args:
+        path.moveTo(points[0])
+        for x, y in points[1:]:
             path.lineTo((x, y))
         if doClose:
             path.closePath()
@@ -1776,7 +1759,7 @@ class DrawBotDrawingTool(object):
 
     # images
 
-    def image(self, path, x, y=None, alpha=None, pageNumber=None):
+    def image(self, path, position, alpha=1, pageNumber=None):
         """
         Add an image from a `path` with an `offset` and an `alpha` value.
         This should accept most common file types like pdf, jpg, png, tiff and gif.
@@ -1790,21 +1773,12 @@ class DrawBotDrawingTool(object):
             # the path can be a path to a file or a url
             image("http://f.cl.ly/items/1T3x1y372J371p0v1F2Z/drawBot.jpg", (100, 100), alpha=.3)
         """
-        if isinstance(x, (tuple)):
-            if alpha is None and y is not None:
-                alpha = y
-            x, y = x
-        else:
-            _deprecatedWarningWrapInTuple("image(\"%s\", (%s, %s), alpha=%s)" % (path, x, y, alpha))
-
-        if alpha is None:
-            alpha = 1
         if isinstance(path, self._imageClass):
             path = path._nsImage()
         if isinstance(path, basestring):
             path = optimizePath(path)
         self._requiresNewFirstPage = True
-        self._addInstruction("image", path, (x, y), alpha, pageNumber)
+        self._addInstruction("image", path, position, alpha, pageNumber)
 
     def imageSize(self, path, pageNumber=None):
         """
