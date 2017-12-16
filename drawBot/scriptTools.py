@@ -183,13 +183,10 @@ def ScriptRunner(text=None, path=None, stdout=None, stderr=None, namespace=None,
         text = f.read()
         f.close()
     source = text.replace('\r\n', '\n').replace('\r', '\n')
-    if PY2 and hasEncodingDeclaration(source):
+    if PY2 and hasEncodingDeclaration(source) and isinstance(source, unicode):
         # Python 2 compile() complains when an encoding declaration is found in a unicode string.
         # As a workaround, we'll just encode it back as a utf-8 string and all is good.
-        try:
-            source = source.encode("utf-8")
-        except:
-            pass
+        source = source.encode("utf-8")
     compileFlags = 0
     if getDefault("DrawBotUseFutureDivision", True):
         compileFlags |= __future__.CO_FUTURE_DIVISION

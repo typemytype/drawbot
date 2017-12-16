@@ -85,6 +85,14 @@ class MiscTest(unittest.TestCase):
         finally:
             drawBot.scriptTools.getDefault = realGetDefault
 
+    def test_ScriptRunner_encoding(self):
+        out = StdOutCollector()
+        ScriptRunner("# -*- coding: utf-8 -*-\nprint(1/2)", stdout=out, stderr=out)
+        self.assertEqual(out, ["0.5"])
+        out = StdOutCollector()
+        ScriptRunner(u"# -*- coding: utf-8 -*-\nprint(1/2)", stdout=out, stderr=out)
+        self.assertEqual(out, ["0.5"])
+
 
 if __name__ == '__main__':
     sys.exit(unittest.main())
