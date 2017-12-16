@@ -1,4 +1,4 @@
-from __future__ import division, absolute_import
+from __future__ import division, absolute_import, print_function
 
 # -*- coding: UTF-8 -*-
 import __future__
@@ -196,7 +196,7 @@ def ScriptRunner(text=None, path=None, stdout=None, stderr=None, namespace=None,
 
     try:
         try:
-            code = compile(source + '\n\n', fileName, "exec", compileFlags)
+            code = compile(source + '\n\n', fileName, "exec", compileFlags, dont_inherit=True)
         except:
             traceback.print_exc(0)
         else:
