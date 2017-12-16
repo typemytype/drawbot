@@ -70,6 +70,21 @@ class MiscTest(unittest.TestCase):
         ScriptRunner("print(1/2)", stdout=out, stderr=out)
         self.assertEqual(out, ["0.5"])
 
+    def test_ScriptRunner_oldDivision(self):
+        realGetDefault = drawBot.scriptTools.getDefault
+        def fakeGetDefault(*args):
+            return False
+        drawBot.scriptTools.getDefault = fakeGetDefault
+        try:
+            out = StdOutCollector()
+            ScriptRunner("print(1/2)", stdout=out, stderr=out)
+            if PY3:
+                self.assertEqual(out, ["0.5"])
+            else:
+                self.assertEqual(out, ["0"])
+        finally:
+            drawBot.scriptTools.getDefault = realGetDefault
+
 
 if __name__ == '__main__':
     sys.exit(unittest.main())
