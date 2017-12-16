@@ -13,12 +13,15 @@ from signal import SIGINT
 import ctypes
 from ctypes.util import find_library
 import threading
-
-from vanilla.vanillaBase import osVersion10_10, osVersionCurrent
-
+from distutils.version import StrictVersion
+import platform
 from fontTools.misc.py23 import PY2, PY3
-
 from drawBot.misc import getDefault
+
+
+osVersionCurrent = StrictVersion(platform.mac_ver()[0])
+osVersion10_10 = StrictVersion("10.10")
+
 
 # Pulling in CheckEventQueueForUserCancel from Carbon.framework
 _carbonPath = find_library("Carbon")
