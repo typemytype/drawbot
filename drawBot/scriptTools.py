@@ -22,7 +22,7 @@ from drawBot.misc import getDefault
 
 # Pulling in CheckEventQueueForUserCancel from Carbon.framework
 _carbonPath = find_library("Carbon")
-if _carbonPath is not None:
+if _carbonPath is not None and AppKit.NSApp() is not None:
     CheckEventQueueForUserCancel = ctypes.CFUNCTYPE(ctypes.c_bool)(('CheckEventQueueForUserCancel', ctypes.CDLL(_carbonPath)))
 else:
     CheckEventQueueForUserCancel = None
