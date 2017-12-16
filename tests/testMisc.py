@@ -100,6 +100,25 @@ class MiscTest(unittest.TestCase):
         ScriptRunner("print(__file__)\nprint(__name__)", stdout=out, stderr=out, path=path)
         self.assertEqual(out, [path, "__main__"])
 
+    def test_ScriptRunner_namespace(self):
+        out = StdOutCollector()
+        ScriptRunner("print(aaaa)", stdout=out, stderr=out, namespace=dict(aaaa=123))
+        self.assertEqual(out, ["123"])
+
+    def test_ScriptRunner_checkSyntaxOnly(self):
+        out = StdOutCollector()
+        ScriptRunner("print(aaaa)", stdout=out, stderr=out, checkSyntaxOnly=True)
+        self.assertEqual(out, [])
+        out = StdOutCollector()
+        ScriptRunner("print('hello world!')", stdout=out, stderr=out, checkSyntaxOnly=False)
+        self.assertEqual(out, ['hello world!'])
+        out = StdOutCollector()
+        ScriptRunner("print('hello world!')", stdout=out, stderr=out, checkSyntaxOnly=True)
+        self.assertEqual(out, [])
+        out = StdOutCollector()
+        ScriptRunner("aaa bbb", stdout=out, stderr=out, checkSyntaxOnly=True)
+        self.assertEqual(out[-1], 'SyntaxError: invalid syntax')
+
 
 if __name__ == '__main__':
     sys.exit(unittest.main())
