@@ -9,10 +9,13 @@ from drawBot.misc import DrawBotError, warnings
 
 class MiscTest(unittest.TestCase):
 
-    def test_polygon_noPoints(self):
+    def test_polygon_notEnoughPoints(self):
         drawBot.newDrawing()
         with self.assertRaises(TypeError):
             drawBot.polygon()
+        with self.assertRaises(TypeError):
+            drawBot.polygon((1, 2))
+        drawBot.polygon((1, 2), (3, 4))
 
     def test_polygon_unexpectedKeywordArgument(self):
         drawBot.newDrawing()
