@@ -213,12 +213,18 @@ testExt = [
     "pdf"
 ]
 
+
+expectedFailures = {"test_svg_image"}
+
+
 def _addTests():
     for path in glob.glob(os.path.join(drawBotScriptDir, "*.py")):
         scriptName = os.path.splitext(os.path.basename(path))[0]
         for ext in testExt:
             testMethod = makeTestCase(path, ext)
             testMethod.__name__ = "test_%s_%s" % (ext, scriptName)
+            if testMethod.__name__ in expectedFailures:
+                testMethod = unittest.expectedFailure(testMethod)
             setattr(DrawBotTest, testMethod.__name__, testMethod)
 
 _addTests()

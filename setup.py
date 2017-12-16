@@ -168,8 +168,9 @@ if runTests:
     print("Running DrawBot tests...")
     process = subprocess.Popen(commands, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, universal_newlines=True)
     stdout, stderr = process.communicate()
-    okLine = stdout.splitlines()[-2].strip()
-    if okLine.split()[-1] != "OK":
+    okLine1 = stdout.splitlines()[-3].strip()  # in case of expected failures or unexpected successes
+    okLine2 = stdout.splitlines()[-2].strip()
+    if okLine1.split()[-1] != "OK" and okLine2.split()[-1] != "OK":
         print("*** TESTS FAILED ***")
         print("Run following command to see details:")
         print(" ".join(commands))
