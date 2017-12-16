@@ -1,6 +1,7 @@
 from __future__ import print_function, division, absolute_import
 
 from fontTools.misc.py23 import *
+from fontTools.misc.py23 import PY3
 import sys
 import unittest
 import drawBot
@@ -36,6 +37,14 @@ class MiscTest(unittest.TestCase):
         out = StdOutCollector()
         ScriptRunner("print('hey!')", stdout=out, stderr=out)
         self.assertEqual(out, ["hey!"])
+
+    def test_ScriptRunner_print_function(self):
+        out = StdOutCollector()
+        ScriptRunner("print 'hey!'", stdout=out, stderr=out)
+        if PY3:
+            self.assertEqual(out[-1], "SyntaxError: Missing parentheses in call to 'print'. Did you mean print('hey!')?")
+        else:
+            self.assertEqual(out, ["hey!"])
 
 
 if __name__ == '__main__':
