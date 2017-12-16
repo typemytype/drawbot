@@ -629,10 +629,10 @@ class DrawBotDrawingTool(object):
             polygon((100, 100), (100, 200), (200, 200), (120, 180), close=True)
         """
         if len(points) <= 1:
-            raise DrawBotError("polygon() expects more than a single point")
+            raise TypeError("polygon() expects more than a single point")
         doClose = kwargs.get("close", True)
-        if len(kwargs) > 1:
-            raise DrawBotError("unexpected keyword argument for this function")
+        if (len(kwargs) == 1 and "close" not in kwargs) or len(kwargs) > 1:
+            raise TypeError("unexpected keyword argument for this function")
 
         path = self._bezierPathClass()
         path.moveTo(points[0])
