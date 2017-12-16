@@ -660,7 +660,7 @@ class DrawBotDrawingTool(object):
         """
         Return a list of all available color spaces.
         """
-        return self._dummyContext._colorSpaceMap.keys()
+        return sorted(self._dummyContext._colorSpaceMap.keys())
 
     def blendMode(self, operation):
         """
