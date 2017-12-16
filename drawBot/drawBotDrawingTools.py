@@ -372,7 +372,7 @@ class DrawBotDrawingTool(object):
             fill(1)
             text("Hello World!", (20, 40))
             # save it with an option that controls the resolution (300 PPI)
-            saveImage("~/Desktop/firstImage.png", imageResolution=300)
+            saveImage("~/Desktop/firstImage300.png", imageResolution=300)
 
         """
         # args are not supported anymore
