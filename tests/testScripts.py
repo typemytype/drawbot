@@ -111,10 +111,13 @@ class DrawBotTest(unittest.TestCase):
         namespace = {"__name__": "__main__", "__file__": path}
 
         with StdOutCollector(captureStdErr=True) as output:
+            cwd = os.getcwd()
+            os.chdir(os.path.dirname(path))
             try:
                 exec(code, namespace)
             except:
                 traceback.print_exc()
+            os.chdir(cwd)
         return output
 
     def test_instructionStack(self):
