@@ -3,6 +3,7 @@ from __future__ import print_function, division, absolute_import
 from fontTools.misc.py23 import *
 from fontTools.misc.py23 import PY3
 import sys
+import os
 import unittest
 import io
 import drawBot
@@ -92,6 +93,12 @@ class MiscTest(unittest.TestCase):
         out = StdOutCollector()
         ScriptRunner(u"# -*- coding: utf-8 -*-\nprint(1/2)", stdout=out, stderr=out)
         self.assertEqual(out, ["0.5"])
+
+    def test_ScriptRunner_file(self):
+        out = StdOutCollector()
+        path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "mytestpath.py")
+        ScriptRunner("print(__file__)\nprint(__name__)", stdout=out, stderr=out, path=path)
+        self.assertEqual(out, [path, "__main__"])
 
 
 if __name__ == '__main__':
