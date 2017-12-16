@@ -4,19 +4,20 @@ import os
 import unittest
 import doctest
 import importlib
+import glob
 
 
 testRoot = os.path.dirname(os.path.abspath(__file__))
 if testRoot not in sys.path:
     sys.path.append(testRoot)
 
-files = ["testScripts.py", "testExport.py", "testMisc.py"]  # TODO automatic discovery based on naming convention
+testModules = glob.glob(os.path.join(testRoot, "test*.py"))
 modulesWithDocTests = ["drawBot.misc", "testExport"]  # TODO: doctest discovery
 
 loader = unittest.TestLoader()
 suite = unittest.TestSuite()
-for fileName in files:
-    moduleName, ext = os.path.splitext(fileName)
+for path in testModules:
+    moduleName, ext = os.path.splitext(os.path.basename(path))
     suite.addTest(loader.loadTestsFromName(moduleName))
 
 for moduleName in modulesWithDocTests:
