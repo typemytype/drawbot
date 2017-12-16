@@ -172,12 +172,6 @@ class DrawBotDrawingTool(object):
             return 1000
         return self._width
 
-    def _get_width(self):
-        warnings.warn("Magic variables are deprecated.")
-        return self.width()
-
-    WIDTH = property(_get_width)
-
     def height(self):
         """
         Returns the height of the current page.
@@ -185,12 +179,6 @@ class DrawBotDrawingTool(object):
         if self._height is None:
             return 1000
         return self._height
-
-    def _get_height(self):
-        warnings.warn("Magic variables are deprecated.")
-        return self.height()
-
-    HEIGHT = property(_get_height)
 
     def sizes(self, paperSize=None):
         """
@@ -207,14 +195,6 @@ class DrawBotDrawingTool(object):
         Returns the current page count.
         """
         return len(self._instructionsStack)
-
-    def _get_pageCount(self):
-        warnings.warn("Magic variables are deprecated.'")
-        return self.pageCount()
-
-    PAGECOUNT = property(_get_pageCount)
-
-    _magicVariables = ["WIDTH", "HEIGHT", "PAGECOUNT"]
 
     # ====================
     # = public callbacks =

@@ -7,7 +7,7 @@ from defconAppKit.windows.baseWindow import BaseWindowController
 from .codeEditor import CodeEditor, OutPutEditor
 from .drawView import DrawView, ThumbnailView
 
-from drawBot.scriptTools import ScriptRunner, CallbackRunner, DrawBotNamespace, StdOutput
+from drawBot.scriptTools import ScriptRunner, CallbackRunner, StdOutput
 from drawBot.drawBotDrawingTools import _drawBotDrawingTool
 from drawBot.context.drawBotContext import DrawBotContext
 from drawBot.misc import getDefault, setDefault, warnings
@@ -87,7 +87,7 @@ class DrawBotController(BaseWindowController):
         # reset the drawing tool
         _drawBotDrawingTool.newDrawing()
         # create a namespace
-        namespace = DrawBotNamespace(_drawBotDrawingTool, _drawBotDrawingTool._magicVariables)
+        namespace = {}
         # add the tool callbacks in the name space
         _drawBotDrawingTool._addToNamespace(namespace)
         # when enabled clear the output text view

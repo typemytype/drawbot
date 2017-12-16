@@ -93,18 +93,6 @@ def _addLocalSysPaths():
 _addLocalSysPaths()
 
 
-class DrawBotNamespace(dict):
-
-    def __init__(self, context, variables):
-        self._context = context
-        self._variables = variables
-
-    def __getitem__(self, item):
-        if item in self._variables:
-            return getattr(self._context, item)
-        return super(DrawBotNamespace, self).__getitem__(item)
-
-
 class _Helper(object):
     """
     Define the builtin 'help'.
