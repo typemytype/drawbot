@@ -21,7 +21,11 @@ from fontTools.misc.py23 import PY2, PY3
 from drawBot.misc import getDefault
 
 # Pulling in CheckEventQueueForUserCancel from Carbon.framework
-CheckEventQueueForUserCancel = ctypes.CFUNCTYPE(ctypes.c_bool)(('CheckEventQueueForUserCancel', ctypes.CDLL(find_library("Carbon"))))
+_carbonPath = find_library("Carbon")
+if _carbonPath is not None:
+    CheckEventQueueForUserCancel = ctypes.CFUNCTYPE(ctypes.c_bool)(('CheckEventQueueForUserCancel', ctypes.CDLL(_carbonPath)))
+else:
+    CheckEventQueueForUserCancel = None
 
 # Acquire this lock if something must not be interrupted by command-period or escape
 cancelLock = threading.Lock()
@@ -195,8 +199,9 @@ def ScriptRunner(text=None, path=None, stdout=None, stderr=None, namespace=None,
         else:
             if not checkSyntaxOnly:
                 scriptDone = False
-                t = threading.Thread(target=userCancelledMonitor, name="UserCancelledMonitor")
-                t.start()
+                if CheckEventQueueForUserCancel is not None:
+                    t = threading.Thread(target=userCancelledMonitor, name="UserCancelledMonitor")
+                    t.start()
                 try:
                     exec(code, namespace)
                 except KeyboardInterrupt:
