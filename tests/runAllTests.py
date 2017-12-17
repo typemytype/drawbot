@@ -7,11 +7,11 @@ import importlib
 import glob
 
 
-testRoot = os.path.dirname(os.path.abspath(__file__))
-if testRoot not in sys.path:
-    sys.path.append(testRoot)
+testRootDir = os.path.dirname(os.path.abspath(__file__))
+if testRootDir not in sys.path:
+    sys.path.append(testRootDir)
 
-testModules = glob.glob(os.path.join(testRoot, "test*.py"))
+testModules = glob.glob(os.path.join(testRootDir, "test*.py"))
 modulesWithDocTests = ["drawBot.misc", "testExport"]  # TODO: doctest discovery
 
 loader = unittest.TestLoader()

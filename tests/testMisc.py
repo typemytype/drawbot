@@ -96,7 +96,7 @@ class MiscTest(unittest.TestCase):
 
     def test_ScriptRunner_file(self):
         out = StdOutCollector()
-        path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "mytestpath.py")
+        path = "mytestpath.py"
         ScriptRunner("print(__file__)\nprint(__name__)", stdout=out, stderr=out, path=path)
         self.assertEqual(out, [path, "__main__"])
 

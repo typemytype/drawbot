@@ -9,7 +9,7 @@ import random
 import drawBot
 from drawBot.drawBotDrawingTools import DrawBotDrawingTool
 from testScripts import StdOutCollector
-from testSupport import randomSeed
+from testSupport import randomSeed, testRootDir, tempTestDataDir, testDataDir
 
 
 _namePattern = re.compile(r"( +).. downloadcode:: ([A-Za-z0-9_]+).py\s*$")
@@ -77,11 +77,8 @@ def readData(path):
 
 
 
-testRoot = os.path.dirname(os.path.abspath(__file__))
-dataDir = os.path.join(testRoot, "data")
-tempDataDir = os.path.join(testRoot, "temp_data")
 # The examples use an http image path; let's fake it with a local jpeg
-mockedImagePath = os.path.join(testRoot, "data", "drawBot.jpg")
+mockedImagePath = os.path.join(testRootDir, "data", "drawBot.jpg")
 assert os.path.exists(mockedImagePath)
 
 def mockImage(path, position, alpha=1):
@@ -133,7 +130,7 @@ def _makeTestCase(exampleName, source, doSaveImage):
         _drawBotDrawingTool._addToNamespace(namespace)
         def mockSaveImage(path, **options):
             fileName = "example_mockSaveImage_" + os.path.basename(path)
-            path = os.path.join(tempDataDir, fileName)
+            path = os.path.join(tempTestDataDir, fileName)
             drawBot.saveImage(path, **options)
         namespace["saveImage"] = mockSaveImage
         namespace["image"] = mockImage
@@ -150,8 +147,8 @@ def _makeTestCase(exampleName, source, doSaveImage):
         with StdOutCollector(captureStdErr=True):
             exec(code, namespace)
         fileName = "example_%s.png" % exampleName
-        imagePath = os.path.join(tempDataDir, fileName)
-        expectedImagePath = os.path.join(dataDir, fileName)
+        imagePath = os.path.join(tempTestDataDir, fileName)
+        expectedImagePath = os.path.join(testDataDir, fileName)
         if doSaveImage:
             drawBot.saveImage(imagePath)
             self.assertFilesEqual(imagePath, expectedImagePath)

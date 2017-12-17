@@ -7,14 +7,10 @@ import os
 import sys
 import glob
 import traceback
+from testSupport import randomSeed, testRootDir, tempTestDataDir, testDataDir
 
 
-testRoot = os.path.dirname(os.path.abspath(__file__))
-dataDir = os.path.join(testRoot, "data")
-drawBotScriptDir = os.path.join(testRoot, "drawBotScripts")
-tempDataDir = os.path.join(testRoot, "temp_data")
-if not os.path.exists(tempDataDir):
-    os.mkdir(tempDataDir)
+drawBotScriptDir = os.path.join(testRootDir, "drawBotScripts")
 
 
 class StdOutCollector(list):
@@ -189,9 +185,9 @@ def makeTestCase(path, ext):
 
     def test(self):
         # get the paths
-        testPath = os.path.join(tempDataDir, "%s.%s" % (scriptName, ext))
-        expectedPath = os.path.join(dataDir, "expected_%s.%s" % (scriptName, ext))
-        expectedOutputPath = os.path.join(dataDir, "expected_%s.txt" % scriptName)
+        testPath = os.path.join(tempTestDataDir, "%s.%s" % (scriptName, ext))
+        expectedPath = os.path.join(testDataDir, "expected_%s.%s" % (scriptName, ext))
+        expectedOutputPath = os.path.join(testDataDir, "expected_%s.txt" % scriptName)
         expectedOutput = readExpectedOutput(expectedOutputPath)
         # get drawBot
         import drawBot
