@@ -649,21 +649,21 @@ class Color(object):
         return new
 
     @classmethod
-    def getColorsFromList(self, inputColors):
+    def getColorsFromList(cls, inputColors):
         outputColors = []
         for color in inputColors:
-            color = self.getColor(color)
+            color = cls.getColor(color)
             outputColors.append(color)
         return outputColors
 
     @classmethod
-    def getColor(self, color):
-        if isinstance(color, self.__class__):
+    def getColor(cls, color):
+        if isinstance(color, cls.__class__):
             return color
         elif isinstance(color, (tuple, list)):
-            return self(*color)
+            return cls(*color)
         elif isinstance(color, AppKit.NSColor):
-            return self(color)
+            return cls(color)
         raise DrawBotError("Not a valid color: %s" % color)
 
 
