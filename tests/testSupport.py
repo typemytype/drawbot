@@ -17,3 +17,9 @@ def randomSeed(a):
         return random.seed(a, version=1)  # compatible with Python 2
     else:
         return random.seed(a)
+
+
+def readData(path):
+    """Return the raw data from a path."""
+    with open(path, "rb") as f:
+        return f.read()

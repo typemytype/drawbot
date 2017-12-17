@@ -7,7 +7,7 @@ import os
 import sys
 import glob
 import traceback
-from testSupport import randomSeed, testRootDir, tempTestDataDir, testDataDir
+from testSupport import randomSeed, testRootDir, tempTestDataDir, testDataDir, readData
 
 
 drawBotScriptDir = os.path.join(testRootDir, "drawBotScripts")
@@ -73,15 +73,15 @@ class DrawBotTest(unittest.TestCase):
 
     def assertSVGFilesEqual(self, path1, path2):
         # compare the content by line
-        self.assertEqual(self.readData(path1).splitlines(), self.readData(path2).splitlines())
+        self.assertEqual(readData(path1).splitlines(), readData(path2).splitlines())
 
     def assertImageFilesEqual(self, path1, path2):
         # compare the data and assert with a simple message
         # no use to show the complete diff of the binary file
-        self.assertTrue(self.readData(path1) == self.readData(path2), "Images are not the same")
+        self.assertTrue(readData(path1) == readData(path2), "Images are not the same")
 
     def assertGenericFilesEqual(self, path1, path2):
-        self.assertEqual(self.readData(path1), self.readData(path2))
+        self.assertEqual(readData(path1), readData(path2))
 
     def assertForFileExtension(self, ext, path1, path2):
         # based on the ext choose an assertion test
@@ -93,11 +93,6 @@ class DrawBotTest(unittest.TestCase):
             self.assertImageFilesEqual(path1, path2)
         else:
             self.assertGenericFilesEqual(path1, path2)
-
-    def readData(self, path):
-        # return the data from a path
-        with open(path, "rb") as f:
-            return f.read()
 
     def executeScriptPath(self, path):
         # read content of py file and exec it

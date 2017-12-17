@@ -9,7 +9,7 @@ import random
 import drawBot
 from drawBot.drawBotDrawingTools import DrawBotDrawingTool
 from testScripts import StdOutCollector
-from testSupport import randomSeed, testRootDir, tempTestDataDir, testDataDir
+from testSupport import randomSeed, testRootDir, tempTestDataDir, testDataDir, readData
 
 
 _namePattern = re.compile(r"( +).. downloadcode:: ([A-Za-z0-9_]+).py\s*$")
@@ -68,13 +68,6 @@ class ExampleTester(unittest.TestCase):
 
     def assertFilesEqual(self, path1, path2):
         self.assertEqual(readData(path1), readData(path2), "Files %r and %s are not the same" % (path1, path2))
-
-
-def readData(path):
-    # return the data from a path
-    with open(path, "rb") as f:
-        return f.read()
-
 
 
 # The examples use an http image path; let's fake it with a local jpeg
