@@ -5,6 +5,7 @@ import CoreText
 
 import os
 import uuid
+import base64
 
 from fontTools.misc.xmlWriter import XMLWriter
 
@@ -12,6 +13,7 @@ from fontTools.misc.transform import Transform
 
 from .tools.openType import getFeatureTagsForFontAttributes
 from .baseContext import BaseContext, GraphicsState, Shadow, Color, Gradient
+from .imageContext import _makeBitmapImageRep
 
 from drawBot.misc import warnings, formatNumber
 
@@ -220,6 +222,7 @@ class SVGContext(BaseContext):
     _svgTagArguments = {
         "version": "1.1",
         "xmlns": "http://www.w3.org/2000/svg",
+        "xmlns:xlink": "http://www.w3.org/1999/xlink"
     }
 
     _svgLineJoinStylesMap = {
@@ -462,8 +465,10 @@ class SVGContext(BaseContext):
             url = AppKit.NSURL.URLWithString_(path)
         else:
             url = AppKit.NSURL.fileURLWithPath_(path)
-        im = AppKit.NSImage.alloc().initByReferencingURL_(url)
-        w, h = im.size()
+        image = AppKit.NSImage.alloc().initByReferencingURL_(url)
+        w, h = image.size()
+        imageRep = _makeBitmapImageRep(image)
+        imageData = imageRep.representationUsingType_properties_(AppKit.NSPNGFileType, None)
         data = dict()
         data["x"] = 0
         data["y"] = 0
@@ -471,8 +476,9 @@ class SVGContext(BaseContext):
         data["height"] = h
         data["opacity"] = alpha
         data["transform"] = self._svgTransform(self._state.transformMatrix.translate(x, y + h).scale(1, -1))
-        data["xlink:href"] = path
-        self._svgContext.simpletag("image", **data)
+        data["xlink:href"] = "data:image/png;base64,%s" % base64.b64encode(imageData)
+        self._svgContext.begintag("image", **data)
+        self._svgContext.endtag("image")
         self._svgContext.newline()
         self._svgEndClipPath()
 
