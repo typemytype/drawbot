@@ -7,43 +7,10 @@ import os
 import sys
 import glob
 import traceback
-from testSupport import randomSeed, testRootDir, tempTestDataDir, testDataDir, readData
+from testSupport import StdOutCollector, randomSeed, testRootDir, tempTestDataDir, testDataDir, readData
 
 
 drawBotScriptDir = os.path.join(testRootDir, "drawBotScripts")
-
-
-class StdOutCollector(list):
-
-    def __init__(self, **kwargs):
-        # force captureStdErr to be a keyword argument
-        if kwargs:
-            captureStdErr = kwargs["captureStdErr"]
-            assert len(kwargs) == 1
-        else:
-            captureStdErr = False
-        self.captureStdErr = captureStdErr
-        super(StdOutCollector, self).__init__()
-
-    def __enter__(self):
-        self.out = sys.stdout
-        self.err = sys.stderr
-        sys.stdout = self
-        if self.captureStdErr:
-            sys.stderr = self
-        return self
-
-    def __exit__(self, type, value, traceback):
-        sys.stdout = self.out
-        sys.stderr = self.err
-
-    def write(self, txt):
-        txt = txt.strip()
-        if txt:
-            self.append(txt)
-
-    def flush(self):
-        pass
 
 
 class DrawBotTest(unittest.TestCase):

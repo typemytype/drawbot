@@ -9,7 +9,7 @@ import io
 import drawBot
 from drawBot.misc import DrawBotError, warnings
 from drawBot.scriptTools import ScriptRunner
-from testScripts import StdOutCollector
+from testSupport import StdOutCollector
 
 
 class MiscTest(unittest.TestCase):

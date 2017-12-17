@@ -1,6 +1,7 @@
 from __future__ import print_function, division, absolute_import
 
 from fontTools.misc.py23 import PY3
+import sys
 import os
 import random
 
@@ -10,6 +11,39 @@ testDataDir = os.path.join(testRootDir, "data")
 tempTestDataDir = os.path.join(testRootDir, "tempTestData")
 if not os.path.exists(tempTestDataDir):
     os.mkdir(tempTestDataDir)
+
+
+class StdOutCollector(list):
+
+    def __init__(self, **kwargs):
+        # force captureStdErr to be a keyword argument
+        if kwargs:
+            captureStdErr = kwargs["captureStdErr"]
+            assert len(kwargs) == 1
+        else:
+            captureStdErr = False
+        self.captureStdErr = captureStdErr
+        super(StdOutCollector, self).__init__()
+
+    def __enter__(self):
+        self.out = sys.stdout
+        self.err = sys.stderr
+        sys.stdout = self
+        if self.captureStdErr:
+            sys.stderr = self
+        return self
+
+    def __exit__(self, type, value, traceback):
+        sys.stdout = self.out
+        sys.stderr = self.err
+
+    def write(self, txt):
+        txt = txt.strip()
+        if txt:
+            self.append(txt)
+
+    def flush(self):
+        pass
 
 
 def randomSeed(a):

@@ -8,8 +8,7 @@ import re
 import random
 import drawBot
 from drawBot.drawBotDrawingTools import DrawBotDrawingTool
-from testScripts import StdOutCollector
-from testSupport import randomSeed, testRootDir, tempTestDataDir, testDataDir, readData
+from testSupport import StdOutCollector, randomSeed, testRootDir, tempTestDataDir, testDataDir, readData
 
 
 _namePattern = re.compile(r"( +).. downloadcode:: ([A-Za-z0-9_]+).py\s*$")

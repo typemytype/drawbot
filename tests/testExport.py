@@ -12,8 +12,7 @@ import random
 import AppKit
 from drawBot.context.tools.gifTools import gifFrameCount
 from drawBot.misc import DrawBotError, warnings
-from testScripts import StdOutCollector
-from testSupport import randomSeed
+from testSupport import randomSeed, StdOutCollector
 
 
 warnings.shouldShowWarnings = True
