@@ -102,7 +102,7 @@ class MiscTest(unittest.TestCase):
 
     def test_ScriptRunner_fromPath(self):
         out = StdOutCollector()
-        path = os.path.join(testDataDir, "scriptRunnerTest.py") # use an actual file, no not confuse coverage testing
+        path = os.path.join(testDataDir, "scriptRunnerTest.py")
         ScriptRunner(path=path, stdout=out, stderr=out)
         self.assertEqual(out, [path, "__main__", u'\xc5benr\xe5'])
 
