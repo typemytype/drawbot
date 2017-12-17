@@ -11,11 +11,8 @@ import drawBot
 import random
 import AppKit
 from drawBot.context.tools.gifTools import gifFrameCount
-from drawBot.misc import DrawBotError, warnings
+from drawBot.misc import DrawBotError
 from testSupport import randomSeed, StdOutCollector
-
-
-warnings.shouldShowWarnings = True
 
 
 class TempFile(object):

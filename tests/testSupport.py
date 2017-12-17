@@ -4,6 +4,7 @@ from fontTools.misc.py23 import PY3
 import sys
 import os
 import random
+from drawBot.misc import warnings
 
 
 testRootDir = os.path.dirname(os.path.abspath(__file__))
@@ -11,6 +12,9 @@ testDataDir = os.path.join(testRootDir, "data")
 tempTestDataDir = os.path.join(testRootDir, "tempTestData")
 if not os.path.exists(tempTestDataDir):
     os.mkdir(tempTestDataDir)
+
+
+warnings.shouldShowWarnings = True
 
 
 class StdOutCollector(list):
