@@ -167,8 +167,9 @@ def ScriptRunner(text=None, path=None, stdout=None, stderr=None, namespace=None,
     if stderr is not None:
         sys.stderr = stderr
     sys.argv = [fileName]
-    os.chdir(curDir)
-    sys.path.insert(0, curDir)
+    if curDir:
+        os.chdir(curDir)
+        sys.path.insert(0, curDir)
     # here we go
     if text is None:
         with open(path, 'rb') as f:
@@ -211,7 +212,8 @@ def ScriptRunner(text=None, path=None, stdout=None, stderr=None, namespace=None,
         sys.argv = saveArgv
         if saveDir:
             os.chdir(saveDir)
-        sys.path.remove(curDir)
+        if curDir:
+            sys.path.remove(curDir)
 
 
 def CallbackRunner(callback, stdout=None, stderr=None, args=[], kwargs={}, fallbackResult=None):
