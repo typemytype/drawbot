@@ -174,7 +174,7 @@ def ScriptRunner(text=None, path=None, stdout=None, stderr=None, namespace=None,
         sys.path.insert(0, curDir)
     # here we go
     if text is None:
-        with open(path, 'rb') as f:
+        with open(path, 'r') as f:
             text = f.read()
     source = text.replace('\r\n', '\n').replace('\r', '\n')
     if PY2 and hasEncodingDeclaration(source) and isinstance(source, unicode):
