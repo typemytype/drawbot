@@ -82,15 +82,12 @@ mockedImagePath = os.path.join(testRootDir, "data", "drawBot.jpg")
 assert os.path.exists(mockedImagePath)
 
 def mockImage(path, position, alpha=1):
-    import drawBot
     drawBot.image(mockedImagePath, position, alpha)
 
 def mockImageSize(path):
-    import drawBot
     return drawBot.imageSize(mockedImagePath)
 
 def mockImagePixelColor(path, xy):
-    import drawBot
     return drawBot.imagePixelColor(mockedImagePath, xy)
 
 def mockVariable(definitions, namespace):
