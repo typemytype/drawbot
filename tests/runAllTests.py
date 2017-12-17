@@ -12,7 +12,7 @@ if testRootDir not in sys.path:
     sys.path.append(testRootDir)
 
 testModules = glob.glob(os.path.join(testRootDir, "test*.py"))
-modulesWithDocTests = ["drawBot.misc", "testExport"]  # TODO: doctest discovery
+modulesWithDocTests = ["drawBot.misc", "testSupport"]  # TODO: doctest discovery
 
 loader = unittest.TestLoader()
 suite = unittest.TestSuite()
