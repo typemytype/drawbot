@@ -77,10 +77,10 @@ def readData(path):
 
 
 
-# The examples use an http image path; let's fake it with a local jpeg
 testRoot = os.path.dirname(os.path.abspath(__file__))
 dataDir = os.path.join(testRoot, "data")
 tempDataDir = os.path.join(testRoot, "temp_data")
+# The examples use an http image path; let's fake it with a local jpeg
 mockedImagePath = os.path.join(testRoot, "data", "drawBot.jpg")
 assert os.path.exists(mockedImagePath)
 
