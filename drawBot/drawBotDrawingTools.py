@@ -211,8 +211,8 @@ class DrawBotDrawingTool(object):
 
         Afterwards the functions `width()` and `height()` can be used for calculations.
 
-        It is advised to use `size()` always at the top of the script and not use `size()`
-        in a multiple page document use `newPage(w, h)` to set the correct dimentions directly.
+        You have to use `size()` before any drawing-related code, and you can't use `size()`
+        in a multi-page document. Use `newPage(w, h)` to set the correct dimensions for each page.
 
         .. downloadcode:: size.py
 
@@ -242,7 +242,7 @@ class DrawBotDrawingTool(object):
         if not self._instructionsStack:
             self.newPage(width, height)
         else:
-            raise DrawBotError("It is advised to use 'size()' at the top of a script.")
+            raise DrawBotError("Can't use 'size()' after drawing has begun. Try to move it to the top of your script.")
 
     def newPage(self, width=None, height=None):
         """
