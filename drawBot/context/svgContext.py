@@ -476,11 +476,13 @@ class SVGContext(BaseContext):
             # store it
             self._embeddedImages[path] = imageID
             _, ext = os.path.splitext(path)
-            ext = ext[1:]  # remove the dot
-            if ext.lower() not in ("png", "jpeg", "jpg"):
-                # the image is not an png or a jpeg
+            mimeSubtype = ext[1:].lower()  # remove the dot, make lowercase
+            if mimeSubtype == "jpg":
+                mimeSubtype = "jpeg"
+            if mimeSubtype not in ("png", "jpeg"):
+                # the image is not a png or a jpeg
                 # convert it to a png
-                ext = "png"
+                mimeSubtype = "png"
                 imageRep = _makeBitmapImageRep(image)
                 imageData = imageRep.representationUsingType_properties_(AppKit.NSPNGFileType, None)
             else:
@@ -490,7 +492,7 @@ class SVGContext(BaseContext):
                 ("id", imageID),
                 ("width", width),
                 ("height", height),
-                ("xlink:href", "data:image/%s;base64,%s" % (ext, base64.b64encode(imageData).decode("ascii")))
+                ("xlink:href", "data:image/%s;base64,%s" % (mimeSubtype, base64.b64encode(imageData).decode("ascii")))
             ]
             self._svgContext.begintag("defs")
             self._svgContext.newline()

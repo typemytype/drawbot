@@ -41,12 +41,7 @@ class DrawBotTest(unittest.TestCase):
 
     def assertSVGFilesEqual(self, path1, path2):
         # compare the content by line
-        if False:
-            # fast
-            self.assertTrue(readData(path1) == readData(path2))
-        else:
-            # may be so slow the process seems to hang if embedded image data is different
-            self.assertEqual(readData(path1).splitlines(), readData(path2).splitlines())
+        self.assertEqual(readData(path1), readData(path2))
 
     def assertImageFilesEqual(self, path1, path2):
         # compare the data and assert with a simple message
