@@ -58,6 +58,18 @@ for key, (w, h) in list(_paperSizes.items()):
     _paperSizes["%sLandscape" % key] = (h, w)
 
 
+class SaveContextManager(object):
+
+    def __init__(self, drawingTools):
+        self._drawingTools = drawingTools
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, type, value, traceback):
+        self._drawingTools.restore()
+
+
 class DrawBotDrawingTool(object):
 
     def __init__(self):
@@ -464,16 +476,7 @@ class DrawBotDrawingTool(object):
         self._dummyContext.save()
         self._requiresNewFirstPage = True
         self._addInstruction("save")
-
-        class SaveContextManager(object):
-
-            def __enter__(saveCxt):
-                return saveCxt
-
-            def __exit__(saveCxt, type, value, traceback):
-                self.restore()
-
-        return SaveContextManager()
+        return SaveContextManager(self)
 
     def restore(self):
         """
