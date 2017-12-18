@@ -60,10 +60,18 @@ for key, (w, h) in list(_paperSizes.items()):
 
 class SaveContextManager(object):
 
+    # Internal helper class for DrawBotDrawingTool.save() allowing 'with' notation:
+    #
+    # with save()
+    #     translate(x, y)
+    #     ...draw stuff...
+    #
+
     def __init__(self, drawingTools):
         self._drawingTools = drawingTools
 
     def __enter__(self):
+        # DrawBotDrawingTool.save() already did the appropriate save()
         return self
 
     def __exit__(self, type, value, traceback):
