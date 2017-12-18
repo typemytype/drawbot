@@ -287,6 +287,7 @@ class SVGContext(BaseContext):
 
     def _reset(self, other=None):
         self._embeddedFonts = set()
+        self._embeddedImages = dict()
 
     def _newPage(self, width, height):
         if hasattr(self, "_svgContext"):
@@ -466,19 +467,47 @@ class SVGContext(BaseContext):
         else:
             url = AppKit.NSURL.fileURLWithPath_(path)
         image = AppKit.NSImage.alloc().initByReferencingURL_(url)
-        w, h = image.size()
-        imageRep = _makeBitmapImageRep(image)
-        imageData = imageRep.representationUsingType_properties_(AppKit.NSPNGFileType, None)
-        data = dict()
-        data["x"] = 0
-        data["y"] = 0
-        data["width"] = w
-        data["height"] = h
-        data["opacity"] = alpha
-        data["transform"] = self._svgTransform(self._state.transformMatrix.translate(x, y + h).scale(1, -1))
-        data["xlink:href"] = "data:image/png;base64,%s" % base64.b64encode(imageData)
-        self._svgContext.begintag("image", **data)
-        self._svgContext.endtag("image")
+        width, height = image.size()
+
+        if path not in self._embeddedImages:
+            # get a unique id for the image
+            imageID = uuid.uuid4().hex
+            # store it
+            self._embeddedImages[path] = imageID
+            _, ext = os.path.splitext(path)
+            ext = ext[1:]  # remove the dot
+            if ext.lower() not in ("png", "jepg", "jpg"):
+                # the image is not an png or a jepg
+                # convert it to a png
+                ext = "png"
+                imageRep = _makeBitmapImageRep(image)
+                imageData = imageRep.representationUsingType_properties_(AppKit.NSPNGFileType, None)
+            else:
+                with open(path, "rb") as f:
+                    imageData = f.read()
+
+            defData = [
+                ("id", imageID),
+                ("width", width),
+                ("height", height),
+                ("xlink:href", "data:image/%s;base64,%s" % (ext, base64.b64encode(imageData)))
+            ]
+            self._svgContext.begintag("defs")
+            self._svgContext.newline()
+            self._svgContext.simpletag("image", defData)
+            self._svgContext.endtag("defs")
+            self._svgContext.newline()
+        else:
+            imageID = self._embeddedImages[path]
+
+        data = [
+            ("x", 0),
+            ("y", 0),
+            ("opacity", alpha),
+            ("transform", self._svgTransform(self._state.transformMatrix.translate(x, y + height).scale(1, -1))),
+            ("xlink:href", "#%s" % imageID)
+        ]
+        self._svgContext.simpletag("use", data)
         self._svgContext.newline()
         self._svgEndClipPath()
 
