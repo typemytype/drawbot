@@ -465,6 +465,16 @@ class DrawBotDrawingTool(object):
         self._requiresNewFirstPage = True
         self._addInstruction("save")
 
+        class SaveContextManager(object):
+
+            def __enter__(saveCxt):
+                return saveCxt
+
+            def __exit__(saveCxt, type, value, traceback):
+                self.restore()
+
+        return SaveContextManager()
+
     def restore(self):
         """
         Restore from a previously saved state.
