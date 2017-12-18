@@ -471,7 +471,7 @@ class SVGContext(BaseContext):
 
         if path not in self._embeddedImages:
             # get a unique id for the image
-            imageID = uuid.uuid4().hex
+            imageID = "image_%s" % (len(self._embeddedImages) + 1)
             # store it
             self._embeddedImages[path] = imageID
             _, ext = os.path.splitext(path)
@@ -495,6 +495,7 @@ class SVGContext(BaseContext):
             self._svgContext.begintag("defs")
             self._svgContext.newline()
             self._svgContext.simpletag("image", defData)
+            self._svgContext.newline()
             self._svgContext.endtag("defs")
             self._svgContext.newline()
         else:
