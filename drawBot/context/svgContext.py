@@ -1,5 +1,6 @@
 from __future__ import absolute_import
 
+from fontTools.misc.py23 import round
 import AppKit
 import CoreText
 
@@ -490,7 +491,7 @@ class SVGContext(BaseContext):
                 ("id", imageID),
                 ("width", width),
                 ("height", height),
-                ("xlink:href", "data:image/%s;base64,%s" % (ext, base64.b64encode(imageData)))
+                ("xlink:href", "data:image/%s;base64,%s" % (ext, base64.b64encode(imageData).decode("ascii")))
             ]
             self._svgContext.begintag("defs")
             self._svgContext.newline()
@@ -521,7 +522,7 @@ class SVGContext(BaseContext):
         return uuid.uuid4().hex
 
     def _svgTransform(self, transform):
-        return "matrix(%s)" % (",".join([str(s) for s in transform]))
+        return "matrix(%s)" % (",".join([str(round(s, 11)) for s in transform]))
 
     def _svgPath(self, path, transformMatrix=None):
         path = path.getNSBezierPath()
