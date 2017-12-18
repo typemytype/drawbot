@@ -47,4 +47,5 @@ local
 .DS_Store
 
 # DrawBot tests
-tests/temp_data/*
+tests/temp_data/*  # obsolete
+tests/tempTestData/*

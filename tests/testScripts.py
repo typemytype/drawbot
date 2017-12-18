@@ -7,47 +7,10 @@ import os
 import sys
 import glob
 import traceback
+from testSupport import StdOutCollector, randomSeed, testRootDir, tempTestDataDir, testDataDir, readData
 
 
-testRoot = os.path.dirname(os.path.abspath(__file__))
-dataDir = os.path.join(testRoot, "data")
-drawBotScriptDir = os.path.join(testRoot, "drawBotScripts")
-tempDataDir = os.path.join(testRoot, "temp_data")
-if not os.path.exists(tempDataDir):
-    os.mkdir(tempDataDir)
-
-
-class StdOutCollector(list):
-
-    def __init__(self, **kwargs):
-        # force captureStdErr to be a keyword argument
-        if kwargs:
-            captureStdErr = kwargs["captureStdErr"]
-            assert len(kwargs) == 1
-        else:
-            captureStdErr = False
-        self.captureStdErr = captureStdErr
-        super(StdOutCollector, self).__init__()
-
-    def __enter__(self):
-        self.out = sys.stdout
-        self.err = sys.stderr
-        sys.stdout = self
-        if self.captureStdErr:
-            sys.stderr = self
-        return self
-
-    def __exit__(self, type, value, traceback):
-        sys.stdout = self.out
-        sys.stderr = self.err
-
-    def write(self, txt):
-        txt = txt.strip()
-        if txt:
-            self.append(txt)
-
-    def flush(self):
-        pass
+drawBotScriptDir = os.path.join(testRootDir, "drawBotScripts")
 
 
 class DrawBotTest(unittest.TestCase):
@@ -77,15 +40,15 @@ class DrawBotTest(unittest.TestCase):
 
     def assertSVGFilesEqual(self, path1, path2):
         # compare the content by line
-        self.assertEqual(self.readData(path1).splitlines(), self.readData(path2).splitlines())
+        self.assertEqual(readData(path1).splitlines(), readData(path2).splitlines())
 
     def assertImageFilesEqual(self, path1, path2):
         # compare the data and assert with a simple message
         # no use to show the complete diff of the binary file
-        self.assertTrue(self.readData(path1) == self.readData(path2), "Images are not the same")
+        self.assertTrue(readData(path1) == readData(path2), "Images are not the same")
 
     def assertGenericFilesEqual(self, path1, path2):
-        self.assertEqual(self.readData(path1), self.readData(path2))
+        self.assertEqual(readData(path1), readData(path2))
 
     def assertForFileExtension(self, ext, path1, path2):
         # based on the ext choose an assertion test
@@ -97,11 +60,6 @@ class DrawBotTest(unittest.TestCase):
             self.assertImageFilesEqual(path1, path2)
         else:
             self.assertGenericFilesEqual(path1, path2)
-
-    def readData(self, path):
-        # return the data from a path
-        with open(path, "rb") as f:
-            return f.read()
 
     def executeScriptPath(self, path):
         # read content of py file and exec it
@@ -189,9 +147,9 @@ def makeTestCase(path, ext):
 
     def test(self):
         # get the paths
-        testPath = os.path.join(tempDataDir, "%s.%s" % (scriptName, ext))
-        expectedPath = os.path.join(dataDir, "expected_%s.%s" % (scriptName, ext))
-        expectedOutputPath = os.path.join(dataDir, "expected_%s.txt" % scriptName)
+        testPath = os.path.join(tempTestDataDir, "%s.%s" % (scriptName, ext))
+        expectedPath = os.path.join(testDataDir, "expected_%s.%s" % (scriptName, ext))
+        expectedOutputPath = os.path.join(testDataDir, "expected_%s.txt" % scriptName)
         expectedOutput = readExpectedOutput(expectedOutputPath)
         # get drawBot
         import drawBot

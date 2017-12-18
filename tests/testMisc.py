@@ -9,7 +9,7 @@ import io
 import drawBot
 from drawBot.misc import DrawBotError, warnings
 from drawBot.scriptTools import ScriptRunner
-from testScripts import StdOutCollector
+from testSupport import StdOutCollector, testDataDir
 
 
 class MiscTest(unittest.TestCase):
@@ -96,9 +96,15 @@ class MiscTest(unittest.TestCase):
 
     def test_ScriptRunner_file(self):
         out = StdOutCollector()
-        path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "mytestpath.py")
+        path = os.path.join(testDataDir, "scriptRunnerTest.py") # use an actual file, no not confuse coverage testing
         ScriptRunner("print(__file__)\nprint(__name__)", stdout=out, stderr=out, path=path)
         self.assertEqual(out, [path, "__main__"])
+
+    def test_ScriptRunner_fromPath(self):
+        out = StdOutCollector()
+        path = os.path.join(testDataDir, "scriptRunnerTest.py")
+        ScriptRunner(path=path, stdout=out, stderr=out)
+        self.assertEqual(out, [path, "__main__", u'\xc5benr\xe5'])
 
     def test_ScriptRunner_namespace(self):
         out = StdOutCollector()

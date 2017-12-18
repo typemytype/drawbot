@@ -16,7 +16,7 @@ import threading
 from distutils.version import StrictVersion
 import platform
 from fontTools.misc.py23 import PY2, PY3
-from drawBot.misc import getDefault
+from drawBot.misc import getDefault, warnings
 
 
 osVersionCurrent = StrictVersion(platform.mac_ver()[0])
@@ -32,6 +32,8 @@ def retrieveCheckEventQueueForUserCancelFromCarbon():
     _carbonPath = find_library("Carbon")
     if _carbonPath is not None:
         CheckEventQueueForUserCancel = ctypes.CFUNCTYPE(ctypes.c_bool)(('CheckEventQueueForUserCancel', ctypes.CDLL(_carbonPath)))
+    else:
+        warnings.warn("Carbon.framework can't be found; command-period script cancelling will not work.")
 
 
 # Acquire this lock if something must not be interrupted by command-period or escape
@@ -167,13 +169,13 @@ def ScriptRunner(text=None, path=None, stdout=None, stderr=None, namespace=None,
     if stderr is not None:
         sys.stderr = stderr
     sys.argv = [fileName]
-    os.chdir(curDir)
-    sys.path.insert(0, curDir)
+    if curDir:
+        os.chdir(curDir)
+        sys.path.insert(0, curDir)
     # here we go
     if text is None:
-        f = open(path, 'rb')
-        text = f.read()
-        f.close()
+        with open(path, 'r') as f:
+            text = f.read()
     source = text.replace('\r\n', '\n').replace('\r', '\n')
     if PY2 and hasEncodingDeclaration(source) and isinstance(source, unicode):
         # Python 2 compile() complains when an encoding declaration is found in a unicode string.
@@ -212,7 +214,8 @@ def ScriptRunner(text=None, path=None, stdout=None, stderr=None, namespace=None,
         sys.argv = saveArgv
         if saveDir:
             os.chdir(saveDir)
-        sys.path.remove(curDir)
+        if curDir:
+            sys.path.remove(curDir)
 
 
 def CallbackRunner(callback, stdout=None, stderr=None, args=[], kwargs={}, fallbackResult=None):

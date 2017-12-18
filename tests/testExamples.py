@@ -8,8 +8,7 @@ import re
 import random
 import drawBot
 from drawBot.drawBotDrawingTools import DrawBotDrawingTool
-from testScripts import StdOutCollector
-from testSupport import randomSeed
+from testSupport import StdOutCollector, randomSeed, testRootDir, tempTestDataDir, testDataDir, readData
 
 
 _namePattern = re.compile(r"( +).. downloadcode:: ([A-Za-z0-9_]+).py\s*$")
@@ -70,30 +69,17 @@ class ExampleTester(unittest.TestCase):
         self.assertEqual(readData(path1), readData(path2), "Files %r and %s are not the same" % (path1, path2))
 
 
-def readData(path):
-    # return the data from a path
-    with open(path, "rb") as f:
-        return f.read()
-
-
-
 # The examples use an http image path; let's fake it with a local jpeg
-testRoot = os.path.dirname(os.path.abspath(__file__))
-dataDir = os.path.join(testRoot, "data")
-tempDataDir = os.path.join(testRoot, "temp_data")
-mockedImagePath = os.path.join(testRoot, "data", "drawBot.jpg")
+mockedImagePath = os.path.join(testRootDir, "data", "drawBot.jpg")
 assert os.path.exists(mockedImagePath)
 
 def mockImage(path, position, alpha=1):
-    import drawBot
     drawBot.image(mockedImagePath, position, alpha)
 
 def mockImageSize(path):
-    import drawBot
     return drawBot.imageSize(mockedImagePath)
 
 def mockImagePixelColor(path, xy):
-    import drawBot
     return drawBot.imagePixelColor(mockedImagePath, xy)
 
 def mockVariable(definitions, namespace):
@@ -133,7 +119,7 @@ def _makeTestCase(exampleName, source, doSaveImage):
         _drawBotDrawingTool._addToNamespace(namespace)
         def mockSaveImage(path, **options):
             fileName = "example_mockSaveImage_" + os.path.basename(path)
-            path = os.path.join(tempDataDir, fileName)
+            path = os.path.join(tempTestDataDir, fileName)
             drawBot.saveImage(path, **options)
         namespace["saveImage"] = mockSaveImage
         namespace["image"] = mockImage
@@ -150,8 +136,8 @@ def _makeTestCase(exampleName, source, doSaveImage):
         with StdOutCollector(captureStdErr=True):
             exec(code, namespace)
         fileName = "example_%s.png" % exampleName
-        imagePath = os.path.join(tempDataDir, fileName)
-        expectedImagePath = os.path.join(dataDir, fileName)
+        imagePath = os.path.join(tempTestDataDir, fileName)
+        expectedImagePath = os.path.join(testDataDir, fileName)
         if doSaveImage:
             drawBot.saveImage(imagePath)
             self.assertFilesEqual(imagePath, expectedImagePath)
