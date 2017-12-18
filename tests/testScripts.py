@@ -201,9 +201,9 @@ def _addTests():
             testMethodName = "test_%s_%s" % (ext, scriptName)
             testMethod = makeTestCase(path, ext, testMethodName in ignoreDeprecationWarnings)
             testMethod.__name__ = testMethodName
-            if testMethod.__name__ in expectedFailures:
+            if testMethodName in expectedFailures:
                 testMethod = unittest.expectedFailure(testMethod)
-            setattr(DrawBotTest, testMethod.__name__, testMethod)
+            setattr(DrawBotTest, testMethodName, testMethod)
 
 _addTests()
 
