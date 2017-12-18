@@ -1,10 +1,12 @@
 from __future__ import absolute_import
 
+from fontTools.misc.py23 import round
 import AppKit
 import CoreText
 
 import os
 import uuid
+import base64
 
 from fontTools.misc.xmlWriter import XMLWriter
 
@@ -12,6 +14,7 @@ from fontTools.misc.transform import Transform
 
 from .tools.openType import getFeatureTagsForFontAttributes
 from .baseContext import BaseContext, GraphicsState, Shadow, Color, Gradient
+from .imageContext import _makeBitmapImageRep
 
 from drawBot.misc import warnings, formatNumber
 
@@ -220,6 +223,7 @@ class SVGContext(BaseContext):
     _svgTagArguments = {
         "version": "1.1",
         "xmlns": "http://www.w3.org/2000/svg",
+        "xmlns:xlink": "http://www.w3.org/1999/xlink"
     }
 
     _svgLineJoinStylesMap = {
@@ -284,6 +288,7 @@ class SVGContext(BaseContext):
 
     def _reset(self, other=None):
         self._embeddedFonts = set()
+        self._embeddedImages = dict()
 
     def _newPage(self, width, height):
         if hasattr(self, "_svgContext"):
@@ -462,17 +467,50 @@ class SVGContext(BaseContext):
             url = AppKit.NSURL.URLWithString_(path)
         else:
             url = AppKit.NSURL.fileURLWithPath_(path)
-        im = AppKit.NSImage.alloc().initByReferencingURL_(url)
-        w, h = im.size()
-        data = dict()
-        data["x"] = 0
-        data["y"] = 0
-        data["width"] = w
-        data["height"] = h
-        data["opacity"] = alpha
-        data["transform"] = self._svgTransform(self._state.transformMatrix.translate(x, y + h).scale(1, -1))
-        data["xlink:href"] = path
-        self._svgContext.simpletag("image", **data)
+        image = AppKit.NSImage.alloc().initByReferencingURL_(url)
+        width, height = image.size()
+
+        if path not in self._embeddedImages:
+            # get a unique id for the image
+            imageID = "image_%s" % (len(self._embeddedImages) + 1)
+            # store it
+            self._embeddedImages[path] = imageID
+            _, ext = os.path.splitext(path)
+            mimeSubtype = ext[1:].lower()  # remove the dot, make lowercase
+            if mimeSubtype == "jpg":
+                mimeSubtype = "jpeg"
+            if mimeSubtype not in ("png", "jpeg"):
+                # the image is not a png or a jpeg
+                # convert it to a png
+                mimeSubtype = "png"
+                imageRep = _makeBitmapImageRep(image)
+                imageData = imageRep.representationUsingType_properties_(AppKit.NSPNGFileType, None)
+            else:
+                imageData = AppKit.NSData.dataWithContentsOfURL_(url).bytes()
+
+            defData = [
+                ("id", imageID),
+                ("width", width),
+                ("height", height),
+                ("xlink:href", "data:image/%s;base64,%s" % (mimeSubtype, base64.b64encode(imageData).decode("ascii")))
+            ]
+            self._svgContext.begintag("defs")
+            self._svgContext.newline()
+            self._svgContext.simpletag("image", defData)
+            self._svgContext.newline()
+            self._svgContext.endtag("defs")
+            self._svgContext.newline()
+        else:
+            imageID = self._embeddedImages[path]
+
+        data = [
+            ("x", 0),
+            ("y", 0),
+            ("opacity", alpha),
+            ("transform", self._svgTransform(self._state.transformMatrix.translate(x, y + height).scale(1, -1))),
+            ("xlink:href", "#%s" % imageID)
+        ]
+        self._svgContext.simpletag("use", data)
         self._svgContext.newline()
         self._svgEndClipPath()
 
@@ -485,7 +523,7 @@ class SVGContext(BaseContext):
         return uuid.uuid4().hex
 
     def _svgTransform(self, transform):
-        return "matrix(%s)" % (",".join([str(s) for s in transform]))
+        return "matrix(%s)" % (",".join([repr(s) for s in transform]))
 
     def _svgPath(self, path, transformMatrix=None):
         path = path.getNSBezierPath()

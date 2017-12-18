@@ -7,6 +7,7 @@ import os
 import sys
 import glob
 import traceback
+import warnings
 from testSupport import StdOutCollector, randomSeed, testRootDir, tempTestDataDir, testDataDir, readData
 
 
@@ -40,7 +41,7 @@ class DrawBotTest(unittest.TestCase):
 
     def assertSVGFilesEqual(self, path1, path2):
         # compare the content by line
-        self.assertEqual(readData(path1).splitlines(), readData(path2).splitlines())
+        self.assertTrue(readData(path1) == readData(path2))
 
     def assertImageFilesEqual(self, path1, path2):
         # compare the data and assert with a simple message
@@ -91,7 +92,7 @@ class DrawBotTest(unittest.TestCase):
             "blendMode saturation",
             "transform 1 0 0 1 10 10",
             "drawPath moveTo 10.0 10.0 lineTo 110.0 10.0 lineTo 110.0 110.0 lineTo 10.0 110.0 closePath",
-            "textBox foo bar 82.4829102 84.0 35.0341797 26.0 center",
+            "textBox foo bar 82.48291015625 84.0 35.0341796875 26.0 center",
             "frameDuration 10",
             "saveImage * {'myExtraAgrument': True}"
         ]
@@ -142,7 +143,7 @@ def readExpectedOutput(path):
         return []
 
 
-def makeTestCase(path, ext):
+def makeTestCase(path, ext, ignoreDeprecationWarnings):
     scriptName = os.path.basename(path)[:-3]
 
     def test(self):
@@ -156,7 +157,11 @@ def makeTestCase(path, ext):
         # start a new drawing
         drawBot.newDrawing()
         # execute the script in place
-        output = self.executeScriptPath(path)
+        # temporarily ignore deprecation warnings (there are some from PyObjC :( )
+        with warnings.catch_warnings():
+            if ignoreDeprecationWarnings:
+                warnings.simplefilter("ignore", DeprecationWarning)
+            output = self.executeScriptPath(path)
         self.assertEqual(cleanupTraceback(output), cleanupTraceback(expectedOutput))
         # save the iamge
         drawBot.saveImage(testPath)
@@ -174,18 +179,31 @@ testExt = [
 ]
 
 
-expectedFailures = {"test_svg_image"}
-
+expectedFailures = {}
+ignoreDeprecationWarnings = {
+    # there are some pesky PyObjC warnings that interfere with our stdout/stderr capturing,
+    # like: 'DeprecationWarning: Using struct wrapper as sequence'
+    "test_pdf_image3",
+    "test_pdf_image4",
+    "test_pdf_text",
+    "test_png_image3",
+    "test_png_image4",
+    "test_png_text",
+    "test_svg_image3",
+    "test_svg_image4",
+    "test_svg_text",
+}
 
 def _addTests():
     for path in glob.glob(os.path.join(drawBotScriptDir, "*.py")):
         scriptName = os.path.splitext(os.path.basename(path))[0]
         for ext in testExt:
-            testMethod = makeTestCase(path, ext)
-            testMethod.__name__ = "test_%s_%s" % (ext, scriptName)
-            if testMethod.__name__ in expectedFailures:
+            testMethodName = "test_%s_%s" % (ext, scriptName)
+            testMethod = makeTestCase(path, ext, testMethodName in ignoreDeprecationWarnings)
+            testMethod.__name__ = testMethodName
+            if testMethodName in expectedFailures:
                 testMethod = unittest.expectedFailure(testMethod)
-            setattr(DrawBotTest, testMethod.__name__, testMethod)
+            setattr(DrawBotTest, testMethodName, testMethod)
 
 _addTests()
 

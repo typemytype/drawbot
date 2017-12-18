@@ -152,14 +152,14 @@ dontSaveImage = ["test_imageSize"]
 def _addExampleTests():
     allExamples = _collectExamples(DrawBotDrawingTool)
     for exampleName, source in allExamples.items():
-        testName = "test_%s" % exampleName
-        testMethod = _makeTestCase(exampleName, source, doSaveImage=testName not in dontSaveImage)
-        testMethod.__name__ = testName
-        if testMethod.__name__ in skip:
+        testMethodName = "test_%s" % exampleName
+        testMethod = _makeTestCase(exampleName, source, doSaveImage=testMethodName not in dontSaveImage)
+        testMethod.__name__ = testMethodName
+        if testMethodName in skip:
             continue
-        if testMethod.__name__ in expectedFailures:
+        if testMethodName in expectedFailures:
             testMethod = unittest.expectedFailure(testMethod)
-        setattr(ExampleTester, testMethod.__name__, testMethod)
+        setattr(ExampleTester, testMethodName, testMethod)
 
 _addExampleTests()
 
