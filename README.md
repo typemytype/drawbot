@@ -40,6 +40,8 @@ It is adviced to start with `newDrawing()` and end with `endDrawing()`, to clear
 
 __Required packages:__
 
+(Most of these are available through `pip`.)
+
 * [vanilla](https://github.com/typesupply/vanilla)
 * [defcon](https://github.com/typesupply/defcon)
 * [defconAppKit](https://github.com/typesupply/defconAppKit)
@@ -69,7 +71,7 @@ DrawBot is compiled with [py2app](https://pypi.python.org/pypi/py2app/) into an 
 #### compile drawBot Python module only
 
 
-This module only works on OSx as it requires `AppKit`, `CoreText` and `Quartz`.
+This module only works on Mac OS as it requires `PyObjC`, `AppKit`, `CoreText` `Quartz` and more.
 
 __Required packages:__
 
