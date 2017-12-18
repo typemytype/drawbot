@@ -484,8 +484,7 @@ class SVGContext(BaseContext):
                 imageRep = _makeBitmapImageRep(image)
                 imageData = imageRep.representationUsingType_properties_(AppKit.NSPNGFileType, None)
             else:
-                with open(path, "rb") as f:
-                    imageData = f.read()
+                imageData = AppKit.NSData.dataWithContentsOfURL_(url).bytes()
 
             defData = [
                 ("id", imageID),
