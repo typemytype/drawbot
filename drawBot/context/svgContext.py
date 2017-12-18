@@ -476,8 +476,8 @@ class SVGContext(BaseContext):
             self._embeddedImages[path] = imageID
             _, ext = os.path.splitext(path)
             ext = ext[1:]  # remove the dot
-            if ext.lower() not in ("png", "jepg", "jpg"):
-                # the image is not an png or a jepg
+            if ext.lower() not in ("png", "jpeg", "jpg"):
+                # the image is not an png or a jpeg
                 # convert it to a png
                 ext = "png"
                 imageRep = _makeBitmapImageRep(image)
