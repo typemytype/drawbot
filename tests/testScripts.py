@@ -174,7 +174,7 @@ testExt = [
 ]
 
 
-expectedFailures = {"test_svg_image"}
+expectedFailures = {}
 
 
 def _addTests():
