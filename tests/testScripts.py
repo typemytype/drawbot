@@ -41,7 +41,7 @@ class DrawBotTest(unittest.TestCase):
 
     def assertSVGFilesEqual(self, path1, path2):
         # compare the content by line
-        self.assertEqual(readData(path1), readData(path2))
+        self.assertTrue(readData(path1) == readData(path2))
 
     def assertImageFilesEqual(self, path1, path2):
         # compare the data and assert with a simple message
@@ -92,7 +92,7 @@ class DrawBotTest(unittest.TestCase):
             "blendMode saturation",
             "transform 1 0 0 1 10 10",
             "drawPath moveTo 10.0 10.0 lineTo 110.0 10.0 lineTo 110.0 110.0 lineTo 10.0 110.0 closePath",
-            "textBox foo bar 82.4829102 84.0 35.0341797 26.0 center",
+            "textBox foo bar 82.48291015625 84.0 35.0341796875 26.0 center",
             "frameDuration 10",
             "saveImage * {'myExtraAgrument': True}"
         ]
