@@ -523,7 +523,7 @@ class SVGContext(BaseContext):
         return uuid.uuid4().hex
 
     def _svgTransform(self, transform):
-        return "matrix(%s)" % (",".join([str(round(s, 11)) for s in transform]))
+        return "matrix(%s)" % (",".join([repr(s) for s in transform]))
 
     def _svgPath(self, path, transformMatrix=None):
         path = path.getNSBezierPath()
