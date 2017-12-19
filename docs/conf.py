@@ -315,16 +315,28 @@ from sphinx.util.inspect import getargspec
 from sphinx.ext import autodoc
 from sphinx.writers.html import HTMLTranslator
 
+downloadCodeRoot = os.path.join(os.path.dirname(__file__), "downloads")
+if os.path.exists(downloadCodeRoot):
+    shutil.rmtree(downloadCodeRoot)
+
+os.mkdir(downloadCodeRoot)
+
+imageSourceRoot = os.path.join(os.path.dirname(__file__), "..", "tests", "data")
+
 
 def visit_download_reference(self, node):
     if node.hasattr('filename'):
-        data = dict(
-            urlPath=posixpath.join(self.builder.dlpath, node['filename']),
-            fileName=node['filename']
+        if not node.get("dontShowThisNode"):
+            data = dict(
+                urlPath=posixpath.join(self.builder.dlpath, node['filename']),
+                fileName=node['filename']
             )
-        self.body.append('<div class="downloadlink"><a class="reference internal drawbotlink" href="%(urlPath)s">Open in DrawBot: %(fileName)s</a>' % data)
-        self.body.append('<a class="reference internal" href="%(urlPath)s">Download: %(fileName)s</a></div>' % data)
+            self.body.append('<div class="downloadlink"><a class="reference internal drawbotlink" href="%(urlPath)s">Open in DrawBot: %(fileName)s</a>' % data)
+            self.body.append('<a class="reference internal" href="%(urlPath)s">Download: %(fileName)s</a></div>' % data)
 
+            if node.get('imageFileName'):
+                imageUrl = posixpath.join(self.builder.dlpath, node['imageFileName'])
+                self.body.append('<div class="example-image"><image src="%s"/></div>' % imageUrl)
         node.clear()
 
 
@@ -348,13 +360,6 @@ class ShowCode(LiteralInclude):
         node['reftarget'] = self.arguments[0]
         nodes.append(node)
         return nodes
-
-
-downloadCodeRoot = os.path.join(os.path.dirname(__file__), "downloads")
-if os.path.exists(downloadCodeRoot):
-    shutil.rmtree(downloadCodeRoot)
-
-os.mkdir(downloadCodeRoot)
 
 
 class DownloadCode(CodeBlock):
@@ -383,10 +388,25 @@ class DownloadCode(CodeBlock):
         f = open(path, "w")
         f.write(code.encode("utf-8"))
         f.close()
+        # add example image if present
+        imageBaseName, _ = os.path.splitext(fileName)
+        imageFileName = "example_%s.png" % imageBaseName
+        imagePath = os.path.join(imageSourceRoot, imageFileName)
+        if os.path.exists(imagePath):
+            imageDestPath = os.path.join(downloadCodeRoot, imageFileName)
+            shutil.copy(imagePath, imageDestPath)
+        else:
+            imageFileName = ""
         # add download links
         node = addnodes.download_reference()
         node['reftarget'] = "/downloads/" + fileName
+        node['imageFileName'] = imageFileName
         nodes.append(node)
+        if imageFileName:
+            node = addnodes.download_reference()
+            node['reftarget'] = "/downloads/" + imageFileName
+            node['dontShowThisNode'] = True
+            nodes.append(node)
         return nodes
 
     def checkPath(self, path, sourcePath=None, add=1):
