@@ -2238,6 +2238,7 @@ class DrawBotDrawingTool(object):
 
         .. downloadcode:: imageObject.py
 
+            size(550, 300)
             # initiate a new image object
             im = ImageObject()
 
