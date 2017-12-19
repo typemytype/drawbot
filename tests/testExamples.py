@@ -6,6 +6,7 @@ import os
 import unittest
 import re
 import random
+import AppKit
 import drawBot
 from drawBot.drawBotDrawingTools import DrawBotDrawingTool
 from testSupport import StdOutCollector, randomSeed, testRootDir, tempTestDataDir, testDataDir, readData
@@ -85,7 +86,20 @@ def mockVariable(definitions, namespace):
     for item in definitions:
         name = item["name"]
         args = item.get("args", {})
-        value = args.get("value", 50)
+        value = args.get("value", None)
+        if value is None:
+            # no value is set
+            uiElement = item["ui"]
+            if uiElement == "ColorWell":
+                # in case of a color well
+                # the default color is black nscolor object
+                value = AppKit.NSColor.blackColor()
+            elif uiElement == "Checkbox":
+                # the default is off
+                value = False
+            else:
+                # fallback to slider value
+                value = 50
         namespace[name] = value
 
 def mockPrintImage(pdf=None):
