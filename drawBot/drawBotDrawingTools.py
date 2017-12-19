@@ -673,7 +673,7 @@ class DrawBotDrawingTool(object):
             # set a stroke color
             stroke(0)
             # draw a line between two given points
-            line((100, 100), (200, 200))
+            line((100, 100), (900, 900))
         """
         path = self._bezierPathClass()
         path.moveTo(point1)
@@ -689,7 +689,7 @@ class DrawBotDrawingTool(object):
         .. downloadcode:: polygon.py
 
             # draw a polygon with x-amount of points
-            polygon((100, 100), (100, 200), (200, 200), (120, 180), close=True)
+            polygon((100, 100), (100, 900), (900, 900), (200, 800), close=True)
         """
         if len(points) <= 1:
             raise TypeError("polygon() expects more than a single point")
@@ -1069,13 +1069,13 @@ class DrawBotDrawingTool(object):
             # set black as the stroke color
             stroke(0)
             # loop over a range of 10
-            for i in range(10):
+            for i in range(20):
                 # in each loop set the stroke width
                 strokeWidth(i)
                 # draw a line
-                line((100, 100), (200, 200))
+                line((100, 100), (200, 900))
                 # and translate the canvas
-                translate(15, 0)
+                translate(30, 0)
         """
         self._requiresNewFirstPage = True
         self._addInstruction("strokeWidth", value)
@@ -1086,6 +1086,7 @@ class DrawBotDrawingTool(object):
 
         .. downloadcode:: miterLimit.py
 
+            size(300, 300)
             # create a path
             path = BezierPath()
 
@@ -1125,6 +1126,7 @@ class DrawBotDrawingTool(object):
 
         .. downloadcode:: lineJoin.py
 
+            size(400, 400)
             # set no fill
             fill(None)
             # set the stroke color to black
@@ -1174,13 +1176,14 @@ class DrawBotDrawingTool(object):
 
         .. downloadcode:: lineCap.py
 
+            size(300, 300)
             # set stroke color to black
             stroke(0)
             # set a strok width
             strokeWidth(10)
 
             # translate the canvas
-            translate(100, 100)
+            translate(50, 50)
 
             # set a line cap style
             lineCap("butt")
@@ -1211,13 +1214,14 @@ class DrawBotDrawingTool(object):
 
         .. downloadcode:: lineDash.py
 
+            size(300, 300)
             # set stroke color to black
             stroke(0)
             # set a strok width
             strokeWidth(10)
 
             # translate the canvas
-            translate(100, 100)
+            translate(50, 50)
 
             # set a line dash
             lineDash(2, 2)
