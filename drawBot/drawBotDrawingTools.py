@@ -617,11 +617,11 @@ class DrawBotDrawingTool(object):
             # set the first oncurve point
             moveTo((100, 100))
             # line to from the previous point to a new point
-            lineTo((100, 200))
-            lineTo((200, 200))
+            lineTo((100, 900))
+            lineTo((900, 900))
 
             # curve to a point with two given handles
-            curveTo((200, 100), (150, 100), (100, 100))
+            curveTo((900, 500), (500, 100), (100, 100))
 
             # close the path
             closePath()
@@ -644,12 +644,12 @@ class DrawBotDrawingTool(object):
 
             # create a bezier path
             path = BezierPath()
-
+            # draw a triangle
             # move to a point
             path.moveTo((100, 100))
             # line to a point
-            path.lineTo((100, 200))
-            path.lineTo((200, 200))
+            path.lineTo((100, 900))
+            path.lineTo((900, 900))
             # close the path
             path.closePath()
             # save the current state
@@ -657,11 +657,9 @@ class DrawBotDrawingTool(object):
             # set the path as a clipping path
             clipPath(path)
             # the oval will be clipped inside the path
-            oval(100, 100, 100, 100)
+            oval(100, 100, 800, 800)
             # restore: this will remove the clip path
             restore()
-
-
         """
         self._requiresNewFirstPage = True
         self._addInstruction("clipPath", path)
