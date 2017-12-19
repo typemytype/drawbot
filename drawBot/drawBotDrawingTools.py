@@ -58,7 +58,7 @@ for key, (w, h) in list(_paperSizes.items()):
     _paperSizes["%sLandscape" % key] = (h, w)
 
 
-class SaveContextManager(object):
+class SavedStateContextManager(object):
 
     """
     Internal helper class for DrawBotDrawingTool.savedState() allowing 'with' notation:
@@ -517,7 +517,7 @@ class DrawBotDrawingTool(object):
             rect(0, 0, 50, 50)
 
         """
-        return SaveContextManager(self)
+        return SavedStateContextManager(self)
 
     # basic shapes
 
