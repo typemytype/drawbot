@@ -609,6 +609,24 @@ class DrawBotDrawingTool(object):
     def drawPath(self, path=None):
         """
         Draw the current path, or draw the provided path.
+
+        .. downloadcode:: drawPath.py
+
+            # create a new empty path
+            newPath()
+            # set the first oncurve point
+            moveTo((100, 100))
+            # line to from the previous point to a new point
+            lineTo((100, 200))
+            lineTo((200, 200))
+
+            # curve to a point with two given handles
+            curveTo((200, 100), (150, 100), (100, 100))
+
+            # close the path
+            closePath()
+            # draw the path
+            drawPath()
         """
         if isinstance(path, AppKit.NSBezierPath):
             path = self._bezierPathClass(path)
@@ -621,6 +639,29 @@ class DrawBotDrawingTool(object):
         """
         Use the current path as a clipping path.
         The clipping path will be used until the canvas gets a `restore()`.
+
+        .. downloadcode:: clipPath.py
+
+            # create a bezier path
+            path = BezierPath()
+
+            # move to a point
+            path.moveTo((100, 100))
+            # line to a point
+            path.lineTo((100, 200))
+            path.lineTo((200, 200))
+            # close the path
+            path.closePath()
+            # save the current state
+            save()
+            # set the path as a clipping path
+            clipPath(path)
+            # the oval will be clipped inside the path
+            oval(100, 100, 100, 100)
+            # restore: this will remove the clip path
+            restore()
+
+
         """
         self._requiresNewFirstPage = True
         self._addInstruction("clipPath", path)
