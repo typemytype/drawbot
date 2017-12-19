@@ -745,27 +745,27 @@ class DrawBotDrawingTool(object):
 
             fill(1, 0, 0, .5)
             # draw a rect
-            rect(0, 10, 10, 100)
+            rect(0, 10, 200, 980)
 
             # only set a gray value
             fill(0)
             # draw a rect
-            rect(10, 10, 10, 100)
+            rect(200, 10, 200, 980)
 
             # only set a gray value with an alpha
             fill(0, .5)
             # draw a rect
-            rect(20, 10, 10, 100)
+            rect(400, 10, 200, 980)
 
             # set rgb with no alpha
             fill(1, 0, 0)
             # draw a rect
-            rect(30, 10, 10, 100)
+            rect(600, 10, 200, 980)
 
             # set rgb with an alpha value
             fill(1, 0, 0, .5)
             # draw a rect
-            rect(40, 10, 10, 100)
+            rect(800, 10, 200, 980)
         """
         self._requiresNewFirstPage = True
         self._addInstruction("fill", r, g, b, alpha)
