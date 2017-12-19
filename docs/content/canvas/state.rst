@@ -3,6 +3,7 @@ State
 
 .. autofunction:: drawBot.save
 .. autofunction:: drawBot.restore
+.. autofunction:: drawBot.savedState
 
 Transformations
 ---------------

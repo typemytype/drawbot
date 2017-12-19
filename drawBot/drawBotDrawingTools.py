@@ -60,18 +60,19 @@ for key, (w, h) in list(_paperSizes.items()):
 
 class SaveContextManager(object):
 
-    # Internal helper class for DrawBotDrawingTool.save() allowing 'with' notation:
-    #
-    # with save()
-    #     translate(x, y)
-    #     ...draw stuff...
-    #
+    """
+    Internal helper class for DrawBotDrawingTool.savedState() allowing 'with' notation:
+
+        with savedState()
+            translate(x, y)
+            ...draw stuff...
+    """
 
     def __init__(self, drawingTools):
         self._drawingTools = drawingTools
 
     def __enter__(self):
-        # DrawBotDrawingTool.save() already did the appropriate save()
+        self._drawingTools.save()
         return self
 
     def __exit__(self, type, value, traceback):
@@ -484,7 +485,6 @@ class DrawBotDrawingTool(object):
         self._dummyContext.save()
         self._requiresNewFirstPage = True
         self._addInstruction("save")
-        return SaveContextManager(self)
 
     def restore(self):
         """
@@ -495,6 +495,26 @@ class DrawBotDrawingTool(object):
         self._dummyContext.restore()
         self._requiresNewFirstPage = True
         self._addInstruction("restore")
+
+    def savedState(self):
+        """
+        Save and restore the current state in a `with` statement.
+
+        .. downloadcode:: savedState.py
+
+            # use with statement
+            # this will be wrapped around a `save` and `restore`
+            with savedState():
+                # set a color
+                fill(1, 0, 0)
+                # draw something
+                rect(100, 100, 200, 200)
+            # already returned to the previously saved state
+            # so this will be a black rectangle
+            rect(0, 0, 50, 50)
+
+        """
+        return SaveContextManager(self)
 
     # basic shapes
 
@@ -1155,22 +1175,22 @@ class DrawBotDrawingTool(object):
             # translate the canvas
             translate(100, 100)
 
-            # set a line cap style
-            lineCap("butt")
+            # set a line dash
+            lineDash(2, 2)
             # draw a line
             line((0, 30), (0, 200))
 
             # rotate the canvas
             rotate(-30)
-            # set a line cap style
-            lineCap("square")
+            # set a line dash
+            lineDash(2, 10, 5, 5)
             # draw a line
             line((0, 30), (0, 200))
 
             # rotate the canvase
             rotate(-30)
-            # set a line cap style
-            lineCap("round")
+            # reset the line dash
+            lineDash(None)
             # draw a line
             line((0, 30), (0, 200))
         """
