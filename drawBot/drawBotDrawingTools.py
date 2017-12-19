@@ -919,12 +919,12 @@ class DrawBotDrawingTool(object):
             # set a gradient as the fill color
             linearGradient(
                 (100, 100),                         # startPoint
-                (200, 200),                         # endPoint
+                (800, 800),                         # endPoint
                 [(1, 0, 0), (0, 0, 1), (0, 1, 0)],  # colors
                 [0, .2, 1]                          # locations
                 )
             # draw a rectangle
-            rect(100, 100, 100, 100)
+            rect(10, 10, 980, 980)
         """
         self._requiresNewFirstPage = True
         self._addInstruction("linearGradient", startPoint, endPoint, colors, locations)
