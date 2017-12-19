@@ -26,41 +26,40 @@ def _dedent(lines):
     return [line[minIndentation:] for line in lines]
 
 
-def _collectExamples(module):
+def _collectExamples(modules):
     allExamples = {}
     names = []
-    for n in module.__dict__:
-        code = None
-        name = None
-        indentation = None
-        if n[0] != "_":
-            method = getattr(module, n)
-            if method.__doc__ and "downloadcode" in method.__doc__:
-                for line in method.__doc__.splitlines() + ["."]:
-                    assert "\t" not in line, (name, repr(line))
-                    if code is None:
-                        m = _namePattern.match(line)
-                        if m is not None:
-                            name = m.group(2)
-                            # print(name)
-                            names.append(name)
-                            indentation = len(m.group(1))
-                            code = []
-                    else:
-                        if not line.strip() and not code:
-                            continue
-                        m = _indentPattern.match(line)
-                        if line.strip() and (m is None or len(m.group(1)) <= indentation):
-                            assert name not in allExamples
-                            allExamples[name] = "\n".join(_dedent(code))
-                            name = None
-                            code = None
-                            indentation = None
+    for module in modules:
+        for n in module.__dict__:
+            code = None
+            name = None
+            indentation = None
+            if n[0] != "_":
+                method = getattr(module, n)
+                if method.__doc__ and "downloadcode" in method.__doc__:
+                    for line in method.__doc__.splitlines() + ["."]:
+                        assert "\t" not in line, (name, repr(line))
+                        if code is None:
+                            m = _namePattern.match(line)
+                            if m is not None:
+                                name = m.group(2)
+                                # print(name)
+                                names.append(name)
+                                indentation = len(m.group(1))
+                                code = []
                         else:
-                            code.append(line)
+                            if not line.strip() and not code:
+                                continue
+                            m = _indentPattern.match(line)
+                            if line.strip() and (m is None or len(m.group(1)) <= indentation):
+                                assert name not in allExamples
+                                allExamples[name] = "\n".join(_dedent(code))
+                                name = None
+                                code = None
+                                indentation = None
+                            else:
+                                code.append(line)
     return allExamples
-
-
 
 
 class ExampleTester(unittest.TestCase):
@@ -150,7 +149,12 @@ expectedFailures = {}
 dontSaveImage = ["test_imageSize"]
 
 def _addExampleTests():
-    allExamples = _collectExamples(DrawBotDrawingTool)
+    allExamples = _collectExamples([
+        DrawBotDrawingTool,
+        DrawBotDrawingTool._formattedStringClass,
+        DrawBotDrawingTool._bezierPathClass
+    ])
+
     for exampleName, source in allExamples.items():
         testMethodName = "test_%s" % exampleName
         testMethod = _makeTestCase(exampleName, source, doSaveImage=testMethodName not in dontSaveImage)
