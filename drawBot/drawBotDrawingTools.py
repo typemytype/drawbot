@@ -1663,7 +1663,7 @@ class DrawBotDrawingTool(object):
                 # draw the text
                 textBox("%s" % pageCount(), (10, 10, 480, th), align="center")
 
-            saveImage("~/Desktop/drawbot.mov")
+            saveImage("~/Desktop/drawbot.mp4")
 
         Another example, this time using a bezierPath as a text envelope:
 
@@ -1977,7 +1977,7 @@ class DrawBotDrawingTool(object):
                 rect(-50, -50, 50, 50)
 
             # save the image as a mov on the desktop
-            saveImage('~/Desktop/frameDuration.mov')
+            saveImage('~/Desktop/frameDuration.gif')
         """
         self._requiresNewFirstPage = True
         self._addInstruction("frameDuration", seconds)
