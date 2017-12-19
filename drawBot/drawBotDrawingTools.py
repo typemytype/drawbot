@@ -515,7 +515,6 @@ class DrawBotDrawingTool(object):
             # already returned to the previously saved state
             # so this will be a black rectangle
             rect(0, 0, 50, 50)
-
         """
         return SaveContextManager(self)
 
@@ -855,27 +854,18 @@ class DrawBotDrawingTool(object):
 
         .. downloadcode:: cmykFill.py
 
-            x, y = 0, 0
-            s = 100
-
             # cyan
             cmykFill(1, 0, 0, 0)
-            rect(x, y, s, s)
-            x += s
-
+            rect(0, 0, 250, 1000)
             # magenta
             cmykFill(0, 1, 0, 0)
-            rect(x, y, s, s)
-            x += s
-
+            rect(250, 0, 250, 1000)
             # yellow
             cmykFill(0, 0, 1, 0)
-            rect(x, y, s, s)
-            x += s
-
+            rect(500, 0, 250, 1000)
             # black
             cmykFill(0, 0, 0, 1)
-            rect(x, y, s, s)
+            rect(750, 0, 250, 1000)
         """
         self._requiresNewFirstPage = True
         self._addInstruction("cmykFill", c, m, y, k, alpha)
@@ -888,17 +878,22 @@ class DrawBotDrawingTool(object):
 
         .. downloadcode:: cmykStroke.py
 
+            # define x, y and the amount of lines needed
             x, y = 20, 20
-            lines = 20
-
+            lines = 49
+            # calculate the smallest step
             colorStep = 1.00 / lines
-
+            # set stroke width
             strokeWidth(10)
-
+            # start a loop
             for i in range(lines):
+                # set a cmyk color
+                # the magenta value is calculated
                 cmykStroke(0, i * colorStep, 1, 0)
-                line((x, y), (x, y + 200))
-                translate(12, 0)
+                # draw a line
+                line((x, y), (x, y + 960))
+                # translate the canvas
+                translate(20, 0)
         """
         self._requiresNewFirstPage = True
         self._addInstruction("cmykStroke", c, m, y, k, alpha)
@@ -913,7 +908,6 @@ class DrawBotDrawingTool(object):
 
             # a red shadow with some blur and a offset
             shadow((100, 100), 100, (1, 0, 0))
-
             # draw a rect
             rect(100, 100, 600, 600)
         """
@@ -931,11 +925,10 @@ class DrawBotDrawingTool(object):
 
         .. downloadcode:: cmykShadow.py
 
-            # a red shadow with some blur and a offset
-            cmykShadow((3, 3), 10, (1, 0, 0, 0))
-
+            # a cyan with some blur and a offset
+            cmykShadow((100, 100), 100, (1, 0, 0, 0))
             # draw a rect
-            rect(100, 100, 30, 30)
+            rect(100, 100, 600, 600)
         """
         if color is None:
             color = (0, 0, 0, 1, 1)
@@ -984,14 +977,14 @@ class DrawBotDrawingTool(object):
         .. downloadcode:: cmykLinearGradient.py
 
             # set a gradient as the fill color
-            linearGradient(
-                (100, 100),                                     # startPoint
-                (200, 200),                                     # endPoint
-                [(1, 0, 0, 1), (0, 0, 1, 0), (0, 1, 0, .2)],    # colors
-                [0, .2, 1]                                      # locations
+            cmykLinearGradient(
+                (100, 100),                                  # startPoint
+                (800, 800),                                  # endPoint
+                [(1, 0, 0, 0), (0, 0, 1, 0), (0, 1, 0, 0)],  # colors
+                [0, .2, 1]                                   # locations
                 )
             # draw a rectangle
-            rect(100, 100, 100, 100)
+            rect(10, 10, 980, 980)
         """
         self._requiresNewFirstPage = True
         self._addInstruction("cmykLinearGradient", startPoint, endPoint, colors, locations)
@@ -1043,15 +1036,15 @@ class DrawBotDrawingTool(object):
 
             # set a gradient as the fill color
             cmykRadialGradient(
-                (100, 100),                                     # startPoint
-                (200, 200),                                     # endPoint
+                (300, 300),                                     # startPoint
+                (600, 600),                                     # endPoint
                 [(1, 0, 0, 1), (0, 0, 1, 0), (0, 1, 0, .2)],    # colors
                 [0, .2, 1],                                     # locations
                 0,                                              # startRadius
-                100                                             # endRadius
+                500                                             # endRadius
                 )
             # draw a rectangle
-            rect(100, 100, 100, 100)
+            rect(10, 10, 980, 980)
         """
         self._requiresNewFirstPage = True
         self._addInstruction("cmykRadialGradient", startPoint, endPoint, colors, locations, startRadius, endRadius)
@@ -1329,8 +1322,12 @@ class DrawBotDrawingTool(object):
 
         .. downloadcode:: lineHeight.py
 
-            lineHeight(20)
-            textBox("Hello\\nWorld", (10, 10, 100, 100))
+            # set line height
+            lineHeight(150)
+            # set font size
+            fontSize(60)
+            # draw text in a box
+            textBox("Hello World " * 10, (100, 100, 800, 800))
         """
         self._dummyContext.lineHeight(value)
         self._addInstruction("lineHeight", value)
@@ -1341,6 +1338,7 @@ class DrawBotDrawingTool(object):
 
         .. downloadcode:: tracking.py
 
+            size(1000, 350)
             # set tracking
             tracking(100)
             # set font size
@@ -1385,9 +1383,12 @@ class DrawBotDrawingTool(object):
         .. downloadcode:: hyphenation.py
 
             txt = '''Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum. Typi non habent claritatem insitam; est usus legentis in iis qui facit eorum claritatem. Investigationes demonstraverunt lectores legere me lius quod ii legunt saepius. Claritas est etiam processus dynamicus, qui sequitur mutationem consuetudium lectorum. Mirum est notare quam littera gothica, quam nunc putamus parum claram, anteposuerit litterarum formas humanitatis per seacula quarta decima et quinta decima. Eodem modo typi, qui nunc nobis videntur parum clari, fiant sollemnes in futurum.'''
-
+            # enable hyphenation
             hyphenation(True)
-            textBox(txt, (10, 10, 200, 200))
+            # set font size
+            fontSize(50)
+            # draw text in a box
+            textBox(txt, (100, 100, 800, 800))
         """
         self._dummyContext.hyphenation(value)
         self._checkLanguageHyphenation()
@@ -1428,13 +1429,13 @@ class DrawBotDrawingTool(object):
 
         .. downloadcode:: language.py
 
+            size(1000, 600)
             # a long dutch word
             word = "paardenkop"
             # a box where we draw in
-            box = (10, 10, 100, 100)
-
+            box = (100, 50, 400, 500)
             # set font size
-            fontSize(28)
+            fontSize(118)
             # enable hyphenation
             hyphenation(True)
             # draw the text with no language set
@@ -1442,7 +1443,7 @@ class DrawBotDrawingTool(object):
             # set language to dutch (nl)
             language("nl")
             # shift up a bit
-            translate(0, 150)
+            translate(500, 0)
             # darw the text again with a language set
             textBox(word, box)
         """
@@ -1476,16 +1477,17 @@ class DrawBotDrawingTool(object):
 
         .. downloadcode:: openTypeFeatures.py
 
+            size(1000, 300)
             # set a font
             font("ACaslonPro-Regular")
             # set the font size
             fontSize(50)
             # draw a string
-            text("aa1465", (100, 200))
+            text("aabcde1234567890", (100, 200))
             # enable some OpenType features
-            openTypeFeatures(lnum=True, smcp=True)
+            openTypeFeatures(onum=True, smcp=True)
             # draw the same string
-            text("aa1465", (100, 100))
+            text("aabcde1234567890", (100, 100))
         """
         self._dummyContext.openTypeFeatures(*args, **features)
         self._addInstruction("openTypeFeatures", *args, **features)
@@ -1504,6 +1506,7 @@ class DrawBotDrawingTool(object):
 
         .. downloadcode:: fontVariations.py
 
+            size(1000, 500)
             # pick a font
             font("Skia")
             # pick a font size
@@ -1546,8 +1549,11 @@ class DrawBotDrawingTool(object):
 
         .. downloadcode:: text.py
 
-            font("Times-Italic")
-            text("hallo, I'm Times", (100, 100))
+            # set a font and font size
+            font("Times-Italic", 200)
+            # draw text
+            text("hallo", (200, 600))
+            text("I'm Times", (100, 300))
         """
         if PY2 and isinstance(txt, basestring):
             try:
@@ -1620,14 +1626,22 @@ class DrawBotDrawingTool(object):
 
         .. downloadcode:: textBox.py
 
-            x, y, w, h = 100, 100, 256, 174
-
+            # a box has an x, y, width and height
+            x, y, w, h = 100, 100, 800, 800
+            # set a fill
             fill(1, 0, 0)
+            # draw a rectangle with variables from above
             rect(x, y, w, h)
+            # set a diferent fill
             fill(1)
-            fontSize(50)
+            # set a font size
+            fontSize(200)
+            # draw text in a text box
+            # with varibales from above
             overflow = textBox("hallo, this text is a bit to long",
                             (x, y, w, h), align="center")
+            # a text box returns text overflow
+            # text that did not make it into the box
             print(overflow)
 
         The returned overflow can be used to add new pages until all text is set:
@@ -1770,6 +1784,7 @@ class DrawBotDrawingTool(object):
 
         .. downloadcode:: formattedString.py
 
+            size(1000, 200)
             # create a formatted string
             txt = FormattedString()
 
@@ -1784,7 +1799,7 @@ class DrawBotDrawingTool(object):
             txt += "hello again"
 
             # drawing the formatted string
-            text(txt, (10, 10))
+            text(txt, (10, 30))
 
 
             # create a formatted string
@@ -1795,7 +1810,7 @@ class DrawBotDrawingTool(object):
             # adding more text with an
             txt.append("world", font="ACaslonPro-Regular", fontSize=50, openTypeFeatures=dict(smcp=True))
 
-            text(txt, (10, 110))
+            text(txt, (10, 150))
 
         .. autoclass:: drawBot.context.baseContext.FormattedString
             :members:

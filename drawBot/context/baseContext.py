@@ -1232,6 +1232,7 @@ class FormattedString(object):
 
         .. downloadcode:: openTypeFeaturesFormattedString.py
 
+            size(1000, 200)
             # create an empty formatted string object
             t = FormattedString()
             # set a font
@@ -1245,7 +1246,7 @@ class FormattedString(object):
             # add some text
             t += " 0123456789 Hello"
             # draw the formatted string
-            text(t, (10, 100))
+            text(t, (10, 80))
         """
         if args and args[0] is None:
             self._openTypeFeatures.clear()
@@ -1314,11 +1315,12 @@ class FormattedString(object):
         .. downloadcode:: indent.py
 
             # setting up some variables
-            x, y, w, h = 10, 10, 200, 300
+            x, y, w, h = 10, 10, 500, 600
 
-            txtIndent = 50
-            txtFirstLineIndent = 70
-            txtTailIndent = -50
+            txtIndent = 100
+            txtFirstLineIndent = 200
+            txtTailIndent = -100
+            txtFontSize = 22
 
             paragraphTop = 3
             paragraphBottom = 10
@@ -1347,7 +1349,7 @@ class FormattedString(object):
             rect(x, y, w, h)
 
             # create a formatted string
-            t = FormattedString()
+            t = FormattedString(fontSize=txtFontSize)
             # set alignment
             t.align("justified")
             # add text
@@ -1355,7 +1357,7 @@ class FormattedString(object):
             # add hard return
             t += "\\n"
             # set style for indented text
-            t.fontSize(6)
+            t.fontSize(txtFontSize*.6)
             t.paragraphTopSpacing(paragraphTop)
             t.paragraphBottomSpacing(paragraphBottom)
             t.firstLineIndent(txtFirstLineIndent)
@@ -1366,7 +1368,7 @@ class FormattedString(object):
             # add hard return
             t += "\\n"
             # reset style
-            t.fontSize(10)
+            t.fontSize(txtFontSize)
             t.indent(None)
             t.tailIndent(None)
             t.firstLineIndent(None)
@@ -1555,16 +1557,17 @@ class FormattedString(object):
 
         .. downloadcode:: appendGlyphFormattedString.py
 
+            size(1000, 400)
             # create an empty formatted string object
             t = FormattedString()
             # set a font
             t.font("Menlo-Regular")
             # set a font size
-            t.fontSize(60)
-            # add some glyphs
-            t.appendGlyph("Eng", "Eng.alt")
+            t.fontSize(300)
+            # add some glyphs by glyph name
+            t.appendGlyph("A", "ampersand", "Eng", "Eng.alt")
             # draw the formatted string
-            text(t, (10, 100))
+            text(t, (100, 100))
         """
         # use a non breaking space as replacement character
         baseString = unichr(0x00A0)
