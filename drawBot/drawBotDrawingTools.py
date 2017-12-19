@@ -1086,32 +1086,25 @@ class DrawBotDrawingTool(object):
 
         .. downloadcode:: miterLimit.py
 
-            size(300, 300)
             # create a path
             path = BezierPath()
-
             # move to a point
             path.moveTo((100, 100))
             # line to a point
-            path.lineTo((100, 200))
-            path.lineTo((120, 100))
-
+            path.lineTo((150, 700))
+            path.lineTo((300, 100))
             # set stroke color to black
             stroke(0)
             # set no fill
             fill(None)
             # set the width of the stroke
-            strokeWidth(10)
-
+            strokeWidth(50)
             # draw the path
             drawPath(path)
-
             # move the canvas
-            translate(100, 0)
-
+            translate(500, 0)
             # set a miter limit
-            miterLimit(50)
-
+            miterLimit(5)
             # draw the same path again
             drawPath(path)
         """
@@ -1126,44 +1119,37 @@ class DrawBotDrawingTool(object):
 
         .. downloadcode:: lineJoin.py
 
-            size(400, 400)
-            # set no fill
-            fill(None)
             # set the stroke color to black
             stroke(0)
+            # set no fill
+            fill(None)
             # set a stroke width
-            strokeWidth(10)
+            strokeWidth(30)
             # set a miter limit
             miterLimit(30)
-
             # create a bezier path
             path = BezierPath()
             # move to a point
             path.moveTo((100, 100))
             # line to a point
-            path.lineTo((100, 200))
-            path.lineTo((110, 100))
-
+            path.lineTo((100, 600))
+            path.lineTo((160, 100))
             # set a line join style
             lineJoin("miter")
             # draw the path
             drawPath(path)
             # translate the canvas
-            translate(100, 0)
-
+            translate(300, 0)
             # set a line join style
             lineJoin("round")
             # draw the path
             drawPath(path)
             # translate the canvas
-            translate(100, 0)
-
+            translate(300, 0)
             # set a line join style
             lineJoin("bevel")
             # draw the path
             drawPath(path)
-            # translate the canvas
-            translate(100, 0)
         """
         self._requiresNewFirstPage = True
         self._addInstruction("lineJoin", value)
@@ -1176,33 +1162,28 @@ class DrawBotDrawingTool(object):
 
         .. downloadcode:: lineCap.py
 
-            size(300, 300)
             # set stroke color to black
             stroke(0)
             # set a strok width
-            strokeWidth(10)
-
+            strokeWidth(50)
             # translate the canvas
-            translate(50, 50)
-
+            translate(150, 50)
             # set a line cap style
             lineCap("butt")
             # draw a line
-            line((0, 30), (0, 200))
-
-            # rotate the canvas
-            rotate(-30)
+            line((0, 200), (0, 800))
+            # translate the canvas
+            translate(300, 0)
             # set a line cap style
             lineCap("square")
             # draw a line
-            line((0, 30), (0, 200))
-
-            # rotate the canvase
-            rotate(-30)
+            line((0, 200), (0, 800))
+            # translate the canvase
+            translate(300, 0)
             # set a line cap style
             lineCap("round")
             # draw a line
-            line((0, 30), (0, 200))
+            line((0, 200), (0, 800))
         """
         self._requiresNewFirstPage = True
         self._addInstruction("lineCap", value)
@@ -1214,33 +1195,28 @@ class DrawBotDrawingTool(object):
 
         .. downloadcode:: lineDash.py
 
-            size(300, 300)
             # set stroke color to black
             stroke(0)
             # set a strok width
-            strokeWidth(10)
-
+            strokeWidth(50)
             # translate the canvas
-            translate(50, 50)
-
+            translate(150, 50)
             # set a line dash
             lineDash(2, 2)
             # draw a line
-            line((0, 30), (0, 200))
-
-            # rotate the canvas
-            rotate(-30)
+            line((0, 200), (0, 800))
+            # translate the canvas
+            translate(300, 0)
             # set a line dash
             lineDash(2, 10, 5, 5)
             # draw a line
-            line((0, 30), (0, 200))
-
-            # rotate the canvase
-            rotate(-30)
+            line((0, 200), (0, 800))
+            # translate the canvase
+            translate(300, 0)
             # reset the line dash
             lineDash(None)
             # draw a line
-            line((0, 30), (0, 200))
+            line((0, 200), (0, 800))
         """
         if not value:
             raise DrawBotError("lineDash must be a list of dashes or None")
@@ -2242,7 +2218,7 @@ class DrawBotDrawingTool(object):
                 # in each loop draw the path
                 drawPath(path)
                 # translate the canvas
-                translate(5, 5)
+                translate(50, 50)
 
             path.text("Hello world", font="Helvetica", fontSize=30, offset=(210, 210))
 
@@ -2263,7 +2239,12 @@ class DrawBotDrawingTool(object):
                 print(["contour is closed", "contour is open"][contour.open])
 
             # translate the path
-            path.translate(0, 300)
+            path.translate(0, -100)
+            # draw the path again
+            drawPath(path)
+            # translate the path
+            path.translate(-300, 0)
+            path.scale(2)
             # draw the path again
             drawPath(path)
 
