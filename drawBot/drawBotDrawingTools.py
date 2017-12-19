@@ -507,8 +507,11 @@ class DrawBotDrawingTool(object):
             with savedState():
                 # set a color
                 fill(1, 0, 0)
+                # do a transformation
+                translate(450, 50)
+                rotate(45)
                 # draw something
-                rect(100, 100, 200, 200)
+                rect(0, 0, 700, 600)
             # already returned to the previously saved state
             # so this will be a black rectangle
             rect(0, 0, 50, 50)
