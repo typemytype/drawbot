@@ -529,7 +529,7 @@ class DrawBotDrawingTool(object):
 
             # draw a rectangle
             #    x    y    w    h
-            rect(100, 100, 200, 200)
+            rect(100, 100, 800, 800)
         """
         self._requiresNewFirstPage = True
         self._addInstruction("rect", x, y, w, h)
