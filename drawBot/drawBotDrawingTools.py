@@ -2278,7 +2278,7 @@ class DrawBotDrawingTool(object):
 
         .. image:: assets/variables.png
 
-        .. downloadcode:: variables.py
+        .. downloadcode:: variablesUI.py
 
             # create small ui element for variables in the script
 
@@ -2315,7 +2315,7 @@ class DrawBotDrawingTool(object):
             # draw some text
             text("Hello Variable", (w, h))
 
-        .. downloadcode:: vanillaVariables.py
+        .. downloadcode:: vanillaVariablesUI.py
 
             # Variable == vanilla power in DrawBot
             from AppKit import NSColor
