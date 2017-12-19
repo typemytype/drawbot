@@ -542,7 +542,7 @@ class DrawBotDrawingTool(object):
 
             # draw an oval
             #    x    y    w    h
-            oval(100, 100, 200, 200)
+            oval(100, 100, 800, 800)
         """
         self._requiresNewFirstPage = True
         self._addInstruction("oval", x, y, w, h)
