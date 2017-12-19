@@ -74,7 +74,10 @@ mockedImagePath = os.path.join(testRootDir, "data", "drawBot.jpg")
 assert os.path.exists(mockedImagePath)
 
 def mockImage(path, position, alpha=1):
-    drawBot.image(mockedImagePath, position, alpha)
+    if isinstance(path, DrawBotDrawingTool._imageClass):
+        drawBot.image(path, position, alpha)
+    else:
+        drawBot.image(mockedImagePath, position, alpha)
 
 def mockImageSize(path):
     return drawBot.imageSize(mockedImagePath)
@@ -166,7 +169,8 @@ def _addExampleTests():
     allExamples = _collectExamples([
         DrawBotDrawingTool,
         DrawBotDrawingTool._formattedStringClass,
-        DrawBotDrawingTool._bezierPathClass
+        DrawBotDrawingTool._bezierPathClass,
+        DrawBotDrawingTool._imageClass
     ])
 
     for exampleName, source in allExamples.items():
