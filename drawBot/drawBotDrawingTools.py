@@ -873,10 +873,10 @@ class DrawBotDrawingTool(object):
         .. downloadcode:: shadow.py
 
             # a red shadow with some blur and a offset
-            shadow((3, 3), 10, (1, 0, 0))
+            shadow((100, 100), 100, (1, 0, 0))
 
             # draw a rect
-            rect(100, 100, 30, 30)
+            rect(100, 100, 600, 600)
         """
         if color is None:
             color = (0, 0, 0)
