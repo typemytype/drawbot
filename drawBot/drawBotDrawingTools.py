@@ -58,12 +58,7 @@ for key, (w, h) in list(_paperSizes.items()):
     _paperSizes["%sLandscape" % key] = (h, w)
 
 
-<<<<<<< HEAD
-class SaveContextManager(object):
-=======
 class SavedStateContextManager(object):
->>>>>>> master
-
     """
     Internal helper class for DrawBotDrawingTool.savedState() allowing 'with' notation:
 
@@ -519,14 +514,8 @@ class DrawBotDrawingTool(object):
             # already returned to the previously saved state
             # so this will be a black rectangle
             rect(0, 0, 50, 50)
-<<<<<<< HEAD
-        """
-        return SaveContextManager(self)
-=======
-
         """
         return SavedStateContextManager(self)
->>>>>>> master
 
     # basic shapes
 
@@ -1203,7 +1192,6 @@ class DrawBotDrawingTool(object):
             # set a strok width
             strokeWidth(50)
             # translate the canvas
-<<<<<<< HEAD
             translate(150, 50)
             # set a line dash
             lineDash(2, 2)
@@ -1217,24 +1205,6 @@ class DrawBotDrawingTool(object):
             line((0, 200), (0, 800))
             # translate the canvase
             translate(300, 0)
-=======
-            translate(100, 100)
-
-            # set a line dash
-            lineDash(2, 2)
-            # draw a line
-            line((0, 30), (0, 200))
-
-            # rotate the canvas
-            rotate(-30)
-            # set a line dash
-            lineDash(2, 10, 5, 5)
-            # draw a line
-            line((0, 30), (0, 200))
-
-            # rotate the canvase
-            rotate(-30)
->>>>>>> master
             # reset the line dash
             lineDash(None)
             # draw a line
