@@ -208,6 +208,6 @@ Quick Reference
     saveImage(u"~/Desktop/drawBotTest.pdf")
     saveImage(u"~/Desktop/drawBotTest.png")
     saveImage(u"~/Desktop/drawBotTest.svg")
-    saveImage(u"~/Desktop/drawBotTest.mov")
+    saveImage(u"~/Desktop/drawBotTest.mp4")
 
     print "Done"
