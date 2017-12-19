@@ -5,7 +5,6 @@ import AppKit
 import CoreText
 
 import os
-import uuid
 import base64
 
 from fontTools.misc.xmlWriter import XMLWriter
@@ -17,6 +16,23 @@ from .baseContext import BaseContext, GraphicsState, Shadow, Color, Gradient
 from .imageContext import _makeBitmapImageRep
 
 from drawBot.misc import warnings, formatNumber
+
+
+class _UniqueIDGenerator(object):
+
+    def __init__(self, prefix):
+        self._prefix = prefix
+        self._intGenerator = self._intGeneratorFunc()
+
+    def gen(self):
+        return "%s%s" % (self._prefix, next(self._intGenerator))
+
+    @staticmethod
+    def _intGeneratorFunc():
+        i = 1
+        while True:
+            yield i
+            i += 1
 
 
 # simple file object
@@ -68,10 +84,11 @@ class SVGColor(Color):
 class SVGGradient(Gradient):
 
     _colorClass = SVGColor
+    _idGenerator = _UniqueIDGenerator("gradient")
 
     def __init__(self, *args, **kwargs):
         super(SVGGradient, self).__init__(*args, **kwargs)
-        self.tagID = uuid.uuid4().hex
+        self.tagID = self._idGenerator.gen()
 
     def copy(self):
         new = super(SVGShadow, self).copy()
@@ -139,10 +156,11 @@ class SVGGradient(Gradient):
 class SVGShadow(Shadow):
 
     _colorClass = SVGColor
+    _idGenerator = _UniqueIDGenerator("shadow")
 
     def __init__(self, *args, **kwargs):
         super(SVGShadow, self).__init__(*args, **kwargs)
-        self.tagID = uuid.uuid4().hex
+        self.tagID = self._idGenerator.gen()
 
     def copy(self):
         new = super(SVGShadow, self).copy()
@@ -217,6 +235,7 @@ class SVGContext(BaseContext):
     _shadowClass = SVGShadow
     _colorClass = SVGColor
     _gradientClass = SVGGradient
+    _clipPathIDGenerator = _UniqueIDGenerator("clip")
 
     _svgFileClass = SVGFile
 
@@ -343,7 +362,7 @@ class SVGContext(BaseContext):
             self._svgEndClipPath()
 
     def _clipPath(self):
-        uniqueID = self._getUniqueID()
+        uniqueID = self._clipPathIDGenerator.gen()
         self._svgContext.begintag("clipPath", id=uniqueID)
         self._svgContext.newline()
         data = dict()
@@ -518,9 +537,6 @@ class SVGContext(BaseContext):
         self._state.transformMatrix = self._state.transformMatrix.transform(transform)
 
     # helpers
-
-    def _getUniqueID(self):
-        return uuid.uuid4().hex
 
     def _svgTransform(self, transform):
         return "matrix(%s)" % (",".join([repr(s) for s in transform]))
