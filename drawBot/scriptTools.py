@@ -174,8 +174,8 @@ def ScriptRunner(text=None, path=None, stdout=None, stderr=None, namespace=None,
         sys.path.insert(0, curDir)
     # here we go
     if text is None:
-        with open(path, 'r') as f:
-            text = f.read()
+        with open(path, 'rb') as f:
+            text = f.read().decode("utf-8")
     source = text.replace('\r\n', '\n').replace('\r', '\n')
     if PY2 and hasEncodingDeclaration(source) and isinstance(source, unicode):
         # Python 2 compile() complains when an encoding declaration is found in a unicode string.
