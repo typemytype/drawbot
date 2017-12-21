@@ -6,6 +6,7 @@ import os
 
 from drawBot.misc import DrawBotError, optimizePath
 from fontTools.misc.py23 import basestring
+from drawBot.context.imageContext import _makeBitmapImageRep
 
 
 class ImageObject(object):
@@ -121,7 +122,7 @@ class ImageObject(object):
         # create an image
         im = AppKit.NSImage.alloc().initWithData_(page.dataRepresentation())
         # create an CIImage object
-        ciImage = AppKit.CIImage.imageWithData_(im.TIFFRepresentation())
+        ciImage = AppKit.CIImage.imageWithData_(_makeBitmapImageRep(im).TIFFRepresentation())
         # merge it with the already set data, if there already an image
         self._merge(ciImage)
 
