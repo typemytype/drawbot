@@ -2,11 +2,13 @@ from __future__ import print_function
 
 import py2app
 from distutils.core import setup
+from distutils.sysconfig import get_python_lib
 import os
 import sys
 import subprocess
 import shutil
 import datetime
+import re
 from plistlib import readPlist, writePlist
 
 from fontTools.misc.py23 import PY3
@@ -15,6 +17,58 @@ from drawBot.drawBotSettings import __version__, appName
 
 rawTimeStamp = datetime.datetime.today()
 timeStamp = rawTimeStamp.strftime("%y%m%d%H%M")
+
+
+_identifierPat = re.compile("[A-Za-z_][A-Za-z_0-9]*$")
+def _isIdentifier(s):
+    return _identifierPat.match(s) is not None
+
+def _findModules(root, extensions, skip, parent=""):
+    for fileName in os.listdir(root):
+        if fileName in skip:
+            continue
+        path = os.path.join(root, fileName)
+        if os.path.isdir(path):
+            if _isIdentifier(fileName) and os.path.exists(os.path.join(path, "__init__.py")):
+                if parent:
+                    packageName = parent + "." + fileName
+                else:
+                    packageName = fileName
+                for module in _findModules(path, extensions, skip, packageName):
+                    yield module
+            elif not parent:
+                for module in _findModules(path, extensions, skip, ""):
+                    yield module
+        elif "." in fileName:
+            moduleName, ext = fileName.split(".", 1)
+            if ext in extensions and _isIdentifier(moduleName):
+                if parent and moduleName == "__init__":
+                    yield parent
+                elif parent:
+                    yield parent + "." + moduleName
+                else:
+                    yield moduleName
+
+def getStdLibModules():
+    versionDict = dict(major=sys.version_info.major, minor=sys.version_info.minor)
+    stdLibPath = get_python_lib(standard_lib=True)
+    isSystemPython = stdLibPath.startswith("/System/")
+    extensions = {"py"}
+    if PY3:
+        extensions.add("cpython-%s%sm-darwin.so" % (sys.version_info.major, sys.version_info.minor))
+    else:
+        extensions.add("so")
+    skip = {"site-packages", "test", "turtledemo", "tkinter", "idlelib", "lib2to3"}
+    return list(_findModules(stdLibPath, extensions, skip)), isSystemPython
+
+
+stdLibModules, isSystemPython = getStdLibModules()
+if isSystemPython:
+    # We use the Python Standard Library from /System, so no need to include anything extra
+    stdLibIncludes = []
+else:
+    # non-/System Python, we should include the entire Python Standard Library
+    stdLibIncludes = stdLibModules
 
 
 def getValueFromSysArgv(key, default=None, isBooleanFlag=False):
@@ -122,7 +176,7 @@ setup(
             includes=[
                 # 'csv',
                 # 'this'
-            ],
+            ] + stdLibIncludes,
             excludes=[
                 "numpy",
                 "scipy",
