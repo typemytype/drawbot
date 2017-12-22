@@ -1,6 +1,6 @@
 # DrawBot
 
-DrawBot is a powerful, free application for MacOSX that invites you to write simple Python scripts to generate two-dimensional graphics. The built-in graphics primitives support rectangles, ovals, (bezier) paths, polygons, text objects and transparency.
+DrawBot is a powerful, free application for macOS that invites you to write Python scripts to generate two-dimensional graphics. The built-in graphics primitives support rectangles, ovals, (bezier) paths, polygons, text objects, colors, transparency and much more. You can program multi-page documents and stop-motion animations. Export formats include PDF, SVG, PNG, JPEG, TIFF, GIF and MP4 video.
 
 To download the latest version of the app, go to  
 http://www.drawbot.com/content/download.html
