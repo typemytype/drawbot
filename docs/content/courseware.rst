@@ -122,7 +122,8 @@ Variables are similar to storage boxes, they need to have a name and contain som
     x = 12
     # is a different variable from
     X = 13
-    print(x, X)
+    print(x)
+    print(X)
 
     y = 102
     # so this is an error:
@@ -206,7 +207,7 @@ each one of the items. Loops are a powerful and fast way to work with lots of it
     for x in range(1, 5):  # outer loop
         print("---")
         for y in range(x, x + 5):  # inner loop
-            print(x, "*", y, "=", x * y)
+            print(x, y, x * y)
 
     print("three loops:")
     for x in range(2):
@@ -219,7 +220,7 @@ each one of the items. Loops are a powerful and fast way to work with lots of it
     for x in range(2):
         for y in range(2):
             for z in range(2):
-                print(x, y, z, "count =", count)
+                print(x, y, z, count)
                 count = count + 1
                 # alternate spelling:
                 #count += 1
@@ -246,7 +247,8 @@ Functions are small programs with the program. Rather than write something over 
     # defining a function that takes an
     # 'argument' (or 'parameter')
     def mysecondfunction(x, y):
-        print("hello!", x, y)
+        print("hello!")
+        print(x, y)
 
     # calling the function with 2 arguments
     mysecondfunction(123, 456)
@@ -286,7 +288,7 @@ Sometimes your program needs to respond to particular values or situations. If t
     # let's define some variables
     a = 12
     b = 20
-    print("a =", a, "and b =", b)
+    print(a, b)
 
     print("are a and b equal?")
     print(a == b)
@@ -307,11 +309,14 @@ Sometimes your program needs to respond to particular values or situations. If t
     print(a <= b)
 
     result = a < b
-    print("result is:", result)
+    print("result is:")
+    print(result)
 
     print("these are the 'boolean' values:")
-    print("the True value:", True)
-    print("the False value:", False)
+    print("the True value:")
+    print(True)
+    print("the False value:")
+    print(False)
 
     if a < b:
         print("a is less than b")
@@ -358,13 +363,18 @@ Sometimes your program needs to respond to particular values or situations. If t
     else:
         print("neither a or b ate greater than 15")
 
-    print("a result:", a > 15 or b > 15)
+    print("a result:")
+    print(a > 15 or b > 15)
 
     # inversing a truth value:
-    print("not True:", not True)
-    print("not False:", not False)
-    print("not not False:", not not False)
-    print("not not not False:", not not not False)
+    print("not True:"
+    print(not True)
+    print("not False:")
+    print(not False)
+    print("not not False:"
+    print(not not False)
+    print("not not not False:")
+    print(not not not False)
 
     # grouping subexpressions by using parentheses:
     if (a > b and b == 13) or b == 25:
