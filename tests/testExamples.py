@@ -9,7 +9,7 @@ import random
 import AppKit
 import drawBot
 from drawBot.drawBotDrawingTools import DrawBotDrawingTool
-from testSupport import StdOutCollector, randomSeed, testRootDir, tempTestDataDir, testDataDir, readData
+from testSupport import StdOutCollector, randomSeed, testRootDir, tempTestDataDir, testDataDir, readData, compareImages
 
 
 _namePattern = re.compile(r"( +).. downloadcode:: ([A-Za-z0-9_]+).py\s*$")
@@ -64,6 +64,10 @@ def _collectExamples(modules):
 
 
 class ExampleTester(unittest.TestCase):
+
+    def assertImagesSimilar(self, path1, path2):
+        similarity = compareImages(path1, path2)
+        self.assertLessEqual(similarity, 0.002, "Images %r and %s are not similar enough" % (path1, path2))
 
     def assertFilesEqual(self, path1, path2):
         self.assertEqual(readData(path1), readData(path2), "Files %r and %s are not the same" % (path1, path2))
@@ -156,7 +160,7 @@ def _makeTestCase(exampleName, source, doSaveImage):
         expectedImagePath = os.path.join(testDataDir, fileName)
         if doSaveImage:
             drawBot.saveImage(imagePath)
-            self.assertFilesEqual(imagePath, expectedImagePath)
+            self.assertImagesSimilar(imagePath, expectedImagePath)
 
     return test
 
