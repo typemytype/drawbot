@@ -57,6 +57,7 @@ __Required packages:__
 * [ufo2svg](https://github.com/typesupply/ufo2svg)
 * [fontTools](https://github.com/fonttools/fonttools)
 * [PyObjC](https://pythonhosted.org/pyobjc/) (Only if you're not building with the system Python 2.7)
+* [PIL](https://github.com/python-pillow/Pillow) (only for running tests)
 
 __Compile:__
 
