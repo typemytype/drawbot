@@ -46,7 +46,7 @@ __Required packages:__
 * [defcon](https://github.com/typesupply/defcon)
 * [defconAppKit](https://github.com/typesupply/defconAppKit)
 * ~~[robofab](https://github.com/robofab-developers/robofab)~~ (not used anymore)
-* [fontTools](https://github.com/behdad/fonttools)
+* [fonttools](https://github.com/fonttools/fonttools)
 * [pygments](http://pygments.org)
 * [jedi](http://jedi.jedidjah.ch/en/latest/)
 * [booleanOperations](https://github.com/typemytype/booleanOperations)
@@ -55,7 +55,6 @@ __Required packages:__
 * [compositor](https://github.com/typesupply/compositor)
 * [feaTools2](https://github.com/typesupply/feaTools2)
 * [ufo2svg](https://github.com/typesupply/ufo2svg)
-* [fontTools](https://github.com/fonttools/fonttools)
 * [PyObjC](https://pythonhosted.org/pyobjc/) (Only if you're not building with the system Python 2.7)
 * [PIL](https://github.com/python-pillow/Pillow) (only for running tests)
 
