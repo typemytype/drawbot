@@ -6,4 +6,4 @@ else:
     appName = "DrawBot"
 
 
-__version__ = "3.110"
+__version__ = "3.111"
