@@ -473,7 +473,7 @@ class DrawBotDrawingTool(object):
         self._drawInContext(context)
         return context.getNSPDFDocument()
 
-    # graphic state
+    # graphics state
 
     def save(self):
         """
@@ -497,7 +497,7 @@ class DrawBotDrawingTool(object):
 
     def savedState(self):
         """
-        Save and restore the current state in a `with` statement.
+        Save and restore the current graphics state in a `with` statement.
 
         .. downloadcode:: savedState.py
 
@@ -511,7 +511,7 @@ class DrawBotDrawingTool(object):
                 rotate(45)
                 # draw something
                 rect(0, 0, 700, 600)
-            # already returned to the previously saved state
+            # already returned to the previously saved graphics state
             # so this will be a black rectangle
             rect(0, 0, 50, 50)
         """
@@ -650,7 +650,7 @@ class DrawBotDrawingTool(object):
             path.lineTo((900, 900))
             # close the path
             path.closePath()
-            # save the current state
+            # save the current graphics state
             save()
             # set the path as a clipping path
             clipPath(path)
