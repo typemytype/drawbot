@@ -170,7 +170,7 @@ def _makeTestCase(exampleName, source, doSaveImage, allowFuzzyImageComparison):
 
 skip = {}
 expectedFailures = {}
-dontSaveImage = ["test_imageSize"]
+dontSaveImage = {"test_imageSize"}
 allowFuzzyImageComparison = {"test_imageObject"}
 
 def _addExampleTests():
