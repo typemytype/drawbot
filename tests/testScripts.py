@@ -119,6 +119,19 @@ class DrawBotTest(unittest.TestCase):
             drawBot.endDrawing()
         self.assertEqual(output, expected)
 
+    def test_booleanoperationListIntersections(self):
+        expected = [(75, 150), (150, 75)]
+        import drawBot
+        path1 = drawBot.BezierPath()
+        path1.rect(50, 50, 100, 100)
+        path2 = drawBot.BezierPath()
+        path2.rect(75, 75, 100, 100)
+        result = path1.listIntersections(path2)
+        self.assertEqual(sorted(result), sorted(expected))
+        path1.appendPath(path2)
+        result = path1.listIntersections()
+        self.assertEqual(sorted(result), sorted(expected))
+
 
 def cleanupTraceback(lines):
     """Strips the trace lines from a traceback. This assumes there is only one

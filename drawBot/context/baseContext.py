@@ -516,6 +516,16 @@ class BezierPath(BasePen):
         booleanOperations.xor(subjectContours, clipContours, result)
         return result
 
+    def listIntersections(self, other=None):
+        """
+        Return a list of intersection points as `x`, `y` tuples.
+        """
+        import booleanOperations
+        contours = self._contoursForBooleanOperations()
+        if other is not None:
+            contours += other._contoursForBooleanOperations()
+        return booleanOperations.getIntersections(contours)
+
     def __mod__(self, other):
         return self.difference(other)
 
