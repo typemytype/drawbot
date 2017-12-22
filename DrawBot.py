@@ -17,6 +17,7 @@ from drawBot.misc import getDefault, stringToInt
 from drawBot.updater import Updater
 
 import objc
+from objc import super
 
 objc.setVerbose(True)
 

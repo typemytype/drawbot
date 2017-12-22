@@ -1,6 +1,7 @@
 from __future__ import absolute_import
 
 import AppKit
+from objc import super
 
 from keyword import kwlist
 import re
