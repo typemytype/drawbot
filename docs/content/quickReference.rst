@@ -9,10 +9,10 @@ Quick Reference
     size(500, 500)
 
     # using the functions width, height and pageCount
-    print "width:", width()
-    print "height:", height()
+    print("width:", width())
+    print("height:", height())
 
-    print "pageCount:", pageCount()
+    print("pageCount:", pageCount())
 
     # simple shapes
 
@@ -47,7 +47,7 @@ Quick Reference
     image("http://f.cl.ly/items/1T3x1y372J371p0v1F2Z/drawBot.jpg", (10, 10), .5)
 
     newPage()
-    print "pageCount:", pageCount()
+    print("pageCount:", pageCount())
     # colors
     # fill(r, g, b)
     # fill(r, g, b, alpha)
@@ -85,7 +85,7 @@ Quick Reference
     newPage()
     # stroke attributes
 
-    print "pageCount:", pageCount()
+    print("pageCount:", pageCount())
     fill(None)
     stroke(0)
     strokeWidth(8)
@@ -107,7 +107,7 @@ Quick Reference
     polygon((310, 10), (310, 400), (350, 350), close=False)
 
     newPage()
-    print "pageCount:", pageCount()
+    print("pageCount:", pageCount())
 
     text("Hello World", (10, 10))
 
@@ -123,11 +123,11 @@ Quick Reference
     textBox("Hello World " * 100, (10, 150, 300, 300))
 
 
-    print "textSize:", textSize("Hallo")
+    print("textSize:", textSize("Hallo"))
 
     newPage()
     # canvas transformations
-    print "pageCount:", pageCount()
+    print("pageCount:", pageCount())
 
     fill(None)
     stroke(0)
@@ -151,7 +151,7 @@ Quick Reference
     restore()
 
     newPage()
-    print "pageCount:", pageCount()
+    print("pageCount:", pageCount())
 
     #    c m y k alpha
     cmykFill(0, 1, 0, 0)
@@ -174,7 +174,7 @@ Quick Reference
     oval(130, 310, 300, 150)
 
     newPage()
-    print "pageCount:", pageCount()
+    print("pageCount:", pageCount())
 
     fill(1, 0, 1)
     linearGradient((10, 10), (200, 20), ([1, 1, 0], [0, 1, 1]))
@@ -210,4 +210,4 @@ Quick Reference
     saveImage(u"~/Desktop/drawBotTest.svg")
     saveImage(u"~/Desktop/drawBotTest.mp4")
 
-    print "Done"
+    print("Done")
