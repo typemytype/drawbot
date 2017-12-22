@@ -44,6 +44,12 @@ div.downloadlink a.drawbotlink {
 	font-size: 1.2em
 }
 
+div.example-image {
+	margin-bottom: 20px;
+	border: 2px solid {{ theme_headercolor1 }};
+	display: inline-block;
+}
+
 h1, h2, h3, h4, h5, h6 {
 	font-family: {{ theme_headerfont }};
 	font-weight: bold;

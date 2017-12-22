@@ -6,9 +6,10 @@ import os
 import unittest
 import re
 import random
+import AppKit
 import drawBot
 from drawBot.drawBotDrawingTools import DrawBotDrawingTool
-from testSupport import StdOutCollector, randomSeed, testRootDir, tempTestDataDir, testDataDir, readData
+from testSupport import StdOutCollector, randomSeed, testRootDir, tempTestDataDir, testDataDir, readData, compareImages
 
 
 _namePattern = re.compile(r"( +).. downloadcode:: ([A-Za-z0-9_]+).py\s*$")
@@ -26,44 +27,47 @@ def _dedent(lines):
     return [line[minIndentation:] for line in lines]
 
 
-def _collectExamples(module):
+def _collectExamples(modules):
     allExamples = {}
     names = []
-    for n in module.__dict__:
-        code = None
-        name = None
-        indentation = None
-        if n[0] != "_":
-            method = getattr(module, n)
-            if method.__doc__ and "downloadcode" in method.__doc__:
-                for line in method.__doc__.splitlines() + ["."]:
-                    assert "\t" not in line, (name, repr(line))
-                    if code is None:
-                        m = _namePattern.match(line)
-                        if m is not None:
-                            name = m.group(2)
-                            # print(name)
-                            names.append(name)
-                            indentation = len(m.group(1))
-                            code = []
-                    else:
-                        if not line.strip() and not code:
-                            continue
-                        m = _indentPattern.match(line)
-                        if line.strip() and (m is None or len(m.group(1)) <= indentation):
-                            assert name not in allExamples
-                            allExamples[name] = "\n".join(_dedent(code))
-                            name = None
-                            code = None
-                            indentation = None
+    for module in modules:
+        for n in module.__dict__:
+            code = None
+            name = None
+            indentation = None
+            if n[0] != "_":
+                method = getattr(module, n)
+                if method.__doc__ and "downloadcode" in method.__doc__:
+                    for line in method.__doc__.splitlines() + ["."]:
+                        assert "\t" not in line, (name, repr(line))
+                        if code is None:
+                            m = _namePattern.match(line)
+                            if m is not None:
+                                name = m.group(2)
+                                # print(name)
+                                names.append(name)
+                                indentation = len(m.group(1))
+                                code = []
                         else:
-                            code.append(line)
+                            if not line.strip() and not code:
+                                continue
+                            m = _indentPattern.match(line)
+                            if line.strip() and (m is None or len(m.group(1)) <= indentation):
+                                assert name not in allExamples
+                                allExamples[name] = "\n".join(_dedent(code))
+                                name = None
+                                code = None
+                                indentation = None
+                            else:
+                                code.append(line)
     return allExamples
 
 
-
-
 class ExampleTester(unittest.TestCase):
+
+    def assertImagesSimilar(self, path1, path2):
+        similarity = compareImages(path1, path2)
+        self.assertLessEqual(similarity, 0.002, "Images %r and %s are not similar enough" % (path1, path2))
 
     def assertFilesEqual(self, path1, path2):
         self.assertEqual(readData(path1), readData(path2), "Files %r and %s are not the same" % (path1, path2))
@@ -74,7 +78,10 @@ mockedImagePath = os.path.join(testRootDir, "data", "drawBot.jpg")
 assert os.path.exists(mockedImagePath)
 
 def mockImage(path, position, alpha=1):
-    drawBot.image(mockedImagePath, position, alpha)
+    if isinstance(path, DrawBotDrawingTool._imageClass):
+        drawBot.image(path, position, alpha)
+    else:
+        drawBot.image(mockedImagePath, position, alpha)
 
 def mockImageSize(path):
     return drawBot.imageSize(mockedImagePath)
@@ -86,7 +93,20 @@ def mockVariable(definitions, namespace):
     for item in definitions:
         name = item["name"]
         args = item.get("args", {})
-        value = args.get("value", 50)
+        value = args.get("value", None)
+        if value is None:
+            # no value is set
+            uiElement = item["ui"]
+            if uiElement == "ColorWell":
+                # in case of a color well
+                # the default color is black nscolor object
+                value = AppKit.NSColor.blackColor()
+            elif uiElement == "Checkbox":
+                # the default is off
+                value = False
+            else:
+                # fallback to slider value
+                value = 50
         namespace[name] = value
 
 def mockPrintImage(pdf=None):
@@ -106,7 +126,7 @@ def mockRandInt(lo, hi):
     return int(lo + extent * random.random())
 
 
-def _makeTestCase(exampleName, source, doSaveImage):
+def _makeTestCase(exampleName, source, doSaveImage, allowFuzzyImageComparison):
 
     def test(self):
         import __future__
@@ -140,20 +160,31 @@ def _makeTestCase(exampleName, source, doSaveImage):
         expectedImagePath = os.path.join(testDataDir, fileName)
         if doSaveImage:
             drawBot.saveImage(imagePath)
-            self.assertFilesEqual(imagePath, expectedImagePath)
+            if allowFuzzyImageComparison:
+                self.assertImagesSimilar(imagePath, expectedImagePath)
+            else:
+                self.assertFilesEqual(imagePath, expectedImagePath)
 
     return test
 
 
 skip = {}
 expectedFailures = {}
-dontSaveImage = ["test_imageSize"]
+dontSaveImage = {"test_imageSize"}
+allowFuzzyImageComparison = {"test_imageObject"}
 
 def _addExampleTests():
-    allExamples = _collectExamples(DrawBotDrawingTool)
+    allExamples = _collectExamples([
+        DrawBotDrawingTool,
+        DrawBotDrawingTool._formattedStringClass,
+        DrawBotDrawingTool._bezierPathClass,
+        DrawBotDrawingTool._imageClass
+    ])
+
     for exampleName, source in allExamples.items():
         testMethodName = "test_%s" % exampleName
-        testMethod = _makeTestCase(exampleName, source, doSaveImage=testMethodName not in dontSaveImage)
+        testMethod = _makeTestCase(exampleName, source, doSaveImage=testMethodName not in dontSaveImage,
+                allowFuzzyImageComparison=testMethodName in allowFuzzyImageComparison)
         testMethod.__name__ = testMethodName
         if testMethodName in skip:
             continue

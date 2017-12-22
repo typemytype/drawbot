@@ -6,6 +6,7 @@ import os
 
 from drawBot.misc import DrawBotError, optimizePath
 from fontTools.misc.py23 import basestring
+from drawBot.context.imageContext import _makeBitmapImageRep
 
 
 class ImageObject(object):
@@ -69,7 +70,8 @@ class ImageObject(object):
             im = AppKit.NSImage.alloc().initByReferencingURL_(url)
         else:
             raise DrawBotError("Cannot read image path '%s'." % path)
-        ciImage = AppKit.CIImage.imageWithData_(im.TIFFRepresentation())
+        rep = _makeBitmapImageRep(im)
+        ciImage = AppKit.CIImage.imageWithData_(rep.TIFFRepresentation())
         self._merge(ciImage, doCrop=True)
 
     def copy(self):
@@ -121,7 +123,8 @@ class ImageObject(object):
         # create an image
         im = AppKit.NSImage.alloc().initWithData_(page.dataRepresentation())
         # create an CIImage object
-        ciImage = AppKit.CIImage.imageWithData_(im.TIFFRepresentation())
+        rep = _makeBitmapImageRep(im)
+        ciImage = AppKit.CIImage.imageWithData_(rep.TIFFRepresentation())
         # merge it with the already set data, if there already an image
         self._merge(ciImage)
 
@@ -198,7 +201,8 @@ class ImageObject(object):
                 ctx.setImageInterpolation_(AppKit.NSImageInterpolationNone)
                 generator.drawAtPoint_fromRect_operation_fraction_((0, 0), ((0, 0), (w, h)), AppKit.NSCompositeCopy, 1)
                 dummy.unlockFocus()
-                self._cachedImage = AppKit.CIImage.imageWithData_(dummy.TIFFRepresentation())
+                rep = _makeBitmapImageRep(dummy)
+                self._cachedImage = AppKit.CIImage.imageWithData_(rep.TIFFRepresentation())
                 del dummy
             elif hasattr(self, "_cachedImage"):
                 ciFilter.setValue_forKey_(self._cachedImage, "inputImage")
