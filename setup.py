@@ -21,9 +21,15 @@ timeStamp = rawTimeStamp.strftime("%y%m%d%H%M")
 
 _identifierPat = re.compile("[A-Za-z_][A-Za-z_0-9]*$")
 def _isIdentifier(s):
+    """Return True if argument `s` is a valid Python identifier."""
     return _identifierPat.match(s) is not None
 
 def _findModules(root, extensions, skip, parent=""):
+    """Yield all modules and packages and their submodules and subpackages found at `root`.
+    Nested folders that do _not_ contain an __init__.py file are assumed to also be on sys.path.
+    `extensions` should be a set of allowed file extensions (without the .). `skip` should be
+    a set of file or folder names to skip. The `parent` argument is for internal use only.
+    """
     for fileName in os.listdir(root):
         if fileName in skip:
             continue
@@ -50,6 +56,9 @@ def _findModules(root, extensions, skip, parent=""):
                     yield moduleName
 
 def getStdLibModules():
+    """Return a list of all module names that are part of the Python Standard Library, and
+    a flag indicating whether we are running from a pre-installed ("/System") python or not.
+    """
     versionDict = dict(major=sys.version_info.major, minor=sys.version_info.minor)
     stdLibPath = get_python_lib(standard_lib=True)
     isSystemPython = stdLibPath.startswith("/System/")
