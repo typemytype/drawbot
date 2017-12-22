@@ -126,7 +126,7 @@ def mockRandInt(lo, hi):
     return int(lo + extent * random.random())
 
 
-def _makeTestCase(exampleName, source, doSaveImage):
+def _makeTestCase(exampleName, source, doSaveImage, allowFuzzyImageComparison):
 
     def test(self):
         import __future__
@@ -160,7 +160,10 @@ def _makeTestCase(exampleName, source, doSaveImage):
         expectedImagePath = os.path.join(testDataDir, fileName)
         if doSaveImage:
             drawBot.saveImage(imagePath)
-            self.assertImagesSimilar(imagePath, expectedImagePath)
+            if allowFuzzyImageComparison:
+                self.assertImagesSimilar(imagePath, expectedImagePath)
+            else:
+                self.assertFilesEqual(imagePath, expectedImagePath)
 
     return test
 
@@ -168,6 +171,7 @@ def _makeTestCase(exampleName, source, doSaveImage):
 skip = {}
 expectedFailures = {}
 dontSaveImage = ["test_imageSize"]
+allowFuzzyImageComparison = {"test_imageObject"}
 
 def _addExampleTests():
     allExamples = _collectExamples([
@@ -179,7 +183,8 @@ def _addExampleTests():
 
     for exampleName, source in allExamples.items():
         testMethodName = "test_%s" % exampleName
-        testMethod = _makeTestCase(exampleName, source, doSaveImage=testMethodName not in dontSaveImage)
+        testMethod = _makeTestCase(exampleName, source, doSaveImage=testMethodName not in dontSaveImage,
+                allowFuzzyImageComparison=testMethodName in allowFuzzyImageComparison)
         testMethod.__name__ = testMethodName
         if testMethodName in skip:
             continue
