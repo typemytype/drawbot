@@ -520,7 +520,7 @@ class BezierPath(BasePen):
         booleanOperations.xor(subjectContours, clipContours, result)
         return result
 
-    def listIntersectionPoints(self, other=None):
+    def intersectionPoints(self, other=None):
         """
         Return a list of intersection points as `x`, `y` tuples.
 
