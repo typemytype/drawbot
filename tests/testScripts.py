@@ -126,10 +126,10 @@ class DrawBotTest(unittest.TestCase):
         path1.rect(50, 50, 100, 100)
         path2 = drawBot.BezierPath()
         path2.rect(75, 75, 100, 100)
-        result = path1.listIntersections(path2)
+        result = path1.listIntersectionPoints(path2)
         self.assertEqual(sorted(result), sorted(expected))
         path1.appendPath(path2)
-        result = path1.listIntersections()
+        result = path1.listIntersectionPoints()
         self.assertEqual(sorted(result), sorted(expected))
 
 

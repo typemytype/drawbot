@@ -466,6 +466,7 @@ class BezierPath(BasePen):
         """
         Return the union between two bezier paths.
         """
+        assert isinstance(other, self.__class__)
         import booleanOperations
         contours = self._contoursForBooleanOperations() + other._contoursForBooleanOperations()
         result = self.__class__()
@@ -487,6 +488,7 @@ class BezierPath(BasePen):
         """
         Return the difference between two bezier paths.
         """
+        assert isinstance(other, self.__class__)
         import booleanOperations
         subjectContours = self._contoursForBooleanOperations()
         clipContours = other._contoursForBooleanOperations()
@@ -498,6 +500,7 @@ class BezierPath(BasePen):
         """
         Return the intersection between two bezier paths.
         """
+        assert isinstance(other, self.__class__)
         import booleanOperations
         subjectContours = self._contoursForBooleanOperations()
         clipContours = other._contoursForBooleanOperations()
@@ -509,6 +512,7 @@ class BezierPath(BasePen):
         """
         Return the xor between two bezier paths.
         """
+        assert isinstance(other, self.__class__)
         import booleanOperations
         subjectContours = self._contoursForBooleanOperations()
         clipContours = other._contoursForBooleanOperations()
@@ -516,13 +520,16 @@ class BezierPath(BasePen):
         booleanOperations.xor(subjectContours, clipContours, result)
         return result
 
-    def listIntersections(self, other=None):
+    def listIntersectionPoints(self, other=None):
         """
         Return a list of intersection points as `x`, `y` tuples.
+
+        Optionaly provide an other path object to find intersection points.
         """
         import booleanOperations
         contours = self._contoursForBooleanOperations()
         if other is not None:
+            assert isinstance(other, self.__class__)
             contours += other._contoursForBooleanOperations()
         return booleanOperations.getIntersections(contours)
 
