@@ -174,6 +174,7 @@ setup(
                 'compositor',
                 'feaTools2',
                 'ufo2svg',
+                'fontPens',
                 'booleanOperations',
                 # 'pyclipper',
                 'pygments',
