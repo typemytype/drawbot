@@ -2134,7 +2134,7 @@ class DrawBotDrawingTool(object):
 
     def _tryInstallFontFromFontName(self, fontName):
         # check if the fontName is actually a path
-        if os.path.exists(fontName):
+        if os.path.exists(fontName) and not os.path.isdir(fontName):
             fontPath = os.path.abspath(fontName)
             ext = os.path.splitext(fontPath)[1]
             if ext.lower() in [".otf", ".ttf", ".ttc"]:
