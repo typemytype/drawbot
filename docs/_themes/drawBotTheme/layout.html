@@ -8,7 +8,8 @@
           <a class="brand" href="{{ pathto(master_doc) }}">{{ project|e }}</a>
           <span class="navbar-text">{{ version|e }}</span>
         </li>
-        <li><a href="{{ pathto('content/quickReference.html', 1) }}">Quick Reference</a></li>
+        <li><a href="http://forum.drawbot.com">Forum</a></li>
+        <!-- <li><a href="{{ pathto('content/quickReference.html', 1) }}">Quick Reference</a></li> -->
         <li><a href="{{ pathto('content/download.html', 1) }}">Download</a></li>
         <li><a href="{{ pathto('genindex.html', 1) }}">Index</a></li>
       </ul>
@@ -61,16 +62,16 @@
 
 {%- block sidebarsearch %}
   <div class="canhide">
-    <h3>Indices</h3>
+    <!-- <h3>Indices</h3>
     <ul>
       <li><a href="{{ pathto('genindex.html', 1) }}">index</a></li>
       <li><a href="{{ pathto('search.html', 1) }}">search</a></li>
-    </ul>
+    </ul> -->
     <h3>More</h3>
     <ul>
       <li><a href="http://docs.python.org/2/">Python</a></li>
-      <li><a href="http://www.code.org">Code.org</a></li>
       <li><a href="https://github.com/typemytype/drawbot">DrawBot Source</a></li>
+      <li><a href="https://forum.rawbot.com">Forum</a></li>
     </ul>
   </div>
 {%- endblock %}
