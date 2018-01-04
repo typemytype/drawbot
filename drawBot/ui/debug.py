@@ -1,6 +1,7 @@
 from __future__ import absolute_import
 
-from AppKit import *
+from Foundation import NSLog
+from AppKit import NSPanel
 
 import sys
 

@@ -17,7 +17,7 @@ from distutils.version import StrictVersion
 import platform
 from fontTools.misc.py23 import PY2, PY3
 from drawBot.misc import getDefault, warnings
-
+from objc import super
 
 osVersionCurrent = StrictVersion(platform.mac_ver()[0])
 osVersion10_10 = StrictVersion("10.10")

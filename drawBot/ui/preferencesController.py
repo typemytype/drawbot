@@ -1,6 +1,9 @@
 from __future__ import absolute_import
 
-from AppKit import *
+from Foundation import NSObject, NSMutableAttributedString, NSInsetRect
+from AppKit import NSApp, NSColorWell, NSActionCell, NSNotificationCenter, NSFontManager, \
+    NSCalibratedRGBColorSpace, NSTableViewFirstColumnOnlyAutoresizingStyle, \
+    NSBezierPath, NSFont, NSForegroundColorAttributeName, NSUnderlineColorAttributeName, NSCenterTextAlignment
 
 from vanilla import *
 from vanilla.vanillaBase import VanillaCallbackWrapper
