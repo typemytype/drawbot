@@ -1,4 +1,7 @@
-from AppKit import *
+from Foundation import NSInvocation, NSString, NSMakeRange, NSMaxRange, NSLocationInRange, NSNotFound, NSMakeRect, NSMinY, NSWidth, NSHeight
+from AppKit import NSRulerView, NSMiniControlSize, NSTextView, NSNotificationCenter, \
+    NSFontAttributeName, NSForegroundColorAttributeName, NSTextStorageDidProcessEditingNotification, \
+    NSFont, NSColor, NSBezierPath, NSRectFill
 import math
 from objc import super
 
