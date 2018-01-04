@@ -22,7 +22,7 @@ from vanilla import *
 from vanilla.py23 import python_method
 from fontTools.misc.py23 import PY3, unichr
 
-from .lineNumberRulerView import DBLineNumberRuler
+from .lineNumberRulerView import LineNumberNSRulerView
 from drawBot.misc import getDefault, getFontDefault, getColorDefault, DrawBotError
 from drawBot.drawBotDrawingTools import _drawBotDrawingTool
 
@@ -1301,7 +1301,7 @@ class CodeEditor(TextEditor):
 
         if codeAttr["showlineNumbers"] is None:
             codeAttr["showlineNumbers"] = True
-        ruler = DBLineNumberRuler.alloc().init()
+        ruler = LineNumberNSRulerView.alloc().init()
         ruler.setClientView_(self.getNSTextView())
         ruler.setRulerBackgroundColor_(AppKit.NSColor.colorWithCalibratedWhite_alpha_(.95, 1))
         self.getNSScrollView().setVerticalRulerView_(ruler)

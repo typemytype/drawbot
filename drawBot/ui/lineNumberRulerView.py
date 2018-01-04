@@ -12,13 +12,13 @@ http://www.noodlesoft.com/blog/2008/10/05/displaying-line-numbers-with-nstextvie
 """
 
 
-class DBLineNumberRuler(NSRulerView):
+class LineNumberNSRulerView(NSRulerView):
 
     DEFAULT_THICKNESS = 22.
     RULER_MARGIN = 5.
 
     def init(self):
-        self = super(DBLineNumberRuler, self).init()
+        self = super(LineNumberNSRulerView, self).init()
         self._font = NSFont.labelFontOfSize_(NSFont.systemFontSizeForControlSize_(NSMiniControlSize))
         self._textColor = NSColor.colorWithCalibratedWhite_alpha_(.42, 1)
         self._rulerBackgroundColor = None
@@ -58,7 +58,7 @@ class DBLineNumberRuler(NSRulerView):
         if oldClientView != view and isinstance(oldClientView, NSTextView):
             NSNotificationCenter.defaultCenter().removeObserver_name_object_(self, NSTextStorageDidProcessEditingNotification, oldClientView.textStorage())
 
-        super(DBLineNumberRuler, self).setClientView_(view)
+        super(LineNumberNSRulerView, self).setClientView_(view)
 
         if view is not None and isinstance(view, NSTextView):
             NSNotificationCenter.defaultCenter().addObserver_selector_name_object_(self, "textDidChange:",
@@ -83,7 +83,7 @@ class DBLineNumberRuler(NSRulerView):
         view = self.clientView()
         if view is not None:
             NSNotificationCenter.defaultCenter().removeObserver_name_object_(self, NSTextStorageDidProcessEditingNotification, view.textStorage())
-        super(DBLineNumberRuler, self).dealloc()
+        super(LineNumberNSRulerView, self).dealloc()
 
     def calculateLines(self):
         view = self.clientView()
