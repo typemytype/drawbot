@@ -415,7 +415,7 @@ class BezierPath(BasePen):
 
     def rotate(self, angle, center=(0, 0)):
         """
-        Rotate the path around the origin point with a given angle in degrees.
+        Rotate the path around the `center` point (which is the origin by default) with a given angle in degrees.
         """
         angle = math.radians(angle)
         c = math.cos(angle)
@@ -427,6 +427,8 @@ class BezierPath(BasePen):
         Scale the path with a given `x` (horizontal scale) and `y` (vertical scale).
 
         If only 1 argument is provided a proportional scale is applied.
+
+        The center of scaling can optionally be set via the `center` keyword argument. By default this is the origin.
         """
         if y is None:
             y = x
@@ -437,6 +439,8 @@ class BezierPath(BasePen):
         Skew the path with given `angle1` and `angle2`.
 
         If only one argument is provided a proportional skew is applied.
+
+        The center of skewing can optionally be set via the `center` keyword argument. By default this is the origin.
         """
         angle1 = math.radians(angle1)
         angle2 = math.radians(angle2)
