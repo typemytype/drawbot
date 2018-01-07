@@ -18,3 +18,4 @@ git+https://github.com/typemytype/ufo2fdk
 git+https://github.com/typesupply/feaPyFoFum
 git+https://github.com/typesupply/feaTools2
 ufoLib
+git+https://github.com/test-lets-make-the-docs-build-break-to-see-whether-failure-notifications-work/
