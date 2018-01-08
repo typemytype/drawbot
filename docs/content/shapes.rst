@@ -7,7 +7,7 @@ Different shapes and how to make them.
 	:titlesonly:
 	:glob:
 
+	shapes/primitives
 	shapes/drawingPath
 	shapes/pathProperties
-	shapes/primitives
 	shapes/bezierPath
