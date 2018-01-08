@@ -9,6 +9,7 @@ import sys
 import traceback
 import site
 import re
+import warnings
 from signal import SIGINT
 import ctypes
 from ctypes.util import find_library
@@ -16,7 +17,7 @@ import threading
 from distutils.version import StrictVersion
 import platform
 from fontTools.misc.py23 import PY2, PY3
-from drawBot.misc import getDefault, warnings
+from drawBot.misc import getDefault
 from objc import super
 
 osVersionCurrent = StrictVersion(platform.mac_ver()[0])
@@ -33,6 +34,7 @@ def retrieveCheckEventQueueForUserCancelFromCarbon():
     if _carbonPath is not None:
         CheckEventQueueForUserCancel = ctypes.CFUNCTYPE(ctypes.c_bool)(('CheckEventQueueForUserCancel', ctypes.CDLL(_carbonPath)))
     else:
+        from drawBot.misc import warnings
         warnings.warn("Carbon.framework can't be found; command-period script cancelling will not work.")
 
 
@@ -49,6 +51,13 @@ class StdOutput(object):
         self._previousFlush = time.time()
 
     def write(self, data):
+        # get all warnings
+        warnFilters = list(warnings.filters)
+        # reset warnings
+        warnings.resetwarnings()
+        # ignore all warnings
+        # we dont want warnings while pusing text to the textview
+        warnings.filterwarnings("ignore")
         if PY2 and isinstance(data, str):
             try:
                 data = unicode(data, "utf-8", "replace")
@@ -66,6 +75,10 @@ class StdOutput(object):
                     self._previousFlush = t
         else:
             self.data.append((data, self.isError))
+        # reset the new warnings
+        warnings.resetwarnings()
+        # update with the old warnings filters
+        warnings.filters.extend(warnFilters)
 
     def flush(self):
         pass
