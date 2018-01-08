@@ -477,7 +477,9 @@ class DrawBotDrawingTool(object):
 
     def save(self):
         """
-        Save the current state.
+        Obsolete: use `savedState()` in a `with` statement instead.
+
+        Save the current graphics state.
         This will save the state of the canvas (with all the transformations)
         but also the state of the colors, strokes...
         """
@@ -487,7 +489,9 @@ class DrawBotDrawingTool(object):
 
     def restore(self):
         """
-        Restore from a previously saved state.
+        Obsolete: use `savedState()` in a `with` statement instead.
+
+        Restore from a previously saved graphics state.
         This will restore the state of the canvas (with all the transformations)
         but also the state of colors, strokes...
         """
@@ -501,8 +505,10 @@ class DrawBotDrawingTool(object):
 
         .. downloadcode:: savedState.py
 
-            # use with statement
-            # this will be wrapped around a `save` and `restore`
+            # Use the 'with' statement.
+            # This makes any changes you make to the graphics state -- such as
+            # colors and transformations -- temporary, and will be reset to
+            # the previous state at the end of the 'with' block.
             with savedState():
                 # set a color
                 fill(1, 0, 0)
