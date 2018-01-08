@@ -641,8 +641,11 @@ class DrawBotDrawingTool(object):
 
     def clipPath(self, path=None):
         """
-        Use the current path as a clipping path.
-        The clipping path will be used until the canvas gets a `restore()`.
+        Use the given path as a clipping path, or the current path if no path was given.
+
+        Everything drawn after a `clipPath()` call will be clipped by the clipping path.
+        To "undo" the clipping later, make sure you do the clipping inside a
+        `with savedState():` block, as shown in the example.
 
         .. downloadcode:: clipPath.py
 
@@ -656,14 +659,14 @@ class DrawBotDrawingTool(object):
             path.lineTo((900, 900))
             # close the path
             path.closePath()
-            # save the current graphics state
-            save()
-            # set the path as a clipping path
-            clipPath(path)
-            # the oval will be clipped inside the path
-            oval(100, 100, 800, 800)
-            # restore: this will remove the clip path
-            restore()
+            # save the graphics state so the clipping happens only
+            # temporarily
+            with savedState():
+                # set the path as a clipping path
+                clipPath(path)
+                # the oval will be clipped inside the path
+                oval(100, 100, 800, 800)
+            # no more clipping here
         """
         self._requiresNewFirstPage = True
         self._addInstruction("clipPath", path)
