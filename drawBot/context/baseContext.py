@@ -1034,9 +1034,10 @@ class FormattedString(object):
                 tabStop = AppKit.NSTextTab.alloc().initWithTextAlignment_location_options_(tabAlign, tab, tabOptions)
                 para.addTabStop_(tabStop)
         if self._lineHeight is not None:
-            # para.setLineSpacing_(lineHeight)
-            para.setMaximumLineHeight_(self._lineHeight)
+            # para.setLineSpacing_(0.0)
+            # para.setLineHeightMultiple_(1)
             para.setMinimumLineHeight_(self._lineHeight)
+            para.setMaximumLineHeight_(self._lineHeight)
 
         if self._indent is not None:
             para.setHeadIndent_(self._indent)
