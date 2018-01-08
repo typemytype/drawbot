@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg height="200" version="1.1" width="200" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <path d="M25,25 l50,0 l0,50 l-50,0 Z M25,25" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,200)"/>
+ <path d="M25,25 l50,0 l0,50 l-50,0 Z M25,25" fill="rgb(255,0,0)" fill-opacity="0.5" transform="matrix(0.9396926207859084,-0.3420201433256687,-0.3420201433256687,-0.9396926207859084,10.058188063494006,207.04281910278942)"/>
+ <path d="M125,25 l50,0 l0,50 l-50,0 Z M125,25" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,200)"/>
+ <path d="M125,25 l50,0 l0,50 l-50,0 Z M125,25" fill="rgb(255,0,0)" fill-opacity="0.5" transform="matrix(1.0,-0.17632698070846498,0.17632698070846498,-1.0,-4.408174517711615,230.8572216239814)"/>
+ <path d="M25,125 l50,0 l0,50 l-50,0 Z M25,125" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,200)"/>
+ <path d="M25,125 l50,0 l0,50 l-50,0 Z M25,125" fill="rgb(255,0,0)" fill-opacity="0.5" transform="matrix(1.2,0.0,0.0,-1.4,-5.0,270.0)"/>
+ <path d="M125,125 l50,0 l0,50 l-50,0 Z M125,125" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,200)"/>
+ <path d="M125,125 l50,0 l0,50 l-50,0 Z M125,125" fill="rgb(255,0,0)" fill-opacity="0.5" transform="matrix(0.7517540966287268,-0.273616114660535,-0.273616114660535,-0.7517540966287268,91.32585315556643,204.4397869756208)"/>
+</svg>
