@@ -9,7 +9,7 @@ import math
 from fontTools.pens.basePen import BasePen
 from fontTools.misc.py23 import basestring, PY2, unichr
 
-from drawBot.misc import DrawBotError, cmyk2rgb, warnings
+from drawBot.misc import DrawBotError, cmyk2rgb, warnings, transformationAtCenter
 
 from .tools import openType
 from .tools import variation
@@ -413,39 +413,45 @@ class BezierPath(BasePen):
         """
         self.transform((1, 0, 0, 1, x, y))
 
-    def rotate(self, angle):
+    def rotate(self, angle, center=(0, 0)):
         """
-        Rotate the path around the origin point with a given angle in degrees.
+        Rotate the path around the `center` point (which is the origin by default) with a given angle in degrees.
         """
         angle = math.radians(angle)
         c = math.cos(angle)
         s = math.sin(angle)
-        self.transform((c, s, -s, c, 0, 0))
+        self.transform((c, s, -s, c, 0, 0), center)
 
-    def scale(self, x=1, y=None):
+    def scale(self, x=1, y=None, center=(0, 0)):
         """
         Scale the path with a given `x` (horizontal scale) and `y` (vertical scale).
 
         If only 1 argument is provided a proportional scale is applied.
+
+        The center of scaling can optionally be set via the `center` keyword argument. By default this is the origin.
         """
         if y is None:
             y = x
-        self.transform((x, 0, 0, y, 0, 0))
+        self.transform((x, 0, 0, y, 0, 0), center)
 
-    def skew(self, angle1, angle2=0):
+    def skew(self, angle1, angle2=0, center=(0, 0)):
         """
         Skew the path with given `angle1` and `angle2`.
 
         If only one argument is provided a proportional skew is applied.
+
+        The center of skewing can optionally be set via the `center` keyword argument. By default this is the origin.
         """
         angle1 = math.radians(angle1)
         angle2 = math.radians(angle2)
-        self.transform((1, math.tan(angle2), math.tan(angle1), 1, 0, 0))
+        self.transform((1, math.tan(angle2), math.tan(angle1), 1, 0, 0), center)
 
-    def transform(self, transformMatrix):
+    def transform(self, transformMatrix, center=(0, 0)):
         """
         Transform a path with a transform matrix (xy, xx, yy, yx, x, y).
         """
+        if center != (0, 0):
+            transformMatrix = transformationAtCenter(transformMatrix, center)
         aT = AppKit.NSAffineTransform.transform()
         aT.setTransformStruct_(transformMatrix[:])
         self._path.transformUsingAffineTransform_(aT)
