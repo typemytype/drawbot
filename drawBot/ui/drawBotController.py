@@ -70,6 +70,11 @@ class DrawBotController(BaseWindowController):
         self.w.split.setDividerPosition(1, windowWidth * .6)
         self.codeSplit.setDividerPosition(0, windowHeight * .7)
 
+        if getDefault("DrawBotAddToolbar", False):
+            # add toolbar
+            self.addToolbar()
+
+
     def codeViewCallback(self, sender):
         document = self.w.getNSWindowController().document()
         document.updateChangeCount_(AppKit.NSChangeDone)
@@ -264,3 +269,53 @@ class DrawBotController(BaseWindowController):
         self.w.unbind("move", self.windowMoveCallback)
         self.w.unbind("resize", self.windowResizeCallback)
         super(DrawBotController, self).windowCloseCallback(sender)
+
+    def addToolbar(self):
+        toolbarItems = [
+            dict(
+                itemIdentifier="run",
+                label="Run",
+                imageNamed="toolbarRun",
+                callback=self.toolbarRun,
+            ),
+            dict(
+                itemIdentifier="comment",
+                label="Comment",
+                imageNamed="toolbarComment",
+                callback=self.toolbarComment,
+            ),
+            dict(
+                itemIdentifier="uncomment",
+                label="Uncomment",
+                imageNamed="toolbarUncomment",
+                callback=self.toolbarUncomment,
+            ),
+            dict(
+                itemIdentifier="indent",
+                label="Indent",
+                imageNamed="toolbarIndent",
+                callback=self.toolbarIndent,
+            ),
+            dict(
+                itemIdentifier="dedent",
+                label="Dedent",
+                imageNamed="toolbarDedent",
+                callback=self.toolbarDedent,
+            ),
+        ]
+        self.w.addToolbar(toolbarIdentifier="DrawBotToolbar", toolbarItems=toolbarItems, addStandardItems=False)
+
+    def toolbarRun(self, sender):
+        self.runCode()
+
+    def toolbarComment(self, sender):
+        self.codeView.comment()
+
+    def toolbarUncomment(self, sender):
+        self.codeView.uncomment()
+
+    def toolbarIndent(self, sender):
+        self.codeView.indent()
+
+    def toolbarDedent(self, sender):
+        self.codeView.dedent()

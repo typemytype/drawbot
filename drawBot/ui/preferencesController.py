@@ -341,9 +341,9 @@ class SyntaxColors(Group):
 class PreferencesController(BaseWindowController):
 
     def __init__(self):
-        self.w = Window((500, 430), miniaturizable=False, minSize=(500, 330))
+        self.w = Window((500, 460), miniaturizable=False, minSize=(500, 430))
 
-        y = -190
+        y = -220
         self.w.syntaxColors = SyntaxColors((0, 0, -0, y))
 
         self.w.hl1 = HorizontalLine((10, y, -10, 1))
@@ -355,6 +355,8 @@ class PreferencesController(BaseWindowController):
         self.w.useFutureDivision = CheckBox((10, y, -10, 22), "Use Future Division (relaxed float division)", callback=self.setToDefaults)
         y += 30
         self.w.shouldOpenUntitledFile = CheckBox((10, y, -10, 22), "Should Open Untitled File", callback=self.setToDefaults)
+        y += 30
+        self.w.showToolbar = CheckBox((10, y, -10, 22), "Add Tool Bar", callback=self.setToDefaults)
         y += 30
         self.w.animateIcon = CheckBox((10, y, -10, 22), "Animate Icon", callback=self.anitmateIconCallback)
         y += 30
@@ -371,6 +373,7 @@ class PreferencesController(BaseWindowController):
         self.w.animateIcon.set(getDefault("DrawBotAnimateIcon", True))
         self.w.checkForUpdates.set(getDefault("DrawBotCheckForUpdatesAtStartup", True))
         self.w.shouldOpenUntitledFile.set(getDefault("shouldOpenUntitledFile", True))
+        self.w.showToolbar.set(getDefault("DrawBotAddToolbar", False))
         self.w.syntaxColors.getFromDefaults()
 
     def setToDefaults(self, sender=None):
@@ -380,6 +383,7 @@ class PreferencesController(BaseWindowController):
         setDefault("DrawBotAnimateIcon", self.w.animateIcon.get())
         setDefault("DrawBotCheckForUpdatesAtStartup", self.w.checkForUpdates.get())
         setDefault("shouldOpenUntitledFile", self.w.shouldOpenUntitledFile.get())
+        setDefault("DrawBotAddToolbar", self.w.showToolbar.get())
 
     def anitmateIconCallback(self, sender):
         self.setToDefaults()
