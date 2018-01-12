@@ -178,6 +178,11 @@ class DrawBotAppDelegate(AppKit.NSObject):
     def showDebug_(self, sender):
         self._debugger.showHide()
 
+    def showForum_(self, sender):
+        url = "http://forum.drawbot.com"
+        ws = AppKit.NSWorkspace.sharedWorkspace()
+        ws.openURL_(AppKit.NSURL.URLWithString_(url))
+
     def getUrl_withReplyEvent_(self, event, reply):
         import urlparse
         import urllib2
