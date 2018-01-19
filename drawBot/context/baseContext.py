@@ -641,7 +641,7 @@ class BezierPath(BasePen):
 
 class Color(object):
 
-    colorSpace = AppKit.NSColorSpace.genericRGBColorSpace
+    colorSpace = AppKit.NSColorSpace.sRGBColorSpace
 
     def __init__(self, r=None, g=None, b=None, a=1):
         self._color = None
@@ -650,11 +650,11 @@ class Color(object):
         if isinstance(r, AppKit.NSColor):
             self._color = r
         elif g is None and b is None:
-            self._color = AppKit.NSColor.colorWithCalibratedRed_green_blue_alpha_(r, r, r, a)
+            self._color = AppKit.NSColor.colorWithDeviceRed_green_blue_alpha_(r, r, r, a)
         elif b is None:
-            self._color = AppKit.NSColor.colorWithCalibratedRed_green_blue_alpha_(r, r, r, g)
+            self._color = AppKit.NSColor.colorWithDeviceRed_green_blue_alpha_(r, r, r, g)
         else:
-            self._color = AppKit.NSColor.colorWithCalibratedRed_green_blue_alpha_(r, g, b, a)
+            self._color = AppKit.NSColor.colorWithDeviceRed_green_blue_alpha_(r, g, b, a)
         self._color = self._color.colorUsingColorSpace_(self.colorSpace())
 
     def set(self):
@@ -1822,7 +1822,7 @@ class BaseContext(object):
     def reset(self):
         self._stack = []
         self._state = self._graphicsStateClass()
-        self._colorClass.colorSpace = self._colorSpaceMap['genericRGB']
+        self._colorClass.colorSpace = self._colorSpaceMap['sRGB']
         self._reset()
 
     def size(self, width=None, height=None):
@@ -1906,7 +1906,7 @@ class BaseContext(object):
 
     def colorSpace(self, colorSpace):
         if colorSpace is None:
-            colorSpace = 'genericRGB'
+            colorSpace = 'sRGB'
         if colorSpace not in self._colorSpaceMap:
             raise DrawBotError("'%s' is not a valid colorSpace, argument must be '%s'" % (colorSpace, "', '".join(self._colorSpaceMap.keys())))
         colorSpace = self._colorSpaceMap[colorSpace]
