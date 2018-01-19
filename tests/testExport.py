@@ -142,7 +142,7 @@ class ExportTest(unittest.TestCase):
         with TempFile(suffix=".jpg") as tmp:
             drawBot.saveImage(tmp.path, imageJPEGCompressionFactor=1.0, imageFallbackBackgroundColor=(0, 1, 0))
             r, g, b, a = drawBot.imagePixelColor(tmp.path, (5, 5))
-            self.assertEqual((round(r, 2), round(g, 2), round(b, 2)), (0, 0.97, 0))  # XXX 0.97 vs 1.0 "calibrated" vs "device"
+            self.assertEqual((round(r, 2), round(g, 2), round(b, 2)), (0, 1.0, 0))
         with TempFile(suffix=".jpg") as tmp:
             drawBot.saveImage(tmp.path, imageJPEGCompressionFactor=1.0, imageFallbackBackgroundColor=AppKit.NSColor.redColor())
             r, g, b, a = drawBot.imagePixelColor(tmp.path, (5, 5))
