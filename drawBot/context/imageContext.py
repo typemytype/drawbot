@@ -110,7 +110,7 @@ class ImageContext(PDFContext):
         return outputPaths
 
 
-def _makeBitmapImageRep(image, imageResolution=72.0):
+def _makeBitmapImageRep(image, imageResolution=72.0, colorSpaceName=AppKit.NSCalibratedRGBColorSpace):
     """Construct a bitmap image representation at a given resolution."""
     scaleFactor = max(1.0, imageResolution) / 72.0
     rep = AppKit.NSBitmapImageRep.alloc().initWithBitmapDataPlanes_pixelsWide_pixelsHigh_bitsPerSample_samplesPerPixel_hasAlpha_isPlanar_colorSpaceName_bytesPerRow_bitsPerPixel_(
@@ -121,7 +121,7 @@ def _makeBitmapImageRep(image, imageResolution=72.0):
         4,                                       # samplesPerPixel
         True,                                    # hasAlpha
         False,                                   # isPlanar
-        AppKit.NSCalibratedRGBColorSpace,        # colorSpaceName
+        colorSpaceName,                          # colorSpaceName
         0,                                       # bytesPerRow
         0                                        # bitsPerPixel
     )
