@@ -67,7 +67,7 @@ class ExampleTester(unittest.TestCase):
 
     def assertImagesSimilar(self, path1, path2):
         similarity = compareImages(path1, path2)
-        self.assertLessEqual(similarity, 0.002, "Images %r and %s are not similar enough" % (path1, path2))
+        self.assertLessEqual(similarity, 0.002, "Images %r and %s are not similar enough: %s" % (path1, path2, similarity))
 
     def assertFilesEqual(self, path1, path2):
         self.assertEqual(readData(path1), readData(path2), "Files %r and %s are not the same" % (path1, path2))

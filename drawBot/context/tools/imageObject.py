@@ -71,7 +71,7 @@ class ImageObject(object):
         else:
             raise DrawBotError("Cannot read image path '%s'." % path)
         rep = _makeBitmapImageRep(im)
-        ciImage = AppKit.CIImage.imageWithData_(rep.TIFFRepresentation())
+        ciImage = AppKit.CIImage.alloc().initWithBitmapImageRep_(rep)
         self._merge(ciImage, doCrop=True)
 
     def copy(self):
@@ -124,7 +124,7 @@ class ImageObject(object):
         im = AppKit.NSImage.alloc().initWithData_(page.dataRepresentation())
         # create an CIImage object
         rep = _makeBitmapImageRep(im)
-        ciImage = AppKit.CIImage.imageWithData_(rep.TIFFRepresentation())
+        ciImage = AppKit.CIImage.alloc().initWithBitmapImageRep_(rep)
         # merge it with the already set data, if there already an image
         self._merge(ciImage)
 
@@ -202,7 +202,7 @@ class ImageObject(object):
                 generator.drawAtPoint_fromRect_operation_fraction_((0, 0), ((0, 0), (w, h)), AppKit.NSCompositeCopy, 1)
                 dummy.unlockFocus()
                 rep = _makeBitmapImageRep(dummy)
-                self._cachedImage = AppKit.CIImage.imageWithData_(rep.TIFFRepresentation())
+                self._cachedImage = AppKit.CIImage.alloc().initWithBitmapImageRep_(rep)
                 del dummy
             elif hasattr(self, "_cachedImage"):
                 ciFilter.setValue_forKey_(self._cachedImage, "inputImage")
