@@ -121,7 +121,7 @@ def _makeBitmapImageRep(image, imageResolution=72.0):
         4,                                       # samplesPerPixel
         True,                                    # hasAlpha
         False,                                   # isPlanar
-        AppKit.NSDeviceRGBColorSpace,            # colorSpaceName
+        AppKit.NSCalibratedRGBColorSpace,        # colorSpaceName
         0,                                       # bytesPerRow
         0                                        # bitsPerPixel
     )
