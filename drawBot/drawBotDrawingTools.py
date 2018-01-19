@@ -29,9 +29,6 @@ def _getmodulecontents(module, names=None):
     return d
 
 
-_chachedPixelColorBitmaps = {}
-
-
 _paperSizes = {
     'Letter'      : (612, 792),
     'LetterSmall' : (612, 792),
@@ -140,6 +137,7 @@ class DrawBotDrawingTool(object):
             self._hasPage = False
             if not hasattr(self, "_tempInstalledFonts"):
                 self._tempInstalledFonts = dict()
+        self._cachedPixelColorBitmaps = {}
 
     def _copy(self):
         new = self.__class__()
@@ -1944,7 +1942,7 @@ class DrawBotDrawingTool(object):
         x, y = xy
         if isinstance(path, basestring):
             path = optimizePath(path)
-        bitmap = _chachedPixelColorBitmaps.get(path)
+        bitmap = self._cachedPixelColorBitmaps.get(path)
         if bitmap is None:
             if isinstance(path, self._imageClass):
                 source = path._nsImage()
@@ -1958,7 +1956,7 @@ class DrawBotDrawingTool(object):
                 source = AppKit.NSImage.alloc().initByReferencingURL_(url)
 
             bitmap = AppKit.NSBitmapImageRep.imageRepWithData_(source.TIFFRepresentation())
-            _chachedPixelColorBitmaps[path] = bitmap
+            self._cachedPixelColorBitmaps[path] = bitmap
 
         color = bitmap.colorAtX_y_(x, bitmap.pixelsHigh() - y - 1)
         if color is None:
