@@ -356,7 +356,7 @@ class PreferencesController(BaseWindowController):
         y += 30
         self.w.shouldOpenUntitledFile = CheckBox((10, y, -10, 22), "Should Open Untitled File", callback=self.setToDefaults)
         y += 30
-        self.w.showToolbar = CheckBox((10, y, -10, 22), "Add Tool Bar", callback=self.setToDefaults)
+        self.w.showToolbar = CheckBox((10, y, -10, 22), "Add Toolbar", callback=self.setToDefaults)
         y += 30
         self.w.animateIcon = CheckBox((10, y, -10, 22), "Animate Icon", callback=self.anitmateIconCallback)
         y += 30
@@ -373,7 +373,7 @@ class PreferencesController(BaseWindowController):
         self.w.animateIcon.set(getDefault("DrawBotAnimateIcon", True))
         self.w.checkForUpdates.set(getDefault("DrawBotCheckForUpdatesAtStartup", True))
         self.w.shouldOpenUntitledFile.set(getDefault("shouldOpenUntitledFile", True))
-        self.w.showToolbar.set(getDefault("DrawBotAddToolbar", False))
+        self.w.showToolbar.set(getDefault("DrawBotAddToolbar", True))
         self.w.syntaxColors.getFromDefaults()
 
     def setToDefaults(self, sender=None):

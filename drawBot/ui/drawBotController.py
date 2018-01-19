@@ -70,7 +70,7 @@ class DrawBotController(BaseWindowController):
         self.w.split.setDividerPosition(1, windowWidth * .6)
         self.codeSplit.setDividerPosition(0, windowHeight * .7)
 
-        if getDefault("DrawBotAddToolbar", False):
+        if getDefault("DrawBotAddToolbar", True):
             # add toolbar
             self.addToolbar()
 
