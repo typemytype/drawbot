@@ -1,7 +1,8 @@
-def star((X, Y), points, inner, outer):
+def star(center, points, inner, outer):
     # create a new path
     newPath()
     # move the pen to the initial position
+    X, Y = center
     moveTo((X, Y + outer))
     for i in range(1, int(2 * points)):
         angle = i * pi / points
@@ -17,5 +18,4 @@ def star((X, Y), points, inner, outer):
     closePath()
     drawPath()
 
-star((312, 344), 4, 82, -100)
-
+star((312, 344), 5, 60, 110)
