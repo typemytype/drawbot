@@ -47,7 +47,7 @@ class ExportTest(unittest.TestCase):
         self.makeTestAnimation(1)
         with StdOutCollector(captureStdErr=True) as output:
             self._saveImageAndReturnSize(".png", someArbitraryOption="foo")
-        self.assertEqual(output, ['*** DrawBot warning: Unrecognized saveImage() option found for PNGContext: someArbitraryOption ***'])
+        self.assertEqual(output.lines(), ['*** DrawBot warning: Unrecognized saveImage() option found for PNGContext: someArbitraryOption ***'])
 
     def test_export_mov(self):
         self.makeTestAnimation(5)
@@ -192,7 +192,7 @@ class ExportTest(unittest.TestCase):
         with self.assertRaises(DrawBotError) as cm:
             with StdOutCollector(captureStdErr=True) as output:
                 drawBot.saveImage(["foo.abcde"])
-        self.assertEqual(output, ['*** DrawBot warning: saveImage([path, path, ...]) is deprecated, use multiple saveImage statements. ***'])
+        self.assertEqual(output.lines(), ['*** DrawBot warning: saveImage([path, path, ...]) is deprecated, use multiple saveImage statements. ***'])
         self.assertEqual(cm.exception.args[0], "Could not find a supported context for: 'abcde'")
 
     def test_saveImage_pathList(self):
@@ -205,50 +205,50 @@ class ExportTest(unittest.TestCase):
         self.makeTestDrawing()
         with StdOutCollector(captureStdErr=True) as output:
             self._saveImageAndReturnSize(".png", multipage=False)
-        self.assertEqual(output, [])
+        self.assertEqual(output.lines(), [])
 
     def test_saveImage_png_ffmpegCodec(self):
         self.makeTestDrawing()
         with StdOutCollector(captureStdErr=True) as output:
             self._saveImageAndReturnSize(".png", ffmpegCodec="mpeg4")
-        self.assertEqual(output, ['*** DrawBot warning: Unrecognized saveImage() option found for PNGContext: ffmpegCodec ***'])
+        self.assertEqual(output.lines(), ['*** DrawBot warning: Unrecognized saveImage() option found for PNGContext: ffmpegCodec ***'])
 
     def test_saveImage_mp4_ffmpegCodec(self):
         self.makeTestDrawing()
         with StdOutCollector(captureStdErr=True) as output:
             self._saveImageAndReturnSize(".mp4", ffmpegCodec="mpeg4")
-        self.assertEqual(output, [])
+        self.assertEqual(output.lines(), [])
 
     def test_saveImage_mp4_imageResolution(self):
         self.makeTestDrawing()
         with StdOutCollector(captureStdErr=True) as output:
             self._saveImageAndReturnSize(".mp4", imageResolution=36)
-        self.assertEqual(output, [])
+        self.assertEqual(output.lines(), [])
 
     def test_saveImage_mp4_imagePNGGamma(self):
         self.makeTestDrawing()
         with StdOutCollector(captureStdErr=True) as output:
             self._saveImageAndReturnSize(".mp4", imagePNGGamma=0.5)
-        self.assertEqual(output, [])
+        self.assertEqual(output.lines(), [])
 
     def test_saveImage_mp4_imageJPEGCompressionFactor(self):
         self.makeTestDrawing()
         with StdOutCollector(captureStdErr=True) as output:
             self._saveImageAndReturnSize(".mp4", imageJPEGCompressionFactor=0.5)
-        self.assertEqual(output, ['*** DrawBot warning: Unrecognized saveImage() option found for MP4Context: imageJPEGCompressionFactor ***'])
+        self.assertEqual(output.lines(), ['*** DrawBot warning: Unrecognized saveImage() option found for MP4Context: imageJPEGCompressionFactor ***'])
 
     def test_saveImage_mp4_multipage(self):
         self.makeTestDrawing()
         with StdOutCollector(captureStdErr=True) as output:
             self._saveImageAndReturnSize(".mp4", multipage=True)
-        self.assertEqual(output, ['*** DrawBot warning: Unrecognized saveImage() option found for MP4Context: multipage ***'])
+        self.assertEqual(output.lines(), ['*** DrawBot warning: Unrecognized saveImage() option found for MP4Context: multipage ***'])
 
     def test_saveImage_multipage_positionalArgument(self):
         self.makeTestDrawing()
         with TempFile(suffix=".png") as tmp:
             with StdOutCollector(captureStdErr=True) as output:
                 drawBot.saveImage(tmp.path, False)
-        self.assertEqual(output, ["*** DrawBot warning: 'multipage' should be a keyword argument: use 'saveImage(path, multipage=True)' ***"])
+        self.assertEqual(output.lines(), ["*** DrawBot warning: 'multipage' should be a keyword argument: use 'saveImage(path, multipage=True)' ***"])
 
     def test_saveImage_multiplePositionalArguments(self):
         self.makeTestDrawing()
@@ -260,7 +260,7 @@ class ExportTest(unittest.TestCase):
         with TempFile(suffix=".png") as tmp:
             with StdOutCollector(captureStdErr=True) as output:
                 drawBot.saveImage(tmp.path, multipage=False)
-        self.assertEqual(output, [])
+        self.assertEqual(output.lines(), [])
 
 
 if __name__ == '__main__':

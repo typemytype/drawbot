@@ -79,7 +79,7 @@ class DrawBotTest(unittest.TestCase):
             except:
                 traceback.print_exc()
             os.chdir(cwd)
-        return output
+        return output.lines()
 
     def test_instructionStack(self):
         expected = [
@@ -117,7 +117,7 @@ class DrawBotTest(unittest.TestCase):
             drawBot.frameDuration(10)
             drawBot.saveImage("*", myExtraAgrument=True)
             drawBot.endDrawing()
-        self.assertEqual(output, expected)
+        self.assertEqual(output.lines(), expected)
 
     def test_booleanoperationListIntersections(self):
         expected = [(75, 150), (150, 75)]
@@ -151,7 +151,7 @@ def cleanupTraceback(lines):
 def readExpectedOutput(path):
     if os.path.exists(path):
         with open(path, "r") as f:
-            return [l.strip() for l in f.read().splitlines()]
+            return [l for l in f.read().splitlines()]
     else:
         return []
 
@@ -198,12 +198,15 @@ ignoreDeprecationWarnings = {
     # like: 'DeprecationWarning: Using struct wrapper as sequence'
     "test_pdf_image3",
     "test_pdf_image4",
+    "test_pdf_imagePixelColor",
     "test_pdf_text",
     "test_png_image3",
     "test_png_image4",
+    "test_png_imagePixelColor",
     "test_png_text",
     "test_svg_image3",
     "test_svg_image4",
+    "test_svg_imagePixelColor",
     "test_svg_text",
 }
 
