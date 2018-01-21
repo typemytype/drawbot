@@ -34,7 +34,7 @@ class MiscTest(unittest.TestCase):
     def test_ScriptRunner_StdOutCollector(self):
         out = StdOutCollector()
         ScriptRunner("print('hey!')", stdout=out, stderr=out)
-        self.assertEqual(out, ["hey!"])
+        self.assertEqual(out.lines(), ["hey!"])
 
     def test_ScriptRunner_io(self):
         if PY3:
@@ -62,14 +62,14 @@ class MiscTest(unittest.TestCase):
         out = StdOutCollector()
         ScriptRunner("print 'hey!'", stdout=out, stderr=out)
         if PY3:
-            self.assertEqual(out[-1], "SyntaxError: Missing parentheses in call to 'print'. Did you mean print('hey!')?")
+            self.assertEqual(out.lines()[-1], "SyntaxError: Missing parentheses in call to 'print'. Did you mean print('hey!')?")
         else:
-            self.assertEqual(out, ["hey!"])
+            self.assertEqual(out.lines(), ["hey!"])
 
     def test_ScriptRunner_division(self):
         out = StdOutCollector()
         ScriptRunner("print(1/2)", stdout=out, stderr=out)
-        self.assertEqual(out, ["0.5"])
+        self.assertEqual(out.lines(), ["0.5"])
 
     def test_ScriptRunner_oldDivision(self):
         realGetDefault = drawBot.scriptTools.getDefault
@@ -80,50 +80,50 @@ class MiscTest(unittest.TestCase):
             out = StdOutCollector()
             ScriptRunner("print(1/2)", stdout=out, stderr=out)
             if PY3:
-                self.assertEqual(out, ["0.5"])
+                self.assertEqual(out.lines(), ["0.5"])
             else:
-                self.assertEqual(out, ["0"])
+                self.assertEqual(out.lines(), ["0"])
         finally:
             drawBot.scriptTools.getDefault = realGetDefault
 
     def test_ScriptRunner_encoding(self):
         out = StdOutCollector()
         ScriptRunner("# -*- coding: utf-8 -*-\nprint(1/2)", stdout=out, stderr=out)
-        self.assertEqual(out, ["0.5"])
+        self.assertEqual(out.lines(), ["0.5"])
         out = StdOutCollector()
         ScriptRunner(u"# -*- coding: utf-8 -*-\nprint(1/2)", stdout=out, stderr=out)
-        self.assertEqual(out, ["0.5"])
+        self.assertEqual(out.lines(), ["0.5"])
 
     def test_ScriptRunner_file(self):
         out = StdOutCollector()
         path = os.path.join(testDataDir, "scriptRunnerTest.py") # use an actual file, no not confuse coverage testing
         ScriptRunner("print(__file__)\nprint(__name__)", stdout=out, stderr=out, path=path)
-        self.assertEqual(out, [path, "__main__"])
+        self.assertEqual(out.lines(), [path, "__main__"])
 
     def test_ScriptRunner_fromPath(self):
         out = StdOutCollector()
         path = os.path.join(testDataDir, "scriptRunnerTest.py")
         ScriptRunner(path=path, stdout=out, stderr=out)
-        self.assertEqual(out, [path, "__main__", u'\xc5benr\xe5'])
+        self.assertEqual(out.lines(), [path, "__main__", u'\xc5benr\xe5'])
 
     def test_ScriptRunner_namespace(self):
         out = StdOutCollector()
         ScriptRunner("print(aaaa)", stdout=out, stderr=out, namespace=dict(aaaa=123))
-        self.assertEqual(out, ["123"])
+        self.assertEqual(out.lines(), ["123"])
 
     def test_ScriptRunner_checkSyntaxOnly(self):
         out = StdOutCollector()
         ScriptRunner("print(aaaa)", stdout=out, stderr=out, checkSyntaxOnly=True)
-        self.assertEqual(out, [])
+        self.assertEqual(out.lines(), [])
         out = StdOutCollector()
         ScriptRunner("print('hello world!')", stdout=out, stderr=out, checkSyntaxOnly=False)
-        self.assertEqual(out, ['hello world!'])
+        self.assertEqual(out.lines(), ['hello world!'])
         out = StdOutCollector()
         ScriptRunner("print('hello world!')", stdout=out, stderr=out, checkSyntaxOnly=True)
-        self.assertEqual(out, [])
+        self.assertEqual(out.lines(), [])
         out = StdOutCollector()
         ScriptRunner("aaa bbb", stdout=out, stderr=out, checkSyntaxOnly=True)
-        self.assertEqual(out[-1], 'SyntaxError: invalid syntax')
+        self.assertEqual(out.lines()[-1], 'SyntaxError: invalid syntax')
 
 
 if __name__ == '__main__':

@@ -6,8 +6,10 @@ import os
 import tempfile
 import shutil
 import random
+import io
 from PIL import Image, ImageChops
 from drawBot.misc import warnings
+from fontTools.misc.py23 import PY2
 
 
 testRootDir = os.path.dirname(os.path.abspath(__file__))
@@ -20,7 +22,7 @@ if not os.path.exists(tempTestDataDir):
 warnings.shouldShowWarnings = True
 
 
-class StdOutCollector(list):
+class StdOutCollector(object):
 
     def __init__(self, **kwargs):
         # force captureStdErr to be a keyword argument
@@ -30,7 +32,7 @@ class StdOutCollector(list):
         else:
             captureStdErr = False
         self.captureStdErr = captureStdErr
-        super(StdOutCollector, self).__init__()
+        self._stream = io.StringIO()
 
     def __enter__(self):
         self.out = sys.stdout
@@ -45,12 +47,15 @@ class StdOutCollector(list):
         sys.stderr = self.err
 
     def write(self, txt):
-        txt = txt.strip()
-        if txt:
-            self.append(txt)
+        if PY2 and not isinstance(txt, unicode):
+            txt = txt.decode("utf-8")
+        self._stream.write(txt)
 
     def flush(self):
         pass
+
+    def lines(self):
+        return self._stream.getvalue().splitlines()
 
 
 class TempFile(object):
