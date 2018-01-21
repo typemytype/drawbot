@@ -20,8 +20,8 @@ class DrawBotTest(unittest.TestCase):
         # read as pdf document
         pdf1 = AppKit.PDFDocument.alloc().initWithURL_(AppKit.NSURL.fileURLWithPath_(path1))
         pdf2 = AppKit.PDFDocument.alloc().initWithURL_(AppKit.NSURL.fileURLWithPath_(path2))
-        self.assertIsNotNone(pdf1, "no PDF could be read from path1")
-        self.assertIsNotNone(pdf2, "no PDF could be read from path2")
+        self.assertIsNotNone(pdf1, "PDF could not be read from %r" % path1)
+        self.assertIsNotNone(pdf2, "PDF could not be read from %r" % path2)
         self.assertTrue(pdf1.pageCount() == pdf2.pageCount(), "PDFs has not the same amount of pages")
         # loop over all pages
         for pageIndex in range(pdf1.pageCount()):
