@@ -61,11 +61,14 @@ class DrawBotTest(unittest.TestCase):
     def executeScriptPath(self, path):
         # read content of py file and exec it
         import __future__
+        from drawBot.misc import warnings
+
         with open(path) as f:
             source = f.read()
         compileFlags = __future__.CO_FUTURE_DIVISION
         code = compile(source, path, "exec", flags=compileFlags, dont_inherit=True)
         namespace = {"__name__": "__main__", "__file__": path}
+        warnings.resetWarnings()  # so we can test DB warnings
 
         with StdOutCollector(captureStdErr=True) as output:
             cwd = os.getcwd()
