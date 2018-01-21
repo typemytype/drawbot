@@ -20,12 +20,8 @@ class DrawBotTest(unittest.TestCase):
         # read as pdf document
         pdf1 = AppKit.PDFDocument.alloc().initWithURL_(AppKit.NSURL.fileURLWithPath_(path1))
         pdf2 = AppKit.PDFDocument.alloc().initWithURL_(AppKit.NSURL.fileURLWithPath_(path2))
-        if pdf1 is None:
-            # path1 is not a pdf document
-            self.assertIsNone(pdf1)
-        if pdf2 is None:
-            # path2 is not a pdf document
-            self.assertIsNone(pdf2)
+        self.assertIsNotNone(pdf1, "PDF could not be read from %r" % path1)
+        self.assertIsNotNone(pdf2, "PDF could not be read from %r" % path2)
         self.assertTrue(pdf1.pageCount() == pdf2.pageCount(), "PDFs has not the same amount of pages")
         # loop over all pages
         for pageIndex in range(pdf1.pageCount()):
@@ -65,11 +61,14 @@ class DrawBotTest(unittest.TestCase):
     def executeScriptPath(self, path):
         # read content of py file and exec it
         import __future__
+        from drawBot.misc import warnings
+
         with open(path) as f:
             source = f.read()
         compileFlags = __future__.CO_FUTURE_DIVISION
         code = compile(source, path, "exec", flags=compileFlags, dont_inherit=True)
         namespace = {"__name__": "__main__", "__file__": path}
+        warnings.resetWarnings()  # so we can test DB warnings
 
         with StdOutCollector(captureStdErr=True) as output:
             cwd = os.getcwd()
@@ -196,14 +195,20 @@ expectedFailures = {}
 ignoreDeprecationWarnings = {
     # there are some pesky PyObjC warnings that interfere with our stdout/stderr capturing,
     # like: 'DeprecationWarning: Using struct wrapper as sequence'
+    "test_pdf_fontVariations",
     "test_pdf_image3",
     "test_pdf_image4",
+    "test_pdf_openTypeFeatures",
     "test_pdf_text",
+    "test_png_fontVariations",
     "test_png_image3",
     "test_png_image4",
+    "test_png_openTypeFeatures",
     "test_png_text",
+    "test_svg_fontVariations",
     "test_svg_image3",
     "test_svg_image4",
+    "test_svg_openTypeFeatures",
     "test_svg_text",
 }
 

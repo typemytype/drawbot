@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg height="200" version="1.1" width="200" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <text text-anchor="start" transform="matrix(1,0,0,1,20,0)">
+  <tspan fill="rgb(0,0,0)" font-family="HoeflerText-Regular" font-size="20" x="0" y="28">
+   Hoefler Fact #123
+  </tspan>
+  <tspan fill="rgb(0,0,0)" font-family="HoeflerText-Regular" font-size="20" style="font-feature-settings: 'dlig';" x="0" y="52">
+   Hoefler Fact #123
+  </tspan>
+  <tspan fill="rgb(0,0,0)" font-family="HoeflerText-Regular" font-size="20" style="font-feature-settings: 'lnum', 'dlig';" x="0" y="76">
+   Hoefler Fact #123
+  </tspan>
+  <tspan fill="rgb(0,0,0)" font-family="HoeflerText-Regular" font-size="20" style="font-feature-settings: 'lnum', 'dlig', 'liga_off';" x="0" y="100">
+   Hoefler Fact #123
+  </tspan>
+  <tspan fill="rgb(0,0,0)" font-family="HoeflerText-Regular" font-size="20" style="font-feature-settings: 'dlig', 'liga_off';" x="0" y="124">
+   Hoefler Fact #123
+  </tspan>
+  <tspan fill="rgb(0,0,0)" font-family="HoeflerText-Regular" font-size="20" style="font-feature-settings: 'liga_off';" x="0" y="148">
+   Hoefler Fact #123
+  </tspan>
+  <tspan fill="rgb(0,0,0)" font-family="HoeflerText-Regular" font-size="20" style="font-feature-settings: 'dlig', 'liga_off';" x="0" y="172">
+   Hoefler Fact #123
+  </tspan>
+ </text>
+</svg>
