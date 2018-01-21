@@ -1,0 +1,1 @@
+*** DrawBot warning: openTypeFeatures(None) is deprecated, use openTypeFeatures(resetFeatures=True) instead. ***
