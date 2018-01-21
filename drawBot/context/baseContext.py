@@ -1272,9 +1272,18 @@ class FormattedString(object):
             # draw the formatted string
             text(t, (10, 80))
         """
-        if args and args[0] is None:
+        if args and features:
+            raise DrawBotError("Can't combine positional arguments and keyword arguments")
+        if args:
+            if len(args) != 1:
+                raise DrawBotError("There can only be one positional argument")
+            if args[0] is not None:
+                raise DrawBotError("First positional argument van only be None")
+            warnings.warn("openTypeFeatures(None) is deprecated, use openTypeFeatures(resetFeatures=True) instead.")
             self._openTypeFeatures.clear()
         else:
+            if features.pop("resetFeatures", False):
+                self._openTypeFeatures.clear()
             self._openTypeFeatures.update(features)
 
     def listOpenTypeFeatures(self, fontName=None):
