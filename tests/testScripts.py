@@ -198,19 +198,16 @@ ignoreDeprecationWarnings = {
     # like: 'DeprecationWarning: Using struct wrapper as sequence'
     "test_pdf_image3",
     "test_pdf_image4",
-    "test_pdf_imagePixelColor",
-    "test_pdf_openTypeFeatures",
     "test_pdf_text",
     "test_png_image3",
     "test_png_image4",
-    "test_png_imagePixelColor",
-    "test_png_openTypeFeatures",
     "test_png_text",
     "test_svg_image3",
     "test_svg_image4",
-    "test_svg_imagePixelColor",
-    "test_svg_openTypeFeatures",
     "test_svg_text",
+    "test_pdf_imagePixelColor",
+    "test_png_imagePixelColor",
+    "test_svg_imagePixelColor",
 }
 
 def _addTests():
