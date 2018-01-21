@@ -1302,9 +1302,18 @@ class FormattedString(object):
         """
         Pick a variation by axes values.
         """
-        if args and args[0] is None:
+        if args and axes:
+            raise DrawBotError("Can't combine positional arguments and keyword arguments")
+        if args:
+            if len(args) != 1:
+                raise DrawBotError("There can only be one positional argument")
+            if args[0] is not None:
+                raise DrawBotError("First positional argument can only be None")
+            warnings.warn("fontVariations(None) is deprecated, use fontVariations(resetVariations=True) instead.")
             self._fontVariations.clear()
         else:
+            if axes.pop("resetVariations", False):
+                self._fontVariations.clear()
             self._fontVariations.update(axes)
 
     def listFontVariations(self, fontName=None):
