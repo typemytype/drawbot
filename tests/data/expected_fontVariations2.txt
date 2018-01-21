@@ -1,0 +1,1 @@
+*** DrawBot warning: fontVariations(None) is deprecated, use fontVariations(resetVariations=True) instead. ***
