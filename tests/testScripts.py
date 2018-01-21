@@ -20,12 +20,8 @@ class DrawBotTest(unittest.TestCase):
         # read as pdf document
         pdf1 = AppKit.PDFDocument.alloc().initWithURL_(AppKit.NSURL.fileURLWithPath_(path1))
         pdf2 = AppKit.PDFDocument.alloc().initWithURL_(AppKit.NSURL.fileURLWithPath_(path2))
-        if pdf1 is None:
-            # path1 is not a pdf document
-            self.assertIsNone(pdf1)
-        if pdf2 is None:
-            # path2 is not a pdf document
-            self.assertIsNone(pdf2)
+        self.assertIsNotNone(pdf1, "no PDF could be read from path1")
+        self.assertIsNotNone(pdf2, "no PDF could be read from path2")
         self.assertTrue(pdf1.pageCount() == pdf2.pageCount(), "PDFs has not the same amount of pages")
         # loop over all pages
         for pageIndex in range(pdf1.pageCount()):
@@ -198,12 +194,15 @@ ignoreDeprecationWarnings = {
     # like: 'DeprecationWarning: Using struct wrapper as sequence'
     "test_pdf_image3",
     "test_pdf_image4",
+    "test_pdf_openTypeFeatures",
     "test_pdf_text",
     "test_png_image3",
     "test_png_image4",
+    "test_png_openTypeFeatures",
     "test_png_text",
     "test_svg_image3",
     "test_svg_image4",
+    "test_svg_openTypeFeatures",
     "test_svg_text",
 }
 
