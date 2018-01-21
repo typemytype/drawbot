@@ -1278,7 +1278,7 @@ class FormattedString(object):
             if len(args) != 1:
                 raise DrawBotError("There can only be one positional argument")
             if args[0] is not None:
-                raise DrawBotError("First positional argument van only be None")
+                raise DrawBotError("First positional argument can only be None")
             warnings.warn("openTypeFeatures(None) is deprecated, use openTypeFeatures(resetFeatures=True) instead.")
             self._openTypeFeatures.clear()
         else:
