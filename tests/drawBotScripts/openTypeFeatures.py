@@ -21,7 +21,8 @@ text("Hoefler Fact #123", (20, 110))
 openTypeFeatures(liga=False)
 text("Hoefler Fact #123", (20, 80))
 
+openTypeFeatures(liga=True, resetFeatures=False)
 text("Hoefler Fact #123", (20, 50))
 
-openTypeFeatures(liga=True, resetFeatures=True)
+openTypeFeatures(liga=False, resetFeatures=True)
 text("Hoefler Fact #123", (20, 20))
