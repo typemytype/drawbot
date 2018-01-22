@@ -1503,6 +1503,7 @@ class DrawBotDrawingTool(object):
         """
         self._dummyContext.openTypeFeatures(*args, **features)
         self._addInstruction("openTypeFeatures", *args, **features)
+        return self.listOpenTypeFeatures()
 
     def listOpenTypeFeatures(self, fontName=None):
         """

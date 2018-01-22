@@ -486,16 +486,15 @@ def getFeatureTagsForFontAttributes(attributes):
 
 
 def getFeatureTagsForDescriptions(featureDescriptions):
-    featureTags = list()
+    featureTags = dict()
     for featureDescription in featureDescriptions:
         featureType = featureDescription[CoreText.NSFontFeatureTypeIdentifierKey]
         for selector in featureDescription["CTFeatureTypeSelectors"]:
             featureSelector = selector[CoreText.NSFontFeatureSelectorIdentifierKey]
             featureTag = reversedFeatureMap.get((featureType, featureSelector))
             if featureTag:
-                featureTag = featureTag.replace("_off", "")
-                if featureTag not in featureTags:
-                    featureTags.append(featureTag)
+                featureKey = featureTag.replace("_off", "")
+                featureTags[featureKey] = selector.get(CoreText.kCTFontFeatureSelectorDefaultKey, False)
     return featureTags
 
 

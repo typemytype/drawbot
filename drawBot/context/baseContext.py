@@ -1285,6 +1285,7 @@ class FormattedString(object):
             if features.pop("resetFeatures", False):
                 self._openTypeFeatures.clear()
             self._openTypeFeatures.update(features)
+        return self.listOpenTypeFeatures()
 
     def listOpenTypeFeatures(self, fontName=None):
         """
@@ -1296,7 +1297,9 @@ class FormattedString(object):
             fontName = _tryInstallFontFromFontName(fontName)
         else:
             fontName = self._font
-        return openType.getFeatureTagsForFontName(fontName)
+        currentFeatures = openType.getFeatureTagsForFontName(fontName)
+        currentFeatures.update(self._openTypeFeatures)
+        return currentFeatures
 
     def fontVariations(self, *args, **axes):
         """
