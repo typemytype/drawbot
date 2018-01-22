@@ -146,7 +146,6 @@ class DrawBotAppDelegate(AppKit.NSObject):
         for document in AppKit.NSApp().orderedDocuments():
             document.testForExternalChanges()
         self.sheduleIconTimer()
-        drawBot.drawBotDrawingTools._chachedPixelColorBitmaps.clear()
 
     def applicationShouldOpenUntitledFile_(self, sender):
         for arg in sys.argv[1:]:
