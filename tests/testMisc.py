@@ -14,6 +14,18 @@ from testSupport import StdOutCollector, testDataDir
 
 class MiscTest(unittest.TestCase):
 
+    def test_openTypeFeatures(self):
+        drawBot.newDrawing()
+        fea = drawBot.listOpenTypeFeatures()
+        self.assertEqual(fea, {'liga': True})
+        drawBot.font("Helvetica")
+        fea = drawBot.listOpenTypeFeatures()
+        self.assertEqual(fea, {'liga': True, 'tnum': True, 'pnum': False})
+        fea = drawBot.listOpenTypeFeatures("HoeflerText-Regular")
+        self.assertEqual(fea, {'liga': True, 'dlig': False, 'tnum': True, 'pnum': False, 'titl': True, 'onum': True, 'lnum': False})
+        fea = drawBot.openTypeFeatures(liga=False)
+        self.assertEqual(fea, {'liga': False, 'tnum': True, 'pnum': False})
+
     def test_polygon_notEnoughPoints(self):
         drawBot.newDrawing()
         with self.assertRaises(TypeError):
