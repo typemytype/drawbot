@@ -150,9 +150,6 @@ class DrawBotAppDelegate(AppKit.NSObject):
         self.sheduleIconTimer()
 
     def applicationShouldOpenUntitledFile_(self, sender):
-        for arg in sys.argv[1:]:
-            if arg.startswith("--testScript="):
-                return False
         return getDefault("shouldOpenUntitledFile", True)
 
     def sheduleIconTimer(self):
