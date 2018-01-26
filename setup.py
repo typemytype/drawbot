@@ -232,8 +232,18 @@ if runTests:
     print("Running DrawBot tests...")
     process = subprocess.Popen(commands, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, universal_newlines=True)
     stdout, stderr = process.communicate()
-    okLine1 = stdout.splitlines()[-3].strip()  # in case of expected failures or unexpected successes
-    okLine2 = stdout.splitlines()[-2].strip()
+    lines = stdout.splitlines()
+    for startTestOutputIndex, line in enumerate(lines):
+        if line.endswith(" starting test script"):
+            break
+    if startTestOutputIndex != 0:
+        print("*** UNEXPECTED OUTPUT BEFORE TEST OUTPUT ***")
+        for line in lines[:startTestOutputIndex]:
+            print(line)
+        print("*** UNEXPECTED OUTPUT BEFORE TEST OUTPUT ***")
+        sys.exit(1)
+    okLine1 = lines[-3].strip()  # in case of expected failures or unexpected successes
+    okLine2 = lines[-2].strip()
     if okLine1.split()[-1] != "OK" and okLine2.split()[-1] != "OK":
         print("*** TESTS FAILED ***")
         print("Run following command to see details:")
