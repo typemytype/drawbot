@@ -128,19 +128,21 @@ class DrawBotAppDelegate(AppKit.NSObject):
                 m = pat.match(arg)
                 if m is None:
                     continue
+                AppKit.NSApp().activateIgnoringOtherApps_(True)
                 testScript = m.group(1)
-                self._runTestScript_(testScript)
-                AppKit.NSApp().terminate_(None)
+                self.performSelector_withObject_afterDelay_("_runTestScript:", testScript, 0.25)
 
     def _runTestScript_(self, testScript):
         import traceback
         assert os.path.exists(testScript), "%r cannot be found" % testScript
         with open(testScript) as f:
             source = f.read()
+        print("starting test script")
         try:
             exec(source, {"__name__": "__main__", "__file__": testScript})
         except:
             traceback.print_exc()
+        AppKit.NSApp().terminate_(None)
 
     def applicationDidBecomeActive_(self, notification):
         for document in AppKit.NSApp().orderedDocuments():
@@ -148,9 +150,6 @@ class DrawBotAppDelegate(AppKit.NSObject):
         self.sheduleIconTimer()
 
     def applicationShouldOpenUntitledFile_(self, sender):
-        for arg in sys.argv[1:]:
-            if arg.startswith("--testScript="):
-                return False
         return getDefault("shouldOpenUntitledFile", True)
 
     def sheduleIconTimer(self):
