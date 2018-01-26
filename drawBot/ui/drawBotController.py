@@ -25,7 +25,7 @@ class DrawBotController(BaseWindowController):
 
     def __init__(self):
         # make a window
-        self.w = Window((400, 400), "DrawBot", minSize=(200, 200), textured=False)
+        self.w = Window((400, 400), "DrawBot", minSize=(200, 200), textured=False, autosaveName=self.windowAutoSaveName)
         # setting previously stored frames, if any
         self.w.getNSWindow().setFrameUsingName_(self.windowAutoSaveName)
         try:
