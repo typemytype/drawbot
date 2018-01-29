@@ -25,6 +25,30 @@ class MiscTest(unittest.TestCase):
         self.assertEqual(fea, {'liga': True, 'dlig': False, 'tnum': True, 'pnum': False, 'titl': True, 'onum': True, 'lnum': False})
         fea = drawBot.openTypeFeatures(liga=False)
         self.assertEqual(fea, {'liga': False, 'tnum': True, 'pnum': False})
+        drawBot.font("LucidaGrande")
+        fea = drawBot.openTypeFeatures(resetFeatures=True)
+        self.assertEqual(fea, {'liga': True})
+
+    def test_fontVariations(self):
+        drawBot.newDrawing()
+        var = drawBot.listFontVariations()
+        self.assertEqual(var, {})
+        drawBot.font("Skia")
+        var = drawBot.listFontVariations()
+        expectedVar = {'wght': {'name': 'Weight', 'minValue': 0.4799, 'maxValue': 3.1999, 'defaultValue': 1.0, 'value': 1.0}, 'wdth': {'name': 'Width', 'minValue': 0.6199, 'maxValue': 1.2999, 'defaultValue': 1.0, 'value': 1.0}}
+        self.assertEqual(var, expectedVar)
+        drawBot.fontVariations(wght=5)
+        var = drawBot.listFontVariations()
+        expectedVarChanged = {'wght': {'name': 'Weight', 'minValue': 0.4799, 'maxValue': 3.1999, 'defaultValue': 1.0, 'value': 5}, 'wdth': {'name': 'Width', 'minValue': 0.6199, 'maxValue': 1.2999, 'defaultValue': 1.0, 'value': 1.0}}
+        self.assertEqual(var, expectedVarChanged)
+        drawBot.fontVariations(resetVariations=True)
+        var = drawBot.listFontVariations()
+        self.assertEqual(var, expectedVar)
+        drawBot.font("Helvetica")
+        var = drawBot.listFontVariations()
+        self.assertEqual(var, {})
+        var = drawBot.fontVariations(wght=5)
+        self.assertEqual(var, {"wght": {"value": 5}})
 
     def test_polygon_notEnoughPoints(self):
         drawBot.newDrawing()
