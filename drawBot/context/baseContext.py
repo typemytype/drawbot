@@ -1330,11 +1330,14 @@ class FormattedString(object):
             fontName = _tryInstallFontFromFontName(fontName)
         else:
             fontName = self._font
+        # get the font variation settings for the current font
         currentVariation = variation.getVariationAxesForFontName(fontName)
+        # add the current font variation settings
         for axis, value in self._fontVariations.items():
             if axis not in currentVariation:
                 currentVariation[axis] = dict()
             currentVariation[axis]["value"] = value
+        # set the value from the defaultValue if it is not set yet
         for axis, data in currentVariation.items():
             if "value" not in data:
                 data["value"] = data["defaultValue"]
