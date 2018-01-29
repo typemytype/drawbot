@@ -1538,6 +1538,7 @@ class DrawBotDrawingTool(object):
         """
         self._dummyContext.fontVariations(*args, **axes)
         self._addInstruction("fontVariations", *args, **axes)
+        return self.listFontVariations()
 
     def listFontVariations(self, fontName=None):
         """
