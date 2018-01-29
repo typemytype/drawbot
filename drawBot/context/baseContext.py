@@ -1318,6 +1318,7 @@ class FormattedString(object):
             if axes.pop("resetVariations", False):
                 self._fontVariations.clear()
             self._fontVariations.update(axes)
+        return self.listFontVariations()
 
     def listFontVariations(self, fontName=None):
         """
@@ -1329,7 +1330,15 @@ class FormattedString(object):
             fontName = _tryInstallFontFromFontName(fontName)
         else:
             fontName = self._font
-        return variation.getVariationAxesForFontName(fontName)
+        currentVariation = variation.getVariationAxesForFontName(fontName)
+        for axis, value in self._fontVariations.items():
+            if axis not in currentVariation:
+                currentVariation[axis] = dict()
+            currentVariation[axis]["value"] = value
+        for axis, data in currentVariation.items():
+            if "value" not in data:
+                data["value"] = data["defaultValue"]
+        return currentVariation
 
     def tabs(self, *tabs):
         """
