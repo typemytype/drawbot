@@ -182,18 +182,22 @@ class DrawBotAppDelegate(AppKit.NSObject):
         ws.openURL_(AppKit.NSURL.URLWithString_(url))
 
     def getUrl_withReplyEvent_(self, event, reply):
-        import urlparse
-        import urllib2
+        if PY3:
+            from urllib.parse import urlparse
+            from urllib.request import urlopen
+        else:
+            from urlparse import urlparse
+            from urllib2 import urlopen
         code = stringToInt(b"----")
         url = event.paramDescriptorForKeyword_(code)
         urlString = url.stringValue()
         documentController = AppKit.NSDocumentController.sharedDocumentController()
 
-        data = urlparse.urlparse(urlString)
+        data = urlparse(urlString)
         if data.netloc:
             # in the cloudzzz
             pythonPath = "http://%s%s" % (data.netloc, data.path)
-            response = urllib2.urlopen(pythonPath)
+            response = urlopen(pythonPath)
             code = response.read()
             response.close()
         else:
