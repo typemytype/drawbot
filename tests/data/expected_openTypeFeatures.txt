@@ -1,2 +1,2 @@
-['liga', 'dlig', 'tnum', 'pnum', 'titl', 'onum', 'lnum']
+{'liga': True, 'dlig': False, 'tnum': True, 'pnum': False, 'titl': True, 'onum': True, 'lnum': False}
 *** DrawBot warning: openTypeFeatures(None) is deprecated, use openTypeFeatures(resetFeatures=True) instead. ***
