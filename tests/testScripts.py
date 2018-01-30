@@ -175,7 +175,7 @@ def makeTestCase(path, ext, ignoreDeprecationWarnings):
                 warnings.simplefilter("ignore", DeprecationWarning)
             output = self.executeScriptPath(path)
         self.assertEqual(cleanupTraceback(output), cleanupTraceback(expectedOutput))
-        # save the iamge
+        # save the image
         drawBot.saveImage(testPath)
         # tell drawBot drawing is done
         drawBot.endDrawing()
