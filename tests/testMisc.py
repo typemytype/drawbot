@@ -29,7 +29,7 @@ class MiscTest(unittest.TestCase):
         fea = drawBot.openTypeFeatures(resetFeatures=True)
         self.assertEqual(fea, {'liga': True})
 
-    def test_openTypeFeaturesSaveRestore(self):
+    def test_openTypeFeatures_saveRestore(self):
         drawBot.newDrawing()
         drawBot.font("AppleBraille")
         drawBot.save()
