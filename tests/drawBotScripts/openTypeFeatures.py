@@ -6,7 +6,7 @@ size(200, 200)
 
 font("HoeflerText-Regular")
 fontSize(20)
-print(listOpenTypeFeatures())
+print(sorted(listOpenTypeFeatures().items()))
 
 text("Hoefler Fact #123", (20, 170))
 
