@@ -1501,9 +1501,9 @@ class DrawBotDrawingTool(object):
             # draw the same string
             text("aabcde1234567890", (100, 100))
         """
-        self._dummyContext.openTypeFeatures(*args, **features)
+        result = self._dummyContext.openTypeFeatures(*args, **features)
         self._addInstruction("openTypeFeatures", *args, **features)
-        return self.listOpenTypeFeatures()
+        return result
 
     def listOpenTypeFeatures(self, fontName=None):
         """
@@ -1536,9 +1536,9 @@ class DrawBotDrawingTool(object):
             # draw text!!
             text("Hello Q", (100, 300))
         """
-        self._dummyContext.fontVariations(*args, **axes)
+        result = self._dummyContext.fontVariations(*args, **axes)
         self._addInstruction("fontVariations", *args, **axes)
-        return self.listFontVariations()
+        return result
 
     def listFontVariations(self, fontName=None):
         """

@@ -1252,7 +1252,9 @@ class FormattedString(object):
 
     def openTypeFeatures(self, *args, **features):
         """
-        Enable OpenType features.
+        Enable OpenType features and return the current openType features settings.
+
+        If no arguments are given `openTypeFeatures()` will just return the current openType features settings.
 
         .. downloadcode:: openTypeFeaturesFormattedString.py
 
@@ -1285,7 +1287,9 @@ class FormattedString(object):
             if features.pop("resetFeatures", False):
                 self._openTypeFeatures.clear()
             self._openTypeFeatures.update(features)
-        return self.listOpenTypeFeatures()
+        currentFeatures = self.listOpenTypeFeatures()
+        currentFeatures.update(self._openTypeFeatures)
+        return currentFeatures
 
     def listOpenTypeFeatures(self, fontName=None):
         """
@@ -1297,13 +1301,13 @@ class FormattedString(object):
             fontName = _tryInstallFontFromFontName(fontName)
         else:
             fontName = self._font
-        currentFeatures = openType.getFeatureTagsForFontName(fontName)
-        currentFeatures.update(self._openTypeFeatures)
-        return currentFeatures
+        return openType.getFeatureTagsForFontName(fontName)
 
     def fontVariations(self, *args, **axes):
         """
-        Pick a variation by axes values.
+        Pick a variation by axes values and return the current font variations settings.
+
+        If no arguments are given `fontVariations()` will just return the current font variations settings.
         """
         if args and axes:
             raise DrawBotError("Can't combine positional arguments and keyword arguments")
@@ -1318,7 +1322,10 @@ class FormattedString(object):
             if axes.pop("resetVariations", False):
                 self._fontVariations.clear()
             self._fontVariations.update(axes)
-        return self.listFontVariations()
+        defaultVariations = self.listFontVariations()
+        currentVariation = {axis: data["defaultValue"] for axis, data in defaultVariations.items()}
+        currentVariation.update(self._fontVariations)
+        return currentVariation
 
     def listFontVariations(self, fontName=None):
         """
@@ -1330,18 +1337,7 @@ class FormattedString(object):
             fontName = _tryInstallFontFromFontName(fontName)
         else:
             fontName = self._font
-        # get the font variation settings for the current font
-        currentVariation = variation.getVariationAxesForFontName(fontName)
-        # add the current font variation settings
-        for axis, value in self._fontVariations.items():
-            if axis not in currentVariation:
-                currentVariation[axis] = dict()
-            currentVariation[axis]["value"] = value
-        # set the value from the defaultValue if it is not set yet
-        for axis, data in currentVariation.items():
-            if "value" not in data:
-                data["value"] = data["defaultValue"]
-        return currentVariation
+        return variation.getVariationAxesForFontName(fontName)
 
     def tabs(self, *tabs):
         """
@@ -2096,10 +2092,10 @@ class BaseContext(object):
         self._state.text.language(language)
 
     def openTypeFeatures(self, *args, **features):
-        self._state.text.openTypeFeatures(*args, **features)
+        return self._state.text.openTypeFeatures(*args, **features)
 
     def fontVariations(self, *args, **axes):
-        self._state.text.fontVariations(*args, **axes)
+        return self._state.text.fontVariations(*args, **axes)
 
     def attributedString(self, txt, align=None):
         if isinstance(txt, FormattedString):

@@ -34,21 +34,22 @@ class MiscTest(unittest.TestCase):
         var = drawBot.listFontVariations()
         self.assertEqual(var, {})
         drawBot.font("Skia")
+        # get the default font variations
         var = drawBot.listFontVariations()
-        expectedVar = {'wght': {'name': 'Weight', 'minValue': 0.4799, 'maxValue': 3.1999, 'defaultValue': 1.0, 'value': 1.0}, 'wdth': {'name': 'Width', 'minValue': 0.6199, 'maxValue': 1.2999, 'defaultValue': 1.0, 'value': 1.0}}
+        expectedVar = {'wght': {'name': 'Weight', 'minValue': 0.4799, 'maxValue': 3.1999, 'defaultValue': 1.0}, 'wdth': {'name': 'Width', 'minValue': 0.6199, 'maxValue': 1.2999, 'defaultValue': 1.0}}
         self.assertEqual(var, expectedVar)
-        drawBot.fontVariations(wght=5)
-        var = drawBot.listFontVariations()
-        expectedVarChanged = {'wght': {'name': 'Weight', 'minValue': 0.4799, 'maxValue': 3.1999, 'defaultValue': 1.0, 'value': 5}, 'wdth': {'name': 'Width', 'minValue': 0.6199, 'maxValue': 1.2999, 'defaultValue': 1.0, 'value': 1.0}}
+        # set a font variation
+        var = drawBot.fontVariations(wght=5)
+        expectedVarChanged = {'wght': 5, 'wdth': 1.0}
         self.assertEqual(var, expectedVarChanged)
-        drawBot.fontVariations(resetVariations=True)
-        var = drawBot.listFontVariations()
-        self.assertEqual(var, expectedVar)
+        # clear all font variations settings
+        var = drawBot.fontVariations(resetVariations=True)
+        self.assertEqual(var, {'wght': 1.0, 'wdth': 1.0})
         drawBot.font("Helvetica")
         var = drawBot.listFontVariations()
         self.assertEqual(var, {})
         var = drawBot.fontVariations(wght=5)
-        self.assertEqual(var, {"wght": {"value": 5}})
+        self.assertEqual(var, {"wght": 5})
 
     def test_polygon_notEnoughPoints(self):
         drawBot.newDrawing()
