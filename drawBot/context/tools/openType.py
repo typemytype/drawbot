@@ -502,5 +502,5 @@ def getFeatureTagsForFontName(fontName):
     descriptor = CoreText.NSFontDescriptor.fontDescriptorWithName_size_(fontName, 12)
     featureDescriptions = CoreText.CTFontDescriptorCopyAttribute(descriptor, CoreText.kCTFontFeaturesAttribute)
     if featureDescriptions is None:
-        return []
+        return dict()
     return getFeatureTagsForDescriptions(featureDescriptions)
