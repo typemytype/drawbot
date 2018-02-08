@@ -1967,6 +1967,9 @@ class DrawBotDrawingTool(object):
         return color.redComponent(), color.greenComponent(), color.blueComponent(), color.alphaComponent()
 
     def numberOfPages(self, path):
+        """
+        Return the number of pages for a given pdf or (animated) gif.
+        """
         path = optimizePath(path)
         if path.startswith("http"):
             url = AppKit.NSURL.URLWithString_(path)
