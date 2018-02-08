@@ -14,6 +14,49 @@ from testSupport import StdOutCollector, testDataDir
 
 class MiscTest(unittest.TestCase):
 
+    def test_openTypeFeatures(self):
+        drawBot.newDrawing()
+        fea = drawBot.listOpenTypeFeatures()
+        self.assertEqual(fea, {'liga': True})
+        drawBot.font("Helvetica")
+        fea = drawBot.listOpenTypeFeatures()
+        self.assertEqual(fea, {'liga': True, 'tnum': True, 'pnum': False})
+        fea = drawBot.listOpenTypeFeatures("HoeflerText-Regular")
+        self.assertEqual(fea, {'liga': True, 'dlig': False, 'tnum': True, 'pnum': False, 'titl': True, 'onum': True, 'lnum': False})
+        fea = drawBot.openTypeFeatures(liga=False)
+        self.assertEqual(fea, {'liga': False, 'tnum': True, 'pnum': False})
+        drawBot.font("LucidaGrande")
+        fea = drawBot.openTypeFeatures(resetFeatures=True)
+        self.assertEqual(fea, {'liga': True})
+
+    def test_openTypeFeatures_saveRestore(self):
+        drawBot.newDrawing()
+        drawBot.font("AppleBraille")
+        drawBot.save()
+        drawBot.restore()
+
+    def test_fontVariations(self):
+        drawBot.newDrawing()
+        var = drawBot.listFontVariations()
+        self.assertEqual(var, {})
+        drawBot.font("Skia")
+        # get the default font variations
+        var = drawBot.listFontVariations()
+        expectedVar = {'wght': {'name': 'Weight', 'minValue': 0.4799, 'maxValue': 3.1999, 'defaultValue': 1.0}, 'wdth': {'name': 'Width', 'minValue': 0.6199, 'maxValue': 1.2999, 'defaultValue': 1.0}}
+        self.assertEqual(var, expectedVar)
+        # set a font variation
+        var = drawBot.fontVariations(wght=5)
+        expectedVarChanged = {'wght': 5, 'wdth': 1.0}
+        self.assertEqual(var, expectedVarChanged)
+        # clear all font variations settings
+        var = drawBot.fontVariations(resetVariations=True)
+        self.assertEqual(var, {'wght': 1.0, 'wdth': 1.0})
+        drawBot.font("Helvetica")
+        var = drawBot.listFontVariations()
+        self.assertEqual(var, {})
+        var = drawBot.fontVariations(wght=5)
+        self.assertEqual(var, {"wght": 5})
+
     def test_polygon_notEnoughPoints(self):
         drawBot.newDrawing()
         with self.assertRaises(TypeError):
