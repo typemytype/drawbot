@@ -325,6 +325,30 @@ def getExternalToolPath(root, toolName):
     return toolPath
 
 
+def memoize(function):
+    """
+    Memoize a function's return value with the function's arguments.
+    The next time a function is called with the same arguments, the cache is returned. 
+
+    Example usage:
+        @memoize
+        def addNumbers(first, second):
+            return first + second
+        # The first time this function is called the calculation will be made,
+        # and and the result will be stored in the cache dict as [first, second]: returnValue
+        # From then on, this value will be returned when the same argument is made to the addNumbers function
+    """
+    saved = {}
+    def wrapper(*args):
+        if args in saved:
+            return saved[args]
+        else:
+            rv = function(*args)
+            saved[args] = rv
+            return rv
+    return wrapper
+
+
 if __name__ == "__main__":
     import doctest
     doctest.testmod()

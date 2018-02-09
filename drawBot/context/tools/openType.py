@@ -1,4 +1,5 @@
 import CoreText
+from drawBot.misc import memoize
 
 # https://developer.apple.com/fonts/TrueType-Reference-Manual/RM09/AppendixF.html
 # https://github.com/behdad/harfbuzz/blob/master/src/hb-coretext.cc#L381
@@ -470,12 +471,14 @@ for key, value in _featureMap.items():
     reversedFeatureMap[(featureType, featureSelector)] = key
 
 
+@memoize
 def getFeatureTagForFontAttribute(attribute):
     featureType = attribute.get(CoreText.NSFontFeatureTypeIdentifierKey)
     featureSelector = attribute.get(CoreText.NSFontFeatureSelectorIdentifierKey)
     return reversedFeatureMap.get((featureType, featureSelector))
 
 
+@memoize
 def getFeatureTagsForFontAttributes(attributes):
     featureTags = list()
     for attribute in attributes:
@@ -485,6 +488,7 @@ def getFeatureTagsForFontAttributes(attributes):
     return featureTags
 
 
+@memoize
 def getFeatureTagsForDescriptions(featureDescriptions):
     featureTags = dict()
     for featureDescription in featureDescriptions:
@@ -498,6 +502,7 @@ def getFeatureTagsForDescriptions(featureDescriptions):
     return featureTags
 
 
+@memoize
 def getFeatureTagsForFontName(fontName):
     descriptor = CoreText.NSFontDescriptor.fontDescriptorWithName_size_(fontName, 12)
     featureDescriptions = CoreText.CTFontDescriptorCopyAttribute(descriptor, CoreText.kCTFontFeaturesAttribute)
