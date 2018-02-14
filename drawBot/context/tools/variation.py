@@ -1,6 +1,8 @@
 import CoreText
 from collections import OrderedDict
 
+from drawBot.misc import memoize
+
 """
 https://developer.apple.com/documentation/coretext/ctfont/font_variation_axis_dictionary_keys?language=objc
 https://developer.apple.com/documentation/coretext/1508650-ctfontdescriptorcreatecopywithva?language=objc
@@ -23,6 +25,7 @@ def convertVariationTagToInt(tag):
     return i
 
 
+@memoize
 def getVariationAxesForFontName(fontName):
     axes = OrderedDict()
     font = CoreText.CTFontCreateWithName(fontName, 12, None)
