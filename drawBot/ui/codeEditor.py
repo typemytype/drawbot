@@ -294,6 +294,7 @@ def _pythonWordCompletions(text, charRange):
 languagesIDEBehavior = {
     "Python": {
         "openToCloseMap": {"(": ")", "[": "]", "{": "}", "<": ">"},
+        "autoCloseMap": {"(": ")", "[": "]", "{": "}", "\"": "\"", "'": "'"},
         "indentWithEndOfLine": [":", "(", "[", "{"],
         "comment": "#",
         "keywords": kwlist,
@@ -588,6 +589,32 @@ class CodeNSTextView(AppKit.NSTextView):
             if txt == "False":
                 self._insertTextAndRun("True", selectedRange)
                 return
+
+        languageData = self.languagesIDEBehaviorForLanguage_(self.lexer().name)
+        if languageData:
+            autoCloseMap = languageData.get("autoCloseMap", dict())
+            if char in autoCloseMap:
+                selectedText = self.string().substringWithRange_(selectedRange)
+                selectedText = selectedText.strip()
+
+                try:
+                    nextChar = self.string().substringWithRange_((selectedRange.location, 1))
+                    nextChar = nextChar.strip()
+                    if nextChar in autoCloseMap.values():
+                        nextChar = ""
+                except Exception:
+                    nextChar = ""
+                if not nextChar or selectedText:
+                    closeChar = autoCloseMap[char]
+                    toInsert = char + selectedText + closeChar
+                    self.insertText_(toInsert)
+                    if not selectedText:
+                        selectedRange.location += 1
+                        selectedRange.length = 0
+                    else:
+                        selectedRange.length = len(toInsert)
+                    self.setSelectedRange_(selectedRange)
+                    return
 
         super(CodeNSTextView, self).keyDown_(event)
         selectedRange = self.selectedRange()
