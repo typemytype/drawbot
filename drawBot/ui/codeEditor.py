@@ -710,6 +710,19 @@ class CodeNSTextView(AppKit.NSTextView):
                 self.insertText_(leadingSpace)
 
     def deleteBackward_(self, sender):
+        languageData = self.languagesIDEBehaviorForLanguage_(self.lexer().name)
+        if languageData:
+            selectedRange = self.selectedRange()
+            if selectedRange.length == 0:
+                try:
+                    char = self.string().substringWithRange_((selectedRange.location-1, 1))
+                    nextChar = self.string().substringWithRange_((selectedRange.location, 1))
+                except Exception:
+                    char = nextChar = ""
+                autoCloseMap = languageData.get("autoCloseMap", dict())
+                if autoCloseMap.get(char) == nextChar:
+                    self.setSelectedRange_((selectedRange.location - 1, 2))
+
         self._deleteIndentation(sender, False, super(CodeNSTextView, self).deleteBackward_)
 
     def deleteForward_(self, sender):
