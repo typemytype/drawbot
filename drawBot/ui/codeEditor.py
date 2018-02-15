@@ -593,17 +593,18 @@ class CodeNSTextView(AppKit.NSTextView):
         languageData = self.languagesIDEBehaviorForLanguage_(self.lexer().name)
         if languageData:
             autoCloseMap = languageData.get("autoCloseMap", dict())
+            try:
+                nextChar = self.string().substringWithRange_((selectedRange.location, 1))
+            except IndexError:
+                nextChar = ""
+            nextChar = nextChar.strip()
+            if nextChar in autoCloseMap.values():
+                nextChar = ""
+
             if char in autoCloseMap:
                 selectedText = self.string().substringWithRange_(selectedRange)
                 selectedText = selectedText.strip()
 
-                try:
-                    nextChar = self.string().substringWithRange_((selectedRange.location, 1))
-                    nextChar = nextChar.strip()
-                    if nextChar in autoCloseMap.values():
-                        nextChar = ""
-                except Exception:
-                    nextChar = ""
                 if not nextChar or selectedText:
                     closeChar = autoCloseMap[char]
                     toInsert = char + selectedText + closeChar
@@ -682,7 +683,7 @@ class CodeNSTextView(AppKit.NSTextView):
             selectedRange = self.selectedRange()
             try:
                 char = string[selectedRange.location - 1]
-            except Exception:
+            except IndexError:
                 char = ""
             if char == ".":
                 self.setSelectedRange_((selectedRange.location - 1, 1))
@@ -715,9 +716,9 @@ class CodeNSTextView(AppKit.NSTextView):
             selectedRange = self.selectedRange()
             if selectedRange.length == 0:
                 try:
-                    char = self.string().substringWithRange_((selectedRange.location-1, 1))
+                    char = self.string().substringWithRange_((selectedRange.location - 1, 1))
                     nextChar = self.string().substringWithRange_((selectedRange.location, 1))
-                except Exception:
+                except IndexError:
                     char = nextChar = ""
                 autoCloseMap = languageData.get("autoCloseMap", dict())
                 if autoCloseMap.get(char) == nextChar:
