@@ -598,6 +598,11 @@ class CodeNSTextView(AppKit.NSTextView):
             except IndexError:
                 nextChar = ""
             nextChar = nextChar.strip()
+            if char == nextChar and char in autoCloseMap.values():
+                reverseMap = {v: k for k, v in autoCloseMap.items()}
+                if reverseMap[char] != char:
+                    self.setSelectedRange_((selectedRange.location + 1, 0))
+                    return
             if nextChar in autoCloseMap.values():
                 nextChar = ""
 
