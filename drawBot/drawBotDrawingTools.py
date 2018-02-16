@@ -14,8 +14,9 @@ from .context.dummyContext import DummyContext
 
 from .context.tools.imageObject import ImageObject
 from .context.tools import gifTools
+from .context.tools import openType
 
-from .misc import DrawBotError, warnings, VariableController, optimizePath, isPDF, isEPS, isGIF, transformationAtCenter
+from .misc import DrawBotError, warnings, VariableController, optimizePath, isPDF, isEPS, isGIF, transformationAtCenter, clearMemoizeCache
 
 from fontTools.misc.py23 import basestring, PY2
 
@@ -138,6 +139,7 @@ class DrawBotDrawingTool(object):
             if not hasattr(self, "_tempInstalledFonts"):
                 self._tempInstalledFonts = dict()
         self._cachedPixelColorBitmaps = {}
+        clearMemoizeCache()
 
     def _copy(self):
         new = self.__class__()
@@ -2129,6 +2131,8 @@ class DrawBotDrawingTool(object):
 
         psName = self._dummyContext._fontNameForPath(path)
         self._tempInstalledFonts[path] = psName
+        # also clear cached memoized functions
+        clearMemoizeCache()
 
         if not success:
             warnings.warn("install font: %s" % error)
