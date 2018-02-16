@@ -333,6 +333,8 @@ _memoizeCache = dict()
 
 
 def clearMemoizeCache():
+    # clears all memoized caches
+    # this is intended as the usage of memoize is made per context
     _memoizeCache.clear()
 
 
@@ -357,8 +359,6 @@ def memoize(function):
             _memoizeCache[key] = result
             return result
     return wrapper
-
-
 
 
 if __name__ == "__main__":
