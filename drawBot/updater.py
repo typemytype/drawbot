@@ -54,9 +54,9 @@ def downloadCurrentVersion():
     Download the current version (dmg) and mount it
     """
     if PY2:
-        path = "http://static.typemytype.com/drawBot/DrawBot.dmg"
+        path = "http://static.typemytype.com/drawBot/DrawBotPy2.dmg"
     else:
-        path = "http://static.typemytype.com/drawBot/DrawBotPy3.dmg"
+        path = "http://static.typemytype.com/drawBot/DrawBot.dmg"
     try:
         # download and mount
         cmds = ["hdiutil", "attach", "-plist", path]
