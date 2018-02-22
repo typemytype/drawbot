@@ -94,7 +94,7 @@ class BezierPath(BasePen):
 
     def __init__(self, path=None, glyphSet=None):
         if path is None:
-            self._path = AppKit.NSBezierPath.bezierPath()
+            self._path = AppKit.NSBezierPath.alloc().init()
         else:
             self._path = path
         BasePen.__init__(self, glyphSet)
@@ -362,7 +362,7 @@ class BezierPath(BasePen):
     def optimizePath(self):
         count = self._path.elementCount()
         if self._path.elementAtIndex_(count - 1) == AppKit.NSMoveToBezierPathElement:
-            optimizedPath = AppKit.NSBezierPath.bezierPath()
+            optimizedPath = AppKit.NSBezierPath.alloc().init()
             for i in range(count - 1):
                 instruction, points = self._path.elementAtIndex_associatedPoints_(i)
                 if instruction == AppKit.NSMoveToBezierPathElement:
@@ -452,7 +452,7 @@ class BezierPath(BasePen):
         """
         if center != (0, 0):
             transformMatrix = transformationAtCenter(transformMatrix, center)
-        aT = AppKit.NSAffineTransform.transform()
+        aT = AppKit.NSAffineTransform.alloc().init()
         aT.setTransformStruct_(transformMatrix[:])
         self._path.transformUsingAffineTransform_(aT)
 
