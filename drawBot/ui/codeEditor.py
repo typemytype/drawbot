@@ -259,6 +259,8 @@ _multiLineParts = [
 
 _whiteSpaceRE = re.compile(r"[ \t]+")
 
+_quoteFinderRE = re.compile(r'([\"\'])((?:(?!\1)[^\\]|(?:\\\\)*\\[^\\])*)\1')
+
 
 def _findWhitespace(s, pos=0):
     m = _whiteSpaceRE.match(s, pos)
@@ -610,6 +612,19 @@ class CodeNSTextView(AppKit.NSTextView):
                 # fail silently
                 pass
             nextChar = nextChar.strip()
+            if char in "\"'":
+                # get the line
+                line, lineRange = self._getTextForRange(selectedRange)
+                # find all quoted string in the line
+                for found in _quoteFinderRE.finditer(line):
+                    if not found.group().startswith(char):
+                        # get the line location
+                        lineLocation = selectedRange.location - lineRange.location
+                        if found.start() < lineLocation < found.end():
+                            # if the cursor is inside the string
+                            # just insert the char
+                            self.insertText_(char)
+                            return
             # the the typed char is the same as the next char
             # and the char is part of the auto close map
             if char == nextChar and char in autoCloseMap.values():
