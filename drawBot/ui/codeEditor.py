@@ -595,9 +595,9 @@ class CodeNSTextView(AppKit.NSTextView):
             autoCloseMap = languageData.get("autoCloseMap", dict())
             # try to get the prev char, fail silently
             prevChar = ""
-            if selectedRange.location > 1:
+            if selectedRange.location >= 1:
                 try:
-                    prevChar = self.string().substringWithRange_((selectedRange.location-1, 1))
+                    prevChar = self.string().substringWithRange_((selectedRange.location - 1, 1))
                 except IndexError:
                     # fail silently
                     pass
@@ -615,16 +615,28 @@ class CodeNSTextView(AppKit.NSTextView):
             if char == nextChar and char in autoCloseMap.values():
                 reverseMap = {v: k for k, v in autoCloseMap.items()}
                 jumpSelection = False
+                jumpLocation = selectedRange.location
                 if char in "\"'" and prevChar != char:
                     # just jump the cursor if the the char is either ' or " and not the same
                     # so "hello + " --> jump cursor after the "
                     jumpSelection = True
+                    # special python case triple quotes
+                    triplets = ""
+                    try:
+                        triplets = self.string().substringWithRange_((selectedRange.location, 3))
+                    except IndexError:
+                        # fail silently
+                        pass
+                    triplets = triplets.strip()
+                    if triplets == char * 3:
+                        jumpLocation += 2
+
                 elif reverseMap[char] != char:
                     # just jump the cursor if the char is not in the reversed auto close map
                     jumpSelection = True
                 if jumpSelection:
                     # adjust the cursor
-                    self.setSelectedRange_((selectedRange.location + 1, 0))
+                    self.setSelectedRange_((jumpLocation + 1, 0))
                     return
             # reset the next char if it part of the auto close map
             if nextChar in autoCloseMap.values():
