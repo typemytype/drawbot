@@ -590,30 +590,60 @@ class CodeNSTextView(AppKit.NSTextView):
                 self._insertTextAndRun("True", selectedRange)
                 return
 
-        languageData = self.languagesIDEBehaviorForLanguage_(self.lexer().name)
         if languageData:
+            # get the auto close map based on the given lexer
             autoCloseMap = languageData.get("autoCloseMap", dict())
+            # try to get the prev char, fail silently
+            prevChar = ""
+            if selectedRange.location > 1:
+                try:
+                    prevChar = self.string().substringWithRange_((selectedRange.location-1, 1))
+                except IndexError:
+                    # fail silently
+                    pass
+            prevChar = prevChar.strip()
+            # try to get the next char, fail silently
+            nextChar = ""
             try:
                 nextChar = self.string().substringWithRange_((selectedRange.location, 1))
             except IndexError:
-                nextChar = ""
+                # fail silently
+                pass
             nextChar = nextChar.strip()
+            # the the typed char is the same as the next char
+            # and the char is part of the auto close map
             if char == nextChar and char in autoCloseMap.values():
                 reverseMap = {v: k for k, v in autoCloseMap.items()}
-                if reverseMap[char] != char:
+                jumpSelection = False
+                if char in "\"'" and prevChar != char:
+                    # just jump the cursor if the the char is either ' or " and not the same
+                    # so "hello + " --> jump cursor after the "
+                    jumpSelection = True
+                elif reverseMap[char] != char:
+                    # just jump the cursor if the char is not in the reversed auto close map
+                    jumpSelection = True
+                if jumpSelection:
+                    # adjust the cursor
                     self.setSelectedRange_((selectedRange.location + 1, 0))
                     return
+            # reset the next char if it part of the auto close map
             if nextChar in autoCloseMap.values():
                 nextChar = ""
-
+            # the typed char is in the auto close map
             if char in autoCloseMap:
+                # get the selected text
                 selectedText = self.string().substringWithRange_(selectedRange)
                 selectedText = selectedText.strip()
-
+                # if there is no next char
+                # or when there is a text selected
                 if not nextChar or selectedText:
+                    # get the closing char
                     closeChar = autoCloseMap[char]
+                    # construct text with auto closed chars
                     toInsert = char + selectedText + closeChar
+                    # insert the text
                     self.insertText_(toInsert)
+                    # reset the selection
                     if not selectedText:
                         selectedRange.location += 1
                         selectedRange.length = 0
@@ -621,7 +651,7 @@ class CodeNSTextView(AppKit.NSTextView):
                         selectedRange.length = len(toInsert)
                     self.setSelectedRange_(selectedRange)
                     return
-
+        # perform the default behaviour of the text view
         super(CodeNSTextView, self).keyDown_(event)
         selectedRange = self.selectedRange()
         self._balanceParenForChar(char, selectedRange.location)
