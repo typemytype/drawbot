@@ -589,7 +589,7 @@ class CodeNSTextView(AppKit.NSTextView):
             if txt == "False":
                 self._insertTextAndRun("True", selectedRange)
                 return
-
+        languageData = self.languagesIDEBehaviorForLanguage_(self.lexer().name)
         if languageData:
             # get the auto close map based on the given lexer
             autoCloseMap = languageData.get("autoCloseMap", dict())
