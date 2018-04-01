@@ -613,28 +613,7 @@ class CodeNSTextView(AppKit.NSTextView):
                 pass
             nextChar = nextChar.strip()
             if char in "\"'":
-                # get the line
-                line, lineRange = self._getTextForRange(selectedRange)
-                # find all quoted string in the line
-                for found in _quoteFinderRE.finditer(line):
-                    if not found.group().startswith(char):
-                        # get the line location
-                        lineLocation = selectedRange.location - lineRange.location
-                        if found.start() < lineLocation < found.end():
-                            # if the cursor is inside the string
-                            # just insert the char
-                            self.insertText_(char)
-                            return
-            # the the typed char is the same as the next char
-            # and the char is part of the auto close map
-            if char == nextChar and char in autoCloseMap.values():
-                reverseMap = {v: k for k, v in autoCloseMap.items()}
-                jumpSelection = False
-                jumpLocation = selectedRange.location
-                if char in "\"'" and prevChar != char:
-                    # just jump the cursor if the the char is either ' or " and not the same
-                    # so "hello + " --> jump cursor after the "
-                    jumpSelection = True
+                if prevChar != char:
                     # special python case triple quotes
                     triplets = ""
                     try:
@@ -644,14 +623,21 @@ class CodeNSTextView(AppKit.NSTextView):
                         pass
                     triplets = triplets.strip()
                     if triplets == char * 3:
-                        jumpLocation += 2
-
-                elif reverseMap[char] != char:
+                        # jump the cursor after the triple quotes
+                        self.setSelectedRange_((selectedRange.location + 3, 0))
+                        return
+                    if prevChar and selectedRange.length == 0:
+                        # dont auto close
+                        self.insertText_(char)
+                        return
+            # the the typed char is the same as the next char
+            # and the char is part of the auto close map
+            if char == nextChar and char in autoCloseMap.values():
+                reverseMap = {v: k for k, v in autoCloseMap.items()}
+                if reverseMap[char] != char:
                     # just jump the cursor if the char is not in the reversed auto close map
-                    jumpSelection = True
-                if jumpSelection:
                     # adjust the cursor
-                    self.setSelectedRange_((jumpLocation + 1, 0))
+                    self.setSelectedRange_((selectedRange.location + 1, 0))
                     return
             # reset the next char if it part of the auto close map
             if nextChar in autoCloseMap.values():
