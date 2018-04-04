@@ -626,6 +626,10 @@ class CodeNSTextView(AppKit.NSTextView):
                         # jump the cursor after the triple quotes
                         self.setSelectedRange_((selectedRange.location + 3, 0))
                         return
+                    if nextChar == char:
+                        # jump the cursor after a quote
+                        self.setSelectedRange_((selectedRange.location + 1, 0))
+                        return
                     if prevChar and selectedRange.length == 0:
                         # dont auto close
                         self.insertText_(char)
