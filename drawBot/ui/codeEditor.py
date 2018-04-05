@@ -630,7 +630,7 @@ class CodeNSTextView(AppKit.NSTextView):
                         # jump the cursor after a quote
                         self.setSelectedRange_((selectedRange.location + 1, 0))
                         return
-                    if prevChar and (prevChar not in autoCloseMap.keys() or prevChar in "\"'") and selectedRange.length == 0:
+                    if prevChar and (prevChar not in autoCloseMap or prevChar in "\"'") and selectedRange.length == 0:
                         # dont auto close
                         self.insertText_(char)
                         return
