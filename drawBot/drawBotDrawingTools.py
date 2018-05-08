@@ -587,6 +587,13 @@ class DrawBotDrawingTool(object):
         self._requiresNewFirstPage = True
         self._addInstruction("curveTo", (x1, y1), (x2, y2), (x3, y3))
 
+    def qCurveTo(self, *points):
+        """
+        Quadratic curve with a given set of off curves to a on curve.
+        """
+        self._requiresNewFirstPage = True
+        self._addInstruction("qCurveTo", points)
+
     def arc(self, center, radius, startAngle, endAngle, clockwise):
         """
         Arc with `center` and a given `radius`, from `startAngle` to `endAngle`, going clockwise if `clockwise` is True and counter clockwise if `clockwise` is False.

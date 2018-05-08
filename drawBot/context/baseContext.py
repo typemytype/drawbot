@@ -1914,6 +1914,9 @@ class BaseContext(object):
     def curveTo(self, pt1, pt2, pt):
         self._state.path.curveTo(pt1, pt2, pt)
 
+    def qCurveTo(self, points):
+        self._state.path.qCurveTo(*points)
+
     def arc(self, center, radius, startAngle, endAngle, clockwise):
         self._state.path.arc(center, radius, startAngle, endAngle, clockwise)
 
