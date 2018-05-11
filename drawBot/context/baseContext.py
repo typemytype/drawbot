@@ -153,8 +153,9 @@ class BezierPath(BasePen):
         """
         if hasattr(self, "_pointToSegmentPen"):
             # its been uses in a point pen world
-            self._pointToSegmentPen.endPath()
+            pointToSegmentPen = self._pointToSegmentPen
             del self._pointToSegmentPen
+            pointToSegmentPen.endPath()
 
     def drawToPen(self, pen):
         """
