@@ -814,7 +814,7 @@ class CodeNSTextView(AppKit.NSTextView):
             self._arrowSelectionDirection = downArrowSelectionDirection
         if len(ranges) == 1:
             newRange = ranges[0].rangeValue()
-            testLocation = -1
+            testLocation = 0xFFFFFFFB
             if newRange.length and self._arrowSelectionDirection != downArrowSelectionDirection:
                 testLocation = self._getLeftWordRange(AppKit.NSRange(newRange.location + newRange.length, 0))
             if AppKit.NSLocationInRange(testLocation, newRange) or AppKit.NSMaxRange(newRange) == testLocation:
@@ -843,7 +843,7 @@ class CodeNSTextView(AppKit.NSTextView):
             self._arrowSelectionDirection = upArrowSelectionDirection
         if len(ranges) == 1:
             newRange = ranges[0].rangeValue()
-            testLocation = -1
+            testLocation = 0xFFFFFFFB
             if newRange.length and self._arrowSelectionDirection != upArrowSelectionDirection:
                 testLocation = self._getRightWordRange(AppKit.NSRange(newRange.location, 0))
             if AppKit.NSLocationInRange(testLocation, newRange) or AppKit.NSMaxRange(newRange) == testLocation:
