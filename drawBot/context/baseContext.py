@@ -5,6 +5,7 @@ import CoreText
 import Quartz
 
 import math
+import os
 
 from fontTools.pens.basePen import BasePen
 from fontTools.misc.py23 import basestring, PY2, unichr
@@ -1527,13 +1528,27 @@ class FormattedString(object):
         Return a list of glyph names supported by the current font.
         """
         from fontTools.ttLib import TTFont, TTLibError
+        from fontTools.misc.macRes import ResourceReader, ResourceError
+
         path = self.fontFilePath()
         if path is None:
             return []
         try:
             # load the font with fontTools
             # provide a fontNumber as lots of fonts are .ttc font files.
-            fontToolsFont = TTFont(path, lazy=True, fontNumber=0)
+            # search for the res_name_or_index for .dfont files.
+            res_name_or_index = None
+            if os.path.splitext(path)[-1].lower() == ".dfont":
+                try:
+                    reader = ResourceReader(path)
+                    names = reader.getNames("sfnt")
+                    if self._font in names:
+                        res_name_or_index = self._font
+                    else:
+                        res_name_or_index = names[0]
+                except ResourceError:
+                    pass
+            fontToolsFont = TTFont(path, lazy=True, fontNumber=0, res_name_or_index=res_name_or_index)
         except TTLibError:
             warnings.warn("Cannot read the font file for '%s' at the path '%s'" % (self._font, path))
             return []
