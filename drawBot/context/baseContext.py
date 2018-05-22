@@ -1030,6 +1030,15 @@ class FormattedString(object):
         if self._tabs:
             for tabStop in para.tabStops():
                 para.removeTabStop_(tabStop)
+
+            if len(self._tabs) < 12:
+                self._tabs = list(self._tabs)
+                # add tab stops if there is not enough stops...
+                # the default is 12 tabs, so lets add 12 in steps of 28
+                lastTabValue = self._tabs[-1][0]
+                for tabIndex in range(12 - len(self._tabs)):
+                    self._tabs.append((lastTabValue + 28 * (tabIndex + 1), "left"))
+
             for tab, tabAlign in self._tabs:
                 tabOptions = None
                 if tabAlign in self._textTabAlignMap:
