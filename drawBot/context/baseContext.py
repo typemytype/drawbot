@@ -1538,7 +1538,31 @@ class FormattedString(object):
             # provide a fontNumber as lots of fonts are .ttc font files.
             # search for the res_name_or_index for .dfont files.
             res_name_or_index = None
-            if os.path.splitext(path)[-1].lower() == ".dfont":
+            fontNumber = None
+            ext = os.path.splitext(path)[-1].lower()
+            if ext == ".ttc":
+                def _getPSName(source):
+                    # get PS name
+                    name = source["name"]
+                    psName = name.getName(6, 1, 0)
+                    if psName is None:
+                        psName.getName(6, 3, 1)
+                    return psName.toStr()
+
+                ttc = TTFont(path, lazy=True, fontNumber=0)
+                numFonts = ttc.reader.numFonts
+                foundPSName = False
+                for fontNumber in range(numFonts):
+                    source = TTFont(path, lazy=True, fontNumber=fontNumber)
+                    psName = _getPSName(source)
+                    if psName == self._font:
+                        foundPSName = True
+                        break
+                if not foundPSName:
+                    # fallback to the first font in the ttc.
+                    fontNumber = 0
+
+            elif ext == ".dfont":
                 try:
                     reader = ResourceReader(path)
                     names = reader.getNames("sfnt")
@@ -1548,7 +1572,7 @@ class FormattedString(object):
                         res_name_or_index = names[0]
                 except ResourceError:
                     pass
-            fontToolsFont = TTFont(path, lazy=True, fontNumber=0, res_name_or_index=res_name_or_index)
+            fontToolsFont = TTFont(path, lazy=True, fontNumber=fontNumber, res_name_or_index=res_name_or_index)
         except TTLibError:
             warnings.warn("Cannot read the font file for '%s' at the path '%s'" % (self._font, path))
             return []
