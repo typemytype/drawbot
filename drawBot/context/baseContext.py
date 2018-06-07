@@ -904,7 +904,7 @@ class FormattedString(object):
 
     def clear(self, onlyText=False):
         if onlyText:
-            self._attributedString.replaceCharactersInRange_withString_((0, self._attributedString.length() - 1), "")
+            self._attributedString.replaceCharactersInRange_withString_((0, self._attributedString.length()), "")
         else:
             self._attributedString = AppKit.NSMutableAttributedString.alloc().init()
 
