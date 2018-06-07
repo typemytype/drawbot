@@ -902,8 +902,11 @@ class FormattedString(object):
         result.update(attributes)
         return result
 
-    def clear(self):
-        self._attributedString = AppKit.NSMutableAttributedString.alloc().init()
+    def clear(self, onlyText=False):
+        if onlyText:
+            self._attributedString.replaceCharactersInRange_withString_((0, self._attributedString.length() - 1), "")
+        else:
+            self._attributedString = AppKit.NSMutableAttributedString.alloc().init()
 
     def append(self, txt, **kwargs):
         """
