@@ -16,7 +16,7 @@ DrawBot can also be installed as a Python module, the app is not required.
 download: https://github.com/typemytype/drawbot/archive/master.zip
 
 run `cd <path/where/you/have/downloaded/and/unzipped/drawBot>`
-run `python setupAsModule.py install`
+run `python setup.py install`
 
 #### Usage
 
@@ -65,7 +65,7 @@ DrawBot is compiled with [py2app](https://pypi.python.org/pypi/py2app/) into an 
 
 
     cd path/To/drawBot
-    python setup.py py2app
+    python setupApp.py py2app
 
 
 #### compile drawBot Python module only
@@ -82,4 +82,4 @@ __Required packages:__
 __Compile:__
 
 	cd path/To/drawBot
-    python setupAsModule.py install
+    python setup.py install
