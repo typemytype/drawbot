@@ -1,4 +1,3 @@
-import AppKit
 import os
 
 from defconAppKit.windows.baseWindow import BaseWindowController
@@ -11,13 +10,13 @@ from drawBot.drawBotPackage import DrawBotPackage
 class DrawBotPackageController(BaseWindowController):
 
     packageInfo = [
-            "name",
-            "version",
-            "developer",
-            "developerURL",
-            "requiresVersion",
-            "mainScript",
-        ]
+        "name",
+        "version",
+        "developer",
+        "developerURL",
+        "requiresVersion",
+        "mainScript",
+    ]
 
     def __init__(self):
         self.bundle = DrawBotPackage()
@@ -27,7 +26,7 @@ class DrawBotPackageController(BaseWindowController):
         y = 10
         m = 120
         for attr in self.packageInfo:
-            text = vanilla.TextBox((10, y, m-15, 22), "%s:" % attr, alignment="right")
+            text = vanilla.TextBox((10, y, m - 15, 22), "%s:" % attr, alignment="right")
             edit = vanilla.EditText((m, y, -10, 22), placeholder=getattr(self.bundle.info, attr))
 
             setattr(self.w, "%s_text" % attr, text)
@@ -38,8 +37,8 @@ class DrawBotPackageController(BaseWindowController):
         y += 30
         self.w.h1 = vanilla.HorizontalLine((0, y, 0, 1))
         y += 10
-        self.w.scriptRoot_text = vanilla.TextBox((10, y, m-15, 22), "Script Root:", alignment="right")
-        self.w.scriptRoot = vanilla.PathControlPopUp((m, y-2, -10, 22), None, callback=self.scriptRootCallback)
+        self.w.scriptRoot_text = vanilla.TextBox((10, y, m - 15, 22), "Script Root:", alignment="right")
+        self.w.scriptRoot = vanilla.PathControl((m, y - 2, -10, 22), None, pathStyle="popUp", callback=self.scriptRootCallback)
         y += 25
         self.w.scriptRoot_note = vanilla.TextBox((m, y, -10, 22), "A folder containing all required python files.", sizeStyle="mini")
 
@@ -62,9 +61,11 @@ class DrawBotPackageController(BaseWindowController):
         if root is None:
             self.showMessage("Package error.", "A scripting root must be provided.")
             return
+
         def saveBundle(path):
             if path:
                 succes, report = self.bundle.buildPackage(path, root)
                 if not succes:
                     self.showMessage("Package error.", report)
+
         self.showPutFile(["drawbot"], saveBundle)
