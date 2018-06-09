@@ -122,6 +122,13 @@ plist = dict(
             CFBundleTypeIconFile="pythonIcon.icns",
             NSDocumentClass="DrawBotDocument",
         ),
+        dict(
+            CFBundleTypeExtensions=["drawbot"],
+            CFBundleTypeName="DrawBot Package",
+            CFBundleTypeRole="Viewer",
+            CFBundleTypeIconFile="drawbotIcon.icns",
+            NSDocumentClass="DrawBotDocument",
+        ),
     ],
     CFBundleIdentifier="com.drawbot",
     LSMinimumSystemVersion=osxMinVersion,

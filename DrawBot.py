@@ -7,14 +7,19 @@ from random import randint
 
 from fontTools.misc.py23 import PY3
 
+from vanilla.dialogs import message
+
 from drawBot.ui.drawBotController import DrawBotController
 from drawBot.ui.preferencesController import PreferencesController
 from drawBot.ui.debug import DebugWindowController
 from drawBot.scriptTools import retrieveCheckEventQueueForUserCancelFromCarbon
 
 import drawBot.drawBotDrawingTools
+
+from drawBot.ui.drawBotPackageController import DrawBotPackageController
 from drawBot.misc import getDefault, stringToInt
 from drawBot.updater import Updater
+from drawBot.drawBotPackage import DrawBotPackage
 
 import objc
 from objc import super
@@ -181,6 +186,9 @@ class DrawBotAppDelegate(AppKit.NSObject):
         ws = AppKit.NSWorkspace.sharedWorkspace()
         ws.openURL_(AppKit.NSURL.URLWithString_(url))
 
+    def buildPackage_(self, sender):
+        DrawBotPackageController()
+
     def getUrl_withReplyEvent_(self, event, reply):
         if PY3:
             from urllib.parse import urlparse
@@ -237,6 +245,16 @@ class DrawBotAppDelegate(AppKit.NSObject):
             dest.performFindPanelAction_(action)
         except Exception:
             pass
+
+    def application_openFile_(self, app, path):
+        ext = os.path.splitext(path)[-1]
+        if ext.lower() == ".drawbot":
+            succes, report = DrawBotPackage(path).run()
+            if not succes:
+                fileName = os.path.basename(path)
+                message("The DrawBot package '%s' failed." % fileName, report)
+            return True
+        return False
 
 
 if __name__ == "__main__":
