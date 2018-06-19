@@ -14,8 +14,6 @@ from drawBot.ui.preferencesController import PreferencesController
 from drawBot.ui.debug import DebugWindowController
 from drawBot.scriptTools import retrieveCheckEventQueueForUserCancelFromCarbon
 
-import drawBot.drawBotDrawingTools
-
 from drawBot.ui.drawBotPackageController import DrawBotPackageController
 from drawBot.misc import getDefault, stringToInt
 from drawBot.updater import Updater
@@ -25,12 +23,6 @@ import objc
 from objc import super
 
 objc.setVerbose(True)
-
-
-if PY3:
-    iconAnimationFormatter = "icon_py3_%s"
-else:
-    iconAnimationFormatter = "icon_%s"
 
 
 class DrawBotDocument(AppKit.NSDocument):
@@ -161,10 +153,16 @@ class DrawBotAppDelegate(AppKit.NSObject):
         if getDefault("DrawBotAnimateIcon", True):
             self._iconTimer = AppKit.NSTimer.scheduledTimerWithTimeInterval_target_selector_userInfo_repeats_(0.1, self, "animateApplicationIcon:", None, False)
 
+    _iconCounter = 0
+
     def animateApplicationIcon_(self, timer):
         if AppKit.NSApp().isActive():
-            image = AppKit.NSImage.imageNamed_(iconAnimationFormatter % randint(0, 20))
+            print(self._iconCounter)
+            image = AppKit.NSImage.imageNamed_("icon_%s" % self._iconCounter)
             AppKit.NSApp().setApplicationIconImage_(image)
+            self._iconCounter += 1
+            if self._iconCounter > 20:
+                self._iconCounter = 0
             self.sheduleIconTimer()
 
     def showDocumentation_(self, sender):
