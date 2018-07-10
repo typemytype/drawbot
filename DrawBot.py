@@ -157,7 +157,6 @@ class DrawBotAppDelegate(AppKit.NSObject):
 
     def animateApplicationIcon_(self, timer):
         if AppKit.NSApp().isActive():
-            print(self._iconCounter)
             image = AppKit.NSImage.imageNamed_("icon_%s" % self._iconCounter)
             AppKit.NSApp().setApplicationIconImage_(image)
             self._iconCounter += 1
