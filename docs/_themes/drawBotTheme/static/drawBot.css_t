@@ -183,7 +183,7 @@ div.header a:hover {
 /* logo */
 
 .logo {
-	margin-left: 150px;
+	margin-left: 180px;
 	margin-right: auto;
 	margin-bottom: -40px;
 	width: 50%;
