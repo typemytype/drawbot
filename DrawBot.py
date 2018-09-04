@@ -134,10 +134,9 @@ class DrawBotAppDelegate(AppKit.NSObject):
         assert os.path.exists(testScript), "%r cannot be found" % testScript
         with open(testScript) as f:
             source = f.read()
-        print("starting test script")
         try:
             exec(source, {"__name__": "__main__", "__file__": testScript})
-        except:
+        except Exception:
             traceback.print_exc()
         AppKit.NSApp().terminate_(None)
 
