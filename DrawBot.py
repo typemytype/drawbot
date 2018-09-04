@@ -3,7 +3,7 @@ from PyObjCTools import AppHelper
 
 import sys
 import os
-from random import randint
+import random
 
 from fontTools.misc.py23 import PY3
 
@@ -154,10 +154,11 @@ class DrawBotAppDelegate(AppKit.NSObject):
             self._iconTimer = AppKit.NSTimer.scheduledTimerWithTimeInterval_target_selector_userInfo_repeats_(0.1, self, "animateApplicationIcon:", None, False)
 
     _iconCounter = 0
+    _iconHand = random.choice(["left", "right"])
 
     def animateApplicationIcon_(self, timer):
         if AppKit.NSApp().isActive():
-            image = AppKit.NSImage.imageNamed_("icon_%s" % self._iconCounter)
+            image = AppKit.NSImage.imageNamed_("icon_%s_%s" % (self._iconHand, self._iconCounter))
             AppKit.NSApp().setApplicationIconImage_(image)
             self._iconCounter += 1
             if self._iconCounter > 20:
