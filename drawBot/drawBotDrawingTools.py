@@ -477,7 +477,7 @@ class DrawBotDrawingTool(object):
 
     def save(self):
         """
-        Obsolete: use `savedState()` in a `with` statement instead.
+        DrawBot strongly recommends to use `savedState()` in a `with` statement instead.
 
         Save the current graphics state.
         This will save the state of the canvas (with all the transformations)
@@ -489,7 +489,7 @@ class DrawBotDrawingTool(object):
 
     def restore(self):
         """
-        Obsolete: use `savedState()` in a `with` statement instead.
+        DrawBot strongly recommends to use `savedState()` in a `with` statement instead.
 
         Restore from a previously saved graphics state.
         This will restore the state of the canvas (with all the transformations)
