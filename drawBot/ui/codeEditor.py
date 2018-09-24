@@ -498,7 +498,7 @@ class CodeNSTextView(AppKit.NSTextView):
         return False
 
     def isAutomaticTextReplacementEnabled(self):
-        return True
+        return False
 
     def isAutomaticQuoteSubstitutionEnabled(self):
         return False
