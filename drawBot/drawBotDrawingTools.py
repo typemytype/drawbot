@@ -294,6 +294,9 @@ class DrawBotDrawingTool(object):
             width, height = _paperSizes[width]
         if width == "screen":
             width, height = AppKit.NSScreen.mainScreen().frame().size
+        if width is None and height is None:
+            width = self._width
+            height = self._height
         self._width = width
         self._height = height
         self._hasPage = True

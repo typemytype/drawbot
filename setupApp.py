@@ -107,10 +107,7 @@ runTests = getValueFromSysArgv("--runTests", isBooleanFlag=True)
 
 osxMinVersion = "10.9.0"
 
-if PY3:
-    iconFile = "DrawBotPy3.icns"
-else:
-    iconFile = "DrawBot.icns"
+iconFile = "DrawBot.icns"
 
 plist = dict(
 
@@ -121,6 +118,14 @@ plist = dict(
             CFBundleTypeRole="Editor",
             CFBundleTypeIconFile="pythonIcon.icns",
             NSDocumentClass="DrawBotDocument",
+        ),
+        dict(
+            CFBundleTypeExtensions=["drawbot"],
+            CFBundleTypeName="DrawBot Package",
+            CFBundleTypeRole="Viewer",
+            CFBundleTypeIconFile="drawbotPackageIcon.icns",
+            NSDocumentClass="DrawBotDocument",
+            LSTypeIsPackage=True,
         ),
     ],
     CFBundleIdentifier="com.drawbot",

@@ -3,29 +3,26 @@ from PyObjCTools import AppHelper
 
 import sys
 import os
-from random import randint
+import random
 
 from fontTools.misc.py23 import PY3
+
+from vanilla.dialogs import message
 
 from drawBot.ui.drawBotController import DrawBotController
 from drawBot.ui.preferencesController import PreferencesController
 from drawBot.ui.debug import DebugWindowController
 from drawBot.scriptTools import retrieveCheckEventQueueForUserCancelFromCarbon
 
-import drawBot.drawBotDrawingTools
+from drawBot.ui.drawBotPackageController import DrawBotPackageController
 from drawBot.misc import getDefault, stringToInt
 from drawBot.updater import Updater
+from drawBot.drawBotPackage import DrawBotPackage
 
 import objc
 from objc import super
 
 objc.setVerbose(True)
-
-
-if PY3:
-    iconAnimationFormatter = "icon_py3_%s"
-else:
-    iconAnimationFormatter = "icon_%s"
 
 
 class DrawBotDocument(AppKit.NSDocument):
@@ -137,10 +134,9 @@ class DrawBotAppDelegate(AppKit.NSObject):
         assert os.path.exists(testScript), "%r cannot be found" % testScript
         with open(testScript) as f:
             source = f.read()
-        print("starting test script")
         try:
             exec(source, {"__name__": "__main__", "__file__": testScript})
-        except:
+        except Exception:
             traceback.print_exc()
         AppKit.NSApp().terminate_(None)
 
@@ -156,10 +152,16 @@ class DrawBotAppDelegate(AppKit.NSObject):
         if getDefault("DrawBotAnimateIcon", True):
             self._iconTimer = AppKit.NSTimer.scheduledTimerWithTimeInterval_target_selector_userInfo_repeats_(0.1, self, "animateApplicationIcon:", None, False)
 
+    _iconCounter = 0
+    _iconHand = random.choice(["left", "right"])
+
     def animateApplicationIcon_(self, timer):
         if AppKit.NSApp().isActive():
-            image = AppKit.NSImage.imageNamed_(iconAnimationFormatter % randint(0, 20))
+            image = AppKit.NSImage.imageNamed_("icon_%s_%s" % (self._iconHand, self._iconCounter))
             AppKit.NSApp().setApplicationIconImage_(image)
+            self._iconCounter += 1
+            if self._iconCounter > 20:
+                self._iconCounter = 0
             self.sheduleIconTimer()
 
     def showDocumentation_(self, sender):
@@ -180,6 +182,9 @@ class DrawBotAppDelegate(AppKit.NSObject):
         url = "http://forum.drawbot.com"
         ws = AppKit.NSWorkspace.sharedWorkspace()
         ws.openURL_(AppKit.NSURL.URLWithString_(url))
+
+    def buildPackage_(self, sender):
+        DrawBotPackageController()
 
     def getUrl_withReplyEvent_(self, event, reply):
         if PY3:
@@ -237,6 +242,16 @@ class DrawBotAppDelegate(AppKit.NSObject):
             dest.performFindPanelAction_(action)
         except Exception:
             pass
+
+    def application_openFile_(self, app, path):
+        ext = os.path.splitext(path)[-1]
+        if ext.lower() == ".drawbot":
+            succes, report = DrawBotPackage(path).run()
+            if not succes:
+                fileName = os.path.basename(path)
+                message("The DrawBot package '%s' failed." % fileName, report)
+            return True
+        return False
 
 
 if __name__ == "__main__":

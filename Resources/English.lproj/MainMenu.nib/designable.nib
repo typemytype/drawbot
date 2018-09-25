@@ -105,6 +105,13 @@
                                     <action selector="saveDocumentAsPDF:" target="-1" id="571"/>
                                 </connections>
                             </menuItem>
+                            <menuItem isSeparatorItem="YES" id="sPe-ju-YC0"/>
+                            <menuItem title="Package Builder" id="kOK-58-X7j">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="buildPackage:" target="-1" id="s64-Wc-EOn"/>
+                                </connections>
+                            </menuItem>
                             <menuItem isSeparatorItem="YES" id="572"/>
                             <menuItem title="Print..." keyEquivalent="p" id="573">
                                 <connections>

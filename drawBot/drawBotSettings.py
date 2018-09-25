@@ -6,4 +6,4 @@ else:
     appName = "DrawBotPy2"
 
 
-__version__ = "3.115"
+__version__ = "3.116"
