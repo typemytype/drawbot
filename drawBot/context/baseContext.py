@@ -1576,7 +1576,7 @@ class FormattedString(object):
         except TTLibError:
             warnings.warn("Cannot read the font file for '%s' at the path '%s'" % (self._font, path))
             return []
-        glyphNames = fontToolsFont.getGlyphNames()
+        glyphNames = fontToolsFont.getGlyphOrder()
         fontToolsFont.close()
         # remove .notdef from glyph names
         if ".notdef" in glyphNames:
