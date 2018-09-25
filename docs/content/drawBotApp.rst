@@ -18,3 +18,4 @@ The :doc:`drawBotApp/preferences` window contains some settings related to the a
 	drawBotApp/codeEditor
 	drawBotApp/preview
 	drawBotApp/preferences
+	drawBotApp/drawBotPackage
