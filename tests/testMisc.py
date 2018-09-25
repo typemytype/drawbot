@@ -6,6 +6,7 @@ import sys
 import os
 import unittest
 import io
+from collections import OrderedDict
 import drawBot
 from drawBot.misc import DrawBotError, warnings
 from drawBot.scriptTools import ScriptRunner
@@ -42,7 +43,7 @@ class MiscTest(unittest.TestCase):
         drawBot.font("Skia")
         # get the default font variations
         var = drawBot.listFontVariations()
-        expectedVar = {'wght': {'name': 'Weight', 'minValue': 0.4799, 'maxValue': 3.1999, 'defaultValue': 1.0}, 'wdth': {'name': 'Width', 'minValue': 0.6199, 'maxValue': 1.2999, 'defaultValue': 1.0}}
+        expectedVar = OrderedDict({'wght': {'name': 'Weight', 'minValue': 0.4799, 'maxValue': 3.1999, 'defaultValue': 1.0}, 'wdth': {'name': 'Width', 'minValue': 0.6199, 'maxValue': 1.3, 'defaultValue': 1.0}})
         self.assertEqual(var, expectedVar)
         # set a font variation
         var = drawBot.fontVariations(wght=5)
@@ -73,6 +74,15 @@ class MiscTest(unittest.TestCase):
             drawBot.polygon((1, 2), (3, 4), closed=False)
         with self.assertRaises(TypeError):
             drawBot.polygon((1, 2), (3, 4), closed=False, foo=123)
+
+    def test_image_imageResolution(self):
+        path = os.path.join(testDataDir, "drawbot.png")
+        dpi = drawBot.imageResolution(path)
+        self.assertEqual(dpi, 72)
+
+        path = os.path.join(testDataDir, "drawbot144.png")
+        dpi = drawBot.imageResolution(path)
+        self.assertEqual(dpi, 144)
 
     def test_ScriptRunner_StdOutCollector(self):
         out = StdOutCollector()

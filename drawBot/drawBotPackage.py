@@ -130,7 +130,7 @@ class DrawBotPackage(object):
         # check if the main script path exists
         mainScriptPath = os.path.join(scriptRoot, self.info.mainScript)
         if not os.path.exists(mainScriptPath):
-            return False, "Main script path '%s' does not exists in '%s'." % (self.info.mainScript, libRoot)
+            return False, "Main script path '%s' does not exists in '%s'." % (self.info.mainScript, mainScriptPath)
         # build packages in temp folder
         tempDir = tempfile.mkdtemp()
         # set the temp folder
