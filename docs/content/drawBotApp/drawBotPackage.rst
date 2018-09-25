@@ -33,7 +33,7 @@ A `.drawbot` package is a folder with an extension.
             ...
 
 
-The info plist dictionary can have the following optional keyword:
+The info plist dictionary can have the following keywords:
 
 * `name`: optional, default to <name>.drawBot
 * `version`: optional, default to 0.0, but advised to set
