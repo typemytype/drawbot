@@ -1,7 +1,7 @@
 pyobjc
 git+https://github.com/typesupply/vanilla
 defcon
-git+https://github.com/typemytype/defconAppKit
+git+https://github.com/typesupply/defconAppKit
 fontTools
 brotli
 pygments
