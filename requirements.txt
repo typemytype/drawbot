@@ -1,4 +1,5 @@
 pyobjc
+py2app
 git+https://github.com/typesupply/vanilla
 defcon
 git+https://github.com/typesupply/defconAppKit
