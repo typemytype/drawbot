@@ -168,6 +168,38 @@ class MiscTest(unittest.TestCase):
         ScriptRunner("aaa bbb", stdout=out, stderr=out, checkSyntaxOnly=True)
         self.assertEqual(out.lines()[-1], 'SyntaxError: invalid syntax')
 
+    def test_newPage_empty_single(self):
+        drawBot.newDrawing()
+        drawBot.newPage()
+        self.assertEqual(drawBot.width(), 1000)
+        self.assertEqual(drawBot.height(), 1000)
+        self.assertEqual(drawBot.pageCount(), 1)
+
+    def test_newPage_empty_implicit_first_page(self):
+        drawBot.newDrawing()
+        drawBot.rect(100, 100, 200, 200)
+        drawBot.newPage()
+        self.assertEqual(drawBot.width(), 1000)
+        self.assertEqual(drawBot.height(), 1000)
+        self.assertEqual(drawBot.pageCount(), 2)
+
+    def test_newPage_empty_multiple(self):
+        drawBot.newDrawing()
+        drawBot.newPage()
+        drawBot.newPage()
+        drawBot.newPage()
+        self.assertEqual(drawBot.width(), 1000)
+        self.assertEqual(drawBot.height(), 1000)
+        self.assertEqual(drawBot.pageCount(), 3)
+
+    def test_newPage_following(self):
+        drawBot.newDrawing()
+        drawBot.size(400, 500)
+        drawBot.newPage()
+        self.assertEqual(drawBot.width(), 400)
+        self.assertEqual(drawBot.height(), 500)
+        self.assertEqual(drawBot.pageCount(), 2)
+
 
 if __name__ == '__main__':
     sys.exit(unittest.main())
