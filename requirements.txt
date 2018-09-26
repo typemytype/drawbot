@@ -6,6 +6,7 @@ fontTools
 brotli
 pygments
 jedi
+attrs
 booleanOperations
 mutatorMath
 git+https://github.com/robofab-developers/fontParts
