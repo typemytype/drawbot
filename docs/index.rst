@@ -1,6 +1,8 @@
 .. highlight:: python
    :linenothreshold: 5
 
+.. toctree::
+   :hidden:
 
 DrawBot Documentation
 =====================
