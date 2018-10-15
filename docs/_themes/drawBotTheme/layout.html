@@ -18,6 +18,19 @@
 
 {%- block extrahead %}
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<!-- favicon files, generated through https://realfavicongenerator.net -->
+<link rel="apple-touch-icon" sizes="180x180" href="{{ pathto('_static/favicons/apple-touch-icon.png',1) }}">
+<link rel="icon" type="image/png" sizes="32x32" href="{{ pathto('_static/favicons/favicon-32x32.png',1) }}">
+<link rel="icon" type="image/png" sizes="16x16" href="{{ pathto('_static/favicons/favicon-16x16.png',1) }}">
+<link rel="manifest" href="{{ pathto('_static/favicons/site.webmanifest',1) }}">
+<link rel="mask-icon" href="{{ pathto('_static/favicons/safari-pinned-tab.svg" color="#5bbad5',1) }}">
+<link rel="shortcut icon" href="{{ pathto('_static/favicons/favicon.ico',1) }}">
+<meta name="msapplication-TileColor" content="#2d89ef">
+<meta name="msapplication-config" content="_static/favicons/browserconfig.xml">
+<meta name="theme-color" content="#ffffff">
+<!-- END favicon files -->
+
 <script type="text/javascript" src="{{ pathto('_static/drawBotURLhandler.js', 1) }}"></script>
 <script>
   document.documentElement.className += (("ontouchstart" in document.documentElement) ? ' touch' : ' no-touch');
@@ -79,7 +92,6 @@
     </div>
   </div>
   {% endblock %}
-
 
   {% block document %}
   <div class="eleven columns">

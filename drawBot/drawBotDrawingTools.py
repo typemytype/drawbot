@@ -2294,8 +2294,12 @@ class DrawBotDrawingTool(object):
             # draw the path again
             drawPath(path)
 
+
         .. autoclass:: drawBot.context.baseContext.BezierPath
             :members:
+            :undoc-members:
+            :inherited-members:
+
         """
         return self._bezierPathClass(path, glyphSet)
 
