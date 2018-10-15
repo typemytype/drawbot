@@ -105,17 +105,41 @@ class BezierPath(BasePen):
 
     # pen support
 
-    def _moveTo(self, pt):
+    def moveTo(self, point):
         """
         Move to a point `x`, `y`.
         """
+        super().moveTo(point)
+
+    def _moveTo(self, pt):
         self._path.moveToPoint_(pt)
 
-    def _lineTo(self, pt):
+    def lineTo(self, point):
         """
         Line to a point `x`, `y`.
         """
+        super().lineTo(point)
+
+    def _lineTo(self, pt):
         self._path.lineToPoint_(pt)
+
+    def curveTo(self, *points):
+        """
+        Draw a cubic bezier with an arbitrary number of control points.
+
+        The last point specified is on-curve, all others are off-curve
+        (control) points.
+        """
+        super().curveTo(*points)
+
+    def qCurveTo(self, *points):
+        """
+        Draw a whole string of quadratic curve segments.
+
+        The last point specified is on-curve, all others are off-curve
+        (control) points.
+        """
+        super().qCurveTo(*points)
 
     def _curveToOne(self, pt1, pt2, pt3):
         """
@@ -157,6 +181,17 @@ class BezierPath(BasePen):
             pointToSegmentPen = self._pointToSegmentPen
             del self._pointToSegmentPen
             pointToSegmentPen.endPath()
+
+    def addComponent(self, glyphName, transformation):
+        """
+        Add a sub glyph. The 'transformation' argument must be a 6-tuple
+        containing an affine transformation, or a Transform object from the
+        fontTools.misc.transform module. More precisely: it should be a
+        sequence containing 6 numbers.
+
+        A `glyphSet` is required during initialization of the BezierPath object.
+        """
+        super().addComponent(self, glyphName, transformation)
 
     def drawToPen(self, pen):
         """
