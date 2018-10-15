@@ -26,9 +26,7 @@ class MetaMock(type):
         return self
 
 
-class Mock(object):
-
-    __metaclass__ = MetaMock
+class Mock(object, metaclass=MetaMock):
 
     def __init__(self, *args, **kwargs):
         pass
@@ -63,6 +61,7 @@ MOCK_MODULES = ['py2app',
 for mod_name in MOCK_MODULES:
     sys.modules[mod_name] = Mock()
 
+print(sys.version_info)
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
@@ -372,7 +371,7 @@ class DownloadCode(CodeBlock):
         # set it as filename
         self.options['filename'] = fileName
         # encode the whole content
-        self.content = [unicode(line) for line in self.content]
+        self.content = [line for line in self.content]
         # call parent class
         nodes = super(DownloadCode, self).run()
         # get the content and encode
@@ -386,7 +385,7 @@ class DownloadCode(CodeBlock):
         self.options["filename"] = fileName
         # write to disk
         f = open(path, "w")
-        f.write(code.encode("utf-8"))
+        f.write(code)
         f.close()
         # add example image if present
         imageBaseName, _ = os.path.splitext(fileName)

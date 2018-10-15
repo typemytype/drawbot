@@ -119,6 +119,11 @@ ul ul, ul ol, ol ol, ol ul {
 	font-weight: bold;
 }
 
+.sphinxsidebarwrapper h3 a {
+	font-size: 14px;
+    line-height: 1.25;
+}
+
 /* auto doc classes */
 
 .function dt {

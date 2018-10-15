@@ -57,36 +57,41 @@
   {% endblock %}
 
   {%- block relbar1 %}
-
   {% endblock %}
 
   {%- block sidebar1 %}
   <div class="three columns">
-    {{ sidebar() }}
+    <div class="sphinxsidebarwrapper">
+      {{ toctree(includehidden=True) }}
+    </div>
+    <div class="canhide">
+
+      {%- if prev %}
+        <div class="canhide">
+          <h4>{{ _('Previous') }}</h4>
+          <p class="topless">
+            <a href="{{ prev.link|e }}" title="{{ _('previous chapter') }}">{{ prev.title }}</a>
+          </p>
+        </div>
+      {%- endif %}
+      {%- if next %}
+        <div class="canhide">
+          <h4>{{ _('Next') }}</h4>
+          <p class="topless">
+            <a href="{{ next.link|e }}" title="{{ _('next chapter') }}">{{ next.title }}</a>
+          </p>
+        </div>
+      {%- endif %}
+
+      <h3>More</h3>
+      <ul>
+        <li><a href="http://docs.python.org/2/">Python</a></li>
+        <li><a href="https://github.com/typemytype/drawbot">DrawBot Source</a></li>
+        <li><a href="http://forum.drawbot.com">Forum</a></li>
+      </ul>
+    </div>
   </div>
   {% endblock %}
-
-  {%- block sidebar2 %}{% endblock %}
-
-  {% block sidebartoc %}
-  {{ toctree(includehidden=True) }}
-  {% endblock %}
-
-  {%- block sidebarsearch %}
-  <div class="canhide">
-    <!-- <h3>Indices</h3>
-    <ul>
-      <li><a href="{{ pathto('genindex.html', 1) }}">index</a></li>
-      <li><a href="{{ pathto('search.html', 1) }}">search</a></li>
-    </ul> -->
-    <h3>More</h3>
-    <ul>
-      <li><a href="http://docs.python.org/2/">Python</a></li>
-      <li><a href="https://github.com/typemytype/drawbot">DrawBot Source</a></li>
-      <li><a href="http://forum.drawbot.com">Forum</a></li>
-    </ul>
-  </div>
-  {%- endblock %}
 
   {% block document %}
   <div class="eleven columns">
@@ -120,7 +125,8 @@
   </div>
   {% endblock %}
 
-  {%- block relbar2 %}{% endblock %}
+  {%- block relbar2 %}
+  {% endblock %}
 
   {%- block footer %}
 </div>
