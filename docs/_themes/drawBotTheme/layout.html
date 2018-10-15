@@ -48,14 +48,27 @@
 
   {%- block sidebar1 %}
   <div class="three columns">
-    {{ toctree(includehidden=True) }}
-
+    <div class="sphinxsidebarwrapper">
+      {{ toctree(includehidden=True) }}
+    </div>
     <div class="canhide">
-      <!-- <h3>Indices</h3>
-      <ul>
-        <li><a href="{{ pathto('genindex.html', 1) }}">index</a></li>
-        <li><a href="{{ pathto('search.html', 1) }}">search</a></li>
-      </ul> -->
+
+      {%- if prev %}
+        <div class="canhide">
+          <h4>{{ _('Previous') }}</h4>
+          <p class="topless">
+            <a href="{{ prev.link|e }}" title="{{ _('previous chapter') }}">{{ prev.title }}</a>
+          </p>
+        </div>
+      {%- endif %}
+      {%- if next %}
+        <div class="canhide">
+          <h4>{{ _('Next') }}</h4>
+          <p class="topless">
+            <a href="{{ next.link|e }}" title="{{ _('next chapter') }}">{{ next.title }}</a>
+          </p>
+        </div>
+      {%- endif %}
 
       <h3>More</h3>
       <ul>
