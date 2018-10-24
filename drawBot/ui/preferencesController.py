@@ -176,9 +176,9 @@ class ColorItem(NSObject):
 
     def setColor_(self, color):
         color = color.colorUsingColorSpaceName_(NSCalibratedRGBColorSpace)
-        r = color.redComponent() * 255
-        g = color.greenComponent() * 255
-        b = color.blueComponent() * 255
+        r = int(color.redComponent() * 255)
+        g = int(color.greenComponent() * 255)
+        b = int(color.blueComponent() * 255)
         self._style["color"] = "%02X%02X%02X" % (r, g, b)
 
     def bold(self):
