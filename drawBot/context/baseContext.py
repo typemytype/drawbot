@@ -1707,7 +1707,7 @@ class FormattedString(object):
             text(t, (100, 100))
         """
         # use a non breaking space as replacement character
-        baseString = unichr(0x00A0)
+        baseString = unichr(0xFFFD)
         font = None
         if self._font:
             font = AppKit.NSFont.fontWithName_size_(self._font, self._fontSize)
