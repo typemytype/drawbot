@@ -156,7 +156,7 @@ class BezierPath(BasePen):
 
     def beginPath(self, identifier=None):
         """
-        Begin path.
+        Begin using the path as a so called point pen and start a new subpath.
         """
         from ufoLib.pointPen import PointToSegmentPen
         self._pointToSegmentPen = PointToSegmentPen(self)
@@ -164,7 +164,7 @@ class BezierPath(BasePen):
 
     def addPoint(self, point, segmentType=None, smooth=False, name=None, identifier=None, **kwargs):
         """
-        Add a point to the path.
+        Use the path as a point pen and add a point to the current subpath. `beginPath` must have been called.
         """
         self._pointToSegmentPen.addPoint(
             point,
@@ -177,11 +177,11 @@ class BezierPath(BasePen):
 
     def endPath(self):
         """
-        End the path.
+        End the current subpath. Calling this method has two distinct meanings:
 
-        When the bezier path is used as a pen, the path will be open.
+        When the bezier path is used as a segment pen (using `moveTo`, `lineTo`, etc.), the path will be open.
 
-        When the bezier path is used as a point pen, the path will process all the points added with `addPoint`.
+        When the bezier path is used as a point pen (using `beginPath` and `addPoint`), the path will process all the points added with `addPoint`, finishing the current subpath.
         """
         if hasattr(self, "_pointToSegmentPen"):
             # its been uses in a point pen world
