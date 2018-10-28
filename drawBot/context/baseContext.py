@@ -179,17 +179,20 @@ class BezierPath(BasePen):
 
     def endPath(self):
         """
-        End the current subpath. Calling this method has two distinct meanings:
+        End the current subpath. Calling this method has two distinct meanings depending on the context:
 
-        When the bezier path is used as a segment pen (using `moveTo`, `lineTo`, etc.), the path will be open.
+        When the bezier path is used as a segment pen (using `moveTo`, `lineTo`, etc.), the current subpath will be finished as an open contour.
 
-        When the bezier path is used as a point pen (using `beginPath` and `addPoint`), the path will process all the points added with `addPoint`, finishing the current subpath.
+        When the bezier path is used as a point pen (using `beginPath`, `addPoint` and `endPath`), the path will process all the points added with `addPoint`, finishing the current subpath.
         """
         if hasattr(self, "_pointToSegmentPen"):
             # its been uses in a point pen world
             pointToSegmentPen = self._pointToSegmentPen
             del self._pointToSegmentPen
             pointToSegmentPen.endPath()
+        else:
+            # with NSBezierPath, nothing special needs to be done for an open subpath.
+            pass
 
     def addComponent(self, glyphName, transformation):
         """
