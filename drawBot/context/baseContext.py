@@ -162,11 +162,18 @@ class BezierPath(BasePen):
         self._pointToSegmentPen = PointToSegmentPen(self)
         self._pointToSegmentPen.beginPath()
 
-    def addPoint(self, *args, **kwargs):
+    def addPoint(self, point, segmentType=None, smooth=False, name=None, identifier=None, **kwargs):
         """
         Add a point to the path.
         """
-        self._pointToSegmentPen.addPoint(*args, **kwargs)
+        self._pointToSegmentPen.addPoint(
+            point,
+            segmentType=segmentType,
+            smooth=smooth,
+            name=name,
+            identifier=identifier,
+            **kwargs
+        )
 
     def endPath(self):
         """
