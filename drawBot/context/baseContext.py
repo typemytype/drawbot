@@ -181,7 +181,7 @@ class BezierPath(BasePen):
 
         When the bezier path is used as a pen, the path will be open.
 
-        When the bezier path is used as a point pen, the path will process all the points added with `addPoints`.
+        When the bezier path is used as a point pen, the path will process all the points added with `addPoint`.
         """
         if hasattr(self, "_pointToSegmentPen"):
             # its been uses in a point pen world
