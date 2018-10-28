@@ -164,7 +164,8 @@ class BezierPath(BasePen):
 
     def addPoint(self, point, segmentType=None, smooth=False, name=None, identifier=None, **kwargs):
         """
-        Use the path as a point pen and add a point to the current subpath. `beginPath` must have been called.
+        Use the path as a point pen and add a point to the current subpath. `beginPath` must
+        have been called prior to adding points with `addPoint` calls.
         """
         if not hasattr(self, "_pointToSegmentPen"):
             raise DrawBotError("path.beginPath() must be called before the path can be used as a point pen")
@@ -179,11 +180,15 @@ class BezierPath(BasePen):
 
     def endPath(self):
         """
-        End the current subpath. Calling this method has two distinct meanings depending on the context:
+        End the current subpath. Calling this method has two distinct meanings depending
+        on the context:
 
-        When the bezier path is used as a segment pen (using `moveTo`, `lineTo`, etc.), the current subpath will be finished as an open contour.
+        When the bezier path is used as a segment pen (using `moveTo`, `lineTo`, etc.),
+        the current subpath will be finished as an open contour.
 
-        When the bezier path is used as a point pen (using `beginPath`, `addPoint` and `endPath`), the path will process all the points added with `addPoint`, finishing the current subpath.
+        When the bezier path is used as a point pen (using `beginPath`, `addPoint` and
+        `endPath`), the path will process all the points added with `addPoint`, finishing
+        the current subpath.
         """
         if hasattr(self, "_pointToSegmentPen"):
             # its been uses in a point pen world
