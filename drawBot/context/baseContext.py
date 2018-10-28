@@ -166,6 +166,8 @@ class BezierPath(BasePen):
         """
         Use the path as a point pen and add a point to the current subpath. `beginPath` must have been called.
         """
+        if not hasattr(self, "_pointToSegmentPen"):
+            raise DrawBotError("path.beginPath() must be called before the path can be used as a point pen")
         self._pointToSegmentPen.addPoint(
             point,
             segmentType=segmentType,
