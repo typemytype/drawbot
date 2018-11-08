@@ -3,6 +3,7 @@ from __future__ import print_function
 import py2app
 from distutils.core import setup
 from distutils.sysconfig import get_python_lib
+import pkg_resources
 import os
 import sys
 import subprocess
@@ -232,26 +233,13 @@ if "-A" not in sys.argv:
         externalToolPath = os.path.join(resourcesPath, externalTool)
         os.chmod(externalToolPath, 0o775)
 
-    # create fs.dist-info
-    fsDistInfoPath = os.path.join(pythonLibPath, "fs.dist-info")
-    os.mkdir(fsDistInfoPath)
-    with open(os.path.join(fsDistInfoPath, "entry_points.txt"), "w") as f:
-        f.write("""[fs.opener]
-file = fs.opener.osfs:OSFSOpener
-ftp = fs.opener.ftpfs:FTPOpener
-mem = fs.opener.memoryfs:MemOpener
-osfs = fs.opener.osfs:OSFSOpener
-siteconf = fs.opener.appfs:AppFSOpener
-sitedata = fs.opener.appfs:AppFSOpener
-tar = fs.opener.tarfs:TarOpener
-temp = fs.opener.tempfs:TempOpener
-usercache = fs.opener.appfs:AppFSOpener
-userconf = fs.opener.appfs:AppFSOpener
-userdata = fs.opener.appfs:AppFSOpener
-userlog = fs.opener.appfs:AppFSOpener
-zip = fs.opener.zipfs:ZipOpener
-""")
-
+    # See:
+    # https://bitbucket.org/ronaldoussoren/py2app/issues/256/fs-module-not-fully-working-from-app
+    # https://github.com/PyFilesystem/pyfilesystem2/issues/228
+    for pkgName in ["fs", "appdirs", "pytz", "six", "setuptools"]:
+        infoPath = pkg_resources.get_distribution(pkgName).egg_info
+        baseInfoName = os.path.basename(infoPath)
+        shutil.copytree(infoPath, os.path.join(pythonLibPath, baseInfoName))
 
 if runTests:
     appExecutable = os.path.join(appLocation, "Contents", "MacOS", appName)
