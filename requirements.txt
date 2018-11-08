@@ -3,7 +3,8 @@ py2app
 git+https://github.com/typesupply/vanilla
 defcon
 git+https://github.com/typesupply/defconAppKit
-fontTools
+fontTools[ufo,lxml,woff,unicode,type1]
+fs
 brotli
 pygments
 jedi

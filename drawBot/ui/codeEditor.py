@@ -527,7 +527,7 @@ class CodeNSTextView(AppKit.NSTextView):
         if self.lexer() is None:
             return
         font = getFontDefault("PyDEFont", self._fallbackFont)
-        length = len(self.string())
+        length = self.string().length()
         setAttrs = self.textStorage().setAttributes_range_
         if text.endswith("\n"):
             text = text[:-1]
@@ -1378,7 +1378,7 @@ class CodeEditor(TextEditor):
             except Exception:
                 codeAttr["lexer"] = None
         if codeAttr["lexer"] is None:
-            codeAttr["lexer"] = PythonLexer()
+            codeAttr["lexer"] = PythonLexer(encoding='utf-8')
         self.setLexer(codeAttr["lexer"])
         if codeAttr["highlightStyle"] is None:
             codeAttr["highlightStyle"] = styleFromDefault()

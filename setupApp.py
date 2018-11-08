@@ -185,6 +185,7 @@ setup(
                 'pygments',
                 'jedi',
                 'fontTools',
+                'fs',
                 # 'xml'
                 'pkg_resources',
             ],
@@ -217,17 +218,39 @@ writePlist(appPlist, path)
 drawBotRoot = os.path.dirname(os.path.abspath(__file__))
 distLocation = os.path.join(drawBotRoot, "dist")
 appLocation = os.path.join(distLocation, "%s.app" % appName)
+resourcesPath = os.path.join(distLocation, "contents", "Resources")
 imgLocation = os.path.join(distLocation, "img_%s" % appName)
 existingDmgLocation = os.path.join(distLocation, "%s.dmg" % appName)
 dmgLocation = os.path.join(distLocation, appName)
-
+pythonVersion = "python%s.%i" % (sys.version_info[0], sys.version_info[1])
+pythonLibPath = os.path.join(resourcesPath, "lib", pythonVersion)
 
 if "-A" not in sys.argv:
     # make sure the external tools have the correct permissions
     externalTools = ("ffmpeg", "gifsicle", "mkbitmap", "potrace")
     for externalTool in externalTools:
-        externalToolPath = os.path.join(appLocation, "contents", "Resources", externalTool)
+        externalToolPath = os.path.join(resourcesPath, externalTool)
         os.chmod(externalToolPath, 0o775)
+
+    # create fs.dist-info
+    fsDistInfoPath = os.path.join(pythonLibPath, "fs.dist-info")
+    os.mkdir(fsDistInfoPath)
+    with open(os.path.join(fsDistInfoPath, "entry_points.txt"), "w") as f:
+        f.write("""[fs.opener]
+file = fs.opener.osfs:OSFSOpener
+ftp = fs.opener.ftpfs:FTPOpener
+mem = fs.opener.memoryfs:MemOpener
+osfs = fs.opener.osfs:OSFSOpener
+siteconf = fs.opener.appfs:AppFSOpener
+sitedata = fs.opener.appfs:AppFSOpener
+tar = fs.opener.tarfs:TarOpener
+temp = fs.opener.tempfs:TempOpener
+usercache = fs.opener.appfs:AppFSOpener
+userconf = fs.opener.appfs:AppFSOpener
+userdata = fs.opener.appfs:AppFSOpener
+userlog = fs.opener.appfs:AppFSOpener
+zip = fs.opener.zipfs:ZipOpener
+""")
 
 
 if runTests:

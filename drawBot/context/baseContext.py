@@ -158,7 +158,7 @@ class BezierPath(BasePen):
         """
         Begin using the path as a so called point pen and start a new subpath.
         """
-        from ufoLib.pointPen import PointToSegmentPen
+        from fontTools.pens.pointPen import PointToSegmentPen
         self._pointToSegmentPen = PointToSegmentPen(self)
         self._pointToSegmentPen.beginPath()
 
