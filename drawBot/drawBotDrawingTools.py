@@ -1978,6 +1978,35 @@ class DrawBotDrawingTool(object):
         color = color.colorUsingColorSpaceName_("NSCalibratedRGBColorSpace")
         return color.redComponent(), color.greenComponent(), color.blueComponent(), color.alphaComponent()
 
+    def imageResolution(self, path):
+        """
+        Return the image resolution for a given image.
+        """
+        if isinstance(path, AppKit.NSImage):
+            # its an NSImage
+            # get all representations
+            reps = path.representations()
+            if not reps:
+                # raise error when no representation are found
+                raise DrawBotError("Cannot extract bitmap data from given nsImage object")
+            # get the bitmap representation
+            rep = reps[0]
+        else:
+            if isinstance(path, basestring):
+                path = optimizePath(path)
+            if path.startswith("http"):
+                url = AppKit.NSURL.URLWithString_(path)
+            else:
+                if not os.path.exists(path):
+                    raise DrawBotError("Image does not exist")
+                url = AppKit.NSURL.fileURLWithPath_(path)
+                try:
+                    rep = AppKit.NSImageRep.imageRepWithContentsOfURL_(url)
+                except Exception:
+                    raise DrawBotError("Cannot read bitmap data for image '%s'" % path)
+
+        return rep.pixelsWide() / rep.size().width * 72.0
+
     def numberOfPages(self, path):
         """
         Return the number of pages for a given pdf or (animated) gif.
