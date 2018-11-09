@@ -219,7 +219,7 @@ writePlist(appPlist, path)
 drawBotRoot = os.path.dirname(os.path.abspath(__file__))
 distLocation = os.path.join(drawBotRoot, "dist")
 appLocation = os.path.join(distLocation, "%s.app" % appName)
-resourcesPath = os.path.join(distLocation, "contents", "Resources")
+resourcesPath = os.path.join(appLocation, "Contents", "Resources")
 imgLocation = os.path.join(distLocation, "img_%s" % appName)
 existingDmgLocation = os.path.join(distLocation, "%s.dmg" % appName)
 dmgLocation = os.path.join(distLocation, appName)
@@ -310,7 +310,7 @@ if buildDMG or ftpHost is not None:
     os.rename(os.path.join(distLocation, "%s.app" % appName), os.path.join(imgLocation, "%s.app" % appName))
     tempDmgName = "%s.tmp.dmg" % appName
 
-    os.system("hdiutil create -size 200m -srcfolder \"%s\" -volname %s -format UDZO \"%s\"" % (imgLocation, appName, os.path.join(distLocation, tempDmgName)))
+    os.system("hdiutil create -fs HFS+ -size 200m -srcfolder \"%s\" -volname %s -format UDZO \"%s\"" % (imgLocation, appName, os.path.join(distLocation, tempDmgName)))
 
     os.system("hdiutil convert -format UDZO -imagekey zlib-level=9 -o \"%s\" \"%s\"" % (dmgLocation, os.path.join(distLocation, tempDmgName)))
 
