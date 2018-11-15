@@ -4,6 +4,7 @@ try:
     from urllib2 import urlopen
 except ImportError:
     from urllib.request import urlopen
+import ssl
 import subprocess
 import plistlib
 import AppKit
@@ -33,7 +34,8 @@ def getCurrentVersion():
     path = "https://raw.github.com/typemytype/drawbot/master/drawBot/drawBotSettings.py"
     code = None
     try:
-        response = urlopen(path, timeout=5)
+        context = ssl._create_unverified_context()
+        response = urlopen(path, timeout=5, context=context)
         code = response.read()
         # convert to ascii and stri
         # in py3 this are bytes and a string object is needed
