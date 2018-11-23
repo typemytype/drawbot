@@ -109,7 +109,7 @@ class BezierPath(BasePen):
         """
         Move to a point `x`, `y`.
         """
-        super().moveTo(point)
+        super(self, BezierPath).moveTo(point)
 
     def _moveTo(self, pt):
         self._path.moveToPoint_(pt)
@@ -118,7 +118,7 @@ class BezierPath(BasePen):
         """
         Line to a point `x`, `y`.
         """
-        super().lineTo(point)
+        super(self, BezierPath).lineTo(point)
 
     def _lineTo(self, pt):
         self._path.lineToPoint_(pt)
@@ -130,7 +130,7 @@ class BezierPath(BasePen):
         The last point specified is on-curve, all others are off-curve
         (control) points.
         """
-        super().curveTo(*points)
+        super(self, BezierPath).curveTo(*points)
 
     def qCurveTo(self, *points):
         """
@@ -139,7 +139,7 @@ class BezierPath(BasePen):
         The last point specified is on-curve, all others are off-curve
         (control) points.
         """
-        super().qCurveTo(*points)
+        super(self, BezierPath).qCurveTo(*points)
 
     def _curveToOne(self, pt1, pt2, pt3):
         """
