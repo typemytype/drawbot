@@ -53,7 +53,6 @@ class ICNSContext(ImageContext):
                 path,
                 iconsetPath,
             ]
-
             # execute the commands
             stdout, stderr = executeExternalProcess(cmds)
         finally:
