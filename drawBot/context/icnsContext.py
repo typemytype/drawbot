@@ -36,7 +36,7 @@ class ICNSContext(ImageContext):
             h = int(round(h))
             # dont allow any other size, the command iconutil will not work otherwise
             if w not in self.allowedPageSizes or h not in self.allowedPageSizes:
-                raise DrawBotError("The .icns can not be build with the size '%sx%s'. Must be either: %s" % (w, h, ", ".join([str(i) for i in self.allowedPageSizes])))
+                raise DrawBotError("The .icns can not be build with the size '%sx%s'. Must be either: %s" % (w, h, ", ".join(["%sx%s" % (i, i) for i in self.allowedPageSizes])))
             # generate a 72 dpi png in the iconset path
             pngPath = os.path.join(iconsetPath, "icon_%sx%s.png" % (w, h))
             super(ICNSContext, self)._writeDataToFile(pageData, pngPath, options)
