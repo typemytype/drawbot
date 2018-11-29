@@ -44,7 +44,7 @@ class ICNSContext(ImageContext):
                 # generate a 144 dpi png in the iconset path
                 pngPath_2x = os.path.join(iconsetPath, "icon_%sx%s@2x.png" % (w, h))
                 super(ICNSContext, self)._writeDataToFile(pageData, pngPath_2x, options_2x)
-            # collecta all iconutil command
+            # collect all iconutil commands
             cmds = [
                 "iconutil",
                 "--convert",
