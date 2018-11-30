@@ -670,7 +670,7 @@ class CodeNSTextView(AppKit.NSTextView):
                             selectedRange.location += 1
                             selectedRange.length = 0
                         else:
-                            selectedRange.length = len(toInsert)
+                            selectedRange.length = nsStringLength(toInsert)
                         self.setSelectedRange_(selectedRange)
                         return
         # perform the default behaviour of the text view
