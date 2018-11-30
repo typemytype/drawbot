@@ -922,7 +922,7 @@ class CodeNSTextView(AppKit.NSTextView):
         location = proposedRange.location
         if granularity == AppKit.NSSelectByWord and proposedRange.length == 0 and location != 0:
             text = self.string()
-            lenText = len(text)
+            lenText = text.length()
             length = 1
             found = False
             while not found:
@@ -1065,7 +1065,7 @@ class CodeNSTextView(AppKit.NSTextView):
     def _jumpToLine(self, lineNumber):
         lines = 1
         string = self.string()
-        length = len(string)
+        length = string.length()
         tempRange = AppKit.NSMakeRange(0, length)
         found = None
         while tempRange.location < length:
@@ -1106,7 +1106,7 @@ class CodeNSTextView(AppKit.NSTextView):
         if not string:
             # no text to color
             return
-        length = len(string)
+        length = string.length()
         textStorage = self.textStorage()
         _lineStart, _lineLength = textStorage.editedRange()
         editedString = string.substringWithRange_((_lineStart, _lineLength))
