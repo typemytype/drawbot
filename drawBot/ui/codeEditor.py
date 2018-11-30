@@ -1186,7 +1186,7 @@ class CodeNSTextView(AppKit.NSTextView):
         if possibleIndentStart < 0:
             return superFunc(sender)
         possibleIndent = None
-        if possibleIndentStart + possibleIndentEnd > len(string):
+        if possibleIndentStart + possibleIndentEnd > string.length():
             return superFunc(sender)
         possibleIndent = string.substringWithRange_((possibleIndentStart, possibleIndentEnd))
 
