@@ -277,20 +277,22 @@ def _pythonWordCompletions(text, charRange):
         return [], 0
     keyWords = list(_drawBotDrawingTool.__all__)
     try:
-        lines = text.substringWithRange_((0, charRange.location)).count("\n") + 1
+        lines = text.substringWithRange_((0, charRange.location))
+        lineCount = lines.count("\n") + 1
         if text.length() == charRange.location:
             columns = None
         else:
             columns = 0
             if text:
                 while text.substringWithRange_((charRange.location - columns, 1)) != "\n":
+                    if charRange.location - columns + 1 <= 1:
+                        break
                     columns += 1
-        script = jedi.api.Script(source=text, line=lines, column=columns)
+        script = jedi.api.Script(source=text, line=lineCount, column=columns)
         keyWords += [c.name for c in script.completions()]
     except Exception:
-        # import traceback
-        # traceback.print_exc()
-        pass
+        import traceback
+        traceback.print_exc()
     keyWords = [word for word in sorted(keyWords) if word.startswith(partialString)]
     return keyWords, 0
 
@@ -882,6 +884,9 @@ class CodeNSTextView(AppKit.NSTextView):
 
     # text completion
 
+    def cancelOperation_(self, sender):
+        self.complete_(sender)
+
     def rangeForUserCompletion(self):
         charRange = super(CodeNSTextView, self).rangeForUserCompletion()
         text = self.string()
@@ -898,6 +903,8 @@ class CodeNSTextView(AppKit.NSTextView):
         return charRange
 
     def completionsForPartialWordRange_indexOfSelectedItem_(self, charRange, index):
+        if self.lexer() is None:
+            return [], 0
         languageData = self.languagesIDEBehaviorForLanguage_(self.lexer().name)
         if languageData is None:
             return [], 0
