@@ -547,7 +547,7 @@ class CodeNSTextView(AppKit.NSTextView):
                 setAttrs(_textAttributesForStyle(style, font), (location + pos + bigUnicodeAdd, bigUnicodeValue))
                 totLenValue += lenValue
                 bigUnicodeAdd += bigUnicodeValue - lenValue
-        self.textStorage().fixFontAttributeInRange_((location, totLenValue))
+        self.textStorage().fixFontAttributeInRange_((location, totLenValue + bigUnicodeAdd))
         self.textStorage().endEditing()
 
     # key down
