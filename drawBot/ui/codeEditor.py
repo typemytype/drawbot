@@ -23,7 +23,7 @@ from vanilla.py23 import python_method
 from fontTools.misc.py23 import PY3, unichr
 
 from .lineNumberRulerView import LineNumberNSRulerView
-from drawBot.misc import getDefault, getFontDefault, getColorDefault, DrawBotError
+from drawBot.misc import getDefault, getFontDefault, getColorDefault, DrawBotError, nsStringLength
 from drawBot.drawBotDrawingTools import _drawBotDrawingTool
 
 
@@ -534,14 +534,17 @@ class CodeNSTextView(AppKit.NSTextView):
         # setAttrs = self.layoutManager().addTemporaryAttributes_forCharacterRange_
         self.textStorage().beginEditing()
         totLenValue = 0
+        bigUnicodeAdd = 0
         for pos, token, value in self.lexer().get_tokens_unprocessed(text):
             style = self.highlightStyleMap.get(token)
             lenValue = len(value)
-            if location + pos + lenValue > length:
-                lenValue = length - (location + pos)
-            if lenValue > 0:
-                setAttrs(_textAttributesForStyle(style, font), (location + pos, lenValue))
+            bigUnicodeValue = nsStringLength(value)
+            if location + pos + bigUnicodeValue > length:
+                bigUnicodeValue = length - (location + pos)
+            if bigUnicodeValue > 0:
+                setAttrs(_textAttributesForStyle(style, font), (location + pos + bigUnicodeAdd, bigUnicodeValue))
                 totLenValue += lenValue
+                bigUnicodeAdd += bigUnicodeValue - lenValue
         self.textStorage().fixFontAttributeInRange_((location, totLenValue))
         self.textStorage().endEditing()
 

@@ -181,6 +181,10 @@ def transformationAtCenter(matrix, centerPoint):
     return tuple(t)
 
 
+def nsStringLength(s):
+    return len(s.encode("utf-16-be")) // 2
+
+
 # ============
 # = warnings =
 # ============
