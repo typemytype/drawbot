@@ -277,17 +277,19 @@ def _pythonWordCompletions(text, charRange):
         return [], 0
     keyWords = list(_drawBotDrawingTool.__all__)
     try:
-        lines = text[:charRange.location].count("\n") + 1
-        if len(text) == charRange.location:
+        lines = text.substringWithRange_((0, charRange.location)).count("\n") + 1
+        if text.length() == charRange.location:
             columns = None
         else:
             columns = 0
             if text:
-                while text[charRange.location - columns] != "\n":
+                while text.substringWithRange_((charRange.location - columns, 1)) != "\n":
                     columns += 1
         script = jedi.api.Script(source=text, line=lines, column=columns)
         keyWords += [c.name for c in script.completions()]
     except Exception:
+        # import traceback
+        # traceback.print_exc()
         pass
     keyWords = [word for word in sorted(keyWords) if word.startswith(partialString)]
     return keyWords, 0
