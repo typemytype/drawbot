@@ -262,6 +262,24 @@ class ExportTest(unittest.TestCase):
                 drawBot.saveImage(tmp.path, multipage=False)
         self.assertEqual(output.lines(), [])
 
+    def makeTestICNSDrawing(self, formats):
+        drawBot.newDrawing()
+        for i, size in enumerate(formats):
+            drawBot.newPage(size, size)
+            f = i / (len(formats) + 1)
+            drawBot.fill(f, f, 1 - f)
+            drawBot.rect(0, 0, size, size)
+
+    def test_export_icns(self):
+        self.makeTestICNSDrawing([16, 32, 128, 256, 512, 1024])
+        self._saveImageAndReturnSize(".icns")
+
+    def test_export_icons_invalidPageSize(self):
+        self.makeTestICNSDrawing([15])
+        with self.assertRaises(DrawBotError) as cm:
+            self._saveImageAndReturnSize(".icns")
+        self.assertEqual(cm.exception.args[0], "The .icns can not be build with the size '15x15'. Must be either: 16x16, 32x32, 128x128, 256x256, 512x512, 1024x1024")
+
 
 if __name__ == '__main__':
     import doctest
