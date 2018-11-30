@@ -792,7 +792,7 @@ class CodeNSTextView(AppKit.NSTextView):
         if not string:
             return
         selectedRange = self.selectedRange()
-        char = string[selectedRange.location]
+        char = string.substringWithRange_((selectedRange.location, 1))
         self._balanceParenForChar(char, selectedRange.location + 1)
 
     def moveRight_(self, sender):
@@ -801,7 +801,7 @@ class CodeNSTextView(AppKit.NSTextView):
         if not string:
             return
         selectedRange = self.selectedRange()
-        char = string[selectedRange.location - 1]
+        char = string.substringWithRange_((selectedRange.location - 1, 1))
         self._balanceParenForChar(char, selectedRange.location)
 
     def moveWordLeft_(self, sender):
@@ -1207,7 +1207,7 @@ class CodeNSTextView(AppKit.NSTextView):
         found = None
         stack = 0
         while location >= 0 and location < string.length():
-            c = string[location]
+            c = string.substringWithRange_((location, 1))
             if c == char:
                 stack += 1
             elif stack != 0 and c == matchChar:
@@ -1215,7 +1215,7 @@ class CodeNSTextView(AppKit.NSTextView):
             elif c == matchChar:
                 found = location
                 break
-            location += add * nsStringLength(c)
+            location += add
         return found
 
     @python_method
