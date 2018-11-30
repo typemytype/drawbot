@@ -1206,7 +1206,7 @@ class CodeNSTextView(AppKit.NSTextView):
         string = self.string()
         found = None
         stack = 0
-        while location >= 0 and location < len(string):
+        while location >= 0 and location < string.length():
             c = string[location]
             if c == char:
                 stack += 1
@@ -1215,7 +1215,7 @@ class CodeNSTextView(AppKit.NSTextView):
             elif c == matchChar:
                 found = location
                 break
-            location += add
+            location += add * nsStringLength(c)
         return found
 
     @python_method
@@ -1300,7 +1300,7 @@ class CodeNSTextView(AppKit.NSTextView):
     @python_method
     def _getRightWordRange(self, newRange):
         text = self.string()
-        lenText = len(text)
+        lenText = text.length()
         location = newRange.location + newRange.length
         if location >= lenText:
             return lenText
