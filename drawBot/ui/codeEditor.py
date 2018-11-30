@@ -592,7 +592,7 @@ class CodeNSTextView(AppKit.NSTextView):
                 self._insertTextAndRun("True", selectedRange)
                 return
         languageData = self.languagesIDEBehaviorForLanguage_(self.lexer().name)
-        if languageData:
+        if languageData and len(event.charactersIgnoringModifiers()) == 0:  # don't do magic if we've got a deadkey
             # get the auto close map based on the given lexer
             autoCloseMap = languageData.get("autoCloseMap", dict())
             # try to get the prev char, fail silently
