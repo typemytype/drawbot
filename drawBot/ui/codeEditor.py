@@ -1512,4 +1512,4 @@ class OutPutEditor(TextEditor):
         self.getNSTextView().display()
 
     def scrollToEnd(self):
-        self.getNSTextView().scrollRangeToVisible_((len(self.get()), 0))
+        self.getNSTextView().scrollRangeToVisible_((self.getNSTextView().string().length(), 0))
