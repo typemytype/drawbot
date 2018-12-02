@@ -143,7 +143,7 @@ plist = dict(
             CFBundleURLName="com.drawbot",
             CFBundleURLSchemes=[appName.lower()])
     ],
-    NSRequiresAquaSystemAppearance=False,
+    NSRequiresAquaSystemAppearance=True,
 )
 
 
