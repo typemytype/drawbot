@@ -190,6 +190,7 @@ setup(
                 'fs',
                 # 'xml'
                 'pkg_resources',
+                'parso',
             ],
             includes=[
                 # 'csv',
