@@ -208,7 +208,7 @@ class BezierPath(BasePen):
 
         A `glyphSet` is required during initialization of the BezierPath object.
         """
-        super().addComponent(self, glyphName, transformation)
+        super(BezierPath, self).addComponent(glyphName, transformation)
 
     def drawToPen(self, pen):
         """
