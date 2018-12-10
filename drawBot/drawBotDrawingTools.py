@@ -1602,13 +1602,13 @@ class DrawBotDrawingTool(object):
             x -= w * .5
         setter = CoreText.CTFramesetterCreateWithAttributedString(attrString)
         path = Quartz.CGPathCreateMutable()
-        Quartz.CGPathAddRect(path, None, Quartz.CGRectMake(x, y, w, h))
+        Quartz.CGPathAddRect(path, None, Quartz.CGRectMake(x, y, w, h * 2))
         box = CoreText.CTFramesetterCreateFrame(setter, (0, 0), path, None)
         ctLines = CoreText.CTFrameGetLines(box)
         origins = CoreText.CTFrameGetLineOrigins(box, (0, len(ctLines)), None)
         if origins:
             y -= origins[0][1]
-        self.textBox(txt, (x, y - h, w, h * 2), align=align)
+        self.textBox(txt, (x, y, w, h * 2), align=align)
 
     def textOverflow(self, txt, box, align=None):
         """
