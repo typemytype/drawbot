@@ -12,4 +12,3 @@ echo "Build App"
 python3 ../setupApp.py py2app
 
 echo "Script Done"
-
