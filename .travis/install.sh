@@ -5,25 +5,20 @@ set -x
 
 echo "Install Start"
 
-if [ "$TRAVIS_OS_NAME" == "osx" ]; then
-    if [[ ${TOXENV} == *"py3"* ]]; then
-        # install current python3 with homebrew
-        # NOTE: the formula is now named just "python"
-        brew update
-        brew install python
-        command -v python3
-        python3 --version
-        python3 -m pip install virtualenv
-        python3 -m virtualenv .venv/
-    else
-        echo "unsupported $TOXENV: "${TOXENV}
-        exit 1
-    fi
-    source .venv/bin/activate
-fi
+# install current python3 with homebrew
+# NOTE: the formula is now named just "python"
+brew update
+brew install python
+command -v python3
+python3 --version
+python3 -m pip install virtualenv
+python3 -m virtualenv .venv/
+
+source .venv/bin/activate
 
 echo "pip requirements"
 
-python -m pip install ../requirements.txt
+python3 -m pip install ../requirements.txt
+python3 -m setup.py install
 
 echo "Install Done"
