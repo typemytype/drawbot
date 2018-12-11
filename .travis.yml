@@ -1,0 +1,14 @@
+language: python
+
+matrix:
+  include:
+    - os: osx
+      language: generic
+
+install:
+  - ./.travis/install.sh
+
+script:
+  - ./.travis/run.sh
+
+# deploy:
