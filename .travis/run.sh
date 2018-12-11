@@ -7,4 +7,4 @@ source .venv/bin/activate
 
 python3 ./tests/runAllTests.py
 
-python3 ./setupApp.py py2app
+python3 ./setupApp.py py2app --dmg
