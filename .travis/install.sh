@@ -18,7 +18,7 @@ source .venv/bin/activate
 
 echo "pip requirements"
 
-python3 -m pip install -r ./requirements.txt
-python3 -m setup.py install
+python3 pip install -r ./requirements.txt
+python3 setup.py install
 
 echo "Install Done"
