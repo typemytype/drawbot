@@ -3,8 +3,6 @@
 set -e
 set -x
 
-echo "Install Start"
-
 # install current python3 with homebrew
 # NOTE: the formula is now named just "python"
 # brew update
@@ -16,9 +14,7 @@ python3 -m virtualenv .venv/
 
 source .venv/bin/activate
 
-echo "pip requirements"
-
 python3 -m pip install -r ./requirements.txt
-python3 setup.py install
+python3 -m pip install -r ./test-requirements.txt
 
-echo "Install Done"
+python3 setup.py install
