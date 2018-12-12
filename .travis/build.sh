@@ -18,6 +18,7 @@ security create-keychain -p mysecretpassword $KEYCHAIN
 security default-keychain -s $KEYCHAIN
 security unlock-keychain -p mysecretpassword $KEYCHAIN
 security import $CERTIFICATE_P12 -k $KEYCHAIN -P $CERTIFICATE_PASSWORD -T /usr/bin/codesign
+security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k mysecretpassword $KEYCHAIN
 
 # build the app
 python3 ./setupApp.py py2app --dmg --codesign "Frederik Berlaen"
