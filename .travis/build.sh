@@ -10,7 +10,7 @@ source .venv-build/bin/activate
 python3 -m pip install -r ./requirements.txt
 python3 -m pip install -r ./test-requirements.txt
 
-install dev certificate
+# install dev certificate
 export CERTIFICATE_P12=Certificate.p12
 echo $CERTIFICATE_OSX_P12 | base64 — decode > $CERTIFICATE_P12
 export KEYCHAIN=build.keychain
