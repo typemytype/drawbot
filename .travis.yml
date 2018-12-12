@@ -13,10 +13,10 @@ install:
 
 script:
   - "./.travis/tests.sh"
+  - "./.travis/build.sh"
 
 deploy:
   provider: releases
-  script: "./.travis/build.sh"
   api_key:
     secure: R4qGXMWXuOm+hVBuED/9THUjTPdX2hCKQGR5YpmuRD5UbFvo4imzk0Pf71lkBE6mXSVmZVyu0oyLQBNeavUH3OxojoCv4IIbNmAFrVWBwwgPLiNZjAJ5F0pQoM0zC1p72y4wrpA4tPXWXVyECNysaEMkQs5BAv5Ic1tAu3C8dtr3Kvp2kQngn8RvGZrmDWpYyGdpW3pWfSSg+QlHGjdiia5jOK+OXVh28AonKVRAPW1i2g3iJdlUdxN/agTQfh+Cnm/YRkqTf/Tp5ual6iJZiyH481vH+wMVMYKu3G1xShQo7Vif6jd80rxN7zxmR2aAXM7LlqQKVKlz4Q0VhaW4phaP//PgA4z5rSQs7y+l3/6JuxUQdIuoM4yjeLbeyAcgS7xt8tWFQURQqbV/JAKATtHNIGfunUosE6qAzLzwTgsGAvOdXcUljYA3MTlE1nGSaAICVXxVsYrhUfrOi22KiN4EO1DFYX0CW9Og6Uh4CNEefdePBj6pMWMK94DSLfI3pBmXm3ibWfmvMTrXNPMnxdT8OhnCPVgtRvrdX82c2a91kLCxgm0Ayxvg3ESJzPzPObQX6Vl4U8vqJTEtCSp6GYS5XY3YYxS/7XAgWnIcPv65AJ9BIdcPZkU7r5sxOh9IWxhpkasJlQCFCPHm7hXhSLIQLfTSyrR3OJCEhjQzsw0=
   file: dist/DrawBot.dmg
