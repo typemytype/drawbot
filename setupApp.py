@@ -164,7 +164,6 @@ for fileName in os.listdir("Resources/externalTools"):
     fullPath = os.path.join("Resources/externalTools", fileName)
     dataFiles.append(fullPath)
 
-drawBotRoot = os.path.dirname(os.path.abspath(__file__))
 
 # build
 setup(
@@ -173,8 +172,6 @@ setup(
     app=[dict(script="DrawBot.py", plist=plist)],
     options=dict(
         py2app=dict(
-            bdist_base=os.path.join(drawBotRoot, 'build'),
-            dist_dir=os.path.join(drawBotRoot, 'dist'),
             packages=[
                 'vanilla',
                 'defcon',
