@@ -1,4 +1,5 @@
 from __future__ import print_function, division, absolute_import
+import AppKit
 import sys
 import os
 import unittest
@@ -24,5 +25,10 @@ for moduleName in modulesWithDocTests:
     m = importlib.import_module(moduleName)
     suite.addTest(doctest.DocTestSuite(m))
 
-unittest.TextTestRunner(verbosity=1).run(suite)
-# TODO: call sys.exit() with result code if we're not in DB
+result = unittest.TextTestRunner(verbosity=1).run(suite)
+
+# call sys.exit() with result code if we're not in DB or not in a app...
+bundle = AppKit.NSBundle.mainBundle()
+appName = bundle.infoDictionary().get("CFBundleDisplayName")
+if appName is None:
+    sys.exit(not result.wasSuccessful())
