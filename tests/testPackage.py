@@ -63,6 +63,13 @@ class PackageTest(unittest.TestCase):
 
         self.assertEqual(output.lines(), ['hello world'])
 
+    def test_missingMainScript(self):
+        path = os.path.join(os.path.dirname(__file__), "package/missingMainScript.drawbot")
+        package = DrawBotPackage(path)
+        succes, message = package.run()
+        self.assertEqual(succes, False)
+        self.assertTrue(message.startswith("Cannot find"))
+
 
 if __name__ == '__main__':
     sys.exit(unittest.main())
