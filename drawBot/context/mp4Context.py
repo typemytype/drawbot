@@ -3,9 +3,11 @@ from __future__ import division, absolute_import, print_function
 import os
 import tempfile
 import shutil
-from drawBot.misc import warnings
+import Quartz
 
-from .imageContext import PNGContext, getSaveImageOptions
+from drawBot.misc import warnings, DrawBotError
+
+from .imageContext import PNGContext
 
 from .tools.mp4Tools import generateMP4
 
@@ -36,6 +38,14 @@ class MP4Context(PNGContext):
         frameDurations = set(self._frameDurations)
         if len(frameDurations) > 1:
             warnings.warn("Exporting to mp4 doesn't support varying frame durations, only the first value was used.")
+
+        pdfDocument = Quartz.PDFDocument.alloc().initWithData_(data)
+        for index in range(pdfDocument.pageCount()):
+            page = pdfDocument.pageAtIndex_(index)
+            # extract the size of the page
+            _, (w, h) = page.boundsForBox_(Quartz.kPDFDisplayBoxArtBox)
+            if w % 2 or h % 2:
+                raise DrawBotError("Exporting to mp4 doesn't support uneven page width and height.")
 
         options["multipage"] = True
         codec = options.get("ffmpegCodec", "libx264")
