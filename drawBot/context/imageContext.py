@@ -104,7 +104,7 @@ class ImageContext(PDFContext):
                 imageRep = _makeBitmapImageRep(image, imageResolution)
                 if self.ensureEvenPixelDimensions:
                     if imageRep.pixelsWide() % 2 or imageRep.pixelsHigh() % 2:
-                        raise DrawBotError("Exporting to %s doesn't support uneven page width and height." % (", ".join(self.fileExtensions)))
+                        raise DrawBotError("Exporting to %s doesn't support odd pixel dimensions width and height." % (", ".join(self.fileExtensions)))
                 imageData = imageRep.representationUsingType_properties_(self._saveImageFileTypes[ext], properties)
                 imagePath = fileName + pathAdd + fileExt
                 imageData.writeToFile_atomically_(imagePath, True)
