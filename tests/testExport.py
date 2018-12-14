@@ -262,9 +262,17 @@ class ExportTest(unittest.TestCase):
                 drawBot.saveImage(tmp.path, multipage=False)
         self.assertEqual(output.lines(), [])
 
-    def test_unevenPages_mp4(self):
+    def test_oddPageHeight_mp4(self):
         # https://github.com/typemytype/drawbot/issues/250
-        self.makeTestAnimation(pageWidth=500, pageHeight=501)
+        self.makeTestAnimation(1, pageWidth=500, pageHeight=501)
+        with TempFile(suffix=".mp4") as tmp:
+            with self.assertRaises(DrawBotError) as cm:
+                drawBot.saveImage(tmp.path)
+        self.assertEqual(cm.exception.args[0], "Exporting to mp4 doesn't support odd pixel dimensions for width and height.")
+
+    def test_oddPageWidth_mp4(self):
+        # https://github.com/typemytype/drawbot/issues/250
+        self.makeTestAnimation(1, pageWidth=501, pageHeight=500)
         with TempFile(suffix=".mp4") as tmp:
             with self.assertRaises(DrawBotError) as cm:
                 drawBot.saveImage(tmp.path)
