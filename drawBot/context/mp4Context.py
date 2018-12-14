@@ -3,9 +3,10 @@ from __future__ import division, absolute_import, print_function
 import os
 import tempfile
 import shutil
+
 from drawBot.misc import warnings
 
-from .imageContext import PNGContext, getSaveImageOptions
+from .imageContext import PNGContext
 
 from .tools.mp4Tools import generateMP4
 
@@ -19,6 +20,8 @@ class MP4Context(PNGContext):
     ] + [(key, doc) for key, doc in PNGContext.saveImageOptions if key != "multipage"]
 
     _defaultFrameDuration = 1 / 10
+
+    ensureEvenPixelDimensions = True
 
     def __init__(self):
         super(MP4Context, self).__init__()
@@ -36,7 +39,6 @@ class MP4Context(PNGContext):
         frameDurations = set(self._frameDurations)
         if len(frameDurations) > 1:
             warnings.warn("Exporting to mp4 doesn't support varying frame durations, only the first value was used.")
-
         options["multipage"] = True
         codec = options.get("ffmpegCodec", "libx264")
         tempDir = tempfile.mkdtemp(suffix=".mp4tmp")

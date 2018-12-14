@@ -15,14 +15,14 @@ from testSupport import StdOutCollector, TempFile, TempFolder, randomSeed
 
 class ExportTest(unittest.TestCase):
 
-    def makeTestAnimation(self, numFrames=25):
+    def makeTestAnimation(self, numFrames=25, pageWidth=500, pageHeight=500):
         randomSeed(0)
         drawBot.newDrawing()
         for i in range(numFrames):
-            drawBot.newPage(500, 500)
+            drawBot.newPage(pageWidth, pageHeight)
             drawBot.frameDuration(1/25)
             drawBot.fill(1)
-            drawBot.rect(0, 0, 500, 500)
+            drawBot.rect(0, 0, pageWidth, pageHeight)
             drawBot.fill(0)
             drawBot.rect(random.randint(0, 100), random.randint(0, 100), 400, 400)
 
@@ -261,6 +261,22 @@ class ExportTest(unittest.TestCase):
             with StdOutCollector(captureStdErr=True) as output:
                 drawBot.saveImage(tmp.path, multipage=False)
         self.assertEqual(output.lines(), [])
+
+    def test_oddPageHeight_mp4(self):
+        # https://github.com/typemytype/drawbot/issues/250
+        self.makeTestAnimation(1, pageWidth=200, pageHeight=201)
+        with TempFile(suffix=".mp4") as tmp:
+            with self.assertRaises(DrawBotError) as cm:
+                drawBot.saveImage(tmp.path)
+        self.assertEqual(cm.exception.args[0], "Exporting to mp4 doesn't support odd pixel dimensions for width and height.")
+
+    def test_oddPageWidth_mp4(self):
+        # https://github.com/typemytype/drawbot/issues/250
+        self.makeTestAnimation(1, pageWidth=201, pageHeight=200)
+        with TempFile(suffix=".mp4") as tmp:
+            with self.assertRaises(DrawBotError) as cm:
+                drawBot.saveImage(tmp.path)
+        self.assertEqual(cm.exception.args[0], "Exporting to mp4 doesn't support odd pixel dimensions for width and height.")
 
     def makeTestICNSDrawing(self, formats):
         drawBot.newDrawing()

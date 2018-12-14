@@ -7,6 +7,7 @@ import os
 
 from .pdfContext import PDFContext
 from .baseContext import Color
+from drawBot.misc import DrawBotError
 
 
 def _nsDataConverter(value):
@@ -71,6 +72,8 @@ class ImageContext(PDFContext):
         ("multipage", "Output a numbered image for each page or frame in the document."),
     ]
 
+    ensureEvenPixelDimensions = False
+
     def _writeDataToFile(self, data, path, options):
         multipage = options.get("multipage")
         if multipage is None:
@@ -99,6 +102,9 @@ class ImageContext(PDFContext):
                 page = pdfDocument.pageAtIndex_(index)
                 image = AppKit.NSImage.alloc().initWithData_(page.dataRepresentation())
                 imageRep = _makeBitmapImageRep(image, imageResolution)
+                if self.ensureEvenPixelDimensions:
+                    if imageRep.pixelsWide() % 2 or imageRep.pixelsHigh() % 2:
+                        raise DrawBotError("Exporting to %s doesn't support odd pixel dimensions for width and height." % (", ".join(self.fileExtensions)))
                 imageData = imageRep.representationUsingType_properties_(self._saveImageFileTypes[ext], properties)
                 imagePath = fileName + pathAdd + fileExt
                 imageData.writeToFile_atomically_(imagePath, True)
