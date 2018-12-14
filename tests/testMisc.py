@@ -13,6 +13,10 @@ from drawBot.scriptTools import ScriptRunner
 from testSupport import StdOutCollector, testDataDir
 
 
+def _roundDictValues(d, digits):
+    return {k: round(v, digits) if isinstance(v, float) else v for k, v in d.items()}
+
+
 class MiscTest(unittest.TestCase):
 
     def test_openTypeFeatures(self):
@@ -43,7 +47,12 @@ class MiscTest(unittest.TestCase):
         drawBot.font("Skia")
         # get the default font variations
         var = drawBot.listFontVariations()
-        expectedVar = OrderedDict({'wght': {'name': 'Weight', 'minValue': 0.4799, 'maxValue': 3.1999, 'defaultValue': 1.0}, 'wdth': {'name': 'Width', 'minValue': 0.6199, 'maxValue': 1.3, 'defaultValue': 1.0}})
+        var['wght'] = _roundDictValues(var['wght'], 3)
+        var['wdth'] = _roundDictValues(var['wdth'], 3)
+        expectedVar = OrderedDict({
+            'wght': {'name': 'Weight', 'minValue': 0.48, 'maxValue': 3.2, 'defaultValue': 1.0},
+            'wdth': {'name': 'Width', 'minValue': 0.62, 'maxValue': 1.3, 'defaultValue': 1.0},
+        })
         self.assertEqual(var, expectedVar)
         # set a font variation
         var = drawBot.fontVariations(wght=5)
