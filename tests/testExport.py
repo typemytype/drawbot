@@ -263,6 +263,7 @@ class ExportTest(unittest.TestCase):
         self.assertEqual(output.lines(), [])
 
     def test_unevenPages_mp4(self):
+        # https://github.com/typemytype/drawbot/issues/250
         self.makeTestAnimation(pageWidth=500, pageHeight=501)
         with TempFile(suffix=".mp4") as tmp:
             with self.assertRaises(DrawBotError) as cm:
