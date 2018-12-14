@@ -5,7 +5,7 @@ import tempfile
 import shutil
 import Quartz
 
-from drawBot.misc import warnings, DrawBotError
+from drawBot.misc import warnings
 
 from .imageContext import PNGContext
 
@@ -21,6 +21,8 @@ class MP4Context(PNGContext):
     ] + [(key, doc) for key, doc in PNGContext.saveImageOptions if key != "multipage"]
 
     _defaultFrameDuration = 1 / 10
+
+    ensureEvenPixelDimensions = True
 
     def __init__(self):
         super(MP4Context, self).__init__()
@@ -38,15 +40,6 @@ class MP4Context(PNGContext):
         frameDurations = set(self._frameDurations)
         if len(frameDurations) > 1:
             warnings.warn("Exporting to mp4 doesn't support varying frame durations, only the first value was used.")
-
-        pdfDocument = Quartz.PDFDocument.alloc().initWithData_(data)
-        for index in range(pdfDocument.pageCount()):
-            page = pdfDocument.pageAtIndex_(index)
-            # extract the size of the page
-            _, (w, h) = page.boundsForBox_(Quartz.kPDFDisplayBoxArtBox)
-            if w % 2 or h % 2:
-                raise DrawBotError("Exporting to mp4 doesn't support uneven page width and height.")
-
         options["multipage"] = True
         codec = options.get("ffmpegCodec", "libx264")
         tempDir = tempfile.mkdtemp(suffix=".mp4tmp")
