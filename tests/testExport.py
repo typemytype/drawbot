@@ -268,7 +268,7 @@ class ExportTest(unittest.TestCase):
         with TempFile(suffix=".mp4") as tmp:
             with self.assertRaises(DrawBotError) as cm:
                 drawBot.saveImage(tmp.path)
-        self.assertEqual(cm.exception.args[0], "Exporting to mp4 doesn't suport odd pixel dimensions for width and height.")
+        self.assertEqual(cm.exception.args[0], "Exporting to mp4 doesn't support odd pixel dimensions for width and height.")
 
     def makeTestICNSDrawing(self, formats):
         drawBot.newDrawing()
