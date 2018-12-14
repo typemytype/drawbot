@@ -15,7 +15,7 @@ for axisTag in sorted(variations):
     data['minValue'] = round(data['minValue'], 3)
     data['maxValue'] = round(data['maxValue'], 3)
     data['name'] = str(data['name'])
-    print(axisTag, [(k, str(data[k])) for k in sorted(data)])
+    print(axisTag, [(k, data[k]) for k in sorted(data)])
 
 text("Hello Q", (20, 170))
 fontVariations(wght=0.6)
