@@ -264,7 +264,7 @@ class ExportTest(unittest.TestCase):
 
     def test_oddPageHeight_mp4(self):
         # https://github.com/typemytype/drawbot/issues/250
-        self.makeTestAnimation(1, pageWidth=500, pageHeight=501)
+        self.makeTestAnimation(1, pageWidth=200, pageHeight=201)
         with TempFile(suffix=".mp4") as tmp:
             with self.assertRaises(DrawBotError) as cm:
                 drawBot.saveImage(tmp.path)
@@ -272,7 +272,7 @@ class ExportTest(unittest.TestCase):
 
     def test_oddPageWidth_mp4(self):
         # https://github.com/typemytype/drawbot/issues/250
-        self.makeTestAnimation(1, pageWidth=501, pageHeight=500)
+        self.makeTestAnimation(1, pageWidth=201, pageHeight=200)
         with TempFile(suffix=".mp4") as tmp:
             with self.assertRaises(DrawBotError) as cm:
                 drawBot.saveImage(tmp.path)
