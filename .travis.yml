@@ -12,7 +12,7 @@ install:
   - "./.travis/install.sh"
 
 script:
-  # - "./.travis/tests.sh"
+  - "./.travis/tests.sh"
   - "./.travis/build.sh"
 
 # when all is working nicely move build to after_succes
