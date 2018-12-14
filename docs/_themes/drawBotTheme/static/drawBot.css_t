@@ -4,6 +4,10 @@
 @import url("skeleton/layout.css");
 @import url("skeleton/skeleton.css");
 
+* {
+ font-variant-ligatures: none;
+}
+
 html {
 	background-color: {{ theme_headercolor2 }};
 }
