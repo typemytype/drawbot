@@ -3,7 +3,6 @@ from __future__ import division, absolute_import, print_function
 import os
 import tempfile
 import shutil
-import Quartz
 
 from drawBot.misc import warnings
 
