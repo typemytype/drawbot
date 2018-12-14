@@ -11,6 +11,7 @@ fontVariations(None)
 variations = listFontVariations()
 for axisTag in sorted(variations):
     data = variations[axisTag]
+    # we're rounding the values so we don't trip over small differences between OSes
     data['defaultValue'] = round(data['defaultValue'], 3)
     data['minValue'] = round(data['minValue'], 3)
     data['maxValue'] = round(data['maxValue'], 3)
