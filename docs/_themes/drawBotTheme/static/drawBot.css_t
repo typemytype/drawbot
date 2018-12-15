@@ -5,7 +5,7 @@
 @import url("skeleton/skeleton.css");
 
 * {
- font-variant-ligatures: none;
+ font-variant-ligatures: none!important;
 }
 
 html {
