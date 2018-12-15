@@ -14,7 +14,8 @@ matrix:
     language: generic
     script:
     - "./.travis/tests.sh"
-  - os: osx   # default to 10.13
+  - os: osx
+    osx_image: xcode9.4  # 10.13
     language: generic
     script:
     - "./.travis/tests.sh"
