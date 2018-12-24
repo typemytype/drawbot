@@ -233,11 +233,12 @@ class BezierPath(BasePen):
         self._path.appendBezierPathWithArcWithCenter_radius_startAngle_endAngle_clockwise_(
             center, radius, startAngle, endAngle, clockwise)
 
-    def arcTo(self, pt1, pt2, radius):
+    def arcTo(self, point1, point2, radius):
         """
-        Arc from one point to an other point with a given `radius`.
+        Arc  defined by a circle inscribed inside the angle specified by three points:
+        the current point, `point1`, and `point2`. The arc is drawn between the two points of the circle that are tangent to the two legs of the angle.
         """
-        self._path.appendBezierPathWithArcFromPoint_toPoint_radius_(pt1, pt2, radius)
+        self._path.appendBezierPathWithArcFromPoint_toPoint_radius_(point1, point2, radius)
 
     def rect(self, x, y, w, h):
         """
