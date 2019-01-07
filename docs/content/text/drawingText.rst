@@ -1,7 +1,7 @@
 Drawing Text
 ============
 
-.. autofunction:: drawBot.text(txt, (x, y))
+.. autofunction:: drawBot.text(txt, (x, y), align=None)
 .. autofunction:: drawBot.textBox
 
 Helpers
