@@ -1596,6 +1596,7 @@ class DrawBotDrawingTool(object):
             raise DrawBotError("align must be left, right, center")
         attrString = self._dummyContext.attributedString(txt, align=align)
         w, h = attrString.size()
+        w *= 2
         if align == "right":
             x -= w
         elif align == "center":
