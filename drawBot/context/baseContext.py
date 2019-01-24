@@ -1404,6 +1404,18 @@ class FormattedString(object):
             fontName = self._font
         return variation.getVariationAxesForFontName(fontName)
 
+    def listFontVariationNamedInstances(self, fontName=None):
+        """
+        List all named instances for the current font.align
+
+        Optionally a `fontName` can be given. If a font path is given the font will be installed and used directly.
+        """
+        if fontName:
+            fontName = _tryInstallFontFromFontName(fontName)
+        else:
+            fontName = self._font
+        return variation.getVariationNamedInstancesForFontName(fontName)
+
     def tabs(self, *tabs):
         """
         Set tabs,tuples of (`float`, `alignment`)

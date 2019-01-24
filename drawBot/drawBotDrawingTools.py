@@ -1560,6 +1560,14 @@ class DrawBotDrawingTool(object):
         """
         return self._dummyContext._state.text.listFontVariations(fontName)
 
+    def listFontVariationNamedInstances(self, fontName=None):
+        """
+        List all named instances for the current font.align
+
+        Optionally a `fontName` can be given. If a font path is given the font will be installed and used directly.
+        """
+        return self._dummyContext._state.text.listFontVariationNamedInstances(fontName)
+
     # drawing text
 
     def text(self, txt, x, y=None, align=None):
