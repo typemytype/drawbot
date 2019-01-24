@@ -1396,6 +1396,9 @@ class FormattedString(object):
         """
         List all variation axes for the current font.
 
+        Returns a dictionary with all axis tags instance with an info dictionary with the following keys: `name`, `minValue` and `maxValue`.
+        For non variable fonts an empty dictionary is returned.
+
         Optionally a `fontName` can be given. If a font path is given the font will be installed and used directly.
         """
         if fontName:
@@ -1404,9 +1407,12 @@ class FormattedString(object):
             fontName = self._font
         return variation.getVariationAxesForFontName(fontName)
 
-    def listFontVariationNamedInstances(self, fontName=None):
+    def listNamedInstances(self, fontName=None):
         """
-        List all named instances for the current font.align
+        List all named instances from a variable font for the current font.
+
+        Returns a dictionary with all named instance as postscript names with their location.
+        For non variable fonts an empty dictionary is returned.
 
         Optionally a `fontName` can be given. If a font path is given the font will be installed and used directly.
         """
@@ -1414,7 +1420,7 @@ class FormattedString(object):
             fontName = _tryInstallFontFromFontName(fontName)
         else:
             fontName = self._font
-        return variation.getVariationNamedInstancesForFontName(fontName)
+        return variation.getNamedInstancesForFontName(fontName)
 
     def tabs(self, *tabs):
         """
