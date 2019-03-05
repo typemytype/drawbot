@@ -11,7 +11,6 @@ The making of (by Andy Clymer)
     import random
     import os
 
-
     tryAndError = False
     drawPencil = True
     drawBubbles = True
