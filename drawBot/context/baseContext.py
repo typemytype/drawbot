@@ -272,7 +272,6 @@ class BezierPath(BasePen):
 
         attributedString = context.attributedString(txt, align)
         w, h = attributedString.size()
-        w *= 2
         if offset:
             x, y = offset
         else:
@@ -283,13 +282,13 @@ class BezierPath(BasePen):
             x -= w * .5
         setter = CoreText.CTFramesetterCreateWithAttributedString(attributedString)
         path = Quartz.CGPathCreateMutable()
-        Quartz.CGPathAddRect(path, None, Quartz.CGRectMake(x, y, w, h * 2))
+        Quartz.CGPathAddRect(path, None, Quartz.CGRectMake(x, y, w, h))
         frame = CoreText.CTFramesetterCreateFrame(setter, (0, 0), path, None)
         ctLines = CoreText.CTFrameGetLines(frame)
         origins = CoreText.CTFrameGetLineOrigins(frame, (0, len(ctLines)), None)
         if origins:
             y -= origins[0][1]
-        self.textBox(txt, box=(x, y, w, h * 2), font=font, fontSize=fontSize, align=align)
+        self.textBox(txt, box=(x, y - h, w, h * 2), font=font, fontSize=fontSize, align=align)
 
     def textBox(self, txt, box, font=_FALLBACKFONT, fontSize=10, align=None, hyphenation=None):
         """
