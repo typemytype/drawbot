@@ -99,7 +99,7 @@ class DrawBotDrawingTool(object):
 
     def _addToNamespace(self, namespace):
         namespace.update(_getmodulecontents(self, self.__all__))
-        namespace.update(_getmodulecontents(random, ["random", "randint", "choice"]))
+        namespace.update(_getmodulecontents(random, ["random", "randint", "choice", "shuffle"]))
         namespace.update(_getmodulecontents(math))
 
     def _addInstruction(self, callback, *args, **kwargs):
