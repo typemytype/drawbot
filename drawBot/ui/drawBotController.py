@@ -74,7 +74,6 @@ class DrawBotController(BaseWindowController):
             # add toolbar
             self.addToolbar()
 
-
     def codeViewCallback(self, sender):
         document = self.w.getNSWindowController().document()
         document.updateChangeCount_(AppKit.NSChangeDone)
