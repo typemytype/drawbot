@@ -7,6 +7,7 @@ import tempfile
 
 from drawBot.drawBotSettings import __version__
 from drawBot.scriptTools import ScriptRunner
+from drawBot.drawBotDrawingTools import _drawBotDrawingTool
 
 """
 DrawBot support for .drawbot packages.
@@ -114,8 +115,12 @@ class DrawBotPackage(object):
             return False, "Cannot execute an empty package."
         if not os.path.exists(path):
             return False, "Cannot find '%s'." % path
+        # create a namespace
+        namespace = {}
+        # add the tool callbacks in the name space
+        _drawBotDrawingTool._addToNamespace(namespace)
         # run the script
-        ScriptRunner(path=path)
+        ScriptRunner(path=path, namespace=namespace)
         return True, ""
 
     def buildPackage(self, destinationPath, scriptRoot):
