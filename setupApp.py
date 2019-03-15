@@ -313,6 +313,9 @@ if buildDMG or ftpHost is not None:
     os.rename(os.path.join(distLocation, "%s.app" % appName), os.path.join(imgLocation, "%s.app" % appName))
     tempDmgName = "%s.tmp.dmg" % appName
 
+    # add a link to the Applications
+    os.system("ln -s /Applications %s" % imgLocation)
+
     os.system("hdiutil create -fs HFS+ -size 200m -srcfolder \"%s\" -volname %s -format UDZO \"%s\"" % (imgLocation, appName, os.path.join(distLocation, tempDmgName)))
 
     os.system("hdiutil convert -format UDZO -imagekey zlib-level=9 -o \"%s\" \"%s\"" % (dmgLocation, os.path.join(distLocation, tempDmgName)))
