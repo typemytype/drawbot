@@ -364,7 +364,7 @@ class DrawBotDrawingTool(object):
         All supported file extensions: %(supporttedExtensions)s.
         (`*` will print out all actions.)
 
-        When exporting an animation or movie, each page represents a frame.
+        When exporting an animation or movie, each page represents a frame and the framerate is set by calling `frameDuration()` after each `newPage()`.
 
         .. downloadcode:: saveImage.py
 
