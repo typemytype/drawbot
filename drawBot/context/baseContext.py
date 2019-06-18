@@ -265,6 +265,8 @@ class BezierPath(BasePen):
 
         Optionally `txt` can be a `FormattedString`.
         """
+        if not isinstance(txt, (basestring, FormattedString)):
+            raise ValueError("depythonifying 'str' or 'FormattedString', got '%s'" % type(txt).__name__)
         if align and align not in BaseContext._textAlignMap.keys():
             raise DrawBotError("align must be %s" % (", ".join(BaseContext._textAlignMap.keys())))
         context = BaseContext()
@@ -305,6 +307,8 @@ class BezierPath(BasePen):
         Optionally `txt` can be a `FormattedString`.
         Optionally `box` can be a `BezierPath`.
         """
+        if not isinstance(txt, (basestring, FormattedString)):
+            raise ValueError("depythonifying 'str' or 'FormattedString', got '%s'" % type(txt).__name__)
         if align and align not in BaseContext._textAlignMap.keys():
             raise DrawBotError("align must be %s" % (", ".join(BaseContext._textAlignMap.keys())))
         context = BaseContext()
@@ -1002,6 +1006,8 @@ class FormattedString(object):
         if isinstance(txt, FormattedString):
             self._attributedString.appendAttributedString_(txt.getNSObject())
             return
+        elif not isinstance(txt, (basestring, FormattedString)):
+            raise ValueError("depythonifying 'str' or 'FormattedString', got '%s'" % type(txt).__name__)
         attributes = {}
         if self._font:
             font = AppKit.NSFont.fontWithName_size_(self._font, self._fontSize)
