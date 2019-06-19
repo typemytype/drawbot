@@ -1587,7 +1587,7 @@ class DrawBotDrawingTool(object):
             except UnicodeEncodeError:
                 pass
         if not isinstance(txt, (basestring, FormattedString)):
-            raise ValueError("depythonifying 'str' or 'FormattedString', got '%s'" % type(txt).__name__)
+            raise TypeError("expected 'str' or 'FormattedString', got '%s'" % type(txt).__name__)
         if y is None:
             x, y = x
         else:
@@ -1634,7 +1634,7 @@ class DrawBotDrawingTool(object):
         if isinstance(txt, self._formattedStringClass):
             txt = txt.copy()
         elif not isinstance(txt, (basestring, FormattedString)):
-            raise ValueError("depythonifying 'str' or 'FormattedString', got '%s'" % type(txt).__name__)
+            raise TypeError("expected 'str' or 'FormattedString', got '%s'" % type(txt).__name__)
         if align is None:
             align = "left"
         elif align not in self._dummyContext._textAlignMap.keys():
@@ -1775,7 +1775,7 @@ class DrawBotDrawingTool(object):
             except UnicodeEncodeError:
                 pass
         if not isinstance(txt, (basestring, FormattedString)):
-            raise ValueError("depythonifying 'str' or 'FormattedString', got '%s'" % type(txt).__name__)
+            raise TypeError("expected 'str' or 'FormattedString', got '%s'" % type(txt).__name__)
         if align is None:
             align = "left"
         elif align not in self._dummyContext._textAlignMap.keys():
@@ -1801,7 +1801,7 @@ class DrawBotDrawingTool(object):
             except UnicodeEncodeError:
                 pass
         if not isinstance(txt, (basestring, FormattedString)):
-            raise ValueError("depythonifying 'str' or 'FormattedString', got '%s'" % type(txt).__name__)
+            raise TypeError("expected 'str' or 'FormattedString', got '%s'" % type(txt).__name__)
         path, (x, y) = self._dummyContext._getPathForFrameSetter(box)
         attrString = self._dummyContext.attributedString(txt)
         setter = CoreText.CTFramesetterCreateWithAttributedString(attrString)
@@ -2126,7 +2126,7 @@ class DrawBotDrawingTool(object):
             except UnicodeEncodeError:
                 pass
         if not isinstance(txt, (basestring, FormattedString)):
-            raise ValueError("depythonifying 'str' or 'FormattedString', got '%s'" % type(txt).__name__)
+            raise TypeError("expected 'str' or 'FormattedString', got '%s'" % type(txt).__name__)
         if width is not None and height is not None:
             raise DrawBotError("Calculating textSize can only have one constrain, either width or height must be None")
         return self._dummyContext.textSize(txt, align, width, height)
