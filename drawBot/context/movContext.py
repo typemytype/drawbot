@@ -6,7 +6,7 @@ import Quartz
 
 import os
 
-from drawBot.misc import DrawBotError
+from drawBot.misc import DrawBotError, warnings
 from .pdfContext import PDFContext
 
 
@@ -41,6 +41,7 @@ class MOVContext(PDFContext):
     def _writeDataToFile(self, data, path, options):
         if os.path.exists(path):
             os.remove(path)
+        warnings.warn("export to '.mov' is deprecated, use '.mp4' instead.")
         movie, error = QTKit.QTMovie.alloc().initToWritableFile_error_(path, None)
         if error:
             raise DrawBotError("Could not create a quick time movie, %s" % error.localizedDescription())
