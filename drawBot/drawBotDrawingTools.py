@@ -607,6 +607,37 @@ class DrawBotDrawingTool(object):
     def arcTo(self, xy1, xy2, radius):
         """
         Arc from one point to an other point with a given `radius`.
+
+        .. downloadcode:: arcTo-example.py
+
+            pt0 = 74, 48
+            pt1 = 238, 182
+            pt2 = 46, 252
+            radius = 60
+
+            def drawPt(pos, r=5):
+                x, y = pos
+                oval(x-r, y-r, r*2, r*2)
+
+            size(300, 300)
+            fill(None)
+
+            path = BezierPath()
+            path.moveTo(pt0)
+            path.arcTo(pt1, pt2, radius)
+
+            stroke(0, 1, 1)
+            polygon(pt0, pt1, pt2)
+            for pt in [pt0, pt1, pt2]:
+                drawPt(pt)
+
+            stroke(0, 0, 1)
+            drawPath(path)
+            stroke(1, 0, 1)
+            for pt in path.onCurvePoints:
+                drawPt(pt, r=3)
+            for pt in path.offCurvePoints:
+                drawPt(pt, r=2)
         """
         x1, y1 = xy1
         x2, y2 = xy2
