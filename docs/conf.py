@@ -22,6 +22,8 @@ import time
 
 class MetaMock(type):
 
+    __slots__ = []
+
     def __getattr__(self, name):
         return self
 
@@ -313,6 +315,19 @@ from sphinx.directives.code import LiteralInclude, CodeBlock
 from sphinx.util.inspect import getargspec
 from sphinx.ext import autodoc
 from sphinx.writers.html import HTMLTranslator
+from sphinx.util import DownloadFiles
+
+
+def add_file_overwrite(self, docname, filename):
+    # type: (str, str) -> None
+    if filename not in self:
+        dest = os.path.basename(filename)
+        self[filename] = (set(), dest)
+
+    self[filename][0].add(docname)
+    return self[filename][1]
+
+DownloadFiles.add_file = add_file_overwrite
 
 downloadCodeRoot = os.path.join(os.path.dirname(__file__), "downloads")
 if os.path.exists(downloadCodeRoot):
