@@ -47,6 +47,7 @@ class Mock(object, metaclass=MetaMock):
 MOCK_MODULES = ['py2app',
         'AppKit', 'Quartz', 'CoreText', 'QTKit',
         'fontTools',
+        'fontTools.ttLib',
         'fontTools.misc',
         'fontTools.misc.transform',
         'fontTools.misc.xmlWriter',
