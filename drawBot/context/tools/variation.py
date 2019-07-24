@@ -1,6 +1,8 @@
 import CoreText
 from collections import OrderedDict
 
+from fontTools.ttLib import TTFont
+
 from drawBot.misc import memoize
 
 """
@@ -27,11 +29,14 @@ def convertVariationTagToInt(tag):
 
 @memoize
 def getVariationAxesForFontName(fontName):
+    """
+    Return a dictionary { axis tag: { name: , minValue: , maxValue: } }
+    """
     axes = OrderedDict()
     font = CoreText.CTFontCreateWithName(fontName, 12, None)
     variationAxesDescriptions = CoreText.CTFontCopyVariationAxes(font)
     if variationAxesDescriptions is None:
-        # 'normal' fonts have no axes descriptions
+        # non-variable fonts have no axes descriptions
         return axes
     for variationAxesDescription in variationAxesDescriptions:
         tag = convertIntToVariationTag(variationAxesDescription[CoreText.kCTFontVariationAxisIdentifierKey])
@@ -42,3 +47,45 @@ def getVariationAxesForFontName(fontName):
         data = dict(name=name, minValue=minValue, maxValue=maxValue, defaultValue=defaultValue)
         axes[tag] = data
     return axes
+
+
+@memoize
+def getNamedInstancesForFontName(fontName):
+    """
+    Return a dict { postscriptName: location } of all named instances in a given font.
+    """
+    instances = OrderedDict()
+    font = CoreText.CTFontCreateWithName(fontName, 12, None)
+    if font is None:
+        return instances
+    fontDescriptor = font.fontDescriptor()
+    url = CoreText.CTFontDescriptorCopyAttribute(fontDescriptor, CoreText.kCTFontURLAttribute)
+    if url is None:
+        return instances
+
+    variationAxesDescriptions = CoreText.CTFontCopyVariationAxes(font)
+    if variationAxesDescriptions is None:
+        # non-variable fonts have no named instances
+        return instances
+    tagNameMap = {}
+    for variationAxesDescription in variationAxesDescriptions:
+        tag = convertIntToVariationTag(variationAxesDescription[CoreText.kCTFontVariationAxisIdentifierKey])
+        name = variationAxesDescription[CoreText.kCTFontVariationAxisNameKey]
+        tagNameMap[tag] = name
+
+    ft = TTFont(url.path())
+    if "fvar" in ft:
+        cgFont = CoreText.CGFontCreateWithFontName(fontName)
+        fvar = ft["fvar"]
+
+        for instance in fvar.instances:
+            fontVariations = dict()
+            for axis, value in instance.coordinates.items():
+                fontVariations[tagNameMap[axis]] = value
+
+            varFont = CoreText.CGFontCreateCopyWithVariations(cgFont, fontVariations)
+            postScriptName = CoreText.CGFontCopyPostScriptName(varFont)
+            instances[postScriptName] = instance.coordinates
+
+    ft.close()
+    return instances

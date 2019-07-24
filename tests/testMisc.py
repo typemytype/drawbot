@@ -67,6 +67,18 @@ class MiscTest(unittest.TestCase):
         var = drawBot.fontVariations(wght=5)
         self.assertEqual(var, {"wght": 5})
 
+    def test_fontVariationNamedInstances(self):
+        drawBot.newDrawing()
+        namedInstances = drawBot.listNamedInstances()
+        self.assertEqual(namedInstances, {})
+        drawBot.font("Skia")
+        namedInstances = drawBot.listNamedInstances()
+        expectedNamedInstances = {'Skia-Regular_Black': {'wght': 3.2, 'wdth': 1.0}, 'Skia-Regular_Extended': {'wght': 1.0, 'wdth': 1.3}, 'Skia-Regular_Condensed': {'wght': 1.0, 'wdth': 0.61998}, 'Skia-Regular_Light': {'wght': 0.48, 'wdth': 1.0}, 'Skia-Regular': {'wght': 1.0, 'wdth': 1.0}, 'Skia-Regular_Black-Extended': {'wght': 3.2, 'wdth': 1.3}, 'Skia-Regular_Light-Extended': {'wght': 0.48, 'wdth': 1.3}, 'Skia-Regular_Black-Condensed': {'wght': 3.0, 'wdth': 0.7}, 'Skia-Regular_Light-Condensed': {'wght': 0.48, 'wdth': 0.7}, 'Skia-Regular_Bold': {'wght': 1.95, 'wdth': 1.0}}
+        self.assertEqual(namedInstances, expectedNamedInstances)
+        drawBot.font("Helvetica")
+        namedInstances = drawBot.listNamedInstances("Skia")
+        self.assertEqual(namedInstances, expectedNamedInstances)
+
     def test_polygon_notEnoughPoints(self):
         drawBot.newDrawing()
         with self.assertRaises(TypeError):

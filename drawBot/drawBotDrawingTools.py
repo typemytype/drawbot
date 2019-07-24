@@ -1549,12 +1549,9 @@ class DrawBotDrawingTool(object):
         return result
 
     def listOpenTypeFeatures(self, fontName=None):
-        """
-        List all OpenType feature tags for the current font.
-
-        Optionally a `fontName` can be given. If a font path is given the font will be installed and used directly.
-        """
         return self._dummyContext._state.text.listOpenTypeFeatures(fontName)
+
+    listOpenTypeFeatures.__doc__ = FormattedString.listFontVariations.__doc__
 
     def fontVariations(self, *args, **axes):
         """
@@ -1584,12 +1581,14 @@ class DrawBotDrawingTool(object):
         return result
 
     def listFontVariations(self, fontName=None):
-        """
-        List all variation axes for the current font.
-
-        Optionally a `fontName` can be given. If a font path is given the font will be installed and used directly.
-        """
         return self._dummyContext._state.text.listFontVariations(fontName)
+
+    listFontVariations.__doc__ = FormattedString.listFontVariations.__doc__
+
+    def listNamedInstances(self, fontName=None):
+        return self._dummyContext._state.text.listNamedInstances(fontName)
+
+    listNamedInstances.__doc__ = FormattedString.listNamedInstances.__doc__
 
     # drawing text
 
