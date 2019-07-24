@@ -51,7 +51,9 @@ class ExportTest(unittest.TestCase):
 
     def test_export_mov(self):
         self.makeTestAnimation(5)
-        self._saveImageAndReturnSize(".mov")
+        with StdOutCollector(captureStdErr=True) as output:
+            self._saveImageAndReturnSize(".mov")
+        self.assertEqual(output.lines(), ["*** DrawBot warning: export to '.mov' is deprecated, use '.mp4' instead. ***"])
 
     def test_export_gif(self):
         self.makeTestAnimation(5)
