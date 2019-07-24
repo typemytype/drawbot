@@ -8,7 +8,7 @@ import Quartz
 
 from .tools import gifTools
 
-from .baseContext import BaseContext
+from .baseContext import BaseContext, FormattedString
 from drawBot.misc import DrawBotError, isPDF, isGIF
 
 
@@ -147,7 +147,7 @@ class PDFContext(BaseContext):
     def _textBox(self, txt, box, align):
         path, (x, y) = self._getPathForFrameSetter(box)
 
-        canDoGradients = True
+        canDoGradients = not isinstance(txt, FormattedString)
         attrString = self.attributedString(txt, align=align)
         if self._state.hyphenation:
             attrString = self.hyphenateAttributedString(attrString, path)
