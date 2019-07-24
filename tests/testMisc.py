@@ -73,10 +73,13 @@ class MiscTest(unittest.TestCase):
         self.assertEqual(namedInstances, {})
         drawBot.font("Skia")
         namedInstances = drawBot.listNamedInstances()
+        namedInstances = _roundInstanceLocations(namedInstances)
         expectedNamedInstances = {'Skia-Regular_Black': {'wght': 3.2, 'wdth': 1.0}, 'Skia-Regular_Extended': {'wght': 1.0, 'wdth': 1.3}, 'Skia-Regular_Condensed': {'wght': 1.0, 'wdth': 0.61998}, 'Skia-Regular_Light': {'wght': 0.48, 'wdth': 1.0}, 'Skia-Regular': {'wght': 1.0, 'wdth': 1.0}, 'Skia-Regular_Black-Extended': {'wght': 3.2, 'wdth': 1.3}, 'Skia-Regular_Light-Extended': {'wght': 0.48, 'wdth': 1.3}, 'Skia-Regular_Black-Condensed': {'wght': 3.0, 'wdth': 0.7}, 'Skia-Regular_Light-Condensed': {'wght': 0.48, 'wdth': 0.7}, 'Skia-Regular_Bold': {'wght': 1.95, 'wdth': 1.0}}
+        expectedNamedInstances = _roundInstanceLocations(expectedNamedInstances)
         self.assertEqual(namedInstances, expectedNamedInstances)
         drawBot.font("Helvetica")
         namedInstances = drawBot.listNamedInstances("Skia")
+        namedInstances = _roundInstanceLocations(namedInstances)
         self.assertEqual(namedInstances, expectedNamedInstances)
 
     def test_polygon_notEnoughPoints(self):
@@ -230,6 +233,10 @@ class MiscTest(unittest.TestCase):
         self.assertEqual(drawBot.width(), 400)
         self.assertEqual(drawBot.height(), 500)
         self.assertEqual(drawBot.pageCount(), 2)
+
+
+def _roundInstanceLocations(instanceLocations):
+    return {instanceName: {tag: round(value, 3) for tag, value in location.items()} for instanceName, location in instanceLocations.items()}
 
 
 if __name__ == '__main__':
