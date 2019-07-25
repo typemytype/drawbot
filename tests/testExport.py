@@ -305,7 +305,6 @@ class ExportTest(unittest.TestCase):
         drawBot.fallbackFont("Courier")
         drawBot.font("Times")
         drawBot.text("a", (10, 10))
-        drawBot.saveImage("/Users/frederik/Documents/apps/drawBot/drawbot/tests/data/expected_svgSaveFallback___2.svg")
         with TempFile(suffix=".svg") as tmp:
             drawBot.saveImage(tmp.path)
             self.assertEqual(readData(tmp.path), readData(expectedPath), "Files %r and %s are not the same" % (tmp.path, expectedPath))
