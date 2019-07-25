@@ -10,7 +10,7 @@ import random
 import AppKit
 from drawBot.context.tools.gifTools import gifFrameCount
 from drawBot.misc import DrawBotError
-from testSupport import StdOutCollector, TempFile, TempFolder, randomSeed
+from testSupport import StdOutCollector, TempFile, TempFolder, randomSeed, readData, testDataDir
 
 
 class ExportTest(unittest.TestCase):
@@ -51,7 +51,9 @@ class ExportTest(unittest.TestCase):
 
     def test_export_mov(self):
         self.makeTestAnimation(5)
-        self._saveImageAndReturnSize(".mov")
+        with StdOutCollector(captureStdErr=True) as output:
+            self._saveImageAndReturnSize(".mov")
+        self.assertEqual(output.lines(), ["*** DrawBot warning: export to '.mov' is deprecated, use '.mp4' instead. ***"])
 
     def test_export_gif(self):
         self.makeTestAnimation(5)
@@ -295,6 +297,18 @@ class ExportTest(unittest.TestCase):
         with self.assertRaises(DrawBotError) as cm:
             self._saveImageAndReturnSize(".icns")
         self.assertEqual(cm.exception.args[0], "The .icns can not be build with the size '15x15'. Must be either: 16x16, 32x32, 128x128, 256x256, 512x512, 1024x1024")
+
+    def test_export_svg_fallbackFont(self):
+        expectedPath = os.path.join(testDataDir, "expected_svgSaveFallback.svg")
+        drawBot.newDrawing()
+        drawBot.newPage(100, 100)
+        drawBot.fallbackFont("Courier")
+        drawBot.font("Times")
+        drawBot.text("a", (10, 10))
+        drawBot.saveImage("/Users/frederik/Documents/apps/drawBot/drawbot/tests/data/expected_svgSaveFallback___2.svg")
+        with TempFile(suffix=".svg") as tmp:
+            drawBot.saveImage(tmp.path)
+            self.assertEqual(readData(tmp.path), readData(expectedPath), "Files %r and %s are not the same" % (tmp.path, expectedPath))
 
 
 if __name__ == '__main__':
