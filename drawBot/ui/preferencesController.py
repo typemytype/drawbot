@@ -339,9 +339,9 @@ class SyntaxColors(Group):
 class PreferencesController(BaseWindowController):
 
     def __init__(self):
-        self.w = Window((500, 460), miniaturizable=False, minSize=(500, 430))
+        self.w = Window((500, 430), miniaturizable=False, minSize=(500, 430))
 
-        y = -220
+        y = -190
         self.w.syntaxColors = SyntaxColors((0, 0, -0, y))
 
         self.w.hl1 = HorizontalLine((10, y, -10, 1))
@@ -349,8 +349,6 @@ class PreferencesController(BaseWindowController):
         self.w.clearOutPut = CheckBox((10, y, -10, 22), "Clear text output before running script", callback=self.setToDefaults)
         y += 30
         self.w.liveOutPut = CheckBox((10, y, -10, 22), "Live update output", callback=self.setToDefaults)
-        y += 30
-        self.w.useFutureDivision = CheckBox((10, y, -10, 22), "Use Future Division (relaxed float division)", callback=self.setToDefaults)
         y += 30
         self.w.shouldOpenUntitledFile = CheckBox((10, y, -10, 22), "Should Open Untitled File", callback=self.setToDefaults)
         y += 30
@@ -367,7 +365,6 @@ class PreferencesController(BaseWindowController):
     def getFromDefaults(self):
         self.w.clearOutPut.set(getDefault("DrawBotClearOutput", True))
         self.w.liveOutPut.set(getDefault("DrawButLiveUpdateStdoutStderr", False))
-        self.w.useFutureDivision.set(getDefault("DrawBotUseFutureDivision", True))
         self.w.animateIcon.set(getDefault("DrawBotAnimateIcon", True))
         self.w.checkForUpdates.set(getDefault("DrawBotCheckForUpdatesAtStartup", True))
         self.w.shouldOpenUntitledFile.set(getDefault("shouldOpenUntitledFile", True))
@@ -377,7 +374,6 @@ class PreferencesController(BaseWindowController):
     def setToDefaults(self, sender=None):
         setDefault("DrawBotClearOutput", self.w.clearOutPut.get())
         setDefault("DrawButLiveUpdateStdoutStderr", self.w.liveOutPut.get())
-        setDefault("DrawBotUseFutureDivision", self.w.useFutureDivision.get())
         setDefault("DrawBotAnimateIcon", self.w.animateIcon.get())
         setDefault("DrawBotCheckForUpdatesAtStartup", self.w.checkForUpdates.get())
         setDefault("shouldOpenUntitledFile", self.w.shouldOpenUntitledFile.get())

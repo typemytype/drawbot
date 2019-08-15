@@ -172,9 +172,6 @@ def ScriptRunner(text=None, path=None, stdout=None, stderr=None, namespace=None,
             text = f.read().decode("utf-8")
     source = text.replace('\r\n', '\n').replace('\r', '\n')
     compileFlags = 0
-    if getDefault("DrawBotUseFutureDivision", True):
-        import __future__
-        compileFlags |= __future__.CO_FUTURE_DIVISION
 
     try:
         try:
