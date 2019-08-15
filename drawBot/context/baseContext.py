@@ -8,7 +8,7 @@ import math
 import os
 
 from fontTools.pens.basePen import BasePen
-from fontTools.misc.py23 import basestring, PY2, unichr
+from fontTools.misc.py23 import basestring, unichr
 
 from drawBot.misc import DrawBotError, cmyk2rgb, warnings, transformationAtCenter
 
@@ -993,11 +993,6 @@ class FormattedString(object):
 
         Text can also be added with `formattedString += "hello"`. It will append the text with the current settings of the formatted string.
         """
-        if PY2 and isinstance(txt, basestring):
-            try:
-                txt = txt.decode("utf-8")
-            except UnicodeEncodeError:
-                pass
         attributes = self._validateAttributes(kwargs, addDefaults=False)
         for key, value in attributes.items():
             self._setAttribute(key, value)

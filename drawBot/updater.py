@@ -18,8 +18,6 @@ from defconAppKit.windows.progressWindow import ProgressWindow
 from drawBot import __version__
 from .misc import DrawBotError, getDefault
 
-from fontTools.misc.py23 import unichr, PY2
-
 
 _versionRE = re.compile(r'__version__\s*=\s*\"([^\"]+)\"')
 
@@ -55,10 +53,7 @@ def downloadCurrentVersion():
     """
     Download the current version (dmg) and mount it
     """
-    if PY2:
-        path = "https://static.typemytype.com/drawBot/DrawBotPy2.dmg"
-    else:
-        path = "https://static.typemytype.com/drawBot/DrawBot.dmg"
+    path = "https://static.typemytype.com/drawBot/DrawBot.dmg"
     try:
         # download and mount
         cmds = ["hdiutil", "attach", "-plist", path]
@@ -106,7 +101,7 @@ class Updater(object):
 
         self.w.cancelButton = vanilla.Button((-270, -30, 60, 20), "Cancel", callback=self.cancelCallback, sizeStyle="small")
         self.w.cancelButton.bind(".", ["command"])
-        self.w.cancelButton.bind(unichr(27), [])
+        self.w.cancelButton.bind(chr(27), [])
 
         self.w.openInBrowser = vanilla.Button((-200, -30, 120, 20), "Show In Browser", callback=self.openInBrowserCallback, sizeStyle="small")
         self.w.okButton = vanilla.Button((-70, -30, 55, 20), "OK", callback=self.okCallback, sizeStyle="small")

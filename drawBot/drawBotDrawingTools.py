@@ -18,7 +18,7 @@ from .context.tools import openType
 
 from .misc import DrawBotError, warnings, VariableController, optimizePath, isPDF, isEPS, isGIF, transformationAtCenter, clearMemoizeCache
 
-from fontTools.misc.py23 import basestring, PY2
+from fontTools.misc.py23 import basestring
 
 
 def _getmodulecontents(module, names=None):
@@ -1611,11 +1611,6 @@ class DrawBotDrawingTool(object):
             text("hallo", (200, 600))
             text("I'm Times", (100, 300))
         """
-        if PY2 and isinstance(txt, basestring):
-            try:
-                txt = txt.decode("utf-8")
-            except UnicodeEncodeError:
-                pass
         if not isinstance(txt, (basestring, FormattedString)):
             raise TypeError("expected 'str' or 'FormattedString', got '%s'" % type(txt).__name__)
         if y is None:
@@ -1656,11 +1651,6 @@ class DrawBotDrawingTool(object):
         Optionally `txt` can be a `FormattedString`.
         Optionally `box` can be a `BezierPath`.
         """
-        if PY2 and isinstance(txt, basestring):
-            try:
-                txt = txt.decode("utf-8")
-            except UnicodeEncodeError:
-                pass
         if isinstance(txt, self._formattedStringClass):
             txt = txt.copy()
         elif not isinstance(txt, (basestring, FormattedString)):
@@ -1799,11 +1789,6 @@ class DrawBotDrawingTool(object):
             # draw some text in the path
             textBox("abcdefghijklmnopqrstuvwxyz"*30000, path)
         """
-        if PY2 and isinstance(txt, basestring):
-            try:
-                txt = txt.decode("utf-8")
-            except UnicodeEncodeError:
-                pass
         if not isinstance(txt, (basestring, FormattedString)):
             raise TypeError("expected 'str' or 'FormattedString', got '%s'" % type(txt).__name__)
         if align is None:
@@ -1825,11 +1810,6 @@ class DrawBotDrawingTool(object):
         Optionally an alignment can be set.
         Possible `align` values are: `"left"`, `"center"`, `"right"` and `"justified"`.
         """
-        if PY2 and isinstance(txt, basestring):
-            try:
-                txt = txt.decode("utf-8")
-            except UnicodeEncodeError:
-                pass
         if not isinstance(txt, (basestring, FormattedString)):
             raise TypeError("expected 'str' or 'FormattedString', got '%s'" % type(txt).__name__)
         path, (x, y) = self._dummyContext._getPathForFrameSetter(box)
@@ -2150,11 +2130,6 @@ class DrawBotDrawingTool(object):
         Optionally a `width` constrain or `height` constrain can be provided
         to calculate the lenght or width of text with the given constrain.
         """
-        if PY2 and isinstance(txt, basestring):
-            try:
-                txt = txt.decode("utf-8")
-            except UnicodeEncodeError:
-                pass
         if not isinstance(txt, (basestring, FormattedString)):
             raise TypeError("expected 'str' or 'FormattedString', got '%s'" % type(txt).__name__)
         if width is not None and height is not None:
