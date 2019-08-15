@@ -1,5 +1,3 @@
-from __future__ import division, absolute_import, print_function
-
 import AppKit
 from math import radians
 import os

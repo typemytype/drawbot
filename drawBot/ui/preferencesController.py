@@ -1,5 +1,3 @@
-from __future__ import absolute_import
-
 from Foundation import NSObject, NSMutableAttributedString, NSInsetRect
 from AppKit import NSApp, NSColorWell, NSActionCell, NSNotificationCenter, NSFontManager, \
     NSCalibratedRGBColorSpace, NSTableViewFirstColumnOnlyAutoresizingStyle, \

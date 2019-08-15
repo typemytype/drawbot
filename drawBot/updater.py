@@ -1,5 +1,3 @@
-from __future__ import absolute_import, print_function
-
 try:
     from urllib2 import urlopen
 except ImportError:

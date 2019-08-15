@@ -1,7 +1,3 @@
-from __future__ import division, absolute_import, print_function
-
-# -*- coding: UTF-8 -*-
-import __future__
 import AppKit
 import time
 import os
@@ -177,6 +173,7 @@ def ScriptRunner(text=None, path=None, stdout=None, stderr=None, namespace=None,
     source = text.replace('\r\n', '\n').replace('\r', '\n')
     compileFlags = 0
     if getDefault("DrawBotUseFutureDivision", True):
+        import __future__
         compileFlags |= __future__.CO_FUTURE_DIVISION
 
     try:
