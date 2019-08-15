@@ -8,7 +8,6 @@ import math
 import os
 
 from fontTools.pens.basePen import BasePen
-from fontTools.misc.py23 import basestring, unichr
 
 from drawBot.misc import DrawBotError, cmyk2rgb, warnings, transformationAtCenter
 
@@ -265,7 +264,7 @@ class BezierPath(BasePen):
 
         Optionally `txt` can be a `FormattedString`.
         """
-        if not isinstance(txt, (basestring, FormattedString)):
+        if not isinstance(txt, (str, FormattedString)):
             raise TypeError("expected 'str' or 'FormattedString', got '%s'" % type(txt).__name__)
         if align and align not in BaseContext._textAlignMap.keys():
             raise DrawBotError("align must be %s" % (", ".join(BaseContext._textAlignMap.keys())))
@@ -307,7 +306,7 @@ class BezierPath(BasePen):
         Optionally `txt` can be a `FormattedString`.
         Optionally `box` can be a `BezierPath`.
         """
-        if not isinstance(txt, (basestring, FormattedString)):
+        if not isinstance(txt, (str, FormattedString)):
             raise TypeError("expected 'str' or 'FormattedString', got '%s'" % type(txt).__name__)
         if align and align not in BaseContext._textAlignMap.keys():
             raise DrawBotError("align must be %s" % (", ".join(BaseContext._textAlignMap.keys())))
@@ -1001,7 +1000,7 @@ class FormattedString(object):
         if isinstance(txt, FormattedString):
             self._attributedString.appendAttributedString_(txt.getNSObject())
             return
-        elif not isinstance(txt, (basestring, FormattedString)):
+        elif not isinstance(txt, (str, FormattedString)):
             raise TypeError("expected 'str' or 'FormattedString', got '%s'" % type(txt).__name__)
         attributes = {}
         if self._font:
@@ -1140,7 +1139,7 @@ class FormattedString(object):
         if isinstance(txt, self.__class__):
             new.getNSObject().appendAttributedString_(txt.getNSObject())
         else:
-            if not isinstance(txt, basestring):
+            if not isinstance(txt, str):
                 raise TypeError("FormattedString requires a str or unicode, got '%s'" % type(txt))
             new.append(txt)
         return new
@@ -1744,7 +1743,7 @@ class FormattedString(object):
             text(t, (100, 100))
         """
         # use a non breaking space as replacement character
-        baseString = unichr(0xFFFD)
+        baseString = chr(0xFFFD)
         font = None
         if self._font:
             font = AppKit.NSFont.fontWithName_size_(self._font, self._fontSize)
@@ -2239,7 +2238,7 @@ class BaseContext(object):
             while hyphenIndex != AppKit.NSNotFound:
                 hyphenIndex = attrString.lineBreakByHyphenatingBeforeIndex_withinRange_(hyphenIndex, wordRange)
                 if hyphenIndex != AppKit.NSNotFound:
-                    mutString.insertString_atIndex_(unichr(self._softHypen), hyphenIndex)
+                    mutString.insertString_atIndex_(chr(self._softHypen), hyphenIndex)
 
         # get the lines
         lines = self._getTypesetterLinesWithPath(attrString, path)
@@ -2258,7 +2257,7 @@ class BaseContext(object):
             # get the string
             subStringText = subString.string()
             # check if the line ends with a softhypen
-            if len(subStringText) and subStringText[-1] == unichr(self._softHypen):
+            if len(subStringText) and subStringText[-1] == chr(self._softHypen):
                 # here we go
                 # get the justified line and get the max line width
                 maxLineWidth, a, d, l = CoreText.CTLineGetTypographicBounds(justifiedLines[i], None, None, None)
@@ -2284,19 +2283,19 @@ class BaseContext(object):
                     # get the width
                     stringWidth = breakString.size().width
                     # add hyphen width if required
-                    if breakString.string()[-1] == unichr(self._softHypen):
+                    if breakString.string()[-1] == chr(self._softHypen):
                         stringWidth += hyphenWidth
                     # found a break
                     if stringWidth <= maxLineWidth:
                         breakFound = True
                         break
 
-                if breakFound and len(breakString.string()) > 2 and breakString.string()[-1] == unichr(self._softHypen):
+                if breakFound and len(breakString.string()) > 2 and breakString.string()[-1] == chr(self._softHypen):
                     # if the break line ends with a soft hyphen
                     # add a hyphen
                     attrString.replaceCharactersInRange_withString_((rng.location + lineBreak, 0), "-")
                 # remove all soft hyphens for the range of that line
-                mutString.replaceOccurrencesOfString_withString_options_range_(unichr(self._softHypen), "", AppKit.NSLiteralSearch, rng)
+                mutString.replaceOccurrencesOfString_withString_options_range_(chr(self._softHypen), "", AppKit.NSLiteralSearch, rng)
                 # reset the lines, from the adjusted attribute string
                 lines = self._getTypesetterLinesWithPath(attrString, path)
                 # reset the justifed lines form the adjusted attributed string
@@ -2304,7 +2303,7 @@ class BaseContext(object):
             # next line
             i += 1
         # remove all soft hyphen
-        mutString.replaceOccurrencesOfString_withString_options_range_(unichr(self._softHypen), "", AppKit.NSLiteralSearch, (0, mutString.length()))
+        mutString.replaceOccurrencesOfString_withString_options_range_(chr(self._softHypen), "", AppKit.NSLiteralSearch, (0, mutString.length()))
         # done!
         return attrString
 

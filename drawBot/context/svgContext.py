@@ -1,6 +1,5 @@
 from __future__ import absolute_import
 
-from fontTools.misc.py23 import round
 import AppKit
 import CoreText
 
