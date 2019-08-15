@@ -1,7 +1,6 @@
 from __future__ import print_function, division, absolute_import
 
 from fontTools.misc.py23 import *
-from fontTools.misc.py23 import PY3
 import sys
 import os
 import unittest
@@ -114,34 +113,23 @@ class MiscTest(unittest.TestCase):
         self.assertEqual(out.lines(), ["hey!"])
 
     def test_ScriptRunner_io(self):
-        if PY3:
-            MyStringIO = io.StringIO
-        else:
-            class MyStringIO(io.StringIO):
-                def write(self, value):
-                    if not isinstance(value, unicode):
-                        value = value.decode("utf8")
-                    super(MyStringIO, self).write(value)
-        out = MyStringIO()
+        out = io.StringIO()
         ScriptRunner("print('hey!')", stdout=out, stderr=out)
         self.assertEqual(out.getvalue(), u'hey!\n')
-        out = MyStringIO()
+        out = io.StringIO()
         ScriptRunner("print(u'hey!')", stdout=out, stderr=out)
         self.assertEqual(out.getvalue(), u'hey!\n')
-        out = MyStringIO()
+        out = io.StringIO()
         ScriptRunner(u"print('hey!')", stdout=out, stderr=out)
         self.assertEqual(out.getvalue(), u'hey!\n')
-        out = MyStringIO()
+        out = io.StringIO()
         ScriptRunner(u"print(u'hey!')", stdout=out, stderr=out)
         self.assertEqual(out.getvalue(), u'hey!\n')
 
     def test_ScriptRunner_print_function(self):
         out = StdOutCollector()
         ScriptRunner("print 'hey!'", stdout=out, stderr=out)
-        if PY3:
-            self.assertEqual(out.lines()[-1], "SyntaxError: Missing parentheses in call to 'print'. Did you mean print('hey!')?")
-        else:
-            self.assertEqual(out.lines(), ["hey!"])
+        self.assertEqual(out.lines()[-1], "SyntaxError: Missing parentheses in call to 'print'. Did you mean print('hey!')?")
 
     def test_ScriptRunner_division(self):
         out = StdOutCollector()
@@ -156,10 +144,7 @@ class MiscTest(unittest.TestCase):
         try:
             out = StdOutCollector()
             ScriptRunner("print(1/2)", stdout=out, stderr=out)
-            if PY3:
-                self.assertEqual(out.lines(), ["0.5"])
-            else:
-                self.assertEqual(out.lines(), ["0"])
+            self.assertEqual(out.lines(), ["0.5"])
         finally:
             drawBot.scriptTools.getDefault = realGetDefault
 
