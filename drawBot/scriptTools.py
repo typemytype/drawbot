@@ -16,7 +16,6 @@ from ctypes.util import find_library
 import threading
 from distutils.version import StrictVersion
 import platform
-from fontTools.misc.py23 import PY2, PY3
 from drawBot.misc import getDefault
 from objc import super
 
@@ -58,11 +57,6 @@ class StdOutput(object):
         # ignore all warnings
         # we dont want warnings while pusing text to the textview
         warnings.filterwarnings("ignore")
-        if PY2 and isinstance(data, str):
-            try:
-                data = unicode(data, "utf-8", "replace")
-            except UnicodeDecodeError:
-                data = "XXX " + repr(data)
         if self.outputView is not None:
             # Better not get SIGINT/KeyboardInterrupt exceptions while we're updating the output view
             with cancelLock:
@@ -89,19 +83,12 @@ class StdOutput(object):
 
 def _addLocalSysPaths():
     version = "%s.%s" % (sys.version_info.major, sys.version_info.minor)
-    if PY3:
-        paths = [
-            # add local stdlib and site-packages; TODO: this needs editing once we embed the full stdlib
-            '/Library/Frameworks/Python.framework/Versions/%s/lib/python%s' % (version, version),
-            '/Library/Frameworks/Python.framework/Versions/%s/lib/python%s/lib-dynload' % (version, version),
-            '/Library/Frameworks/Python.framework/Versions/%s/lib/python%s/site-packages' % (version, version),
-        ]
-    else:
-        paths = [
-            '/System/Library/Frameworks/Python.framework/Versions/%s/lib/python%s' % (version, version),
-            '/System/Library/Frameworks/Python.framework/Versions/%s/lib/python%s/lib-dynload' % (version, version),
-            '/System/Library/Frameworks/Python.framework/Versions/%s/lib/python%s/site-packages' % (version, version),
-        ]
+    paths = [
+        # add local stdlib and site-packages; TODO: this needs editing once we embed the full stdlib
+        '/Library/Frameworks/Python.framework/Versions/%s/lib/python%s' % (version, version),
+        '/Library/Frameworks/Python.framework/Versions/%s/lib/python%s/lib-dynload' % (version, version),
+        '/Library/Frameworks/Python.framework/Versions/%s/lib/python%s/site-packages' % (version, version),
+    ]
 
     paths.append('/Library/Python/%s/site-packages' % version)
 
@@ -156,8 +143,6 @@ def ScriptRunner(text=None, path=None, stdout=None, stderr=None, namespace=None,
             time.sleep(0.25)  # check at most 4 times per second
 
     if path:
-        if PY2 and isinstance(path, unicode):
-            path = path.encode("utf-8")
         curDir, fileName = os.path.split(path)
     else:
         curDir = os.getenv("HOME")
@@ -190,10 +175,6 @@ def ScriptRunner(text=None, path=None, stdout=None, stderr=None, namespace=None,
         with open(path, 'rb') as f:
             text = f.read().decode("utf-8")
     source = text.replace('\r\n', '\n').replace('\r', '\n')
-    if PY2 and hasEncodingDeclaration(source) and isinstance(source, unicode):
-        # Python 2 compile() complains when an encoding declaration is found in a unicode string.
-        # As a workaround, we'll just encode it back as a utf-8 string and all is good.
-        source = source.encode("utf-8")
     compileFlags = 0
     if getDefault("DrawBotUseFutureDivision", True):
         compileFlags |= __future__.CO_FUTURE_DIVISION
