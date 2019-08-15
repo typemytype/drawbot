@@ -1,7 +1,4 @@
-try:
-    from urllib2 import urlopen
-except ImportError:
-    from urllib.request import urlopen
+from urllib.request import urlopen
 import ssl
 import subprocess
 import plistlib
