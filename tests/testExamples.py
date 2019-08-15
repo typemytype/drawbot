@@ -128,11 +128,9 @@ def mockRandInt(lo, hi):
 def _makeTestCase(exampleName, source, doSaveImage, allowFuzzyImageComparison):
 
     def test(self):
-        import __future__
         from drawBot.drawBotDrawingTools import _drawBotDrawingTool
 
-        compileFlags = __future__.CO_FUTURE_DIVISION
-        code = compile(source, "<%s>" % exampleName, "exec", flags=compileFlags, dont_inherit=True)
+        code = compile(source, "<%s>" % exampleName, "exec")
 
         namespace = {}
         _drawBotDrawingTool._addToNamespace(namespace)
