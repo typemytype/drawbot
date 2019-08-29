@@ -10,9 +10,7 @@ import subprocess
 import shutil
 import datetime
 import re
-from plistlib import readPlist, writePlist
-
-from fontTools.misc.py23 import PY3
+import plistlib
 
 from drawBot.drawBotSettings import __version__, appName
 
@@ -64,10 +62,7 @@ def getStdLibModules():
     stdLibPath = get_python_lib(standard_lib=True)
     isSystemPython = stdLibPath.startswith("/System/")
     extensions = {"py"}
-    if PY3:
-        extensions.add("cpython-%s%sm-darwin.so" % (sys.version_info.major, sys.version_info.minor))
-    else:
-        extensions.add("so")
+    extensions.add("cpython-%s%sm-darwin.so" % (sys.version_info.major, sys.version_info.minor))
     skip = {"site-packages", "test", "turtledemo", "tkinter", "idlelib", "lib2to3"}
     return list(_findModules(stdLibPath, extensions, skip)), isSystemPython
 
@@ -213,9 +208,11 @@ setup(
 
 # fix the icon
 path = os.path.join(os.path.dirname(__file__), "dist", "%s.app" % appName, "Contents", "Info.plist")
-appPlist = readPlist(path)
+with open(path, "rb") as f:
+    appPlist = plistlib.load(f)
 appPlist["CFBundleIconFile"] = iconFile
-writePlist(appPlist, path)
+with open(path, "wb") as f:
+    plistlib.dump(appPlist, f)
 
 
 # get relevant paths
