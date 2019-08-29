@@ -1,5 +1,3 @@
-from __future__ import absolute_import
-
 import platform
 from distutils.version import StrictVersion
 import AppKit

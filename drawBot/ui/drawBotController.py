@@ -1,5 +1,3 @@
-from __future__ import absolute_import
-
 import AppKit
 from vanilla import *
 from defconAppKit.windows.baseWindow import BaseWindowController

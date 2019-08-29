@@ -1,4 +1,3 @@
-from __future__ import print_function
 from drawBot import *
 
 size(200, 200)

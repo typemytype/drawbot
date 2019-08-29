@@ -1,5 +1,3 @@
-from __future__ import absolute_import
-
 import AppKit
 import CoreText
 import Quartz
@@ -17,8 +15,6 @@ from .context.tools import gifTools
 from .context.tools import openType
 
 from .misc import DrawBotError, warnings, VariableController, optimizePath, isPDF, isEPS, isGIF, transformationAtCenter, clearMemoizeCache
-
-from fontTools.misc.py23 import basestring, PY2
 
 
 def _getmodulecontents(module, names=None):
@@ -1611,12 +1607,7 @@ class DrawBotDrawingTool(object):
             text("hallo", (200, 600))
             text("I'm Times", (100, 300))
         """
-        if PY2 and isinstance(txt, basestring):
-            try:
-                txt = txt.decode("utf-8")
-            except UnicodeEncodeError:
-                pass
-        if not isinstance(txt, (basestring, FormattedString)):
+        if not isinstance(txt, (str, FormattedString)):
             raise TypeError("expected 'str' or 'FormattedString', got '%s'" % type(txt).__name__)
         if y is None:
             x, y = x
@@ -1656,14 +1647,9 @@ class DrawBotDrawingTool(object):
         Optionally `txt` can be a `FormattedString`.
         Optionally `box` can be a `BezierPath`.
         """
-        if PY2 and isinstance(txt, basestring):
-            try:
-                txt = txt.decode("utf-8")
-            except UnicodeEncodeError:
-                pass
         if isinstance(txt, self._formattedStringClass):
             txt = txt.copy()
-        elif not isinstance(txt, (basestring, FormattedString)):
+        elif not isinstance(txt, (str, FormattedString)):
             raise TypeError("expected 'str' or 'FormattedString', got '%s'" % type(txt).__name__)
         if align is None:
             align = "left"
@@ -1799,12 +1785,7 @@ class DrawBotDrawingTool(object):
             # draw some text in the path
             textBox("abcdefghijklmnopqrstuvwxyz"*30000, path)
         """
-        if PY2 and isinstance(txt, basestring):
-            try:
-                txt = txt.decode("utf-8")
-            except UnicodeEncodeError:
-                pass
-        if not isinstance(txt, (basestring, FormattedString)):
+        if not isinstance(txt, (str, FormattedString)):
             raise TypeError("expected 'str' or 'FormattedString', got '%s'" % type(txt).__name__)
         if align is None:
             align = "left"
@@ -1825,12 +1806,7 @@ class DrawBotDrawingTool(object):
         Optionally an alignment can be set.
         Possible `align` values are: `"left"`, `"center"`, `"right"` and `"justified"`.
         """
-        if PY2 and isinstance(txt, basestring):
-            try:
-                txt = txt.decode("utf-8")
-            except UnicodeEncodeError:
-                pass
-        if not isinstance(txt, (basestring, FormattedString)):
+        if not isinstance(txt, (str, FormattedString)):
             raise TypeError("expected 'str' or 'FormattedString', got '%s'" % type(txt).__name__)
         path, (x, y) = self._dummyContext._getPathForFrameSetter(box)
         attrString = self._dummyContext.attributedString(txt)
@@ -1899,7 +1875,7 @@ class DrawBotDrawingTool(object):
         """
         if isinstance(path, self._imageClass):
             path = path._nsImage()
-        if isinstance(path, basestring):
+        if isinstance(path, str):
             path = optimizePath(path)
         self._requiresNewFirstPage = True
         self._addInstruction("image", path, position, alpha, pageNumber)
@@ -1922,7 +1898,7 @@ class DrawBotDrawingTool(object):
             # its an NSImage
             rep = path
         else:
-            if isinstance(path, basestring):
+            if isinstance(path, str):
                 path = optimizePath(path)
             if path.startswith("http"):
                 url = AppKit.NSURL.URLWithString_(path)
@@ -1992,7 +1968,7 @@ class DrawBotDrawingTool(object):
                         text("W", (x, y))
         """
         x, y = xy
-        if isinstance(path, basestring):
+        if isinstance(path, str):
             path = optimizePath(path)
         bitmap = self._cachedPixelColorBitmaps.get(path)
         if bitmap is None:
@@ -2030,7 +2006,7 @@ class DrawBotDrawingTool(object):
             # get the bitmap representation
             rep = reps[0]
         else:
-            if isinstance(path, basestring):
+            if isinstance(path, str):
                 path = optimizePath(path)
             if path.startswith("http"):
                 url = AppKit.NSURL.URLWithString_(path)
@@ -2150,12 +2126,7 @@ class DrawBotDrawingTool(object):
         Optionally a `width` constrain or `height` constrain can be provided
         to calculate the lenght or width of text with the given constrain.
         """
-        if PY2 and isinstance(txt, basestring):
-            try:
-                txt = txt.decode("utf-8")
-            except UnicodeEncodeError:
-                pass
-        if not isinstance(txt, (basestring, FormattedString)):
+        if not isinstance(txt, (str, FormattedString)):
             raise TypeError("expected 'str' or 'FormattedString', got '%s'" % type(txt).__name__)
         if width is not None and height is not None:
             raise DrawBotError("Calculating textSize can only have one constrain, either width or height must be None")

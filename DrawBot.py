@@ -5,8 +5,6 @@ import sys
 import os
 import random
 
-from fontTools.misc.py23 import PY3
-
 from vanilla.dialogs import message
 
 from drawBot.ui.drawBotController import DrawBotController
@@ -187,12 +185,8 @@ class DrawBotAppDelegate(AppKit.NSObject):
         DrawBotPackageController()
 
     def getUrl_withReplyEvent_(self, event, reply):
-        if PY3:
-            from urllib.parse import urlparse
-            from urllib.request import urlopen
-        else:
-            from urlparse import urlparse
-            from urllib2 import urlopen
+        from urllib.parse import urlparse
+        from urllib.request import urlopen
         code = stringToInt(b"----")
         url = event.paramDescriptorForKeyword_(code)
         urlString = url.stringValue()

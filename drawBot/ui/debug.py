@@ -1,5 +1,3 @@
-from __future__ import absolute_import
-
 from Foundation import NSLog
 from AppKit import NSPanel
 

@@ -1,11 +1,8 @@
-from __future__ import division, absolute_import, print_function
-
 import AppKit
 from math import radians
 import os
 
 from drawBot.misc import DrawBotError, optimizePath
-from fontTools.misc.py23 import basestring
 from drawBot.context.imageContext import _makeBitmapImageRep
 
 
@@ -59,7 +56,7 @@ class ImageObject(object):
         """
         if isinstance(path, AppKit.NSImage):
             im = path
-        elif isinstance(path, basestring):
+        elif isinstance(path, str):
             path = optimizePath(path)
             if path.startswith("http"):
                 url = AppKit.NSURL.URLWithString_(path)

@@ -1,5 +1,3 @@
-from __future__ import print_function
-
 # This is a test case derived from https://github.com/typemytype/drawbot/issues/171
 # It ensures that rgb values specified in fill() end up in image output without
 # being mangled by a color space (within 8-bit resulution).

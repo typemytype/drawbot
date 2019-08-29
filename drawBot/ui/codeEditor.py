@@ -1,5 +1,3 @@
-from __future__ import absolute_import
-
 import AppKit
 from objc import super
 
@@ -20,7 +18,6 @@ except Exception:
 
 from vanilla import *
 from vanilla.py23 import python_method
-from fontTools.misc.py23 import PY3, unichr
 
 from .lineNumberRulerView import LineNumberNSRulerView
 from drawBot.misc import getDefault, getFontDefault, getColorDefault, DrawBotError, nsStringLength
@@ -140,7 +137,7 @@ class _JumpToLineSheet(object):
 
         self.w.cancelButton = Button((-170, -30, -80, 20), "Cancel", callback=self.cancelCallback, sizeStyle="small")
         self.w.cancelButton.bind(".", ["command"])
-        self.w.cancelButton.bind(unichr(27), [])
+        self.w.cancelButton.bind(chr(27), [])
 
         self.w.okButton = Button((-70, -30, -10, 20), "OK", callback=self.okCallback, sizeStyle="small")
         self.w.setDefaultButton(self.w.okButton)
@@ -305,26 +302,20 @@ languagesIDEBehavior = {
         "comment": "#",
         "keywords": kwlist,
         "wordCompletions": _pythonWordCompletions,
-        "dropPathFormatting": 'u"%s"',
+        "dropPathFormatting": '%r',
         "dropPathsFormatting": '[%s]',
         "dropPathsSeperator": ", "
     },
 }
-if PY3:
-    languagesIDEBehavior["Python"]["dropPathFormatting"] = '%r'
 
 downArrowSelectionDirection = 0
 upArrowSelectionDirection = 1
 
-if PY3:
-    def _floatRepr(f):
-        """In Python 3, we may get float representations that are too precise,
-        like 0.199999999999999. That is not nice for our interactive number
-        editing."""
-        return str(round(f, 8))
-else:
-    def _floatRepr(f):
-        return f
+def _floatRepr(f):
+    """In Python 3, we may get float representations that are too precise,
+    like 0.199999999999999. That is not nice for our interactive number
+    editing."""
+    return str(round(f, 8))
 
 
 class CodeNSTextView(AppKit.NSTextView):

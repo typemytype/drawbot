@@ -1,6 +1,3 @@
-from __future__ import print_function, division, absolute_import
-
-from fontTools.misc.py23 import PY3
 import sys
 import os
 import tempfile
@@ -9,7 +6,6 @@ import random
 import io
 from PIL import Image, ImageChops
 from drawBot.misc import warnings
-from fontTools.misc.py23 import PY2
 
 
 testRootDir = os.path.dirname(os.path.abspath(__file__))
@@ -47,8 +43,6 @@ class StdOutCollector(object):
         sys.stderr = self.err
 
     def write(self, txt):
-        if PY2 and not isinstance(txt, unicode):
-            txt = txt.decode("utf-8")
         self._stream.write(txt)
 
     def flush(self):
@@ -114,10 +108,7 @@ class TempFolder(TempFile):
 
 
 def randomSeed(a):
-    if PY3:
-        return random.seed(a, version=1)  # compatible with Python 2
-    else:
-        return random.seed(a)
+    return random.seed(a, version=1)  # compatible with Python 2
 
 
 def readData(path):
