@@ -5,7 +5,7 @@ from keyword import kwlist
 import re
 import sys
 
-from pygments.lexers import PythonLexer, get_lexer_by_name
+from pygments.lexers import Python3Lexer, get_lexer_by_name
 from pygments.token import *
 from pygments.style import Style
 from pygments.styles.default import DefaultStyle
@@ -295,7 +295,7 @@ def _pythonWordCompletions(text, charRange):
 
 
 languagesIDEBehavior = {
-    "Python": {
+    "Python 3": {
         "openToCloseMap": {"(": ")", "[": "]", "{": "}", "<": ">"},
         "autoCloseMap": {"(": ")", "[": "]", "{": "}", "\"": "\"", "'": "'"},
         "indentWithEndOfLine": [":", "(", "[", "{"],
@@ -1383,7 +1383,7 @@ class CodeEditor(TextEditor):
             except Exception:
                 codeAttr["lexer"] = None
         if codeAttr["lexer"] is None:
-            codeAttr["lexer"] = PythonLexer(encoding='utf-8')
+            codeAttr["lexer"] = Python3Lexer(encoding='utf-8')
         self.setLexer(codeAttr["lexer"])
         if codeAttr["highlightStyle"] is None:
             codeAttr["highlightStyle"] = styleFromDefault()
