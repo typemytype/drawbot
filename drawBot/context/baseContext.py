@@ -250,6 +250,31 @@ class BezierPath(BasePen):
         self._path.appendBezierPathWithOvalInRect_(((x, y), (w, h)))
         self.closePath()
 
+    def line(self, point1, point2):
+        """
+        Add a line between two given points.
+        """
+        self.moveTo(point1)
+        self.lineTo(point2)
+
+    def polygon(self, *points, **kwargs):
+        """
+        Draws a polygon with n-amount of points.
+        Optionally a `close` argument can be provided to open or close the path.
+        As default a `polygon` is a closed path.
+        """
+        if len(points) <= 1:
+            raise TypeError("polygon() expects more than a single point")
+        doClose = kwargs.get("close", True)
+        if (len(kwargs) == 1 and "close" not in kwargs) or len(kwargs) > 1:
+            raise TypeError("unexpected keyword argument for this function")
+
+        self.moveTo(points[0])
+        for x, y in points[1:]:
+            self.lineTo((x, y))
+        if doClose:
+            self.closePath()
+
     def text(self, txt, offset=None, font=_FALLBACKFONT, fontSize=10, align=None):
         """
         Draws a `txt` with a `font` and `fontSize` at an `offset` in the bezier path.

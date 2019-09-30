@@ -720,8 +720,7 @@ class DrawBotDrawingTool(object):
             line((100, 100), (900, 900))
         """
         path = self._bezierPathClass()
-        path.moveTo(point1)
-        path.lineTo(point2)
+        path.line(point1, point2)
         self.drawPath(path)
 
     def polygon(self, *points, **kwargs):
@@ -735,18 +734,8 @@ class DrawBotDrawingTool(object):
             # draw a polygon with x-amount of points
             polygon((100, 100), (100, 900), (900, 900), (200, 800), close=True)
         """
-        if len(points) <= 1:
-            raise TypeError("polygon() expects more than a single point")
-        doClose = kwargs.get("close", True)
-        if (len(kwargs) == 1 and "close" not in kwargs) or len(kwargs) > 1:
-            raise TypeError("unexpected keyword argument for this function")
-
         path = self._bezierPathClass()
-        path.moveTo(points[0])
-        for x, y in points[1:]:
-            path.lineTo((x, y))
-        if doClose:
-            path.closePath()
+        path.polygon(*points, **kwargs)
         self.drawPath(path)
 
     # color
