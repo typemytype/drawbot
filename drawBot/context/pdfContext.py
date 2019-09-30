@@ -39,20 +39,21 @@ class PDFContext(BaseContext):
         self.size(width, height)
         mediaBox = Quartz.CGRectMake(0, 0, self.width, self.height)
         auxiliaryInfo = dict()
+        auxiliaryInfo[Quartz.kCGPDFContextMediaBox] = mediaBox
         if bleed:
             auxiliaryInfo[Quartz.kCGPDFContextBleedBox] = Quartz.CGRectMake(-bleed[0], -bleed[1], width + bleed[2], height + bleed[3])
         if self._hasContext:
             # reset the context
             self.reset()
             # add a new page
-            Quartz.CGContextEndPage(self._pdfContext)
-            Quartz.CGContextBeginPage(self._pdfContext, mediaBox)
+            Quartz.CGPDFContextEndPage(self._pdfContext)
+            Quartz.CGPDFContextBeginPage(self._pdfContext, auxiliaryInfo)
         else:
             # create a new pdf document
             self._pdfData = Quartz.CFDataCreateMutable(None, 0)
             dataConsumer = Quartz.CGDataConsumerCreateWithCFData(self._pdfData)
-            self._pdfContext = Quartz.CGPDFContextCreate(dataConsumer, mediaBox, auxiliaryInfo)
-            Quartz.CGContextBeginPage(self._pdfContext, mediaBox)
+            self._pdfContext = Quartz.CGPDFContextCreate(dataConsumer, mediaBox, None)
+            Quartz.CGPDFContextBeginPage(self._pdfContext, auxiliaryInfo)
             self._hasContext = True
 
     def _closeContext(self):
