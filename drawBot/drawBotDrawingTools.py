@@ -260,7 +260,7 @@ class DrawBotDrawingTool(object):
         else:
             raise DrawBotError("Can't use 'size()' after drawing has begun. Try to move it to the top of your script.")
 
-    def newPage(self, width=None, height=None):
+    def newPage(self, width=None, height=None, bleed=None):
         """
         Create a new canvas to draw in.
         This will act like a page in a pdf or a frame in a mov.
@@ -293,11 +293,16 @@ class DrawBotDrawingTool(object):
         if width is None and height is None:
             width = self.width()
             height = self.height()
+        if bleed is not None:
+            if isinstance(bleed, (int, float)):
+                bleed = (bleed, bleed, bleed, bleed)
+            if len(bleed) != 4:
+                raise DrawBotError("Bleed must be a tuple of 4 values.")
         self._width = width
         self._height = height
         self._hasPage = True
         self._dummyContext = DummyContext()
-        self._addInstruction("newPage", width, height)
+        self._addInstruction("newPage", width, height, bleed)
 
     def pages(self):
         """

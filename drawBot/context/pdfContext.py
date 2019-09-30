@@ -35,10 +35,12 @@ class PDFContext(BaseContext):
         self._hasContext = False
         self._cachedImages = {}
 
-    def _newPage(self, width, height):
+    def _newPage(self, width, height, bleed):
         self.size(width, height)
         mediaBox = Quartz.CGRectMake(0, 0, self.width, self.height)
-
+        auxiliaryInfo = dict()
+        if bleed:
+            auxiliaryInfo[Quartz.kCGPDFContextBleedBox] = Quartz.CGRectMake(-bleed[0], -bleed[1], width + bleed[2], height + bleed[3])
         if self._hasContext:
             # reset the context
             self.reset()
@@ -49,7 +51,7 @@ class PDFContext(BaseContext):
             # create a new pdf document
             self._pdfData = Quartz.CFDataCreateMutable(None, 0)
             dataConsumer = Quartz.CGDataConsumerCreateWithCFData(self._pdfData)
-            self._pdfContext = Quartz.CGPDFContextCreate(dataConsumer, mediaBox, None)
+            self._pdfContext = Quartz.CGPDFContextCreate(dataConsumer, mediaBox, auxiliaryInfo)
             Quartz.CGContextBeginPage(self._pdfContext, mediaBox)
             self._hasContext = True
 
