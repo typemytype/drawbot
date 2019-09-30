@@ -8,6 +8,8 @@ import os
 import sys
 import subprocess
 import shutil
+import tempfile
+import time
 import datetime
 import re
 import plistlib
@@ -101,9 +103,15 @@ ftpPassword = getValueFromSysArgv("--ftppassword")
 buildDMG = getValueFromSysArgv("--dmg", isBooleanFlag=True)
 runTests = getValueFromSysArgv("--runTests", isBooleanFlag=True)
 
+notarizeDeveloper = getValueFromSysArgv("--notarizedeveloper")
+notarizePassword = getValueFromSysArgv("--notarizePassword")
+
+
 osxMinVersion = "10.9.0"
 
 iconFile = "DrawBot.icns"
+
+bundleIdentifier = "com.drawbot"
 
 plist = dict(
 
@@ -124,7 +132,7 @@ plist = dict(
             LSTypeIsPackage=True,
         ),
     ],
-    CFBundleIdentifier="com.drawbot",
+    CFBundleIdentifier=bundleIdentifier,
     LSMinimumSystemVersion=osxMinVersion,
     LSApplicationCategoryType="public.app-category.graphics-design",
     LSMinimumSystemVersionByArchitecture=dict(i386=osxMinVersion, x86_64=osxMinVersion),
@@ -325,6 +333,88 @@ if buildDMG or ftpHost is not None:
 
     print("- done building dmg... -")
     print("------------------------")
+
+    if notarizeDeveloper and notarizePassword:
+        print("----------------------")
+        print("-    notarizing dmg   -")
+        notarize = [
+            "xcrun",
+            "altool",
+            "--notarize-app",
+            "-t",
+            "osx",
+            "--file",
+            existingDmgLocation,
+            "--primary-bundle-id", bundleIdentifier,
+            "-u", notarizeDeveloper,
+            "-p", notarizePassword,
+            "--output-format", "xml"
+        ]
+
+        notarizeStapler = [
+            "xcrun",
+            "stapler",
+            "staple", existingDmgLocation
+        ]
+
+        print("notarizing app")
+        notarisationRequestUUID = None
+        with tempfile.TemporaryFile(mode='w+b') as stdoutFile:
+            popen = subprocess.Popen(notarize, stdout=stdoutFile)
+            popen.wait()
+            stdoutFile.seek(0)
+            data = stdoutFile.read()
+            data = plistlib.loads(data)
+            if "notarization-upload" in data:
+                notarisationRequestUUID = data["notarization-upload"].get("RequestUUID")
+                print("notarisation Request UUID:", notarisationRequestUUID)
+
+            if "product-errors" in data:
+                print("\n".join([e["message"] for e in data["product-errors"]]))
+        print("done notarizing app")
+
+        notarisationSucces = False
+        if notarisationRequestUUID:
+            print("getting notarization info")
+            notarizeInfo = [
+                "xcrun",
+                "altool",
+                "--notarization-info", notarisationRequestUUID,
+                "-u", notarizeDeveloper,
+                "-p", notarizePassword,
+                "--output-format",  "xml"
+                ]
+            countDown = 2
+            while countDown:
+                with tempfile.TemporaryFile(mode='w+b') as stdoutFile:
+                    popen = subprocess.Popen(notarizeInfo, stdout=stdoutFile)
+                    popen.wait()
+                    stdoutFile.seek(0)
+                    data = stdoutFile.read()
+                    data = plistlib.loads(data)
+
+                    if "notarization-info" in data:
+                        status = data["notarization-info"].get("Status", "").lower()
+                        if status == "success":
+                            notarisationSucces = True
+                            print("notarization succes")
+                            break
+                        if status == "invalid":
+                            print("notarization invalid")
+                            break
+                    print("Not completed yet. Sleeping for 30 seconds")
+                countDown -= 1
+                time.sleep(30)
+            print("done getting notarization info")
+
+        if notarisationSucces:
+            print("stapler")
+            popen = subprocess.Popen(notarizeStapler)
+            popen.wait()
+            print("done stapler")
+
+        print("- done notarizing dmg -")
+        print("----------------------")
 
     if ftpHost and ftpPath and ftpLogin and ftpPassword:
         import ftplib
