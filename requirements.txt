@@ -21,5 +21,4 @@ git+https://github.com/typesupply/ufo2svg
 git+https://github.com/typemytype/ufo2fdk
 git+https://github.com/typesupply/feaPyFoFum
 git+https://github.com/typesupply/feaTools2
-ufoLib[lxml]
 uharfbuzz
