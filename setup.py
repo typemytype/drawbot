@@ -11,10 +11,8 @@ _versionRE = re.compile(r'__version__\s*=\s*\"([^\"]+)\"')
 with open('drawBot/drawBotSettings.py', "r") as settings:
     code = settings.read()
     found = _versionRE.search(code)
-    if found:
-        __version__ = found.group(1)
-    else:
-        assert found is not None, "drawBot __version__ not found"
+    assert found is not None, "drawBot __version__ not found"
+    __version__ = found.group(1)
 
 
 externalTools = ("ffmpeg", "gifsicle", "mkbitmap", "potrace")
