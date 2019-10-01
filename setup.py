@@ -6,9 +6,7 @@ import re
 import shutil
 
 
-__version__ = "undefined"
 _versionRE = re.compile(r'__version__\s*=\s*\"([^\"]+)\"')
-
 # read the version number for the settings file
 with open('drawBot/drawBotSettings.py', "r") as settings:
     code = settings.read()
