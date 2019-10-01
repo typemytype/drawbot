@@ -13,6 +13,8 @@ with open('drawBot/drawBotSettings.py', "r") as settings:
     found = _versionRE.search(code)
     if found:
         __version__ = found.group(1)
+    else:
+        assert found is not None, "drawBot __version__ not found"
 
 
 externalTools = ("ffmpeg", "gifsicle", "mkbitmap", "potrace")
