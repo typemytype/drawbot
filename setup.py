@@ -2,13 +2,19 @@
 from __future__ import division, absolute_import, print_function
 from setuptools import setup
 import os
+import re
 import shutil
 
+
 __version__ = "undefined"
+_versionRE = re.compile(r'__version__\s*=\s*\"([^\"]+)\"')
+
 # read the version number for the settings file
 with open('drawBot/drawBotSettings.py', "r") as settings:
-    source = settings.read()
-    exec(source)
+    code = settings.read()
+    found = _versionRE.search(code)
+    if found:
+        __version__ = found.group(1)
 
 
 externalTools = ("ffmpeg", "gifsicle", "mkbitmap", "potrace")
