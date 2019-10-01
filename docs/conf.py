@@ -74,6 +74,8 @@ sys.path.insert(0, os.path.abspath('../'))
 
 import drawBot.drawBotSettings as drawBotSettings
 
+appName = "DrawBot"
+
 # -- General configuration -----------------------------------------------------
 
 # If your documentation needs a minimal Sphinx version, state it here.
@@ -96,7 +98,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = drawBotSettings.appName
+project = appName
 copyright = u'%s, Just van Rossum, Erik van Blokland, Frederik Berlaen' % (time.strftime('%Y'))
 
 # The version info for the project you're documenting, acts as replacement for
@@ -160,10 +162,10 @@ html_theme_path = ['_themes']
 
 # The name for this set of Sphinx documents.  If None, it defaults to
 # "<project> v<release> documentation".
-html_title = "%s %s" % (drawBotSettings.appName, release)
+html_title = "%s %s" % (appName, release)
 
 # A shorter title for the navigation bar.  Default is the same as html_title.
-html_short_title = drawBotSettings.appName
+html_short_title = appName
 
 # The name of an image file (relative to this directory) to place at the top
 # of the sidebar.

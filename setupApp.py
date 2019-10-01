@@ -14,7 +14,9 @@ import datetime
 import re
 import plistlib
 
-from drawBot.drawBotSettings import __version__, appName
+from drawBot.drawBotSettings import __version__
+
+appName = "DrawBot"
 
 rawTimeStamp = datetime.datetime.today()
 timeStamp = rawTimeStamp.strftime("%y%m%d%H%M")
