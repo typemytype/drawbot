@@ -4,6 +4,7 @@ import CoreText
 from fontTools.ttLib import TTFont
 
 from drawBot.misc import memoize
+from . import SFNTLayoutTypes
 
 
 def getFeatureTagsForFontAttributes(attributes):
@@ -33,4 +34,11 @@ def getFeatureTagsForFontName(fontName):
     if "GSUB" in ft:
         for record in ft["GSUB"].table.FeatureList.FeatureRecord:
             featureTags.add(record.FeatureTag)
+    if "feat" in ft:
+        for featureName in ft["feat"].table.FeatureNames.FeatureName:
+            for featureSetting in featureName.Settings.Setting:
+                featureTag = SFNTLayoutTypes.reversedFeatureMap.get((featureName.FeatureType, featureSetting.SettingValue))
+                if featureTag:
+                    featureTag = featureTag.replace("_off", "")
+                    featureTags.add(featureTag)
     return list(sorted(featureTags))
