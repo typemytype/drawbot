@@ -1041,17 +1041,11 @@ class FormattedString(object):
                 # set all disabled features first
                 orderedOpenTypeFeatures = sorted(self._openTypeFeatures.items(), key=lambda kv: kv[1])
                 for featureTag, value in orderedOpenTypeFeatures:
-                    coreTextFeatureTag = featureTag
-                    if not value:
-                        coreTextFeatureTag = "%s_off" % featureTag
-                    if coreTextFeatureTag in openType.featureMap:
-                        if value and featureTag not in existingOpenTypeFeatures:
-                            # only warn when the feature is on and not existing for the current font
-                            warnings.warn("OpenType feature '%s' not available for '%s'" % (featureTag, self._font))
-                        feature = openType.featureMap[coreTextFeatureTag]
-                        coreTextfeatures.append(feature)
-                    else:
-                        warnings.warn("OpenType feature '%s' not available" % (featureTag))
+                    if value and featureTag not in existingOpenTypeFeatures:
+                        # only warn when the feature is on and not existing for the current font
+                        warnings.warn("OpenType feature '%s' not available for '%s'" % (featureTag, self._font))
+                    feature = dict(CTFeatureOpenTypeTag=featureTag, CTFeatureOpenTypeValue=value)
+                    coreTextfeatures.append(feature)
             coreTextFontVariations = dict()
             if self._fontVariations:
                 existingAxes = variation.getVariationAxesForFontName(self._font)
@@ -1068,7 +1062,7 @@ class FormattedString(object):
                         warnings.warn("variation axis '%s' not available for '%s'" % (axis, self._font))
             fontAttributes = {}
             if coreTextfeatures:
-                fontAttributes[CoreText.NSFontFeatureSettingsAttribute] = coreTextfeatures
+                fontAttributes[CoreText.kCTFontFeatureSettingsAttribute] = coreTextfeatures
             if coreTextFontVariations:
                 fontAttributes[CoreText.NSFontVariationAttribute] = coreTextFontVariations
             if self._fallbackFont:
@@ -1374,9 +1368,7 @@ class FormattedString(object):
             if features.pop("resetFeatures", False):
                 self._openTypeFeatures.clear()
             self._openTypeFeatures.update(features)
-        currentFeatures = self.listOpenTypeFeatures()
-        currentFeatures.update(self._openTypeFeatures)
-        return currentFeatures
+        return dict(self._openTypeFeatures)
 
     def listOpenTypeFeatures(self, fontName=None):
         """
