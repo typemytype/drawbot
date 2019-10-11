@@ -8,11 +8,11 @@ from . import SFNTLayoutTypes
 
 
 def getFeatureTagsForFontAttributes(attributes):
-    featureTags = list()
+    featureTags = dict()
     for attribute in attributes:
         tag = attribute.get("CTFeatureOpenTypeTag")
         if tag:
-            featureTags.append(tag)
+            featureTags[tag] = attribute.get("CTFeatureOpenTypeValue", True)
     return featureTags
 
 
