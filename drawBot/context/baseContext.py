@@ -1769,7 +1769,7 @@ class FormattedString(object):
         # disable calt features, as this seems to be on by default
         # for both the font stored in the nsGlyphInfo as in the replacement character
         fontAttributes = {}
-        fontAttributes[CoreText.NSFontFeatureSettingsAttribute] = [openType.featureMap["calt_off"]]
+        fontAttributes[CoreText.kCTFontFeatureSettingsAttribute] = [dict(CTFeatureOpenTypeTag="calt", CTFeatureOpenTypeValue=False)]
         fontDescriptor = font.fontDescriptor()
         fontDescriptor = fontDescriptor.fontDescriptorByAddingAttributes_(fontAttributes)
         font = AppKit.NSFont.fontWithDescriptor_size_(fontDescriptor, self._fontSize)
