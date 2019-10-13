@@ -551,7 +551,6 @@ class BezierPath(BasePen):
             scale = b_w / w
         else:
             scale = b_h / h
-        self.translate(b_x1 - x, b_y1 - y)
         self.scale(scale, scale)
         self.center(bounds)
 
@@ -565,9 +564,7 @@ class BezierPath(BasePen):
         b_x1, b_y1, b_x2, b_y2 = bounds
         left_w = b_x2 - b_x1 - w
         left_h = b_y2 - b_y1 - h
-        self.translate((left_w/2)-x, (left_h/2)-y)
-
-    # boolean operations
+        self.translate((left_w/2) + b_x1 - x, (left_h/2) + b_y1 - y)
 
     def _contoursForBooleanOperations(self):
         # contours are very temporaly objects
