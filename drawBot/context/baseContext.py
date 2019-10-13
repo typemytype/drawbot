@@ -537,6 +537,36 @@ class BezierPath(BasePen):
         aT.setTransformStruct_(transformMatrix[:])
         self._path.transformUsingAffineTransform_(aT)
 
+    def fit(self, bounds):
+        """
+        Fit and center the path inside the given bounds.
+        """
+        if self._path.isEmpty():
+            return
+        (x, y), (w, h) = self._path.bounds()
+        b_x1, b_y1, b_x2, b_y2 = bounds
+        b_w = b_x2 - b_x1
+        b_h = b_y2 - b_y1
+        if w / h >= b_w / b_h:
+            scale = b_w / w
+        else:
+            scale = b_h / h
+        self.translate(b_x1 - x, b_y1 - y)
+        self.scale(scale, scale)
+        self.center(bounds)
+
+    def center(self, bounds):
+        """
+        Center the path inside the given bounds.
+        """
+        if self._path.isEmpty():
+            return
+        (x, y), (w, h) = self._path.bounds()
+        b_x1, b_y1, b_x2, b_y2 = bounds
+        left_w = b_x2 - b_x1 - w
+        left_h = b_y2 - b_y1 - h
+        self.translate((left_w/2)-x, (left_h/2)-y)
+
     # boolean operations
 
     def _contoursForBooleanOperations(self):
