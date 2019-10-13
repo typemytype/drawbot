@@ -1,5 +1,3 @@
-from __future__ import print_function
-
 import py2app
 from distutils.core import setup
 from distutils.sysconfig import get_python_lib
