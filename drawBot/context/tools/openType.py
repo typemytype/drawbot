@@ -57,7 +57,7 @@ def getFeatureTagsForFontName(fontName):
 
 def _getTTFontFromTTC(path, psFontName, searchOrder=((1, 0), (3, 1))):
     ttc = TTCollection(path, lazy=True)
-    for index, font in enumerate(ttc):
+    for font in ttc:
         for platID, platEncID in searchOrder:
             nameRecord = font["name"].getName(6, platID, platEncID)
             if nameRecord is not None and str(nameRecord) == psFontName:
