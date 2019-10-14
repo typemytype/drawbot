@@ -13,8 +13,18 @@ def getFeatureTagsForFontAttributes(attributes):
     featureTags = dict()
     for attribute in attributes:
         tag = attribute.get("CTFeatureOpenTypeTag")
-        if tag:
+        if tag is not None:
             featureTags[tag] = attribute.get("CTFeatureOpenTypeValue", True)
+        else:
+            # Fallback for macOS < 10.13
+            featureType = attribute.get("CTFeatureTypeIdentifier")
+            featureSelector = attribute.get("CTFeatureSelectorIdentifier")
+            tag = SFNTLayoutTypes.reversedFeatureMap[(featureType, featureSelector)]
+            value = True
+            if len(tag) == 8 and tag.endswith("_off"):
+                value = False
+                tag = tag[:4]
+            featureTags[tag] = value
     return featureTags
 
 
