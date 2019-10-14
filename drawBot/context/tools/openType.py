@@ -41,4 +41,5 @@ def getFeatureTagsForFontName(fontName):
                 if featureTag:
                     featureTag = featureTag.replace("_off", "")
                     featureTags.add(featureTag)
+    ft.close()
     return list(sorted(featureTags))
