@@ -1,7 +1,9 @@
+import os
 import AppKit
 import CoreText
 
 from fontTools.ttLib import TTFont
+from fontTools.ttLib.ttCollection import TTCollection
 
 from drawBot.misc import memoize
 from . import SFNTLayoutTypes
@@ -24,9 +26,17 @@ def getFeatureTagsForFontName(fontName):
         return featureTags
     fontDescriptor = font.fontDescriptor()
     url = CoreText.CTFontDescriptorCopyAttribute(fontDescriptor, CoreText.kCTFontURLAttribute)
+    psFontName = CoreText.CTFontDescriptorCopyAttribute(fontDescriptor, CoreText.kCTFontNameAttribute)
     if url is None:
         return featureTags
-    ft = TTFont(url.path(), lazy=True, fontNumber=0)
+    path = url.path()
+    ext = os.path.splitext(path)[1].lower()
+    if ext in (".ttc", ".otc"):
+        ft = _getTTFontFromTTC(path, psFontName)
+    elif ext == ".dfont":
+        ft = TTFont(path, lazy=True, res_name_or_index=psFontName)
+    else:
+        ft = TTFont(path, lazy=True)
     featureTags = set()
     if "GPOS" in ft:
         for record in ft["GPOS"].table.FeatureList.FeatureRecord:
@@ -43,3 +53,13 @@ def getFeatureTagsForFontName(fontName):
                     featureTags.add(featureTag)
     ft.close()
     return list(sorted(featureTags))
+
+
+def _getTTFontFromTTC(path, psFontName, searchOrder=((1, 0), (3, 1))):
+    ttc = TTCollection(path, lazy=True)
+    for index, font in enumerate(ttc):
+        for platID, platEncID in searchOrder:
+            nameRecord = font["name"].getName(6, platID, platEncID)
+            if nameRecord is not None and str(nameRecord) == psFontName:
+                return font
+    raise IndexError(f"font {psFontName} not found")
