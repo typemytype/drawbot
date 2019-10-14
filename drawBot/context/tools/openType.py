@@ -27,7 +27,7 @@ def getFeatureTagsForFontName(fontName):
     fontDescriptor = font.fontDescriptor()
     url = CoreText.CTFontDescriptorCopyAttribute(fontDescriptor, CoreText.kCTFontURLAttribute)
     psFontName = CoreText.CTFontDescriptorCopyAttribute(fontDescriptor, CoreText.kCTFontNameAttribute)
-    if url is None:
+    if url is None or psFontName is None:
         return featureTags
     path = url.path()
     ext = os.path.splitext(path)[1].lower()
