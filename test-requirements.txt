@@ -1,4 +1,2 @@
-Pillow
-pyobjc
-fontTools
-booleanOperations
+pillow
+attrs
