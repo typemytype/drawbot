@@ -10,7 +10,7 @@ before_install:
 matrix:
   include:
   - os: osx
-    osx_image: xcode6.4  # 10.10
+    osx_image: xcode8  # 10.11
     language: generic
     script:
     - "./.travis/tests.sh"
