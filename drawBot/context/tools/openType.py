@@ -73,6 +73,9 @@ def getFeatureTagsForFontName(fontName):
 
 
 def _getTTFontFromSuitcase(path, psFontName, searchOrder=((1, 0), (3, 1))):
+    # Support for .dfont and especially "regular" suitcases is minimal,
+    # and we will not raise an error when the requested font isn't found,
+    # but will return None.
     rr = ResourceReader(path)
     if "sfnt" not in rr:
         return None
