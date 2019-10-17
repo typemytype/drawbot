@@ -45,8 +45,10 @@ def getFeatureTagsForFontName(fontName):
         ft = _getTTFontFromTTC(path, psFontName)
     elif ext == ".dfont":
         ft = TTFont(path, lazy=True, res_name_or_index=psFontName)
-    else:
+    elif ext in (".ttf", ".otf"):
         ft = TTFont(path, lazy=True)
+    else:
+        return featureTags
     featureTags = set()
     if "GPOS" in ft:
         for record in ft["GPOS"].table.FeatureList.FeatureRecord:
