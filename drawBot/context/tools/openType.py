@@ -4,6 +4,8 @@ import CoreText
 
 from fontTools.ttLib import TTFont
 from fontTools.ttLib.ttCollection import TTCollection
+from fontTools.misc.macCreatorType import getMacCreatorAndType
+from fontTools.misc.macRes import ResourceReader
 
 from drawBot.misc import memoize
 from . import SFNTLayoutTypes
@@ -41,12 +43,15 @@ def getFeatureTagsForFontName(fontName):
         return featureTags
     path = url.path()
     ext = os.path.splitext(path)[1].lower()
+    macType = getMacCreatorAndType(path)[1]
     if ext in (".ttc", ".otc"):
         ft = _getTTFontFromTTC(path, psFontName)
-    elif ext == ".dfont":
-        ft = TTFont(path, lazy=True, res_name_or_index=psFontName)
     elif ext in (".ttf", ".otf"):
         ft = TTFont(path, lazy=True)
+    elif ext == ".dfont" or macType == "FFIL":
+        ft = _getTTFontFromSuitcase(path, psFontName)
+        if ft is None:
+            return featureTags
     else:
         return featureTags
     featureTags = set()
@@ -65,6 +70,19 @@ def getFeatureTagsForFontName(fontName):
                     featureTags.add(featureTag)
     ft.close()
     return list(sorted(featureTags))
+
+
+def _getTTFontFromSuitcase(path, psFontName, searchOrder=((1, 0), (3, 1))):
+    rr = ResourceReader(path)
+    if "sfnt" not in rr:
+        return None
+    for index in rr.getIndices("sfnt"):
+        font = TTFont(path, lazy=True, res_name_or_index=index)
+        for platID, platEncID in searchOrder:
+            nameRecord = font["name"].getName(6, platID, platEncID)
+            if nameRecord is not None and str(nameRecord) == psFontName:
+                return font
+    return None
 
 
 def _getTTFontFromTTC(path, psFontName, searchOrder=((1, 0), (3, 1))):
