@@ -55,10 +55,10 @@ def getFeatureTagsForFontName(fontName):
     else:
         return featureTags
     featureTags = set()
-    if "GPOS" in ft:
+    if "GPOS" in ft and ft["GPOS"].table.FeatureList is not None:
         for record in ft["GPOS"].table.FeatureList.FeatureRecord:
             featureTags.add(record.FeatureTag)
-    if "GSUB" in ft:
+    if "GSUB" in ft and ft["GSUB"].table.FeatureList is not None:
         for record in ft["GSUB"].table.FeatureList.FeatureRecord:
             featureTags.add(record.FeatureTag)
     if "feat" in ft:
