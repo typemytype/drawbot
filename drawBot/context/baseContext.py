@@ -1043,7 +1043,7 @@ class FormattedString(object):
                 # set all disabled features first
                 orderedOpenTypeFeatures = sorted(self._openTypeFeatures.items(), key=lambda kv: kv[1])
                 for featureTag, value in orderedOpenTypeFeatures:
-                    if featureTag not in existingOpenTypeFeatures:
+                    if value and featureTag not in existingOpenTypeFeatures:
                         # only warn when the feature is on and not existing for the current font
                         warnings.warn("OpenType feature '%s' not available for '%s'" % (featureTag, self._font))
                     feature = dict(CTFeatureOpenTypeTag=featureTag, CTFeatureOpenTypeValue=value)
