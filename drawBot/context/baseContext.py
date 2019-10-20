@@ -646,6 +646,20 @@ class BezierPath(BasePen):
         return booleanOperations.getIntersections(contours)
 
     def strokePath(self, width, lineCap="round", lineJoin="round", miterLimit=10):
+        """
+        Strokes the path with the given width.
+
+        Optionally these options can be set:
+
+        * `lineCap`: Possible values are `"butt"`, `"square"` or `"round"`
+        * `lineJoin`: Possible values are `"bevel"`, `"miter"` or `"round"`
+        * `mitterLimit`: The miter limit to use for `"miter"` lineJoin option
+        """
+        if lineJoin not in _LINEJOINSTYLESMAP:
+            raise DrawBotError("lineJoin must be 'bevel', 'miter' or 'round'")
+        if lineCap not in _LINECAPSTYLESMAP:
+            raise DrawBotError("lineCap must be 'butt', 'square' or 'round'")
+
         strokedCGPath = Quartz.CGPathCreateCopyByStrokingPath(self._getCGPath(), None, width, _LINECAPSTYLESMAP[lineCap], _LINEJOINSTYLESMAP[lineJoin], miterLimit)
         self._setCGpath(strokedCGPath)
 
@@ -2211,7 +2225,7 @@ class BaseContext(object):
     def lineCap(self, cap):
         if cap is None:
             self._state.lineCap = None
-        if cap not in self._LINECAPSTYLESMAP:
+        if cap not in _LINECAPSTYLESMAP:
             raise DrawBotError("lineCap() argument must be 'butt', 'square' or 'round'")
         self._state.lineCap = _LINECAPSTYLESMAP[cap]
 
