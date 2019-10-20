@@ -421,17 +421,17 @@ class BezierPath(BasePen):
             Quartz.CGPathCloseSubpath(path)
         return path
 
-    def _setCGpath(self, cgpath):
+    def _setCGPath(self, cgpath):
         self._path = AppKit.NSBezierPath.alloc().init()
 
         def _addPoints(arg, element):
             instruction, points = element.type, element.points
             if instruction == Quartz.kCGPathElementMoveToPoint:
-                self._path.moveToPoint_((points[0].x, points[0].y))
+                self._path.moveToPoint_(points[0])
             elif instruction == Quartz.kCGPathElementAddLineToPoint:
-                self._path.lineToPoint_((points[0].x, points[0].y))
+                self._path.lineToPoint_(points[0])
             elif instruction == Quartz.kCGPathElementAddCurveToPoint:
-                self._path.curveToPoint_controlPoint1_controlPoint2_((points[2].x, points[2].y),(points[0].x, points[0].y), (points[1].x, points[1].y))
+                self._path.curveToPoint_controlPoint1_controlPoint2_(points[2], points[0], points[1])
             elif instruction == Quartz.kCGPathElementCloseSubpath:
                 self._path.closePath()
         Quartz.CGPathApply(cgpath, None, _addPoints)
@@ -645,9 +645,10 @@ class BezierPath(BasePen):
             contours += other._contoursForBooleanOperations()
         return booleanOperations.getIntersections(contours)
 
-    def strokePath(self, width, lineCap="round", lineJoin="round", miterLimit=10):
+    def expandStroke(self, width, lineCap="round", lineJoin="round", miterLimit=10):
         """
-        Strokes the path with the given width.
+        Returns a new bezier path with an expanded stroke around the bezier
+        path with a given width.
 
         Optionally these options can be set:
 
@@ -661,7 +662,9 @@ class BezierPath(BasePen):
             raise DrawBotError("lineCap must be 'butt', 'square' or 'round'")
 
         strokedCGPath = Quartz.CGPathCreateCopyByStrokingPath(self._getCGPath(), None, width, _LINECAPSTYLESMAP[lineCap], _LINEJOINSTYLESMAP[lineJoin], miterLimit)
-        self._setCGpath(strokedCGPath)
+        result = self.__class__()
+        result._setCGPath(strokedCGPath)
+        return result
 
     def __mod__(self, other):
         return self.difference(other)
