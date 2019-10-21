@@ -2398,7 +2398,7 @@ class BaseContext(object):
 
     def _getPathForFrameSetter(self, box):
         if isinstance(box, self._bezierPathClass):
-            path = box._getCGPath(withBounds=True)
+            path = box._getCGPath()
             (x, y), (w, h) = CoreText.CGPathGetPathBoundingBox(path)
         else:
             x, y, w, h = box
