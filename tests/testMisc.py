@@ -18,17 +18,17 @@ class MiscTest(unittest.TestCase):
     def test_openTypeFeatures(self):
         drawBot.newDrawing()
         fea = drawBot.listOpenTypeFeatures()
-        self.assertEqual(fea, {'liga': True})
+        self.assertEqual(fea, ['liga'])
         drawBot.font("Helvetica")
         fea = drawBot.listOpenTypeFeatures()
-        self.assertEqual(fea, {'liga': True, 'tnum': True, 'pnum': False})
+        self.assertEqual(fea, ['liga', 'pnum', 'tnum'])
         fea = drawBot.listOpenTypeFeatures("HoeflerText-Regular")
-        self.assertEqual(fea, {'liga': True, 'dlig': False, 'tnum': True, 'pnum': False, 'titl': True, 'onum': True, 'lnum': False})
+        self.assertEqual(fea, ['dlig', 'liga', 'lnum', 'onum', 'pnum', 'titl', 'tnum'])
         fea = drawBot.openTypeFeatures(liga=False)
-        self.assertEqual(fea, {'liga': False, 'tnum': True, 'pnum': False})
+        self.assertEqual(fea, {'liga': False})
         drawBot.font("LucidaGrande")
         fea = drawBot.openTypeFeatures(resetFeatures=True)
-        self.assertEqual(fea, {'liga': True})
+        self.assertEqual(fea, {})
 
     def test_openTypeFeatures_saveRestore(self):
         drawBot.newDrawing()

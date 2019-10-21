@@ -11,6 +11,7 @@ from drawBot.misc import DrawBotError, cmyk2rgb, warnings, transformationAtCente
 
 from .tools import openType
 from .tools import variation
+from .tools import SFNTLayoutTypes
 
 
 _FALLBACKFONT = "LucidaGrande"
@@ -1034,24 +1035,26 @@ class FormattedString(object):
                     ff = _FALLBACKFONT
                 warnings.warn("font: '%s' is not installed, back to the fallback font: '%s'" % (self._font, ff))
                 font = AppKit.NSFont.fontWithName_size_(ff, self._fontSize)
-            coreTextfeatures = []
+            coreTextFontFeatures = []
+            nsFontFeatures = []  # fallback for macOS < 10.13
             if self._openTypeFeatures:
                 existingOpenTypeFeatures = openType.getFeatureTagsForFontName(self._font)
                 # sort features by their on/off state
                 # set all disabled features first
                 orderedOpenTypeFeatures = sorted(self._openTypeFeatures.items(), key=lambda kv: kv[1])
                 for featureTag, value in orderedOpenTypeFeatures:
-                    coreTextFeatureTag = featureTag
+                    if value and featureTag not in existingOpenTypeFeatures:
+                        # only warn when the feature is on and not existing for the current font
+                        warnings.warn("OpenType feature '%s' not available for '%s'" % (featureTag, self._font))
+                    feature = dict(CTFeatureOpenTypeTag=featureTag, CTFeatureOpenTypeValue=value)
+                    coreTextFontFeatures.append(feature)
+                    # The next lines are a fallback for macOS < 10.13
+                    nsFontFeatureTag = featureTag
                     if not value:
-                        coreTextFeatureTag = "%s_off" % featureTag
-                    if coreTextFeatureTag in openType.featureMap:
-                        if value and featureTag not in existingOpenTypeFeatures:
-                            # only warn when the feature is on and not existing for the current font
-                            warnings.warn("OpenType feature '%s' not available for '%s'" % (featureTag, self._font))
-                        feature = openType.featureMap[coreTextFeatureTag]
-                        coreTextfeatures.append(feature)
-                    else:
-                        warnings.warn("OpenType feature '%s' not available" % (featureTag))
+                        nsFontFeatureTag = "%s_off" % featureTag
+                    if nsFontFeatureTag in SFNTLayoutTypes.featureMap:
+                        feature = SFNTLayoutTypes.featureMap[nsFontFeatureTag]
+                        nsFontFeatures.append(feature)
             coreTextFontVariations = dict()
             if self._fontVariations:
                 existingAxes = variation.getVariationAxesForFontName(self._font)
@@ -1067,8 +1070,10 @@ class FormattedString(object):
                     else:
                         warnings.warn("variation axis '%s' not available for '%s'" % (axis, self._font))
             fontAttributes = {}
-            if coreTextfeatures:
-                fontAttributes[CoreText.NSFontFeatureSettingsAttribute] = coreTextfeatures
+            if coreTextFontFeatures:
+                fontAttributes[CoreText.kCTFontFeatureSettingsAttribute] = coreTextFontFeatures
+                # fallback for macOS < 10.13:
+                fontAttributes[CoreText.NSFontFeatureSettingsAttribute] = nsFontFeatures
             if coreTextFontVariations:
                 fontAttributes[CoreText.NSFontVariationAttribute] = coreTextFontVariations
             if self._fallbackFont:
@@ -1374,9 +1379,7 @@ class FormattedString(object):
             if features.pop("resetFeatures", False):
                 self._openTypeFeatures.clear()
             self._openTypeFeatures.update(features)
-        currentFeatures = self.listOpenTypeFeatures()
-        currentFeatures.update(self._openTypeFeatures)
-        return currentFeatures
+        return dict(self._openTypeFeatures)
 
     def listOpenTypeFeatures(self, fontName=None):
         """
@@ -1777,7 +1780,7 @@ class FormattedString(object):
         # disable calt features, as this seems to be on by default
         # for both the font stored in the nsGlyphInfo as in the replacement character
         fontAttributes = {}
-        fontAttributes[CoreText.NSFontFeatureSettingsAttribute] = [openType.featureMap["calt_off"]]
+        fontAttributes[CoreText.kCTFontFeatureSettingsAttribute] = [dict(CTFeatureOpenTypeTag="calt", CTFeatureOpenTypeValue=False)]
         fontDescriptor = font.fontDescriptor()
         fontDescriptor = fontDescriptor.fontDescriptorByAddingAttributes_(fontAttributes)
         font = AppKit.NSFont.fontWithDescriptor_size_(fontDescriptor, self._fontSize)

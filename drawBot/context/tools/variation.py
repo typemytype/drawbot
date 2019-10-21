@@ -73,7 +73,7 @@ def getNamedInstancesForFontName(fontName):
         name = variationAxesDescription[CoreText.kCTFontVariationAxisNameKey]
         tagNameMap[tag] = name
 
-    ft = TTFont(url.path())
+    ft = TTFont(url.path(), lazy=True, fontNumber=0)
     if "fvar" in ft:
         cgFont = CoreText.CGFontCreateWithFontName(fontName)
         fvar = ft["fvar"]

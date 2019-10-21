@@ -4,22 +4,22 @@
   <tspan fill="rgb(0,0,0)" font-family="HoeflerText-Regular" font-size="20" x="0" y="28">
    Hoefler Fact #123
   </tspan>
-  <tspan fill="rgb(0,0,0)" font-family="HoeflerText-Regular" font-size="20" style="font-feature-settings: 'dlig';" x="0" y="52">
+  <tspan fill="rgb(0,0,0)" font-family="HoeflerText-Regular" font-size="20" style="font-feature-settings: 'dlig' 1;" x="0" y="52">
    Hoefler Fact #123
   </tspan>
-  <tspan fill="rgb(0,0,0)" font-family="HoeflerText-Regular" font-size="20" style="font-feature-settings: 'lnum', 'dlig';" x="0" y="76">
+  <tspan fill="rgb(0,0,0)" font-family="HoeflerText-Regular" font-size="20" style="font-feature-settings: 'lnum' 1, 'dlig' 1;" x="0" y="76">
    Hoefler Fact #123
   </tspan>
-  <tspan fill="rgb(0,0,0)" font-family="HoeflerText-Regular" font-size="20" style="font-feature-settings: 'lnum', 'dlig', 'liga_off';" x="0" y="100">
+  <tspan fill="rgb(0,0,0)" font-family="HoeflerText-Regular" font-size="20" style="font-feature-settings: 'lnum' 1, 'dlig' 1, 'liga' 0;" x="0" y="100">
    Hoefler Fact #123
   </tspan>
-  <tspan fill="rgb(0,0,0)" font-family="HoeflerText-Regular" font-size="20" style="font-feature-settings: 'dlig', 'liga_off';" x="0" y="124">
+  <tspan fill="rgb(0,0,0)" font-family="HoeflerText-Regular" font-size="20" style="font-feature-settings: 'dlig' 1, 'liga' 0;" x="0" y="124">
    Hoefler Fact #123
   </tspan>
-  <tspan fill="rgb(0,0,0)" font-family="HoeflerText-Regular" font-size="20" style="font-feature-settings: 'liga_off';" x="0" y="148">
+  <tspan fill="rgb(0,0,0)" font-family="HoeflerText-Regular" font-size="20" style="font-feature-settings: 'liga' 0;" x="0" y="148">
    Hoefler Fact #123
   </tspan>
-  <tspan fill="rgb(0,0,0)" font-family="HoeflerText-Regular" font-size="20" style="font-feature-settings: 'dlig', 'liga_off';" x="0" y="172">
+  <tspan fill="rgb(0,0,0)" font-family="HoeflerText-Regular" font-size="20" style="font-feature-settings: 'dlig' 1, 'liga' 0;" x="0" y="172">
    Hoefler Fact #123
   </tspan>
  </text>
