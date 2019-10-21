@@ -393,7 +393,7 @@ class BezierPath(BasePen):
         """
         return self._path
 
-    def _getCGPath(self, withBounds=False):
+    def _getCGPath(self):
         path = Quartz.CGPathCreateMutable()
         count = self._path.elementCount()
         for i in range(count):
@@ -411,14 +411,6 @@ class BezierPath(BasePen):
                 )
             elif instruction == AppKit.NSClosePathBezierPathElement:
                 Quartz.CGPathCloseSubpath(path)
-        # hacking to get a proper close path at the end of the path
-        if withBounds:
-            x, y, _, _ = self.bounds()
-            Quartz.CGPathMoveToPoint(path, None, x, y)
-            Quartz.CGPathAddLineToPoint(path, None, x, y)
-            Quartz.CGPathAddLineToPoint(path, None, x, y)
-            Quartz.CGPathAddLineToPoint(path, None, x, y)
-            Quartz.CGPathCloseSubpath(path)
         return path
 
     def _setCGPath(self, cgpath):
