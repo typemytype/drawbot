@@ -15,7 +15,16 @@ from .tools import SFNTLayoutTypes
 
 
 _FALLBACKFONT = "LucidaGrande"
-
+_LINEJOINSTYLESMAP = dict(
+    miter=Quartz.kCGLineJoinMiter,
+    round=Quartz.kCGLineJoinRound,
+    bevel=Quartz.kCGLineJoinBevel
+)
+_LINECAPSTYLESMAP = dict(
+    butt=Quartz.kCGLineCapButt,
+    square=Quartz.kCGLineCapSquare,
+    round=Quartz.kCGLineCapRound,
+)
 
 def _tryInstallFontFromFontName(fontName):
     from drawBot.drawBotDrawingTools import _drawBotDrawingTool
@@ -403,14 +412,22 @@ class BezierPath(BasePen):
                 )
             elif instruction == AppKit.NSClosePathBezierPathElement:
                 Quartz.CGPathCloseSubpath(path)
-        # hacking to get a proper close path at the end of the path
-        x, y, _, _ = self.bounds()
-        Quartz.CGPathMoveToPoint(path, None, x, y)
-        Quartz.CGPathAddLineToPoint(path, None, x, y)
-        Quartz.CGPathAddLineToPoint(path, None, x, y)
-        Quartz.CGPathAddLineToPoint(path, None, x, y)
-        Quartz.CGPathCloseSubpath(path)
         return path
+
+    def _setCGPath(self, cgpath):
+        self._path = AppKit.NSBezierPath.alloc().init()
+
+        def _addPoints(arg, element):
+            instruction, points = element.type, element.points
+            if instruction == Quartz.kCGPathElementMoveToPoint:
+                self._path.moveToPoint_(points[0])
+            elif instruction == Quartz.kCGPathElementAddLineToPoint:
+                self._path.lineToPoint_(points[0])
+            elif instruction == Quartz.kCGPathElementAddCurveToPoint:
+                self._path.curveToPoint_controlPoint1_controlPoint2_(points[2], points[0], points[1])
+            elif instruction == Quartz.kCGPathElementCloseSubpath:
+                self._path.closePath()
+        Quartz.CGPathApply(cgpath, None, _addPoints)
 
     def setNSBezierPath(self, path):
         """
@@ -620,6 +637,26 @@ class BezierPath(BasePen):
             assert isinstance(other, self.__class__)
             contours += other._contoursForBooleanOperations()
         return booleanOperations.getIntersections(contours)
+
+    def expandStroke(self, width, lineCap="round", lineJoin="round", miterLimit=10):
+        """
+        Returns a new bezier path with an expanded stroke around the original path,
+        with a given `width`. Note: the new path will not contain the original path.
+
+        The following optional arguments are available with respect to line caps and joins:
+        * `lineCap`: Possible values are `"butt"`, `"square"` or `"round"`
+        * `lineJoin`: Possible values are `"bevel"`, `"miter"` or `"round"`
+        * `miterLimit`: The miter limit to use for `"miter"` lineJoin option
+        """
+        if lineJoin not in _LINEJOINSTYLESMAP:
+            raise DrawBotError("lineJoin must be 'bevel', 'miter' or 'round'")
+        if lineCap not in _LINECAPSTYLESMAP:
+            raise DrawBotError("lineCap must be 'butt', 'square' or 'round'")
+
+        strokedCGPath = Quartz.CGPathCreateCopyByStrokingPath(self._getCGPath(), None, width, _LINECAPSTYLESMAP[lineCap], _LINEJOINSTYLESMAP[lineJoin], miterLimit)
+        result = self.__class__()
+        result._setCGPath(strokedCGPath)
+        return result
 
     def __mod__(self, other):
         return self.difference(other)
@@ -1882,18 +1919,6 @@ class BaseContext(object):
     saveImageOptions = []
     validateSaveImageOptions = True
 
-    _lineJoinStylesMap = dict(
-        miter=Quartz.kCGLineJoinMiter,
-        round=Quartz.kCGLineJoinRound,
-        bevel=Quartz.kCGLineJoinBevel
-    )
-
-    _lineCapStylesMap = dict(
-        butt=Quartz.kCGLineCapButt,
-        square=Quartz.kCGLineCapSquare,
-        round=Quartz.kCGLineCapRound,
-    )
-
     _textAlignMap = FormattedString._textAlignMap
     _textTabAlignMap = FormattedString._textTabAlignMap
     _textUnderlineMap = FormattedString._textUnderlineMap
@@ -2190,16 +2215,16 @@ class BaseContext(object):
     def lineJoin(self, join):
         if join is None:
             self._state.lineJoin = None
-        if join not in self._lineJoinStylesMap:
+        if join not in _LINEJOINSTYLESMAP:
             raise DrawBotError("lineJoin() argument must be 'bevel', 'miter' or 'round'")
-        self._state.lineJoin = self._lineJoinStylesMap[join]
+        self._state.lineJoin = _LINEJOINSTYLESMAP[join]
 
     def lineCap(self, cap):
         if cap is None:
             self._state.lineCap = None
-        if cap not in self._lineCapStylesMap:
+        if cap not in _LINECAPSTYLESMAP:
             raise DrawBotError("lineCap() argument must be 'butt', 'square' or 'round'")
-        self._state.lineCap = self._lineCapStylesMap[cap]
+        self._state.lineCap = _LINECAPSTYLESMAP[cap]
 
     def lineDash(self, dash):
         if dash[0] is None:
