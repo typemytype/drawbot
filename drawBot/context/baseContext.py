@@ -639,14 +639,13 @@ class BezierPath(BasePen):
 
     def expandStroke(self, width, lineCap="round", lineJoin="round", miterLimit=10):
         """
-        Returns a new bezier path with an expanded stroke around the bezier
-        path with a given width.
+        Returns a new bezier path with an expanded stroke around the original path,
+        with a given `width`. Note: the new path will not contain the original path.
 
-        Optionally these options can be set:
-
+        The following optional arguments are available with respect to line caps and joins:
         * `lineCap`: Possible values are `"butt"`, `"square"` or `"round"`
         * `lineJoin`: Possible values are `"bevel"`, `"miter"` or `"round"`
-        * `mitterLimit`: The miter limit to use for `"miter"` lineJoin option
+        * `miterLimit`: The miter limit to use for `"miter"` lineJoin option
         """
         if lineJoin not in _LINEJOINSTYLESMAP:
             raise DrawBotError("lineJoin must be 'bevel', 'miter' or 'round'")
