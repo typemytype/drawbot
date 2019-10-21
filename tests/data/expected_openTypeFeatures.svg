@@ -6,27 +6,27 @@
   </tspan>
  </text>
  <text text-anchor="start" transform="matrix(1,0,0,1,20.0,-108.0)">
-  <tspan fill="rgb(0,0,0)" font-family="HoeflerText-Regular" font-size="20" style="font-feature-settings: 'dlig';" x="0" y="168">
+  <tspan fill="rgb(0,0,0)" font-family="HoeflerText-Regular" font-size="20" style="font-feature-settings: 'dlig' 1;" x="0" y="168">
    Hoefler Fact #123
   </tspan>
  </text>
  <text text-anchor="start" transform="matrix(1,0,0,1,20.0,-78.0)">
-  <tspan fill="rgb(0,0,0)" font-family="HoeflerText-Regular" font-size="20" style="font-feature-settings: 'lnum', 'dlig';" x="0" y="168">
+  <tspan fill="rgb(0,0,0)" font-family="HoeflerText-Regular" font-size="20" style="font-feature-settings: 'lnum' 1, 'dlig' 1;" x="0" y="168">
    Hoefler Fact #123
   </tspan>
  </text>
  <text text-anchor="start" transform="matrix(1,0,0,1,20.0,-48.0)">
-  <tspan fill="rgb(0,0,0)" font-family="HoeflerText-Regular" font-size="20" style="font-feature-settings: 'lnum', 'dlig', 'liga_off';" x="0" y="168">
+  <tspan fill="rgb(0,0,0)" font-family="HoeflerText-Regular" font-size="20" style="font-feature-settings: 'lnum' 1, 'dlig' 1, 'liga' 0;" x="0" y="168">
    Hoefler Fact #123
   </tspan>
  </text>
  <text text-anchor="start" transform="matrix(1,0,0,1,20.0,-18.0)">
-  <tspan fill="rgb(0,0,0)" font-family="HoeflerText-Regular" font-size="20" style="font-feature-settings: 'lnum', 'dlig';" x="0" y="168">
+  <tspan fill="rgb(0,0,0)" font-family="HoeflerText-Regular" font-size="20" style="font-feature-settings: 'lnum' 1, 'dlig' 1;" x="0" y="168">
    Hoefler Fact #123
   </tspan>
  </text>
  <text text-anchor="start" transform="matrix(1,0,0,1,20.0,12.0)">
-  <tspan fill="rgb(0,0,0)" font-family="HoeflerText-Regular" font-size="20" style="font-feature-settings: 'liga_off';" x="0" y="168">
+  <tspan fill="rgb(0,0,0)" font-family="HoeflerText-Regular" font-size="20" style="font-feature-settings: 'liga' 0;" x="0" y="168">
    Hoefler Fact #123
   </tspan>
  </text>

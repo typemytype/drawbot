@@ -620,7 +620,7 @@ class SVGContext(BaseContext):
         return None
 
     def _svgStyleOpenTypeFeatures(self, featureTags):
-        return ", ".join(["'%s'" % tag for tag in featureTags])
+        return ", ".join(["'%s' %s" % (tag, int(value)) for tag, value in featureTags.items()])
 
     def _svgStyle(self, **kwargs):
         style = []
