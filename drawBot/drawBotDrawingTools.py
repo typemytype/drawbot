@@ -7,7 +7,7 @@ import os
 import random
 
 from .context import getContextForFileExt, getContextOptions, getFileExtensions, getContextOptionsDocs
-from .context.baseContext import BezierPath, FormattedString
+from .context.baseContext import BezierPath, FormattedString, makeTextBox
 from .context.dummyContext import DummyContext
 
 from .context.tools.imageObject import ImageObject
@@ -1603,21 +1603,9 @@ class DrawBotDrawingTool(object):
             align = "left"
         elif align not in ("left", "center", "right"):
             raise DrawBotError("align must be left, right, center")
-        attrString = self._dummyContext.attributedString(txt, align=align)
-        w, h = attrString.size()
-        if align == "right":
-            x -= w
-        elif align == "center":
-            x -= w * .5
-        setter = CoreText.CTFramesetterCreateWithAttributedString(attrString)
-        path = Quartz.CGPathCreateMutable()
-        Quartz.CGPathAddRect(path, None, Quartz.CGRectMake(x, y, w, h * 2))
-        box = CoreText.CTFramesetterCreateFrame(setter, (0, 0), path, None)
-        ctLines = CoreText.CTFrameGetLines(box)
-        origins = CoreText.CTFrameGetLineOrigins(box, (0, len(ctLines)), None)
-        if origins:
-            y -= origins[0][1]
-        self.textBox(txt, (x, y, w, h * 2), align=align)
+        attributedString = self._dummyContext.attributedString(txt, align=align)
+        box = makeTextBox(attributedString, x, y, align)
+        self.textBox(txt, box, align=align)
 
     def textOverflow(self, txt, box, align=None):
         """
