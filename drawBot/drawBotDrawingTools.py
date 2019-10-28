@@ -1577,7 +1577,7 @@ class DrawBotDrawingTool(object):
 
     # drawing text
 
-    def text(self, txt, x, y=None, align=None):
+    def text(self, txt, position, align=None):
         """
         Draw a text at a provided position.
 
@@ -1598,10 +1598,7 @@ class DrawBotDrawingTool(object):
         """
         if not isinstance(txt, (str, FormattedString)):
             raise TypeError("expected 'str' or 'FormattedString', got '%s'" % type(txt).__name__)
-        if y is None:
-            x, y = x
-        else:
-            warnings.warn("position must a tuple: text('%s', (%s, %s))" % (txt, x, y))
+        x, y = position
         if align is None:
             align = "left"
         elif align not in ("left", "center", "right"):
