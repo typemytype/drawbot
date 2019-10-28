@@ -748,6 +748,11 @@ class BezierPath(BasePen):
 
 def makeTextBox(attributedString, x, y, align):
     w, h = attributedString.size()
+    # Add a small padding value to the width, to compensate for small errors
+    # with variable fonts; see https://github.com/typemytype/drawbot/issues/315
+    # (The extra width is compensated correctly when using right and center
+    # alignments, as the appropriate part of the box is not moving.)
+    w += 2
     if align == "right":
         x -= w
     elif align == "center":
