@@ -17,7 +17,7 @@ matrix:
     osx_image: xcode9.4  # 10.13
     language: generic
     script:
-    - "./.travis/tests.sh"
+    - coverage run "./.travis/tests.sh"
 #   - os: osx
 #     osx_image: xcode9.4  # 10.13
 #     language: generic
@@ -69,3 +69,6 @@ matrix:
 # #   on:
 # #     repo: typemytype/drawbot
 # #     branch: trying_out_travis  # remove when PR is done
+
+after_success:
+  - codecov
