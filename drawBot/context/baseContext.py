@@ -1397,7 +1397,7 @@ class FormattedString(object):
             # add some text
             t += "0123456789 Hello"
             # enable some open type features
-            t.openTypeFeatures(smcp=True, lnum=True)
+            t.openTypeFeatures(smcp=True, onum=True)
             # add some text
             t += " 0123456789 Hello"
             # draw the formatted string
