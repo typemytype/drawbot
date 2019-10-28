@@ -1519,7 +1519,7 @@ class DrawBotDrawingTool(object):
 
             size(1000, 300)
             # set a font
-            font("ACaslonPro-Regular")
+            font("Baskerville")
             # set the font size
             fontSize(50)
             # draw a string
@@ -1835,9 +1835,9 @@ class DrawBotDrawingTool(object):
             txt = FormattedString()
 
             # adding some text with some formatting
-            txt.append("hello", font="ACaslonPro-Regular", fontSize=50)
+            txt.append("hello", font="Baskerville", fontSize=50)
             # adding more text with an
-            txt.append("world", font="ACaslonPro-Regular", fontSize=50, openTypeFeatures=dict(smcp=True))
+            txt.append("world", font="Baskerville", fontSize=50, openTypeFeatures=dict(smcp=True))
 
             text(txt, (10, 150))
 
