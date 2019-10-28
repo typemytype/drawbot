@@ -194,6 +194,7 @@ testExt = [
 
 
 skipTests = {
+    "test_svg_fontVariations2",  # On macOS 10.13, there is a named instance for Condensed. Also, Variable fonts don't work in SVG export yet.
     "test_svg_image3",  # embedded image is subtly different, but we can't render SVG, so we can't compare fuzzily
     "test_svg_image4",  # ditto.
 }
@@ -230,8 +231,9 @@ def _addTests():
             testMethod.__name__ = testMethodName
             if testMethodName in expectedFailures:
                 testMethod = unittest.expectedFailure(testMethod)
-            if testMethodName not in skipTests:
-                setattr(DrawBotTest, testMethodName, testMethod)
+            if testMethodName in skipTests:
+                testMethod = unittest.skip(testMethod)
+            setattr(DrawBotTest, testMethodName, testMethod)
 
 _addTests()
 
