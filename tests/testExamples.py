@@ -66,9 +66,6 @@ class ExampleTester(unittest.TestCase):
         similarity = compareImages(path1, path2)
         self.assertLessEqual(similarity, 0.0011, "Images %r and %s are not similar enough: %s" % (path1, path2, similarity))
 
-    def assertFilesEqual(self, path1, path2):
-        self.assertEqual(readData(path1), readData(path2), "Files %r and %s are not the same" % (path1, path2))
-
 
 # The examples use an http image path; let's fake it with a local jpeg
 mockedImagePath = os.path.join(testRootDir, "data", "drawBot.jpg")
