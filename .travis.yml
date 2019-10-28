@@ -69,3 +69,6 @@ matrix:
 # #   on:
 # #     repo: typemytype/drawbot
 # #     branch: trying_out_travis  # remove when PR is done
+
+after_success:
+  - codecov

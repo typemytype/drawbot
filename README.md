@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/typemytype/drawbot.svg?branch=master)](https://travis-ci.org/typemytype/drawbot)
+[![codecov](https://codecov.io/gh/typemytype/drawbot/branch/master/graph/badge.svg)](https://codecov.io/gh/typemytype/drawbot)
 
 # DrawBot
 
