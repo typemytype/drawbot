@@ -159,9 +159,6 @@ def _makeTestCase(exampleName, source, doSaveImage):
 
 skip = {
     "test_imageObject",  # skipping, the rendering diff between OS versions is too great
-    "test_formattedString",  # TODO: need to use a system font, not ACaslon.
-    "test_openTypeFeatures",  # TODO: need to use a system font, not ACaslon.
-    "test_openTypeFeaturesFormattedString",  # TODO: need to use a system font, not ACaslon.
     "test_lineHeight",  # This fails on Travis. TODO: figure out why.
 }
 expectedFailures = {}
