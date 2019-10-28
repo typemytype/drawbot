@@ -1391,7 +1391,7 @@ class FormattedString(object):
             # create an empty formatted string object
             t = FormattedString()
             # set a font
-            t.font("Baskerville")
+            t.font("Didot")
             # set a font size
             t.fontSize(60)
             # add some text
