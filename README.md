@@ -15,6 +15,12 @@ DrawBot can also be installed as a Python module, the app is not required.
 
 #### Install 
 
+The easiest way is to use pip:
+
+	$ pip install git+https://github.com/typemytype/drawbot
+
+To install it manually, follow these instrutions:
+
 download: https://github.com/typemytype/drawbot/archive/master.zip
 
 run `cd <path/where/you/have/downloaded/and/unzipped/drawBot>`
