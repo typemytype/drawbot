@@ -39,7 +39,7 @@ class DrawBotTest(unittest.TestCase):
             f1 = io.BytesIO(data1)
             f2 = io.BytesIO(data2)
             similarity = compareImages(f1, f2)
-            self.assertLessEqual(similarity, 0.001, "PDF files %r and %r are not similar enough: %s (page %s)" % (path1, path2, similarity, pageIndex + 1))
+            self.assertLessEqual(similarity, 0.0011, "PDF files %r and %r are not similar enough: %s (page %s)" % (path1, path2, similarity, pageIndex + 1))
 
     def assertSVGFilesEqual(self, path1, path2):
         # compare the content by line
