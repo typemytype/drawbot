@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/typemytype/drawbot.svg?branch=master)](https://travis-ci.org/typemytype/drawbot)
+
 # DrawBot
 
 DrawBot is a powerful, free application for macOS that invites you to write Python scripts to generate two-dimensional graphics. The built-in graphics primitives support rectangles, ovals, (bezier) paths, polygons, text objects, colors, transparency and much more. You can program multi-page documents and stop-motion animations. Export formats include PDF, SVG, PNG, JPEG, TIFF, animated GIF and MP4 video.
