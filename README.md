@@ -19,7 +19,7 @@ The easiest way is to use pip:
 
 	$ pip install git+https://github.com/typemytype/drawbot
 
-To install it manually, follow these instrutions:
+To install it manually, follow these instructions:
 
 download: https://github.com/typemytype/drawbot/archive/master.zip
 
