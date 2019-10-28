@@ -16,4 +16,3 @@ fi
 command -v python3
 python3 --version
 python3 -c "import platform; print('macOS version:', platform.mac_ver()[0])"
-pip3 install codecov
