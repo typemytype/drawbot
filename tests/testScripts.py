@@ -31,7 +31,15 @@ class DrawBotTest(unittest.TestCase):
             image2 = AppKit.NSImage.alloc().initWithData_(page2.dataRepresentation())
             # compare the image tiff data
             # no use to show the complete diff of the binary data
-            self.assertTrue(image1.TIFFRepresentation() == image2.TIFFRepresentation(), "PDF data on page %s is not the same" % (pageIndex + 1))
+            data1 = image1.TIFFRepresentation()
+            data2 = image2.TIFFRepresentation()
+            if data1 == data2:
+                return  # all fine
+            # Fall back to fuzzy image compare
+            f1 = io.BytesIO(data1)
+            f2 = io.BytesIO(data2)
+            similarity = compareImages(f1, f2)
+            self.assertLessEqual(similarity, 0.001, "PDF files %r and %r are not similar enough: %s (page %s)" % (path1, path2, similarity, pageIndex + 1))
 
     def assertSVGFilesEqual(self, path1, path2):
         # compare the content by line
