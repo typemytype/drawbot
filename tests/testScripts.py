@@ -35,7 +35,7 @@ class DrawBotTest(unittest.TestCase):
 
     def assertSVGFilesEqual(self, path1, path2):
         # compare the content by line
-        self.assertTrue(readData(path1) == readData(path2))
+        self.assertTrue(readData(path1) == readData(path2), "SVG files are not identical")
 
     def assertImageFilesEqual(self, path1, path2):
         data1 = readData(path1)
