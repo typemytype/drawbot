@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg height="200" version="1.1" width="200" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <text text-anchor="start" transform="matrix(1,0,0,1,29.931640625,-71.0)">
+  <tspan fill="rgb(0,0,0)" font-family="LucidaGrande" font-size="20" x="0" y="171">
+   foo bar
+  </tspan>
+ </text>
+ <text text-anchor="start" transform="matrix(1,0,0,1,64.9658203125,-91.0)">
+  <tspan fill="rgb(0,0,0)" font-family="LucidaGrande" font-size="20" x="0" y="171">
+   foo bar
+  </tspan>
+ </text>
+ <text text-anchor="start" transform="matrix(1,0,0,1,100.0,-111.0)">
+  <tspan fill="rgb(0,0,0)" font-family="LucidaGrande" font-size="20" x="0" y="171">
+   foo bar
+  </tspan>
+ </text>
+</svg>
