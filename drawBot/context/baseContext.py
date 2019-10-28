@@ -304,25 +304,13 @@ class BezierPath(BasePen):
         context = BaseContext()
         context.font(font, fontSize)
 
-        attributedString = context.attributedString(txt, align)
-        w, h = attributedString.size()
         if offset:
             x, y = offset
         else:
             x = y = 0
-        if align == "right":
-            x -= w
-        elif align == "center":
-            x -= w * .5
-        setter = CoreText.CTFramesetterCreateWithAttributedString(attributedString)
-        path = Quartz.CGPathCreateMutable()
-        Quartz.CGPathAddRect(path, None, Quartz.CGRectMake(x, y, w, h))
-        frame = CoreText.CTFramesetterCreateFrame(setter, (0, 0), path, None)
-        ctLines = CoreText.CTFrameGetLines(frame)
-        origins = CoreText.CTFrameGetLineOrigins(frame, (0, len(ctLines)), None)
-        if origins:
-            y -= origins[0][1]
-        self.textBox(txt, box=(x, y - h, w, h * 2), font=font, fontSize=fontSize, align=align)
+        attributedString = context.attributedString(txt, align)
+        box = makeTextBox(attributedString, x, y, align)
+        self.textBox(txt, box=box, font=font, fontSize=fontSize, align=align)
 
     def textBox(self, txt, box, font=_FALLBACKFONT, fontSize=10, align=None, hyphenation=None):
         """
@@ -756,6 +744,23 @@ class BezierPath(BasePen):
             contour = contours[index]
             yield contour
             index += 1
+
+
+def makeTextBox(attributedString, x, y, align):
+    w, h = attributedString.size()
+    if align == "right":
+        x -= w
+    elif align == "center":
+        x -= w * .5
+    setter = CoreText.CTFramesetterCreateWithAttributedString(attributedString)
+    path = Quartz.CGPathCreateMutable()
+    Quartz.CGPathAddRect(path, None, Quartz.CGRectMake(x, y, w, h))
+    frame = CoreText.CTFramesetterCreateFrame(setter, (0, 0), path, None)
+    ctLines = CoreText.CTFrameGetLines(frame)
+    origins = CoreText.CTFrameGetLineOrigins(frame, (0, len(ctLines)), None)
+    if origins:
+        y -= origins[0][1]
+    return (x, y - h, w, h * 2)
 
 
 class Color(object):
