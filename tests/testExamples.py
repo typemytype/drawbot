@@ -183,10 +183,10 @@ def _addExampleTests():
         testMethod = _makeTestCase(exampleName, source, doSaveImage=testMethodName not in dontSaveImage,
                 allowFuzzyImageComparison=testMethodName in allowFuzzyImageComparison)
         testMethod.__name__ = testMethodName
-        if testMethodName in skip:
-            continue
         if testMethodName in expectedFailures:
             testMethod = unittest.expectedFailure(testMethod)
+        if testMethodName in skip:
+            testMethod = unittest.skip(testMethod)
         setattr(ExampleTester, testMethodName, testMethod)
 
 _addExampleTests()
