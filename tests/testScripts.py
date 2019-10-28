@@ -193,6 +193,10 @@ testExt = [
 ]
 
 
+skipTests = {
+    "test_svg_image3",  # embedded image is subtly different, but we can't render SVG, so we can't compare fuzzily
+    "test_svg_image4",  # ditto.
+}
 expectedFailures = {}
 ignoreDeprecationWarnings = {
     # there are some pesky PyObjC warnings that interfere with our stdout/stderr capturing,
@@ -226,7 +230,8 @@ def _addTests():
             testMethod.__name__ = testMethodName
             if testMethodName in expectedFailures:
                 testMethod = unittest.expectedFailure(testMethod)
-            setattr(DrawBotTest, testMethodName, testMethod)
+            if testMethodName not in skipTests:
+                setattr(DrawBotTest, testMethodName, testMethod)
 
 _addTests()
 
