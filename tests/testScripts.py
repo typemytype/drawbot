@@ -1,11 +1,12 @@
 import AppKit
+import io
 import unittest
 import os
 import sys
 import glob
 import traceback
 import warnings
-from testSupport import StdOutCollector, randomSeed, testRootDir, tempTestDataDir, testDataDir, readData
+from testSupport import StdOutCollector, randomSeed, testRootDir, tempTestDataDir, testDataDir, readData, compareImages
 
 
 drawBotScriptDir = os.path.join(testRootDir, "drawBotScripts")
@@ -37,9 +38,15 @@ class DrawBotTest(unittest.TestCase):
         self.assertTrue(readData(path1) == readData(path2))
 
     def assertImageFilesEqual(self, path1, path2):
-        # compare the data and assert with a simple message
-        # no use to show the complete diff of the binary file
-        self.assertTrue(readData(path1) == readData(path2), "Images are not the same")
+        data1 = readData(path1)
+        data2 = readData(path2)
+        if data1 == data2:
+            return  # all fine
+        # Fall back to fuzzy image compare
+        f1 = io.BytesIO(data1)
+        f2 = io.BytesIO(data2)
+        similarity = compareImages(f1, f2)
+        self.assertLessEqual(similarity, 0.001, "Images %r and %r are not similar enough: %s" % (path1, path2, similarity))
 
     def assertGenericFilesEqual(self, path1, path2):
         self.assertEqual(readData(path1), readData(path2))
