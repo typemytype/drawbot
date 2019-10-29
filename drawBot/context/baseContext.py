@@ -897,15 +897,13 @@ def makeTextBoxes(attributedString, xy, align, plainText):
     origins = CoreText.CTFrameGetLineOrigins(frame, (0, len(ctLines)), None)
     boxes = []
 
-    for i, (originX, originY) in enumerate(origins):
-        ctLine = ctLines[i]
+    for ctLine, (originX, originY) in zip(ctLines, origins):
         rng = CoreText.CTLineGetStringRange(ctLine)
 
         attributedSubstring = attributedString.attributedSubstringFromRange_(rng)
         # strip trailing returns
         if attributedSubstring.string()[-1] in ["\n", "\r"]:
-            rng.length -= 1
-            attributedSubstring = attributedString.attributedSubstringFromRange_(rng)
+            attributedString.deleteCharactersInRange_((rng.length - 1, 1))
         width, height = attributedSubstring.size()
         para, _ = attributedSubstring.attribute_atIndex_effectiveRange_(AppKit.NSParagraphStyleAttributeName, 0, None)
 
