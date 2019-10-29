@@ -16,13 +16,13 @@
   </tspan>
  </text>
  <path d="M0,50 l200,0" fill="none" stroke="rgb(0,255,0)" stroke-width="1" transform="matrix(1,0,0,-1,0,200)"/>
- <text text-anchor="start" transform="matrix(1,0,0,1,40.802734375,-71.0)">
-  <tspan fill="rgb(0,255,255)" font-family="Times-Roman" font-size="20" x="2" y="171">
+ <text text-anchor="start" transform="matrix(1,0,0,1,42.802734375,-71.0)">
+  <tspan fill="rgb(0,255,255)" font-family="Times-Roman" font-size="20" x="0" y="171">
    foo bar
   </tspan>
  </text>
- <text text-anchor="start" transform="matrix(1,0,0,1,70.4013671875,-91.0)">
-  <tspan fill="rgb(0,255,255)" font-family="Times-Roman" font-size="20" x="1" y="171">
+ <text text-anchor="start" transform="matrix(1,0,0,1,71.4013671875,-91.0)">
+  <tspan fill="rgb(0,255,255)" font-family="Times-Roman" font-size="20" x="0" y="171">
    foo bar
   </tspan>
  </text>
