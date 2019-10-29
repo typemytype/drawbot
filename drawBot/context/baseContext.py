@@ -301,17 +301,16 @@ class BezierPath(BasePen):
             raise TypeError("expected 'str' or 'FormattedString', got '%s'" % type(txt).__name__)
         if align and align not in BaseContext._textAlignMap.keys():
             raise DrawBotError("align must be %s" % (", ".join(BaseContext._textAlignMap.keys())))
+
         context = BaseContext()
         context.font(font, fontSize)
-
         attributedString = context.attributedString(txt, align)
         if offset:
             x, y = offset
         else:
             x = y = 0
-
-        for fs, box in makeTextBoxes(attributedString, (x, y), align=align):
-            self.textBox(fs, box)
+        for subTxt, box in makeTextBoxes(attributedString, (x, y), align=align, plainText=not isinstance(txt, FormattedString)):
+            self.textBox(subTxt, box, font=font, fontSize=fontSize, align=align)
 
     def textBox(self, txt, box, font=_FALLBACKFONT, fontSize=10, align=None, hyphenation=None):
         """
@@ -875,7 +874,7 @@ class Gradient(object):
         return new
 
 
-def makeTextBoxes(attributedString, xy, align):
+def makeTextBoxes(attributedString, xy, align, plainText):
     extraPadding = 20
     x, y = xy
     w, h = attributedString.size()
@@ -902,12 +901,13 @@ def makeTextBoxes(attributedString, xy, align):
         ctLine = ctLines[i]
         rng = CoreText.CTLineGetStringRange(ctLine)
 
-        substring = attributedString.attributedSubstringFromRange_(rng)
+        attributedSubstring = attributedString.attributedSubstringFromRange_(rng)
         # strip trailing returns
-        if substring.string()[-1] in ["\n", "\r"]:
-            substring = attributedString.attributedSubstringFromRange_((rng.location, rng.length-1))
-        width, height = substring.size()
-        para, _ = substring.attribute_atIndex_effectiveRange_(AppKit.NSParagraphStyleAttributeName, 0, None)
+        if attributedSubstring.string()[-1] in ["\n", "\r"]:
+            rng.length -= 1
+            attributedSubstring = attributedString.attributedSubstringFromRange_(rng)
+        width, height = attributedSubstring.size()
+        para, _ = attributedSubstring.attribute_atIndex_effectiveRange_(AppKit.NSParagraphStyleAttributeName, 0, None)
 
         width += extraPadding
         originX = 0
@@ -916,11 +916,14 @@ def makeTextBoxes(attributedString, xy, align):
         elif para.alignment() == AppKit.NSRightTextAlignment:
             originX = -width
 
-        formattedSubstring = FormattedString()
-        formattedSubstring.getNSObject().appendAttributedString_(substring)
+        substring = FormattedString()
+        substring.getNSObject().appendAttributedString_(attributedSubstring)
+
+        if plainText:
+            substring = str(substring)
 
         box = (x + originX, y - originY, width, h * 2)
-        boxes.append((formattedSubstring, box))
+        boxes.append((substring, box))
 
         y -= height * 2
 

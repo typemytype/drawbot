@@ -1601,9 +1601,9 @@ class DrawBotDrawingTool(object):
         x, y = position
         if align not in ("left", "center", "right", None):
             raise DrawBotError("align must be left, right, center")
-        attrString = self._dummyContext.attributedString(txt, align=align)
-        for fs, box in makeTextBoxes(attrString, (x, y), align=align):
-            self.textBox(fs, box)
+        attributedString = self._dummyContext.attributedString(txt, align=align)
+        for subTxt, box in makeTextBoxes(attributedString, (x, y), align=align, plainText=not isinstance(txt, FormattedString)):
+            self.textBox(subTxt, box, align=align)
 
     def textOverflow(self, txt, box, align=None):
         """
