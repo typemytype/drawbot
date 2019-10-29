@@ -882,8 +882,10 @@ def makeTextBoxes(attributedString, xy, align):
     w += extraPadding
 
     if align is not None:
+        attributedString = attributedString.mutableCopy()
         # overwrite all align settings in each paragraph style
         def block(value, rng, stop):
+            value = value.mutableCopy()
             value.setAlignment_(FormattedString._textAlignMap[align])
             attributedString.addAttribute_value_range_(AppKit.NSParagraphStyleAttributeName, value, rng)
         attributedString.enumerateAttribute_inRange_options_usingBlock_(AppKit.NSParagraphStyleAttributeName, (0, len(attributedString)), 0, block)
