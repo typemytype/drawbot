@@ -754,7 +754,7 @@ def makeTextBox(attributedString, x, y, align):
         x -= w * .5
     setter = CoreText.CTFramesetterCreateWithAttributedString(attributedString)
     path = Quartz.CGPathCreateMutable()
-    Quartz.CGPathAddRect(path, None, Quartz.CGRectMake(x, y, w, h * 2))
+    Quartz.CGPathAddRect(path, None, Quartz.CGRectMake(x, y, w, h))
     frame = CoreText.CTFramesetterCreateFrame(setter, (0, 0), path, None)
     ctLines = CoreText.CTFrameGetLines(frame)
     origins = CoreText.CTFrameGetLineOrigins(frame, (0, len(ctLines)), None)
