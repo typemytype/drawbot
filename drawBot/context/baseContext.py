@@ -903,7 +903,7 @@ def makeTextBoxes(attributedString, xy, align, plainText):
         attributedSubstring = attributedString.attributedSubstringFromRange_(rng)
         # strip trailing returns
         if attributedSubstring.string()[-1] in ["\n", "\r"]:
-            attributedString.deleteCharactersInRange_((rng.length - 1, 1))
+            attributedSubstring.deleteCharactersInRange_((rng.length - 1, 1))
         width, height = attributedSubstring.size()
         para, _ = attributedSubstring.attribute_atIndex_effectiveRange_(AppKit.NSParagraphStyleAttributeName, 0, None)
 
