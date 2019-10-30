@@ -8,7 +8,6 @@ branches:
 before_install:
   - "./.travis/install.sh"
 
-
 # see macOS version https://docs.travis-ci.com/user/reference/osx/#os-x-version
 
 matrix:
@@ -19,6 +18,10 @@ matrix:
     script:
     - "./.travis/tests.sh"
 
+
+after_failure:
+  - "apt-get install lftp"
+  - lftp -e "mirror -R ./tests/tempTestData $FTP_REMOTE_DIR" -u $FTP_USERNAME,$FTP_PASSWORD $FTP_HOST
 
 after_success:
   - codecov
