@@ -207,6 +207,7 @@ skipTests = {
     "test_svg_fontVariations2",  # On macOS 10.13, there is a named instance for Condensed. Also, Variable fonts don't work in SVG export yet.
     "test_svg_image3",  # embedded image is subtly different, but we can't render SVG, so we can't compare fuzzily
     "test_svg_image4",  # ditto.
+    "test_svg_fontPath",  # no fonts embedded into svg and no var support (yet)
 }
 expectedFailures = {}
 ignoreDeprecationWarnings = {
