@@ -18,16 +18,21 @@ jobs:
       uses: actions/setup-python@v1
       with:
         python-version: 3.7
-    - name: Checkout
-      uses: actions/checkout@v1
-    - name: Install dependencies
+    - name: Check python
       run: |
-        python3 -m pip install -r ./test-requirements.txt
-        python3 -m pip install codecov
-    - name: Run tests
-      run: coverage run ./tests/runAllTests.py
-    - name: Storing artifacts
-      uses: actions/upload-artifact@master
-      with:
-        name: DrawBot Temp Data Results
-        path: ./tests/tempTestData
+        python --version
+        python -c "import platform; print('macOS version:', platform.mac_ver()[0])"
+    # - name: Checkout
+    #   uses: actions/checkout@v1
+  
+    # - name: Install dependencies
+    #   run: |
+    #     python3 -m pip install -r ./test-requirements.txt
+    #     python3 -m pip install codecov
+    # - name: Run tests
+    #   run: coverage run ./tests/runAllTests.py
+    # - name: Storing artifacts
+    #   uses: actions/upload-artifact@master
+    #   with:
+    #     name: DrawBot Temp Data Results
+    #     path: ./tests/tempTestData
