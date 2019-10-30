@@ -207,9 +207,6 @@ skipTests = {
     "test_svg_fontVariations2",  # On macOS 10.13, there is a named instance for Condensed. Also, Variable fonts don't work in SVG export yet.
     "test_svg_image3",  # embedded image is subtly different, but we can't render SVG, so we can't compare fuzzily
     "test_svg_image4",  # ditto.
-    "test_pdf_imageHTTP",  # Hmm, http requests are not allowed from Travis. https should work however, not on our image URL. TODO: find https image host
-    "test_png_imageHTTP",
-    "test_svg_imageHTTP",
 }
 expectedFailures = {}
 ignoreDeprecationWarnings = {
