@@ -14,14 +14,23 @@ jobs:
     runs-on: macOS-10.13
 
     steps:
-    - name: Set up Python 3.7
-      uses: actions/setup-python@v1
-      with:
-        python-version: 3.7
-    - name: Check python
+    - uses: actions/checkout@v1
+    - name: Run a one-line script
+      run: echo Hello, world!
+    - name: Run a multi-line script
       run: |
-        python --version
-        python -c "import platform; print('macOS version:', platform.mac_ver()[0])"
+        echo Add other actions to build,
+        echo test, and deploy your project.
+
+    # steps:
+    # - name: Set up Python 3.7
+    #   uses: actions/setup-python@v1
+    #   with:
+    #     python-version: 3.7
+    # - name: Check python
+    #   run: |
+    #     python --version
+    #     python -c "import platform; print('macOS version:', platform.mac_ver()[0])"
     # - name: Checkout
     #   uses: actions/checkout@v1
   
