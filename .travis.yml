@@ -7,6 +7,7 @@ branches:
 
 before_install:
   - "./.travis/install.sh"
+  - "apt-get install lftp"
 
 # see macOS version https://docs.travis-ci.com/user/reference/osx/#os-x-version
 
@@ -20,7 +21,6 @@ matrix:
 
 
 after_failure:
-  - "apt-get install lftp"
   - lftp -e "mirror -R ./tests/tempTestData $FTP_REMOTE_DIR" -u $FTP_USERNAME,$FTP_PASSWORD $FTP_HOST
 
 after_success:
