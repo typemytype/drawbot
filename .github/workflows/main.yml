@@ -11,12 +11,17 @@ on:
 jobs:
   test:
 
-    runs-on: macOS-10.13
+    runs-on: ubuntu-latest # macOS-10.13
 
     steps:
     - uses: actions/checkout@v1
     - name: Run a one-line script
       run: echo Hello, world!
+    - uses: actions/checkout@v1
+    - name: Set up Python 3.7
+      uses: actions/setup-python@v1
+      with:
+        python-version: 3.7      
     - name: Run a multi-line script
       run: |
         echo Add other actions to build,
