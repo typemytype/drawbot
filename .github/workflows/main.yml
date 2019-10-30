@@ -11,42 +11,27 @@ on:
 jobs:
   test:
 
-    runs-on: ubuntu-latest # macOS-10.13
+    runs-on: macOS-10.14
 
     steps:
-    - uses: actions/checkout@v1
-    - name: Run a one-line script
-      run: echo Hello, world!
-    - uses: actions/checkout@v1
     - name: Set up Python 3.7
       uses: actions/setup-python@v1
       with:
-        python-version: 3.7      
-    - name: Run a multi-line script
+        python-version: 3.7
+    - name: Check python
       run: |
-        echo Add other actions to build,
-        echo test, and deploy your project.
-
-    # steps:
-    # - name: Set up Python 3.7
-    #   uses: actions/setup-python@v1
-    #   with:
-    #     python-version: 3.7
-    # - name: Check python
-    #   run: |
-    #     python --version
-    #     python -c "import platform; print('macOS version:', platform.mac_ver()[0])"
-    # - name: Checkout
-    #   uses: actions/checkout@v1
-  
-    # - name: Install dependencies
-    #   run: |
-    #     python3 -m pip install -r ./test-requirements.txt
-    #     python3 -m pip install codecov
-    # - name: Run tests
-    #   run: coverage run ./tests/runAllTests.py
-    # - name: Storing artifacts
-    #   uses: actions/upload-artifact@master
-    #   with:
-    #     name: DrawBot Temp Data Results
-    #     path: ./tests/tempTestData
+        python --version
+        python -c "import platform; print('macOS version:', platform.mac_ver()[0])"
+    - name: Checkout
+      uses: actions/checkout@v1
+    - name: Install dependencies
+      run: |
+        python -m pip install -r ./test-requirements.txt
+        python -m pip install codecov
+    - name: Run tests
+      run: coverage run ./tests/runAllTests.py
+    - name: Storing artifacts
+      uses: actions/upload-artifact@master
+      with:
+        name: DrawBot Temp Data Results
+        path: ./tests/tempTestData
