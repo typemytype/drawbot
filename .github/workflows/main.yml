@@ -30,10 +30,9 @@ jobs:
         python -m pip install .
         python -m pip install codecov
     - name: Run tests
-      run: coverage run ./tests/runAllTests.py
-    - name: List all artifacts
-      run: ls ./tests/tempTestData
+      run: coverage run ./tests/runAllTests.py      
     - name: Storing artifacts
+      if: failure()
       uses: actions/upload-artifact@master
       with:
         name: DrawBot Temp Data Results
