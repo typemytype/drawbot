@@ -22,3 +22,4 @@ git+https://github.com/typemytype/ufo2fdk
 git+https://github.com/typesupply/feaPyFoFum
 git+https://github.com/typesupply/feaTools2
 uharfbuzz
+pillow

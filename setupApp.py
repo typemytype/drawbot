@@ -195,6 +195,7 @@ setup(
                 # 'xml'
                 'pkg_resources',
                 'parso',
+                'PIL',
             ],
             includes=[
                 # 'csv',
@@ -204,7 +205,6 @@ setup(
                 "numpy",
                 "scipy",
                 "matplotlib",
-                "PIL",
                 "pygame",
                 "wx",
                 "sphinx",
