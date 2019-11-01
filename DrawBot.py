@@ -3,28 +3,6 @@ import sys
 import os
 import site
 
-
-def _getPIPTargetPath():
-    appSupportPath = AppKit.NSSearchPathForDirectoriesInDomains(
-        AppKit.NSApplicationSupportDirectory,
-        AppKit.NSUserDomainMask, True)[0]
-    version = f"{sys.version_info.major}.{sys.version_info.minor}"
-    return os.path.join(appSupportPath, f"DrawBot/Python{version}")
-
-
-def _addLocalSysPaths():
-    version = f"{sys.version_info.major}.{sys.version_info.minor}"
-    paths = [
-        _getPIPTargetPath(),
-        '/Library/Python/%s/site-packages' % version,
-    ]
-    for path in paths:
-        if path not in sys.path and os.path.exists(path):
-            site.addsitedir(path)
-
-_addLocalSysPaths()
-
-
 from PyObjCTools import AppHelper
 
 import random
@@ -277,6 +255,27 @@ class DrawBotAppDelegate(AppKit.NSObject):
                 message("The DrawBot package '%s' failed." % fileName, report)
             return True
         return False
+
+
+def _getPIPTargetPath():
+    appSupportPath = AppKit.NSSearchPathForDirectoriesInDomains(
+        AppKit.NSApplicationSupportDirectory,
+        AppKit.NSUserDomainMask, True)[0]
+    version = f"{sys.version_info.major}.{sys.version_info.minor}"
+    return os.path.join(appSupportPath, f"DrawBot/Python{version}")
+
+
+def _addLocalSysPaths():
+    version = f"{sys.version_info.major}.{sys.version_info.minor}"
+    paths = [
+        _getPIPTargetPath(),
+        '/Library/Python/%s/site-packages' % version,
+    ]
+    for path in paths:
+        if path not in sys.path and os.path.exists(path):
+            site.addsitedir(path)
+
+_addLocalSysPaths()
 
 
 if __name__ == "__main__":
