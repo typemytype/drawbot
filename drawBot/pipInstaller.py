@@ -34,8 +34,6 @@ class PipInstallerController:
         self.targetPath = targetPath
         self._isRunning = False
 
-        leftMargin = 50
-
         y = 15
         self.w = Window((640, 300), "Install External Python Packages", 
                 minSize=(640, 300), autosaveName="PipInstaller")
