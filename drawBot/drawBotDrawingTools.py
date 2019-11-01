@@ -7,7 +7,7 @@ import os
 import random
 
 from .context import getContextForFileExt, getContextOptions, getFileExtensions, getContextOptionsDocs
-from .context.baseContext import BezierPath, FormattedString
+from .context.baseContext import BezierPath, FormattedString, makeTextBoxes
 from .context.dummyContext import DummyContext
 
 from .context.tools.imageObject import ImageObject
@@ -1599,25 +1599,11 @@ class DrawBotDrawingTool(object):
         if not isinstance(txt, (str, FormattedString)):
             raise TypeError("expected 'str' or 'FormattedString', got '%s'" % type(txt).__name__)
         x, y = position
-        if align is None:
-            align = "left"
-        elif align not in ("left", "center", "right"):
+        if align not in ("left", "center", "right", None):
             raise DrawBotError("align must be left, right, center")
-        attrString = self._dummyContext.attributedString(txt, align=align)
-        w, h = attrString.size()
-        if align == "right":
-            x -= w
-        elif align == "center":
-            x -= w * .5
-        setter = CoreText.CTFramesetterCreateWithAttributedString(attrString)
-        path = Quartz.CGPathCreateMutable()
-        Quartz.CGPathAddRect(path, None, Quartz.CGRectMake(x, y, w, h * 2))
-        box = CoreText.CTFramesetterCreateFrame(setter, (0, 0), path, None)
-        ctLines = CoreText.CTFrameGetLines(box)
-        origins = CoreText.CTFrameGetLineOrigins(box, (0, len(ctLines)), None)
-        if origins:
-            y -= origins[0][1]
-        self.textBox(txt, (x, y, w, h * 2), align=align)
+        attributedString = self._dummyContext.attributedString(txt, align=align)
+        for subTxt, box in makeTextBoxes(attributedString, (x, y), align=align, plainText=not isinstance(txt, FormattedString)):
+            self.textBox(subTxt, box, align=align)
 
     def textOverflow(self, txt, box, align=None):
         """
@@ -1857,7 +1843,7 @@ class DrawBotDrawingTool(object):
         .. downloadcode:: image.py
 
             # the path can be a path to a file or a url
-            image("http://f.cl.ly/items/1T3x1y372J371p0v1F2Z/drawBot.jpg", (100, 100), alpha=.3)
+            image("https://d1sz9tkli0lfjq.cloudfront.net/items/1T3x1y372J371p0v1F2Z/drawBot.jpg", (100, 100), alpha=.3)
         """
         if isinstance(path, self._imageClass):
             path = path._nsImage()
@@ -1872,7 +1858,7 @@ class DrawBotDrawingTool(object):
 
         .. downloadcode:: imageSize.py
 
-            print(imageSize("http://f.cl.ly/items/1T3x1y372J371p0v1F2Z/drawBot.jpg"))
+            print(imageSize("https://d1sz9tkli0lfjq.cloudfront.net/items/1T3x1y372J371p0v1F2Z/drawBot.jpg"))
         """
         if isinstance(path, self._imageClass):
             # its an drawBot.ImageObject, just return the size from that obj
@@ -1925,7 +1911,7 @@ class DrawBotDrawingTool(object):
         .. downloadcode:: pixelColor.py
 
             # path to the image
-            path = u"http://f.cl.ly/items/1T3x1y372J371p0v1F2Z/drawBot.jpg"
+            path = u"https://d1sz9tkli0lfjq.cloudfront.net/items/1T3x1y372J371p0v1F2Z/drawBot.jpg"
 
             # get the size of the image
             w, h = imageSize(path)
