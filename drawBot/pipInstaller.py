@@ -66,7 +66,11 @@ class PipInstallerController:
         self.stdoutCallback("Enter a package name in the text field, then choose an action from the “gear” button.\n")
 
     def show(self):
-        self.w.show()
+        if self.w._window is None:
+            # We have been closed, let's start over
+            self.__init__(self.targetPath)
+        else:
+            self.w.show()
 
     def windowShouldClose(self, window):
         if self.isRunning:
