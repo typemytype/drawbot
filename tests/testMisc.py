@@ -216,6 +216,15 @@ class MiscTest(unittest.TestCase):
         self.assertEqual(drawBot.height(), 500)
         self.assertEqual(drawBot.pageCount(), 2)
 
+    def test_font_install(self):
+        fontPath = os.path.join(testDataDir, "MutatorSans.ttf")
+        drawBot.newDrawing()
+        drawBot.newPage()
+        postscriptName = drawBot.font(fontPath)
+        self.assertEqual(postscriptName, "MutatorMathTest-LightCondensed")
+        variations = drawBot.listFontVariations()
+        self.assertEqual(variations, {'wdth': {'name': 'Width', 'minValue': 0.0, 'maxValue': 1000.0, 'defaultValue': 0.0}, 'wght': {'name': 'Weight', 'minValue': 0.0, 'maxValue': 1000.0, 'defaultValue': 0.0}})
+
 
 def _roundInstanceLocations(instanceLocations):
     return {instanceName: {tag: round(value, 3) for tag, value in location.items()} for instanceName, location in instanceLocations.items()}

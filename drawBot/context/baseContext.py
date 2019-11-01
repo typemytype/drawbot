@@ -301,28 +301,16 @@ class BezierPath(BasePen):
             raise TypeError("expected 'str' or 'FormattedString', got '%s'" % type(txt).__name__)
         if align and align not in BaseContext._textAlignMap.keys():
             raise DrawBotError("align must be %s" % (", ".join(BaseContext._textAlignMap.keys())))
+
         context = BaseContext()
         context.font(font, fontSize)
-
         attributedString = context.attributedString(txt, align)
-        w, h = attributedString.size()
         if offset:
             x, y = offset
         else:
             x = y = 0
-        if align == "right":
-            x -= w
-        elif align == "center":
-            x -= w * .5
-        setter = CoreText.CTFramesetterCreateWithAttributedString(attributedString)
-        path = Quartz.CGPathCreateMutable()
-        Quartz.CGPathAddRect(path, None, Quartz.CGRectMake(x, y, w, h))
-        frame = CoreText.CTFramesetterCreateFrame(setter, (0, 0), path, None)
-        ctLines = CoreText.CTFrameGetLines(frame)
-        origins = CoreText.CTFrameGetLineOrigins(frame, (0, len(ctLines)), None)
-        if origins:
-            y -= origins[0][1]
-        self.textBox(txt, box=(x, y - h, w, h * 2), font=font, fontSize=fontSize, align=align)
+        for subTxt, box in makeTextBoxes(attributedString, (x, y), align=align, plainText=not isinstance(txt, FormattedString)):
+            self.textBox(subTxt, box, font=font, fontSize=fontSize, align=align)
 
     def textBox(self, txt, box, font=_FALLBACKFONT, fontSize=10, align=None, hyphenation=None):
         """
@@ -884,6 +872,60 @@ class Gradient(object):
         new.startRadius = self.startRadius
         new.endRadius = self.endRadius
         return new
+
+
+def makeTextBoxes(attributedString, xy, align, plainText):
+    extraPadding = 20
+    x, y = xy
+    w, h = attributedString.size()
+    w += extraPadding
+
+    if align is not None:
+        attributedString = attributedString.mutableCopy()
+        # overwrite all align settings in each paragraph style
+        def block(value, rng, stop):
+            value = value.mutableCopy()
+            value.setAlignment_(FormattedString._textAlignMap[align])
+            attributedString.addAttribute_value_range_(AppKit.NSParagraphStyleAttributeName, value, rng)
+        attributedString.enumerateAttribute_inRange_options_usingBlock_(AppKit.NSParagraphStyleAttributeName, (0, len(attributedString)), 0, block)
+
+    setter = CoreText.CTFramesetterCreateWithAttributedString(attributedString)
+    path = Quartz.CGPathCreateMutable()
+    Quartz.CGPathAddRect(path, None, Quartz.CGRectMake(x, y, w, h * 2))
+    frame = CoreText.CTFramesetterCreateFrame(setter, (0, 0), path, None)
+    ctLines = CoreText.CTFrameGetLines(frame)
+    origins = CoreText.CTFrameGetLineOrigins(frame, (0, len(ctLines)), None)
+    boxes = []
+
+    for ctLine, (originX, originY) in zip(ctLines, origins):
+        rng = CoreText.CTLineGetStringRange(ctLine)
+
+        attributedSubstring = attributedString.attributedSubstringFromRange_(rng)
+        # strip trailing returns
+        if attributedSubstring.string()[-1] in ["\n", "\r"]:
+            attributedSubstring.deleteCharactersInRange_((rng.length - 1, 1))
+        width, height = attributedSubstring.size()
+        para, _ = attributedSubstring.attribute_atIndex_effectiveRange_(AppKit.NSParagraphStyleAttributeName, 0, None)
+
+        width += extraPadding
+        originX = 0
+        if para.alignment() == AppKit.NSCenterTextAlignment:
+            originX -= width * .5
+        elif para.alignment() == AppKit.NSRightTextAlignment:
+            originX = -width
+
+        substring = FormattedString()
+        substring.getNSObject().appendAttributedString_(attributedSubstring)
+
+        if plainText:
+            substring = str(substring)
+
+        box = (x + originX, y - originY, width, h * 2)
+        boxes.append((substring, box))
+
+        y -= height * 2
+
+    return boxes
 
 
 class FormattedString(object):
