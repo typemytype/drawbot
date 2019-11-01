@@ -180,7 +180,7 @@ class PipInstallerController:
 
 def callPip(arguments, stdoutCallback, stderrCallback, resultCallback):
     arguments = [sys.executable, '-m', "pip", "--disable-pip-version-check", "--isolated"] + arguments
-    env = dict(PYTHONPATH=":".join(sys.path), PATH="/usr/bin")
+    env = dict(PYTHONPATH=":".join(sys.path), PYTHONHOME=sys.prefix, PATH="/usr/bin")
     callExternalProcess("pip", arguments, env, stdoutCallback, stderrCallback, resultCallback)
 
 
