@@ -268,7 +268,6 @@ def _getPIPTargetPath():
     return os.path.join(appSupportPath, f"DrawBot/Python{version}")
 
 
-
 def _addLocalSysPaths():
     version = f"{sys.version_info.major}.{sys.version_info.minor}"
     paths = [
