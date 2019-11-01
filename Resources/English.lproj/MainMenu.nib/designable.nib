@@ -1,8 +1,8 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="6751" systemVersion="14F27" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment version="1050" identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="6751"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14460.31"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="NSApplication"/>
@@ -321,7 +321,11 @@
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="qUE-RK-mJ3"/>
-                            <menuItem title="Install Python Packages..." id="px7-qm-8tb"/>
+                            <menuItem title="Install Python Packages..." id="px7-qm-8tb">
+                                <connections>
+                                    <action selector="showPIPInstaller:" target="-1" id="sQ1-Oa-h2M"/>
+                                </connections>
+                            </menuItem>
                         </items>
                     </menu>
                 </menuItem>

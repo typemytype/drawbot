@@ -114,10 +114,6 @@ class DrawBotAppDelegate(AppKit.NSObject):
         return self
 
     def applicationDidFinishLaunching_(self, notification):
-        # HACK to get pip menu working: I failed at setting up the correct action in XCode... TODO: remove hack, fix MainMenu.nib
-        item = AppKit.NSApp().menu().itemWithTitle_("Python").submenu().itemWithTitle_("Install Python Packages...")
-        item.setAction_("showPIPInstaller:")
-
         retrieveCheckEventQueueForUserCancelFromCarbon()
         self._debugger = DebugWindowController()
         Updater()
