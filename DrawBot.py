@@ -1,6 +1,7 @@
 import AppKit
 import sys
 import os
+import site
 
 
 def _getPIPTargetPath():
@@ -27,7 +28,6 @@ _addLocalSysPaths()
 from PyObjCTools import AppHelper
 
 import random
-import site
 
 from vanilla.dialogs import message
 
