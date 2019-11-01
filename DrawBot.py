@@ -4,6 +4,7 @@ from PyObjCTools import AppHelper
 import sys
 import os
 import random
+import site
 
 from vanilla.dialogs import message
 
@@ -113,6 +114,10 @@ class DrawBotAppDelegate(AppKit.NSObject):
         return self
 
     def applicationDidFinishLaunching_(self, notification):
+        # HACK to get pip menu working: I failed at setting up the correct action in XCode... TODO: remove hack, fix MainMenu.nib
+        item = AppKit.NSApp().menu().itemWithTitle_("Python").submenu().itemWithTitle_("Install Python Packages...")
+        item.setAction_("showPIPInstaller:")
+
         retrieveCheckEventQueueForUserCancelFromCarbon()
         self._debugger = DebugWindowController()
         Updater()
@@ -181,6 +186,13 @@ class DrawBotAppDelegate(AppKit.NSObject):
         ws = AppKit.NSWorkspace.sharedWorkspace()
         ws.openURL_(AppKit.NSURL.URLWithString_(url))
 
+    def showPIPInstaller_(self, sender):
+        if hasattr(self, "pipInstallerController"):
+            self.pipInstallerController.show()
+        else:
+            from drawBot.pipInstaller import PipInstallerController
+            self.pipInstallerController = PipInstallerController(_getPIPTargetPath())
+
     def buildPackage_(self, sender):
         DrawBotPackageController()
 
@@ -246,6 +258,28 @@ class DrawBotAppDelegate(AppKit.NSObject):
                 message("The DrawBot package '%s' failed." % fileName, report)
             return True
         return False
+
+
+def _getPIPTargetPath():
+    appSupportPath = AppKit.NSSearchPathForDirectoriesInDomains(
+            AppKit.NSApplicationSupportDirectory,
+            AppKit.NSUserDomainMask, True)[0]
+    version = f"{sys.version_info.major}.{sys.version_info.minor}"
+    return os.path.join(appSupportPath, f"DrawBot/Python{version}")
+
+
+
+def _addLocalSysPaths():
+    version = f"{sys.version_info.major}.{sys.version_info.minor}"
+    paths = [
+        _getPIPTargetPath(),
+        '/Library/Python/%s/site-packages' % version,
+    ]
+    for path in paths:
+        if path not in sys.path and os.path.exists(path):
+            site.addsitedir(path)
+
+_addLocalSysPaths()
 
 
 if __name__ == "__main__":
