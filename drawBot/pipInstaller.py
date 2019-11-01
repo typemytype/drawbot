@@ -15,7 +15,7 @@ class MyActionButton(ActionButton):
     def __init__(self, posSize, items, *args, **kwargs):
         super().__init__(posSize, items, *args, **kwargs)
         self._nsObject.setAutoenablesItems_(False)
-        self.menuItemIndices = {item["name"]: index + 1for index, item in enumerate(items)}
+        self.menuItemIndices = {item["name"]: index + 1 for index, item in enumerate(items)}
         separatorIndices = [index + 1 for index, item in enumerate(items) if not item["title"]]
         menu = self._nsObject.menu()
         for index in separatorIndices:
