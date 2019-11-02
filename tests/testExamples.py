@@ -179,7 +179,7 @@ def _addExampleTests():
         if testMethodName in expectedFailures:
             testMethod = unittest.expectedFailure(testMethod)
         if testMethodName in skip:
-            testMethod = unittest.skip(testMethod)
+            testMethod = unittest.skip("manual skip")(testMethod)
         setattr(ExampleTester, testMethodName, testMethod)
 
 _addExampleTests()
