@@ -55,7 +55,7 @@ class PipInstallerController:
         self.w.open()
 
         self.w.bind("should close", self.windowShouldClose)
-        self.stdoutCallback(welcomeText)
+        self.stdoutWrite(welcomeText)
 
     def show(self):
         if self.w._window is None:
@@ -120,7 +120,7 @@ class PipInstallerController:
             outputLines.append(data)
         def doneShowCallback(resultCode):
             if resultCode != 0:
-                self.stderrCallback("".join(outputLines))
+                self.stderrWrite("".join(outputLines))
                 self.setResultCode(resultCode)
                 self.isRunning = False
                 return
@@ -139,9 +139,9 @@ class PipInstallerController:
             packageNamesBad = [name for name in packageNames if name in packages and packages[name] != self.targetPath]
             packageNamesGood = [name for name in packageNames if name in packages and packages[name] == self.targetPath]
             for name in packageNamesNotFound:
-                self.stderrCallback(f"Skipping {name} as it is not installed\n")
+                self.stderrWrite(f"Skipping {name} as it is not installed\n")
             for name in packageNamesBad:
-                self.stderrCallback(f"Skipping {name} as it is not installed in {self.targetPath}\n")
+                self.stderrWrite(f"Skipping {name} as it is not installed in {self.targetPath}\n")
             if packageNamesGood:
                 self.callPip(["uninstall", "-y"] + extraArguments + packageNamesGood, clearOutput=False)
             else:
@@ -165,13 +165,13 @@ class PipInstallerController:
             self.w.outputField.clear()
         self.isRunning = True
         self.setResultCode("--")
-        callPip(arguments, self.stdoutCallback, self.stderrCallback, self.resultCallback)
+        callPip(arguments, self.stdoutWrite, self.stderrWrite, self.resultCallback)
 
-    def stdoutCallback(self, data):
+    def stdoutWrite(self, data):
         self.w.outputField.append(data)
         self.w.outputField.scrollToEnd()
 
-    def stderrCallback(self, data):
+    def stderrWrite(self, data):
         self.w.outputField.append(data, isError=True)
         self.w.outputField.scrollToEnd()
 
@@ -179,7 +179,7 @@ class PipInstallerController:
         self.setResultCode(resultCode)
         self.isRunning = False
         if resultCode == 23:  # special pip error code
-            self.stdoutCallback("No results.\n")
+            self.stdoutWrite("No results.\n")
 
     def setResultCode(self, resultCode):
         self.w.resultCodeField.set(f"pip result code: {resultCode}")
