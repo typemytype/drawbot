@@ -6,10 +6,13 @@ import sys
 import glob
 import traceback
 import warnings
+import platform
+from distutils.version import StrictVersion
 from testSupport import StdOutCollector, randomSeed, testRootDir, tempTestDataDir, testDataDir, readData, compareImages
 
 
 drawBotScriptDir = os.path.join(testRootDir, "drawBotScripts")
+macOSVersion = StrictVersion(platform.mac_ver()[0])
 
 
 class DrawBotTest(unittest.TestCase):
@@ -209,7 +212,15 @@ skipTests = {
     "test_svg_image4",  # ditto.
     "test_svg_fontPath",  # no fonts embedded into svg and no var support (yet)
 }
+
+conditionalSkip = {
+    "test_svg_text2": (macOSVersion < "10.13", "text as path comes out differently on 10.10"),
+    "test_pdf_fontPath": (macOSVersion < "10.13", "text as path comes out differently on 10.10"),
+    "test_png_fontPath": (macOSVersion < "10.13", "text as path comes out differently on 10.10"),
+}
+
 expectedFailures = {}
+
 ignoreDeprecationWarnings = {
     # there are some pesky PyObjC warnings that interfere with our stdout/stderr capturing,
     # like: 'DeprecationWarning: Using struct wrapper as sequence'
@@ -243,7 +254,9 @@ def _addTests():
             if testMethodName in expectedFailures:
                 testMethod = unittest.expectedFailure(testMethod)
             if testMethodName in skipTests:
-                testMethod = unittest.skip(testMethod)
+                testMethod = unittest.skip("manual skip")(testMethod)
+            if testMethodName in conditionalSkip:
+                testMethod = unittest.skipIf(*conditionalSkip[testMethodName])(testMethod)
             setattr(DrawBotTest, testMethodName, testMethod)
 
 _addTests()
