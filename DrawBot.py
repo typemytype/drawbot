@@ -1,10 +1,9 @@
 import AppKit
+from PyObjCTools import AppHelper
+
 import sys
 import os
 import site
-
-from PyObjCTools import AppHelper
-
 import random
 
 from vanilla.dialogs import message
