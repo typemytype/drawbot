@@ -91,7 +91,11 @@ class PipInstallerController:
         self.w.goButton.enable(not onoff)
 
     def getUserArguments(self):
-        return shlex.split(self.w.textEntry.get())
+        try:
+            return shlex.split(self.w.textEntry.get())
+        except ValueError:
+            # shlex syntax error: ignore and return the entire string as a single argument
+            return [self.w.textEntry.get()]
 
     def goButtonCallback(self, sender):
         commandName = self.pipCommandNames[self.w.pipCommandsButton.get()]
