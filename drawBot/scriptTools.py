@@ -3,7 +3,6 @@ import time
 import os
 import sys
 import traceback
-import site
 import re
 import warnings
 from signal import SIGINT
@@ -75,24 +74,6 @@ class StdOutput(object):
 
     def close(self):
         pass
-
-
-def _addLocalSysPaths():
-    version = "%s.%s" % (sys.version_info.major, sys.version_info.minor)
-    paths = [
-        # add local stdlib and site-packages; TODO: this needs editing once we embed the full stdlib
-        '/Library/Frameworks/Python.framework/Versions/%s/lib/python%s' % (version, version),
-        '/Library/Frameworks/Python.framework/Versions/%s/lib/python%s/lib-dynload' % (version, version),
-        '/Library/Frameworks/Python.framework/Versions/%s/lib/python%s/site-packages' % (version, version),
-    ]
-
-    paths.append('/Library/Python/%s/site-packages' % version)
-
-    for path in paths:
-        if path not in sys.path and os.path.exists(path):
-            site.addsitedir(path)
-
-_addLocalSysPaths()
 
 
 class _Helper(object):
