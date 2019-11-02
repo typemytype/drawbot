@@ -25,7 +25,7 @@ class PipInstallerController:
         self.targetPath = targetPath
         self._isRunning = False
 
-        y = 15
+        y = 12
         self.w = Window((640, 300), "Install Python Packages", 
                 minSize=(640, 300), autosaveName="PipInstaller")
 
@@ -33,12 +33,12 @@ class PipInstallerController:
         self.pipCommandNames = [f"pip{re.sub(r'[ /]', '', item)}Command" for item in items]
         self.w.pipCommandsButton = PopUpButton((15, y, 140, 25), items)
         self.w.pipCommandsButton.getNSPopUpButton().setBezelStyle_(AppKit.NSBezelStyleTexturedRounded)        
-        self.w.textEntry = EditText((170, y, -175, 25), placeholder="Enter one or more package names",
+        self.w.textEntry = EditText((170, y, -165, 25), placeholder="Enter one or more package names",
                 callback=self.textEntryCallback)
-        self.w.goButton = Button((-160, y, 50, 25), "Go!", callback=self.goButtonCallback)
+        self.w.goButton = Button((-150, y, 50, 25), "Go!", callback=self.goButtonCallback)
         self.w.goButton.enable(False)
         self.w.setDefaultButton(self.w.goButton)
-        self.w.progressSpinner = ProgressSpinner((-100, y, 25, 25))
+        self.w.progressSpinner = ProgressSpinner((-90, y, 25, 25))
 
         items = [
             dict(name="list", title="List Installed Packages", callback=self.pipListCallback),
@@ -46,7 +46,7 @@ class PipInstallerController:
             "----",
             dict(name="revealInstallFolder", title="Reveal Install Folder in Finder", callback=self.revealInstallFolderCallback),
         ]
-        self.w.extraActionButton = ActionButton((-60, y, 40, 25), items)
+        self.w.extraActionButton = ActionButton((-50, y, 35, 25), items)
         y += 35
 
         self.w.outputField = OutputEditor((0, y, -0, -20), readOnly=True)
