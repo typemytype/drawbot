@@ -50,7 +50,7 @@ class PipInstallerController:
         y += 35
 
         self.w.outputField = OutputEditor((0, y, -0, -20), readOnly=True)
-        self.w.resultcodeField = TextBox((10, -18, 200, 0), "", sizeStyle="small")
+        self.w.resultCodeField = TextBox((10, -18, 200, 0), "", sizeStyle="small")
 
         self.w.open()
 
@@ -118,9 +118,10 @@ class PipInstallerController:
         outputLines = []
         def collectOutput(data):
             outputLines.append(data)
-        def doneShowCallback(resultcode):
-            if resultcode != 0:
+        def doneShowCallback(resultCode):
+            if resultCode != 0:
                 self.stderrCallback("".join(outputLines))
+                self.setResultCode(resultCode)
                 self.isRunning = False
                 return
             packages = {}
@@ -174,14 +175,14 @@ class PipInstallerController:
         self.w.outputField.append(data, isError=True)
         self.w.outputField.scrollToEnd()
 
-    def resultCallback(self, resultcode):
-        self.setResultCode(resultcode)
+    def resultCallback(self, resultCode):
+        self.setResultCode(resultCode)
         self.isRunning = False
-        if resultcode == 23:  # special pip error code
+        if resultCode == 23:  # special pip error code
             self.stdoutCallback("No results.\n")
 
-    def setResultCode(self, resultcode):
-        self.w.resultcodeField.set(f"pip result code: {resultcode}")
+    def setResultCode(self, resultCode):
+        self.w.resultCodeField.set(f"pip result code: {resultCode}")
 
 
 def callPip(arguments, stdoutCallback, stderrCallback, resultCallback):
