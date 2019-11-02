@@ -210,7 +210,7 @@ def _testTimeout():
 def callExternalProcess(name, arguments, env, stdoutCallback, stderrCallback, resultCallback, timeout=15):
     def worker():
         process = subprocess.Popen(arguments, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
-                                   env=env, encoding="utf-8")
+                                   env=env, encoding="utf-8", bufsize=1)
         readers = [process.stdout, process.stderr]
         while readers:
             readyReaders, _, _ = select.select(readers, [], [], timeout)
