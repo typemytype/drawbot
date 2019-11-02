@@ -25,7 +25,8 @@ class PipInstallerController:
         self.targetPath = targetPath
         self._isRunning = False
 
-        self.w = Window((640, 300), minSize=(640, 300), autosaveName="PipInstaller")
+        self.w = Window((640, 300),  "Install Python Packages",
+                minSize=(640, 300), autosaveName="PipInstaller")
         # Fake empty toolbar, so we get a Safari-like appearance
         self.w.getNSWindow().setTitlebarAppearsTransparent_(True)
         self.w.getNSWindow().setTitleVisibility_(True)
@@ -39,6 +40,7 @@ class PipInstallerController:
         self.w.pipCommandsButton.getNSPopUpButton().setBezelStyle_(AppKit.NSBezelStyleTexturedRounded)        
         self.w.textEntry = EditText((234, y+2, -152, 21), placeholder="Enter one or more package names",
                 callback=self.textEntryCallback)
+        self.w.textEntry._nsObject.setBezelStyle_(AppKit.NSTextFieldRoundedBezel)
         self.w.goButton = Button((-142, y+2, 50, 21), "Go!", callback=self.goButtonCallback)
         self.w.goButton.enable(False)
         self.w.setDefaultButton(self.w.goButton)
