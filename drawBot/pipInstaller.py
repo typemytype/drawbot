@@ -25,20 +25,24 @@ class PipInstallerController:
         self.targetPath = targetPath
         self._isRunning = False
 
-        y = 12
-        self.w = Window((640, 300), "Install Python Packages", 
-                minSize=(640, 300), autosaveName="PipInstaller")
+        self.w = Window((640, 300), minSize=(640, 300), autosaveName="PipInstaller")
+        # Fake empty toolbar, so we get a Safari-like appearance
+        self.w.getNSWindow().setTitlebarAppearsTransparent_(True)
+        self.w.getNSWindow().setTitleVisibility_(True)
+        self.w.getNSWindow().setStyleMask_(self.w.getNSWindow().styleMask() | AppKit.NSWindowStyleMaskFullSizeContentView)
+        self.w.getNSWindow().setToolbar_(AppKit.NSToolbar.alloc().initWithIdentifier_("PipEmptyToolbar"))
 
+        y = 7
         items = ["Search PyPI", "Install / Upgrade", "Uninstall", "Show Package Info"]
         self.pipCommandNames = [f"pip{re.sub(r'[ /]', '', item)}Command" for item in items]
-        self.w.pipCommandsButton = PopUpButton((15, y, 140, 25), items)
+        self.w.pipCommandsButton = PopUpButton((80, y+1, 140, 22), items)
         self.w.pipCommandsButton.getNSPopUpButton().setBezelStyle_(AppKit.NSBezelStyleTexturedRounded)        
-        self.w.textEntry = EditText((170, y, -165, 25), placeholder="Enter one or more package names",
+        self.w.textEntry = EditText((234, y+2, -152, 21), placeholder="Enter one or more package names",
                 callback=self.textEntryCallback)
-        self.w.goButton = Button((-150, y, 50, 25), "Go!", callback=self.goButtonCallback)
+        self.w.goButton = Button((-142, y+2, 50, 21), "Go!", callback=self.goButtonCallback)
         self.w.goButton.enable(False)
         self.w.setDefaultButton(self.w.goButton)
-        self.w.progressSpinner = ProgressSpinner((-90, y, 25, 25))
+        self.w.progressSpinner = ProgressSpinner((-82, y+3, 18, 18))
 
         items = [
             dict(name="list", title="List Installed Packages", callback=self.pipListCallback),
@@ -47,7 +51,7 @@ class PipInstallerController:
             dict(name="revealInstallFolder", title="Reveal Install Folder in Finder", callback=self.revealInstallFolderCallback),
         ]
         self.w.extraActionButton = ActionButton((-50, y, 35, 25), items)
-        y += 35
+        y += 30
 
         self.w.outputField = OutputEditor((0, y, -0, -20), readOnly=True)
         self.w.resultCodeField = TextBox((10, -18, 200, 0), "", sizeStyle="small")
