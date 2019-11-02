@@ -39,9 +39,9 @@ class PDFContext(BaseContext):
         self.size(width, height)
         mediaBox = Quartz.CGRectMake(0, 0, self.width, self.height)
 
+        # reset the context
+        self.reset()
         if self._hasContext:
-            # reset the context
-            self.reset()
             # add a new page
             Quartz.CGContextEndPage(self._pdfContext)
             Quartz.CGContextBeginPage(self._pdfContext, mediaBox)
