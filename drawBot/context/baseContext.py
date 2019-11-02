@@ -1648,6 +1648,8 @@ class FormattedString(object):
     def language(self, language):
         """
         Set the preferred language as language tag or None to use the default language.
+
+        `language()` will activate the `locl` OpenType features, if supported by the current font.
         """
         self._language = language
 
