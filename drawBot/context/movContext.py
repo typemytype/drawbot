@@ -3,10 +3,10 @@ import Quartz
 import os
 
 from ..misc import DrawBotError, warnings
-from ..osVersion import osVersion
+from ..macOSVersion import macOSVersion
 from .pdfContext import PDFContext
 
-if osVersion >= "10.15":
+if macOSVersion >= "10.15":
     # QTKit is being deprecated
     QTKit = None
 else:

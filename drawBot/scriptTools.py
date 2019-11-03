@@ -10,7 +10,7 @@ import ctypes
 from ctypes.util import find_library
 import threading
 from .misc import getDefault
-from .osVersion import osVersion
+from .macOSVersion import macOSVersion
 from objc import super
 
 
@@ -55,7 +55,7 @@ class StdOutput(object):
                 t = time.time()
                 if t - self._previousFlush > 0.2:
                     self.outputView.scrollToEnd()
-                    if osVersion >= "10.10":
+                    if macOSVersion >= "10.10":
                         AppKit.NSRunLoop.mainRunLoop().runUntilDate_(AppKit.NSDate.dateWithTimeIntervalSinceNow_(0.0001))
                     self._previousFlush = t
         else:
