@@ -186,7 +186,6 @@ setup(
                 'ufo2svg',
                 'fontPens',
                 'booleanOperations',
-                'uharfbuzz',
                 # 'pyclipper',
                 'pygments',
                 'jedi',
