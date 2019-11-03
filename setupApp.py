@@ -186,7 +186,6 @@ setup(
                 'ufo2svg',
                 'fontPens',
                 'booleanOperations',
-                'uharfbuzz',
                 # 'pyclipper',
                 'pygments',
                 'jedi',
@@ -195,6 +194,7 @@ setup(
                 # 'xml'
                 'pkg_resources',
                 'parso',
+                'pip',
             ],
             includes=[
                 # 'csv',

@@ -748,6 +748,8 @@ class CodeNSTextView(AppKit.NSTextView):
     def insertNewline_(self, sender):
         selectedRange = self.selectedRange()
         super(CodeNSTextView, self).insertNewline_(sender)
+        if self.lexer() is None:
+            return
         languageData = self.languagesIDEBehaviorForLanguage_(self.lexer().name)
         if languageData:
             leadingSpace = ""
@@ -763,6 +765,9 @@ class CodeNSTextView(AppKit.NSTextView):
                 self.insertText_(leadingSpace)
 
     def deleteBackward_(self, sender):
+        if self.lexer() is None:
+            super(CodeNSTextView, self).deleteBackward_(sender)
+            return
         languageData = self.languagesIDEBehaviorForLanguage_(self.lexer().name)
         if languageData:
             selectedRange = self.selectedRange()

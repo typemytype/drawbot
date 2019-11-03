@@ -60,7 +60,7 @@ def _explodeGif(path):
     files = os.listdir(destRoot)
     _explodedGifCache[path] = dict(
         source=destRoot,
-        fileNames=files,
+        fileNames=sorted(files),
     )
 
 

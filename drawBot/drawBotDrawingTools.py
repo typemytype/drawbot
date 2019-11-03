@@ -1467,6 +1467,8 @@ class DrawBotDrawingTool(object):
 
         Support is depending on local OS.
 
+        `language()` will activate the `locl` OpenType features, if supported by the current font.
+
         .. downloadcode:: language.py
 
             size(1000, 600)

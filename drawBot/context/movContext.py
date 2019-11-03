@@ -1,11 +1,16 @@
 import AppKit
-import QTKit
 import Quartz
-
 import os
 
-from drawBot.misc import DrawBotError, warnings
+from ..misc import DrawBotError, warnings
+from ..macOSVersion import macOSVersion
 from .pdfContext import PDFContext
+
+if macOSVersion >= "10.15":
+    # QTKit is being deprecated
+    QTKit = None
+else:
+    import QTKit
 
 
 class MOVContext(PDFContext):
@@ -13,15 +18,18 @@ class MOVContext(PDFContext):
     fileExtensions = ["mov"]
     saveImageOptions = []
 
-    _saveMovieAttributes = {
-        QTKit.QTAddImageCodecType: "png "
-    }
+    if QTKit is not None:
+        _saveMovieAttributes = {
+            QTKit.QTAddImageCodecType: "png "
+        }
 
     _frameLength = 3000
     _frameScale = 30000
 
     def __init__(self):
         super(MOVContext, self).__init__()
+        if QTKit is None:
+            raise DrawBotError("Export to '.mov' was deprecated and is not supported on this system (10.15 and up). Use .mp4 instead.")
         self._frameDurationData = []
 
     def _newPage(self, width, height):
@@ -39,7 +47,7 @@ class MOVContext(PDFContext):
     def _writeDataToFile(self, data, path, options):
         if os.path.exists(path):
             os.remove(path)
-        warnings.warn("export to '.mov' is deprecated, use '.mp4' instead.")
+        warnings.warn("Export to '.mov' is deprecated, use '.mp4' instead.")
         movie, error = QTKit.QTMovie.alloc().initToWritableFile_error_(path, None)
         if error:
             raise DrawBotError("Could not create a quick time movie, %s" % error.localizedDescription())
