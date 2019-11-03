@@ -6,13 +6,11 @@ import sys
 import glob
 import traceback
 import warnings
-import platform
-from distutils.version import StrictVersion
+from drawBot.macOSVersion import macOSVersion
 from testSupport import StdOutCollector, randomSeed, testRootDir, tempTestDataDir, testDataDir, readData, compareImages
 
 
 drawBotScriptDir = os.path.join(testRootDir, "drawBotScripts")
-macOSVersion = StrictVersion(platform.mac_ver()[0])
 
 
 class DrawBotTest(unittest.TestCase):

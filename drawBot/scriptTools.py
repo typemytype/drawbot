@@ -9,13 +9,9 @@ from signal import SIGINT
 import ctypes
 from ctypes.util import find_library
 import threading
-from distutils.version import StrictVersion
-import platform
-from drawBot.misc import getDefault
+from .misc import getDefault
+from .macOSVersion import macOSVersion
 from objc import super
-
-osVersionCurrent = StrictVersion(platform.mac_ver()[0])
-osVersion10_10 = StrictVersion("10.10")
 
 
 # Pulling in CheckEventQueueForUserCancel from Carbon.framework
@@ -59,7 +55,7 @@ class StdOutput(object):
                 t = time.time()
                 if t - self._previousFlush > 0.2:
                     self.outputView.scrollToEnd()
-                    if osVersionCurrent >= osVersion10_10:
+                    if macOSVersion >= "10.10":
                         AppKit.NSRunLoop.mainRunLoop().runUntilDate_(AppKit.NSDate.dateWithTimeIntervalSinceNow_(0.0001))
                     self._previousFlush = t
         else:
