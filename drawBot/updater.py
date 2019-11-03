@@ -4,10 +4,12 @@ import subprocess
 import plistlib
 import AppKit
 import re
+import traceback
 
 from distutils.version import StrictVersion
 
 import vanilla
+from vanilla.dialogs import message
 from defconAppKit.windows.progressWindow import ProgressWindow
 
 from drawBot import __version__
@@ -56,7 +58,7 @@ def downloadCurrentVersion():
         out, err = popen.communicate()
         if popen.returncode != 0:
             raise DrawBotError("Mounting failed")
-        output = plistlib.readPlistFromString(out)
+        output = plistlib.loads(out)
         dmgPath = None
         for item in output["system-entities"]:
             if "mount-point" in item:
@@ -64,7 +66,8 @@ def downloadCurrentVersion():
                 break
         AppKit.NSWorkspace.sharedWorkspace().openFile_(dmgPath)
     except:
-        print("Something went wrong while downloading %s" % path)
+        exc = traceback.format_exc()
+        message("Something went wrong while downloading %s" % path, exc)
 
 
 class Updater(object):
