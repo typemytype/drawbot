@@ -6,13 +6,11 @@ import sys
 import glob
 import traceback
 import warnings
-import platform
-from distutils.version import StrictVersion
+from drawBot.osVersion import osVersion
 from testSupport import StdOutCollector, randomSeed, testRootDir, tempTestDataDir, testDataDir, readData, compareImages
 
 
 drawBotScriptDir = os.path.join(testRootDir, "drawBotScripts")
-macOSVersion = StrictVersion(platform.mac_ver()[0])
 
 
 class DrawBotTest(unittest.TestCase):
@@ -214,9 +212,9 @@ skipTests = {
 }
 
 conditionalSkip = {
-    "test_svg_text2": (macOSVersion < "10.13", "text as path comes out differently on 10.10"),
-    "test_pdf_fontPath": (macOSVersion < "10.13", "text as path comes out differently on 10.10"),
-    "test_png_fontPath": (macOSVersion < "10.13", "text as path comes out differently on 10.10"),
+    "test_svg_text2": (osVersion < "10.13", "text as path comes out differently on 10.10"),
+    "test_pdf_fontPath": (osVersion < "10.13", "text as path comes out differently on 10.10"),
+    "test_png_fontPath": (osVersion < "10.13", "text as path comes out differently on 10.10"),
 }
 
 expectedFailures = {}

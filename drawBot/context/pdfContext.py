@@ -1,5 +1,3 @@
-import platform
-from distutils.version import StrictVersion
 import AppKit
 import CoreText
 import Quartz
@@ -7,12 +5,8 @@ import Quartz
 from .tools import gifTools
 
 from .baseContext import BaseContext, FormattedString
-from drawBot.misc import DrawBotError, isPDF, isGIF
-
-
-osVersionCurrent = StrictVersion(platform.mac_ver()[0])
-osVersion10_11 = StrictVersion("10.11")
-osVersion10_13 = StrictVersion("10.13")
+from ..misc import DrawBotError, isPDF, isGIF
+from ..osVersion import osVersion
 
 
 def sendPDFtoPrinter(pdfDocument):
@@ -207,7 +201,7 @@ class PDFContext(BaseContext):
                         Quartz.CGContextSetLineJoin(self._pdfContext, self._state.lineJoin)
                 if fillColor is not None and strokeColor is not None:
                     drawingMode = Quartz.kCGTextFillStroke
-                    if osVersionCurrent >= osVersion10_11 and osVersion10_11 < osVersion10_13:
+                    if osVersion >= "10.11" and osVersion < "10.13":
                         # solve bug in OSX where the stroke color is the same as the fill color
                         # simple solution: draw it twice...
                         drawingMode = Quartz.kCGTextFill
