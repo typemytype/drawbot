@@ -2,12 +2,13 @@ import AppKit
 import Quartz
 from distutils.version import StrictVersion
 
+import platform
 import os
 
-from drawBot.scriptTools import osVersionCurrent
 from drawBot.misc import DrawBotError, warnings
 from .pdfContext import PDFContext
 
+osVersionCurrent = StrictVersion(platform.mac_ver()[0])
 if osVersionCurrent >= StrictVersion("10.15"):
     # QTKit is being deprecated
     QTKit = None
