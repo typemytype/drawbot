@@ -345,6 +345,17 @@
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="92"/>
+                            <menuItem title="Zoom In" keyEquivalent="+" id="3NM-vm-77p">
+                                <connections>
+                                    <action selector="zoomIn:" target="-1" id="Vlx-DC-oWw"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Zoom Out" keyEquivalent="-" id="j68-Rs-dwg">
+                                <connections>
+                                    <action selector="zoomOut:" target="-1" id="XYb-Qf-BI1"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="Jwz-XY-R7g"/>
                             <menuItem title="Bring All to Front" id="5">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
