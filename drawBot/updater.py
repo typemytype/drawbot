@@ -10,7 +10,6 @@ from distutils.version import StrictVersion
 
 import vanilla
 from vanilla.dialogs import message
-
 from defconAppKit.windows.progressWindow import ProgressWindow
 
 from drawBot import __version__
