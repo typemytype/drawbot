@@ -1184,7 +1184,10 @@ class FormattedString(object):
             # Supply a negative value for NSStrokeWidthAttributeName
             # when you wish to draw a string that is both filled and stroked.
             # see https://developer.apple.com/library/content/qa/qa1531/_index.html
-            attributes[AppKit.NSStrokeWidthAttributeName] = -abs(self._strokeWidth)
+            # The stroke weight scales with the font size, where it matches the value
+            # at 100 points. Our value should not scale with the font size, so we
+            # compensate by multiplying by 100 and dividing by the font size.
+            attributes[AppKit.NSStrokeWidthAttributeName] = -abs(100 * self._strokeWidth / self._fontSize)
         para = AppKit.NSMutableParagraphStyle.alloc().init()
         if self._align:
             para.setAlignment_(self._textAlignMap[self._align])
