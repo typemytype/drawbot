@@ -48,7 +48,6 @@ class PipInstallerController:
 
         items = [
             dict(name="list", title="List Our Installed Packages (pip freeze)", callback=self.pipFreezeCallback),
-            dict(name="list", title="List All Installed Packages (pip list)", callback=self.pipListCallback),
             dict(name="showPipVersion", title="Show Pip Version (pip --version)", callback=self.pipVersionCallback),
             "----",
             dict(name="revealInstallFolder", title="Reveal Install Folder in Finder", callback=self.revealInstallFolderCallback),
@@ -119,9 +118,6 @@ class PipInstallerController:
 
     def pipShowPackageInfoCommand(self, userArguments):
         self.callPip(["show"] + userArguments)
-
-    def pipListCallback(self, sender):
-        self.callPip(["list"])
 
     def pipFreezeCallback(self, sender):
         self.callPip(["freeze", "--path", self.targetPath])
