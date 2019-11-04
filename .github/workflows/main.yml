@@ -30,10 +30,20 @@ jobs:
         python -m pip install .
         python -m pip install codecov
     - name: Run tests
-      run: coverage run ./tests/runAllTests.py      
-    - name: Storing artifacts
+      run: coverage run ./tests/runAllTests.py
+    - name: Storing Test Data Artifacts
       if: failure()
       uses: actions/upload-artifact@master
       with:
         name: DrawBot Temp Data Results
         path: ./tests/tempTestData
+    - name: Building Test Differences
+      if: failure()
+      run: python ./test/testDataDifferenceBuilder.py ./tests/tempTestData ./testDifferences.pdf
+    - name: Storing Test Differences
+      if: failure()
+      uses: actions/upload-artifact@master
+      with:
+        name: DrawBot Test Differences
+        path: ./testDifferences.pdf
+
