@@ -47,10 +47,10 @@ class PipInstallerController:
         self.w.progressSpinner = ProgressSpinner((-82, y+3, 18, 18))
 
         items = [
-            dict(name="list", title="List Our Installed Packages (pip freeze)", callback=self.pipFreezeCallback),
-            dict(name="showPipVersion", title="Show Pip Version (pip --version)", callback=self.pipVersionCallback),
+            dict(title="List Our Installed Packages (pip freeze)", callback=self.pipFreezeCallback),
+            dict(title="Show Pip Version (pip --version)", callback=self.pipVersionCallback),
             "----",
-            dict(name="revealInstallFolder", title="Reveal Install Folder in Finder", callback=self.revealInstallFolderCallback),
+            dict(title="Reveal Install Folder in Finder", callback=self.revealInstallFolderCallback),
         ]
         self.w.extraActionButton = ActionButton((-50, y, 35, 25), items)
         y += 30
