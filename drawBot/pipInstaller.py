@@ -47,10 +47,10 @@ class PipInstallerController:
         self.w.progressSpinner = ProgressSpinner((-82, y+3, 18, 18))
 
         items = [
-            dict(name="list", title="List Installed Packages", callback=self.pipListCallback),
-            dict(name="showPipVersion", title="Show Pip Version", callback=self.pipVersionCallback),
+            dict(title="List Our Installed Packages (pip freeze)", callback=self.pipFreezeCallback),
+            dict(title="Show Pip Version (pip --version)", callback=self.pipVersionCallback),
             "----",
-            dict(name="revealInstallFolder", title="Reveal Install Folder in Finder", callback=self.revealInstallFolderCallback),
+            dict(title="Reveal Install Folder in Finder", callback=self.revealInstallFolderCallback),
         ]
         self.w.extraActionButton = ActionButton((-50, y, 35, 25), items)
         y += 30
@@ -119,8 +119,8 @@ class PipInstallerController:
     def pipShowPackageInfoCommand(self, userArguments):
         self.callPip(["show"] + userArguments)
 
-    def pipListCallback(self, sender):
-        self.callPip(["list"])
+    def pipFreezeCallback(self, sender):
+        self.callPip(["freeze", "--path", self.targetPath])
 
     def pipUninstallCommand(self, userArguments):
         packageNames = [arg.lower() for arg in userArguments if not arg.startswith("-")]

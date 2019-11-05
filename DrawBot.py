@@ -268,7 +268,8 @@ def _addLocalSysPaths():
     version = f"{sys.version_info.major}.{sys.version_info.minor}"
     paths = [
         _getPIPTargetPath(),
-        '/Library/Python/%s/site-packages' % version,
+        f'/Library/Python/{version}/site-packages',
+        f'/Library/Frameworks/Python.framework/Versions/{version}/lib/python{version}/site-packages/',
     ]
     for path in paths:
         if path not in sys.path and os.path.exists(path):
