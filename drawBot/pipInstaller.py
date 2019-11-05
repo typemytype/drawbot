@@ -28,36 +28,72 @@ class PipInstallerController:
         self.w = Window((640, 300),  "Install Python Packages",
                 minSize=(640, 300), autosaveName="PipInstaller")
         # Fake empty toolbar, so we get a Safari-like appearance
-        self.w.getNSWindow().setTitlebarAppearsTransparent_(True)
         self.w.getNSWindow().setTitleVisibility_(True)
-        self.w.getNSWindow().setStyleMask_(self.w.getNSWindow().styleMask() | AppKit.NSWindowStyleMaskFullSizeContentView)
-        self.w.getNSWindow().setToolbar_(AppKit.NSToolbar.alloc().initWithIdentifier_("PipEmptyToolbar"))
 
         y = 7
         items = ["Search PyPI", "Install / Upgrade", "Uninstall", "Show Package Info"]
         self.pipCommandNames = [f"pip{re.sub(r'[ /]', '', item)}Command" for item in items]
-        self.w.pipCommandsButton = PopUpButton((80, y+1, 140, 22), items)
-        self.w.pipCommandsButton.getNSPopUpButton().setBezelStyle_(AppKit.NSBezelStyleTexturedRounded)        
-        self.w.textEntry = EditText((234, y+2, -152, 21), placeholder="Enter one or more package names",
-                callback=self.textEntryCallback)
-        self.w.textEntry._nsObject.setBezelStyle_(AppKit.NSTextFieldRoundedBezel)
-        self.w.goButton = Button((-142, y+2, 50, 21), "Go!", callback=self.goButtonCallback)
-        self.w.goButton.enable(False)
-        self.w.setDefaultButton(self.w.goButton)
-        self.w.progressSpinner = ProgressSpinner((-82, y+3, 18, 18))
-
+        self.pipCommandsButton = PopUpButton((0, 0, 0, 0), items)
+        self.pipCommandsButton.getNSPopUpButton().setBezelStyle_(AppKit.NSBezelStyleTexturedRounded)        
+        self.pipCommandsButton.getNSPopUpButton().setFrame_((((0, 0), (140, 35))))
+        
+        self.textEntry = EditText((0, 0, 0, 0), 
+                placeholder="Enter one or more package names",
+                callback=self.textEntryCallback
+            )
+        self.textEntry.getNSTextField().setBezelStyle_(AppKit.NSTextFieldRoundedBezel)
+        self.textEntry.getNSTextField().setFrame_((((0, 0), (200, 35))))
+        
+        self.goButton = Button((0, 0, 0, 0), "Go!", callback=self.goButtonCallback)
+        self.goButton.enable(False)
+        self.goButton.getNSButton().setFrame_((((0, 0), (50, 35))))
+        
         items = [
             dict(title="List Our Installed Packages (pip freeze)", callback=self.pipFreezeCallback),
             dict(title="Show Pip Version (pip --version)", callback=self.pipVersionCallback),
             "----",
             dict(title="Reveal Install Folder in Finder", callback=self.revealInstallFolderCallback),
         ]
-        self.w.extraActionButton = ActionButton((-50, y, 35, 25), items)
-        y += 30
-
-        self.w.outputField = OutputEditor((0, y, -0, -20), readOnly=True)
+        self.extraActionButton = ActionButton((0, 0, 0, 0), items)
+        self.extraActionButton.getNSPopUpButton().setFrame_((((0, 0), (40, 35))))
+        
+        self.progressSpinner = ProgressSpinner((0, 0, 0, 0))
+        self.progressSpinner.getNSProgressIndicator().setFrame_((((0, 0), (20, 20))))
+        
+        toolbarItems = [
+            dict(itemIdentifier="pipCommands",
+                 label="Pip Commands",
+                 view=self.pipCommandsButton.getNSPopUpButton(),
+             ),             
+             dict(itemIdentifier="pipTextEntry",
+                 label="Pip",
+                 view=self.textEntry.getNSTextField(),
+             ),
+             dict(itemIdentifier="pipGo",
+                 label="Pip",
+                 view=self.goButton.getNSButton(),
+             ),
+             dict(itemIdentifier="pipSpinner",
+                 label="Pip",
+                 view=self.progressSpinner.getNSProgressIndicator(),
+             ),             
+             dict(itemIdentifier="pipExtraActions",
+                 label="Pip Actions",
+                 view=self.extraActionButton.getNSPopUpButton(),
+             )
+        ]
+        
+        items = self.w.addToolbar(toolbarIdentifier="PipInstallerToolbar", toolbarItems=toolbarItems, addStandardItems=False)
+        
+        items["pipTextEntry"].setMinSize_((150, 22))
+        items["pipTextEntry"].setMaxSize_((1000, 22))
+        
+        self.w.getNSWindow().toolbar().setShowsBaselineSeparator_(False)
+            
+        self.w.outputField = OutputEditor((0, 0, -0, -20), readOnly=True)
         self.w.resultCodeField = TextBox((10, -18, 200, 0), "", sizeStyle="small")
-
+        
+        self.w.setDefaultButton(self.goButton)
         self.w.open()
 
         self.w.bind("should close", self.windowShouldClose)
@@ -85,26 +121,26 @@ class PipInstallerController:
     def isRunning(self, onoff):
         self._isRunning = onoff
         if onoff:
-            self.w.progressSpinner.start()
+            self.progressSpinner.start()
         else:
-            self.w.progressSpinner.stop()
-        self.w.goButton.enable(not onoff)
+            self.progressSpinner.stop()
+        self.goButton.enable(bool(self.textEntry.get()) and not onoff)
 
     def getUserArguments(self):
         try:
-            return shlex.split(self.w.textEntry.get())
+            return shlex.split(self.textEntry.get())
         except ValueError:
             # shlex syntax error: ignore and return the entire string as a single argument
-            return [self.w.textEntry.get()]
+            return [self.textEntry.get()]
 
     def goButtonCallback(self, sender):
-        commandName = self.pipCommandNames[self.w.pipCommandsButton.get()]
+        commandName = self.pipCommandNames[self.pipCommandsButton.get()]
         getattr(self, commandName)(self.getUserArguments())
 
     def textEntryCallback(self, sender):
         if self.isRunning:
             return
-        self.w.goButton.enable(bool(self.getUserArguments()))
+        self.goButton.enable(bool(self.getUserArguments()))
 
     def pipSearchPyPICommand(self, userArguments):
         self.callPip(["search"] + userArguments)
