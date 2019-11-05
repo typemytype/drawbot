@@ -40,12 +40,11 @@ jobs:
     - name: Building Test Differences
       if: failure()
       run: |
-        ls -a
-        python test/testDataDifferenceBuilder.py tests/tempTestData testDifferences.pdf
+        python ./tests/testDataDifferenceBuilder.py ./tests/tempTestData ./tests/testDifferences.pdf
     - name: Storing Test Differences
       if: failure()
       uses: actions/upload-artifact@master
       with:
         name: DrawBot Test Differences
-        path: ./testDifferences.pdf
+        path: ./tests/testDifferences.pdf
 
