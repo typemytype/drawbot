@@ -19,35 +19,34 @@ Enter one or more package names in the text field, choose an action from \
 the popup button on the left, then click “Go!” or hit return or enter.
 """
 
+
 class PipInstallerController:
 
     def __init__(self, targetPath):
         self.targetPath = targetPath
         self._isRunning = False
 
-        self.w = Window((640, 300),  "Install Python Packages",
+        self.w = Window((640, 300), "Install Python Packages",
                 minSize=(640, 300), autosaveName="PipInstaller")
-        # Fake empty toolbar, so we get a Safari-like appearance
         self.w.getNSWindow().setTitleVisibility_(True)
 
-        y = 7
         items = ["Search PyPI", "Install / Upgrade", "Uninstall", "Show Package Info"]
         self.pipCommandNames = [f"pip{re.sub(r'[ /]', '', item)}Command" for item in items]
         self.pipCommandsButton = PopUpButton((0, 0, 0, 0), items)
-        self.pipCommandsButton.getNSPopUpButton().setBezelStyle_(AppKit.NSBezelStyleTexturedRounded)        
+        self.pipCommandsButton.getNSPopUpButton().setBezelStyle_(AppKit.NSBezelStyleTexturedRounded)
         self.pipCommandsButton.getNSPopUpButton().setFrame_((((0, 0), (140, 35))))
-        
-        self.textEntry = EditText((0, 0, 0, 0), 
+
+        self.textEntry = EditText((0, 0, 0, 0),
                 placeholder="Enter one or more package names",
                 callback=self.textEntryCallback
             )
         self.textEntry.getNSTextField().setBezelStyle_(AppKit.NSTextFieldRoundedBezel)
         self.textEntry.getNSTextField().setFrame_((((0, 0), (200, 35))))
-        
+
         self.goButton = Button((0, 0, 0, 0), "Go!", callback=self.goButtonCallback)
         self.goButton.enable(False)
         self.goButton.getNSButton().setFrame_((((0, 0), (50, 35))))
-        
+
         items = [
             dict(title="List Our Installed Packages (pip freeze)", callback=self.pipFreezeCallback),
             dict(title="Show Pip Version (pip --version)", callback=self.pipVersionCallback),
@@ -56,43 +55,44 @@ class PipInstallerController:
         ]
         self.extraActionButton = ActionButton((0, 0, 0, 0), items)
         self.extraActionButton.getNSPopUpButton().setFrame_((((0, 0), (40, 35))))
-        
+
         self.progressSpinner = ProgressSpinner((0, 0, 0, 0))
         self.progressSpinner.getNSProgressIndicator().setFrame_((((0, 0), (20, 20))))
-        
+
         toolbarItems = [
             dict(itemIdentifier="pipCommands",
                  label="Pip Commands",
                  view=self.pipCommandsButton.getNSPopUpButton(),
-             ),             
-             dict(itemIdentifier="pipTextEntry",
-                 label="Pip",
-                 view=self.textEntry.getNSTextField(),
-             ),
-             dict(itemIdentifier="pipGo",
-                 label="Pip",
-                 view=self.goButton.getNSButton(),
-             ),
-             dict(itemIdentifier="pipSpinner",
-                 label="Pip",
-                 view=self.progressSpinner.getNSProgressIndicator(),
-             ),             
-             dict(itemIdentifier="pipExtraActions",
-                 label="Pip Actions",
-                 view=self.extraActionButton.getNSPopUpButton(),
-             )
+            ),
+            dict(itemIdentifier="pipTextEntry",
+                label="Pip",
+                view=self.textEntry.getNSTextField(),
+            ),
+            dict(itemIdentifier="pipGo",
+                label="Pip",
+                view=self.goButton.getNSButton(),
+            ),
+            dict(itemIdentifier="pipSpinner",
+                label="Pip",
+                view=self.progressSpinner.getNSProgressIndicator(),
+            ),
+            dict(itemIdentifier="pipExtraActions",
+                label="Pip Actions",
+                view=self.extraActionButton.getNSPopUpButton(),
+            )
         ]
-        
+
         items = self.w.addToolbar(toolbarIdentifier="PipInstallerToolbar", toolbarItems=toolbarItems, addStandardItems=False)
-        
+
         items["pipTextEntry"].setMinSize_((150, 22))
-        items["pipTextEntry"].setMaxSize_((1000, 22))
-        
+        items["pipTextEntry"].setMaxSize_((2000, 22))
+
         self.w.getNSWindow().toolbar().setShowsBaselineSeparator_(False)
-            
+
         self.w.outputField = OutputEditor((0, 0, -0, -20), readOnly=True)
         self.w.resultCodeField = TextBox((10, -18, 200, 0), "", sizeStyle="small")
-        
+
+        self.w.getNSWindow().makeFirstResponder_(self.textEntry.getNSTextField())
         self.w.setDefaultButton(self.goButton)
         self.w.open()
 
