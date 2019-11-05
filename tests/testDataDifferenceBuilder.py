@@ -2,7 +2,7 @@ import os
 from PIL import Image, ImageChops
 import tempfile
 
-from tests.testSupport import compareImages, testDataDir
+from testSupport import compareImages, testDataDir
 
 import drawBot
 import sys
