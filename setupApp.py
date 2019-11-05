@@ -195,6 +195,7 @@ setup(
                 'pkg_resources',
                 'parso',
                 'pip',
+                'packaging'
             ],
             includes=[
                 # 'csv',
