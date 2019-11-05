@@ -39,11 +39,12 @@ jobs:
         path: ./tests/tempTestData
     - name: Building Test Differences
       if: failure()
-      run: python ./test/testDataDifferenceBuilder.py ./tests/tempTestData ./testDifferences.pdf
+      run: |
+        python ./tests/testDataDifferenceBuilder.py ./tests/tempTestData ./tests/testDifferences.pdf
     - name: Storing Test Differences
       if: failure()
       uses: actions/upload-artifact@master
       with:
         name: DrawBot Test Differences
-        path: ./testDifferences.pdf
+        path: ./tests/testDifferences.pdf
 
