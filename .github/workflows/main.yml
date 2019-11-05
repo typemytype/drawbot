@@ -39,7 +39,9 @@ jobs:
         path: ./tests/tempTestData
     - name: Building Test Differences
       if: failure()
-      run: python test/testDataDifferenceBuilder.py tests/tempTestData testDifferences.pdf
+      run: |
+        ls -a
+        python test/testDataDifferenceBuilder.py tests/tempTestData testDifferences.pdf
     - name: Storing Test Differences
       if: failure()
       uses: actions/upload-artifact@master
