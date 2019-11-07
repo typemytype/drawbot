@@ -31,7 +31,9 @@ for path in tests:
     padding = 0
     if a > 0.0012:
         padding = 50
-    drawBot.newPage(w * 4 + padding * 2, h + padding * 2)
+    drawBot.newPage(w * 4 + padding * 2, h + padding * 2 + 30)
+    drawBot.text(f"{os.path.basename(path)} - {os.path.basename(localPath)}", (10, 10))
+    drawBot.translate(0, 30)
     if padding:
         with drawBot.savedState():
             drawBot.fill(None)
