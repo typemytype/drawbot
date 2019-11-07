@@ -38,9 +38,11 @@ jobs:
         name: DrawBot Temp Data Results
         path: ./tests/tempTestData
     - name: Building Test Differences
+      if: failure()
       run: |
-        python ./tests/dataDifferenceBuilder.py ./tests/tempTestData ./tests/differences.pdf
+        python ./tests/differenceBuilder.py ./tests/tempTestData ./tests/differences.pdf
     - name: Storing Test Differences
+      if: failure()
       uses: actions/upload-artifact@master
       with:
         name: DrawBot Test Differences
