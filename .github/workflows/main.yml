@@ -39,10 +39,10 @@ jobs:
         path: ./tests/tempTestData
     - name: Building Test Differences
       run: |
-        python ./tests/testDataDifferenceBuilder.py ./tests/tempTestData ./tests/testDifferences.pdf
+        python ./tests/dataDifferenceBuilder.py ./tests/tempTestData ./tests/differences.pdf
     - name: Storing Test Differences
       uses: actions/upload-artifact@master
       with:
         name: DrawBot Test Differences
-        path: ./tests/testDifferences.pdf
+        path: ./tests/differences.pdf
 
