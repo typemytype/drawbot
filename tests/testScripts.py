@@ -209,7 +209,6 @@ skipTests = {
     "test_svg_image3",  # embedded image is subtly different, but we can't render SVG, so we can't compare fuzzily
     "test_svg_image4",  # ditto.
     "test_svg_fontPath",  # no fonts embedded into svg and no var support (yet)
-    "test_export_mov",  # .mov is deprecated and not working on 10.15
 }
 
 conditionalSkip = {
