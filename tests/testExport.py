@@ -49,8 +49,9 @@ class ExportTest(unittest.TestCase):
 
     def test_export_mov(self):
         self.makeTestAnimation(5)
-        with StdOutCollector(captureStdErr=True) as output:
-            self._saveImageAndReturnSize(".mov")
+        with self.assertRaises(DrawBotError) as cm:
+            with StdOutCollector(captureStdErr=True) as output:
+                self._saveImageAndReturnSize(".mov")
         if macOSVersion < "10.15":
             # a warning on lower then 10.15
             self.assertEqual(output.lines(), ["*** DrawBot warning: Export to '.mov' is deprecated, use '.mp4' instead. ***"])
