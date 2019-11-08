@@ -206,6 +206,7 @@ skipTests = {
     "test_pdf_fontVariations2",  # Fails on 10.13 on Travis, why?
     "test_png_fontVariations2",  # Fails on 10.13 on Travis, why?
     "test_svg_fontVariations2",  # On macOS 10.13, there is a named instance for Condensed. Also, Variable fonts don't work in SVG export yet.
+    "test_svg_fontVariations",  # on macOS 10.15 the family name of the font contains the location: 'Skia-Regular_wght9999_wdth10000'.
     "test_svg_image3",  # embedded image is subtly different, but we can't render SVG, so we can't compare fuzzily
     "test_svg_image4",  # ditto.
     "test_svg_fontPath",  # no fonts embedded into svg and no var support (yet)
