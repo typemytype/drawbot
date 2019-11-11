@@ -8,6 +8,7 @@ import os
 from fontTools.pens.basePen import BasePen
 
 from drawBot.misc import DrawBotError, cmyk2rgb, warnings, transformationAtCenter
+from drawBot.macOSVersion import macOSVersion
 
 from .tools import openType
 from .tools import variation
@@ -1151,8 +1152,9 @@ class FormattedString(object):
             fontAttributes = {}
             if coreTextFontFeatures:
                 fontAttributes[CoreText.kCTFontFeatureSettingsAttribute] = coreTextFontFeatures
-                # fallback for macOS < 10.13:
-                fontAttributes[CoreText.NSFontFeatureSettingsAttribute] = nsFontFeatures
+                if macOSVersion < "10.13":
+                    # fallback for macOS < 10.13:
+                    fontAttributes[CoreText.NSFontFeatureSettingsAttribute] = nsFontFeatures
             if coreTextFontVariations:
                 fontAttributes[CoreText.NSFontVariationAttribute] = coreTextFontVariations
             if self._fallbackFont:
