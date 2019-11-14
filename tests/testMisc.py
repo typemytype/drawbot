@@ -231,6 +231,12 @@ class MiscTest(unittest.TestCase):
         fs = drawBot.FormattedString("A\n")
         drawBot.text(fs, (0, 0))
 
+    def test_formattedString_issue337_part2(self):
+        # https://github.com/typemytype/drawbot/issues/337
+        drawBot.newDrawing()
+        fs = drawBot.FormattedString("A\n\n")
+        drawBot.text(fs, (0, 0))
+
 
 def _roundInstanceLocations(instanceLocations):
     return {instanceName: {tag: round(value, 3) for tag, value in location.items()} for instanceName, location in instanceLocations.items()}
