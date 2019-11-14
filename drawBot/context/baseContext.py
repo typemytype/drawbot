@@ -907,23 +907,24 @@ def makeTextBoxes(attributedString, xy, align, plainText):
             rng.length -= 1
             attributedSubstring = attributedString.attributedSubstringFromRange_(rng)
         width, height = attributedSubstring.size()
-        para, _ = attributedSubstring.attribute_atIndex_effectiveRange_(AppKit.NSParagraphStyleAttributeName, 0, None)
+        if attributedSubstring.length() > 0:
+            para, _ = attributedSubstring.attribute_atIndex_effectiveRange_(AppKit.NSParagraphStyleAttributeName, 0, None)
 
-        width += extraPadding
-        originX = 0
-        if para.alignment() == AppKit.NSCenterTextAlignment:
-            originX -= width * .5
-        elif para.alignment() == AppKit.NSRightTextAlignment:
-            originX = -width
+            width += extraPadding
+            originX = 0
+            if para.alignment() == AppKit.NSCenterTextAlignment:
+                originX -= width * .5
+            elif para.alignment() == AppKit.NSRightTextAlignment:
+                originX = -width
 
-        substring = FormattedString()
-        substring.getNSObject().appendAttributedString_(attributedSubstring)
+            substring = FormattedString()
+            substring.getNSObject().appendAttributedString_(attributedSubstring)
 
-        if plainText:
-            substring = str(substring)
+            if plainText:
+                substring = str(substring)
 
-        box = (x + originX, y - originY, width, h * 2)
-        boxes.append((substring, box))
+            box = (x + originX, y - originY, width, h * 2)
+            boxes.append((substring, box))
 
         y -= height * 2
 
