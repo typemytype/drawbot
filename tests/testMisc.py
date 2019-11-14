@@ -225,6 +225,12 @@ class MiscTest(unittest.TestCase):
         variations = drawBot.listFontVariations()
         self.assertEqual(variations, {'wdth': {'name': 'Width', 'minValue': 0.0, 'maxValue': 1000.0, 'defaultValue': 0.0}, 'wght': {'name': 'Weight', 'minValue': 0.0, 'maxValue': 1000.0, 'defaultValue': 0.0}})
 
+    def test_formattedString_issue337(self):
+        # https://github.com/typemytype/drawbot/issues/337
+        drawBot.newDrawing()
+        fs = drawBot.FormattedString("A\n")
+        drawBot.text(fs, (0, 0))
+
 
 def _roundInstanceLocations(instanceLocations):
     return {instanceName: {tag: round(value, 3) for tag, value in location.items()} for instanceName, location in instanceLocations.items()}
