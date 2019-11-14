@@ -907,7 +907,7 @@ def makeTextBoxes(attributedString, xy, align, plainText):
         if attributedSubstring.string()[-1] in ["\n", "\r"]:
             attributedSubstring = attributedSubstring.mutableCopy()
             if rng.length == 1:
-                # apart from the newline, the string is empty, which will give us the wrong
+                # Apart from the newline, the string is empty, which will give us the wrong
                 # height. First replace the newline with a space, then measure the height,
                 # strip the space, then measure the width...
                 attributedSubstring.replaceCharactersInRange_withString_((rng.length - 1, 1), " ")
