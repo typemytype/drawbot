@@ -256,7 +256,6 @@ class MiscTest(unittest.TestCase):
             drawBot.text(fs, (0, 60))
             fs = drawBot.FormattedString("A\n\nC\n")
             drawBot.text(fs, (10, 60))
-
             drawBot.saveImage("*")
             drawBot.endDrawing()
         self.assertEqual(output.lines(), expected)
