@@ -902,14 +902,24 @@ def makeTextBoxes(attributedString, xy, align, plainText):
         rng = CoreText.CTLineGetStringRange(ctLine)
 
         attributedSubstring = attributedString.attributedSubstringFromRange_(rng)
+        para, _ = attributedSubstring.attribute_atIndex_effectiveRange_(AppKit.NSParagraphStyleAttributeName, 0, None)
         # strip trailing returns
         if attributedSubstring.string()[-1] in ["\n", "\r"]:
-            rng.length -= 1
-            attributedSubstring = attributedString.attributedSubstringFromRange_(rng)
-        width, height = attributedSubstring.size()
+            attributedSubstring = attributedSubstring.mutableCopy()
+            if rng.length == 1:
+                # apart from the newline, the string is empty, which will give us the wrong
+                # height. First replace the newline with a space, then measure the height,
+                # strip the space, then measure the width...
+                attributedSubstring.replaceCharactersInRange_withString_((rng.length - 1, 1), " ")
+                _, height = attributedSubstring.size()
+                attributedSubstring.deleteCharactersInRange_((rng.length - 1, 1))
+                width, _ = attributedSubstring.size()
+            else:
+                attributedSubstring.deleteCharactersInRange_((rng.length - 1, 1))
+                width, height = attributedSubstring.size()
+        else:
+            width, height = attributedSubstring.size()
         if attributedSubstring.length() > 0:
-            para, _ = attributedSubstring.attribute_atIndex_effectiveRange_(AppKit.NSParagraphStyleAttributeName, 0, None)
-
             width += extraPadding
             originX = 0
             if para.alignment() == AppKit.NSCenterTextAlignment:
