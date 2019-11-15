@@ -902,28 +902,40 @@ def makeTextBoxes(attributedString, xy, align, plainText):
         rng = CoreText.CTLineGetStringRange(ctLine)
 
         attributedSubstring = attributedString.attributedSubstringFromRange_(rng)
+        para, _ = attributedSubstring.attribute_atIndex_effectiveRange_(AppKit.NSParagraphStyleAttributeName, 0, None)
         # strip trailing returns
         if attributedSubstring.string()[-1] in ["\n", "\r"]:
-            rng.length -= 1
-            attributedSubstring = attributedString.attributedSubstringFromRange_(rng)
-        width, height = attributedSubstring.size()
-        para, _ = attributedSubstring.attribute_atIndex_effectiveRange_(AppKit.NSParagraphStyleAttributeName, 0, None)
+            attributedSubstring = attributedSubstring.mutableCopy()
+            if rng.length == 1:
+                # Apart from the newline, the string is empty, which will give us the wrong
+                # height. First replace the newline with a space, then measure the height,
+                # then strip the space. The width is zero for an empty string.
+                attributedSubstring.replaceCharactersInRange_withString_((rng.length - 1, 1), " ")
+                _, height = attributedSubstring.size()
+                width = 0  # width is zero, but is not used as we're skipping making a box for an empty string.
+                attributedSubstring.deleteCharactersInRange_((rng.length - 1, 1))
+                assert attributedSubstring.length() == 0
+            else:
+                attributedSubstring.deleteCharactersInRange_((rng.length - 1, 1))
+                width, height = attributedSubstring.size()
+        else:
+            width, height = attributedSubstring.size()
+        if attributedSubstring.length() > 0:
+            width += extraPadding
+            originX = 0
+            if para.alignment() == AppKit.NSCenterTextAlignment:
+                originX -= width * .5
+            elif para.alignment() == AppKit.NSRightTextAlignment:
+                originX = -width
 
-        width += extraPadding
-        originX = 0
-        if para.alignment() == AppKit.NSCenterTextAlignment:
-            originX -= width * .5
-        elif para.alignment() == AppKit.NSRightTextAlignment:
-            originX = -width
+            substring = FormattedString()
+            substring.getNSObject().appendAttributedString_(attributedSubstring)
 
-        substring = FormattedString()
-        substring.getNSObject().appendAttributedString_(attributedSubstring)
+            if plainText:
+                substring = str(substring)
 
-        if plainText:
-            substring = str(substring)
-
-        box = (x + originX, y - originY, width, h * 2)
-        boxes.append((substring, box))
+            box = (x + originX, y - originY, width, h * 2)
+            boxes.append((substring, box))
 
         y -= height * 2
 
