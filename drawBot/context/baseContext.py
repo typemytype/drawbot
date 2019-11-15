@@ -909,11 +909,12 @@ def makeTextBoxes(attributedString, xy, align, plainText):
             if rng.length == 1:
                 # Apart from the newline, the string is empty, which will give us the wrong
                 # height. First replace the newline with a space, then measure the height,
-                # strip the space, then measure the width...
+                # then strip the space. The width is zero for an empty string.
                 attributedSubstring.replaceCharactersInRange_withString_((rng.length - 1, 1), " ")
                 _, height = attributedSubstring.size()
+                width = 0  # width is zero, but is not used as we're skipping making a box for an empty string.
                 attributedSubstring.deleteCharactersInRange_((rng.length - 1, 1))
-                width, _ = attributedSubstring.size()
+                assert attributedSubstring.length() == 0
             else:
                 attributedSubstring.deleteCharactersInRange_((rng.length - 1, 1))
                 width, height = attributedSubstring.size()
