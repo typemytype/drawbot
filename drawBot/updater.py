@@ -18,14 +18,16 @@ from .misc import DrawBotError, getDefault
 
 _versionRE = re.compile(r'__version__\s*=\s*\"([^\"]+)\"')
 
+__fallback_version__ = "0.0"
+
 
 def getCurrentVersion():
     """
-    Return the newest version number from github.
+    Return tuple (succesfully retreived, newest version number) from github.
     """
-    __fallback_version__ = "0.0"
+    errors = []
     if not getDefault("checkForUpdatesAtStartup", True):
-        return __fallback_version__
+        return __fallback_version__, errors
     path = "https://raw.github.com/typemytype/drawbot/master/drawBot/drawBotSettings.py"
     code = None
     try:
@@ -36,14 +38,17 @@ def getCurrentVersion():
         # in py3 this are bytes and a string object is needed
         code = str(code.decode("ascii"))
         response.close()
-    except Exception:
+    except Exception as e:
         # just silently fail, its not so important
+        errors.append(f"Cannot retrieve version number from DrawBot repo:\n{e}")
         pass
     if code:
         found = _versionRE.search(code)
         if found:
-            return found.group(1)
-    return __fallback_version__
+            return found.group(1), errors
+        else:
+            errors.append(f"Cannot retrieve version number from the following code:\n{code}")
+    return __fallback_version__, errors
 
 
 def downloadCurrentVersion():
@@ -65,7 +70,7 @@ def downloadCurrentVersion():
                 dmgPath = item["mount-point"]
                 break
         AppKit.NSWorkspace.sharedWorkspace().openFile_(dmgPath)
-    except:
+    except Exception:
         exc = traceback.format_exc()
         message("Something went wrong while downloading %s" % path, exc)
 
@@ -79,8 +84,11 @@ class Updater(object):
         self.__version__ = __version__
         if not getDefault("DrawBotCheckForUpdatesAtStartup", True):
             return
-        self.currentVersion = getCurrentVersion()
+        self.currentVersion, self.currentVersionErrors = getCurrentVersion()
         self.needsUpdate = StrictVersion(__version__) < StrictVersion(self.currentVersion)
+        if self.currentVersionErrors:
+            # print them out so the debugger window catch this
+            print("\n".join(self.currentVersionErrors))
         if not self.needsUpdate:
             return
         if parentWindow:
