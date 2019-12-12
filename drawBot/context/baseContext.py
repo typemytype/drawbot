@@ -449,20 +449,21 @@ class BezierPath(BasePen):
 
     def optimizePath(self):
         count = self._path.elementCount()
-        if self._path.elementAtIndex_(count - 1) == AppKit.NSMoveToBezierPathElement:
-            optimizedPath = AppKit.NSBezierPath.alloc().init()
-            for i in range(count - 1):
-                instruction, points = self._path.elementAtIndex_associatedPoints_(i)
-                if instruction == AppKit.NSMoveToBezierPathElement:
-                    optimizedPath.moveToPoint_(*points)
-                elif instruction == AppKit.NSLineToBezierPathElement:
-                    optimizedPath.lineToPoint_(*points)
-                elif instruction == AppKit.NSCurveToBezierPathElement:
-                    p1, p2, p3 = points
-                    optimizedPath.curveToPoint_controlPoint1_controlPoint2_(p3, p1, p2)
-                elif instruction == AppKit.NSClosePathBezierPathElement:
-                    optimizedPath.closePath()
-            self._path = optimizedPath
+        if not count or self._path.elementAtIndex_(count - 1) != AppKit.NSMoveToBezierPathElement:
+            return
+        optimizedPath = AppKit.NSBezierPath.alloc().init()
+        for i in range(count - 1):
+            instruction, points = self._path.elementAtIndex_associatedPoints_(i)
+            if instruction == AppKit.NSMoveToBezierPathElement:
+                optimizedPath.moveToPoint_(*points)
+            elif instruction == AppKit.NSLineToBezierPathElement:
+                optimizedPath.lineToPoint_(*points)
+            elif instruction == AppKit.NSCurveToBezierPathElement:
+                p1, p2, p3 = points
+                optimizedPath.curveToPoint_controlPoint1_controlPoint2_(p3, p1, p2)
+            elif instruction == AppKit.NSClosePathBezierPathElement:
+                optimizedPath.closePath()
+        self._path = optimizedPath
 
     def copy(self):
         """
