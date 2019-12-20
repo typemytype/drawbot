@@ -225,6 +225,41 @@ class MiscTest(unittest.TestCase):
         variations = drawBot.listFontVariations()
         self.assertEqual(variations, {'wdth': {'name': 'Width', 'minValue': 0.0, 'maxValue': 1000.0, 'defaultValue': 0.0}, 'wght': {'name': 'Weight', 'minValue': 0.0, 'maxValue': 1000.0, 'defaultValue': 0.0}})
 
+    def test_formattedString_issue337(self):
+        # https://github.com/typemytype/drawbot/issues/337
+        drawBot.newDrawing()
+        fs = drawBot.FormattedString("A\n")
+        drawBot.text(fs, (0, 0))
+
+    def test_formattedString_issue337_part2(self):
+        # https://github.com/typemytype/drawbot/issues/337
+        drawBot.newDrawing()
+        fs = drawBot.FormattedString("A\n\n")
+        drawBot.text(fs, (0, 0))
+
+    def test_formattedString_issue337_part3(self):
+        # Verifying we get the correct line height on an empty string
+        expected = [
+            'reset None',
+            'newPage 1000 1000',
+            'textBox A 0 -34.0 26.8994140625 104.0 left',
+            'textBox B 0 -48.0 25.751953125 104.0 left',
+            'textBox C 0 -62.0 26.9189453125 104.0 left',
+            'textBox A 10 -34.0 26.8994140625 104.0 left',
+            'textBox C 10 -62.0 26.9189453125 104.0 left',
+            "saveImage * {}",
+        ]
+        with StdOutCollector() as output:
+            import drawBot
+            drawBot.newDrawing()
+            fs = drawBot.FormattedString("A\nB\nC\n")
+            drawBot.text(fs, (0, 60))
+            fs = drawBot.FormattedString("A\n\nC\n")
+            drawBot.text(fs, (10, 60))
+            drawBot.saveImage("*")
+            drawBot.endDrawing()
+        self.assertEqual(output.lines(), expected)
+
 
 def _roundInstanceLocations(instanceLocations):
     return {instanceName: {tag: round(value, 3) for tag, value in location.items()} for instanceName, location in instanceLocations.items()}

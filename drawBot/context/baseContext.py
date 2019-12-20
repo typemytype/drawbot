@@ -8,6 +8,7 @@ import os
 from fontTools.pens.basePen import BasePen
 
 from drawBot.misc import DrawBotError, cmyk2rgb, warnings, transformationAtCenter
+from drawBot.macOSVersion import macOSVersion
 
 from .tools import openType
 from .tools import variation
@@ -448,20 +449,21 @@ class BezierPath(BasePen):
 
     def optimizePath(self):
         count = self._path.elementCount()
-        if self._path.elementAtIndex_(count - 1) == AppKit.NSMoveToBezierPathElement:
-            optimizedPath = AppKit.NSBezierPath.alloc().init()
-            for i in range(count - 1):
-                instruction, points = self._path.elementAtIndex_associatedPoints_(i)
-                if instruction == AppKit.NSMoveToBezierPathElement:
-                    optimizedPath.moveToPoint_(*points)
-                elif instruction == AppKit.NSLineToBezierPathElement:
-                    optimizedPath.lineToPoint_(*points)
-                elif instruction == AppKit.NSCurveToBezierPathElement:
-                    p1, p2, p3 = points
-                    optimizedPath.curveToPoint_controlPoint1_controlPoint2_(p3, p1, p2)
-                elif instruction == AppKit.NSClosePathBezierPathElement:
-                    optimizedPath.closePath()
-            self._path = optimizedPath
+        if not count or self._path.elementAtIndex_(count - 1) != AppKit.NSMoveToBezierPathElement:
+            return
+        optimizedPath = AppKit.NSBezierPath.alloc().init()
+        for i in range(count - 1):
+            instruction, points = self._path.elementAtIndex_associatedPoints_(i)
+            if instruction == AppKit.NSMoveToBezierPathElement:
+                optimizedPath.moveToPoint_(*points)
+            elif instruction == AppKit.NSLineToBezierPathElement:
+                optimizedPath.lineToPoint_(*points)
+            elif instruction == AppKit.NSCurveToBezierPathElement:
+                p1, p2, p3 = points
+                optimizedPath.curveToPoint_controlPoint1_controlPoint2_(p3, p1, p2)
+            elif instruction == AppKit.NSClosePathBezierPathElement:
+                optimizedPath.closePath()
+        self._path = optimizedPath
 
     def copy(self):
         """
@@ -901,27 +903,40 @@ def makeTextBoxes(attributedString, xy, align, plainText):
         rng = CoreText.CTLineGetStringRange(ctLine)
 
         attributedSubstring = attributedString.attributedSubstringFromRange_(rng)
+        para, _ = attributedSubstring.attribute_atIndex_effectiveRange_(AppKit.NSParagraphStyleAttributeName, 0, None)
         # strip trailing returns
         if attributedSubstring.string()[-1] in ["\n", "\r"]:
-            attributedSubstring.deleteCharactersInRange_((rng.length - 1, 1))
-        width, height = attributedSubstring.size()
-        para, _ = attributedSubstring.attribute_atIndex_effectiveRange_(AppKit.NSParagraphStyleAttributeName, 0, None)
+            attributedSubstring = attributedSubstring.mutableCopy()
+            if rng.length == 1:
+                # Apart from the newline, the string is empty, which will give us the wrong
+                # height. First replace the newline with a space, then measure the height,
+                # then strip the space. The width is zero for an empty string.
+                attributedSubstring.replaceCharactersInRange_withString_((rng.length - 1, 1), " ")
+                _, height = attributedSubstring.size()
+                width = 0  # width is zero, but is not used as we're skipping making a box for an empty string.
+                attributedSubstring.deleteCharactersInRange_((rng.length - 1, 1))
+                assert attributedSubstring.length() == 0
+            else:
+                attributedSubstring.deleteCharactersInRange_((rng.length - 1, 1))
+                width, height = attributedSubstring.size()
+        else:
+            width, height = attributedSubstring.size()
+        if attributedSubstring.length() > 0:
+            width += extraPadding
+            originX = 0
+            if para.alignment() == AppKit.NSCenterTextAlignment:
+                originX -= width * .5
+            elif para.alignment() == AppKit.NSRightTextAlignment:
+                originX = -width
 
-        width += extraPadding
-        originX = 0
-        if para.alignment() == AppKit.NSCenterTextAlignment:
-            originX -= width * .5
-        elif para.alignment() == AppKit.NSRightTextAlignment:
-            originX = -width
+            substring = FormattedString()
+            substring.getNSObject().appendAttributedString_(attributedSubstring)
 
-        substring = FormattedString()
-        substring.getNSObject().appendAttributedString_(attributedSubstring)
+            if plainText:
+                substring = str(substring)
 
-        if plainText:
-            substring = str(substring)
-
-        box = (x + originX, y - originY, width, h * 2)
-        boxes.append((substring, box))
+            box = (x + originX, y - originY, width, h * 2)
+            boxes.append((substring, box))
 
         y -= height * 2
 
@@ -1151,8 +1166,9 @@ class FormattedString(object):
             fontAttributes = {}
             if coreTextFontFeatures:
                 fontAttributes[CoreText.kCTFontFeatureSettingsAttribute] = coreTextFontFeatures
-                # fallback for macOS < 10.13:
-                fontAttributes[CoreText.NSFontFeatureSettingsAttribute] = nsFontFeatures
+                if macOSVersion < "10.13":
+                    # fallback for macOS < 10.13:
+                    fontAttributes[CoreText.NSFontFeatureSettingsAttribute] = nsFontFeatures
             if coreTextFontVariations:
                 fontAttributes[CoreText.NSFontVariationAttribute] = coreTextFontVariations
             if self._fallbackFont:

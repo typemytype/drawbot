@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg height="200" version="1.1" width="200" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg width="200" height="200" viewBox="0 0 200 200" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
  <path d="M20,20 l0,80 l80,0 l0,80 c50,0,80,-30,80,-80 l0,-80 Z M40,40 l120,0 c0,25,-15,40,-40,40 l-80,0 Z M40,40" fill="rgb(127,0,0)" transform="matrix(1,0,0,-1,0,200)"/>
 </svg>

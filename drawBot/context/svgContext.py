@@ -236,11 +236,11 @@ class SVGContext(BaseContext):
 
     _svgFileClass = SVGFile
 
-    _svgTagArguments = {
-        "version": "1.1",
-        "xmlns": "http://www.w3.org/2000/svg",
-        "xmlns:xlink": "http://www.w3.org/1999/xlink"
-    }
+    _svgTagArguments = [
+        ("version", "1.1"),
+        ("xmlns", "http://www.w3.org/2000/svg"),
+        ("xmlns:xlink", "http://www.w3.org/1999/xlink")
+    ]
 
     _svgLineJoinStylesMap = {
         AppKit.NSMiterLineJoinStyle: "miter",
@@ -316,7 +316,8 @@ class SVGContext(BaseContext):
         self._svgContext = XMLWriter(self._svgData, encoding="utf-8", indentwhite=self.indentation)
         self._svgContext.width = self.width
         self._svgContext.height = self.height
-        self._svgContext.begintag("svg", width=self.width, height=self.height, **self._svgTagArguments)
+        attrs = [('width', self.width), ('height', self.height), ('viewBox', f"0 0 {self.width} {self.height}")]
+        self._svgContext.begintag("svg", attrs + self._svgTagArguments)
         self._svgContext.newline()
         self._state.transformMatrix = self._state.transformMatrix.scale(1, -1).translate(0, -self.height)
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg height="300" version="1.1" width="300" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg width="300" height="300" viewBox="0 0 300 300" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
  <path d="M0,0 l100,0 l0,100 l-100,0 Z M0,0" fill="rgb(255,0,0)" transform="matrix(1,0,0,-1,150,150)"/>
  <path d="M0,0 l100,0 l0,100 l-100,0 Z M0,0" fill="rgb(0,255,0)" transform="matrix(0.7071067811865476,-0.7071067811865475,-0.7071067811865475,-0.7071067811865476,150,150)"/>
  <path d="M0,0 l100,0 l0,100 l-100,0 Z M0,0" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,300)"/>

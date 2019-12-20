@@ -388,7 +388,9 @@ class PreferencesController(BaseWindowController):
         oldValue = getDefault("DrawBotCheckForUpdatesAtStartup", True)
         setDefault("DrawBotCheckForUpdatesAtStartup", True)
         updater = Updater(self.w)
-        if not updater.needsUpdate:
+        if updater.currentVersionErrors:
+            self.showMessage("Cannot retrieve the version number from the DrawBot repository.", "\n".join(updater.currentVersionErrors))
+        elif not updater.needsUpdate:
             self.showMessage("You have the latest version!", "DrawBot %s is currently the newest version" % updater.__version__)
         setDefault("DrawBotCheckForUpdatesAtStartup", oldValue)
 
