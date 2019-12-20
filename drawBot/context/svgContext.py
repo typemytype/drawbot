@@ -316,7 +316,7 @@ class SVGContext(BaseContext):
         self._svgContext = XMLWriter(self._svgData, encoding="utf-8", indentwhite=self.indentation)
         self._svgContext.width = self.width
         self._svgContext.height = self.height
-        self._svgContext.begintag("svg", width=self.width, height=self.height, **self._svgTagArguments)
+        self._svgContext.begintag("svg", width=self.width, height=self.height, viewbox=f"0 0 {self.width} {self.height}", **self._svgTagArguments)
         self._svgContext.newline()
         self._state.transformMatrix = self._state.transformMatrix.scale(1, -1).translate(0, -self.height)
 
