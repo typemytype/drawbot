@@ -82,9 +82,9 @@ class BezierContour(list):
             pen.closePath()
 
     def _get_points(self):
-        return [point for segment in self for point in segment]
+        return tuple([point for segment in self for point in segment])
 
-    points = property(_get_points, doc="Return a list of all the points making up this contour, regardless of whether they are on curve or off curve.")
+    points = property(_get_points, doc="Return an immutable list of all the points in the contour as point coordinate `(x, y)` tuples.")
 
 
 class BezierPath(BasePen):
@@ -699,22 +699,22 @@ class BezierPath(BasePen):
             elif not offCurve:
                 pts = pts[-1:]
             points.extend([(p.x, p.y) for p in pts])
-        return points
+        return tuple(points)
 
     def _get_points(self):
         return self._points()
 
-    points = property(_get_points, doc="Return a list of all points.")
+    points = property(_get_points, doc="Return a immutable list of all points in the bezierPath as point coordinate `(x, y)` tuples.")
 
     def _get_onCurvePoints(self):
         return self._points(offCurve=False)
 
-    onCurvePoints = property(_get_onCurvePoints, doc="Return a list of all on curve points.")
+    onCurvePoints = property(_get_onCurvePoints, doc="Return a immutable list of all on curve points in the bezierPath as point coordinate `(x, y)` tuples.")
 
     def _get_offCurvePoints(self):
         return self._points(onCurve=False)
 
-    offCurvePoints = property(_get_offCurvePoints, doc="Return a list of all off curve points.")
+    offCurvePoints = property(_get_offCurvePoints, doc="Return a immutable list of all off curve points in the bezierPath as point coordinate `(x, y)` tuples.")
 
     def _get_contours(self):
         contours = []
@@ -728,9 +728,9 @@ class BezierPath(BasePen):
                 contours[-1].append([(p.x, p.y) for p in pts])
         if len(contours) >= 2 and len(contours[-1]) == 1 and contours[-1][0] == contours[-2][0]:
             contours.pop()
-        return contours
+        return tuple(contours)
 
-    contours = property(_get_contours, doc="Return a list of contours with all point coordinates sorted in segments. A contour object has an `open` attribute.")
+    contours = property(_get_contours, doc="Return a immutable list of contours with all point coordinates sorted in segments. A contour object has an `open` attribute.")
 
     def __len__(self):
         return len(self.contours)
