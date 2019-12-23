@@ -704,17 +704,17 @@ class BezierPath(BasePen):
     def _get_points(self):
         return self._points()
 
-    points = property(_get_points, doc="Return a immutable list of all points in the bezierPath as point coordinate `(x, y)` tuples.")
+    points = property(_get_points, doc="Return an immutable list of all points in the BezierPath as point coordinate `(x, y)` tuples.")
 
     def _get_onCurvePoints(self):
         return self._points(offCurve=False)
 
-    onCurvePoints = property(_get_onCurvePoints, doc="Return a immutable list of all on curve points in the bezierPath as point coordinate `(x, y)` tuples.")
+    onCurvePoints = property(_get_onCurvePoints, doc="Return an immutable list of all on curve points in the BezierPath as point coordinate `(x, y)` tuples.")
 
     def _get_offCurvePoints(self):
         return self._points(onCurve=False)
 
-    offCurvePoints = property(_get_offCurvePoints, doc="Return a immutable list of all off curve points in the bezierPath as point coordinate `(x, y)` tuples.")
+    offCurvePoints = property(_get_offCurvePoints, doc="Return an immutable list of all off curve points in the BezierPath as point coordinate `(x, y)` tuples.")
 
     def _get_contours(self):
         contours = []
@@ -730,7 +730,7 @@ class BezierPath(BasePen):
             contours.pop()
         return tuple(contours)
 
-    contours = property(_get_contours, doc="Return a immutable list of contours with all point coordinates sorted in segments. A contour object has an `open` attribute.")
+    contours = property(_get_contours, doc="Return an immutable list of contours with all point coordinates sorted in segments. A contour object has an `open` attribute.")
 
     def __len__(self):
         return len(self.contours)
