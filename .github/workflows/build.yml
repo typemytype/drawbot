@@ -26,8 +26,8 @@ jobs:
         python3 -m pip install -r ./requirements.txt
         python3 -m pip install -r ./test-requirements.txt
         python3 -m pip install .
-    - name: Run tests
-      run: python3 ./tests/runAllTests.py
+    # - name: Run tests
+    #   run: python3 ./tests/runAllTests.py
     - name: Build app
       # if: success()
       run: |
