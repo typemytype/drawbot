@@ -12,7 +12,7 @@ jobs:
 
     steps:
     - name: Set up Python 3.7
-      run:
+      run: |
         brew update
         brew install python
     - name: Check python
