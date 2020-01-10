@@ -1,4 +1,4 @@
-name: DrawBot
+name: DrawBot Test Bench
 
 on:
   push:
