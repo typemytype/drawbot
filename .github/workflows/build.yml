@@ -12,26 +12,26 @@ jobs:
 
     steps:
     - name: Set up Python 3.7
-      uses: actions/setup-python@v1
-      with:
-        python-version: 3.7
+      run:
+        brew update
+        brew install python
     - name: Check python
       run: |
-        python --version
-        python -c "import platform; print('macOS version:', platform.mac_ver()[0])"
+        python3 --version
+        python3 -c "import platform; print('macOS version:', platform.mac_ver()[0])"
     - name: Checkout
       uses: actions/checkout@v1
     - name: Install dependencies
       run: |
-        python -m pip install -r ./requirements.txt
-        python -m pip install -r ./test-requirements.txt
-        python -m pip install .
+        python3 -m pip install -r ./requirements.txt
+        python3 -m pip install -r ./test-requirements.txt
+        python3 -m pip install .
     - name: Run tests
-      run: python ./tests/runAllTests.py
+      run: python3 ./tests/runAllTests.py
     - name: Build app
       if: success()
       run: |
-        python setupApp.py py2app --dmg
+        python3 setupApp.py py2app --dmg
     - name: Create Release
       if: success()
       id: create_release
