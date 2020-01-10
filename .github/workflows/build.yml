@@ -31,7 +31,7 @@ jobs:
     - name: Build app
       if: success()
       run: |
-        python setupApp.py py2app
+        python setupApp.py py2app --dmg
     - name: Create Release
       if: success()
       id: create_release
