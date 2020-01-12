@@ -31,20 +31,21 @@ jobs:
         python3 -c "import platform; print('macOS version:', platform.mac_ver()[0])"
     - name: Install Certificates
       run: |
-        KEY_CHAIN=build.keychain
+        KEY_CHAIN=drawBotBuild.keychain
         CERTIFICATE_DEVELOPER_ID_APPLICATION=certificate.cer
         CERTIFICATE_DEVELOPER_ID_INSTALLER=certificate.cer
+
         echo $DEVELOPER_ID_APPLICATION | base64 --decode > $CERTIFICATE_DEVELOPER_ID_APPLICATION
         echo $DEVELOPER_ID_INSTALLER | base64 --decode > $CERTIFICATE_DEVELOPER_ID_INSTALLER
 
-        security create-keychain -p drawBotKeyChain $KEY_CHAIN
+        security create-keychain -p $KEYCHAIN_PASSWORD $KEY_CHAIN
         security default-keychain -s $KEY_CHAIN
-        security unlock-keychain -p drawBotKeyChain $KEY_CHAIN
+        security unlock-keychain -p $KEYCHAIN_PASSWORD $KEY_CHAIN
 
-        security import $CERTIFICATE_DEVELOPER_ID_APPLICATION -k $KEY_CHAIN -T /usr/bin/codesign;
-        security import $CERTIFICATE_DEVELOPER_ID_INSTALLER -k $KEY_CHAIN -T /usr/bin/codesign;
+        security import $CERTIFICATE_DEVELOPER_ID_APPLICATION -k $KEY_CHAIN -P $CERTIFICATE_PASSWORD  -T /usr/bin/codesign
+        security import $CERTIFICATE_DEVELOPER_ID_INSTALLER -k $KEY_CHAIN -P $CERTIFICATE_PASSWORD -T /usr/bin/codesign
 
-        security set-key-partition-list -S apple-tool:,apple: -s -k drawBotKeyChain $KEY_CHAIN
+        security set-key-partition-list -S apple-tool:,apple: -s -k $KEYCHAIN_PASSWORD $KEY_CHAIN
 
         rm -fr *.cer
     - name: Checkout
