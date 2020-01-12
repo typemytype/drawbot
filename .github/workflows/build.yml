@@ -36,18 +36,18 @@ jobs:
         echo $DEVELOPER_ID_APPLICATION | base64 --decode > application_certificate.cer
         echo $DEVELOPER_ID_INSTALLER | base64 --decode > installer_certificate.cer
 
-        security create-keychain -p $KEYCHAIN_PASSWORD $KEY_CHAIN
+        security create-keychain -p "$KEYCHAIN_PASSWORD" $KEY_CHAIN
 
         security import application_certificate.cer -k $KEY_CHAIN -P $CERTIFICATE_PASSWORD  -T /usr/bin/codesign
         security import installer_certificate.cer -k $KEY_CHAIN -P $CERTIFICATE_PASSWORD -T /usr/bin/codesign
 
         security list-keychain -s $KEY_CHAIN
-        security unlock-keychain -p $KEYCHAIN_PASSWORD $KEY_CHAIN
+        security unlock-keychain -p "$KEYCHAIN_PASSWORD" $KEY_CHAIN
 
         security default-keychain -s $KEY_CHAIN
 
         security find-identity -v -p codesigning
-        security set-key-partition-list -S apple-tool:,apple: -s -k $KEYCHAIN_PASSWORD $KEY_CHAIN
+        security set-key-partition-list -S apple-tool:,apple: -s -k "$KEYCHAIN_PASSWORD" $KEY_CHAIN
 
         rm -fr *.cer
     - name: Checkout
