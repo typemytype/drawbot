@@ -22,10 +22,10 @@ jobs:
 
     steps:
     - name: Install Certificates
+      env:
       run: |
-        echo $CERTIFICATE_P12 | base64 --decode > certificate.p12
-        echo $CERTIFICATE_PASSWORD
-        security import certificate.p12 -P $CERTIFICATE_PASSWORD
+        echo ${{ secrets.CERTIFICATE_P12 }} | base64 --decode > certificate.p12
+        security import certificate.p12 -P ${{ secrets.CERTIFICATE_PASSWORD }}
         rm -fr *.p12
     - name: Set up Python 3.7
       run: |
