@@ -23,8 +23,8 @@ jobs:
     steps:
     - name: Set up Python 3.7
       run: |
-        curl -O https://www.python.org/ftp/python/3.7.6/python-3.7.6-macosx10.9.pkg
-        sudo installer -pkg python-3.7.6-macosx10.9.pkg /
+        curl https://www.python.org/ftp/python/3.7.6/python-3.7.6-macosx10.9.pkg --output pythonInstaller.pkg
+        sudo installer -pkg pythonInstaller.pkg -target /
     - name: Check python
       run: |
         python3 --version
