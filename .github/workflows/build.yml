@@ -22,7 +22,6 @@ jobs:
 
     steps:
     - name: Install Certificates
-      env:
       run: |
         echo ${{ secrets.CERTIFICATE_P12 }} | base64 --decode > certificate.p12
         security import certificate.p12 -P ${{ secrets.CERTIFICATE_PASSWORD }}
