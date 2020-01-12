@@ -24,6 +24,7 @@ jobs:
     - name: Install Certificates
       run: |
         echo $CERTIFICATE_P12 | base64 --decode > certificate.p12
+        echo $CERTIFICATE_PASSWORD
         security import certificate.p12 -P $CERTIFICATE_PASSWORD
         rm -fr *.p12
     - name: Set up Python 3.7
