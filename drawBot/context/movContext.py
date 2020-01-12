@@ -3,14 +3,12 @@ import Quartz
 import os
 
 from ..misc import DrawBotError, warnings
-from ..macOSVersion import macOSVersion
 from .pdfContext import PDFContext
 
-if macOSVersion >= "10.15":
-    # QTKit is being deprecated
-    QTKit = None
-else:
+try:
     import QTKit
+except ImportError:
+    QTKit = None
 
 
 class MOVContext(PDFContext):
