@@ -45,11 +45,12 @@ jobs:
     #   run: python3 ./tests/runAllTests.py
     - name: Build app
       run: |
-        python3 setupApp.py py2app --dmg
+        python3 setupApp.py py2app --dmg --codesign "${{ secrets.CODESIGN_NAME }}"
     - name: Set enviroment for github-release
       run: |
         DRAWBOT_VERSION=`python3 -c "import drawBot;print(drawBot.__version__)"`
-        echo ::set-env name=version::"$DRAWBOT_VERSION"
+        echo ::set-env name=drawbot_version::"$DRAWBOT_VERSION"
+        echo $DRAWBOT_VERSION
       id: drawbot_version
     - name: Create Release
       id: create_release
@@ -57,8 +58,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
       with:
-        tag_name: v${{ steps.drawbot_version.outputs.version }}
-        release_name: Release ${{ steps.drawbot_version.outputs.version }}
+        tag_name: v${{ steps.drawbot_version.outputs.drawbot_version }}
+        release_name: Release ${{ steps.drawbot_version.outputs.drawbot_version }}
         draft: true
         prerelease: false
         body: |

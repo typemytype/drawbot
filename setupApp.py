@@ -195,13 +195,13 @@ setup(
                 'pkg_resources',
                 'parso',
                 'pip',
-                'packaging'
             ],
             includes=[
                 # 'csv',
                 # 'this'
             ] + stdLibIncludes,
             excludes=[
+                "packaging",
                 "numpy",
                 "scipy",
                 "matplotlib",
@@ -383,7 +383,7 @@ if buildDMG or ftpHost is not None:
                 "--notarization-info", notarisationRequestUUID,
                 "-u", notarizeDeveloper,
                 "-p", notarizePassword,
-                "--output-format",  "xml"
+                "--output-format", "xml"
                 ]
             countDown = 2
             while countDown:
