@@ -295,7 +295,7 @@ def _pythonWordCompletions(text, charRange):
 
 
 languagesIDEBehavior = {
-    "Python 3": {
+    "Python": {
         "openToCloseMap": {"(": ")", "[": "]", "{": "}", "<": ">"},
         "autoCloseMap": {"(": ")", "[": "]", "{": "}", "\"": "\"", "'": "'"},
         "indentWithEndOfLine": [":", "(", "[", "{"],
@@ -307,6 +307,7 @@ languagesIDEBehavior = {
         "dropPathsSeperator": ", "
     },
 }
+languagesIDEBehavior["Python 3"] = languagesIDEBehavior["Python"]
 
 downArrowSelectionDirection = 0
 upArrowSelectionDirection = 1
