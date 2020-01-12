@@ -8,6 +8,7 @@ from .pdfContext import PDFContext
 try:
     import QTKit
 except ImportError:
+    # QTKit is deprecated, so may not be available
     QTKit = None
 
 
