@@ -1,9 +1,19 @@
 name: DrawBot App Builder
 
+# an other trigger is needed...
+# there are double releases
+# cause github seems to make a release for each tag
+# on:
+#   push:
+#     tags:
+#       - "*"
 on:
   push:
-    tags:
-      - "*"
+    branches:
+    - master
+  pull_request:
+    branches:
+    - master
 
 jobs:
   build:
@@ -13,8 +23,8 @@ jobs:
     steps:
     - name: Set up Python 3.7
       run: |
-        brew update
-        brew install python
+        curl -O https://www.python.org/ftp/python/3.7.6/python-3.7.6-macosx10.9.pkg
+        sudo installer -pkg python-3.7.6-macosx10.9.pkg /
     - name: Check python
       run: |
         python3 --version
@@ -24,7 +34,6 @@ jobs:
     - name: Install dependencies
       run: |
         python3 -m pip install -r ./requirements.txt
-        python3 -m pip install -r ./test-requirements.txt
         python3 -m pip install .
     # - name: Run tests
     #   run: python3 ./tests/runAllTests.py
