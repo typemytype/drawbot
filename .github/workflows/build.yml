@@ -43,24 +43,26 @@ jobs:
     # - name: Run tests
     #   run: python3 ./tests/runAllTests.py
     - name: Build app
-      # if: success()
       run: |
         python3 setupApp.py py2app --dmg --codesign "${{ secrets.CODESIGN_NAME }}" --notarizedeveloper "${{ secrets.NOTARIZE_DEVELOPER }}" --notarizePassword "${{ secrets.NOTARIZE_PASSWORD }}"
+    - name: Set enviroment for github-release
+      run: |
+        DRAWBOT_VERSION=`python3 -c "import drawBot;print(drawBot.__version__)"`
+        echo ::set-env name=version::"$DRAWBOT_VERSION"
+      id: drawbot_version
     - name: Create Release
-      # if: success()
       id: create_release
       uses: actions/create-release@v1.0.0
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
       with:
-        tag_name: ${{ github.ref }}
-        release_name: Release ${{ github.ref }}
+        tag_name: v${{ steps.drawbot_version.outputs.version }}
+        release_name: Release ${{ steps.drawbot_version.outputs.version }}
         draft: true
         prerelease: false
         body: |
           !!!Edit the Release note!!!
     - name: Upload Release Asset
-      # if: success()
       id: upload-release-asset
       uses: actions/upload-release-asset@v1.0.1
       env:
