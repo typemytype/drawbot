@@ -23,28 +23,9 @@ jobs:
     steps:
     - name: Install Certificates
       run: |
-        echo "$CERTIFICATE_P12" | base64 --decode > "certificate.p12"
+        echo $CERTIFICATE_P12 | base64 --decode > certificate.p12
         security import certificate.p12 -P $CERTIFICATE_PASSWORD
-      # KEY_CHAIN=drawBotBuild.keychain
-
-
-
-      # security create-keychain -p "$KEYCHAIN_PASSWORD" $KEY_CHAIN
-
-
-
-      # -T /usr/bin/codesign
-
-      # security list-keychain -s $KEY_CHAIN
-      # security unlock-keychain -p "$KEYCHAIN_PASSWORD" $KEY_CHAIN
-      # security set-keychain-settings -t 3600 -u $KEY_CHAIN
-
-      # security default-keychain -s $KEY_CHAIN
-
-      #security find-identity -v -p codesigning
-      # security set-key-partition-list -S apple-tool:,apple: -s -k "$KEYCHAIN_PASSWORD" $KEY_CHAIN
-
-      #rm -fr *.p12
+        rm -fr *.p12
     - name: Set up Python 3.7
       run: |
         curl https://www.python.org/ftp/python/3.7.6/python-3.7.6-macosx10.9.pkg --output pythonInstaller.pkg
