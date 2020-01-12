@@ -24,7 +24,11 @@ jobs:
     - name: Install Certificates
       run: |
         echo ${{ secrets.CERTIFICATE_P12 }} | base64 --decode > certificate.p12
-        security import certificate.p12 -P ${{ secrets.CERTIFICATE_PASSWORD }}
+        security create-keychain -p drawbotKeychain drawbot.keychain
+        security default-keychain -s drawbot.keychain
+        security unlock-keychain -p drawbotKeychain drawbot.keychain
+        security import certificate.p12 -k drawbot.keychain -P ${{ secrets.CERTIFICATE_PASSWORD }}
+        security set-key-partition-list -S apple-tool:,apple: -s -k drawbotKeychain drawbot.keychain
         rm -fr *.p12
         security find-identity -v
     - name: Set up Python 3.7
