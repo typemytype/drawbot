@@ -21,14 +21,6 @@ jobs:
     runs-on: macos-latest
 
     steps:
-    - name: Set up Python 3.7
-      run: |
-        curl https://www.python.org/ftp/python/3.7.6/python-3.7.6-macosx10.9.pkg --output pythonInstaller.pkg
-        sudo installer -pkg pythonInstaller.pkg -target /
-    - name: Check python
-      run: |
-        python3 --version
-        python3 -c "import platform; print('macOS version:', platform.mac_ver()[0])"
     - name: Install Certificates
       run: |
         KEY_CHAIN=drawBotBuild.keychain
@@ -49,6 +41,14 @@ jobs:
         security set-key-partition-list -S apple-tool:,apple: -s -k "$KEYCHAIN_PASSWORD" $KEY_CHAIN
 
         rm -fr *.p12
+    - name: Set up Python 3.7
+      run: |
+        curl https://www.python.org/ftp/python/3.7.6/python-3.7.6-macosx10.9.pkg --output pythonInstaller.pkg
+        sudo installer -pkg pythonInstaller.pkg -target /
+    - name: Check python
+      run: |
+        python3 --version
+        python3 -c "import platform; print('macOS version:', platform.mac_ver()[0])"
     - name: Checkout
       uses: actions/checkout@v1
     - name: Install dependencies
