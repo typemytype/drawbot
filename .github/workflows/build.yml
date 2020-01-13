@@ -30,7 +30,7 @@ jobs:
         security import certificate.p12 -k drawbot.keychain -P ${{ secrets.CERTIFICATE_PASSWORD }}
         security set-key-partition-list -S apple-tool:,apple: -s -k drawbotKeychain drawbot.keychain
         rm -fr *.p12
-        security find-identity -v
+        security find-identity -v -p codesigning
     - name: Set up Python 3.7
       run: |
         curl https://www.python.org/ftp/python/3.7.6/python-3.7.6-macosx10.9.pkg --output pythonInstaller.pkg
@@ -54,7 +54,18 @@ jobs:
     - name: Dummy codesign
       run: |
         echo "start dummy codesign"
-        codesign --force --sign "Developer ID Application: ${{ secrets.CODESIGN_NAME }}" -v dist/DrawBot.app
+
+        codesign --sign "Developer ID Application: ${{ secrets.CODESIGN_NAME }}" dist/DrawBot.app/Contents/MacOS/python
+        codesign --sign "Developer ID Application: ${{ secrets.CODESIGN_NAME }}" dist/DrawBot.app/Contents/Frameworks/libtcl8.6.dylib
+        codesign --sign "Developer ID Application: ${{ secrets.CODESIGN_NAME }}" dist/DrawBot.app/Contents/Frameworks/libpanelw.5.dylib
+        codesign --sign "Developer ID Application: ${{ secrets.CODESIGN_NAME }}" dist/DrawBot.app/Contents/Frameworks/libssl.1.1.dylib
+        codesign --sign "Developer ID Application: ${{ secrets.CODESIGN_NAME }}" dist/DrawBot.app/Contents/Frameworks/Python.framework
+        codesign --sign "Developer ID Application: ${{ secrets.CODESIGN_NAME }}" dist/DrawBot.app/Contents/Frameworks/libtk8.6.dylib
+        codesign --sign "Developer ID Application: ${{ secrets.CODESIGN_NAME }}" dist/DrawBot.app/Contents/Frameworks/libcrypto.1.1.dylib
+        codesign --sign "Developer ID Application: ${{ secrets.CODESIGN_NAME }}" dist/DrawBot.app/Contents/Frameworks/libncursesw.5.dylib
+
+        codesign --sign "Developer ID Application: ${{ secrets.CODESIGN_NAME }}" dist/DrawBot.app
+
         codesign --verify --verbose=4 dist/DrawBot.app
         spctl --verbose=4 --raw --assess --type execute dist/DrawBot.app
         echo "done dummy codesign"
