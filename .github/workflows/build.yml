@@ -49,7 +49,7 @@ jobs:
     #   run: python3 ./tests/runAllTests.py
     - name: Build app
       run: |
-        python3 setupApp.py py2app --dmg --codesign "${{ secrets.CODESIGN_NAME }}"
+        python3 setupApp.py py2app --dmg  --notarizedeveloper "${{ secrets.NOTARIZE_DEVELOPER }}" --notarizePassword "${{ secrets.NOTARIZE_PASSWORD }}"
     - name: Set enviroment for github-release
       run: |
         DRAWBOT_VERSION=`python3 -c "import drawBot;print(drawBot.__version__)"`
