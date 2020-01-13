@@ -49,13 +49,19 @@ jobs:
     #   run: python3 ./tests/runAllTests.py
     - name: Build app
       run: |
-        python3 setupApp.py py2app --dmg  --notarizedeveloper "${{ secrets.NOTARIZE_DEVELOPER }}" --notarizePassword "${{ secrets.NOTARIZE_PASSWORD }}"
+        # python3 setupApp.py py2app --dmg --codesign "${{ secrets.CODESIGN_NAME }}" --notarizedeveloper "${{ secrets.NOTARIZE_DEVELOPER }}" --notarizePassword "${{ secrets.NOTARIZE_PASSWORD }}"
+        python3 setupApp.py py2app --dmg --notarizedeveloper "${{ secrets.NOTARIZE_DEVELOPER }}" --notarizePassword "${{ secrets.NOTARIZE_PASSWORD }}"
+    - name: Dummy codesign
+      run: |
+        echo "start dummy codesign"
+        codesign --sign "Developer ID Application: ${{ secrets.CODESIGN_NAME }}" -v dist/DrawBot.app
+        echo "done dummy codesign"
     - name: Set enviroment for github-release
+      id: drawbot_version
       run: |
         DRAWBOT_VERSION=`python3 -c "import drawBot;print(drawBot.__version__)"`
-        echo ::set-env name=drawbot_version::"$DRAWBOT_VERSION"
+        echo ::set-output name=drawbot_version::"$DRAWBOT_VERSION"
         echo $DRAWBOT_VERSION
-      id: drawbot_version
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1.0.0
