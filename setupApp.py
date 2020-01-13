@@ -287,7 +287,7 @@ if buildDMG or ftpHost is not None:
         # ================
         print("---------------------")
         print("-   code signing    -")
-        cmds = ["codesign", "--force", "--deep", "--sign", "Developer ID Application: %s" % codeSignDeveloperName, "-v", appLocation]
+        cmds = ["codesign", "--force", "--deep", "--verbose", "--sign", "Developer ID Application: %s" % codeSignDeveloperName, appLocation]
         popen = subprocess.Popen(cmds)
         popen.wait()
         print("- done code signing -")

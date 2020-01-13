@@ -54,7 +54,9 @@ jobs:
     - name: Dummy codesign
       run: |
         echo "start dummy codesign"
-        codesign --force --deep --sign "Developer ID Application: ${{ secrets.CODESIGN_NAME }}" -v dist/DrawBot.app
+        codesign --force --sign "Developer ID Application: ${{ secrets.CODESIGN_NAME }}" -v dist/DrawBot.app
+        codesign --verify --verbose=4 dist/DrawBot.app
+        spctl --verbose=4 --raw --assess --type execute dist/DrawBot.app
         echo "done dummy codesign"
     - name: Set enviroment for github-release
       id: drawbot_version
