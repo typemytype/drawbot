@@ -24,11 +24,12 @@ jobs:
     - name: Install Certificates
       run: |
         echo ${{ secrets.CERTIFICATE_P12 }} | base64 --decode > certificate.p12
-        security create-keychain -p drawbotKeychain drawbot.keychain
-        security default-keychain -s drawbot.keychain
-        security unlock-keychain -p drawbotKeychain drawbot.keychain
-        security import certificate.p12 -k drawbot.keychain -P ${{ secrets.CERTIFICATE_PASSWORD }}
-        security set-key-partition-list -S apple-tool:,apple: -s -k drawbotKeychain drawbot.keychain
+        security import certificate.p12 -P ${{ secrets.CERTIFICATE_PASSWORD }}
+        # security create-keychain -p drawbotKeychain drawbot.keychain
+        # security default-keychain -s drawbot.keychain
+        # security unlock-keychain -p drawbotKeychain drawbot.keychain
+        # security import certificate.p12 -k drawbot.keychain -P ${{ secrets.CERTIFICATE_PASSWORD }}
+        # security set-key-partition-list -S apple-tool:,apple: -s -k drawbotKeychain drawbot.keychain
         rm -fr *.p12
         security find-identity -v -p codesigning
     - name: Set up Python 3.7
@@ -55,16 +56,16 @@ jobs:
       run: |
         echo "start dummy codesign"
 
-        codesign --sign "Developer ID Application: ${{ secrets.CODESIGN_NAME }}" dist/DrawBot.app/Contents/MacOS/python
-        codesign --sign "Developer ID Application: ${{ secrets.CODESIGN_NAME }}" dist/DrawBot.app/Contents/Frameworks/libtcl8.6.dylib
-        codesign --sign "Developer ID Application: ${{ secrets.CODESIGN_NAME }}" dist/DrawBot.app/Contents/Frameworks/libpanelw.5.dylib
-        codesign --sign "Developer ID Application: ${{ secrets.CODESIGN_NAME }}" dist/DrawBot.app/Contents/Frameworks/libssl.1.1.dylib
-        codesign --sign "Developer ID Application: ${{ secrets.CODESIGN_NAME }}" dist/DrawBot.app/Contents/Frameworks/Python.framework
-        codesign --sign "Developer ID Application: ${{ secrets.CODESIGN_NAME }}" dist/DrawBot.app/Contents/Frameworks/libtk8.6.dylib
-        codesign --sign "Developer ID Application: ${{ secrets.CODESIGN_NAME }}" dist/DrawBot.app/Contents/Frameworks/libcrypto.1.1.dylib
-        codesign --sign "Developer ID Application: ${{ secrets.CODESIGN_NAME }}" dist/DrawBot.app/Contents/Frameworks/libncursesw.5.dylib
+        codesign --verbose --sign "Developer ID Application: ${{ secrets.CODESIGN_NAME }}" dist/DrawBot.app/Contents/MacOS/python
+        codesign --verbose --sign "Developer ID Application: ${{ secrets.CODESIGN_NAME }}" dist/DrawBot.app/Contents/Frameworks/libtcl8.6.dylib
+        codesign --verbose --sign "Developer ID Application: ${{ secrets.CODESIGN_NAME }}" dist/DrawBot.app/Contents/Frameworks/libpanelw.5.dylib
+        codesign --verbose --sign "Developer ID Application: ${{ secrets.CODESIGN_NAME }}" dist/DrawBot.app/Contents/Frameworks/libssl.1.1.dylib
+        codesign --verbose --sign "Developer ID Application: ${{ secrets.CODESIGN_NAME }}" dist/DrawBot.app/Contents/Frameworks/Python.framework
+        codesign --verbose --sign "Developer ID Application: ${{ secrets.CODESIGN_NAME }}" dist/DrawBot.app/Contents/Frameworks/libtk8.6.dylib
+        codesign --verbose --sign "Developer ID Application: ${{ secrets.CODESIGN_NAME }}" dist/DrawBot.app/Contents/Frameworks/libcrypto.1.1.dylib
+        codesign --verbose --sign "Developer ID Application: ${{ secrets.CODESIGN_NAME }}" dist/DrawBot.app/Contents/Frameworks/libncursesw.5.dylib
 
-        codesign --sign "Developer ID Application: ${{ secrets.CODESIGN_NAME }}" dist/DrawBot.app
+        codesign --verbose --sign "Developer ID Application: ${{ secrets.CODESIGN_NAME }}" dist/DrawBot.app
 
         codesign --verify --verbose=4 dist/DrawBot.app
         spctl --verbose=4 --raw --assess --type execute dist/DrawBot.app
