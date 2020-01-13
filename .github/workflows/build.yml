@@ -51,7 +51,8 @@ jobs:
     - name: Build app
       run: |
         # python3 setupApp.py py2app --dmg --codesign "${{ secrets.CODESIGN_NAME }}" --notarizedeveloper "${{ secrets.NOTARIZE_DEVELOPER }}" --notarizePassword "${{ secrets.NOTARIZE_PASSWORD }}"
-        python3 setupApp.py py2app --dmg --notarizedeveloper "${{ secrets.NOTARIZE_DEVELOPER }}" --notarizePassword "${{ secrets.NOTARIZE_PASSWORD }}"
+        # python3 setupApp.py py2app --dmg --notarizedeveloper "${{ secrets.NOTARIZE_DEVELOPER }}" --notarizePassword "${{ secrets.NOTARIZE_PASSWORD }}"
+        python3 setupApp.py py2app --dmg
     - name: Dummy codesign
       run: |
         echo "start dummy codesign"
