@@ -56,16 +56,16 @@ jobs:
       run: |
         echo "start dummy codesign"
 
-        codesign --verbose --sign "Developer ID Application: ${{ secrets.CODESIGN_NAME }}" dist/DrawBot.app/Contents/MacOS/python
-        codesign --verbose --sign "Developer ID Application: ${{ secrets.CODESIGN_NAME }}" dist/DrawBot.app/Contents/Frameworks/libtcl8.6.dylib
-        codesign --verbose --sign "Developer ID Application: ${{ secrets.CODESIGN_NAME }}" dist/DrawBot.app/Contents/Frameworks/libpanelw.5.dylib
-        codesign --verbose --sign "Developer ID Application: ${{ secrets.CODESIGN_NAME }}" dist/DrawBot.app/Contents/Frameworks/libssl.1.1.dylib
-        codesign --verbose --sign "Developer ID Application: ${{ secrets.CODESIGN_NAME }}" dist/DrawBot.app/Contents/Frameworks/Python.framework
-        codesign --verbose --sign "Developer ID Application: ${{ secrets.CODESIGN_NAME }}" dist/DrawBot.app/Contents/Frameworks/libtk8.6.dylib
-        codesign --verbose --sign "Developer ID Application: ${{ secrets.CODESIGN_NAME }}" dist/DrawBot.app/Contents/Frameworks/libcrypto.1.1.dylib
-        codesign --verbose --sign "Developer ID Application: ${{ secrets.CODESIGN_NAME }}" dist/DrawBot.app/Contents/Frameworks/libncursesw.5.dylib
+        sudo codesign --verbose --sign "Developer ID Application: ${{ secrets.CODESIGN_NAME }}" dist/DrawBot.app/Contents/MacOS/python
+        sudo codesign --verbose --sign "Developer ID Application: ${{ secrets.CODESIGN_NAME }}" dist/DrawBot.app/Contents/Frameworks/libtcl8.6.dylib
+        sudo codesign --verbose --sign "Developer ID Application: ${{ secrets.CODESIGN_NAME }}" dist/DrawBot.app/Contents/Frameworks/libpanelw.5.dylib
+        sudo codesign --verbose --sign "Developer ID Application: ${{ secrets.CODESIGN_NAME }}" dist/DrawBot.app/Contents/Frameworks/libssl.1.1.dylib
+        sudo codesign --verbose --sign "Developer ID Application: ${{ secrets.CODESIGN_NAME }}" dist/DrawBot.app/Contents/Frameworks/Python.framework
+        sudo codesign --verbose --sign "Developer ID Application: ${{ secrets.CODESIGN_NAME }}" dist/DrawBot.app/Contents/Frameworks/libtk8.6.dylib
+        sudo codesign --verbose --sign "Developer ID Application: ${{ secrets.CODESIGN_NAME }}" dist/DrawBot.app/Contents/Frameworks/libcrypto.1.1.dylib
+        sudo codesign --verbose --sign "Developer ID Application: ${{ secrets.CODESIGN_NAME }}" dist/DrawBot.app/Contents/Frameworks/libncursesw.5.dylib
 
-        codesign --verbose --sign "Developer ID Application: ${{ secrets.CODESIGN_NAME }}" dist/DrawBot.app
+        sudo codesign --verbose --sign "Developer ID Application: ${{ secrets.CODESIGN_NAME }}" dist/DrawBot.app
 
         codesign --verify --verbose=4 dist/DrawBot.app
         spctl --verbose=4 --raw --assess --type execute dist/DrawBot.app
