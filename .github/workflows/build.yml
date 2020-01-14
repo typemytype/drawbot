@@ -39,30 +39,42 @@ jobs:
         python3 -m pip install .
     # - name: Run tests
     #   run: python3 ./tests/runAllTests.py
-    # - name: Build app
-    #   run: |
-    #     python3 setupApp.py py2app --dmg --codesign "${{ secrets.CODESIGN_NAME }}" --notarizedeveloper "${{ secrets.NOTARIZE_DEVELOPER }}" --notarizePassword "${{ secrets.NOTARIZE_PASSWORD }}"
-    - name: Create Release
-      id: create_release
-      uses: actions/create-release@master
+    - name: Build app
+      run: |
+        python3 setupApp.py py2app --dmg --codesign "${{ secrets.CODESIGN_NAME }}" --notarizedeveloper "${{ secrets.NOTARIZE_DEVELOPER }}" --notarizePassword "${{ secrets.NOTARIZE_PASSWORD }}"
+    - name: Release
+      uses: docker://antonyurchenko/git-release:latest
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        DRAFT_RELEASE: "false"
+        PRE_RELEASE: "false"
+        CHANGELOG_FILE: "CHANGELOG.md"
+        ALLOW_EMPTY_CHANGELOG: "true"
+        ALLOW_TAG_PREFIX: "true"
       with:
-        tag_name: ${{ github.ref }}
-        release_name: DrawBot version ${{ github.ref }}
-        draft: true
-        prerelease: false
-        body: |
-          Changes in this Release:
-          - ...
-    - name: Upload Release Asset
-      id: upload-release-asset
-      uses: actions/upload-release-asset@v1.0.1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
-        asset_path: ./dist/DrawBot.dmg
-        asset_name: DrawBot.dmg
-        asset_content_type: application/dmg
+        args: |
+            dist/DrawBot.dmg
+    # - name: Create Release
+    #   id: create_release
+    #   uses: actions/create-release@master
+    #   env:
+    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+    #   with:
+    #     tag_name: ${{ github.ref }}
+    #     release_name: DrawBot version ${{ github.ref }}
+    #     draft: true
+    #     prerelease: false
+    #     body: |
+    #       Changes in this Release:
+    #       - ...
+    # - name: Upload Release Asset
+    #   id: upload-release-asset
+    #   uses: actions/upload-release-asset@v1.0.1
+    #   env:
+    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+    #   with:
+    #     upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
+    #     asset_path: ./dist/DrawBot.dmg
+    #     asset_name: DrawBot.dmg
+    #     asset_content_type: application/dmg
 
