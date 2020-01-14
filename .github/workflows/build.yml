@@ -44,7 +44,7 @@ jobs:
     #     python3 setupApp.py py2app --dmg --codesign "${{ secrets.CODESIGN_NAME }}" --notarizedeveloper "${{ secrets.NOTARIZE_DEVELOPER }}" --notarizePassword "${{ secrets.NOTARIZE_PASSWORD }}"
     - name: Create Release
       id: create_release
-      uses: actions/create-release@v1.0.0
+      uses: actions/create-release@master
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
       with:
