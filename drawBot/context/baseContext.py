@@ -471,7 +471,11 @@ class BezierPath(BasePen):
         """
         new = self.__class__()
         new._path = self._path.copy()
+        new._copyContextProperties(self)
         return new
+
+    def _copyContextProperties(self, other):
+        pass
 
     def reverse(self):
         """
@@ -1688,7 +1692,11 @@ class FormattedString(object):
         attributes = {key: getattr(self, "_%s" % key) for key in self._formattedAttributes}
         new = self.__class__(**attributes)
         new._attributedString = self._attributedString.mutableCopy()
+        new._copyContextProperties(self)
         return new
+
+    def _copyContextProperties(self, other):
+        pass
 
     def fontContainsCharacters(self, characters):
         """

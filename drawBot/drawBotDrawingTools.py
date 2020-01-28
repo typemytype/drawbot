@@ -1605,6 +1605,8 @@ class DrawBotDrawingTool(object):
             raise DrawBotError("align must be left, right, center")
         attributedString = self._dummyContext.attributedString(txt, align=align)
         for subTxt, box in makeTextBoxes(attributedString, (x, y), align=align, plainText=not isinstance(txt, FormattedString)):
+            if isinstance(txt, FormattedString):
+                subTxt._copyContextProperties(txt)
             self.textBox(subTxt, box, align=align)
 
     def textOverflow(self, txt, box, align=None):
