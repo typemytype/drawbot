@@ -9,10 +9,64 @@ from fontTools.misc.xmlWriter import XMLWriter
 from fontTools.misc.transform import Transform
 
 from .tools.openType import getFeatureTagsForFontAttributes
-from .baseContext import BaseContext, GraphicsState, Shadow, Color, Gradient
+from .baseContext import BaseContext, GraphicsState, Shadow, Color, Gradient, BezierPath, FormattedString
 from .imageContext import _makeBitmapImageRep
 
 from drawBot.misc import warnings, formatNumber
+
+
+# add context specific attributes to main objects
+
+def _get_svgID(self):
+    return getattr(self, "_svgID", None)
+
+
+def _set_svgID(self, value):
+    self._svgID = value
+
+
+BezierPath.svgID = property(_get_svgID, _set_svgID, doc="The path svg id, as a string.")
+FormattedString.svgID = property(_get_svgID, _set_svgID, doc="The formatted string svg id, as a string.")
+
+
+def _get_svgClass(self):
+    return getattr(self, "_svgClass", None)
+
+
+def _set_svgClass(self, value):
+    self._svgClass = value
+
+
+BezierPath.svgClass = property(_get_svgClass, _set_svgClass, doc="The path svg class, as a string.")
+FormattedString.svgClass = property(_get_svgClass, _set_svgClass, doc="The formatted string svg class, as a string.")
+
+
+def _get_svgLink(self):
+    return getattr(self, "_svgLink", None)
+
+
+def _set_svgLink(self, value):
+    self._svgLink = value
+
+
+BezierPath.svgLink = property(_get_svgLink, _set_svgLink, doc="The path svg link, as a string.")
+FormattedString.svgLink = property(_get_svgLink, _set_svgLink, doc="The formatted string svg link, as a string.")
+
+
+def svgCopyContextProperties(obj):
+    existingCopyContextProperties = obj._copyContextProperties
+
+    def wrappedCopyContextProperties(self, other):
+        existingCopyContextProperties(self, other)
+        self.svgID = other.svgID
+        self.svgClass = other.svgClass
+        self.svgLink = other.svgLink
+
+    obj._copyContextProperties = wrappedCopyContextProperties
+
+
+svgCopyContextProperties(BezierPath)
+svgCopyContextProperties(FormattedString)
 
 
 class _UniqueIDGenerator(object):
@@ -350,13 +404,23 @@ class SVGContext(BaseContext):
             self._svgBeginClipPath()
             data = self._svgDrawingAttributes()
             data["d"] = self._svgPath(self._state.path)
+            if self._state.path.svgID:
+                data["id"] = self._state.path.svgID
+            if self._state.path.svgClass:
+                data["class"] = self._state.path.svgClass
             data["transform"] = self._svgTransform(self._state.transformMatrix)
             if self._state.shadow is not None:
                 data["filter"] = "url(#%s)" % self._state.shadow.tagID
             if self._state.gradient is not None:
                 data["fill"] = "url(#%s)" % self._state.gradient.tagID
+            if self._state.path.svgLink:
+                self._svgContext.begintag("a", **{"xlink:href": self._state.path.svgLink})
+                self._svgContext.newline()
             self._svgContext.simpletag("path", **data)
             self._svgContext.newline()
+            if self._state.path.svgLink:
+                self._svgContext.endtag("a")
+                self._svgContext.newline()
             self._svgEndClipPath()
 
     def _clipPath(self):
@@ -373,12 +437,12 @@ class SVGContext(BaseContext):
         self._svgContext.newline()
         self._state.clipPathID = uniqueID
 
-    def _textBox(self, txt, box, align):
+    def _textBox(self, rawTxt, box, align):
         path, (x, y) = self._getPathForFrameSetter(box)
         canDoGradients = True
         if align == "justified":
             warnings.warn("justified text is not supported in a svg context")
-        attrString = self.attributedString(txt, align=align)
+        attrString = self.attributedString(rawTxt, align=align)
         if self._state.hyphenation:
             attrString = self.hyphenateAttributedString(attrString, path)
         txt = attrString.string()
@@ -394,6 +458,14 @@ class SVGContext(BaseContext):
         }
         if self._state.shadow is not None:
             data["filter"] = "url(#%s_flipped)" % self._state.shadow.tagID
+        if isinstance(rawTxt, FormattedString):
+            if rawTxt.svgID:
+                data["id"] = rawTxt.svgID
+            if rawTxt.svgClass:
+                data["class"] = rawTxt.svgClass
+            if rawTxt.svgLink:
+                self._svgContext.begintag("a", **{"xlink:href": rawTxt.svgLink})
+                self._svgContext.newline()
         self._svgContext.begintag("text", **data)
         self._svgContext.newline()
 
@@ -475,6 +547,9 @@ class SVGContext(BaseContext):
 
         self._svgContext.endtag("text")
         self._svgContext.newline()
+        if isinstance(rawTxt, FormattedString) and rawTxt.svgLink:
+            self._svgContext.endtag("a")
+            self._svgContext.newline()
         self._svgEndClipPath()
 
     def _image(self, path, xy, alpha, pageNumber):
