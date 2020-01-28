@@ -475,7 +475,9 @@ class BezierPath(BasePen):
         return new
 
     def _copyContextProperties(self, other):
-        pass
+        self.svgID = other.svgID
+        self.svgClass = other.svgClass
+        self.svgLink = other.svgLink
 
     def reverse(self):
         """
@@ -750,6 +752,32 @@ class BezierPath(BasePen):
             contour = contours[index]
             yield contour
             index += 1
+
+    # context specific attributes
+
+    def _get_svgID(self):
+        return getattr(self, "_svgID", None)
+
+    def _set_svgID(self, value):
+        self._svgID = value
+
+    svgID = property(_get_svgID, _set_svgID, doc="The path svg id, as a string.")
+
+    def _get_svgClass(self):
+        return getattr(self, "_svgClass", None)
+
+    def _set_svgClass(self, value):
+        self._svgClass = value
+
+    svgClass = property(_get_svgClass, _set_svgClass, doc="The path svg class, as a string.")
+
+    def _get_svgLink(self):
+        return getattr(self, "_svgLink", None)
+
+    def _set_svgLink(self, value):
+        self._svgLink = value
+
+    svgLink = property(_get_svgLink, _set_svgLink, doc="The path svg link, as a string.")
 
 
 class Color(object):
@@ -1696,7 +1724,9 @@ class FormattedString(object):
         return new
 
     def _copyContextProperties(self, other):
-        pass
+        self.svgID = other.svgID
+        self.svgClass = other.svgClass
+        self.svgLink = other.svgLink
 
     def fontContainsCharacters(self, characters):
         """
@@ -1907,6 +1937,32 @@ class FormattedString(object):
                 warnings.warn("font '%s' has no glyph with the name '%s'" % (font.fontName(), glyphName))
         self.openTypeFeatures(**_openTypeFeatures)
         self._fallbackFont = fallbackFont
+
+    # context specific attributes
+
+    def _get_svgID(self):
+        return getattr(self, "_svgID", None)
+
+    def _set_svgID(self, value):
+        self._svgID = value
+
+    svgID = property(_get_svgID, _set_svgID, doc="The path svg id, as a string.")
+
+    def _get_svgClass(self):
+        return getattr(self, "_svgClass", None)
+
+    def _set_svgClass(self, value):
+        self._svgClass = value
+
+    svgClass = property(_get_svgClass, _set_svgClass, doc="The path svg class, as a string.")
+
+    def _get_svgLink(self):
+        return getattr(self, "_svgLink", None)
+
+    def _set_svgLink(self, value):
+        self._svgLink = value
+
+    svgLink = property(_get_svgLink, _set_svgLink, doc="The path svg link, as a string.")
 
 
 class GraphicsState(object):

@@ -15,60 +15,6 @@ from .imageContext import _makeBitmapImageRep
 from drawBot.misc import warnings, formatNumber
 
 
-# add context specific attributes to main objects
-
-def _get_svgID(self):
-    return getattr(self, "_svgID", None)
-
-
-def _set_svgID(self, value):
-    self._svgID = value
-
-
-BezierPath.svgID = property(_get_svgID, _set_svgID, doc="The path svg id, as a string.")
-FormattedString.svgID = property(_get_svgID, _set_svgID, doc="The formatted string svg id, as a string.")
-
-
-def _get_svgClass(self):
-    return getattr(self, "_svgClass", None)
-
-
-def _set_svgClass(self, value):
-    self._svgClass = value
-
-
-BezierPath.svgClass = property(_get_svgClass, _set_svgClass, doc="The path svg class, as a string.")
-FormattedString.svgClass = property(_get_svgClass, _set_svgClass, doc="The formatted string svg class, as a string.")
-
-
-def _get_svgLink(self):
-    return getattr(self, "_svgLink", None)
-
-
-def _set_svgLink(self, value):
-    self._svgLink = value
-
-
-BezierPath.svgLink = property(_get_svgLink, _set_svgLink, doc="The path svg link, as a string.")
-FormattedString.svgLink = property(_get_svgLink, _set_svgLink, doc="The formatted string svg link, as a string.")
-
-
-def svgCopyContextProperties(obj):
-    existingCopyContextProperties = obj._copyContextProperties
-
-    def wrappedCopyContextProperties(self, other):
-        existingCopyContextProperties(self, other)
-        self.svgID = other.svgID
-        self.svgClass = other.svgClass
-        self.svgLink = other.svgLink
-
-    obj._copyContextProperties = wrappedCopyContextProperties
-
-
-svgCopyContextProperties(BezierPath)
-svgCopyContextProperties(FormattedString)
-
-
 class _UniqueIDGenerator(object):
 
     def __init__(self, prefix):
