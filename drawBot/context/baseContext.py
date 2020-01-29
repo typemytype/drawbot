@@ -35,10 +35,23 @@ def _tryInstallFontFromFontName(fontName):
 
 # context specific attributes
 
+class ContextPropertyMixin:
+
+    def copyContextProperties(self, other):
+        # loop over all base classes
+        for cls in self.__class__.__bases__:
+            func = getattr(cls, "_copyContextProperties", None)
+            if func is not None:
+                func(self, other)
+
+
 class contextProperty:
 
-    def __init__(self, doc):
+    def __init__(self, doc, validator=None):
         self.__doc__ = doc
+        if validator is not None:
+            validator = getattr(self, f"_{validator}")
+        self._validator = validator
 
     def __set_name__(self, owner, name):
         self.name = name
@@ -47,17 +60,30 @@ class contextProperty:
         return obj.__dict__.get(self.name)
 
     def __set__(self, obj, value):
+        if self._validator:
+            self._validator(value)
         obj.__dict__[self.name] = value
 
     def __delete__(self, obj):
         obj.__dict__.pop(self.name, None)
 
+    def _stringValidator(self, value):
+        if value is None:
+            return
+        if not isinstance(value, str):
+            raise DrawBotError(f"'{self.name}' must be a string.")
+
 
 class SVGContextPropertyMixin:
 
-    svgID = contextProperty("The svg id, as a string.")
-    svgClass = contextProperty("The svg class, as a string.")
-    svgLink = contextProperty("The svg link, as a string.")
+    svgID = contextProperty("The svg id, as a string.", "stringValidator")
+    svgClass = contextProperty("The svg class, as a string.", "stringValidator")
+    svgLink = contextProperty("The svg link, as a string.", "stringValidator")
+
+    def _copyContextProperties(self, other):
+        self.svgID = other.svgID
+        self.svgClass = other.svgClass
+        self.svgLink = other.svgLink
 
 
 class BezierContour(list):
@@ -115,7 +141,7 @@ class BezierContour(list):
     points = property(_get_points, doc="Return an immutable list of all the points in the contour as point coordinate `(x, y)` tuples.")
 
 
-class BezierPath(BasePen, SVGContextPropertyMixin):
+class BezierPath(BasePen, SVGContextPropertyMixin, ContextPropertyMixin):
 
     """
     A bezier path object, if you want to draw the same over and over again.
@@ -499,13 +525,8 @@ class BezierPath(BasePen, SVGContextPropertyMixin):
         """
         new = self.__class__()
         new._path = self._path.copy()
-        new._copyContextProperties(self)
+        new.copyContextProperties(self)
         return new
-
-    def _copyContextProperties(self, other):
-        self.svgID = other.svgID
-        self.svgClass = other.svgClass
-        self.svgLink = other.svgLink
 
     def reverse(self):
         """
@@ -977,7 +998,7 @@ def makeTextBoxes(attributedString, xy, align, plainText):
     return boxes
 
 
-class FormattedString(SVGContextPropertyMixin):
+class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
 
     """
     FormattedString is a reusable object, if you want to draw the same over and over again.
@@ -1722,13 +1743,8 @@ class FormattedString(SVGContextPropertyMixin):
         attributes = {key: getattr(self, "_%s" % key) for key in self._formattedAttributes}
         new = self.__class__(**attributes)
         new._attributedString = self._attributedString.mutableCopy()
-        new._copyContextProperties(self)
+        new.copyContextProperties(self)
         return new
-
-    def _copyContextProperties(self, other):
-        self.svgID = other.svgID
-        self.svgClass = other.svgClass
-        self.svgLink = other.svgLink
 
     def fontContainsCharacters(self, characters):
         """
@@ -1939,32 +1955,6 @@ class FormattedString(SVGContextPropertyMixin):
                 warnings.warn("font '%s' has no glyph with the name '%s'" % (font.fontName(), glyphName))
         self.openTypeFeatures(**_openTypeFeatures)
         self._fallbackFont = fallbackFont
-
-    # context specific attributes
-
-    def _get_svgID(self):
-        return getattr(self, "_svgID", None)
-
-    def _set_svgID(self, value):
-        self._svgID = value
-
-    svgID = property(_get_svgID, _set_svgID, doc="The path svg id, as a string.")
-
-    def _get_svgClass(self):
-        return getattr(self, "_svgClass", None)
-
-    def _set_svgClass(self, value):
-        self._svgClass = value
-
-    svgClass = property(_get_svgClass, _set_svgClass, doc="The path svg class, as a string.")
-
-    def _get_svgLink(self):
-        return getattr(self, "_svgLink", None)
-
-    def _set_svgLink(self, value):
-        self._svgLink = value
-
-    svgLink = property(_get_svgLink, _set_svgLink, doc="The path svg link, as a string.")
 
 
 class GraphicsState(object):
