@@ -27,9 +27,37 @@ _LINECAPSTYLESMAP = dict(
     round=Quartz.kCGLineCapRound,
 )
 
+
 def _tryInstallFontFromFontName(fontName):
     from drawBot.drawBotDrawingTools import _drawBotDrawingTool
     return _drawBotDrawingTool._tryInstallFontFromFontName(fontName)
+
+
+# context specific attributes
+
+class contextProperty:
+
+    def __init__(self, doc):
+        self.__doc__ = doc
+
+    def __set_name__(self, owner, name):
+        self.name = name
+
+    def __get__(self, obj, cls=None):
+        return obj.__dict__.get(self.name)
+
+    def __set__(self, obj, value):
+        obj.__dict__[self.name] = value
+
+    def __delete__(self, obj):
+        obj.__dict__.pop(self.name, None)
+
+
+class SVGContextPropertyMixin:
+
+    svgID = contextProperty("The svg id, as a string.")
+    svgClass = contextProperty("The svg class, as a string.")
+    svgLink = contextProperty("The svg link, as a string.")
 
 
 class BezierContour(list):
@@ -87,7 +115,7 @@ class BezierContour(list):
     points = property(_get_points, doc="Return an immutable list of all the points in the contour as point coordinate `(x, y)` tuples.")
 
 
-class BezierPath(BasePen):
+class BezierPath(BasePen, SVGContextPropertyMixin):
 
     """
     A bezier path object, if you want to draw the same over and over again.
@@ -753,32 +781,6 @@ class BezierPath(BasePen):
             yield contour
             index += 1
 
-    # context specific attributes
-
-    def _get_svgID(self):
-        return getattr(self, "_svgID", None)
-
-    def _set_svgID(self, value):
-        self._svgID = value
-
-    svgID = property(_get_svgID, _set_svgID, doc="The path svg id, as a string.")
-
-    def _get_svgClass(self):
-        return getattr(self, "_svgClass", None)
-
-    def _set_svgClass(self, value):
-        self._svgClass = value
-
-    svgClass = property(_get_svgClass, _set_svgClass, doc="The path svg class, as a string.")
-
-    def _get_svgLink(self):
-        return getattr(self, "_svgLink", None)
-
-    def _set_svgLink(self, value):
-        self._svgLink = value
-
-    svgLink = property(_get_svgLink, _set_svgLink, doc="The path svg link, as a string.")
-
 
 class Color(object):
 
@@ -975,7 +977,7 @@ def makeTextBoxes(attributedString, xy, align, plainText):
     return boxes
 
 
-class FormattedString(object):
+class FormattedString(SVGContextPropertyMixin):
 
     """
     FormattedString is a reusable object, if you want to draw the same over and over again.
