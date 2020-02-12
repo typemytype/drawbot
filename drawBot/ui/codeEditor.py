@@ -758,6 +758,10 @@ class CodeNSTextView(AppKit.NSTextView):
             m = _whiteSpaceRE.match(line)
             if m is not None:
                 leadingSpace = m.group()
+            # strip comment
+            commentTag = languageData.get("comment")
+            if commentTag is not None:
+                line = line.split(commentTag)[0]
             line = line.strip()
             if line and line[-1] in languageData["indentWithEndOfLine"]:
                 leadingSpace += self.indent()
