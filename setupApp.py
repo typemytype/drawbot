@@ -385,7 +385,7 @@ if buildDMG or ftpHost is not None:
                 "-p", notarizePassword,
                 "--output-format", "xml"
                 ]
-            countDown = 2
+            countDown = 10
             while countDown:
                 with tempfile.TemporaryFile(mode='w+b') as stdoutFile:
                     popen = subprocess.Popen(notarizeInfo, stdout=stdoutFile)
