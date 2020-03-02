@@ -27,9 +27,65 @@ _LINECAPSTYLESMAP = dict(
     round=Quartz.kCGLineCapRound,
 )
 
+
 def _tryInstallFontFromFontName(fontName):
     from drawBot.drawBotDrawingTools import _drawBotDrawingTool
     return _drawBotDrawingTool._tryInstallFontFromFontName(fontName)
+
+
+# context specific attributes
+
+class ContextPropertyMixin:
+
+    def copyContextProperties(self, other):
+        # loop over all base classes
+        for cls in self.__class__.__bases__:
+            func = getattr(cls, "_copyContextProperties", None)
+            if func is not None:
+                func(self, other)
+
+
+class contextProperty:
+
+    def __init__(self, doc, validator=None):
+        self.__doc__ = doc
+        if validator is not None:
+            validator = getattr(self, f"_{validator}")
+        self._validator = validator
+
+    def __set_name__(self, owner, name):
+        self.name = name
+
+    def __get__(self, obj, cls=None):
+        if obj is None:
+            return self
+        return obj.__dict__.get(self.name)
+
+    def __set__(self, obj, value):
+        if self._validator:
+            self._validator(value)
+        obj.__dict__[self.name] = value
+
+    def __delete__(self, obj):
+        obj.__dict__.pop(self.name, None)
+
+    def _stringValidator(self, value):
+        if value is None:
+            return
+        if not isinstance(value, str):
+            raise DrawBotError(f"'{self.name}' must be a string.")
+
+
+class SVGContextPropertyMixin:
+
+    svgID = contextProperty("The svg id, as a string.", "stringValidator")
+    svgClass = contextProperty("The svg class, as a string.", "stringValidator")
+    svgLink = contextProperty("The svg link, as a string.", "stringValidator")
+
+    def _copyContextProperties(self, other):
+        self.svgID = other.svgID
+        self.svgClass = other.svgClass
+        self.svgLink = other.svgLink
 
 
 class BezierContour(list):
@@ -87,7 +143,7 @@ class BezierContour(list):
     points = property(_get_points, doc="Return an immutable list of all the points in the contour as point coordinate `(x, y)` tuples.")
 
 
-class BezierPath(BasePen):
+class BezierPath(BasePen, SVGContextPropertyMixin, ContextPropertyMixin):
 
     """
     A bezier path object, if you want to draw the same over and over again.
@@ -471,6 +527,7 @@ class BezierPath(BasePen):
         """
         new = self.__class__()
         new._path = self._path.copy()
+        new.copyContextProperties(self)
         return new
 
     def reverse(self):
@@ -943,7 +1000,7 @@ def makeTextBoxes(attributedString, xy, align, plainText):
     return boxes
 
 
-class FormattedString(object):
+class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
 
     """
     FormattedString is a reusable object, if you want to draw the same over and over again.
@@ -1688,6 +1745,7 @@ class FormattedString(object):
         attributes = {key: getattr(self, "_%s" % key) for key in self._formattedAttributes}
         new = self.__class__(**attributes)
         new._attributedString = self._attributedString.mutableCopy()
+        new.copyContextProperties(self)
         return new
 
     def fontContainsCharacters(self, characters):
