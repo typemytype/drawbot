@@ -1830,6 +1830,11 @@ class DrawBotDrawingTool(object):
 
         .. autoclass:: drawBot.context.baseContext.FormattedString
             :members:
+            :undoc-members:
+            :inherited-members:
+            :show-inheritance:
+            :exclude-members: copyContextProperties
+
         """
         return self._formattedStringClass(*args, **kwargs)
 
@@ -2315,6 +2320,8 @@ class DrawBotDrawingTool(object):
             :members:
             :undoc-members:
             :inherited-members:
+            :show-inheritance:
+            :exclude-members: copyContextProperties
 
         """
         return self._bezierPathClass(path, glyphSet)
