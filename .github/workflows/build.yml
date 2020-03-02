@@ -35,14 +35,14 @@ jobs:
         python3 --version
         python3 -c "import platform; print('macOS version:', platform.mac_ver()[0])"
 
+    - name: Checkout
+      uses: actions/checkout@v1
+
     - name: Setup Virtual Environment
       run: |
         python3 -m venv venv
         source venv/bin/activate
         python -c "import sys; print('\n'.join(sys.path))"
-
-    - name: Checkout
-      uses: actions/checkout@v1
 
     - name: Install dependencies
       run: |
@@ -50,8 +50,9 @@ jobs:
         pip install --upgrade pip
         pip install -r ./requirements.txt
         pip install .
-        pip install --upgrade app/customWheels/lxml-4.5.0-cp37-cp37m-macosx_10_9_x86_64.whl
-        pip install --upgrade app/customWheels/uharfbuzz-0.5.1.dev13+g5f9b224-cp37-cp37m-macosx_10_9_x86_64.whl
+        pip install --upgrade ./app/customWheels/lxml-4.5.0-cp37-cp37m-macosx_10_9_x86_64.whl
+        pip install --upgrade ./app/customWheels/uharfbuzz-0.5.1.dev13+g5f9b224-cp37-cp37m-macosx_10_9_x86_64.whl
+
     - name: Run tests
       run:
         source venv/bin/activate
