@@ -4,7 +4,7 @@ import re
 
 
 changelogVersionPattern = re.compile(r"## \[(.+)\]")
-githubRefPattern = re.compile(r"refs/tags/v(.*)")
+githubRefPattern = re.compile(r"refs/tags/(.*)")
 
 
 changelogPath = pathlib.Path(__file__).resolve().parent.parent / "CHANGELOG.md"
