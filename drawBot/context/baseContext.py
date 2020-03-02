@@ -57,6 +57,8 @@ class contextProperty:
         self.name = name
 
     def __get__(self, obj, cls=None):
+        if obj is None:
+            return self
         return obj.__dict__.get(self.name)
 
     def __set__(self, obj, value):
