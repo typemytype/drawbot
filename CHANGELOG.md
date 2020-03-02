@@ -1,17 +1,22 @@
 # Changelog For DrawBot
 
 
-## [3.124] 
+## [3.124] Unreleased
 
 
-## [3.123]
+## [3.123] 2020-03-02
 
 - Built with Github actions!!!!
 - Improve pip installer.
 - Support `viewBox` in svg output.
 - Point attributes of a bezierPath are immutable.
+- Fix bug when an formattedString contains an empty last line.
+- Don't optimize an empty bezierPath.
+- Improve updater message.
+- Upgrade code editor lexer to python3.
+- Upgrade internal tool potrace and mkbitmap.
 
-## [3.122]
+## [3.122] 2019-11-03
 
 - Adding bezierPath.expandStroke(width, lineCap="round", lineJoin="round", miterLimit=10) (thanks to Bahman Eslami)
 - Improved internal OpenType feature tags setting
@@ -25,3 +30,8 @@
 - All test now run on Travis CI (and soon also on GitHub Actions)
 - Removed Python 2 code
 - Many small issues were fixed
+
+## [3.121] 2019-10-04
+
+
+## [3.120] 2019-03-13
