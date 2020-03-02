@@ -9,7 +9,7 @@ from fontTools.misc.xmlWriter import XMLWriter
 from fontTools.misc.transform import Transform
 
 from .tools.openType import getFeatureTagsForFontAttributes
-from .baseContext import BaseContext, GraphicsState, Shadow, Color, Gradient
+from .baseContext import BaseContext, GraphicsState, Shadow, Color, Gradient, BezierPath, FormattedString
 from .imageContext import _makeBitmapImageRep
 
 from drawBot.misc import warnings, formatNumber
@@ -350,13 +350,23 @@ class SVGContext(BaseContext):
             self._svgBeginClipPath()
             data = self._svgDrawingAttributes()
             data["d"] = self._svgPath(self._state.path)
+            if self._state.path.svgID:
+                data["id"] = self._state.path.svgID
+            if self._state.path.svgClass:
+                data["class"] = self._state.path.svgClass
             data["transform"] = self._svgTransform(self._state.transformMatrix)
             if self._state.shadow is not None:
                 data["filter"] = "url(#%s)" % self._state.shadow.tagID
             if self._state.gradient is not None:
                 data["fill"] = "url(#%s)" % self._state.gradient.tagID
+            if self._state.path.svgLink:
+                self._svgContext.begintag("a", **{"xlink:href": self._state.path.svgLink})
+                self._svgContext.newline()
             self._svgContext.simpletag("path", **data)
             self._svgContext.newline()
+            if self._state.path.svgLink:
+                self._svgContext.endtag("a")
+                self._svgContext.newline()
             self._svgEndClipPath()
 
     def _clipPath(self):
@@ -373,12 +383,12 @@ class SVGContext(BaseContext):
         self._svgContext.newline()
         self._state.clipPathID = uniqueID
 
-    def _textBox(self, txt, box, align):
+    def _textBox(self, rawTxt, box, align):
         path, (x, y) = self._getPathForFrameSetter(box)
         canDoGradients = True
         if align == "justified":
             warnings.warn("justified text is not supported in a svg context")
-        attrString = self.attributedString(txt, align=align)
+        attrString = self.attributedString(rawTxt, align=align)
         if self._state.hyphenation:
             attrString = self.hyphenateAttributedString(attrString, path)
         txt = attrString.string()
@@ -394,6 +404,14 @@ class SVGContext(BaseContext):
         }
         if self._state.shadow is not None:
             data["filter"] = "url(#%s_flipped)" % self._state.shadow.tagID
+        if isinstance(rawTxt, FormattedString):
+            if rawTxt.svgID:
+                data["id"] = rawTxt.svgID
+            if rawTxt.svgClass:
+                data["class"] = rawTxt.svgClass
+            if rawTxt.svgLink:
+                self._svgContext.begintag("a", **{"xlink:href": rawTxt.svgLink})
+                self._svgContext.newline()
         self._svgContext.begintag("text", **data)
         self._svgContext.newline()
 
@@ -475,6 +493,9 @@ class SVGContext(BaseContext):
 
         self._svgContext.endtag("text")
         self._svgContext.newline()
+        if isinstance(rawTxt, FormattedString) and rawTxt.svgLink:
+            self._svgContext.endtag("a")
+            self._svgContext.newline()
         self._svgEndClipPath()
 
     def _image(self, path, xy, alpha, pageNumber):

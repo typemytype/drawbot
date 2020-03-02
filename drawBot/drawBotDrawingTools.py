@@ -1605,6 +1605,8 @@ class DrawBotDrawingTool(object):
             raise DrawBotError("align must be left, right, center")
         attributedString = self._dummyContext.attributedString(txt, align=align)
         for subTxt, box in makeTextBoxes(attributedString, (x, y), align=align, plainText=not isinstance(txt, FormattedString)):
+            if isinstance(txt, FormattedString):
+                subTxt.copyContextProperties(txt)
             self.textBox(subTxt, box, align=align)
 
     def textOverflow(self, txt, box, align=None):
@@ -1828,6 +1830,11 @@ class DrawBotDrawingTool(object):
 
         .. autoclass:: drawBot.context.baseContext.FormattedString
             :members:
+            :undoc-members:
+            :inherited-members:
+            :show-inheritance:
+            :exclude-members: copyContextProperties
+
         """
         return self._formattedStringClass(*args, **kwargs)
 
@@ -2313,6 +2320,8 @@ class DrawBotDrawingTool(object):
             :members:
             :undoc-members:
             :inherited-members:
+            :show-inheritance:
+            :exclude-members: copyContextProperties
 
         """
         return self._bezierPathClass(path, glyphSet)
