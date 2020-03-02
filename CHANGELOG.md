@@ -6,10 +6,10 @@
 
 ## [3.123]
 
-- Build with Github actions!!!!
+- Built with Github actions!!!!
 - Improve pip installer.
 - Support `viewBox` in svg output.
-- Point atributes of a bezierPath are immutable.
+- Point attributes of a bezierPath are immutable.
 
 ## [3.122]
 
