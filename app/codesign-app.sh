@@ -19,6 +19,12 @@ find "$APP_PATH" -iname '*.so' -or -iname '*.dylib' |
     done;
 
 
+codesign --sign "$DEV_ID" --entitlements "$ENTITLEMENTS" --deep "${APP_PATH}/Contents/Resources/ffmpeg" --force --options runtime
+codesign --sign "$DEV_ID" --entitlements "$ENTITLEMENTS" --deep "${APP_PATH}/Contents/Resources/gifsicle" --force --options runtime
+codesign --sign "$DEV_ID" --entitlements "$ENTITLEMENTS" --deep "${APP_PATH}/Contents/Resources/mkbitmap" --force --options runtime
+codesign --sign "$DEV_ID" --entitlements "$ENTITLEMENTS" --deep "${APP_PATH}/Contents/Resources/potrace" --force --options runtime
+
+
 # Codesign the app
 codesign --sign "$DEV_ID" \
          --entitlements "$ENTITLEMENTS" \
