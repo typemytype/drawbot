@@ -68,7 +68,7 @@ jobs:
       if: always()
       with:
         name: notarize_log.txt
-        path: .dist/notarize_log.txt
+        path: ./dist/notarize_log.txt
 
     - name: Read CHANGELOG.md
       id: changelog
