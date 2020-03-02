@@ -15,6 +15,7 @@
 - Improve updater message.
 - Upgrade code editor lexer to python3.
 - Upgrade internal tool potrace and mkbitmap.
+- Add context specific attribes: `svgLink`, `svgID`, `svgClass`.
 
 ## [3.122] 2019-11-03
 
