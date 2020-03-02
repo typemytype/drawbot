@@ -234,6 +234,8 @@ existingDmgLocation = os.path.join(distLocation, "%s.dmg" % appName)
 dmgLocation = os.path.join(distLocation, appName)
 pythonVersion = "python%s.%i" % (sys.version_info[0], sys.version_info[1])
 pythonLibPath = os.path.join(resourcesPath, "lib", pythonVersion)
+appToolsRoot = os.path.join(drawBotRoot, "app")
+
 
 if "-A" not in sys.argv:
     # make sure the external tools have the correct permissions
@@ -285,27 +287,8 @@ if buildDMG or ftpHost is not None:
         # ================
         # = code signing =
         # ================
-        print("---------------------")
-        print("-   code signing    -")
-        cmds = ["codesign", "--force", "--deep", "--verbose", "--sign", "Developer ID Application: %s" % codeSignDeveloperName, appLocation]
-        popen = subprocess.Popen(cmds)
+        popen = subprocess.Popen([os.path.join(appToolsRoot, "codesign-app.sh"), "Developer ID Application: %s" % codeSignDeveloperName, appLocation, os.path.join(appToolsRoot, "entitlements.xml")])
         popen.wait()
-        print("- done code signing -")
-        print("---------------------")
-
-        print("------------------------------")
-        print("- verifying with codesign... -")
-        cmds = ["codesign", "--verify", "--verbose=4", appLocation]
-        popen = subprocess.Popen(cmds)
-        popen.wait()
-        print("------------------------------")
-
-        print("---------------------------")
-        print("- verifying with spctl... -")
-        cmds = ["spctl", "--verbose=4", "--raw", "--assess", "--type", "execute", appLocation]
-        popen = subprocess.Popen(cmds)
-        popen.wait()
-        print("---------------------------")
 
     # ================
     # = creating dmg =
@@ -385,7 +368,7 @@ if buildDMG or ftpHost is not None:
                 "-p", notarizePassword,
                 "--output-format", "xml"
                 ]
-            countDown = 10
+            countDown = 16
             while countDown:
                 with tempfile.TemporaryFile(mode='w+b') as stdoutFile:
                     popen = subprocess.Popen(notarizeInfo, stdout=stdoutFile)
@@ -396,6 +379,7 @@ if buildDMG or ftpHost is not None:
 
                     if "notarization-info" in data:
                         status = data["notarization-info"].get("Status", "").lower()
+                        print("     notarization status:", status)
                         if status == "success":
                             notarisationSucces = True
                             print("notarization succes")
@@ -403,9 +387,15 @@ if buildDMG or ftpHost is not None:
                         if status == "invalid":
                             print("notarization invalid")
                             break
-                    print("Not completed yet. Sleeping for 30 seconds")
+                    print("     Not completed yet. Sleeping for 30 seconds")
                 countDown -= 1
                 time.sleep(30)
+
+            if "notarization-info" in data:
+                logURL = data["notarization-info"].get("LogFileURL")
+                if logURL:
+                    os.system(f"curl -s {logURL} > {os.path.join(distLocation, 'notarize_log.txt')}")
+
             print("done getting notarization info")
 
         if notarisationSucces:
