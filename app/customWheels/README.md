@@ -9,3 +9,7 @@ The official wheel blocks notarizing:
 # uharfbuzz
 
 Codesigning and notarizing works, validating the code signatures works, yet when uharfbuzz gets imported upon running the application on macOS 10.10 (maybe also others, but not 10.15) it results in an dyld ImportError, claiming that the signature is invalid. If I build uharfbuzz from the source, this does not happen. I have no idea what the difference could be.
+
+# xattr
+
+same as uharfbuzz

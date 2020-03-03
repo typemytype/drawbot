@@ -52,6 +52,7 @@ jobs:
         pip install .
         pip install --upgrade ./app/customWheels/lxml-4.5.0-cp37-cp37m-macosx_10_9_x86_64.whl
         pip install --upgrade ./app/customWheels/uharfbuzz-0.5.1.dev13+g5f9b224-cp37-cp37m-macosx_10_9_x86_64.whl
+        pip install --upgrade ./app/customWheels/xattr-0.9.7-cp37-cp37m-macosx_10_9_x86_64.whl
 
     - name: Run tests
       run:
