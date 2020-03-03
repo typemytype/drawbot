@@ -1,5 +1,6 @@
 pyobjc
-py2app
+# pin py2app to version 0.19, see https://github.com/ronaldoussoren/py2app/issues/281
+py2app==0.19
 git+https://github.com/robotools/vanilla
 defcon
 git+https://github.com/robotools/defconAppKit
