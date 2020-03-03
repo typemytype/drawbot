@@ -44,6 +44,12 @@ class ContextPropertyMixin:
             if func is not None:
                 func(self, other)
 
+    def _stringValidator(self, attr, value):
+        if value is None:
+            return
+        if not isinstance(value, str):
+            raise DrawBotError(f"'{attr}' must be a string.")
+
 
 class contextProperty:
 
@@ -78,7 +84,16 @@ class contextProperty:
 
 class SVGContextPropertyMixin:
 
-    svgID = contextProperty("The svg id, as a string.", "stringValidator")
+    def _get_svgID(self):
+        return getattr(self, "_svgID", None)
+
+    def _set_svgID(self, value):
+        self._stringValidator("svgID", value)
+        self._svgID = value
+
+    svgID = property(_get_svgID, _set_svgID, doc="The svg id, as a string.")
+
+    # svgID = contextProperty("The svg id, as a string.", "stringValidator")
     svgClass = contextProperty("The svg class, as a string.", "stringValidator")
     svgLink = contextProperty("The svg link, as a string.", "stringValidator")
 
