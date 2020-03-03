@@ -27,12 +27,6 @@ class MetaMock(type):
     def __getattr__(self, name):
         return self
 
-    def __len__(self):
-        return 0
-
-    def __iter__(self):
-        return iter([])
-
 
 class Mock(object, metaclass=MetaMock):
 
