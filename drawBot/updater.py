@@ -55,7 +55,7 @@ def downloadCurrentVersion():
     """
     Download the current version (dmg) and mount it
     """
-    path = "https://static.typemytype.com/drawBot/DrawBot.dmg"
+    path = "https://github.com/typemytype/drawbot/releases/latest/download/DrawBot.dmg"
     try:
         # download and mount
         cmds = ["hdiutil", "attach", "-plist", path]
