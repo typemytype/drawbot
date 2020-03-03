@@ -3,6 +3,7 @@
 
 ## [3.124] Unreleased
 
+- Fix updater with the correct download link.
 
 ## [3.123] 2020-03-03
 
