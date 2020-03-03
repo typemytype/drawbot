@@ -9,7 +9,7 @@
 - Fully notarized and built with GitHub Actions!!!!
 - Improve pip installer.
 - Support `viewBox` in svg output.
-- Point attributes of a bezierPath are immutable.
+- Point attributes of a BezierPath are immutable.
 - Fix bug when an FormattedString contains an empty last line.
 - Don't optimize an empty BezierPath.
 - Improve updater message.
