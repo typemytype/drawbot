@@ -6,16 +6,16 @@
 
 ## [3.123] 2020-03-03
 
-- Built with Github actions!!!!
+- Fully notarized and built with GitHub Actions!!!!
 - Improve pip installer.
 - Support `viewBox` in svg output.
 - Point attributes of a bezierPath are immutable.
-- Fix bug when an formattedString contains an empty last line.
-- Don't optimize an empty bezierPath.
+- Fix bug when an FormattedString contains an empty last line.
+- Don't optimize an empty BezierPath.
 - Improve updater message.
 - Upgrade code editor lexer to python3.
 - Upgrade internal tool potrace and mkbitmap.
-- Add context specific attribes: `svgLink`, `svgID`, `svgClass`.
+- Add context-specific attributes for BezierPath and FormattedString: `svgLink`, `svgID`, `svgClass`.
 
 ## [3.122] 2019-11-03
 
