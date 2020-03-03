@@ -92,3 +92,6 @@ __Compile:__
 
 	cd path/To/drawBot
     python setup.py install
+
+
+## [Release protocol](https://github.com/typemytype/drawbot/wiki/DrawBot-release-protocol)
