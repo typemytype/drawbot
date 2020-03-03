@@ -1,5 +1,7 @@
 pyobjc
-py2app
+# pin py2app to version 0.19, see https://github.com/ronaldoussoren/py2app/issues/281
+# fix error: Failed to connect (colorGridView) outlet from (NSApplication) to (NSColorPickerGridView): missing setter or instance variable
+py2app==0.19
 git+https://github.com/robotools/vanilla
 defcon
 git+https://github.com/robotools/defconAppKit
@@ -22,3 +24,4 @@ git+https://github.com/typemytype/ufo2fdk
 git+https://github.com/typesupply/feaPyFoFum
 git+https://github.com/typesupply/feaTools2
 pip
+packaging

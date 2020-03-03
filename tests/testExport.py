@@ -7,6 +7,7 @@ import random
 import AppKit
 from drawBot.context.tools.gifTools import gifFrameCount
 from drawBot.misc import DrawBotError
+from drawBot.macOSVersion import macOSVersion
 from testSupport import StdOutCollector, TempFile, TempFolder, randomSeed, readData, testDataDir
 
 
@@ -48,9 +49,15 @@ class ExportTest(unittest.TestCase):
 
     def test_export_mov(self):
         self.makeTestAnimation(5)
-        with StdOutCollector(captureStdErr=True) as output:
-            self._saveImageAndReturnSize(".mov")
-        self.assertEqual(output.lines(), ["*** DrawBot warning: Export to '.mov' is deprecated, use '.mp4' instead. ***"])
+        with self.assertRaises(DrawBotError) as cm:
+            with StdOutCollector(captureStdErr=True) as output:
+                self._saveImageAndReturnSize(".mov")
+        if macOSVersion < "10.15":
+            # a warning on lower then 10.15
+            self.assertEqual(output.lines(), ["*** DrawBot warning: Export to '.mov' is deprecated, use '.mp4' instead. ***"])
+        else:
+            # a traceback on 10.15
+            self.assertEqual(cm.exception.args[0], "Export to '.mov' was deprecated and is not supported on this system (10.15 and up). Use .mp4 instead.")
 
     def test_export_gif(self):
         self.makeTestAnimation(5)

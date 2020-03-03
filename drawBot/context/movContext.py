@@ -3,7 +3,6 @@ import Quartz
 import os
 
 from ..misc import DrawBotError, warnings
-from ..macOSVersion import macOSVersion
 from .pdfContext import PDFContext
 
 try:
