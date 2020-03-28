@@ -1,9 +1,12 @@
 # Changelog For DrawBot
 
+## [3.125] Unreleased
 
-## [3.124] Unreleased
+
+## [3.124] 2020-0328
 
 - Fix updater with the correct download link.
+- Allowing external tools to be used inside DrawBot, a notarizing entitlement.
 
 ## [3.123] 2020-03-03
 
