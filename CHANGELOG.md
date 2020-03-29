@@ -2,6 +2,7 @@
 
 ## [3.125] Unreleased
 
+- Update embedded uharfbuzz.
 
 ## [3.124] 2020-0328
 
