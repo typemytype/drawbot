@@ -1480,7 +1480,8 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
 
     def tracking(self, tracking):
         """
-        Set the tracking between characters.
+        Set the tracking between characters. It adds an absolute number of
+        points between the characters.
         """
         self._tracking = tracking
 
