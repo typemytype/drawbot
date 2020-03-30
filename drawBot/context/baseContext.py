@@ -1150,7 +1150,7 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
         * `strokeWidth`: the strokeWidth to be used for the given text
         * `align`: the alignment to be used for the given text
         * `lineHeight`: the lineHeight to be used for the given text
-        * `tracking`: set tracking for the given text
+        * `tracking`: set tracking for the given text in absolute points
         * `baselineShift`: set base line shift for the given text
         * `openTypeFeatures`: enable OpenType features
         * `fontVariations`: pick a variation by axes values
