@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="200" height="200" viewBox="0 0 200 200" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <path d="M10,10 l20,0 l0,20 l-20,0 Z M10,10" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,200)"/>
+ <a href="http://drawbot.com">
+  <rect fill="transparent" height="20" width="20" x="10" y="170"/></a></svg>

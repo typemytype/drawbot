@@ -652,6 +652,20 @@ class SVGContext(BaseContext):
             style.append("%s: %s;" % (key, value))
         return " ".join(style)
 
+    def _linkURL(self, url, xywh):
+        x, y, w, h = xywh
+        rectData = dict(
+            x=x,
+            y=self.height-y-h,
+            width=w,
+            height=h,
+            fill="transparent",
+        )
+        self._svgContext.begintag("a", href=url)
+        self._svgContext.newline()
+        self._svgContext.simpletag('rect', **rectData)
+        self._svgContext.endtag("a")
+
     def installFont(self, path):
         success, error = super(self.__class__, self).installFont(path)
         # if path not in self._embeddedFonts:
