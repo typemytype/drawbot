@@ -21,5 +21,6 @@ Page Attributes
 .. autofunction:: drawBot.pageCount
 .. autofunction:: drawBot.pages
 .. autofunction:: drawBot.frameDuration
+.. autofunction:: drawBot.linkURL
 .. autofunction:: drawBot.linkDestination(name, (x, y))
 .. autofunction:: drawBot.linkRect

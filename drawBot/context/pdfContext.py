@@ -382,6 +382,12 @@ class PDFContext(BaseContext):
             return Quartz.CGColorCreateGenericGray(c.whiteComponent(), c.alphaComponent())
         return Quartz.CGColorCreateGenericRGB(c.redComponent(), c.greenComponent(), c.blueComponent(), c.alphaComponent())
 
+    def _linkURL(self, url, xywh):
+        url = AppKit.NSURL.URLWithString_(url)
+        x, y, w, h = xywh
+        rectBox = Quartz.CGRectMake(x, y, w, h)
+        Quartz.CGPDFContextSetURLForRect(self._pdfContext, url, rectBox)
+
     def _linkDestination(self, name, xy):
         x, y = xy
         if (x, y) == (None, None):

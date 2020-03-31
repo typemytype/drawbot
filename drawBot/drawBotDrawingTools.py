@@ -2073,6 +2073,16 @@ class DrawBotDrawingTool(object):
 
     # pdf links
 
+    def linkURL(self, url, xywh):
+        """
+        Add a rect for an external url link.
+
+        The link rectangle will be set independent of the current context transformations.
+        """
+        x, y, w, h = xywh
+        self._requiresNewFirstPage = True
+        self._addInstruction("linkURL", url, (x, y, w, h))
+
     def linkDestination(self, name, x=None, y=None):
         """
         Add a destination point for a link within a PDF.
