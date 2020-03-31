@@ -3,6 +3,7 @@
 ## [3.125] Unreleased
 
 - Update embedded uharfbuzz.
+- Adding `linkURL`.
 
 ## [3.124] 2020-0328
 
