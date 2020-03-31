@@ -160,6 +160,7 @@ def _makeTestCase(exampleName, source, doSaveImage):
 skip = {
     "test_imageObject",  # skipping, the rendering diff between OS versions is too great
     "test_lineHeight",  # This fails on Travis. TODO: figure out why.
+    "test_linkRect",  # skipping, we dont compare raw pdf data
 }
 expectedFailures = {}
 dontSaveImage = {"test_imageSize"}
