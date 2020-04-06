@@ -3,7 +3,9 @@
 ## [3.125] Unreleased
 
 - Update embedded uharfbuzz.
-- Adding `linkURL`.
+- Adding `linkURL(url, (x, y, w, h))`.
+- Adding `url(url)` and `formattedString.url(url)`.
+- Improve support for `underline`.
 
 ## [3.124] 2020-0328
 
