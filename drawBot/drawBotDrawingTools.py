@@ -1793,6 +1793,41 @@ class DrawBotDrawingTool(object):
         origins = CoreText.CTFrameGetLineOrigins(box, (0, len(ctLines)), None)
         return [(x + o.x, y + o.y) for o in origins]
 
+    def textBoxCharacterBounds(self, txt, box, align=None):
+        """
+        Returns a list of `((x, y, w, h), baseLineOffset, characters, formattedString)`.
+
+        A `box` could be a `(x, y, w, h)` or a bezierPath object.
+
+        Optionally an alignment can be set.
+        Possible `align` values are: `"left"`, `"center"`, `"right"` and `"justified"`.
+        """
+        if not isinstance(txt, (str, FormattedString)):
+            raise TypeError("expected 'str' or 'FormattedString', got '%s'" % type(txt).__name__)
+        characterBounds = list()
+        path, (x, y) = self._dummyContext._getPathForFrameSetter(box)
+        attrString = self._dummyContext.attributedString(txt)
+        rawText = attrString.string()
+        setter = CoreText.CTFramesetterCreateWithAttributedString(attrString)
+        box = CoreText.CTFramesetterCreateFrame(setter, (0, 0), path, None)
+        ctLines = CoreText.CTFrameGetLines(box)
+        origins = CoreText.CTFrameGetLineOrigins(box, (0, len(ctLines)), None)
+        for i, (originX, originY) in enumerate(origins):
+            ctLine = ctLines[i]
+            ctRuns = CoreText.CTLineGetGlyphRuns(ctLine)
+            for ctRun in ctRuns:
+                runRange = CoreText.CTRunGetStringRange(ctRun)
+                runPos = CoreText.CTRunGetPositions(ctRun, (0, 1), None)[0]
+                runW, runH, ascent, descent = CoreText.CTRunGetTypographicBounds(ctRun, (0, 0), None, None, None)
+
+                characters = rawText.substringWithRange_(runRange)
+                characterBounds.append((
+                    (x + originX + runPos.x, y + originY + runPos.y - ascent, runW, runH + ascent), ascent,
+                    characters,
+                    txt[runRange.location: runRange.location + runRange.length]
+                ))
+        return characterBounds
+
     _formattedStringClass = FormattedString
 
     def FormattedString(self, *args, **kwargs):
