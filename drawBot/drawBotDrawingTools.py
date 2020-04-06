@@ -5,6 +5,7 @@ import Quartz
 import math
 import os
 import random
+from collections import namedtuple
 
 from .context import getContextForFileExt, getContextOptions, getFileExtensions, getContextOptionsDocs
 from .context.baseContext import BezierPath, FormattedString, makeTextBoxes
@@ -1804,10 +1805,12 @@ class DrawBotDrawingTool(object):
         """
         if not isinstance(txt, (str, FormattedString)):
             raise TypeError("expected 'str' or 'FormattedString', got '%s'" % type(txt).__name__)
-        characterBounds = list()
+
+        CharactersBounds = namedtuple('CharactersBounds', ['bounds', 'baselineOffset', 'formattedSubString'])
+
+        bounds = list()
         path, (x, y) = self._dummyContext._getPathForFrameSetter(box)
         attrString = self._dummyContext.attributedString(txt)
-        rawText = attrString.string()
         setter = CoreText.CTFramesetterCreateWithAttributedString(attrString)
         box = CoreText.CTFramesetterCreateFrame(setter, (0, 0), path, None)
         ctLines = CoreText.CTFrameGetLines(box)
@@ -1819,14 +1822,12 @@ class DrawBotDrawingTool(object):
                 runRange = CoreText.CTRunGetStringRange(ctRun)
                 runPos = CoreText.CTRunGetPositions(ctRun, (0, 1), None)[0]
                 runW, runH, ascent, descent = CoreText.CTRunGetTypographicBounds(ctRun, (0, 0), None, None, None)
-
-                characters = rawText.substringWithRange_(runRange)
-                characterBounds.append((
-                    (x + originX + runPos.x, y + originY + runPos.y - ascent, runW, runH + ascent), ascent,
-                    characters,
+                bounds.append(CharactersBounds(
+                    (x + originX + runPos.x, y + originY + runPos.y - ascent, runW, runH + ascent),
+                    ascent,
                     txt[runRange.location: runRange.location + runRange.length]
                 ))
-        return characterBounds
+        return bounds
 
     _formattedStringClass = FormattedString
 
