@@ -493,6 +493,9 @@ class SVGContext(BaseContext):
                 self._svgContext.newline()
                 self._svgContext.endtag("tspan")
                 self._svgContext.newline()
+                if url is not None:
+                    self._svgContext.endtag("a")
+                    self._svgContext.newline()
                 self._restore()
 
         self._svgContext.endtag("text")
@@ -668,7 +671,9 @@ class SVGContext(BaseContext):
         self._svgContext.begintag("a", href=url)
         self._svgContext.newline()
         self._svgContext.simpletag('rect', **rectData)
+        self._svgContext.newline()
         self._svgContext.endtag("a")
+        self._svgContext.newline()
 
     def installFont(self, path):
         success, error = super(self.__class__, self).installFont(path)
