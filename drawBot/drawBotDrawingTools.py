@@ -1403,7 +1403,7 @@ class DrawBotDrawingTool(object):
     def underline(self, value):
         """
         Set the underline value.
-        Underline must be `single` or `None.
+        Underline must be `single`, `thick`, `double` or `None`.
 
         .. downloadcode:: underline.py
 

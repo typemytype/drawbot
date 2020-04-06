@@ -1025,8 +1025,8 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
 
     _textUnderlineMap = dict(
         single=AppKit.NSUnderlineStyleSingle,
-        # thick=AppKit.NSUnderlineStyleThick,
-        # double=AppKit.NSUnderlineStyleDouble,
+        thick=AppKit.NSUnderlineStyleThick,
+        double=AppKit.NSUnderlineStyleDouble,
         # solid=AppKit.NSUnderlinePatternSolid,
         # dotted=AppKit.NSUnderlinePatternDot,
         # dashed=AppKit.NSUnderlinePatternDash,
@@ -1493,7 +1493,7 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
     def underline(self, underline):
         """
         Set the underline value.
-        Underline must be `single` or `None`.
+        Underline must be `single`, `thick`, `double` or `None`.
         """
         self._underline = underline
 
