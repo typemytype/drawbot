@@ -168,7 +168,6 @@ class PDFContext(BaseContext):
                     Quartz.CGContextSetTextPosition(self._pdfContext, x+originX, y+originY+baselineShift)
                     urlBox = CoreText.CTRunGetImageBounds(ctRun, self._pdfContext, (0, 0))
                     urlBox = Quartz.CGContextConvertRectToDeviceSpace(self._pdfContext, urlBox)
-                    print(urlBox)
                     Quartz.CGPDFContextSetURLForRect(self._pdfContext, url, urlBox)
                     self._restore()
                 drawingMode = None
