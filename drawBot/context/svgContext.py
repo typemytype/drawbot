@@ -434,6 +434,7 @@ class SVGContext(BaseContext):
                 strokeWidth = attributes.get(AppKit.NSStrokeWidthAttributeName, self._state.strokeWidth)
                 baselineShift = attributes.get(AppKit.NSBaselineOffsetAttributeName, 0)
                 openTypeFeatures = fontAttributes.get(CoreText.NSFontFeatureSettingsAttribute)
+                url = attributes.get(AppKit.NSLinkAttributeName)
 
                 fontName = font.fontName()
                 fontSize = font.pointSize()
@@ -483,6 +484,9 @@ class SVGContext(BaseContext):
 
                 spanData["x"] = formatNumber(originX + runX)
                 spanData["y"] = formatNumber(self.height - originY - runY + baselineShift)
+                if url is not None:
+                    self._svgContext.begintag("a", href=url.absoluteString())
+                    self._svgContext.newline()
                 self._svgContext.begintag("tspan", **spanData)
                 self._svgContext.newline()
                 self._svgContext.write(runTxt)

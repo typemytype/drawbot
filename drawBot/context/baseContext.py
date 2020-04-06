@@ -981,10 +981,11 @@ def makeTextBoxes(attributedString, xy, align, plainText):
         if attributedSubstring.length() > 0:
             width += extraPadding
             originX = 0
-            if para.alignment() == AppKit.NSCenterTextAlignment:
-                originX -= width * .5
-            elif para.alignment() == AppKit.NSRightTextAlignment:
-                originX = -width
+            if para is not None:
+                if para and para.alignment() == AppKit.NSCenterTextAlignment:
+                    originX -= width * .5
+                elif para.alignment() == AppKit.NSRightTextAlignment:
+                    originX = -width
 
             substring = FormattedString()
             substring.getNSObject().appendAttributedString_(attributedSubstring)
@@ -1051,6 +1052,7 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
         tracking=None,
         baselineShift=None,
         underline=None,
+        url=None,
         openTypeFeatures=dict(),
         fontVariations=dict(),
         tabs=None,
@@ -1311,6 +1313,8 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
             attributes[AppKit.NSBaselineOffsetAttributeName] = self._baselineShift
         if self._underline in self._textUnderlineMap:
             attributes[AppKit.NSUnderlineStyleAttributeName] = self._textUnderlineMap[self._underline]
+        if self._url is not None:
+            attributes[AppKit.NSLinkAttributeName] = AppKit.NSURL.URLWithString_(self._url)
         if self._language:
             attributes["NSLanguage"] = self._language
         attributes[AppKit.NSParagraphStyleAttributeName] = para
@@ -1496,6 +1500,13 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
         Underline must be `single`, `thick`, `double` or `None`.
         """
         self._underline = underline
+
+    def url(self, url):
+        """
+        set the url value.
+        url must be a string or `None`
+        """
+        self._url = url
 
     def openTypeFeatures(self, *args, **features):
         """
@@ -2379,6 +2390,9 @@ class BaseContext(object):
 
     def underline(self, underline):
         self._state.text.underline(underline)
+
+    def url(self, value):
+        self._state.text.url(value)
 
     def hyphenation(self, value):
         self._state.hyphenation = value

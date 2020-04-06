@@ -1416,6 +1416,19 @@ class DrawBotDrawingTool(object):
         self._dummyContext.underline(value)
         self._addInstruction("underline", value)
 
+    def url(self, value):
+        """
+        Set the url value for text.
+
+        .. downloadcode:: url.py
+
+            fontSize(140)
+            url("http://drawbot.com")
+            text("hello", (100, 100))
+        """
+        self._dummyContext.url(value)
+        self._addInstruction("url", value)
+
     def hyphenation(self, value):
         """
         Set hyphenation, `True` or `False`.
