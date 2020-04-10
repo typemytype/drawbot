@@ -3,6 +3,8 @@
 ## [3.125] Unreleased
 
 - Update embedded uharfbuzz.
+- Improve support for kern feature.
+- Seperate tracking from kerning.
 
 ## [3.124] 2020-0328
 
