@@ -428,12 +428,11 @@ class SVGContext(BaseContext):
                 attributes = CoreText.CTRunGetAttributes(ctRun)
                 font = attributes.get(AppKit.NSFontAttributeName)
                 fontDescriptor = font.fontDescriptor()
-                fontAttributes = fontDescriptor.fontAttributes()
                 fillColor = attributes.get(AppKit.NSForegroundColorAttributeName)
                 strokeColor = attributes.get(AppKit.NSStrokeColorAttributeName)
                 strokeWidth = attributes.get(AppKit.NSStrokeWidthAttributeName, self._state.strokeWidth)
                 baselineShift = attributes.get(AppKit.NSBaselineOffsetAttributeName, 0)
-                openTypeFeatures = fontAttributes.get(CoreText.NSFontFeatureSettingsAttribute)
+                openTypeFeatures = attributes.get("drawbot.openTypeFeatures")
 
                 fontName = font.fontName()
                 fontSize = font.pointSize()
@@ -458,9 +457,8 @@ class SVGContext(BaseContext):
                 spanData["font-size"] = formatNumber(fontSize)
 
                 if openTypeFeatures:
-                    featureTags = getFeatureTagsForFontAttributes(openTypeFeatures)
                     spanData["style"] = self._svgStyle(**{
-                            "font-feature-settings": self._svgStyleOpenTypeFeatures(featureTags)
+                            "font-feature-settings": self._svgStyleOpenTypeFeatures(openTypeFeatures)
                         }
                     )
 

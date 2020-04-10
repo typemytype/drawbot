@@ -1189,6 +1189,9 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
             coreTextFontFeatures = []
             nsFontFeatures = []  # fallback for macOS < 10.13
             if self._openTypeFeatures:
+                # store openTypeFeatures in a custom attributes key
+                attributes["drawbot.openTypeFeatures"] = dict(self._openTypeFeatures)
+                # get existing openTypeFeatures for the font
                 existingOpenTypeFeatures = openType.getFeatureTagsForFontName(self._font)
                 # sort features by their on/off state
                 # set all disabled features first
