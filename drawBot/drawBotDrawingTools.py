@@ -1796,7 +1796,7 @@ class DrawBotDrawingTool(object):
 
     def textBoxCharacterBounds(self, txt, box, align=None):
         """
-        Returns a list of `((x, y, w, h), baseLineOffset, characters, formattedString)`.
+        Returns a list of typesetted bounding boxes `((x, y, w, h), baseLineOffset, characters, formattedString)`.
 
         A `box` could be a `(x, y, w, h)` or a bezierPath object.
 
