@@ -3,6 +3,7 @@
 ## [3.125] Unreleased
 
 - Update embedded uharfbuzz.
+- Add `textBoxCharacterBounds` which calculates a list of type setting bounding boxes.
 
 ## [3.124] 2020-0328
 
