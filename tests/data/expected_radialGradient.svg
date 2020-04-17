@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg width="200" height="200" viewBox="0 0 200 200" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
  <defs>
-  <radialGradient cx="200" cy="200" fx="0" fy="0" gradientUnits="userSpaceOnUse" id="gradient4" r="200">
+  <radialGradient cx="200" cy="200" fx="0" fy="0" gradientUnits="userSpaceOnUse" id="gradient2" r="200">
    <stop offset="0" stop-color="rgb(255,0,0)"/>
    <stop offset="0.2" stop-color="rgb(0,0,255)"/>
    <stop offset="1" stop-color="rgb(0,255,0)"/>
   </radialGradient>
-  <radialGradient cx="200" cy="0" fx="0" fy="200" gradientUnits="userSpaceOnUse" id="gradient4_flipped" r="200">
+  <radialGradient cx="200" cy="0" fx="0" fy="200" gradientUnits="userSpaceOnUse" id="gradient2_flipped" r="200">
    <stop offset="0" stop-color="rgb(255,0,0)"/>
    <stop offset="0.2" stop-color="rgb(0,0,255)"/>
    <stop offset="1" stop-color="rgb(0,255,0)"/>
   </radialGradient>
  </defs>
- <path d="M0,0 l200,0 l0,200 l-200,0 Z M0,0" fill="url(#gradient4)" transform="matrix(1,0,0,-1,0,200)"/>
+ <path d="M0,0 l200,0 l0,200 l-200,0 Z M0,0" fill="url(#gradient2)" transform="matrix(1,0,0,-1,0,200)"/>
 </svg>
