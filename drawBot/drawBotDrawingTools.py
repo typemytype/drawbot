@@ -1902,8 +1902,8 @@ class DrawBotDrawingTool(object):
                 rep = gifTools.gifFrameAtIndex(url, pageNumber - 1)
             elif _isPDF and pageNumber is not None:
                 page = pdfDocument.pageAtIndex_(pageNumber - 1)
-                # this is probably not the fastest method...
-                rep = AppKit.NSImage.alloc().initWithData_(page.dataRepresentation())
+                mediaBox = page.boundsForBox_(Quartz.kPDFDisplayBoxMediaBox)
+                return mediaBox.size.width, mediaBox.size.height
             else:
                 _hasPixels = True
                 rep = AppKit.NSImageRep.imageRepWithContentsOfURL_(url)
