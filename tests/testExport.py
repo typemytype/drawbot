@@ -8,11 +8,10 @@ import AppKit
 from drawBot.context.tools.gifTools import gifFrameCount
 from drawBot.misc import DrawBotError
 from drawBot.macOSVersion import macOSVersion
-from testSupport import StdOutCollector, TempFile, TempFolder, randomSeed, readData, testDataDir
-from testScripts import DrawBotTest
+from testSupport import DrawBotBaseTest, StdOutCollector, TempFile, TempFolder, randomSeed, readData, testDataDir
 
 
-class ExportTest(unittest.TestCase):
+class ExportTest(DrawBotBaseTest):
 
     def makeTestAnimation(self, numFrames=25, pageWidth=500, pageHeight=500):
         randomSeed(0)
@@ -157,6 +156,8 @@ class ExportTest(unittest.TestCase):
             self.assertEqual((round(r, 1), round(g, 1), round(b, 1)), (1, 0.0, 0))
 
     def test_imageAntiAliasing(self):
+        from testScripts import DrawBotTest
+
         expectedPath = os.path.join(testDataDir, "expected_imageAntiAliasing.png")
 
         drawBot.newDrawing()
@@ -172,7 +173,7 @@ class ExportTest(unittest.TestCase):
 
         with TempFile(suffix=".png") as tmp:
             drawBot.saveImage(tmp.path, antiAliasing=False)
-            DrawBotTest.assertImageFilesEqual(self, tmp.path, expectedPath)
+            self.assertImageFilesEqual(tmp.path, expectedPath)
 
     def _testMultipage(self, extension, numFrames, expectedMultipageCount):
         self.makeTestAnimation(numFrames)
