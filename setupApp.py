@@ -195,13 +195,14 @@ setup(
                 'pkg_resources',
                 'parso',
                 'pip',
+                "setuptools",
+                "packaging",
             ],
             includes=[
                 # 'csv',
                 # 'this'
             ] + stdLibIncludes,
             excludes=[
-                "packaging",
                 "numpy",
                 "scipy",
                 "matplotlib",
