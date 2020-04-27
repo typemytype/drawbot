@@ -956,6 +956,7 @@ def makeTextBoxes(attributedString, xy, align, plainText):
     origins = CoreText.CTFrameGetLineOrigins(frame, (0, len(ctLines)), None)
     boxes = []
 
+    nextHeight = 0
     for ctLine, (originX, originY) in zip(ctLines, origins):
         rng = CoreText.CTLineGetStringRange(ctLine)
 
@@ -985,6 +986,10 @@ def makeTextBoxes(attributedString, xy, align, plainText):
                 originX -= width * .5
             elif para.alignment() == AppKit.NSRightTextAlignment:
                 originX = -width
+
+            height += para.paragraphSpacing()
+            height += nextHeight
+            nextHeight += para.paragraphSpacingBefore()
 
             substring = FormattedString()
             substring.getNSObject().appendAttributedString_(attributedSubstring)
