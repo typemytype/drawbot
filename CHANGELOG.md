@@ -1,12 +1,18 @@
 # Changelog For DrawBot
 
-## [3.125] Unreleased
+## [3.126] 2020-??-??
 
-- Update embedded uharfbuzz.
 - Improve support for kern feature.
 - Seperate tracking from kerning.
 
-## [3.124] 2020-0328
+## [3.125] 2020-04-22
+
+- Update embedded uharfbuzz.
+- Embed setuptool and packaging.
+- Fix drawbot://url/to/python.py.
+- Improve tracking documenation.
+
+## [3.124] 2020-03-28
 
 - Fix updater with the correct download link.
 - Allowing external tools to be used inside DrawBot, a notarizing entitlement.
