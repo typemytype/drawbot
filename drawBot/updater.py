@@ -1,10 +1,12 @@
-from urllib.request import urlopen
 import ssl
 import subprocess
 import plistlib
 import AppKit
 import re
 import traceback
+import tempfile
+import ssl
+from urllib.request import urlopen, Request
 
 from distutils.version import StrictVersion
 
@@ -57,10 +59,16 @@ def downloadCurrentVersion():
     """
     path = "https://github.com/typemytype/drawbot/releases/latest/download/DrawBot.dmg"
     try:
+        context = ssl._create_unverified_context()
+        request = Request(path, headers={'User-Agent': 'Drawbot'})
         # download and mount
-        cmds = ["hdiutil", "attach", "-plist", path]
-        popen = subprocess.Popen(cmds, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        out, err = popen.communicate()
+        with tempfile.NamedTemporaryFile(mode='w+b') as dmgFile:
+            response = urlopen(request, timeout=5, context=context)
+            dmgFile.write(response.read())
+            response.close()
+            cmds = ["hdiutil", "attach", "-plist", dmgFile.name]
+            popen = subprocess.Popen(cmds, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            out, err = popen.communicate()
         if popen.returncode != 0:
             raise DrawBotError("Mounting failed")
         output = plistlib.loads(out)

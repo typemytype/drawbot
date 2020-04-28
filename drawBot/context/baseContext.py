@@ -1152,7 +1152,7 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
         * `strokeWidth`: the strokeWidth to be used for the given text
         * `align`: the alignment to be used for the given text
         * `lineHeight`: the lineHeight to be used for the given text
-        * `tracking`: set tracking for the given text
+        * `tracking`: set tracking for the given text in absolute points
         * `baselineShift`: set base line shift for the given text
         * `openTypeFeatures`: enable OpenType features
         * `fontVariations`: pick a variation by axes values
@@ -1484,7 +1484,8 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
 
     def tracking(self, tracking):
         """
-        Set the tracking between characters.
+        Set the tracking between characters. It adds an absolute number of
+        points between the characters.
         """
         self._tracking = tracking
 

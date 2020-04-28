@@ -1374,7 +1374,8 @@ class DrawBotDrawingTool(object):
 
     def tracking(self, value):
         """
-        Set the tracking between characters.
+        Set the tracking between characters. It adds an absolute number of
+        points between the characters.
 
         .. downloadcode:: tracking.py
 
