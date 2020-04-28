@@ -1,10 +1,5 @@
 # Changelog For DrawBot
 
-## [3.126] 2020-??-??
-
-- Improve support for kern feature.
-- Seperate tracking from kerning.
-
 ## [3.125] 2020-04-22
 
 - Update embedded uharfbuzz.
