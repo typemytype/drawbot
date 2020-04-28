@@ -194,7 +194,8 @@ class DrawBotAppDelegate(AppKit.NSObject):
 
     def getUrl_withReplyEvent_(self, event, reply):
         from urllib.parse import urlparse
-        from urllib.request import urlopen
+        from urllib.request import urlopen, Request
+        import ssl
         code = stringToInt(b"----")
         url = event.paramDescriptorForKeyword_(code)
         urlString = url.stringValue()
@@ -203,8 +204,10 @@ class DrawBotAppDelegate(AppKit.NSObject):
         data = urlparse(urlString)
         if data.netloc:
             # in the cloudzzz
-            pythonPath = "http://%s%s" % (data.netloc, data.path)
-            response = urlopen(pythonPath)
+            pythonPath = "https://%s%s" % (data.netloc, data.path)
+            context = ssl._create_unverified_context()
+            request = Request(pythonPath, headers={'User-Agent': 'Drawbot'})
+            response = urlopen(request, timeout=5, context=context)
             code = response.read()
             response.close()
         else:
