@@ -1,4 +1,5 @@
-[![Build Status](https://travis-ci.org/typemytype/drawbot.svg?branch=master)](https://travis-ci.org/typemytype/drawbot)
+![DrawBot Test Bench](https://github.com/typemytype/drawbot/workflows/DrawBot%20Test%20Bench/badge.svg)
+![DrawBot App Builder](https://github.com/typemytype/drawbot/workflows/DrawBot%20App%20Builder/badge.svg)
 [![codecov](https://codecov.io/gh/typemytype/drawbot/branch/master/graph/badge.svg)](https://codecov.io/gh/typemytype/drawbot)
 
 # DrawBot
