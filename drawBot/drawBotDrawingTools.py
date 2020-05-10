@@ -1539,7 +1539,7 @@ class DrawBotDrawingTool(object):
     def listOpenTypeFeatures(self, fontName=None):
         return self._dummyContext._state.text.listOpenTypeFeatures(fontName)
 
-    listOpenTypeFeatures.__doc__ = FormattedString.listFontVariations.__doc__
+    listOpenTypeFeatures.__doc__ = FormattedString.listOpenTypeFeatures.__doc__
 
     def fontVariations(self, *args, **axes):
         """
