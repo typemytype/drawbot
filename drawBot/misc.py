@@ -212,22 +212,24 @@ warnings = Warnings()
 
 class VariableController(object):
 
-    def __init__(self, attributes, callback, document=None):
+    def __init__(self, attributes, callback, document=None, isContinuous=True):
         import vanilla
         self._callback = callback
         self._attributes = None
+        self._isContinuous = None
         self.w = vanilla.FloatingWindow((250, 50))
-        self.buildUI(attributes)
+        self.buildUI(attributes, isContinuous)
         self.w.open()
         if document:
             self.w.assignToDocument(document)
         self.w.setTitle("Variables")
 
-    def buildUI(self, attributes):
+    def buildUI(self, attributes, isContinuous):
         import vanilla
-        if self._attributes == attributes:
+        if (self._attributes, self._isContinuous) == (attributes, isContinuous):
             return
         self._attributes = attributes
+        self._isContinuous = isContinuous
         if hasattr(self.w, "ui"):
             del self.w.ui
         self.w.ui = ui = vanilla.Group((0, 0, -0, -0))
@@ -265,12 +267,17 @@ class VariableController(object):
             else:
                 # all other get a size style
                 args["sizeStyle"] = "small"
-            if attribute.get("isContinuous", True):
+            # add the callback
+            if isContinuous:
                 args["callback"] = self.changed
             # create the control view
             attr = getattr(vanilla, uiElement)((labelSize, y, -10, height), **args)
             # set the control view
             setattr(ui, name, attr)
+            y += height + 6
+        if not isContinuous:
+            # add button when the variable control is set to not continuous
+            ui._isContinuousUpdateButton = vanilla.Button((labelSize, y, -10, height), "Update", callback=self.changed)
             y += height + 6
         # resize the window according the provided ui elements
         self.w.resize(250, y)
