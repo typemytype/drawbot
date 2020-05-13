@@ -2401,7 +2401,11 @@ class DrawBotDrawingTool(object):
                 dict(name="useColor", ui="CheckBox"),
                 # create a variable called 'c'
                 # and the related ui is a ColorWell.
-                dict(name="c", ui="ColorWell")
+                dict(name="c", ui="ColorWell"),
+                # create a variable called 'foo'
+                # the related ui is a slider
+                # and is not continuous: the slider will not send an update when it is changed
+                dict(name="foo", ui="Slider", isContinuous=True),
                 ], globals())
 
             # draw a rect
