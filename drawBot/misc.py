@@ -265,8 +265,10 @@ class VariableController(object):
             else:
                 # all other get a size style
                 args["sizeStyle"] = "small"
+            if attribute.get("isContinuously", True):
+                args["callback"] = self.changed
             # create the control view
-            attr = getattr(vanilla, uiElement)((labelSize, y, -10, height), callback=self.changed, **args)
+            attr = getattr(vanilla, uiElement)((labelSize, y, -10, height), **args)
             # set the control view
             setattr(ui, name, attr)
             y += height + 6
