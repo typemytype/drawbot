@@ -2377,7 +2377,7 @@ class DrawBotDrawingTool(object):
         as you want to insert the variable in the current workspace.
         It is required that `workSpace` is a `dict` object.
 
-        The `continuous` argument controls whether script is run when UI
+        The `continuous` argument controls whether the script is run when UI
         elements change. The default is `True`, which will execute the script
         immediately and continuously when the user input changes. When set to
         `False`, there will be an "Update" button added at the bottom of the window.
