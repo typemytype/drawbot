@@ -67,6 +67,7 @@ class ImageContext(PDFContext):
 
     saveImageOptions = [
         ("imageResolution", "The resolution of the output image in PPI. Default is 72."),
+        ("antiAliasing", "Indicate if a the image should be rendedered with anti-aliasing. Default is True."),
         ("multipage", "Output a numbered image for each page or frame in the document."),
     ]
 
@@ -87,6 +88,7 @@ class ImageContext(PDFContext):
             pathAdd = ""
         outputPaths = []
         imageResolution = options.get("imageResolution", 72.0)
+        antiAliasing = options.get("antiAliasing", True)
         properties = {}
         for key, value in options.items():
             if key in _nsImageOptions:
@@ -98,8 +100,11 @@ class ImageContext(PDFContext):
             pool = AppKit.NSAutoreleasePool.alloc().init()
             try:
                 page = pdfDocument.pageAtIndex_(index)
-                image = AppKit.NSImage.alloc().initWithData_(page.dataRepresentation())
-                imageRep = _makeBitmapImageRep(image, imageResolution)
+                imageRep = _makeBitmapImageRep(
+                    pdfPage=page,
+                    antiAliasing=antiAliasing,
+                    imageResolution=imageResolution
+                )
                 if self.ensureEvenPixelDimensions:
                     if imageRep.pixelsWide() % 2 or imageRep.pixelsHigh() % 2:
                         raise DrawBotError("Exporting to %s doesn't support odd pixel dimensions for width and height." % (", ".join(self.fileExtensions)))
@@ -114,13 +119,21 @@ class ImageContext(PDFContext):
         return outputPaths
 
 
-def _makeBitmapImageRep(image, imageResolution=72.0, colorSpaceName=AppKit.NSCalibratedRGBColorSpace):
+def _makeBitmapImageRep(nsImage=None, pdfPage=None, imageResolution=72.0, antiAliasing=True, colorSpaceName=AppKit.NSCalibratedRGBColorSpace):
     """Construct a bitmap image representation at a given resolution."""
+    if nsImage is None and pdfPage is None:
+        raise DrawBotError("At least a image or a pdf page must be provided to create a bitmap representaion.")
     scaleFactor = max(1.0, imageResolution) / 72.0
+    if pdfPage is not None:
+        mediaBox = pdfPage.boundsForBox_(Quartz.kPDFDisplayBoxMediaBox)
+        width, height = mediaBox.size
+    elif nsImage is not None:
+        width, height = nsImage.size()
+
     rep = AppKit.NSBitmapImageRep.alloc().initWithBitmapDataPlanes_pixelsWide_pixelsHigh_bitsPerSample_samplesPerPixel_hasAlpha_isPlanar_colorSpaceName_bytesPerRow_bitsPerPixel_(
         None,                                    # planes
-        int(image.size().width * scaleFactor),   # pixelsWide
-        int(image.size().height * scaleFactor),  # pixelsHigh
+        int(width * scaleFactor),                # pixelsWide
+        int(height * scaleFactor),               # pixelsHigh
         8,                                       # bitsPerSample
         4,                                       # samplesPerPixel
         True,                                    # hasAlpha
@@ -129,13 +142,21 @@ def _makeBitmapImageRep(image, imageResolution=72.0, colorSpaceName=AppKit.NSCal
         0,                                       # bytesPerRow
         0                                        # bitsPerPixel
     )
-    rep.setSize_(image.size())
+
+    rep.setSize_((width, height))
 
     AppKit.NSGraphicsContext.saveGraphicsState()
     try:
         AppKit.NSGraphicsContext.setCurrentContext_(
             AppKit.NSGraphicsContext.graphicsContextWithBitmapImageRep_(rep))
-        image.drawAtPoint_fromRect_operation_fraction_((0, 0), AppKit.NSZeroRect, AppKit.NSCompositeSourceOver, 1.0)
+        if pdfPage is not None:
+            context = AppKit.NSGraphicsContext.currentContext().CGContext()
+            if not antiAliasing:
+                Quartz.CGContextSetInterpolationQuality(context, Quartz.kCGInterpolationNone)
+                Quartz.CGContextSetAllowsAntialiasing(context, False)
+            Quartz.CGContextDrawPDFPage(context, pdfPage.pageRef())
+        elif nsImage is not None:
+            nsImage.drawAtPoint_fromRect_operation_fraction_((0, 0), AppKit.NSZeroRect, AppKit.NSCompositeSourceOver, 1.0)
     finally:
         AppKit.NSGraphicsContext.restoreGraphicsState()
     return rep

@@ -434,12 +434,11 @@ class SVGContext(BaseContext):
                 attributes = CoreText.CTRunGetAttributes(ctRun)
                 font = attributes.get(AppKit.NSFontAttributeName)
                 fontDescriptor = font.fontDescriptor()
-                fontAttributes = fontDescriptor.fontAttributes()
                 fillColor = attributes.get(AppKit.NSForegroundColorAttributeName)
                 strokeColor = attributes.get(AppKit.NSStrokeColorAttributeName)
                 strokeWidth = attributes.get(AppKit.NSStrokeWidthAttributeName, self._state.strokeWidth)
                 baselineShift = attributes.get(AppKit.NSBaselineOffsetAttributeName, 0)
-                openTypeFeatures = fontAttributes.get(CoreText.NSFontFeatureSettingsAttribute)
+                openTypeFeatures = attributes.get("drawbot.openTypeFeatures")
                 underline = attributes.get(AppKit.NSUnderlineStyleAttributeName)
                 url = attributes.get(AppKit.NSLinkAttributeName)
 
@@ -467,8 +466,7 @@ class SVGContext(BaseContext):
                 spanData["font-size"] = formatNumber(fontSize)
 
                 if openTypeFeatures:
-                    featureTags = getFeatureTagsForFontAttributes(openTypeFeatures)
-                    style["font-feature-settings"] = self._svgStyleOpenTypeFeatures(featureTags)
+                    style["font-feature-settings"] = self._svgStyleOpenTypeFeatures(openTypeFeatures)
 
                 if canDoGradients and self._state.gradient is not None:
                     spanData["fill"] = "url(#%s_flipped)" % self._state.gradient.tagID

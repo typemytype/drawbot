@@ -243,14 +243,14 @@ class MiscTest(unittest.TestCase):
             'reset None',
             'newPage 1000 1000',
             'textBox A 0 -34.0 26.8994140625 104.0 left',
-            'textBox B 0 -48.0 25.751953125 104.0 left',
-            'textBox C 0 -62.0 26.9189453125 104.0 left',
+            'textBox B 0 -46.0 25.751953125 104.0 left',
+            'textBox C 0 -58.0 26.9189453125 104.0 left',
             'textBox A 10 -34.0 26.8994140625 104.0 left',
-            'textBox C 10 -62.0 26.9189453125 104.0 left',
-            "saveImage * {}",
+            'textBox  10 48.0 20.0 104.0 left',
+            'textBox C 10 -58.0 26.9189453125 104.0 left',
+            'saveImage * {}'
         ]
         with StdOutCollector() as output:
-            import drawBot
             drawBot.newDrawing()
             fs = drawBot.FormattedString("A\nB\nC\n")
             drawBot.text(fs, (0, 60))
@@ -259,6 +259,37 @@ class MiscTest(unittest.TestCase):
             drawBot.saveImage("*")
             drawBot.endDrawing()
         self.assertEqual(output.lines(), expected)
+
+    def test_textBoxBaselines(self):
+        drawBot.newDrawing()
+        baselines = drawBot.textBoxBaselines("hello foo bar world " * 10, (10, 10, 300, 300))
+        self.assertEqual(baselines, [(10.0, 300.0), (10.0, 288.0), (10.0, 276.0), (10.0, 264.0)])
+
+        t = drawBot.FormattedString()
+        t += "hello " * 2
+        t.fontSize(30)
+        t += "foo " * 2
+        t.font("Times")
+        t += "bar " * 2
+        t.fontSize(40)
+        t += "world " * 2
+        baselines = drawBot.textBoxBaselines(t, (10, 10, 300, 300))
+        self.assertEqual(baselines, [(10.0, 281.0), (10.0, 235.0)])
+
+    def test_textBoxCharacterBounds(self):
+        drawBot.newDrawing()
+        t = drawBot.FormattedString()
+        t += "hello " * 2
+        t.fontSize(30)
+        t += "foo " * 2
+        t.font("Times")
+        t += "bar " * 2
+        t.fontSize(40)
+        t += "world " * 2
+        bounds = drawBot.textBoxCharacterBounds(t, (10, 10, 300, 300))
+        self.assertEqual([i.bounds for i in bounds], [(10.0, 278.890625, 53.73046875, 11.77734375), (63.73046875, 274.671875, 114.755859375, 35.33203125), (178.486328125, 273.5, 91.611328125, 30.0), (10.0, 225.0, 206.640625, 40.0)])
+        self.assertEqual([i.baselineOffset for i in bounds], [2.109375, 6.328125, 7.5, 10.0])
+        self.assertEqual([str(i.formattedSubString) for i in bounds], ['hello hello ', 'foo foo ', 'bar bar ', 'world world '])
 
 
 def _roundInstanceLocations(instanceLocations):

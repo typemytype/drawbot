@@ -5,6 +5,7 @@ import Quartz
 import math
 import os
 import random
+from collections import namedtuple
 
 from .context import getContextForFileExt, getContextOptions, getFileExtensions, getContextOptionsDocs
 from .context.baseContext import BezierPath, FormattedString, makeTextBoxes
@@ -1552,7 +1553,7 @@ class DrawBotDrawingTool(object):
     def listOpenTypeFeatures(self, fontName=None):
         return self._dummyContext._state.text.listOpenTypeFeatures(fontName)
 
-    listOpenTypeFeatures.__doc__ = FormattedString.listFontVariations.__doc__
+    listOpenTypeFeatures.__doc__ = FormattedString.listOpenTypeFeatures.__doc__
 
     def fontVariations(self, *args, **axes):
         """
@@ -1806,6 +1807,41 @@ class DrawBotDrawingTool(object):
         origins = CoreText.CTFrameGetLineOrigins(box, (0, len(ctLines)), None)
         return [(x + o.x, y + o.y) for o in origins]
 
+    def textBoxCharacterBounds(self, txt, box, align=None):
+        """
+        Returns a list of typesetted bounding boxes `((x, y, w, h), baseLineOffset, characters, formattedString)`.
+
+        A `box` could be a `(x, y, w, h)` or a bezierPath object.
+
+        Optionally an alignment can be set.
+        Possible `align` values are: `"left"`, `"center"`, `"right"` and `"justified"`.
+        """
+        if not isinstance(txt, (str, FormattedString)):
+            raise TypeError("expected 'str' or 'FormattedString', got '%s'" % type(txt).__name__)
+
+        CharactersBounds = namedtuple('CharactersBounds', ['bounds', 'baselineOffset', 'formattedSubString'])
+
+        bounds = list()
+        path, (x, y) = self._dummyContext._getPathForFrameSetter(box)
+        attrString = self._dummyContext.attributedString(txt)
+        setter = CoreText.CTFramesetterCreateWithAttributedString(attrString)
+        box = CoreText.CTFramesetterCreateFrame(setter, (0, 0), path, None)
+        ctLines = CoreText.CTFrameGetLines(box)
+        origins = CoreText.CTFrameGetLineOrigins(box, (0, len(ctLines)), None)
+        for i, (originX, originY) in enumerate(origins):
+            ctLine = ctLines[i]
+            ctRuns = CoreText.CTLineGetGlyphRuns(ctLine)
+            for ctRun in ctRuns:
+                runRange = CoreText.CTRunGetStringRange(ctRun)
+                runPos = CoreText.CTRunGetPositions(ctRun, (0, 1), None)[0]
+                runW, runH, ascent, descent = CoreText.CTRunGetTypographicBounds(ctRun, (0, 0), None, None, None)
+                bounds.append(CharactersBounds(
+                    (x + originX + runPos.x, y + originY + runPos.y - ascent, runW, runH + ascent),
+                    ascent,
+                    txt[runRange.location: runRange.location + runRange.length]
+                ))
+        return bounds
+
     _formattedStringClass = FormattedString
 
     def FormattedString(self, *args, **kwargs):
@@ -1915,8 +1951,8 @@ class DrawBotDrawingTool(object):
                 rep = gifTools.gifFrameAtIndex(url, pageNumber - 1)
             elif _isPDF and pageNumber is not None:
                 page = pdfDocument.pageAtIndex_(pageNumber - 1)
-                # this is probably not the fastest method...
-                rep = AppKit.NSImage.alloc().initWithData_(page.dataRepresentation())
+                mediaBox = page.boundsForBox_(Quartz.kPDFDisplayBoxMediaBox)
+                return mediaBox.size.width, mediaBox.size.height
             else:
                 _hasPixels = True
                 rep = AppKit.NSImageRep.imageRepWithContentsOfURL_(url)
