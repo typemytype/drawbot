@@ -254,6 +254,12 @@ class SVGContext(BaseContext):
         AppKit.NSRoundLineCapStyle: "round",
     }
 
+    _svgUnderlineStylesMap = {
+        AppKit.NSUnderlineStyleSingle: "",
+        AppKit.NSUnderlineStyleThick: "",
+        AppKit.NSUnderlineStyleDouble: "double",
+    }
+
     indentation = " "
     fileExtensions = ["svg"]
     saveImageOptions = [
@@ -433,12 +439,15 @@ class SVGContext(BaseContext):
                 strokeWidth = attributes.get(AppKit.NSStrokeWidthAttributeName, self._state.strokeWidth)
                 baselineShift = attributes.get(AppKit.NSBaselineOffsetAttributeName, 0)
                 openTypeFeatures = attributes.get("drawbot.openTypeFeatures")
+                underline = attributes.get(AppKit.NSUnderlineStyleAttributeName)
+                url = attributes.get(AppKit.NSLinkAttributeName)
 
                 fontName = font.fontName()
                 fontSize = font.pointSize()
                 fontFallbacks = [fallbackFont.postscriptName() for fallbackFont in fontDescriptor.get(CoreText.NSFontCascadeListAttribute, [])]
                 fontNames = ", ".join([fontName] + fontFallbacks)
 
+                style = dict()
                 spanData = dict(defaultData)
                 fill = self._colorClass(fillColor).svgColor()
                 if fill:
@@ -457,14 +466,19 @@ class SVGContext(BaseContext):
                 spanData["font-size"] = formatNumber(fontSize)
 
                 if openTypeFeatures:
-                    spanData["style"] = self._svgStyle(**{
-                            "font-feature-settings": self._svgStyleOpenTypeFeatures(openTypeFeatures)
-                        }
-                    )
+                    style["font-feature-settings"] = self._svgStyleOpenTypeFeatures(openTypeFeatures)
 
                 if canDoGradients and self._state.gradient is not None:
                     spanData["fill"] = "url(#%s_flipped)" % self._state.gradient.tagID
 
+                if underline is not None:
+                    style["text-decoration"] = "underline"
+                    underlineStyle = self._svgUnderlineStylesMap.get(underline)
+                    if underlineStyle:
+                        style["text-decoration-style"] = underlineStyle
+
+                if style:
+                    spanData["style"] = self._svgStyle(**style)
                 self._save()
 
                 runTxt = txt.substringWithRange_((stringRange.location, stringRange.length))
@@ -481,12 +495,18 @@ class SVGContext(BaseContext):
 
                 spanData["x"] = formatNumber(originX + runX)
                 spanData["y"] = formatNumber(self.height - originY - runY + baselineShift)
+                if url is not None:
+                    self._svgContext.begintag("a", href=url.absoluteString())
+                    self._svgContext.newline()
                 self._svgContext.begintag("tspan", **spanData)
                 self._svgContext.newline()
                 self._svgContext.write(runTxt)
                 self._svgContext.newline()
                 self._svgContext.endtag("tspan")
                 self._svgContext.newline()
+                if url is not None:
+                    self._svgContext.endtag("a")
+                    self._svgContext.newline()
                 self._restore()
 
         self._svgContext.endtag("text")
@@ -646,9 +666,25 @@ class SVGContext(BaseContext):
         style = []
         if self._state.blendMode is not None:
             style.append("mix-blend-mode: %s;" % self._state.blendMode)
-        for key, value in kwargs.items():
+        for key, value in sorted(kwargs.items()):
             style.append("%s: %s;" % (key, value))
         return " ".join(style)
+
+    def _linkURL(self, url, xywh):
+        x, y, w, h = xywh
+        rectData = dict(
+            x=x,
+            y=self.height-y-h,
+            width=w,
+            height=h,
+            fill="transparent",
+        )
+        self._svgContext.begintag("a", href=url)
+        self._svgContext.newline()
+        self._svgContext.simpletag('rect', **rectData)
+        self._svgContext.newline()
+        self._svgContext.endtag("a")
+        self._svgContext.newline()
 
     def installFont(self, path):
         success, error = super(self.__class__, self).installFont(path)

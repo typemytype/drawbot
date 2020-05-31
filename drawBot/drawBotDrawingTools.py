@@ -1405,7 +1405,7 @@ class DrawBotDrawingTool(object):
     def underline(self, value):
         """
         Set the underline value.
-        Underline must be `single` or `None.
+        Underline must be `single`, `thick`, `double` or `None`.
 
         .. downloadcode:: underline.py
 
@@ -1417,6 +1417,19 @@ class DrawBotDrawingTool(object):
             raise DrawBotError("underline must be %s" % (", ".join(sorted(self._dummyContext._textUnderlineMap.keys()))))
         self._dummyContext.underline(value)
         self._addInstruction("underline", value)
+
+    def url(self, value):
+        """
+        Set the url value for text.
+
+        .. downloadcode:: url.py
+
+            fontSize(140)
+            url("http://drawbot.com")
+            text("hello", (100, 100))
+        """
+        self._dummyContext.url(value)
+        self._addInstruction("url", value)
 
     def hyphenation(self, value):
         """
@@ -2110,25 +2123,59 @@ class DrawBotDrawingTool(object):
 
     # pdf links
 
-    def linkDestination(self, name, x=None, y=None):
+    def linkURL(self, url, xywh):
+        """
+        Add a clickable rectangle for an external url link.
+
+        The link rectangle will be set independent of the current context transformations.
+        """
+        x, y, w, h = xywh
+        self._requiresNewFirstPage = True
+        self._addInstruction("linkURL", url, (x, y, w, h))
+
+    def linkDestination(self, name, xy):
         """
         Add a destination point for a link within a PDF.
+        Setup a clickable retangle with `linkRect(name, (x, y, w, h))` with the same name.
 
         The destination position will be set independent of the current context transformations.
         """
-        if x:
-            if len(x) == 2:
-                x, y = x
-            else:
-                x, y = (None, None)
+        x, y = xy
         self._requiresNewFirstPage = True
         self._addInstruction("linkDestination", name, (x, y))
 
     def linkRect(self, name, xywh):
         """
-        Add a rect for a link within a PDF.
+        Add a clickable rectangle for a link within a PDF.
+        Use `linkDestination(name, (x, y))` with the same name to set the destination of the clickable rectangle.
 
         The link rectangle will be set independent of the current context transformations.
+
+        .. downloadcode:: linkRect.py
+
+            # a variable with the amount of pages we want
+            totalPages = 10
+            # create the first page with a index
+            newPage()
+            # set a font size
+            fontSize(30)
+            # start a loop over all wanted pages
+            for i in range(totalPages):
+                # set a random fill color
+                fill(random(), random(), random())
+                # draw a rectangle
+                rect(10, 50 * i, 50, 50)
+                # add a clickable link rectangle with a unique name
+                linkRect(f"beginPage_{i}", (10, 10 + 50 * i, 50, 50))
+
+            # start a loop over all wanted pages
+            for i in range(totalPages):
+                # create a new page
+                newPage()
+                # add a link destination with a given name
+                # the name must refer to a linkRect name
+                linkDestination(f"beginPage_{i}", (0, 0))
+
         """
         x, y, w, h = xywh
         self._requiresNewFirstPage = True

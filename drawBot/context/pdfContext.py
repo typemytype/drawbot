@@ -161,7 +161,15 @@ class PDFContext(BaseContext):
                 strokeColor = attributes.get(AppKit.NSStrokeColorAttributeName)
                 strokeWidth = attributes.get(AppKit.NSStrokeWidthAttributeName, self._state.strokeWidth)
                 baselineShift = attributes.get(AppKit.NSBaselineOffsetAttributeName, 0)
+                url = attributes.get(AppKit.NSLinkAttributeName)
                 self._save()
+                if url is not None:
+                    self._save()
+                    Quartz.CGContextSetTextPosition(self._pdfContext, x+originX, y+originY+baselineShift)
+                    urlBox = CoreText.CTRunGetImageBounds(ctRun, self._pdfContext, (0, 0))
+                    urlBox = Quartz.CGContextConvertRectToDeviceSpace(self._pdfContext, urlBox)
+                    Quartz.CGPDFContextSetURLForRect(self._pdfContext, url, urlBox)
+                    self._restore()
                 drawingMode = None
                 if self._state.shadow is not None:
                     self._pdfShadow(self._state.shadow)
@@ -381,6 +389,12 @@ class PDFContext(BaseContext):
             # gray color
             return Quartz.CGColorCreateGenericGray(c.whiteComponent(), c.alphaComponent())
         return Quartz.CGColorCreateGenericRGB(c.redComponent(), c.greenComponent(), c.blueComponent(), c.alphaComponent())
+
+    def _linkURL(self, url, xywh):
+        url = AppKit.NSURL.URLWithString_(url)
+        x, y, w, h = xywh
+        rectBox = Quartz.CGRectMake(x, y, w, h)
+        Quartz.CGPDFContextSetURLForRect(self._pdfContext, url, rectBox)
 
     def _linkDestination(self, name, xy):
         x, y = xy

@@ -334,6 +334,27 @@ class ExportTest(DrawBotBaseTest):
             drawBot.saveImage(tmp.path)
             self.assertEqual(readData(tmp.path), readData(expectedPath), "Files %r and %s are not the same" % (tmp.path, expectedPath))
 
+    def test_linkURL_svg(self):
+        expectedPath = os.path.join(testDataDir, "expected_svgLinkURL.svg")
+        drawBot.newDrawing()
+        drawBot.newPage(200, 200)
+        drawBot.rect(10, 10, 20, 20)
+        drawBot.linkURL("http://drawbot.com", (10, 10, 20, 20))
+        with TempFile(suffix=".svg") as tmp:
+            drawBot.saveImage(tmp.path)
+            self.assertEqual(readData(tmp.path), readData(expectedPath), "Files %r and %s are not the same" % (tmp.path, expectedPath))
+
+    def test_formattedStringURL_svg(self):
+        expectedPath = os.path.join(testDataDir, "expected_formattedStringURL.svg")
+        drawBot.newDrawing()
+        drawBot.newPage(200, 200)
+        drawBot.underline("single")
+        drawBot.url("http://drawbot.com")
+        drawBot.text("foo", (10, 10))
+        with TempFile(suffix=".svg") as tmp:
+            drawBot.saveImage(tmp.path)
+            self.assertEqual(readData(tmp.path), readData(expectedPath), "Files %r and %s are not the same" % (tmp.path, expectedPath))
+
 
 if __name__ == '__main__':
     import doctest

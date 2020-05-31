@@ -970,10 +970,11 @@ def makeTextBoxes(attributedString, xy, align, plainText):
         if attributedSubstring.length() > 0:
             width += extraPadding
             originX = 0
-            if para.alignment() == AppKit.NSCenterTextAlignment:
-                originX -= width * .5
-            elif para.alignment() == AppKit.NSRightTextAlignment:
-                originX = -width
+            if para is not None:
+                if para.alignment() == AppKit.NSCenterTextAlignment:
+                    originX -= width * .5
+                elif para.alignment() == AppKit.NSRightTextAlignment:
+                    originX = -width
 
             attributedSubstring
             if attributedSubstring.string()[-1] in ["\n", "\r"]:
@@ -1036,8 +1037,8 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
 
     _textUnderlineMap = dict(
         single=AppKit.NSUnderlineStyleSingle,
-        # thick=AppKit.NSUnderlineStyleThick,
-        # double=AppKit.NSUnderlineStyleDouble,
+        thick=AppKit.NSUnderlineStyleThick,
+        double=AppKit.NSUnderlineStyleDouble,
         # solid=AppKit.NSUnderlinePatternSolid,
         # dotted=AppKit.NSUnderlinePatternDot,
         # dashed=AppKit.NSUnderlinePatternDash,
@@ -1062,6 +1063,7 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
         tracking=None,
         baselineShift=None,
         underline=None,
+        url=None,
         openTypeFeatures=dict(),
         fontVariations=dict(),
         tabs=None,
@@ -1334,6 +1336,8 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
             attributes[AppKit.NSBaselineOffsetAttributeName] = self._baselineShift
         if self._underline in self._textUnderlineMap:
             attributes[AppKit.NSUnderlineStyleAttributeName] = self._textUnderlineMap[self._underline]
+        if self._url is not None:
+            attributes[AppKit.NSLinkAttributeName] = AppKit.NSURL.URLWithString_(self._url)
         if self._language:
             attributes["NSLanguage"] = self._language
         attributes[AppKit.NSParagraphStyleAttributeName] = para
@@ -1517,9 +1521,16 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
     def underline(self, underline):
         """
         Set the underline value.
-        Underline must be `single` or `None`.
+        Underline must be `single`, `thick`, `double` or `None`.
         """
         self._underline = underline
+
+    def url(self, url):
+        """
+        set the url value.
+        url must be a string or `None`
+        """
+        self._url = url
 
     def openTypeFeatures(self, *args, **features):
         """
@@ -2156,6 +2167,9 @@ class BaseContext(object):
     def _printImage(self, pdf=None):
         pass
 
+    def _linkURL(self, url, xywh):
+        pass
+
     def _linkDestination(self, name, xy):
         pass
 
@@ -2401,6 +2415,9 @@ class BaseContext(object):
     def underline(self, underline):
         self._state.text.underline(underline)
 
+    def url(self, value):
+        self._state.text.url(value)
+
     def hyphenation(self, value):
         self._state.hyphenation = value
 
@@ -2607,6 +2624,10 @@ class BaseContext(object):
         if psName is not None:
             psName = psName.toUnicode()
         return psName
+
+    def linkURL(self, url, xywh):
+        x, y, w, h = xywh
+        self._linkURL(url, (x, y, w, h))
 
     def linkDestination(self, name, xy):
         x, y = xy
