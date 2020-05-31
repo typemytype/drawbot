@@ -8,10 +8,10 @@ import AppKit
 from drawBot.context.tools.gifTools import gifFrameCount
 from drawBot.misc import DrawBotError
 from drawBot.macOSVersion import macOSVersion
-from testSupport import StdOutCollector, TempFile, TempFolder, randomSeed, readData, testDataDir
+from testSupport import DrawBotBaseTest, StdOutCollector, TempFile, TempFolder, randomSeed, readData, testDataDir
 
 
-class ExportTest(unittest.TestCase):
+class ExportTest(DrawBotBaseTest):
 
     def makeTestAnimation(self, numFrames=25, pageWidth=500, pageHeight=500):
         randomSeed(0)
@@ -154,6 +154,26 @@ class ExportTest(unittest.TestCase):
             r, g, b, a = drawBot.imagePixelColor(tmp.path, (5, 5))
             # TODO: fix excessive rounding. 2 digits fails on 10.13, at least on Travis
             self.assertEqual((round(r, 1), round(g, 1), round(b, 1)), (1, 0.0, 0))
+
+    def test_imageAntiAliasing(self):
+        from testScripts import DrawBotTest
+
+        expectedPath = os.path.join(testDataDir, "expected_imageAntiAliasing.png")
+
+        drawBot.newDrawing()
+        drawBot.size(100, 100)
+        drawBot.fill(1, 0, 0)
+        drawBot.oval(10, 10, 40, 80)
+        drawBot.fill(0)
+        drawBot.stroke(0)
+        drawBot.line((-0.5, -0.5), (100.5, 100.5))
+        drawBot.line((0, 20.5), (100, 20.5))
+        drawBot.fontSize(20)
+        drawBot.text("a", (62, 30))
+
+        with TempFile(suffix=".png") as tmp:
+            drawBot.saveImage(tmp.path, antiAliasing=False)
+            self.assertImageFilesEqual(tmp.path, expectedPath)
 
     def _testMultipage(self, extension, numFrames, expectedMultipageCount):
         self.makeTestAnimation(numFrames)
