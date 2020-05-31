@@ -1189,6 +1189,9 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
             coreTextFontFeatures = []
             nsFontFeatures = []  # fallback for macOS < 10.13
             if self._openTypeFeatures:
+                # store openTypeFeatures in a custom attributes key
+                attributes["drawbot.openTypeFeatures"] = dict(self._openTypeFeatures)
+                # get existing openTypeFeatures for the font
                 existingOpenTypeFeatures = openType.getFeatureTagsForFontName(self._font)
                 # sort features by their on/off state
                 # set all disabled features first
@@ -1206,6 +1209,12 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
                     if nsFontFeatureTag in SFNTLayoutTypes.featureMap:
                         feature = SFNTLayoutTypes.featureMap[nsFontFeatureTag]
                         nsFontFeatures.append(feature)
+                    # kern is a special case
+                    if featureTag == "kern" and not value:
+                        # https://developer.apple.com/documentation/uikit/nskernattributename
+                        # The value 0 means kerning is disabled.
+                        attributes[AppKit.NSKernAttributeName] = 0
+
             coreTextFontVariations = dict()
             if self._fontVariations:
                 existingAxes = variation.getVariationAxesForFontName(self._font)
@@ -1305,8 +1314,11 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
         if self._paragraphBottomSpacing is not None:
             para.setParagraphSpacing_(self._paragraphBottomSpacing)
 
-        if self._tracking:
-            attributes[AppKit.NSKernAttributeName] = self._tracking
+        if self._tracking is not None:
+            if macOSVersion < "10.12":
+                attributes[AppKit.NSKernAttributeName] = self._tracking
+            else:
+                attributes[CoreText.kCTTrackingAttributeName] = self._tracking
         if self._baselineShift is not None:
             attributes[AppKit.NSBaselineOffsetAttributeName] = self._baselineShift
         if self._underline in self._textUnderlineMap:

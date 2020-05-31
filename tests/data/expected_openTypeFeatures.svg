@@ -11,17 +11,17 @@
   </tspan>
  </text>
  <text text-anchor="start" transform="matrix(1,0,0,1,20.0,-78.0)">
-  <tspan fill="rgb(0,0,0)" font-family="HoeflerText-Regular" font-size="20" style="font-feature-settings: 'lnum' 1, 'dlig' 1;" x="0" y="168">
+  <tspan fill="rgb(0,0,0)" font-family="HoeflerText-Regular" font-size="20" style="font-feature-settings: 'dlig' 1, 'lnum' 1;" x="0" y="168">
    Hoefler Fact #123
   </tspan>
  </text>
  <text text-anchor="start" transform="matrix(1,0,0,1,20.0,-48.0)">
-  <tspan fill="rgb(0,0,0)" font-family="HoeflerText-Regular" font-size="20" style="font-feature-settings: 'lnum' 1, 'dlig' 1, 'liga' 0;" x="0" y="168">
+  <tspan fill="rgb(0,0,0)" font-family="HoeflerText-Regular" font-size="20" style="font-feature-settings: 'dlig' 1, 'lnum' 1, 'liga' 0;" x="0" y="168">
    Hoefler Fact #123
   </tspan>
  </text>
  <text text-anchor="start" transform="matrix(1,0,0,1,20.0,-18.0)">
-  <tspan fill="rgb(0,0,0)" font-family="HoeflerText-Regular" font-size="20" style="font-feature-settings: 'lnum' 1, 'dlig' 1;" x="0" y="168">
+  <tspan fill="rgb(0,0,0)" font-family="HoeflerText-Regular" font-size="20" style="font-feature-settings: 'dlig' 1, 'lnum' 1, 'liga' 1;" x="0" y="168">
    Hoefler Fact #123
   </tspan>
  </text>
