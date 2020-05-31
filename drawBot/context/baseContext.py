@@ -982,7 +982,7 @@ def makeTextBoxes(attributedString, xy, align, plainText):
             width += extraPadding
             originX = 0
             if para is not None:
-                if para and para.alignment() == AppKit.NSCenterTextAlignment:
+                if para.alignment() == AppKit.NSCenterTextAlignment:
                     originX -= width * .5
                 elif para.alignment() == AppKit.NSRightTextAlignment:
                     originX = -width
