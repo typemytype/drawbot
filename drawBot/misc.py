@@ -212,24 +212,24 @@ warnings = Warnings()
 
 class VariableController(object):
 
-    def __init__(self, attributes, callback, document=None, isContinuous=True):
+    def __init__(self, attributes, callback, document=None, continuous=True):
         import vanilla
         self._callback = callback
         self._attributes = None
-        self._isContinuous = None
+        self._continuous = None
         self.w = vanilla.FloatingWindow((250, 50))
-        self.buildUI(attributes, isContinuous)
+        self.buildUI(attributes, continuous)
         self.w.open()
         if document:
             self.w.assignToDocument(document)
         self.w.setTitle("Variables")
 
-    def buildUI(self, attributes, isContinuous):
+    def buildUI(self, attributes, continuous):
         import vanilla
-        if (self._attributes, self._isContinuous) == (attributes, isContinuous):
+        if (self._attributes, self._continuous) == (attributes, continuous):
             return
         self._attributes = attributes
-        self._isContinuous = isContinuous
+        self._continuous = continuous
         if hasattr(self.w, "ui"):
             del self.w.ui
         self.w.ui = ui = vanilla.Group((0, 0, -0, -0))
@@ -268,16 +268,16 @@ class VariableController(object):
                 # all other get a size style
                 args["sizeStyle"] = "small"
             # add the callback
-            if isContinuous:
+            if continuous:
                 args["callback"] = self.changed
             # create the control view
             attr = getattr(vanilla, uiElement)((labelSize, y, -10, height), **args)
             # set the control view
             setattr(ui, name, attr)
             y += height + 6
-        if not isContinuous:
+        if not continuous:
             # add button when the variable control is set to not continuous
-            ui._isContinuousUpdateButton = vanilla.Button((labelSize, y, -10, height), "Update", callback=self.changed)
+            ui._continuousUpdateButton = vanilla.Button((labelSize, y, -10, height), "Update", callback=self.changed)
             y += height + 6
         # resize the window according the provided ui elements
         self.w.resize(250, y)

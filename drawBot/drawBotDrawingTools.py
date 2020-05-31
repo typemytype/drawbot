@@ -2369,7 +2369,7 @@ class DrawBotDrawingTool(object):
         """
         return self._imageClass(path)
 
-    def Variable(self, variables, workSpace, isContinuous=True):
+    def Variable(self, variables, workSpace, continuous=True):
         """
         Build small UI for variables in a script.
 
@@ -2377,9 +2377,13 @@ class DrawBotDrawingTool(object):
         as you want to insert the variable in the current workspace.
         It is required that `workSpace` is a `dict` object.
 
-        Setting `isContinuous` to `False` will add a "Update" button at the bottom.
-        for the user to click to get and update. The default is `True` and will
-        set all control updating the script continuously.
+        The `continuous` argument controls whether whether script is run when UI
+        elements change. The default is `True`, which will execute the script
+        immediately and continuously when the user input changes. When set to
+        `False`, there will be an "Update" button added at the bottom of the window.
+        The user will have to click this button to execute the script and see the
+        changes. This is useful when the script is slow, and continuous execution
+        would decrease responsiveness.
 
         .. image:: assets/variables.png
 
@@ -2448,10 +2452,10 @@ class DrawBotDrawingTool(object):
             raise DrawBotError("There is no document open")
         controller = document.vanillaWindowController
         try:
-            controller._variableController.buildUI(variables, isContinuous=isContinuous)
+            controller._variableController.buildUI(variables, continuous=continuous)
             controller._variableController.show()
         except Exception:
-            controller._variableController = VariableController(variables, controller.runCode, document, isContinuous=isContinuous)
+            controller._variableController = VariableController(variables, controller.runCode, document, continuous=continuous)
 
         data = controller._variableController.get()
         for v, value in data.items():
