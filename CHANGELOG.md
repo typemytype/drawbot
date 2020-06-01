@@ -1,5 +1,18 @@
 # Changelog For DrawBot
 
+## [3.126] 2020-06-??
+
+- Improve auto-update checker.
+- Fix docs for `listOpenTypeFeatures`.
+- Add option while saving an animated gif: `loop`.
+- Add option while saving an image: `antiAliasing`.
+- Improve the difference between kerning, an OpenType feature and tracking, adding white space between characters.
+- Add `textBoxCharacterBounds(text, box)` returning a list of typesetted bounding boxes.
+- Improve `text()` typesetting with multiline text and paragraph styles.
+- Add `formattedString.url(url)`.
+- Add `linkURL(url, box)`. 
+- Add option `continuous` in `Variable(.., continuous=False)`.
+
 ## [3.125] 2020-04-22
 
 - Update embedded uharfbuzz.
