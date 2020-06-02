@@ -393,10 +393,14 @@ if buildDMG or ftpHost is not None:
                 time.sleep(30)
 
             if "notarization-info" in data:
-                print("get notarization log")
                 logURL = data["notarization-info"].get("LogFileURL")
+                print(f"get notarization log from: {logURL}")
+                notarizeLogPath = os.path.join(distLocation, 'notarize_log.txt')
                 if logURL:
-                    os.system(f"curl -s {logURL} > {os.path.join(distLocation, 'notarize_log.txt')}")
+                    os.system(f"curl -s {logURL} > {notarizeLogPath}")
+                else:
+                    # create the file
+                    open(notarizeLogPath, 'w').close()
 
             print("done getting notarization info")
 
