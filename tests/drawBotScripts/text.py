@@ -18,3 +18,5 @@ drawBot.fontSize(20)
 drawBot.text("foo bar", (drawBot.width()*.5, 100), align="right")
 drawBot.text("foo bar", (drawBot.width()*.5, 120), align="center")
 drawBot.text("foo bar", (drawBot.width()*.5, 140), align="left")
+# test empty text https://github.com/typemytype/drawbot/issues/389
+drawBot.text("", (0, 0))

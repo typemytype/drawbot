@@ -955,6 +955,8 @@ def makeTextBoxes(attributedString, xy, align, plainText):
     ctLines = CoreText.CTFrameGetLines(frame)
     origins = CoreText.CTFrameGetLineOrigins(frame, (0, len(ctLines)), None)
     boxes = []
+    if not origins:
+        return boxes
 
     firstLineJump = h * 2 - origins[0].y
 
