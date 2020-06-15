@@ -31,6 +31,13 @@ class MP4Context(PNGContext):
     def _newPage(self, width, height):
         super(MP4Context, self)._newPage(width, height)
         self._frameDurations.append(self._defaultFrameDuration)
+        # https://github.com/typemytype/drawbot/issues/391
+        # draw a solid white background by default
+        # ffmpeg converts transparency to a black background color
+        self.save()
+        self.fill(1)
+        self.rect(0, 0, width, height)
+        self.restore()
 
     def _writeDataToFile(self, data, path, options):
         frameRate = round(1.0 / self._frameDurations[0], 3)
