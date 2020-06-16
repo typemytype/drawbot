@@ -1,5 +1,6 @@
 import AppKit
-from PyObjCTools import AppHelper
+import asyncio
+from corefoundationasyncio import CoreFoundationEventLoop
 
 import sys
 import os
@@ -20,8 +21,6 @@ from drawBot.drawBotPackage import DrawBotPackage
 
 import objc
 from objc import super
-
-objc.setVerbose(True)
 
 
 class DrawBotDocument(AppKit.NSDocument):
@@ -278,8 +277,15 @@ def _addLocalSysPaths():
         if path not in sys.path and os.path.exists(path):
             site.addsitedir(path)
 
+
 _addLocalSysPaths()
 
 
 if __name__ == "__main__":
-    AppHelper.runEventLoop()
+    objc.setVerbose(True)
+    loop = CoreFoundationEventLoop()
+    asyncio.set_event_loop(loop)
+    try:
+        loop.run_forever()
+    finally:
+        loop.close()
