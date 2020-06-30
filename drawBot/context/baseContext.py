@@ -1737,6 +1737,9 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
     def tailIndent(self, indent):
         """
         Set indent of text right of the paragraph.
+
+        If positive, this value is the distance from the leading margin.
+        If 0 or negative, it’s the distance from the trailing margin.
         """
         self._tailIndent = indent
 
