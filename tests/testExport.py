@@ -87,6 +87,12 @@ class ExportTest(DrawBotBaseTest):
         self.makeTestDrawing()
         self._saveImageAndReturnSize(".bmp")
 
+    def test_export_pathlib(self):
+        import pathlib
+        self.makeTestDrawing()
+        with TempFile(suffix=".png") as tmp:
+            drawBot.saveImage(pathlib.Path(tmp.path))
+
     def test_imageResolution(self):
         self.makeTestDrawing()
         with TempFile(suffix=".png") as tmp:

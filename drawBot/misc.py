@@ -68,6 +68,7 @@ def setColorDefault(key, color):
 # ==============
 
 def optimizePath(path):
+    path = os.fspath(path)
     if path.startswith("http"):
         return path
     path = os.path.expanduser(path)

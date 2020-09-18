@@ -1906,7 +1906,7 @@ class DrawBotDrawingTool(object):
         """
         if isinstance(path, self._imageClass):
             path = path._nsImage()
-        if isinstance(path, str):
+        if isinstance(path, (str, os.PathLike)):
             path = optimizePath(path)
         self._requiresNewFirstPage = True
         self._addInstruction("image", path, position, alpha, pageNumber)
