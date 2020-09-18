@@ -225,6 +225,17 @@ class MiscTest(unittest.TestCase):
         variations = drawBot.listFontVariations()
         self.assertEqual(variations, {'wdth': {'name': 'Width', 'minValue': 0.0, 'maxValue': 1000.0, 'defaultValue': 0.0}, 'wght': {'name': 'Weight', 'minValue': 0.0, 'maxValue': 1000.0, 'defaultValue': 0.0}})
 
+    def test_font_install_pathlib(self):
+        import pathlib
+        fontPath = os.path.join(testDataDir, "MutatorSans.ttf")
+        fontPath = pathlib.Path(fontPath)
+        drawBot.newDrawing()
+        drawBot.newPage()
+        postscriptName = drawBot.font(fontPath)
+        self.assertEqual(postscriptName, "MutatorMathTest-LightCondensed")
+        variations = drawBot.listFontVariations()
+        self.assertEqual(variations, {'wdth': {'name': 'Width', 'minValue': 0.0, 'maxValue': 1000.0, 'defaultValue': 0.0}, 'wght': {'name': 'Weight', 'minValue': 0.0, 'maxValue': 1000.0, 'defaultValue': 0.0}})
+
     def test_formattedString_issue337(self):
         # https://github.com/typemytype/drawbot/issues/337
         drawBot.newDrawing()
