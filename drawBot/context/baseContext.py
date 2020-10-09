@@ -255,7 +255,7 @@ class BezierPath(BasePen, SVGContextPropertyMixin, ContextPropertyMixin):
         the current subpath.
         """
         if hasattr(self, "_pointToSegmentPen"):
-            # its been uses in a point pen world
+            # its been used in a point pen world
             pointToSegmentPen = self._pointToSegmentPen
             del self._pointToSegmentPen
             pointToSegmentPen.endPath()
