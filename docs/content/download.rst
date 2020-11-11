@@ -13,7 +13,7 @@ Older Downloads
 
 `Version History <https://github.com/typemytype/drawbot/releases>`_
 
-`Very Old Version History <http://static.typemytype.com/drawBot/versionHistory>`_
+`Very Old Version History <http://versionhistory.drawbot.com>`_
 
 License
 -------
