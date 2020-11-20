@@ -48,6 +48,9 @@ _paperSizes = {
     'Quarto'      : (610, 780),
     '10x14'       : (720, 1008),
     'Zoom'        : (1920, 960),
+    'Instagram'   : (1080, 1080),
+    'InstagramStory':(1080, 1920),
+    'Teams'       : (1920, 1080),
 }
 
 for key, (w, h) in list(_paperSizes.items()):
