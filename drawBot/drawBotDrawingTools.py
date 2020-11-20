@@ -47,6 +47,7 @@ _paperSizes = {
     'Folio'       : (612, 936),
     'Quarto'      : (610, 780),
     '10x14'       : (720, 1008),
+    'Zoom'        : (1920, 960),
 }
 
 for key, (w, h) in list(_paperSizes.items()):
