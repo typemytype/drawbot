@@ -12,6 +12,7 @@
 - Add `formattedString.url(url)`.
 - Add `linkURL(url, box)`. 
 - Add option `continuous` in `Variable(.., continuous=False)`.
+- Remove `mov` context in favor of `mp4` as `QTKit` is not supported anymore.
 
 ## [3.125] 2020-04-22
 
