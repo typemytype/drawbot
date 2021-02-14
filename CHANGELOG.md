@@ -1,6 +1,12 @@
 # Changelog For DrawBot
 
-## [3.126] 2020-06-??
+## [3.127] 2021-??
+
+- Allow `Path` objects in places where a path is an argument: `saveImage(pathObject)`, `image(pathObject, ...)` 
+- Add support for asyncio by lauching the app with corefoundationasyncio.
+- Remove `mov` context in favor of `mp4` as `QTKit` is not supported anymore.
+
+## [3.126] 2020-07-02
 
 - Improve update checker.
 - Fix docs for `listOpenTypeFeatures`.
@@ -12,7 +18,6 @@
 - Add `formattedString.url(url)`.
 - Add `linkURL(url, box)`. 
 - Add option `continuous` in `Variable(.., continuous=False)`.
-- Remove `mov` context in favor of `mp4` as `QTKit` is not supported anymore.
 
 ## [3.125] 2020-04-22
 
