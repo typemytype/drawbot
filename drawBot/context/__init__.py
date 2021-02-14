@@ -2,7 +2,6 @@ from .pdfContext import PDFContext
 from .imageContext import PNGContext, JPEGContext, TIFFContext, BMPContext
 from .gifContext import GIFContext
 from .svgContext import SVGContext
-from .movContext import MOVContext
 from .printContext import PrintContext
 from .mp4Context import MP4Context
 from .icnsContext import ICNSContext
@@ -17,7 +16,6 @@ allContexts = [
     GIFContext,
     BMPContext,
     MP4Context,
-    MOVContext,
     ICNSContext,
     PrintContext
 ]
