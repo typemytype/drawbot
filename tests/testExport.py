@@ -47,18 +47,6 @@ class ExportTest(DrawBotBaseTest):
             self._saveImageAndReturnSize(".png", someArbitraryOption="foo")
         self.assertEqual(output.lines(), ['*** DrawBot warning: Unrecognized saveImage() option found for PNGContext: someArbitraryOption ***'])
 
-    def test_export_mov(self):
-        self.makeTestAnimation(5)
-        with self.assertRaises(DrawBotError) as cm:
-            with StdOutCollector(captureStdErr=True) as output:
-                self._saveImageAndReturnSize(".mov")
-        if macOSVersion < "10.15":
-            # a warning on lower then 10.15
-            self.assertEqual(output.lines(), ["*** DrawBot warning: Export to '.mov' is deprecated, use '.mp4' instead. ***"])
-        else:
-            # a traceback on 10.15
-            self.assertEqual(cm.exception.args[0], "Export to '.mov' was deprecated and is not supported on this system (10.15 and up). Use .mp4 instead.")
-
     def test_export_gif(self):
         self.makeTestAnimation(5)
         self._saveImageAndReturnSize(".gif")
