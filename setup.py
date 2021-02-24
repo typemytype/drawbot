@@ -60,4 +60,3 @@ setup(name="drawBot",
 for externalTool in externalTools:
     dest = os.path.join(externalToolsDestRoot, externalTool)
     os.remove(dest)
-
