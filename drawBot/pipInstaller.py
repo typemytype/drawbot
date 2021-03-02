@@ -30,7 +30,12 @@ class PipInstallerController:
                 minSize=(640, 300), autosaveName="PipInstaller")
         self.w.getNSWindow().setTitleVisibility_(True)
 
-        items = ["Search PyPI", "Install / Upgrade", "Uninstall", "Show Package Info"]
+        items = [
+            # "Search PyPI",  # disable for now, https://status.python.org/incidents/grk0k7sz6zkp
+            "Install / Upgrade",
+            "Uninstall",
+            "Show Package Info"
+        ]
         self.pipCommandNames = [f"pip{re.sub(r'[ /]', '', item)}Command" for item in items]
         self.pipCommandsButton = PopUpButton((0, 0, 0, 0), items)
         self.pipCommandsButton.getNSPopUpButton().setBezelStyle_(AppKit.NSBezelStyleTexturedRounded)
