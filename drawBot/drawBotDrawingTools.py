@@ -1322,9 +1322,9 @@ class DrawBotDrawingTool(object):
 
             font("Times-Italic")
         """
-        font = getNSFontFromNameOrPath(fontNameOrPath, fontSize, fontNumber)
         self._dummyContext.font(fontNameOrPath, fontSize, fontNumber)
         self._addInstruction("font", fontNameOrPath, fontSize, fontNumber)
+        font = getNSFontFromNameOrPath(fontNameOrPath, fontSize or 10, fontNumber)
         return getFontName(font)
 
     def fallbackFont(self, fontNameOrPath, fontNumber=0):

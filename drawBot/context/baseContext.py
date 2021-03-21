@@ -1430,7 +1430,7 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
         if fontSize is not None:
             self._fontSize = fontSize
         self._fontNumber = fontNumber
-        font = getNSFontFromNameOrPath(fontNameOrPath, fontSize, fontNumber)
+        font = getNSFontFromNameOrPath(fontNameOrPath, fontSize or 10, fontNumber)
         return getFontName(font)
 
     def fontNumber(self, fontNumber):
