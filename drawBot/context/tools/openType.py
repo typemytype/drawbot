@@ -31,9 +31,8 @@ def getFeatureTagsForFontAttributes(attributes):
 
 
 @memoize
-def getFeatureTagsForFontName(fontName):
+def getFeatureTagsForFont(font):
     featureTags = []
-    font = AppKit.NSFont.fontWithName_size_(fontName, 12)
     if font is None:
         return featureTags
     fontDescriptor = font.fontDescriptor()
