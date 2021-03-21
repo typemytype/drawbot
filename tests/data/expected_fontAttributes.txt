@@ -1,11 +1,11 @@
 Helvetica
 Helvetica
-38.5009765625
--11.4990234375
--11.4990234375
+True
+True
 False
 True
 True
+False
 Helvetica.ttc
 ['.null', 'nonmarkingreturn', 'space', 'exclam', 'quotedbl', 'numbersign']
 38.5009765625
@@ -17,11 +17,11 @@ Helvetica.ttc
 
 ../data/MutatorSans.ttf
 MutatorMathTest-LightCondensed
-40.000152587890625
--9.999847412109375
--9.999847412109375
+True
+False
 False
 True
+False
 False
 MutatorSans.ttf
 ['A', 'B', 'C', 'D', 'E', 'F']

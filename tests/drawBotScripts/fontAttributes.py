@@ -2,15 +2,13 @@ import os
 import drawBot
 drawBot.size(50, 50)
 characters = "Aa今"
-glyphNames = ["A", "a"]
+glyphNames = ["A", "a", "zzz"]
 for fontName in ["Helvetica", "../data/MutatorSans.ttf"]:
     print(fontName)
     print(drawBot.font(fontName))
     drawBot.fontSize(50)
-    print(drawBot.fontAscender())
-    print(drawBot.fontDescender())
-    print(drawBot.fontDescender())
-    print(drawBot.fontContainsCharacters(characters))
+    for char in characters:
+        print(drawBot.fontContainsCharacters(char))
     for glyphName in glyphNames:
         print(drawBot.fontContainsGlyph(glyphName))
     print(os.path.basename(drawBot.fontFilePath()))
