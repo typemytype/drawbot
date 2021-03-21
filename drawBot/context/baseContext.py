@@ -1349,7 +1349,8 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
             if ff is None:
                 ff = _FALLBACKFONT
                 ffNumber = 0
-            warnings.warn(f"font: '{self._font}' is not installed, back to the fallback font: '{ff}'")
+            fontNumberString = f" fontNumber={self._fontNumber}" if self._fontNumber else ""
+            warnings.warn(f"font: '{self._font}'{fontNumberString} can't be found, using the fallback font '{ff}'")
             font = getNSFontFromNameOrPath(ff, self._fontSize, ffNumber)
         return font
 
@@ -2629,7 +2630,12 @@ def getNSFontFromNameOrPath(fontNameOrPath, fontSize, fontNumber):
     if not descriptors:
         return None
     if not 0 <= fontNumber < len(descriptors):
-        return None
+        warnings.warn(
+            f"font: fontNumber out of range for '{fontPath}': "
+            f"{fontNumber} not in range 0..{len(descriptors) - 1}; "
+            f"falling back to 0"
+        )
+        fontNumber = 0
     return CoreText.CTFontCreateWithFontDescriptor(descriptors[fontNumber], fontSize, None)
 
 
