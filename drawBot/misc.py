@@ -1,5 +1,6 @@
 import AppKit
 
+import functools
 import sys
 import os
 import subprocess
@@ -364,6 +365,7 @@ def memoize(function):
         # and and the result will be stored in the cache dict as [first, second]: returnValue
         # From then on, this value will be returned when the same argument is made to the addNumbers function
     """
+    @functools.wraps(function)
     def wrapper(*args):
         key = (function, args)
         if key in _memoizeCache:
