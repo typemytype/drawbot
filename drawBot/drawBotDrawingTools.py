@@ -2234,7 +2234,14 @@ class DrawBotDrawingTool(object):
             text("Hello World", (10, 10))
             # uninstall font
             uninstallFont(path)
+
+        This function has been deprecated: please use the font path directly in all
+        places that accept a font name.
         """
+        warnings.warn(
+            "installFont(path) has been deprecated, use the font path directly in "
+            "all places that accept a font name."
+        )
         if path in self._tempInstalledFonts:
             return self._tempInstalledFonts[path]
 
@@ -2253,7 +2260,14 @@ class DrawBotDrawingTool(object):
     def uninstallFont(self, path):
         """
         Uninstall a font with a given path.
+
+        This function has been deprecated: please use the font path directly in all
+        places that accept a font name.
         """
+        warnings.warn(
+            "uninstallFont(path) has been deprecated, use the font path directly in "
+            "all places that accept a font name."
+        )
         success, error = self._dummyContext.uninstallFont(path)
         if path in self._tempInstalledFonts:
             del self._tempInstalledFonts[path]
