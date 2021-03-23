@@ -28,12 +28,11 @@ def convertVariationTagToInt(tag):
 
 
 @memoize
-def getVariationAxesForFontName(fontName):
+def getVariationAxesForFont(font):
     """
     Return a dictionary { axis tag: { name: , minValue: , maxValue: } }
     """
     axes = OrderedDict()
-    font = CoreText.CTFontCreateWithName(fontName, 12, None)
     variationAxesDescriptions = CoreText.CTFontCopyVariationAxes(font)
     if variationAxesDescriptions is None:
         # non-variable fonts have no axes descriptions
@@ -50,12 +49,11 @@ def getVariationAxesForFontName(fontName):
 
 
 @memoize
-def getNamedInstancesForFontName(fontName):
+def getNamedInstancesForFont(font):
     """
     Return a dict { postscriptName: location } of all named instances in a given font.
     """
     instances = OrderedDict()
-    font = CoreText.CTFontCreateWithName(fontName, 12, None)
     if font is None:
         return instances
     fontDescriptor = font.fontDescriptor()
@@ -75,7 +73,7 @@ def getNamedInstancesForFontName(fontName):
 
     ft = TTFont(url.path(), lazy=True, fontNumber=0)
     if "fvar" in ft:
-        cgFont = CoreText.CGFontCreateWithFontName(fontName)
+        cgFont, _ = CoreText.CTFontCopyGraphicsFont(font, None)
         fvar = ft["fvar"]
 
         for instance in fvar.instances:
