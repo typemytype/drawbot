@@ -1825,7 +1825,7 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
         font = getNSFontFromNameOrPath(self._font, self._fontSize, self._fontNumber)
         if font is not None:
             url = CoreText.CTFontDescriptorCopyAttribute(font.fontDescriptor(), CoreText.kCTFontURLAttribute)
-            if url:
+            if url is not None:
                 return url.path()
             elif os.path.exists(self._font):
                 return os.path.abspath(self._font)
