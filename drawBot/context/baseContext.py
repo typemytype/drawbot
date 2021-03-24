@@ -1827,6 +1827,8 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
             url = CoreText.CTFontDescriptorCopyAttribute(font.fontDescriptor(), CoreText.kCTFontURLAttribute)
             if url:
                 return url.path()
+            elif os.path.exists(self._font):
+                return os.path.abspath(self._font)
         warnings.warn("Cannot find the path to the font '%s'." % self._font)
         return None
 

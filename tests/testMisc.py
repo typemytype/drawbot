@@ -312,6 +312,8 @@ class MiscTest(unittest.TestCase):
             ff.write(src.read_bytes())
             firstModTime = os.stat(ff.name).st_mtime
             drawBot.newDrawing()
+            drawBot.font(ff.name)
+            self.assertEqual(ff.name, drawBot.fontFilePath())
             path = drawBot.BezierPath()
             path.text("E", font=ff.name, fontSize=1000)
             self.assertEqual((60.0, 0.0, 340.0, 700.0), path.bounds())
@@ -323,6 +325,8 @@ class MiscTest(unittest.TestCase):
             secondModTime = os.stat(ff.name).st_mtime
             assert firstModTime != secondModTime, (firstModTime, secondModTime)
             drawBot.newDrawing()  # to clear the memoize cache in baseContext
+            drawBot.font(ff.name)
+            self.assertEqual(ff.name, drawBot.fontFilePath())
             path = drawBot.BezierPath()
             path.text("E", font=ff.name, fontSize=1000)
             self.assertEqual((60.0, 0.0, 400.0, 800.0), path.bounds())
