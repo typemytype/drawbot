@@ -2639,13 +2639,20 @@ def getNSFontFromNameOrPath(fontNameOrPath, fontSize, fontNumber):
     return CoreText.CTFontCreateWithFontDescriptor(descriptors[fontNumber], fontSize, None)
 
 
+#
 # Cache for font descriptors that have been reloaded after a font file
-# changed on disk. We don't clear this cache, as the number of reloaded
+# changed on disk. Keys are absolute paths to font files, values are
+# (modificationTime, fontDescriptors) tuples. `fontDescriptors` is
+# None when the font was used but did not have to be reloaded, and a
+# list of font descriptors if the font has been reloaded before.
+#
+# We don't clear this cache, as the number of reloaded
 # fonts should generably be within reasonable limits, and re-reloading
 # upon every run (think Variable Sliders) is expensive.
 # NOTE: It's possible to turn this into a Least Recently Used cache with
 # a maximum size, using Python 3.7's insertion order preserving dict
 # behavior, but it may not be worth the effort.
+#
 _reloadedFontDescriptors = {}
 
 
