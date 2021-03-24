@@ -2646,9 +2646,10 @@ def getNSFontFromNameOrPath(fontNameOrPath, fontSize, fontNumber):
 # None when the font was used but did not have to be reloaded, and a
 # list of font descriptors if the font has been reloaded before.
 #
-# We don't clear this cache, as the number of reloaded
-# fonts should generably be within reasonable limits, and re-reloading
-# upon every run (think Variable Sliders) is expensive.
+# We don't clear this cache, as the number of reloaded fonts should
+# generably be within reasonable limits, and re-reloading upon every
+# run (think Variable Sliders) is expensive.
+#
 # NOTE: It's possible to turn this into a Least Recently Used cache with
 # a maximum size, using Python 3.7's insertion order preserving dict
 # behavior, but it may not be worth the effort.
