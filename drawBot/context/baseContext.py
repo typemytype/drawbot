@@ -1828,6 +1828,8 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
             if url is not None:
                 return url.path()
             elif os.path.exists(self._font):
+                # This happens for reloaded fonts: the font object can't
+                # know its file origin, because it was loaded from data.
                 return os.path.abspath(self._font)
         warnings.warn("Cannot find the path to the font '%s'." % self._font)
         return None
