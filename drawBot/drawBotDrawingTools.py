@@ -169,7 +169,6 @@ class DrawBotDrawingTool(object):
             saveImage("~/Desktop/anOval.pdf")
         """
         self._reset()
-        self.installedFonts()
 
     def endDrawing(self):
         """

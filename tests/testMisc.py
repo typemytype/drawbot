@@ -1,8 +1,11 @@
 import sys
 import os
+import pathlib
 import unittest
 import io
+import tempfile
 from collections import OrderedDict
+from fontTools.ttLib import TTFont
 import drawBot
 from drawBot.misc import DrawBotError, warnings
 from drawBot.scriptTools import ScriptRunner
@@ -301,6 +304,28 @@ class MiscTest(unittest.TestCase):
         self.assertEqual([i.bounds for i in bounds], [(10.0, 278.890625, 53.73046875, 11.77734375), (63.73046875, 274.671875, 114.755859375, 35.33203125), (178.486328125, 273.5, 91.611328125, 30.0), (10.0, 225.0, 206.640625, 40.0)])
         self.assertEqual([i.baselineOffset for i in bounds], [2.109375, 6.328125, 7.5, 10.0])
         self.assertEqual([str(i.formattedSubString) for i in bounds], ['hello hello ', 'foo foo ', 'bar bar ', 'world world '])
+
+    def test_reloadFont(self):
+        src = pathlib.Path(__file__).resolve().parent / "data" / "MutatorSans.ttf"
+        assert src.exists()
+        with tempfile.NamedTemporaryFile(suffix=".ttf") as ff:
+            ff.write(src.read_bytes())
+            firstModTime = os.stat(ff.name).st_mtime
+            drawBot.newDrawing()
+            path = drawBot.BezierPath()
+            path.text("E", font=ff.name, fontSize=1000)
+            self.assertEqual((60.0, 0.0, 340.0, 700.0), path.bounds())
+            ff.seek(0)
+            ttf = TTFont(ff)
+            ttf["glyf"]["E"].coordinates[0] = (400, 800)
+            ff.seek(0)
+            ttf.save(ff)
+            secondModTime = os.stat(ff.name).st_mtime
+            assert firstModTime != secondModTime, (firstModTime, secondModTime)
+            drawBot.newDrawing()  # to clear the memoize cache in baseContext
+            path = drawBot.BezierPath()
+            path.text("E", font=ff.name, fontSize=1000)
+            self.assertEqual((60.0, 0.0, 400.0, 800.0), path.bounds())
 
 
 def _roundInstanceLocations(instanceLocations):
