@@ -322,7 +322,7 @@ class MiscTest(unittest.TestCase):
             ttf.save(ff)
             secondModTime = os.stat(ff.name).st_mtime
             assert firstModTime != secondModTime, (firstModTime, secondModTime)
-            drawBot.newDrawing()  # to clear the memioze cache in baseContext
+            drawBot.newDrawing()  # to clear the memoize cache in baseContext
             path = drawBot.BezierPath()
             path.text("E", font=ff.name, fontSize=1000)
             self.assertEqual((60.0, 0.0, 400.0, 800.0), path.bounds())
