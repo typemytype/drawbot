@@ -1255,7 +1255,7 @@ class ImageObject(object):
         """
         Generates an Aztec code (two-dimensional barcode) from input data.
 
-        Attributes: `message` a string, `correctionLevel` a float, `layers` a float, `compactStyle` a bool.
+        Attributes: `message` as bytes, `correctionLevel` a float, `layers` a float, `compactStyle` a bool.
         """
         attr = dict()
         if message:
@@ -1275,12 +1275,14 @@ class ImageObject(object):
         """
         Generates a Quick Response code (two-dimensional barcode) from input data.
 
-        Attributes: `message` a string, `correctionLevel` a float.
+        Attributes: `message` as bytes, `correctionLevel` a single letter string,
+        options are: `'L'` (7%), `'M'` (15%), `'Q'` (25%) or `'H'` (30%).
         """
         attr = dict()
         if message:
             attr["inputMessage"] = AppKit.NSData.dataWithBytes_length_(message, len(message))
         if correctionLevel:
+            assert correctionLevel in "LMQH", "'correctionLevel' must be either 'L', 'M', 'Q', 'H'"
             attr["inputCorrectionLevel"] = correctionLevel
         filterDict = dict(name="CIQRCodeGenerator", attributes=attr)
         filterDict["size"] = size
@@ -1291,7 +1293,7 @@ class ImageObject(object):
         """
         Generates a Code 128 one-dimensional barcode from input data.
 
-        Attributes: `message` a string, `quietSpace` a float.
+        Attributes: `message` a bytes, `quietSpace` a float.
         """
         attr = dict()
         if message:
