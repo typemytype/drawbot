@@ -2639,11 +2639,38 @@ def getNSFontFromNameOrPath(fontNameOrPath, fontSize, fontNumber):
     return CoreText.CTFontCreateWithFontDescriptor(descriptors[fontNumber], fontSize, None)
 
 
+# Cache for font descriptors that have been reloaded after a font file
+# changed on disk. We don't clear this cache, as the number of reloaded
+# fonts should generably be within reasonable limits, and re-reloading
+# upon every run (think Variable Sliders) is expensive.
+# NOTE: It's possible to turn this into a Least Recently Used cache with
+# a maximum size, using Python 3.7's insertion order preserving dict
+# behavior, but it may not be worth the effort.
+_reloadedFontDescriptors = {}
+
+
 @memoize
 def getFontDescriptorsFromPath(fontPath):
-    url = AppKit.NSURL.fileURLWithPath_(os.path.abspath(fontPath))
-    assert url is not None
-    return CoreText.CTFontManagerCreateFontDescriptorsFromURL(url)
+    modTime = os.stat(fontPath).st_mtime
+    prevModTime, descriptors = _reloadedFontDescriptors.get(fontPath, (modTime, None))
+    if modTime == prevModTime:
+        if not descriptors:
+            # Load font from disk, letting the OS handle caching and loading
+            url = AppKit.NSURL.fileURLWithPath_(fontPath)
+            assert url is not None
+            descriptors = CoreText.CTFontManagerCreateFontDescriptorsFromURL(url)
+            # Nothing was reloaded, this is the general case: do not cache the
+            # descriptors globally (they are cached per newDrawing session via
+            # @memoize), only store the modification time.
+            _reloadedFontDescriptors[fontPath] = modTime, None
+    else:
+        # The font file was changed on disk since we last used it. We now load
+        # it from data explicitly, bypassing any OS cache, ensuring we will see
+        # the updated font.
+        data = AppKit.NSData.dataWithContentsOfFile_(fontPath)
+        descriptors = CoreText.CTFontManagerCreateFontDescriptorsFromData(data)
+        _reloadedFontDescriptors[fontPath] = modTime, descriptors
+    return descriptors
 
 
 def getFontName(font):
