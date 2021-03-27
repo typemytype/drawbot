@@ -2634,12 +2634,10 @@ def getNSFontFromNameOrPath(fontNameOrPath, fontSize, fontNumber):
     if not descriptors:
         return None
     if not 0 <= fontNumber < len(descriptors):
-        warnings.warn(
-            f"font: fontNumber out of range for '{fontPath}': "
-            f"{fontNumber} not in range 0..{len(descriptors) - 1}; "
-            f"falling back to 0"
+        raise IndexError(
+            f"fontNumber out of range for '{fontPath}': "
+            f"{fontNumber} not in range 0..{len(descriptors) - 1}"
         )
-        fontNumber = 0
     return CoreText.CTFontCreateWithFontDescriptor(descriptors[fontNumber], fontSize, None)
 
 
