@@ -331,6 +331,17 @@ class MiscTest(unittest.TestCase):
             path.text("E", font=ff.name, fontSize=1000)
             self.assertEqual((60.0, 0.0, 400.0, 800.0), path.bounds())
 
+    def test_ttc_IndexError(self):
+        src = pathlib.Path(__file__).resolve().parent / "data" / "MutatorSans.ttc"
+        self.assertEqual("MutatorMathTest-LightCondensed", drawBot.font(src, fontNumber=0))
+        self.assertEqual("MutatorMathTest-LightWide", drawBot.font(src, fontNumber=1))
+        self.assertEqual("MutatorMathTest-BoldCondensed", drawBot.font(src, fontNumber=2))
+        self.assertEqual("MutatorMathTest-BoldWide", drawBot.font(src, fontNumber=3))
+        with self.assertRaises(IndexError):
+            drawBot.font(src, fontNumber=4)
+        with self.assertRaises(IndexError):
+            drawBot.font(src, fontNumber=-1)
+
 
 def _roundInstanceLocations(instanceLocations):
     return {instanceName: {tag: round(value, 3) for tag, value in location.items()} for instanceName, location in instanceLocations.items()}
