@@ -1528,19 +1528,27 @@ class DrawBotDrawingTool(object):
 
             c2pc, c2sc, calt, case, cpsp, cswh, dlig, frac, liga, lnum, onum, ordn, pnum, rlig, sinf, smcp, ss01, ss02, ss03, ss04, ss05, ss06, ss07, ss08, ss09, ss10, ss11, ss12, ss13, ss14, ss15, ss16, ss17, ss18, ss19, ss20, subs, sups, swsh, titl, tnum
 
+        A `resetFeatures` argument can be set to `True` in order to get back to the default state.
+
         .. downloadcode:: openTypeFeatures.py
 
-            size(1000, 300)
+            newPage(1000, 300)
             # set a font
             font("Didot")
             # set the font size
             fontSize(50)
-            # draw a string
-            text("aabcde1234567890", (100, 200))
+            # create a string
+            someTxt = "aabcde1234567890"
+            # draw the string
+            text(someTxt, (100, 220))
             # enable some OpenType features
             openTypeFeatures(onum=True, smcp=True)
             # draw the same string
-            text("aabcde1234567890", (100, 100))
+            text(someTxt, (100, 150))
+            # reset defaults
+            openTypeFeatures(resetFeatures=True)
+            # the same string again, back to default features
+            text(someTxt, (100, 70))
         """
         result = self._dummyContext.openTypeFeatures(*args, **features)
         self._addInstruction("openTypeFeatures", *args, **features)
