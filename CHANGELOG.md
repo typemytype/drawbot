@@ -1,10 +1,13 @@
 # Changelog For DrawBot
 
-## [3.127] 2021-??
+## [3.127] 2021-04-29
 
 - Allow `Path` objects in places where a path is an argument: `saveImage(pathObject)`, `image(pathObject, ...)` 
 - Add support for asyncio by lauching the app with corefoundationasyncio.
 - Remove `mov` context in favor of `mp4` as `QTKit` is not supported anymore.
+- Always draw a white background while rendering to `mp4`.
+- Improve reading out and using fonts from disk, use them direclty instead of installing them.
+- Update documentation.
 
 ## [3.126] 2020-07-02
 
