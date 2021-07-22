@@ -2620,6 +2620,13 @@ class BaseContext(object):
 
 @memoize
 def getNSFontFromNameOrPath(fontNameOrPath, fontSize, fontNumber):
+    font = _getNSFontFromNameOrPath(fontNameOrPath, fontSize, fontNumber)
+    if font is None:
+        warnings.warn(f"not font could be found for '{fontNameOrPath}'")
+    return font
+
+
+def _getNSFontFromNameOrPath(fontNameOrPath, fontSize, fontNumber):
     if fontSize is None:
         fontSize = 10
     if isinstance(fontNameOrPath, str):
