@@ -1,19 +1,19 @@
-Helvetica
-Helvetica
+Times
+Times-Roman
 True
 True
 False
 True
 True
 False
-Helvetica.ttc
+Times.ttc
 ['.null', 'nonmarkingreturn', 'space', 'exclam', 'quotedbl', 'numbersign']
-38.5009765625
--11.4990234375
-26.1474609375
-35.8642578125
+37.5
+-12.5
+22.6806640625
+33.0810546875
 0.0
-60.0
+61.0
 
 ../data/MutatorSans.ttf
 MutatorMathTest-LightCondensed
