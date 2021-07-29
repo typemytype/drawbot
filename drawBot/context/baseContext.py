@@ -1191,6 +1191,7 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
         elif not isinstance(txt, (str, FormattedString)):
             raise TypeError("expected 'str' or 'FormattedString', got '%s'" % type(txt).__name__)
         attributes = {}
+        attributes[AppKit.NSLigatureAttributeName] = 1  # https://github.com/typemytype/drawbot/issues/427
         if self._font:
             font = self._getNSFontWithFallback()
             coreTextFontFeatures = []
