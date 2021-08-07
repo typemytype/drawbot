@@ -1223,20 +1223,8 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
                         # The value 0 means kerning is disabled.
                         attributes[AppKit.NSKernAttributeName] = 0
 
-            coreTextFontVariations = dict()
-            if self._fontVariations:
-                existingAxes = variation.getVariationAxesForFont(font)
-                for axis, value in self._fontVariations.items():
-                    if axis in existingAxes:
-                        existinsAxis = existingAxes[axis]
-                        # clip variation value within the min max value
-                        if value < existinsAxis["minValue"]:
-                            value = existinsAxis["minValue"]
-                        if value > existinsAxis["maxValue"]:
-                            value = existinsAxis["maxValue"]
-                        coreTextFontVariations[variation.convertVariationTagToInt(axis)] = value
-                    else:
-                        warnings.warn("variation axis '%s' not available for '%s'" % (axis, self._font))
+            coreTextFontVariations = variation.getFontVariationAttributes(font, self._fontVariations)
+
             fontAttributes = {}
             if coreTextFontFeatures:
                 fontAttributes[CoreText.kCTFontFeatureSettingsAttribute] = coreTextFontFeatures
@@ -1954,6 +1942,10 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
         # disable calt features, as this seems to be on by default
         # for both the font stored in the nsGlyphInfo as in the replacement character
         fontAttributes = {}
+        coreTextFontVariations = variation.getFontVariationAttributes(font, self._fontVariations)
+        if coreTextFontVariations:
+            fontAttributes[CoreText.NSFontVariationAttribute] = coreTextFontVariations
+
         fontAttributes[CoreText.kCTFontFeatureSettingsAttribute] = [dict(CTFeatureOpenTypeTag="calt", CTFeatureOpenTypeValue=False)]
         fontDescriptor = font.fontDescriptor()
         fontDescriptor = fontDescriptor.fontDescriptorByAddingAttributes_(fontAttributes)

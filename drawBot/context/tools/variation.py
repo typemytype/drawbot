@@ -3,7 +3,7 @@ from collections import OrderedDict
 
 from fontTools.ttLib import TTFont
 
-from drawBot.misc import memoize
+from drawBot.misc import memoize, warnings
 
 """
 https://developer.apple.com/documentation/coretext/ctfont/font_variation_axis_dictionary_keys?language=objc
@@ -87,3 +87,21 @@ def getNamedInstancesForFont(font):
 
     ft.close()
     return instances
+
+
+def getFontVariationAttributes(font, fontVariations):
+    coreTextFontVariations = dict()
+    if fontVariations:
+        existingAxes = getVariationAxesForFont(font)
+        for axis, value in fontVariations.items():
+            if axis in existingAxes:
+                existinsAxis = existingAxes[axis]
+                # clip variation value within the min max value
+                if value < existinsAxis["minValue"]:
+                    value = existinsAxis["minValue"]
+                if value > existinsAxis["maxValue"]:
+                    value = existinsAxis["maxValue"]
+                coreTextFontVariations[convertVariationTagToInt(axis)] = value
+            else:
+                warnings.warn("variation axis '%s' not available for '%s'" % (axis, font.fontName()))
+    return coreTextFontVariations
