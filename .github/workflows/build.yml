@@ -15,7 +15,7 @@ jobs:
     - name: Install Certificates
       run: |
         echo ${{ secrets.CERTIFICATE_P12 }} | base64 --decode > certificate.p12
-        security import certificate.p12 -P ${{ secrets.CERTIFICATE_PASSWORD }}
+        # security import certificate.p12 -P ${{ secrets.CERTIFICATE_PASSWORD }}
         security create-keychain -p drawbotKeychain drawbot.keychain
         security default-keychain -s drawbot.keychain
         security set-keychain-settings -l -u -t 8000
