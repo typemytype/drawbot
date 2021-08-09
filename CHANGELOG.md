@@ -1,5 +1,11 @@
 # Changelog For DrawBot
 
+## [3.128] 2021-08-09
+
+- Fixing bug when adding glyphNames to a formattedString with fontVariation settings.
+- Always set the ligature default to workaround a bug in macOS
+- Improve error messages for ill-specified fonts 
+
 ## [3.127] 2021-04-29
 
 - Allow `Path` objects in places where a path is an argument: `saveImage(pathObject)`, `image(pathObject, ...)` 
