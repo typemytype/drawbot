@@ -485,7 +485,9 @@ class BezierPath(BasePen, SVGContextPropertyMixin, ContextPropertyMixin):
 
     def bounds(self):
         """
-        Return the bounding box of the path.
+        Return the bounding box of the path in the form
+        `(x minimum, y minimum, x maximum, y maximum)`` or,
+        in the case of empty path `None`.
         """
         if self._path.isEmpty():
             return None
@@ -494,7 +496,9 @@ class BezierPath(BasePen, SVGContextPropertyMixin, ContextPropertyMixin):
 
     def controlPointBounds(self):
         """
-        Return the bounding box of the path including the offcurve points.
+        Return the bounding box of the path including the offcurve points
+        in the form `(x minimum, y minimum, x maximum, y maximum)`` or,
+        in the case of empty path `None`.
         """
         (x, y), (w, h) = self._path.controlPointBounds()
         return x, y, x + w, y + h
