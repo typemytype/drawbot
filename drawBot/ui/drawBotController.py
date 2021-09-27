@@ -178,7 +178,7 @@ class DrawBotController(BaseWindowController):
             return
         # set it back in the text view
         textView = self.codeView.getNSTextView()
-        # selecte all
+        # select all
         textView.setSelectedRange_((0, len(code)))
         # replace the text
         textView.insertText_(formattedCode)
