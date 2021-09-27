@@ -172,7 +172,10 @@ class DrawBotController(BaseWindowController):
         # get the code
         code = self.code()
         # format the code with black
-        formattedCode = black.format_str(code, mode=black.Mode())
+        try:
+            formattedCode = black.format_str(code, mode=black.Mode())
+        except black.InvalidInput:
+            return
         # set it back in the text view
         textView = self.codeView.getNSTextView()
         # selecte all
