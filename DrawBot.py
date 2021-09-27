@@ -62,6 +62,10 @@ class DrawBotDocument(AppKit.NSDocument):
         self.vanillaWindowController.checkSyntax()
         return True
 
+    def formatCode_(self, sender):
+        self.vanillaWindowController.formatCode()
+        return True
+
     def saveDocumentAsPDF_(self, sender):
         self.vanillaWindowController.savePDF()
         return True

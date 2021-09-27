@@ -167,6 +167,19 @@ class DrawBotController(BaseWindowController):
         self.stdout = None
         self.stderr = None
 
+    def formatCode(self, sender=None):
+        import black
+        # get the code
+        code = self.code()
+        # format the code with black
+        formattedCode = black.format_str(code, mode=black.Mode())
+        # set it back in the text view
+        textView = self.codeView.getNSTextView()
+        # selecte all
+        textView.setSelectedRange_((0, len(code)))
+        # replace the text
+        textView.insertText_(formattedCode)
+
     def _savePDF(self, path):
         # get the pdf date from the draw view
         data = self.drawView.get()
