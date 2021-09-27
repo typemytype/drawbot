@@ -178,10 +178,22 @@ class DrawBotController(BaseWindowController):
             return
         # set it back in the text view
         textView = self.codeView.getNSTextView()
-        # selecte all
+        # store current selection by line range
+        selectedRange = textView.selectedRange()
+        string = textView.string()
+        lineRange = string.lineRangeForRange_(selectedRange)
+        # select all
         textView.setSelectedRange_((0, len(code)))
         # replace the text
         textView.insertText_(formattedCode)
+        # try to reset the selection location back
+        cursor = (lineRange.location, 0)
+        try:
+            textView.setSelectedRange_(cursor)
+            textView.scrollRangeToVisible_(cursor)
+        except IndexError:
+            # fail silently
+            pass
 
     def _savePDF(self, path):
         # get the pdf date from the draw view
