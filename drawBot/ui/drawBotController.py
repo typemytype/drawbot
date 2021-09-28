@@ -182,10 +182,8 @@ class DrawBotController(BaseWindowController):
         selectedRange = textView.selectedRange()
         string = textView.string()
         lineRange = string.lineRangeForRange_(selectedRange)
-        # select all
-        textView.setSelectedRange_((0, len(code)))
         # replace the text
-        textView.insertText_(formattedCode)
+        textView.insertText_replacementRange_(formattedCode, (0, len(code)))
         # try to reset the selection location back
         cursor = (lineRange.location, 0)
         try:
