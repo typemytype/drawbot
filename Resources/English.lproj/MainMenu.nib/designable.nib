@@ -287,6 +287,12 @@
                                     <action selector="liveCoding:" target="-1" id="591"/>
                                 </connections>
                             </menuItem>
+                            <menuItem title="Format Code" keyEquivalent="f" id="2jO-Ca-LB4">
+                                <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
+                                <connections>
+                                    <action selector="formatCode:" target="-1" id="B89-dC-yge"/>
+                                </connections>
+                            </menuItem>
                             <menuItem isSeparatorItem="YES" id="557"/>
                             <menuItem title="Indent" keyEquivalent="]" id="559">
                                 <connections>
@@ -380,8 +386,7 @@
                                     <action selector="showDebug:" target="-1" id="585"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Forum" keyEquivalent="f" id="1oC-vu-nlV">
-                                <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
+                            <menuItem title="Forum" keyEquivalent="F" id="1oC-vu-nlV">
                                 <connections>
                                     <action selector="showForum:" target="-1" id="b2C-BJ-2ep"/>
                                 </connections>
