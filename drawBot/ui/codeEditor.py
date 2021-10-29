@@ -948,7 +948,7 @@ class CodeNSTextView(AppKit.NSTextView):
             found = False
             while not found:
                 length += 1
-                if location + length >= lenText:
+                if location + length > lenText:
                     found = True
                 else:
                     c = text.substringWithRange_((location, length))[-1]
