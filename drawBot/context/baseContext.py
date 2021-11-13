@@ -807,7 +807,7 @@ class BezierPath(BasePen, SVGContextPropertyMixin, ContextPropertyMixin):
 
 class Color(object):
 
-    colorSpace = AppKit.NSColorSpace.genericRGBColorSpace
+    colorSpace = AppKit.NSColorSpace.genericRGBColorSpace()
 
     def __init__(self, r=None, g=None, b=None, a=1):
         self._color = None
@@ -821,7 +821,7 @@ class Color(object):
             self._color = AppKit.NSColor.colorWithCalibratedRed_green_blue_alpha_(r, r, r, g)
         else:
             self._color = AppKit.NSColor.colorWithCalibratedRed_green_blue_alpha_(r, g, b, a)
-        self._color = self._color.colorUsingColorSpace_(self.colorSpace())
+        self._color = self._color.colorUsingColorSpace_(self.colorSpace)
 
     def set(self):
         self._color.set()
@@ -858,7 +858,7 @@ class Color(object):
 
 class CMYKColor(Color):
 
-    colorSpace = AppKit.NSColorSpace.genericCMYKColorSpace
+    colorSpace = AppKit.NSColorSpace.genericCMYKColorSpace()
 
     def __init__(self, c=None, m=None, y=None, k=None, a=1):
         if c is None:
@@ -867,7 +867,7 @@ class CMYKColor(Color):
             self._color = c
         else:
             self._color = AppKit.NSColor.colorWithDeviceCyan_magenta_yellow_black_alpha_(c, m, y, k, a)
-        self._color = self._color.colorUsingColorSpace_(self.colorSpace())
+        self._color = self._color.colorUsingColorSpace_(self.colorSpace)
         self._cmyka = c, m, y, k, a
 
 
@@ -2057,11 +2057,11 @@ class BaseContext(object):
     _textUnderlineMap = FormattedString._textUnderlineMap
 
     _colorSpaceMap = dict(
-        genericRGB=AppKit.NSColorSpace.genericRGBColorSpace,
-        adobeRGB1998=AppKit.NSColorSpace.adobeRGB1998ColorSpace,
-        sRGB=AppKit.NSColorSpace.sRGBColorSpace,
-        genericGray=AppKit.NSColorSpace.genericGrayColorSpace,
-        genericGamma22Gray=AppKit.NSColorSpace.genericGamma22GrayColorSpace,
+        genericRGB=AppKit.NSColorSpace.genericRGBColorSpace(),
+        adobeRGB1998=AppKit.NSColorSpace.adobeRGB1998ColorSpace(),
+        sRGB=AppKit.NSColorSpace.sRGBColorSpace(),
+        genericGray=AppKit.NSColorSpace.genericGrayColorSpace(),
+        genericGamma22Gray=AppKit.NSColorSpace.genericGamma22GrayColorSpace(),
     )
 
     _blendModeMap = dict(
