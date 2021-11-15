@@ -4,6 +4,7 @@ Text Properties
 .. autofunction:: drawBot.font
 .. autofunction:: drawBot.fontSize
 .. autofunction:: drawBot.fallbackFont
+.. autofunction:: drawBot.underline
 .. autofunction:: drawBot.hyphenation
 .. autofunction:: drawBot.lineHeight
 .. autofunction:: drawBot.tracking
