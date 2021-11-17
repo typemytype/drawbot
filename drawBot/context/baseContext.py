@@ -973,9 +973,9 @@ def makeTextBoxes(attributedString, xy, align, plainText):
             width += extraPadding
             originX = 0
             if para is not None:
-                if para.alignment() == AppKit.NSCenterTextAlignment:
+                if para.alignment() == AppKit.NSTextAlignmentCenter:
                     originX -= width * .5
-                elif para.alignment() == AppKit.NSRightTextAlignment:
+                elif para.alignment() == AppKit.NSTextAlignmentRight:
                     originX = -width
 
             attributedSubstring
@@ -1025,16 +1025,16 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
     _cmykColorClass = CMYKColor
 
     _textAlignMap = dict(
-        center=AppKit.NSCenterTextAlignment,
-        left=AppKit.NSLeftTextAlignment,
-        right=AppKit.NSRightTextAlignment,
-        justified=AppKit.NSJustifiedTextAlignment,
+        center=AppKit.NSTextAlignmentCenter,
+        left=AppKit.NSTextAlignmentLeft,
+        right=AppKit.NSTextAlignmentRight,
+        justified=AppKit.NSTextAlignmentJustified,
     )
 
     _textTabAlignMap = dict(
-        center=AppKit.NSCenterTextAlignment,
-        left=AppKit.NSLeftTextAlignment,
-        right=AppKit.NSRightTextAlignment,
+        center=AppKit.NSTextAlignmentCenter,
+        left=AppKit.NSTextAlignmentLeft,
+        right=AppKit.NSTextAlignmentRight,
     )
 
     _textUnderlineMap = dict(
