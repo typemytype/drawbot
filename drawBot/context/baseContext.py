@@ -978,7 +978,6 @@ def makeTextBoxes(attributedString, xy, align, plainText):
                 elif para.alignment() == AppKit.NSTextAlignmentRight:
                     originX = -width
 
-            attributedSubstring
             if attributedSubstring.string()[-1] in ["\n", "\r"]:
                 attributedSubstring = attributedSubstring.mutableCopy()
                 attributedSubstring.deleteCharactersInRange_((rng.length - 1, 1))
