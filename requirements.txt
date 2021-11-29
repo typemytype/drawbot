@@ -12,6 +12,7 @@ fs
 brotli
 pygments
 jedi
+pillow
 attrs
 booleanOperations
 mutatorMath
