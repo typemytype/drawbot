@@ -282,11 +282,11 @@ class ExportTest(DrawBotBaseTest):
     def test_saveImage_PIL(self):
         self.makeTestDrawing()
         image = drawBot.saveImage("PIL")
-        self.assertIsInstance(image, PIL.Image)
+        self.assertIsInstance(image, PIL.Image.Image)
 
         images = drawBot.saveImage("PIL", multipage=True)
         for image in images:
-            self.assertIsInstance(image, AppKit.NSImage)
+            self.assertIsInstance(image, PIL.Image.Image)
 
     def test_saveImage_NSImage(self):
         self.makeTestDrawing()
