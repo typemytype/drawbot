@@ -394,7 +394,7 @@ class DrawBotDrawingTool(object):
             saveImage("~/Desktop/firstImage300.png", imageResolution=300)
 
         """
-        if not isinstance(path, str):
+        if not isinstance(path, (str, os.PathLike)):
             raise TypeError("Cannot apply saveImage options to multiple output formats, expected 'str', got '%s'" % type(path).__name__)
         # args are not supported anymore
         if args:
