@@ -45,7 +45,7 @@ class GIFContext(ImageContext):
             tempPath = tempfile.mkstemp(suffix=".gif")[1]
 
         self._inputPaths = []
-        super(GIFContext, self)._writeDataToFile(data, tempPath, options)
+        super()._writeDataToFile(data, tempPath, options)
 
         if shouldBeAnimated:
             generateGif(self._inputPaths, path, self._delayData, options.get("imageGIFLoop", True))
