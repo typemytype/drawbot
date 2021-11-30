@@ -2,7 +2,7 @@ import AppKit
 import io
 
 
-def PIL2NSImage(pilImage):
+def pilToNSImage(pilImage):
     buffer = io.BytesIO()
     pilImage.save(buffer, pilImage.format)
     data = buffer.getvalue()
