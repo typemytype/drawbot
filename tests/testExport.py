@@ -215,7 +215,7 @@ class ExportTest(DrawBotBaseTest):
         self.makeTestDrawing()
         with self.assertRaises(TypeError) as cm:
             drawBot.saveImage(["foo.abcde"], foo=123)
-        self.assertEqual(cm.exception.args[0], "Cannot apply saveImage options to multiple output formats. expected 'str', got 'list'")
+        self.assertEqual(cm.exception.args[0], "Cannot apply saveImage options to multiple output formats, expected 'str', got 'list'")
 
     def test_saveImage_png_multipage(self):
         self.makeTestDrawing()
