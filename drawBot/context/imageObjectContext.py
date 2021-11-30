@@ -12,10 +12,10 @@ class BaseImageObjectContext(ImageContext):
         self._imageObjects = []
         with tempfile.NamedTemporaryFile(suffix=".tiff") as temp:
             super()._writeDataToFile(data, temp.name, options)
-        # if not options.get("multipage"):
-        #     self._imageObjects = self._imageObjects[0]
         imageObjects = self._imageObjects
         del self._imageObjects
+        if not options.get("multipage"):
+            imageObjects = imageObjects[0]
         return imageObjects
 
     def _saveImageDataToFile(self, imageData, imagePath):
