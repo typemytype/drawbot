@@ -1,5 +1,3 @@
-import tempfile
-
 from PIL import Image
 import io
 import AppKit
@@ -10,8 +8,9 @@ class BaseImageObjectContext(ImageContext):
 
     def _writeDataToFile(self, data, path, options):
         self._imageObjects = []
-        with tempfile.NamedTemporaryFile(suffix=".tiff") as temp:
-            super()._writeDataToFile(data, temp.name, options)
+        # we just need a path with a file extension
+        # nothing will be written to disk
+        super()._writeDataToFile(data, "temp.tiff", options)
         imageObjects = self._imageObjects
         del self._imageObjects
         if not options.get("multipage"):
