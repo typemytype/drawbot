@@ -4,6 +4,7 @@ import Quartz
 
 import math
 import os
+import tempfile
 import random
 from collections import namedtuple
 
@@ -471,6 +472,38 @@ class DrawBotDrawingTool(object):
         context = DrawBotContext()
         self._drawInContext(context)
         return context.getNSPDFDocument()
+
+    def shareImage(self, format="pdf", service="airdrop", **kwargs):
+        """
+        Share the canvas to a service with a specified format.
+
+        As default the `format` is `pdf`, any suffix drawBot supports is possible.
+
+        `service` options are `airdrop`, `mail` or `message`.
+
+        .. downloadcode:: printImage.py
+
+            # set A4 page size
+            size(200, 200)
+            # draw something
+            text("Foo, bar", (10, 10))
+            # share it over airdrop
+            shareImage('pdf', service="airdrop")
+        """
+        path = tempfile.mkstemp(suffix=f".{format}")[1]
+
+        self.saveImage(path, **kwargs)
+
+        serviceMap = dict(
+            airdrop=AppKit.NSSharingServiceNameSendViaAirDrop,
+            mail=AppKit.NSSharingServiceNameComposeEmail,
+            message=AppKit.NSSharingServiceNameComposeMessage,
+        )
+
+        sharingService = AppKit.NSSharingService.sharingServiceNamed_(serviceMap[service])
+        sharingService.performWithItems_([
+            AppKit.NSURL.fileURLWithPath_(path)
+        ])
 
     # graphics state
 
