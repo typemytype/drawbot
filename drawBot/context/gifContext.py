@@ -42,17 +42,15 @@ class GIFContext(ImageContext):
         tempPath = path
         if shouldBeAnimated:
             options["multipage"] = True
-            tempDir = tempfile.mkdtemp(suffix=".giftmp")
-            tempPath = os.path.join(tempDir, "frame.gif")
+            tempPath = tempfile.mkstemp(suffix=".gif")[1]
 
+        self._inputPaths = []
         super(GIFContext, self)._writeDataToFile(data, tempPath, options)
 
         if shouldBeAnimated:
-            def getFrameNumber(name):
-                fileName = os.path.basename(name)
-                num = fileName[6:-4]
-                return int(num)
+            generateGif(self._inputPaths, path, self._delayData, options.get("imageGIFLoop", True))
+        del self._inputPaths
 
-            inputPaths = sorted(glob.glob(tempDir + "frame_*.gif"), key=getFrameNumber)
-
-            generateGif(inputPaths, path, self._delayData, options.get("imageGIFLoop", True))
+    def _saveImageDataToFile(self, imageData, imagePath):
+        super()._saveImageDataToFile(imageData, imagePath)
+        self._inputPaths.append(imagePath)
