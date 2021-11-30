@@ -20,7 +20,7 @@ allContexts = [
     ICNSContext,
     PrintContext,
     PILContext,
-    NSImageContext
+    NSImageContext,
 ]
 
 
