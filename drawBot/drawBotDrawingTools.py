@@ -395,7 +395,7 @@ class DrawBotDrawingTool(object):
 
         """
         if not isinstance(path, str):
-            raise TypeError("expected 'str', got '%s'" % type(path).__name__)
+            raise TypeError("Cannot apply saveImage options to multiple output formats, expected 'str', got '%s'" % type(path).__name__)
         # args are not supported anymore
         if args:
             if len(args) == 1:
