@@ -5,6 +5,7 @@ import glob
 import drawBot
 import random
 import AppKit
+import PIL
 from drawBot.context.tools.gifTools import gifFrameCount
 from drawBot.misc import DrawBotError
 from drawBot.macOSVersion import macOSVersion
@@ -277,6 +278,34 @@ class ExportTest(DrawBotBaseTest):
             with StdOutCollector(captureStdErr=True) as output:
                 drawBot.saveImage(tmp.path, multipage=False)
         self.assertEqual(output.lines(), [])
+
+    def test_saveImage_PIL(self):
+        self.makeTestDrawing()
+        image = drawBot.saveImage("PIL")
+        self.assertIsInstance(image, PIL.Image)
+
+        images = drawBot.saveImage("PIL", multipage=True)
+        for image in images:
+            self.assertIsInstance(image, AppKit.NSImage)
+
+    def test_saveImage_NSImage(self):
+        self.makeTestDrawing()
+        image = drawBot.saveImage("NSImage")
+        self.assertIsInstance(image, AppKit.NSImage)
+
+        images = drawBot.saveImage("NSImage", multipage=True)
+        for image in images:
+            self.assertIsInstance(image, AppKit.NSImage)
+
+    def test_saveImage_returnValue(self):
+        self.makeTestDrawing()
+        for ext in (".png", ".pdf", ".gif"):
+            with TempFile(suffix=ext) as tmp:
+                result = drawBot.saveImage(tmp.path)
+                self.assertIsNone(result)
+        for ext in ("PIL", "NSImage"):
+            result = drawBot.saveImage(ext)
+            self.assertIsNotNone(result)
 
     def test_oddPageHeight_mp4(self):
         # https://github.com/typemytype/drawbot/issues/250
