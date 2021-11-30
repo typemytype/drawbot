@@ -86,7 +86,6 @@ class ImageContext(PDFContext):
         if not multipage:
             firstPage = pageCount - 1
             pathAdd = ""
-        outputPaths = []
         imageResolution = options.get("imageResolution", 72.0)
         antiAliasing = options.get("antiAliasing", True)
         properties = {}
@@ -112,11 +111,9 @@ class ImageContext(PDFContext):
                 imagePath = fileName + pathAdd + fileExt
                 self._saveImageDataToFile(imageData, imagePath)
                 pathAdd = "_%s" % (index + 2)
-                outputPaths.append(imagePath)
                 del page, imageRep, imageData
             finally:
                 del pool
-        return outputPaths
 
     def _saveImageDataToFile(self, imageData, imagePath):
         imageData.writeToFile_atomically_(imagePath, True)

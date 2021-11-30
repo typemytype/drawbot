@@ -1,5 +1,6 @@
 import Quartz
-
+import os
+import glob
 import tempfile
 
 from .imageContext import ImageContext, getSaveImageOptions
@@ -41,9 +42,17 @@ class GIFContext(ImageContext):
         tempPath = path
         if shouldBeAnimated:
             options["multipage"] = True
-            tempPath = tempfile.mkstemp(suffix=".gif")[1]
+            tempDir = tempfile.mkdtemp(suffix=".giftmp")
+            tempPath = os.path.join(tempDir, "frame.gif")
 
-        inputPaths = super(GIFContext, self)._writeDataToFile(data, tempPath, options)
+        super(GIFContext, self)._writeDataToFile(data, tempPath, options)
 
         if shouldBeAnimated:
+            def getFrameNumber(name):
+                fileName = os.path.basename(name)
+                num = fileName[6:-4]
+                return int(num)
+
+            inputPaths = sorted(glob.glob(tempDir + "frame_*.gif"), key=getFrameNumber)
+
             generateGif(inputPaths, path, self._delayData, options.get("imageGIFLoop", True))
