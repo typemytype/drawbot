@@ -109,13 +109,13 @@ class ImageContext(PDFContext):
                         raise DrawBotError("Exporting to %s doesn't support odd pixel dimensions for width and height." % (", ".join(self.fileExtensions)))
                 imageData = imageRep.representationUsingType_properties_(self._saveImageFileTypes[ext], properties)
                 imagePath = fileName + pathAdd + fileExt
-                self._saveImageDataToFile(imageData, imagePath)
+                self._storeImageData(imageData, imagePath)
                 pathAdd = "_%s" % (index + 2)
                 del page, imageRep, imageData
             finally:
                 del pool
 
-    def _saveImageDataToFile(self, imageData, imagePath):
+    def _storeImageData(self, imageData, imagePath):
         imageData.writeToFile_atomically_(imagePath, True)
 
 

@@ -17,7 +17,7 @@ class BaseImageObjectContext(ImageContext):
             imageObjects = imageObjects[0]
         return imageObjects
 
-    def _saveImageDataToFile(self, imageData, imagePath):
+    def _storeImageData(self, imageData, imagePath):
         obj = self._getObjectForData(imageData)
         self._imageObjects.append(obj)
 

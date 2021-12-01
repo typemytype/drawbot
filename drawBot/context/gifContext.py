@@ -51,6 +51,6 @@ class GIFContext(ImageContext):
             generateGif(self._inputPaths, path, self._delayData, options.get("imageGIFLoop", True))
         del self._inputPaths
 
-    def _saveImageDataToFile(self, imageData, imagePath):
+    def _storeImageData(self, imageData, imagePath):
         super()._saveImageDataToFile(imageData, imagePath)
         self._inputPaths.append(imagePath)
