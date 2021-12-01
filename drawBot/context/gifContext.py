@@ -52,5 +52,5 @@ class GIFContext(ImageContext):
         del self._inputPaths
 
     def _storeImageData(self, imageData, imagePath):
-        super()._saveImageDataToFile(imageData, imagePath)
+        super()._storeImageData(imageData, imagePath)
         self._inputPaths.append(imagePath)
