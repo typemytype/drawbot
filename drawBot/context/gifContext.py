@@ -1,6 +1,4 @@
 import Quartz
-import os
-import glob
 import tempfile
 
 from .imageContext import ImageContext, getSaveImageOptions
