@@ -5,6 +5,7 @@ import Quartz
 import math
 import os
 import random
+import pathlib
 from collections import namedtuple
 
 from .context import getContextForFileExt, getContextOptions, getFileExtensions, getContextOptionsDocs
@@ -1933,6 +1934,8 @@ class DrawBotDrawingTool(object):
             # its an NSImage
             rep = path
         else:
+            if isinstance(path, pathlib.Path):
+                path = f'{path}'
             if isinstance(path, str):
                 path = optimizePath(path)
             if path.startswith("http"):
@@ -2005,6 +2008,8 @@ class DrawBotDrawingTool(object):
         x, y = xy
         if isinstance(path, str):
             path = optimizePath(path)
+        elif isinstance(path, pathlib.Path):
+            path = f'{path}'
         bitmap = self._cachedPixelColorBitmaps.get(path)
         if bitmap is None:
             if isinstance(path, self._imageClass):
@@ -2043,6 +2048,8 @@ class DrawBotDrawingTool(object):
         else:
             if isinstance(path, str):
                 path = optimizePath(path)
+            if isinstance(path, pathlib.Path):
+                path = f'{path}'
             if path.startswith("http"):
                 url = AppKit.NSURL.URLWithString_(path)
             else:
@@ -2249,6 +2256,10 @@ class DrawBotDrawingTool(object):
             "installFont(path) has been deprecated, use the font path directly in "
             "all places that accept a font name."
         )
+
+        if isinstance(path, pathlib.Path):
+            path = f"{path}"
+
         if path in self._tempInstalledFonts:
             return self._tempInstalledFonts[path]
 
@@ -2275,6 +2286,10 @@ class DrawBotDrawingTool(object):
             "uninstallFont(path) has been deprecated, use the font path directly in "
             "all places that accept a font name."
         )
+
+        if isinstance(path, pathlib.Path):
+            path = f"{path}"
+
         success, error = self._dummyContext.uninstallFont(path)
         if path in self._tempInstalledFonts:
             del self._tempInstalledFonts[path]

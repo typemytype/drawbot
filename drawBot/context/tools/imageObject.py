@@ -1,6 +1,7 @@
 import AppKit
 from math import radians
 import os
+import pathlib
 
 from drawBot.misc import DrawBotError, optimizePath
 from drawBot.context.imageContext import _makeBitmapImageRep
@@ -56,8 +57,14 @@ class ImageObject(object):
         """
         if isinstance(path, AppKit.NSImage):
             im = path
-        elif isinstance(path, str):
-            path = optimizePath(path)
+        else:
+            if isinstance(path, str):
+                path = optimizePath(path)
+            elif isinstance(path, pathlib.Path):
+                path = f'{path}'
+            else:
+                raise DrawBotError("Cannot read image path '%s'." % path)
+
             if path.startswith("http"):
                 url = AppKit.NSURL.URLWithString_(path)
             else:
@@ -65,8 +72,6 @@ class ImageObject(object):
                     raise DrawBotError("Image path '%s' does not exists." % path)
                 url = AppKit.NSURL.fileURLWithPath_(path)
             im = AppKit.NSImage.alloc().initByReferencingURL_(url)
-        else:
-            raise DrawBotError("Cannot read image path '%s'." % path)
         rep = _makeBitmapImageRep(im)
         ciImage = AppKit.CIImage.alloc().initWithBitmapImageRep_(rep)
         self._merge(ciImage, doCrop=True)
