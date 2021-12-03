@@ -485,7 +485,9 @@ class BezierPath(BasePen, SVGContextPropertyMixin, ContextPropertyMixin):
 
     def bounds(self):
         """
-        Return the bounding box of the path.
+        Return the bounding box of the path in the form
+        `(x minimum, y minimum, x maximum, y maximum)`` or,
+        in the case of empty path `None`.
         """
         if self._path.isEmpty():
             return None
@@ -494,7 +496,9 @@ class BezierPath(BasePen, SVGContextPropertyMixin, ContextPropertyMixin):
 
     def controlPointBounds(self):
         """
-        Return the bounding box of the path including the offcurve points.
+        Return the bounding box of the path including the offcurve points
+        in the form `(x minimum, y minimum, x maximum, y maximum)`` or,
+        in the case of empty path `None`.
         """
         (x, y), (w, h) = self._path.controlPointBounds()
         return x, y, x + w, y + h
@@ -803,7 +807,7 @@ class BezierPath(BasePen, SVGContextPropertyMixin, ContextPropertyMixin):
 
 class Color(object):
 
-    colorSpace = AppKit.NSColorSpace.genericRGBColorSpace
+    colorSpace = AppKit.NSColorSpace.genericRGBColorSpace()
 
     def __init__(self, r=None, g=None, b=None, a=1):
         self._color = None
@@ -817,7 +821,7 @@ class Color(object):
             self._color = AppKit.NSColor.colorWithCalibratedRed_green_blue_alpha_(r, r, r, g)
         else:
             self._color = AppKit.NSColor.colorWithCalibratedRed_green_blue_alpha_(r, g, b, a)
-        self._color = self._color.colorUsingColorSpace_(self.colorSpace())
+        self._color = self._color.colorUsingColorSpace_(self.colorSpace)
 
     def set(self):
         self._color.set()
@@ -854,7 +858,7 @@ class Color(object):
 
 class CMYKColor(Color):
 
-    colorSpace = AppKit.NSColorSpace.genericCMYKColorSpace
+    colorSpace = AppKit.NSColorSpace.genericCMYKColorSpace()
 
     def __init__(self, c=None, m=None, y=None, k=None, a=1):
         if c is None:
@@ -863,7 +867,7 @@ class CMYKColor(Color):
             self._color = c
         else:
             self._color = AppKit.NSColor.colorWithDeviceCyan_magenta_yellow_black_alpha_(c, m, y, k, a)
-        self._color = self._color.colorUsingColorSpace_(self.colorSpace())
+        self._color = self._color.colorUsingColorSpace_(self.colorSpace)
         self._cmyka = c, m, y, k, a
 
 
@@ -969,12 +973,11 @@ def makeTextBoxes(attributedString, xy, align, plainText):
             width += extraPadding
             originX = 0
             if para is not None:
-                if para.alignment() == AppKit.NSCenterTextAlignment:
+                if para.alignment() == AppKit.NSTextAlignmentCenter:
                     originX -= width * .5
-                elif para.alignment() == AppKit.NSRightTextAlignment:
+                elif para.alignment() == AppKit.NSTextAlignmentRight:
                     originX = -width
 
-            attributedSubstring
             if attributedSubstring.string()[-1] in ["\n", "\r"]:
                 attributedSubstring = attributedSubstring.mutableCopy()
                 attributedSubstring.deleteCharactersInRange_((rng.length - 1, 1))
@@ -1021,16 +1024,16 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
     _cmykColorClass = CMYKColor
 
     _textAlignMap = dict(
-        center=AppKit.NSCenterTextAlignment,
-        left=AppKit.NSLeftTextAlignment,
-        right=AppKit.NSRightTextAlignment,
-        justified=AppKit.NSJustifiedTextAlignment,
+        center=AppKit.NSTextAlignmentCenter,
+        left=AppKit.NSTextAlignmentLeft,
+        right=AppKit.NSTextAlignmentRight,
+        justified=AppKit.NSTextAlignmentJustified,
     )
 
     _textTabAlignMap = dict(
-        center=AppKit.NSCenterTextAlignment,
-        left=AppKit.NSLeftTextAlignment,
-        right=AppKit.NSRightTextAlignment,
+        center=AppKit.NSTextAlignmentCenter,
+        left=AppKit.NSTextAlignmentLeft,
+        right=AppKit.NSTextAlignmentRight,
     )
 
     _textUnderlineMap = dict(
@@ -1191,6 +1194,7 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
         elif not isinstance(txt, (str, FormattedString)):
             raise TypeError("expected 'str' or 'FormattedString', got '%s'" % type(txt).__name__)
         attributes = {}
+        attributes[AppKit.NSLigatureAttributeName] = 1  # https://github.com/typemytype/drawbot/issues/427
         if self._font:
             font = self._getNSFontWithFallback()
             coreTextFontFeatures = []
@@ -1222,20 +1226,8 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
                         # The value 0 means kerning is disabled.
                         attributes[AppKit.NSKernAttributeName] = 0
 
-            coreTextFontVariations = dict()
-            if self._fontVariations:
-                existingAxes = variation.getVariationAxesForFont(font)
-                for axis, value in self._fontVariations.items():
-                    if axis in existingAxes:
-                        existinsAxis = existingAxes[axis]
-                        # clip variation value within the min max value
-                        if value < existinsAxis["minValue"]:
-                            value = existinsAxis["minValue"]
-                        if value > existinsAxis["maxValue"]:
-                            value = existinsAxis["maxValue"]
-                        coreTextFontVariations[variation.convertVariationTagToInt(axis)] = value
-                    else:
-                        warnings.warn("variation axis '%s' not available for '%s'" % (axis, self._font))
+            coreTextFontVariations = variation.getFontVariationAttributes(font, self._fontVariations)
+
             fontAttributes = {}
             if coreTextFontFeatures:
                 fontAttributes[CoreText.kCTFontFeatureSettingsAttribute] = coreTextFontFeatures
@@ -1953,6 +1945,10 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
         # disable calt features, as this seems to be on by default
         # for both the font stored in the nsGlyphInfo as in the replacement character
         fontAttributes = {}
+        coreTextFontVariations = variation.getFontVariationAttributes(font, self._fontVariations)
+        if coreTextFontVariations:
+            fontAttributes[CoreText.NSFontVariationAttribute] = coreTextFontVariations
+
         fontAttributes[CoreText.kCTFontFeatureSettingsAttribute] = [dict(CTFeatureOpenTypeTag="calt", CTFeatureOpenTypeValue=False)]
         fontDescriptor = font.fontDescriptor()
         fontDescriptor = fontDescriptor.fontDescriptorByAddingAttributes_(fontAttributes)
@@ -2060,11 +2056,11 @@ class BaseContext(object):
     _textUnderlineMap = FormattedString._textUnderlineMap
 
     _colorSpaceMap = dict(
-        genericRGB=AppKit.NSColorSpace.genericRGBColorSpace,
-        adobeRGB1998=AppKit.NSColorSpace.adobeRGB1998ColorSpace,
-        sRGB=AppKit.NSColorSpace.sRGBColorSpace,
-        genericGray=AppKit.NSColorSpace.genericGrayColorSpace,
-        genericGamma22Gray=AppKit.NSColorSpace.genericGamma22GrayColorSpace,
+        genericRGB=AppKit.NSColorSpace.genericRGBColorSpace(),
+        adobeRGB1998=AppKit.NSColorSpace.adobeRGB1998ColorSpace(),
+        sRGB=AppKit.NSColorSpace.sRGBColorSpace(),
+        genericGray=AppKit.NSColorSpace.genericGrayColorSpace(),
+        genericGamma22Gray=AppKit.NSColorSpace.genericGamma22GrayColorSpace(),
     )
 
     _blendModeMap = dict(
@@ -2620,6 +2616,18 @@ class BaseContext(object):
 
 @memoize
 def getNSFontFromNameOrPath(fontNameOrPath, fontSize, fontNumber):
+    if not isinstance(fontNameOrPath, (str, os.PathLike)):
+        tp = type(fontNameOrPath).__name__
+        raise TypeError(
+            f"'fontNameOrPath' should be str or path-like, '{tp}' found"
+        )
+    font = _getNSFontFromNameOrPath(fontNameOrPath, fontSize, fontNumber)
+    if font is None:
+        warnings.warn(f"not font could be found for '{fontNameOrPath}'")
+    return font
+
+
+def _getNSFontFromNameOrPath(fontNameOrPath, fontSize, fontNumber):
     if fontSize is None:
         fontSize = 10
     if isinstance(fontNameOrPath, str):

@@ -3,7 +3,7 @@ import drawBot
 drawBot.size(50, 50)
 characters = "Aa今"
 glyphNames = ["A", "a", "zzz"]
-for fontName in ["Helvetica", "../data/MutatorSans.ttf"]:
+for fontName in ["Times", "../data/MutatorSans.ttf"]:
     print(fontName)
     print(drawBot.font(fontName))
     drawBot.fontSize(50)

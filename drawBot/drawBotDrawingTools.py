@@ -1336,7 +1336,7 @@ class DrawBotDrawingTool(object):
         """
         dummyFont = getNSFontFromNameOrPath(fontNameOrPath, 10, fontNumber)
         if dummyFont is None:
-            raise DrawBotError("Fallback font '%s' is not available" % fontName)
+            raise DrawBotError("Fallback font '%s' is not available" % fontNameOrPath)
         self._dummyContext.fallbackFont(fontNameOrPath)
         self._addInstruction("fallbackFont", fontNameOrPath, fontNumber)
         return getFontName(dummyFont)

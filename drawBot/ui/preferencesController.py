@@ -212,7 +212,7 @@ class SyntaxColors(Group):
         y = 10
         self.fontText = TextBox((x, y, middle, 22), "Font:", alignment="right")
         self.font = EditText((x + middle + gutter, y, -100, 22), readOnly=True)
-        self.font.getNSTextField().setAlignment_(NSCenterTextAlignment)
+        self.font.getNSTextField().setAlignment_(NSTextAlignmentCenter)
         self.selectFont = Button((-90, y, -10, 22), "Select...", callback=self.selectFontCallback)
         y += 30
         self.backgroundColorText = TextBox((x, y, middle, 22), "Background:", alignment="right")

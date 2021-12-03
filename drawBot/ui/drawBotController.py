@@ -167,6 +167,32 @@ class DrawBotController(BaseWindowController):
         self.stdout = None
         self.stderr = None
 
+    def formatCode(self, sender=None):
+        import black
+        # get the code
+        code = self.code()
+        # format the code with black
+        try:
+            formattedCode = black.format_str(code, mode=black.Mode())
+        except black.InvalidInput:
+            return
+        # set it back in the text view
+        textView = self.codeView.getNSTextView()
+        # store current selection by line range
+        selectedRange = textView.selectedRange()
+        string = textView.string()
+        lineRange = string.lineRangeForRange_(selectedRange)
+        # replace the text
+        textView.insertText_replacementRange_(formattedCode, (0, string.length()))
+        # try to reset the selection location back
+        cursor = (lineRange.location, 0)
+        try:
+            textView.setSelectedRange_(cursor)
+            textView.scrollRangeToVisible_(cursor)
+        except IndexError:
+            # fail silently
+            pass
+
     def _savePDF(self, path):
         # get the pdf date from the draw view
         data = self.drawView.get()

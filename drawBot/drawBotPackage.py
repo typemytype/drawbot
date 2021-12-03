@@ -1,7 +1,7 @@
 import os
 import shutil
 import attr
-from plistlib import readPlist, writePlist
+import plistlib
 from distutils.version import LooseVersion
 import tempfile
 
@@ -78,7 +78,8 @@ class DrawBotPackage(object):
         # get the info.plist path
         infoPath = self.infoPath()
         if infoPath and os.path.exists(infoPath):
-            info = readPlist(infoPath)
+            with open(infoPath, "rb") as f:
+                info = plistlib.load(f)
             self.info.fromDict(info)
             # validate incoming info
             attr.validate(self.info)
@@ -146,7 +147,8 @@ class DrawBotPackage(object):
         infoData = self.info.asDict()
         # only write info that is different from
         if infoData:
-            writePlist(infoData, self.infoPath())
+            with open(self.infoPath(), "wb") as f:
+                plistlib.dump(infoData, f)
         # build lib root path
         libRoot = os.path.join(self.path, "lib")
         # copy the script root

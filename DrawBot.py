@@ -62,6 +62,10 @@ class DrawBotDocument(AppKit.NSDocument):
         self.vanillaWindowController.checkSyntax()
         return True
 
+    def formatCode_(self, sender):
+        self.vanillaWindowController.formatCode()
+        return True
+
     def saveDocumentAsPDF_(self, sender):
         self.vanillaWindowController.savePDF()
         return True
@@ -236,16 +240,6 @@ class DrawBotAppDelegate(AppKit.NSObject):
             "Do you want to open this Script?" % (fileName, domain),
             result
         )
-
-    def performFindPanelAction_(self, action):
-        try:
-            # a bug somewhere in OSX
-            # the short cuts (fe cmd+g) arent redirected properly to the text views
-            view = AppKit.NSApp().keyWindow().firstResponder()
-            dest = view.superview().superview().superview()._contentView().documentView()
-            dest.performFindPanelAction_(action)
-        except Exception:
-            pass
 
     def application_openFile_(self, app, path):
         ext = os.path.splitext(path)[-1]
