@@ -1933,7 +1933,7 @@ class DrawBotDrawingTool(object):
             # its an NSImage
             rep = path
         else:
-            if isinstance(path, str):
+            if isinstance(path, (str, os.PathLike)):
                 path = optimizePath(path)
             if path.startswith("http"):
                 url = AppKit.NSURL.URLWithString_(path)
@@ -2003,7 +2003,7 @@ class DrawBotDrawingTool(object):
                         text("W", (x, y))
         """
         x, y = xy
-        if isinstance(path, str):
+        if isinstance(path, (str, os.PathLike)):
             path = optimizePath(path)
         bitmap = self._cachedPixelColorBitmaps.get(path)
         if bitmap is None:
@@ -2041,7 +2041,7 @@ class DrawBotDrawingTool(object):
             # get the bitmap representation
             rep = reps[0]
         else:
-            if isinstance(path, str):
+            if isinstance(path, (str, os.PathLike)):
                 path = optimizePath(path)
             if path.startswith("http"):
                 url = AppKit.NSURL.URLWithString_(path)
@@ -2249,6 +2249,7 @@ class DrawBotDrawingTool(object):
             "installFont(path) has been deprecated, use the font path directly in "
             "all places that accept a font name."
         )
+        path = os.fspath(path)
         if path in self._tempInstalledFonts:
             return self._tempInstalledFonts[path]
 
@@ -2275,6 +2276,7 @@ class DrawBotDrawingTool(object):
             "uninstallFont(path) has been deprecated, use the font path directly in "
             "all places that accept a font name."
         )
+        path = os.fspath(path)
         success, error = self._dummyContext.uninstallFont(path)
         if path in self._tempInstalledFonts:
             del self._tempInstalledFonts[path]
