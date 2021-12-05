@@ -56,7 +56,7 @@ class ImageObject(object):
         """
         if isinstance(path, AppKit.NSImage):
             im = path
-        elif isinstance(path, str):
+        elif isinstance(path, (str, os.PathLike)):
             path = optimizePath(path)
             if path.startswith("http"):
                 url = AppKit.NSURL.URLWithString_(path)
