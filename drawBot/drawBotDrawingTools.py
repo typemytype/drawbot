@@ -2249,6 +2249,7 @@ class DrawBotDrawingTool(object):
             "installFont(path) has been deprecated, use the font path directly in "
             "all places that accept a font name."
         )
+        path = os.fspath(path)
         if path in self._tempInstalledFonts:
             return self._tempInstalledFonts[path]
 
@@ -2275,6 +2276,7 @@ class DrawBotDrawingTool(object):
             "uninstallFont(path) has been deprecated, use the font path directly in "
             "all places that accept a font name."
         )
+        path = os.fspath(path)
         success, error = self._dummyContext.uninstallFont(path)
         if path in self._tempInstalledFonts:
             del self._tempInstalledFonts[path]
