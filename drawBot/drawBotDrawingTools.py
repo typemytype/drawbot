@@ -395,6 +395,8 @@ class DrawBotDrawingTool(object):
             saveImage("~/Desktop/firstImage300.png", imageResolution=300)
 
         """
+        if not isinstance(path, (str, os.PathLike)):
+            raise TypeError("Cannot apply saveImage options to multiple output formats, expected 'str' or 'os.PathLike', got '%s'" % type(path).__name__)
         # args are not supported anymore
         if args:
             if len(args) == 1:
@@ -404,18 +406,6 @@ class DrawBotDrawingTool(object):
             else:
                 # if there are more just raise a TypeError
                 raise TypeError("saveImage(path, **options) takes only keyword arguments")
-        # support for multiple paths in a single saveImage is deprecated
-        if isinstance(path, (list, tuple)):
-            if options:
-                # multiple paths with options is not possible
-                raise DrawBotError("Cannot apply saveImage options to multiple output formats.")
-            else:
-                # warn and solve when multiple paths are given
-                warnings.warn("saveImage([path, path, ...]) is deprecated, use multiple saveImage statements.")
-                for p in path:
-                    self.saveImage(p, **options)
-                return
-
         originalPath = path
         path = optimizePath(path)
         dirName = os.path.dirname(path)
@@ -434,7 +424,7 @@ class DrawBotDrawingTool(object):
                 if optionName not in allowedSaveImageOptions:
                     warnings.warn("Unrecognized saveImage() option found for %s: %s" % (context.__class__.__name__, optionName))
         self._drawInContext(context)
-        context.saveImage(path, options)
+        return context.saveImage(path, options)
 
     # filling docs with content from all possible and installed contexts
     saveImage.__doc__ = saveImage.__doc__ % dict(
@@ -1966,7 +1956,7 @@ class DrawBotDrawingTool(object):
             # its an NSImage
             rep = path
         else:
-            if isinstance(path, str):
+            if isinstance(path, (str, os.PathLike)):
                 path = optimizePath(path)
             if path.startswith("http"):
                 url = AppKit.NSURL.URLWithString_(path)
@@ -2036,7 +2026,7 @@ class DrawBotDrawingTool(object):
                         text("W", (x, y))
         """
         x, y = xy
-        if isinstance(path, str):
+        if isinstance(path, (str, os.PathLike)):
             path = optimizePath(path)
         bitmap = self._cachedPixelColorBitmaps.get(path)
         if bitmap is None:
@@ -2074,7 +2064,7 @@ class DrawBotDrawingTool(object):
             # get the bitmap representation
             rep = reps[0]
         else:
-            if isinstance(path, str):
+            if isinstance(path, (str, os.PathLike)):
                 path = optimizePath(path)
             if path.startswith("http"):
                 url = AppKit.NSURL.URLWithString_(path)
@@ -2282,6 +2272,7 @@ class DrawBotDrawingTool(object):
             "installFont(path) has been deprecated, use the font path directly in "
             "all places that accept a font name."
         )
+        path = os.fspath(path)
         if path in self._tempInstalledFonts:
             return self._tempInstalledFonts[path]
 
@@ -2308,6 +2299,7 @@ class DrawBotDrawingTool(object):
             "uninstallFont(path) has been deprecated, use the font path directly in "
             "all places that accept a font name."
         )
+        path = os.fspath(path)
         success, error = self._dummyContext.uninstallFont(path)
         if path in self._tempInstalledFonts:
             del self._tempInstalledFonts[path]

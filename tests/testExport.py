@@ -5,6 +5,7 @@ import glob
 import drawBot
 import random
 import AppKit
+import PIL
 from drawBot.context.tools.gifTools import gifFrameCount
 from drawBot.misc import DrawBotError
 from drawBot.macOSVersion import macOSVersion
@@ -210,17 +211,12 @@ class ExportTest(DrawBotBaseTest):
         with self.assertRaises(DrawBotError) as cm:
             drawBot.saveImage("foo.abcde")
         self.assertEqual(cm.exception.args[0], "Could not find a supported context for: 'abcde'")
-        with self.assertRaises(DrawBotError) as cm:
-            with StdOutCollector(captureStdErr=True) as output:
-                drawBot.saveImage(["foo.abcde"])
-        self.assertEqual(output.lines(), ['*** DrawBot warning: saveImage([path, path, ...]) is deprecated, use multiple saveImage statements. ***'])
-        self.assertEqual(cm.exception.args[0], "Could not find a supported context for: 'abcde'")
 
     def test_saveImage_pathList(self):
         self.makeTestDrawing()
         with self.assertRaises(TypeError) as cm:
             drawBot.saveImage(["foo.abcde"], foo=123)
-        self.assertEqual(cm.exception.args[0], 'Cannot apply saveImage options to multiple output formats.')
+        self.assertEqual(cm.exception.args[0], "Cannot apply saveImage options to multiple output formats, expected 'str' or 'os.PathLike', got 'list'")
 
     def test_saveImage_png_multipage(self):
         self.makeTestDrawing()
@@ -282,6 +278,34 @@ class ExportTest(DrawBotBaseTest):
             with StdOutCollector(captureStdErr=True) as output:
                 drawBot.saveImage(tmp.path, multipage=False)
         self.assertEqual(output.lines(), [])
+
+    def test_saveImage_PIL(self):
+        self.makeTestDrawing()
+        image = drawBot.saveImage("PIL")
+        self.assertIsInstance(image, PIL.Image.Image)
+
+        images = drawBot.saveImage("PIL", multipage=True)
+        for image in images:
+            self.assertIsInstance(image, PIL.Image.Image)
+
+    def test_saveImage_NSImage(self):
+        self.makeTestDrawing()
+        image = drawBot.saveImage("NSImage")
+        self.assertIsInstance(image, AppKit.NSImage)
+
+        images = drawBot.saveImage("NSImage", multipage=True)
+        for image in images:
+            self.assertIsInstance(image, AppKit.NSImage)
+
+    def test_saveImage_returnValue(self):
+        self.makeTestDrawing()
+        for ext in (".png", ".pdf", ".gif"):
+            with TempFile(suffix=ext) as tmp:
+                result = drawBot.saveImage(tmp.path)
+                self.assertIsNone(result)
+        for ext in ("PIL", "NSImage"):
+            result = drawBot.saveImage(ext)
+            self.assertIsNotNone(result)
 
     def test_oddPageHeight_mp4(self):
         # https://github.com/typemytype/drawbot/issues/250
