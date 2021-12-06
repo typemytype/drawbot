@@ -2177,7 +2177,7 @@ class BaseContext(object):
     def saveImage(self, path, options):
         if not self.hasPage:
             raise DrawBotError("can't save image when no page is set")
-        self._saveImage(path, options)
+        return self._saveImage(path, options)
 
     def printImage(self, pdf=None):
         self._printImage(pdf)

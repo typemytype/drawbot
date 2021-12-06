@@ -197,6 +197,7 @@ setup(
                 'pip',
                 "setuptools",
                 "packaging",
+                "PIL",
             ],
             includes=[
                 # 'csv',
@@ -206,7 +207,6 @@ setup(
                 "numpy",
                 "scipy",
                 "matplotlib",
-                "PIL",
                 "pygame",
                 "wx",
                 "sphinx",

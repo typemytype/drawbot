@@ -5,6 +5,7 @@ from .svgContext import SVGContext
 from .printContext import PrintContext
 from .mp4Context import MP4Context
 from .icnsContext import ICNSContext
+from .imageObjectContext import PILContext, NSImageContext
 
 
 allContexts = [
@@ -17,7 +18,9 @@ allContexts = [
     BMPContext,
     MP4Context,
     ICNSContext,
-    PrintContext
+    PrintContext,
+    PILContext,
+    NSImageContext,
 ]
 
 

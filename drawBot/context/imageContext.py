@@ -86,7 +86,6 @@ class ImageContext(PDFContext):
         if not multipage:
             firstPage = pageCount - 1
             pathAdd = ""
-        outputPaths = []
         imageResolution = options.get("imageResolution", 72.0)
         antiAliasing = options.get("antiAliasing", True)
         properties = {}
@@ -110,13 +109,14 @@ class ImageContext(PDFContext):
                         raise DrawBotError("Exporting to %s doesn't support odd pixel dimensions for width and height." % (", ".join(self.fileExtensions)))
                 imageData = imageRep.representationUsingType_properties_(self._saveImageFileTypes[ext], properties)
                 imagePath = fileName + pathAdd + fileExt
-                imageData.writeToFile_atomically_(imagePath, True)
+                self._storeImageData(imageData, imagePath)
                 pathAdd = "_%s" % (index + 2)
-                outputPaths.append(imagePath)
                 del page, imageRep, imageData
             finally:
                 del pool
-        return outputPaths
+
+    def _storeImageData(self, imageData, imagePath):
+        imageData.writeToFile_atomically_(imagePath, True)
 
 
 def _makeBitmapImageRep(nsImage=None, pdfPage=None, imageResolution=72.0, antiAliasing=True, colorSpaceName=AppKit.NSCalibratedRGBColorSpace):
