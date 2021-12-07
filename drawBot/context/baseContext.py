@@ -1316,7 +1316,7 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
         if self._paragraphBottomSpacing is not None:
             para.setParagraphSpacing_(self._paragraphBottomSpacing)
 
-        if self._tracking is not None:
+        if txt not in "\n\r" and self._tracking is not None:
             if macOSVersion < "10.12":
                 attributes[AppKit.NSKernAttributeName] = self._tracking
             else:
