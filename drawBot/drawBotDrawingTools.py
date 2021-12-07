@@ -474,7 +474,7 @@ class DrawBotDrawingTool(object):
         .. downloadcode:: printImage.py
 
             # set A4 page size
-            size(200, 200)
+            newPage(200, 200)
             # draw something
             text("Foo, bar", (10, 10))
             # share it over airdrop
@@ -482,7 +482,8 @@ class DrawBotDrawingTool(object):
         """
         path = tempfile.mkstemp(suffix=f".{format}")[1]
 
-        self.saveImage(path, **kwargs)
+        context = getContextForFileExt("pdf")
+        context.saveImage(path, **kwargs)
 
         serviceMap = dict(
             airdrop=AppKit.NSSharingServiceNameSendViaAirDrop,
