@@ -471,7 +471,7 @@ class DrawBotDrawingTool(object):
 
         `service` options are `airdrop`, `mail` or `message`.
 
-        .. downloadcode:: printImage.py
+        .. downloadcode:: shareImage.py
 
             # set A4 page size
             newPage(200, 200)
