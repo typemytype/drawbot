@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="640" height="160" viewBox="0 0 640 160" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <text text-anchor="start" transform="matrix(1,0,0,1,10.0,277.0)">
+  <tspan fill="rgb(0,0,0)" font-family="Skia-Regular" font-size="200" x="0" y="-127">
+   &amp;
+  </tspan>
+  <tspan fill="rgb(0,0,0)" font-family="Skia-Regular" font-size="200" style="font-feature-settings: 'calt' 0;" x="146.19" y="-127">
+   �
+  </tspan>
+  <tspan fill="rgb(0,0,0)" font-family="Skia-Regular_wght20000_wdth10000" font-size="200" style="font-feature-settings: 'calt' 0;" x="292.38" y="-127">
+   �
+  </tspan>
+  <tspan fill="rgb(0,0,0)" font-family="Skia-Regular_wght20000_wdth10000" font-size="200" style="font-feature-settings: 'calt' 0;" x="449.71" y="-127">
+   &amp;
+  </tspan>
+ </text>
+</svg>

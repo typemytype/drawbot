@@ -1,6 +1,10 @@
+setuptools>=45.2.0
 pyobjc
-py2app
-git+https://github.com/robotools/vanilla
+corefoundationasyncio
+# pin py2app to version 0.19, see https://github.com/ronaldoussoren/py2app/issues/281
+# fix error: Failed to connect (colorGridView) outlet from (NSApplication) to (NSColorPickerGridView): missing setter or instance variable
+py2app==0.19
+cocoa-vanilla==0.2.0
 defcon
 git+https://github.com/robotools/defconAppKit
 fontTools[ufo,lxml,woff,unicode,type1]
@@ -8,6 +12,7 @@ fs
 brotli
 pygments
 jedi
+pillow
 attrs
 booleanOperations
 mutatorMath
@@ -21,5 +26,6 @@ git+https://github.com/typesupply/ufo2svg
 git+https://github.com/typemytype/ufo2fdk
 git+https://github.com/typesupply/feaPyFoFum
 git+https://github.com/typesupply/feaTools2
-ufoLib[lxml]
-uharfbuzz
+pip
+packaging
+black

@@ -1,0 +1,104 @@
+name: DrawBot App Builder
+
+on:
+  push:
+    tags:
+      - "*"
+
+jobs:
+  build:
+
+    runs-on: macos-latest
+
+    steps:
+
+    - name: Install Certificates
+      run: |
+        echo ${{ secrets.CERTIFICATE_P12 }} | base64 --decode > certificate.p12
+        security import certificate.p12 -P ${{ secrets.CERTIFICATE_PASSWORD }}
+        security create-keychain -p drawbotKeychain drawbot.keychain
+        security default-keychain -s drawbot.keychain
+        security set-keychain-settings -l -u -t 8000
+        security unlock-keychain -p drawbotKeychain drawbot.keychain
+        security import certificate.p12 -k drawbot.keychain -P ${{ secrets.CERTIFICATE_PASSWORD }} -T /usr/bin/codesign
+        security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k drawbotKeychain drawbot.keychain
+        rm -fr *.p12
+        security find-identity -v -p codesigning
+
+    - name: Set up Python 3.7
+      run: |
+        curl https://www.python.org/ftp/python/3.7.6/python-3.7.6-macosx10.9.pkg --output pythonInstaller.pkg
+        sudo installer -pkg pythonInstaller.pkg -target /
+
+    - name: Check python
+      run: |
+        python3 --version
+        python3 -c "import platform; print('macOS version:', platform.mac_ver()[0])"
+
+    - name: Checkout
+      uses: actions/checkout@v1
+
+    - name: Setup Virtual Environment
+      run: |
+        python3 -m venv venv
+        source venv/bin/activate
+        python -c "import sys; print('\n'.join(sys.path))"
+
+    - name: Install dependencies
+      run: |
+        source venv/bin/activate
+        pip install --upgrade pip
+        pip install -r ./requirements.txt
+        pip install .
+        pip install --upgrade ./app/customWheels/lxml-4.5.0-cp37-cp37m-macosx_10_9_x86_64.whl
+        pip install --upgrade ./app/customWheels/uharfbuzz-0.8.0-cp37-cp37m-macosx_10_9_x86_64.whl
+        pip install --upgrade ./app/customWheels/xattr-0.9.7-cp37-cp37m-macosx_10_9_x86_64.whl
+
+    - name: Run tests
+      run:
+        source venv/bin/activate
+        python ./tests/runAllTests.py
+
+    - name: Build app
+      run: |
+        source venv/bin/activate
+        python setupApp.py py2app --dmg --codesign "${{ secrets.CODESIGN_NAME }}" --notarizedeveloper "${{ secrets.NOTARIZE_DEVELOPER }}" --notarizePassword "${{ secrets.NOTARIZE_PASSWORD }}"
+
+    - name: Upload Notarization Log
+      uses: actions/upload-artifact@v1
+      if: always()
+      with:
+        name: notarize_log.txt
+        path: ./dist/notarize_log.txt
+
+    - name: Read CHANGELOG.md
+      id: changelog
+      env:
+        GITHUB_REF: ${{ github.ref }}
+      run: |
+        source venv/bin/activate
+        echo "::set-output name=body::$(python app/extract_changes.py)"
+
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@master
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: DrawBot version ${{ github.ref }}
+        draft: false
+        prerelease: false
+        body: ${{ steps.changelog.outputs.body }}
+
+    - name: Upload Release Asset
+      id: upload-release-asset
+      uses: actions/upload-release-asset@v1.0.1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
+        asset_path: ./dist/DrawBot.dmg
+        asset_name: DrawBot.dmg
+        asset_content_type: application/octet-stream
+

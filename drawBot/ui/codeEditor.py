@@ -285,8 +285,8 @@ def _pythonWordCompletions(text, charRange):
                     if charRange.location - columns + 1 <= 1:
                         break
                     columns += 1
-        script = jedi.api.Script(source=text, line=lineCount, column=columns)
-        keyWords += [c.name for c in script.completions()]
+        script = jedi.api.Script(source=text)
+        keyWords += [c.name for c in script.complete(line=lineCount, column=columns)]
     except Exception:
         import traceback
         traceback.print_exc()
@@ -295,7 +295,7 @@ def _pythonWordCompletions(text, charRange):
 
 
 languagesIDEBehavior = {
-    "Python 3": {
+    "Python": {
         "openToCloseMap": {"(": ")", "[": "]", "{": "}", "<": ">"},
         "autoCloseMap": {"(": ")", "[": "]", "{": "}", "\"": "\"", "'": "'"},
         "indentWithEndOfLine": [":", "(", "[", "{"],
@@ -307,6 +307,7 @@ languagesIDEBehavior = {
         "dropPathsSeperator": ", "
     },
 }
+languagesIDEBehavior["Python 3"] = languagesIDEBehavior["Python"]
 
 downArrowSelectionDirection = 0
 upArrowSelectionDirection = 1
@@ -748,6 +749,8 @@ class CodeNSTextView(AppKit.NSTextView):
     def insertNewline_(self, sender):
         selectedRange = self.selectedRange()
         super(CodeNSTextView, self).insertNewline_(sender)
+        if self.lexer() is None:
+            return
         languageData = self.languagesIDEBehaviorForLanguage_(self.lexer().name)
         if languageData:
             leadingSpace = ""
@@ -755,6 +758,10 @@ class CodeNSTextView(AppKit.NSTextView):
             m = _whiteSpaceRE.match(line)
             if m is not None:
                 leadingSpace = m.group()
+            # strip comment
+            commentTag = languageData.get("comment")
+            if commentTag is not None:
+                line = line.split(commentTag)[0]
             line = line.strip()
             if line and line[-1] in languageData["indentWithEndOfLine"]:
                 leadingSpace += self.indent()
@@ -763,6 +770,9 @@ class CodeNSTextView(AppKit.NSTextView):
                 self.insertText_(leadingSpace)
 
     def deleteBackward_(self, sender):
+        if self.lexer() is None:
+            super(CodeNSTextView, self).deleteBackward_(sender)
+            return
         languageData = self.languagesIDEBehaviorForLanguage_(self.lexer().name)
         if languageData:
             selectedRange = self.selectedRange()
@@ -938,7 +948,7 @@ class CodeNSTextView(AppKit.NSTextView):
             found = False
             while not found:
                 length += 1
-                if location + length >= lenText:
+                if location + length > lenText:
                     found = True
                 else:
                     c = text.substringWithRange_((location, length))[-1]

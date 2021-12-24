@@ -27,6 +27,12 @@ class MetaMock(type):
     def __getattr__(self, name):
         return self
 
+    def __len__(self):
+        return 0
+
+    def __iter__(self):
+        return iter([])
+
 
 class Mock(object, metaclass=MetaMock):
 
@@ -48,10 +54,13 @@ MOCK_MODULES = ['py2app',
         'AppKit', 'Quartz', 'CoreText', 'QTKit',
         'fontTools',
         'fontTools.ttLib',
+        'fontTools.ttLib.ttCollection',
         'fontTools.misc',
         'fontTools.misc.transform',
         'fontTools.misc.xmlWriter',
         'fontTools.misc.py23',
+        'fontTools.misc.macCreatorType',
+        'fontTools.misc.macRes',
         'fontTools.pens',
         'fontTools.pens.basePen',
         'fontTools.pens.areaPen',
@@ -73,6 +82,8 @@ sys.path.insert(0, os.path.abspath('../'))
 
 
 import drawBot.drawBotSettings as drawBotSettings
+
+appName = "DrawBot"
 
 # -- General configuration -----------------------------------------------------
 
@@ -96,7 +107,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = drawBotSettings.appName
+project = appName
 copyright = u'%s, Just van Rossum, Erik van Blokland, Frederik Berlaen' % (time.strftime('%Y'))
 
 # The version info for the project you're documenting, acts as replacement for
@@ -160,10 +171,10 @@ html_theme_path = ['_themes']
 
 # The name for this set of Sphinx documents.  If None, it defaults to
 # "<project> v<release> documentation".
-html_title = "%s %s" % (drawBotSettings.appName, release)
+html_title = "%s %s" % (appName, release)
 
 # A shorter title for the navigation bar.  Default is the same as html_title.
-html_short_title = drawBotSettings.appName
+html_short_title = appName
 
 # The name of an image file (relative to this directory) to place at the top
 # of the sidebar.

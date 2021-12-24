@@ -1,79 +1,16 @@
-import AppKit
 import unittest
 import os
 import sys
 import glob
-import traceback
 import warnings
-from testSupport import StdOutCollector, randomSeed, testRootDir, tempTestDataDir, testDataDir, readData
+from drawBot.macOSVersion import macOSVersion
+from testSupport import DrawBotBaseTest, StdOutCollector, randomSeed, testRootDir, tempTestDataDir, testDataDir, readData, compareImages
 
 
 drawBotScriptDir = os.path.join(testRootDir, "drawBotScripts")
 
 
-class DrawBotTest(unittest.TestCase):
-
-    def assertPDFFilesEqual(self, path1, path2):
-        # read as pdf document
-        pdf1 = AppKit.PDFDocument.alloc().initWithURL_(AppKit.NSURL.fileURLWithPath_(path1))
-        pdf2 = AppKit.PDFDocument.alloc().initWithURL_(AppKit.NSURL.fileURLWithPath_(path2))
-        self.assertIsNotNone(pdf1, "PDF could not be read from %r" % path1)
-        self.assertIsNotNone(pdf2, "PDF could not be read from %r" % path2)
-        self.assertTrue(pdf1.pageCount() == pdf2.pageCount(), "PDFs has not the same amount of pages")
-        # loop over all pages
-        for pageIndex in range(pdf1.pageCount()):
-            # get the pages
-            page1 = pdf1.pageAtIndex_(pageIndex)
-            page2 = pdf2.pageAtIndex_(pageIndex)
-            # create images from the page data
-            image1 = AppKit.NSImage.alloc().initWithData_(page1.dataRepresentation())
-            image2 = AppKit.NSImage.alloc().initWithData_(page2.dataRepresentation())
-            # compare the image tiff data
-            # no use to show the complete diff of the binary data
-            self.assertTrue(image1.TIFFRepresentation() == image2.TIFFRepresentation(), "PDF data on page %s is not the same" % (pageIndex + 1))
-
-    def assertSVGFilesEqual(self, path1, path2):
-        # compare the content by line
-        self.assertTrue(readData(path1) == readData(path2))
-
-    def assertImageFilesEqual(self, path1, path2):
-        # compare the data and assert with a simple message
-        # no use to show the complete diff of the binary file
-        self.assertTrue(readData(path1) == readData(path2), "Images are not the same")
-
-    def assertGenericFilesEqual(self, path1, path2):
-        self.assertEqual(readData(path1), readData(path2))
-
-    def assertForFileExtension(self, ext, path1, path2):
-        # based on the ext choose an assertion test
-        if ext == "pdf":
-            self.assertPDFFilesEqual(path1, path2)
-        elif ext == "svg":
-            self.assertSVGFilesEqual(path1, path2)
-        elif ext in ("png", "tiff", "jpeg", "jpg"):
-            self.assertImageFilesEqual(path1, path2)
-        else:
-            self.assertGenericFilesEqual(path1, path2)
-
-    def executeScriptPath(self, path):
-        # read content of py file and exec it
-        from drawBot.misc import warnings
-
-        with open(path) as f:
-            source = f.read()
-        code = compile(source, path, "exec")
-        namespace = {"__name__": "__main__", "__file__": path}
-        warnings.resetWarnings()  # so we can test DB warnings
-
-        with StdOutCollector(captureStdErr=True) as output:
-            cwd = os.getcwd()
-            os.chdir(os.path.dirname(path))
-            try:
-                exec(code, namespace)
-            except:
-                traceback.print_exc()
-            os.chdir(cwd)
-        return output.lines()
+class DrawBotTest(DrawBotBaseTest):
 
     def test_instructionStack(self):
         expected = [
@@ -86,7 +23,7 @@ class DrawBotTest(unittest.TestCase):
             "blendMode saturation",
             "transform 1 0 0 1 10 10",
             "drawPath moveTo 10.0 10.0 lineTo 110.0 10.0 lineTo 110.0 110.0 lineTo 10.0 110.0 closePath",
-            "textBox foo bar 82.48291015625 84.0 35.0341796875 26.0 center",
+            "textBox foo bar 72.48291015625 84.0 55.0341796875 26.0 center",
             "frameDuration 10",
             "saveImage * {'myExtraAgrument': True}"
         ]
@@ -186,7 +123,24 @@ testExt = [
 ]
 
 
+skipTests = {
+    "test_pdf_fontVariations2",  # Fails on 10.13 on Travis, why?
+    "test_png_fontVariations2",  # Fails on 10.13 on Travis, why?
+    "test_svg_fontVariations2",  # On macOS 10.13, there is a named instance for Condensed. Also, Variable fonts don't work in SVG export yet.
+    "test_svg_fontVariations",  # on macOS 10.15 the family name of the font contains the location: 'Skia-Regular_wght9999_wdth10000'.
+    "test_svg_image3",  # embedded image is subtly different, but we can't render SVG, so we can't compare fuzzily
+    "test_svg_image4",  # ditto.
+    "test_svg_fontPath",  # no fonts embedded into svg and no var support (yet)
+}
+
+conditionalSkip = {
+    "test_svg_text2": (macOSVersion < "10.13", "text as path comes out differently on 10.10"),
+    "test_pdf_fontPath": (macOSVersion < "10.13", "text as path comes out differently on 10.10"),
+    "test_png_fontPath": (macOSVersion < "10.13", "text as path comes out differently on 10.10"),
+}
+
 expectedFailures = {}
+
 ignoreDeprecationWarnings = {
     # there are some pesky PyObjC warnings that interfere with our stdout/stderr capturing,
     # like: 'DeprecationWarning: Using struct wrapper as sequence'
@@ -219,6 +173,10 @@ def _addTests():
             testMethod.__name__ = testMethodName
             if testMethodName in expectedFailures:
                 testMethod = unittest.expectedFailure(testMethod)
+            if testMethodName in skipTests:
+                testMethod = unittest.skip("manual skip")(testMethod)
+            if testMethodName in conditionalSkip:
+                testMethod = unittest.skipIf(*conditionalSkip[testMethodName])(testMethod)
             setattr(DrawBotTest, testMethodName, testMethod)
 
 _addTests()

@@ -1,7 +1,7 @@
 from Foundation import NSObject, NSMutableAttributedString, NSInsetRect
 from AppKit import NSApp, NSColorWell, NSActionCell, NSNotificationCenter, NSFontManager, \
     NSCalibratedRGBColorSpace, NSTableViewFirstColumnOnlyAutoresizingStyle, \
-    NSBezierPath, NSFont, NSForegroundColorAttributeName, NSUnderlineColorAttributeName, NSCenterTextAlignment
+    NSBezierPath, NSFont, NSForegroundColorAttributeName, NSUnderlineColorAttributeName, NSTextAlignmentCenter
 
 from vanilla import *
 from vanilla.vanillaBase import VanillaCallbackWrapper
@@ -212,7 +212,7 @@ class SyntaxColors(Group):
         y = 10
         self.fontText = TextBox((x, y, middle, 22), "Font:", alignment="right")
         self.font = EditText((x + middle + gutter, y, -100, 22), readOnly=True)
-        self.font.getNSTextField().setAlignment_(NSCenterTextAlignment)
+        self.font.getNSTextField().setAlignment_(NSTextAlignmentCenter)
         self.selectFont = Button((-90, y, -10, 22), "Select...", callback=self.selectFontCallback)
         y += 30
         self.backgroundColorText = TextBox((x, y, middle, 22), "Background:", alignment="right")
@@ -388,7 +388,9 @@ class PreferencesController(BaseWindowController):
         oldValue = getDefault("DrawBotCheckForUpdatesAtStartup", True)
         setDefault("DrawBotCheckForUpdatesAtStartup", True)
         updater = Updater(self.w)
-        if not updater.needsUpdate:
+        if updater.currentVersionErrors:
+            self.showMessage("Cannot retrieve the version number from the DrawBot repository.", "\n".join(updater.currentVersionErrors))
+        elif not updater.needsUpdate:
             self.showMessage("You have the latest version!", "DrawBot %s is currently the newest version" % updater.__version__)
         setDefault("DrawBotCheckForUpdatesAtStartup", oldValue)
 

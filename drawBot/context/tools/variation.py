@@ -3,7 +3,7 @@ from collections import OrderedDict
 
 from fontTools.ttLib import TTFont
 
-from drawBot.misc import memoize
+from drawBot.misc import memoize, warnings
 
 """
 https://developer.apple.com/documentation/coretext/ctfont/font_variation_axis_dictionary_keys?language=objc
@@ -28,12 +28,11 @@ def convertVariationTagToInt(tag):
 
 
 @memoize
-def getVariationAxesForFontName(fontName):
+def getVariationAxesForFont(font):
     """
     Return a dictionary { axis tag: { name: , minValue: , maxValue: } }
     """
     axes = OrderedDict()
-    font = CoreText.CTFontCreateWithName(fontName, 12, None)
     variationAxesDescriptions = CoreText.CTFontCopyVariationAxes(font)
     if variationAxesDescriptions is None:
         # non-variable fonts have no axes descriptions
@@ -50,12 +49,11 @@ def getVariationAxesForFontName(fontName):
 
 
 @memoize
-def getNamedInstancesForFontName(fontName):
+def getNamedInstancesForFont(font):
     """
     Return a dict { postscriptName: location } of all named instances in a given font.
     """
     instances = OrderedDict()
-    font = CoreText.CTFontCreateWithName(fontName, 12, None)
     if font is None:
         return instances
     fontDescriptor = font.fontDescriptor()
@@ -73,9 +71,9 @@ def getNamedInstancesForFontName(fontName):
         name = variationAxesDescription[CoreText.kCTFontVariationAxisNameKey]
         tagNameMap[tag] = name
 
-    ft = TTFont(url.path())
+    ft = TTFont(url.path(), lazy=True, fontNumber=0)
     if "fvar" in ft:
-        cgFont = CoreText.CGFontCreateWithFontName(fontName)
+        cgFont, _ = CoreText.CTFontCopyGraphicsFont(font, None)
         fvar = ft["fvar"]
 
         for instance in fvar.instances:
@@ -89,3 +87,21 @@ def getNamedInstancesForFontName(fontName):
 
     ft.close()
     return instances
+
+
+def getFontVariationAttributes(font, fontVariations):
+    coreTextFontVariations = dict()
+    if fontVariations:
+        existingAxes = getVariationAxesForFont(font)
+        for axis, value in fontVariations.items():
+            if axis in existingAxes:
+                existinsAxis = existingAxes[axis]
+                # clip variation value within the min max value
+                if value < existinsAxis["minValue"]:
+                    value = existinsAxis["minValue"]
+                if value > existinsAxis["maxValue"]:
+                    value = existinsAxis["maxValue"]
+                coreTextFontVariations[convertVariationTagToInt(axis)] = value
+            else:
+                warnings.warn("variation axis '%s' not available for '%s'" % (axis, font.fontName()))
+    return coreTextFontVariations

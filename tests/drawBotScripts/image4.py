@@ -1,3 +1,4 @@
+import pathlib
 import drawBot
 drawBot.size(500, 500)
 imagePath = "../data/drawBot.pdf"
@@ -25,5 +26,5 @@ imagePath = "../data/drawBot.bmp"
 w, h = drawBot.imageSize(imagePath)
 drawBot.save()
 drawBot.scale(250 / w)
-drawBot.image(imagePath, (w, h))
+drawBot.image(pathlib.Path(imagePath), (w, h))  # verify that pathlib.Path objects work
 drawBot.restore()

@@ -2,29 +2,17 @@
 from __future__ import division, absolute_import, print_function
 from setuptools import setup
 import os
+import re
 import shutil
 
-from drawBot.drawBotSettings import __version__
 
-try:
-    import fontTools
-except ImportError:
-    print("*** Warning: drawBot requires FontTools, see:")
-    print("    https://github.com/fonttools/fonttools")
-
-
-try:
-    import vanilla
-except ImportError:
-    print("*** Warning: drawBot requires vanilla, see:")
-    print("    https://github.com/typesupply/vanilla")
-
-
-try:
-    import defconAppKit
-except ImportError:
-    print("*** Warning: drawBot requires defconAppKit, see:")
-    print("    https://github.com/typesupply/defconAppKit")
+_versionRE = re.compile(r'__version__\s*=\s*\"([^\"]+)\"')
+# read the version number for the settings file
+with open('drawBot/drawBotSettings.py', "r") as settings:
+    code = settings.read()
+    found = _versionRE.search(code)
+    assert found is not None, "drawBot __version__ not found"
+    __version__ = found.group(1)
 
 
 externalTools = ("ffmpeg", "gifsicle", "mkbitmap", "potrace")
@@ -60,6 +48,11 @@ setup(name="drawBot",
             "context/tools/potrace"
         ]
     },
+    install_requires=[
+        "pyobjc",
+        "fontTools",
+        "booleanOperations"
+    ],
     include_package_data=True,
 )
 

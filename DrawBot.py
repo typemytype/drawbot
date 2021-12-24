@@ -1,8 +1,10 @@
 import AppKit
-from PyObjCTools import AppHelper
+import asyncio
+from corefoundationasyncio import CoreFoundationEventLoop
 
 import sys
 import os
+import site
 import random
 
 from vanilla.dialogs import message
@@ -19,8 +21,6 @@ from drawBot.drawBotPackage import DrawBotPackage
 
 import objc
 from objc import super
-
-objc.setVerbose(True)
 
 
 class DrawBotDocument(AppKit.NSDocument):
@@ -60,6 +60,10 @@ class DrawBotDocument(AppKit.NSDocument):
 
     def checkSyntax_(self, sender):
         self.vanillaWindowController.checkSyntax()
+        return True
+
+    def formatCode_(self, sender):
+        self.vanillaWindowController.formatCode()
         return True
 
     def saveDocumentAsPDF_(self, sender):
@@ -147,7 +151,7 @@ class DrawBotAppDelegate(AppKit.NSObject):
         return getDefault("shouldOpenUntitledFile", True)
 
     def sheduleIconTimer(self):
-        if getDefault("DrawBotAnimateIcon", True):
+        if getDefault("DrawBotAnimateIcon", False):
             self._iconTimer = AppKit.NSTimer.scheduledTimerWithTimeInterval_target_selector_userInfo_repeats_(0.1, self, "animateApplicationIcon:", None, False)
 
     _iconCounter = 0
@@ -181,12 +185,20 @@ class DrawBotAppDelegate(AppKit.NSObject):
         ws = AppKit.NSWorkspace.sharedWorkspace()
         ws.openURL_(AppKit.NSURL.URLWithString_(url))
 
+    def showPIPInstaller_(self, sender):
+        if hasattr(self, "pipInstallerController"):
+            self.pipInstallerController.show()
+        else:
+            from drawBot.pipInstaller import PipInstallerController
+            self.pipInstallerController = PipInstallerController(_getPIPTargetPath())
+
     def buildPackage_(self, sender):
         DrawBotPackageController()
 
     def getUrl_withReplyEvent_(self, event, reply):
         from urllib.parse import urlparse
-        from urllib.request import urlopen
+        from urllib.request import urlopen, Request
+        import ssl
         code = stringToInt(b"----")
         url = event.paramDescriptorForKeyword_(code)
         urlString = url.stringValue()
@@ -195,8 +207,10 @@ class DrawBotAppDelegate(AppKit.NSObject):
         data = urlparse(urlString)
         if data.netloc:
             # in the cloudzzz
-            pythonPath = "http://%s%s" % (data.netloc, data.path)
-            response = urlopen(pythonPath)
+            pythonPath = "https://%s%s" % (data.netloc, data.path)
+            context = ssl._create_unverified_context()
+            request = Request(pythonPath, headers={'User-Agent': 'Drawbot'})
+            response = urlopen(request, timeout=5, context=context)
             code = response.read()
             response.close()
         else:
@@ -227,16 +241,6 @@ class DrawBotAppDelegate(AppKit.NSObject):
             result
         )
 
-    def performFindPanelAction_(self, action):
-        try:
-            # a bug somewhere in OSX
-            # the short cuts (fe cmd+g) arent redirected properly to the text views
-            view = AppKit.NSApp().keyWindow().firstResponder()
-            dest = view.superview().superview().superview()._contentView().documentView()
-            dest.performFindPanelAction_(action)
-        except Exception:
-            pass
-
     def application_openFile_(self, app, path):
         ext = os.path.splitext(path)[-1]
         if ext.lower() == ".drawbot":
@@ -248,5 +252,34 @@ class DrawBotAppDelegate(AppKit.NSObject):
         return False
 
 
+def _getPIPTargetPath():
+    appSupportPath = AppKit.NSSearchPathForDirectoriesInDomains(
+        AppKit.NSApplicationSupportDirectory,
+        AppKit.NSUserDomainMask, True)[0]
+    version = f"{sys.version_info.major}.{sys.version_info.minor}"
+    return os.path.join(appSupportPath, f"DrawBot/Python{version}")
+
+
+def _addLocalSysPaths():
+    version = f"{sys.version_info.major}.{sys.version_info.minor}"
+    paths = [
+        _getPIPTargetPath(),
+        f'/Library/Python/{version}/site-packages',
+        f'/Library/Frameworks/Python.framework/Versions/{version}/lib/python{version}/site-packages/',
+    ]
+    for path in paths:
+        if path not in sys.path and os.path.exists(path):
+            site.addsitedir(path)
+
+
+_addLocalSysPaths()
+
+
 if __name__ == "__main__":
-    AppHelper.runEventLoop()
+    objc.setVerbose(True)
+    loop = CoreFoundationEventLoop()
+    asyncio.set_event_loop(loop)
+    try:
+        loop.run_forever()
+    finally:
+        loop.close()

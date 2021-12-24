@@ -1,5 +1,3 @@
-import platform
-from distutils.version import StrictVersion
 import AppKit
 import CoreText
 import Quartz
@@ -7,12 +5,8 @@ import Quartz
 from .tools import gifTools
 
 from .baseContext import BaseContext, FormattedString
-from drawBot.misc import DrawBotError, isPDF, isGIF
-
-
-osVersionCurrent = StrictVersion(platform.mac_ver()[0])
-osVersion10_11 = StrictVersion("10.11")
-osVersion10_13 = StrictVersion("10.13")
+from ..misc import DrawBotError, isPDF, isGIF
+from ..macOSVersion import macOSVersion
 
 
 def sendPDFtoPrinter(pdfDocument):
@@ -35,25 +29,22 @@ class PDFContext(BaseContext):
         self._hasContext = False
         self._cachedImages = {}
 
-    def _newPage(self, width, height, bleed):
+    def _newPage(self, width, height):
         self.size(width, height)
         mediaBox = Quartz.CGRectMake(0, 0, self.width, self.height)
-        auxiliaryInfo = dict()
-        auxiliaryInfo[Quartz.kCGPDFContextMediaBox] = mediaBox
-        if bleed:
-            auxiliaryInfo[Quartz.kCGPDFContextBleedBox] = Quartz.CGRectMake(-bleed[0], -bleed[1], width + bleed[2], height + bleed[3])
+
+        # reset the context
+        self.reset()
         if self._hasContext:
-            # reset the context
-            self.reset()
             # add a new page
-            Quartz.CGPDFContextEndPage(self._pdfContext)
-            Quartz.CGPDFContextBeginPage(self._pdfContext, auxiliaryInfo)
+            Quartz.CGContextEndPage(self._pdfContext)
+            Quartz.CGContextBeginPage(self._pdfContext, mediaBox)
         else:
             # create a new pdf document
             self._pdfData = Quartz.CFDataCreateMutable(None, 0)
             dataConsumer = Quartz.CGDataConsumerCreateWithCFData(self._pdfData)
             self._pdfContext = Quartz.CGPDFContextCreate(dataConsumer, mediaBox, None)
-            Quartz.CGPDFContextBeginPage(self._pdfContext, auxiliaryInfo)
+            Quartz.CGContextBeginPage(self._pdfContext, mediaBox)
             self._hasContext = True
 
     def _closeContext(self):
@@ -62,14 +53,16 @@ class PDFContext(BaseContext):
         self._hasContext = False
 
     def _saveImage(self, path, options):
+        generatedObject = None
         pool = AppKit.NSAutoreleasePool.alloc().init()
         try:
             self._closeContext()
-            self._writeDataToFile(self._pdfData, path, options)
+            generatedObject = self._writeDataToFile(self._pdfData, path, options)
             self._pdfContext = None
             self._pdfData = None
         finally:
             del pool
+        return generatedObject
 
     def _writeDataToFile(self, data, path, options):
         multipage = options.get("multipage")
@@ -170,7 +163,15 @@ class PDFContext(BaseContext):
                 strokeColor = attributes.get(AppKit.NSStrokeColorAttributeName)
                 strokeWidth = attributes.get(AppKit.NSStrokeWidthAttributeName, self._state.strokeWidth)
                 baselineShift = attributes.get(AppKit.NSBaselineOffsetAttributeName, 0)
+                url = attributes.get(AppKit.NSLinkAttributeName)
                 self._save()
+                if url is not None:
+                    self._save()
+                    Quartz.CGContextSetTextPosition(self._pdfContext, x+originX, y+originY+baselineShift)
+                    urlBox = CoreText.CTRunGetImageBounds(ctRun, self._pdfContext, (0, 0))
+                    urlBox = Quartz.CGContextConvertRectToDeviceSpace(self._pdfContext, urlBox)
+                    Quartz.CGPDFContextSetURLForRect(self._pdfContext, url, urlBox)
+                    self._restore()
                 drawingMode = None
                 if self._state.shadow is not None:
                     self._pdfShadow(self._state.shadow)
@@ -210,7 +211,7 @@ class PDFContext(BaseContext):
                         Quartz.CGContextSetLineJoin(self._pdfContext, self._state.lineJoin)
                 if fillColor is not None and strokeColor is not None:
                     drawingMode = Quartz.kCGTextFillStroke
-                    if osVersionCurrent >= osVersion10_11 and osVersion10_11 < osVersion10_13:
+                    if macOSVersion >= "10.11" and macOSVersion < "10.13":
                         # solve bug in OSX where the stroke color is the same as the fill color
                         # simple solution: draw it twice...
                         drawingMode = Quartz.kCGTextFill
@@ -359,7 +360,7 @@ class PDFContext(BaseContext):
                 cgColor = self._cmykNSColorToCGColor(c)
                 colors.append(cgColor)
         else:
-            colorSpace = self._colorClass.colorSpace().CGColorSpace()
+            colorSpace = self._colorClass.colorSpace.CGColorSpace()
             colors = []
             for color in gradient.colors:
                 c = color.getNSObject()
@@ -390,6 +391,12 @@ class PDFContext(BaseContext):
             # gray color
             return Quartz.CGColorCreateGenericGray(c.whiteComponent(), c.alphaComponent())
         return Quartz.CGColorCreateGenericRGB(c.redComponent(), c.greenComponent(), c.blueComponent(), c.alphaComponent())
+
+    def _linkURL(self, url, xywh):
+        url = AppKit.NSURL.URLWithString_(url)
+        x, y, w, h = xywh
+        rectBox = Quartz.CGRectMake(x, y, w, h)
+        Quartz.CGPDFContextSetURLForRect(self._pdfContext, url, rectBox)
 
     def _linkDestination(self, name, xy):
         x, y = xy
