@@ -480,10 +480,23 @@ class DrawBotDrawingTool(object):
             # share it over airdrop
             shareImage('pdf', service="airdrop")
         """
-        path = tempfile.mkstemp(suffix=f".{format}")[1]
+        class SharingServiceDelegate:
 
-        context = getContextForFileExt("pdf")
-        context.saveImage(path, **kwargs)
+            def __init__(self, path):
+                self.path = path
+
+            def _removePath(self):
+                if os.path.exists(self.path):
+                    os.remove(self.path)
+
+            def sharingService_didShareItems_(self, sharingService, items):
+                self._removePath()
+
+            def sharingService_didFailToShareItems_error_(self, sharingService, items, error):
+                self._removePath()
+
+        path = tempfile.mkstemp(suffix=f".{format}")[1]
+        self.saveImage(path, **kwargs)
 
         serviceMap = dict(
             airdrop=AppKit.NSSharingServiceNameSendViaAirDrop,
@@ -492,6 +505,7 @@ class DrawBotDrawingTool(object):
         )
 
         sharingService = AppKit.NSSharingService.sharingServiceNamed_(serviceMap[service])
+        sharingService.setDelegate_(SharingServiceDelegate(path))
         sharingService.performWithItems_([
             AppKit.NSURL.fileURLWithPath_(path)
         ])
