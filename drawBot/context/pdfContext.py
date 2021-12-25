@@ -36,7 +36,6 @@ class PDFContext(BaseContext):
         auxiliaryInfo = {
             Quartz.kCGPDFContextAuthor: "DrawBot"
         }
-        print(options)
         # auxiliaryInfo[Quartz.kCGPDFContextMediaBox] = AppKit.NSValue.valueWithRect_(mediaBox)
         if "bleed" in options:
             leftBleed, topBleed, rightBleed, bottomBleed = options["bleed"]
@@ -51,7 +50,6 @@ class PDFContext(BaseContext):
 
         # reset the context
         self.reset()
-        print("auxiliaryInfo:", auxiliaryInfo)
         if self._hasContext:
             # add a new page
             Quartz.CGPDFContextEndPage(self._pdfContext)
