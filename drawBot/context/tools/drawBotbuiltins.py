@@ -8,7 +8,7 @@ def norm(value, start, stop):
 
 def lerp(start, stop, factor):
     """
-    Interpolate using a value between 0 and 1
+    Return an interpolated value between `start` and `stop` using interpolation factor `factor`.
     """
     return start + (stop - start) * factor
 
