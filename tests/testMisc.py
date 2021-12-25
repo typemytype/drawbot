@@ -342,6 +342,25 @@ class MiscTest(unittest.TestCase):
         with self.assertRaises(IndexError):
             drawBot.font(src, fontNumber=-1)
 
+    def test_norm(self):
+        assert drawBot.norm(20, 10, 30) == 0.5
+        assert drawBot.norm(-10, 10, 30) == -1
+        with self.assertRaises(ZeroDivisionError):
+            drawBot.norm(20, 10, 10)
+
+    def test_lerp(self):
+        assert drawBot.lerp(10, 30, 0.5) == 20
+        assert drawBot.lerp(10, 10, 0.5) == 10
+        assert drawBot.lerp(10, 30, 0) == 10
+        assert drawBot.lerp(10, 30, 1) == 30
+        assert drawBot.lerp(10, 30, 2) == 50
+
+    def test_remap(self):
+        assert drawBot.remap(15, 10, 20, 30, 50) == 40
+        with self.assertRaises(ZeroDivisionError):
+            drawBot.remap(15, 20, 20, 30, 50)
+
+
 
 def _roundInstanceLocations(instanceLocations):
     return {instanceName: {tag: round(value, 3) for tag, value in location.items()} for instanceName, location in instanceLocations.items()}
