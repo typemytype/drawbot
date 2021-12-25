@@ -28,7 +28,7 @@ class MP4Context(PNGContext):
     def _frameDuration(self, frameDuration):
         self._frameDurations[-1] = frameDuration
 
-    def _newPage(self, width, height):
+    def _newPage(self, width, height, pageOptions):
         super(MP4Context, self)._newPage(width, height)
         self._frameDurations.append(self._defaultFrameDuration)
         # https://github.com/typemytype/drawbot/issues/391

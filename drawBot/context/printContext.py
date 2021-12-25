@@ -41,8 +41,8 @@ class PrintContext(BaseContext):
     fileExtensions = ["*"]
     validateSaveImageOptions = False
 
-    def _newPage(self, width, height):
-        print("newPage %s %s" % (width, height))
+    def _newPage(self, width, height, pageOptions):
+        print("newPage %s %s %s" % (width, height, pageOptions))
 
     def _save(self):
         print("save")
