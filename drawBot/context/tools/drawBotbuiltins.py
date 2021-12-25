@@ -1,7 +1,7 @@
 
 def norm(value, start, stop):
     """
-    Return the interpolation factor (between 0 and 1) of a VALUE between START and STOP.
+    Return the interpolation factor (between 0 and 1) of a `value` between `start` and `stop`.
     """
     return float(value - start) / float(stop - start)
 
