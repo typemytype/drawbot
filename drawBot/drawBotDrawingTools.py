@@ -6,6 +6,7 @@ import math
 import os
 import tempfile
 import random
+import time
 from collections import namedtuple
 
 from .context import getContextForFileExt, getContextOptions, getFileExtensions, getContextOptionsDocs
@@ -490,6 +491,9 @@ class DrawBotDrawingTool(object):
                     os.remove(self.path)
 
             def sharingService_didShareItems_(self, sharingService, items):
+                # wait a sec to be sure the serice (like mail) has started up
+                # and collected all the assets from disk
+                time.sleep(1)
                 self._removePath()
 
             def sharingService_didFailToShareItems_error_(self, sharingService, items, error):
