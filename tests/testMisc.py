@@ -359,6 +359,10 @@ class MiscTest(unittest.TestCase):
         assert drawBot.remap(15, 10, 20, 30, 50) == 40
         with self.assertRaises(ZeroDivisionError):
             drawBot.remap(15, 20, 20, 30, 50)
+        assert drawBot.remap(5, 10, 20, 30, 50) == 20
+        assert drawBot.remap(5, 10, 20, 30, 50, clamp=True) == 30
+        assert drawBot.remap(25, 10, 20, 30, 50) == 60
+        assert drawBot.remap(25, 10, 20, 30, 50, clamp=True) == 50
 
 
 
