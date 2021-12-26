@@ -499,20 +499,24 @@ class DrawBotDrawingTool(object):
             def sharingService_didFailToShareItems_error_(self, sharingService, items, error):
                 self._removePath()
 
-        path = tempfile.mkstemp(suffix=f".{format}")[1]
-        self.saveImage(path, **kwargs)
-
         serviceMap = dict(
             airdrop=AppKit.NSSharingServiceNameSendViaAirDrop,
             mail=AppKit.NSSharingServiceNameComposeEmail,
             message=AppKit.NSSharingServiceNameComposeMessage,
         )
+        if service not in serviceMap:
+            raise DrawBotError(f"service must be {', '.join(serviceMap.keys())}")
 
-        sharingService = AppKit.NSSharingService.sharingServiceNamed_(serviceMap[service])
-        sharingService.setDelegate_(SharingServiceDelegate(path))
-        sharingService.performWithItems_([
-            AppKit.NSURL.fileURLWithPath_(path)
-        ])
+        path = tempfile.mkstemp(suffix=f".{format}")[1]
+        self.saveImage(path, **kwargs)
+
+        if os.path.exists(path):
+            # only pop up the sharing service when saveImage is succes full
+            sharingService = AppKit.NSSharingService.sharingServiceNamed_(serviceMap[service])
+            sharingService.setDelegate_(SharingServiceDelegate(path))
+            sharingService.performWithItems_([
+                AppKit.NSURL.fileURLWithPath_(path)
+            ])
 
     # graphics state
 
