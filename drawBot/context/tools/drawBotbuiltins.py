@@ -3,7 +3,7 @@ def norm(value, start, stop):
     """
     Return the interpolation factor (between 0 and 1) of a `value` between `start` and `stop`.
     """
-    return float(value - start) / float(stop - start)
+    return (value - start) / (stop - start)
 
 
 def lerp(start, stop, factor):
@@ -19,8 +19,5 @@ def remap(value, start1, stop1, start2, stop2, clamp=False):
     """
     factor = norm(value, start1, stop1)
     if clamp:
-        if factor < 0:
-            factor = 0
-        if factor > 1:
-            factor = 1
+        factor = min(1, max(factor, 0))
     return lerp(start2, stop2, factor)
