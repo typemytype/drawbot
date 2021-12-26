@@ -19,5 +19,8 @@ def remap(value, start1, stop1, start2, stop2, clamp=False):
     """
     factor = norm(value, start1, stop1)
     if clamp:
-        factor = min(1, max(factor, 0))
+        if factor < 0:
+            factor = 0
+        elif factor > 1:
+            factor = 1
     return lerp(start2, stop2, factor)
