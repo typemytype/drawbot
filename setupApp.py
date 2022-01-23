@@ -136,7 +136,7 @@ plist = dict(
     LSMinimumSystemVersion=osxMinVersion,
     LSApplicationCategoryType="public.app-category.graphics-design",
     LSMinimumSystemVersionByArchitecture=dict(i386=osxMinVersion, x86_64=osxMinVersion),
-    LSArchitecturePriority=["x86_64", "i386"],
+    LSArchitecturePriority=["arm64", "x86_64", "i386"],
     CFBundleShortVersionString=__version__,
     CFBundleVersion=__version__,
     CFBundleIconFile=iconFile,
@@ -236,6 +236,13 @@ dmgLocation = os.path.join(distLocation, appName)
 pythonVersion = "python%s.%i" % (sys.version_info[0], sys.version_info[1])
 pythonLibPath = os.path.join(resourcesPath, "lib", pythonVersion)
 appToolsRoot = os.path.join(drawBotRoot, "app")
+
+if "-A" in sys.argv:
+    for path, currentDirectory, files in os.walk(appLocation):
+        for file in files:
+            if file == ".DS_Store":
+                filePath = os.path.join(path, file)
+                os.remove(filePath)
 
 
 if "-A" not in sys.argv:
