@@ -1,7 +1,7 @@
 from Foundation import NSInvocation, NSString, NSMakeRange, NSMaxRange, NSLocationInRange, NSNotFound, NSMakeRect, NSMinY, NSWidth, NSHeight
 from AppKit import NSRulerView, NSMiniControlSize, NSTextView, NSNotificationCenter, \
     NSFontAttributeName, NSForegroundColorAttributeName, NSTextStorageDidProcessEditingNotification, \
-    NSFont, NSColor, NSBezierPath, NSRectFill
+    NSFont, NSColor, NSBezierPath, NSRectFill, NSViewBoundsDidChangeNotification
 import math
 from objc import super
 
@@ -64,6 +64,9 @@ class LineNumberNSRulerView(NSRulerView):
             NSNotificationCenter.defaultCenter().addObserver_selector_name_object_(self, "textDidChange:",
                                                     NSTextStorageDidProcessEditingNotification,
                                                     view.textStorage())
+            NSNotificationCenter.defaultCenter().addObserver_selector_name_object_(self, "textViewBoundsChange:",
+                                                    NSViewBoundsDidChangeNotification,
+                                                    view.enclosingScrollView().contentView())
 
     def lineIndices(self):
         if self._lineIndices is None:
@@ -78,11 +81,12 @@ class LineNumberNSRulerView(NSRulerView):
         self.invalidateLineIndices()
         self.setNeedsDisplay_(True)
 
+    def textViewBoundsChange_(self, sender):
+        self.setNeedsDisplay_(True)
+
     def dealloc(self):
         # make sure we remove ourselves as an observer of the text storage
-        view = self.clientView()
-        if view is not None:
-            NSNotificationCenter.defaultCenter().removeObserver_name_object_(self, NSTextStorageDidProcessEditingNotification, view.textStorage())
+        NSNotificationCenter.defaultCenter().removeObserver_(self)
         super(LineNumberNSRulerView, self).dealloc()
 
     def calculateLines(self):
