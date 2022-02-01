@@ -14,6 +14,7 @@ from .context.dummyContext import DummyContext
 from .context.tools.imageObject import ImageObject
 from .context.tools import gifTools
 from .context.tools import openType
+from .context.tools import drawBotbuiltins
 
 from .misc import DrawBotError, warnings, VariableController, optimizePath, isPDF, isEPS, isGIF, transformationAtCenter, clearMemoizeCache
 
@@ -98,6 +99,7 @@ class DrawBotDrawingTool(object):
         namespace.update(_getmodulecontents(self, self.__all__))
         namespace.update(_getmodulecontents(random, ["random", "randint", "choice", "shuffle"]))
         namespace.update(_getmodulecontents(math))
+        namespace.update(_getmodulecontents(drawBotbuiltins))
 
     def _addInstruction(self, callback, *args, **kwargs):
         if callback == "newPage":
