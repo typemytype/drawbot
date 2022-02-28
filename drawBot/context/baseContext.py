@@ -3,6 +3,7 @@ import CoreText
 import Quartz
 
 import math
+import re
 import os
 
 from fontTools.pens.basePen import BasePen
@@ -1960,6 +1961,12 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
         self._openTypeFeatures = dict(calt=False)
         for glyphName in glyphNames:
             glyph = font.glyphWithName_(glyphName)
+            if not glyph:
+                # Try falling back to "glyph12345"-style glyph names,
+                # as synthesized by fonttools for post format-3 fonts
+                glyphIDMatch = re.match(r"glyph(\d\d\d\d\d)$", glyphName)
+                if glyphIDMatch is not None:
+                    glyph = int(glyphIDMatch.group(1))
             if glyph:
                 self.append(baseString)
                 glyphInfo = AppKit.NSGlyphInfo.glyphInfoWithGlyph_forFont_baseString_(glyph, font, baseString)
