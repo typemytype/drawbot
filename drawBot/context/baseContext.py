@@ -3,7 +3,6 @@ import CoreText
 import Quartz
 
 import math
-import re
 import os
 
 from fontTools.pens.basePen import BasePen
@@ -1917,12 +1916,12 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
 
     def appendGlyph(self, *glyphNames):
         """
-        Append a glyph by his glyph name using the current `font`.
+        Append a glyph by his glyph name or glyph index using the current `font`.
         Multiple glyph names are possible.
 
         .. downloadcode:: appendGlyphFormattedString.py
 
-            size(1000, 400)
+            size(1300, 400)
             # create an empty formatted string object
             t = FormattedString()
             # set a font
@@ -1931,8 +1930,11 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
             t.fontSize(300)
             # add some glyphs by glyph name
             t.appendGlyph("A", "ampersand", "Eng", "Eng.alt")
+            # add some glyphs by glyph index (this depends heavily on the font)
+            t.appendGlyph(50, 51)
             # draw the formatted string
             text(t, (100, 100))
+
         """
         # use a non breaking space as replacement character
         baseString = chr(0xFFFD)
@@ -1960,19 +1962,22 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
         _openTypeFeatures = dict(self._openTypeFeatures)
         self._openTypeFeatures = dict(calt=False)
         for glyphName in glyphNames:
-            glyph = font.glyphWithName_(glyphName)
-            if not glyph:
-                # Try falling back to "glyph12345"-style glyph names,
-                # as synthesized by fonttools for post format-3 fonts
-                glyphIDMatch = re.match(r"glyph(\d\d\d\d\d)$", glyphName)
-                if glyphIDMatch is not None:
-                    glyph = int(glyphIDMatch.group(1))
+            if isinstance(glyphName, int):
+                # support glyph indexes
+                glyph = glyphName
+            else:
+                glyph = font.glyphWithName_(glyphName)
             if glyph:
                 self.append(baseString)
                 glyphInfo = AppKit.NSGlyphInfo.glyphInfoWithGlyph_forFont_baseString_(glyph, font, baseString)
                 self._attributedString.addAttribute_value_range_(AppKit.NSGlyphInfoAttributeName, glyphInfo, (len(self) - 1, 1))
             else:
-                warnings.warn("font '%s' has no glyph with the name '%s'" % (font.fontName(), glyphName))
+                if isinstance(glyphName, int):
+                    message = "font '{fontName}' has no glyph with index '{glyphName}'"
+                else:
+                    message = "font '{fontName}' has no glyph with the name '{glyphName}'"
+                warnings.warn(message.format(fontName=font.fontName(), glyphName=glyphName))
+
         self.openTypeFeatures(**_openTypeFeatures)
         self._fallbackFont = fallbackFont
 
