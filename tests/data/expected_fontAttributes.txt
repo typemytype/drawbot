@@ -41,6 +41,6 @@ MutatorSans.ttc 2
 MutatorMathTest-BoldWide
 MutatorSans.ttc 3
 
-Courier Courier.ttc 0
-Courier-Bold Courier.ttc 1
-Courier-Oblique Courier.ttc 2
+Courier Courier.dfont 0
+Courier-Bold Courier.dfont 1
+Courier-Oblique Courier.dfont 2
