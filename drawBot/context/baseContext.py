@@ -1975,8 +1975,8 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
                 else:
                     warnings.warn(f"font '{font.fontName()}' has no glyph with glyph ID {glyph}")
             else:
-                if isinstance(glyphName, int):
-                    message = "skipping glyph with glyph ID 0 (.notdef)"
+                if isinstance(glyphName, int) or glyphName == ".notdef":
+                    message = "skipping '.notdef' glyph (glyph ID 0)"
                 else:
                     message = "font '{fontName}' has no glyph with the name '{glyphName}'"
                 warnings.warn(message.format(fontName=font.fontName(), glyphName=glyphName))
