@@ -1930,7 +1930,7 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
             t.fontSize(300)
             # add some glyphs by glyph name
             t.appendGlyph("A", "ampersand", "Eng", "Eng.alt")
-            # add some glyphs by glyph index (this depends heavily on the font)
+            # add some glyphs by glyph ID (this depends heavily on the font)
             t.appendGlyph(50, 51)
             # draw the formatted string
             text(t, (100, 100))
@@ -1963,17 +1963,20 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
         self._openTypeFeatures = dict(calt=False)
         for glyphName in glyphNames:
             if isinstance(glyphName, int):
-                # support glyph indexes
+                # glyphName is a glyph ID
                 glyph = glyphName
             else:
                 glyph = font.glyphWithName_(glyphName)
             if glyph:
                 self.append(baseString)
                 glyphInfo = AppKit.NSGlyphInfo.glyphInfoWithGlyph_forFont_baseString_(glyph, font, baseString)
-                self._attributedString.addAttribute_value_range_(AppKit.NSGlyphInfoAttributeName, glyphInfo, (len(self) - 1, 1))
+                if glyphInfo is not None:
+                    self._attributedString.addAttribute_value_range_(AppKit.NSGlyphInfoAttributeName, glyphInfo, (len(self) - 1, 1))
+                else:
+                    warnings.warn(f"font '{font.fontName()}' has no glyph with glyph ID {glyph}")
             else:
-                if isinstance(glyphName, int):
-                    message = "font '{fontName}' has no glyph with index '{glyphName}'"
+                if isinstance(glyphName, int) or glyphName == ".notdef":
+                    message = "skipping '.notdef' glyph (glyph ID 0)"
                 else:
                     message = "font '{fontName}' has no glyph with the name '{glyphName}'"
                 warnings.warn(message.format(fontName=font.fontName(), glyphName=glyphName))
