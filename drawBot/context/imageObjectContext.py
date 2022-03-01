@@ -1,8 +1,14 @@
-from PIL import Image
 import io
 import AppKit
+try:
+    from PIL import Image
+    hasPIL = True
+except ImportError:
+    hasPIL = False
 
 from .imageContext import ImageContext
+from drawBot.misc import DrawBotError
+
 
 class BaseImageObjectContext(ImageContext):
 
@@ -28,6 +34,11 @@ class BaseImageObjectContext(ImageContext):
 class PILContext(BaseImageObjectContext):
 
     fileExtensions = ["PIL"]
+
+    def __init__(self):
+        if not hasPIL:
+            raise DrawBotError("The package PIL is required.")
+        super().__init__()
 
     def _getObjectForData(self, data):
         file = io.BytesIO(data.bytes())
