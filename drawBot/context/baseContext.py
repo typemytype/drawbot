@@ -1963,7 +1963,7 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
         self._openTypeFeatures = dict(calt=False)
         for glyphName in glyphNames:
             if isinstance(glyphName, int):
-                # support glyph indexes
+                # glyphName is a glyph ID
                 glyph = glyphName
             else:
                 glyph = font.glyphWithName_(glyphName)
