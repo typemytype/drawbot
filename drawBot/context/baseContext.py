@@ -3,7 +3,6 @@ import CoreText
 import Quartz
 
 import math
-import re
 import os
 
 from fontTools.pens.basePen import BasePen
