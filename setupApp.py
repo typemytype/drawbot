@@ -171,6 +171,7 @@ for fileName in os.listdir("Resources/externalTools"):
 setup(
     name=appName,
     data_files=dataFiles,
+    packages=[],
     app=[dict(script="DrawBot.py", plist=plist)],
     options=dict(
         py2app=dict(
