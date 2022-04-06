@@ -197,8 +197,8 @@ class DrawBotDrawingTool(object):
             for eachBooklet in range(1, 4):
                 with drawing():
                     for eachPage in range(10):
-                        newPage(400, 400)
-                        text(f"{pageCount()}", (100, 100))
+                        newPage(100, 100)
+                        text(f"{pageCount()}", (40, 40))
                     saveImage(f"book_{eachBooklet}.pdf")
         """
         self.newDrawing()
