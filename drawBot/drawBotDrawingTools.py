@@ -206,6 +206,7 @@ class DrawBotDrawingTool(object):
             yield
         finally:
             self.endDrawing()
+            self.newDrawing()
 
     # magic variables
 
