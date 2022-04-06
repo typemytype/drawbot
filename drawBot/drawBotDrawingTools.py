@@ -6,6 +6,7 @@ import math
 import os
 import random
 from collections import namedtuple
+from contextlib import contextmanager
 
 from .context import getContextForFileExt, getContextOptions, getFileExtensions, getContextOptionsDocs
 from .context.baseContext import BezierPath, FormattedString, makeTextBoxes, getNSFontFromNameOrPath, getFontName
@@ -72,25 +73,6 @@ class SavedStateContextManager(object):
 
     def __exit__(self, type, value, traceback):
         self._drawingTools.restore()
-
-
-class DrawingContextManager(object):
-    """
-    Internal helper class for DrawBotDrawingTool.drawing() allowing 'with' notation:
-
-        with drawing()
-            newPage(400, 400)
-            ...draw stuff...
-    """
-    def __init__(self, drawingTools):
-        self._drawingTools = drawingTools
-
-    def __enter__(self):
-        self._drawingTools.newDrawing()
-        return self
-
-    def __exit__(self, type, value, traceback):
-        self._drawingTools.endDrawing()
 
 
 class DrawBotDrawingTool(object):
@@ -199,6 +181,7 @@ class DrawBotDrawingTool(object):
         self._uninstallAllFonts()
         gifTools.clearExplodedGifCache()
 
+    @contextmanager
     def drawing(self):
         """
         Reset and clean the drawing stack in a `with` statement.
@@ -218,7 +201,11 @@ class DrawBotDrawingTool(object):
                         text(f"{pageCount()}", (100, 100))
                     saveImage(f"book_{eachBooklet}.pdf")
         """
-        return DrawingContextManager(self)
+        self.newDrawing()
+        try:
+            yield
+        finally:
+            self.endDrawing()
 
     # magic variables
 
