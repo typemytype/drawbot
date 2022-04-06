@@ -55,26 +55,6 @@ for key, (w, h) in list(_paperSizes.items()):
     _paperSizes["%sLandscape" % key] = (h, w)
 
 
-class SavedStateContextManager(object):
-    """
-    Internal helper class for DrawBotDrawingTool.savedState() allowing 'with' notation:
-
-        with savedState()
-            translate(x, y)
-            ...draw stuff...
-    """
-
-    def __init__(self, drawingTools):
-        self._drawingTools = drawingTools
-
-    def __enter__(self):
-        self._drawingTools.save()
-        return self
-
-    def __exit__(self, type, value, traceback):
-        self._drawingTools.restore()
-
-
 class DrawBotDrawingTool(object):
 
     def __init__(self):
@@ -517,6 +497,7 @@ class DrawBotDrawingTool(object):
         self._requiresNewFirstPage = True
         self._addInstruction("restore")
 
+    @contextmanager
     def savedState(self):
         """
         Save and restore the current graphics state in a `with` statement.
@@ -539,7 +520,11 @@ class DrawBotDrawingTool(object):
             # so this will be a black rectangle
             rect(0, 0, 50, 50)
         """
-        return SavedStateContextManager(self)
+        self.save()
+        try:
+            yield
+        finally:
+            self.restore()
 
     # basic shapes
 
