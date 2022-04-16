@@ -192,11 +192,20 @@ class ImageObject(object):
                 w, h = filterDict["size"]
                 dummy = AppKit.NSImage.alloc().initWithSize_((w, h))
                 generator = ciFilter.valueForKey_("outputImage")
+                extent = generator.extent()
+                scaleX = w / extent.size.width
+                scaleY = h / extent.size.height
                 dummy.lockFocus()
                 ctx = AppKit.NSGraphicsContext.currentContext()
                 ctx.setShouldAntialias_(False)
                 ctx.setImageInterpolation_(AppKit.NSImageInterpolationNone)
-                generator.drawAtPoint_fromRect_operation_fraction_((0, 0), ((0, 0), (w, h)), AppKit.NSCompositeCopy, 1)
+                fromRect = (0, 0), (w, h)
+                if filterDict.get("fitImage", False):
+                    transform = AppKit.NSAffineTransform.transform()
+                    transform.scaleXBy_yBy_(scaleX, scaleY)
+                    transform.concat()
+                    fromRect = extent
+                generator.drawAtPoint_fromRect_operation_fraction_((0, 0), fromRect, AppKit.NSCompositeCopy, 1)
                 dummy.unlockFocus()
                 rep = _makeBitmapImageRep(dummy)
                 self._cachedImage = AppKit.CIImage.alloc().initWithBitmapImageRep_(rep)
@@ -1269,6 +1278,7 @@ class ImageObject(object):
         filterDict = dict(name="CIAztecCodeGenerator", attributes=attr)
         filterDict["size"] = size
         filterDict["isGenerator"] = True
+        filterDict["fitImage"] = True
         self._addFilter(filterDict)
 
     def QRCodeGenerator(self, size, message=None, correctionLevel=None):
@@ -1287,6 +1297,7 @@ class ImageObject(object):
         filterDict = dict(name="CIQRCodeGenerator", attributes=attr)
         filterDict["size"] = size
         filterDict["isGenerator"] = True
+        filterDict["fitImage"] = True
         self._addFilter(filterDict)
 
     def code128BarcodeGenerator(self, size, message=None, quietSpace=None):
@@ -1303,6 +1314,7 @@ class ImageObject(object):
         filterDict = dict(name="CICode128BarcodeGenerator", attributes=attr)
         filterDict["size"] = size
         filterDict["isGenerator"] = True
+        filterDict["fitImage"] = True
         self._addFilter(filterDict)
 
     def checkerboardGenerator(self, size, center=None, color0=None, color1=None, width=None, sharpness=None):
@@ -1367,6 +1379,7 @@ class ImageObject(object):
         filterDict = dict(name="CILenticularHaloGenerator", attributes=attr)
         filterDict["size"] = size
         filterDict["isGenerator"] = True
+        filterDict["fitImage"] = True
         self._addFilter(filterDict)
 
     def PDF417BarcodeGenerator(self, size, message=None, minWidth=None, maxWidth=None, minHeight=None, maxHeight=None, dataColumns=None, rows=None, preferredAspectRatio=None, compactionMode=None, compactStyle=None, correctionLevel=None, alwaysSpecifyCompaction=None):
@@ -1403,6 +1416,7 @@ class ImageObject(object):
         filterDict = dict(name="CIPDF417BarcodeGenerator", attributes=attr)
         filterDict["size"] = size
         filterDict["isGenerator"] = True
+        filterDict["fitImage"] = True
         self._addFilter(filterDict)
 
     def randomGenerator(self, size):
@@ -1489,6 +1503,7 @@ class ImageObject(object):
         filterDict = dict(name="CISunbeamsGenerator", attributes=attr)
         filterDict["size"] = size
         filterDict["isGenerator"] = True
+        filterDict["fitImage"] = True
         self._addFilter(filterDict)
 
     def crop(self, rectangle=None):
