@@ -2645,7 +2645,8 @@ def getNSFontFromNameOrPath(fontNameOrPath, fontSize, fontNumber):
 def _getNSFontFromNameOrPath(fontNameOrPath, fontSize, fontNumber):
     if fontSize is None:
         fontSize = 10
-    if isinstance(fontNameOrPath, str):
+    if isinstance(fontNameOrPath, str) and not fontNameOrPath.startswith("."):
+        # skip dot prefix fonts, those are system fonts
         nsFont = AppKit.NSFont.fontWithName_size_(fontNameOrPath, fontSize)
         if nsFont is not None:
             return nsFont
