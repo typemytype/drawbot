@@ -1,6 +1,5 @@
 import py2app
 from distutils.core import setup
-from distutils.sysconfig import get_python_lib
 import pkg_resources
 import os
 import sys
@@ -55,27 +54,6 @@ def _findModules(root, extensions, skip, parent=""):
                     yield parent + "." + moduleName
                 else:
                     yield moduleName
-
-def getStdLibModules():
-    """Return a list of all module names that are part of the Python Standard Library, and
-    a flag indicating whether we are running from a pre-installed ("/System") python or not.
-    """
-    versionDict = dict(major=sys.version_info.major, minor=sys.version_info.minor)
-    stdLibPath = get_python_lib(standard_lib=True)
-    isSystemPython = stdLibPath.startswith("/System/")
-    extensions = {"py"}
-    extensions.add("cpython-%s%sm-darwin.so" % (sys.version_info.major, sys.version_info.minor))
-    skip = {"site-packages", "test", "turtledemo", "tkinter", "idlelib", "lib2to3"}
-    return list(_findModules(stdLibPath, extensions, skip)), isSystemPython
-
-
-stdLibModules, isSystemPython = getStdLibModules()
-if isSystemPython:
-    # We use the Python Standard Library from /System, so no need to include anything extra
-    stdLibIncludes = []
-else:
-    # non-/System Python, we should include the entire Python Standard Library
-    stdLibIncludes = stdLibModules
 
 
 def getValueFromSysArgv(key, default=None, isBooleanFlag=False):
@@ -187,6 +165,7 @@ setup(
                 'ufo2svg',
                 'fontPens',
                 'booleanOperations',
+                'extractor',
                 # 'pyclipper',
                 'pygments',
                 'jedi',
@@ -203,7 +182,7 @@ setup(
             includes=[
                 # 'csv',
                 # 'this'
-            ] + stdLibIncludes,
+            ],
             excludes=[
                 "numpy",
                 "scipy",
