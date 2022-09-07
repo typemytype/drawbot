@@ -8,7 +8,6 @@ import AppKit
 import PIL
 from drawBot.context.tools.gifTools import gifFrameCount
 from drawBot.misc import DrawBotError
-from drawBot.macOSVersion import macOSVersion
 from testSupport import DrawBotBaseTest, StdOutCollector, TempFile, TempFolder, randomSeed, readData, testDataDir
 
 

@@ -5,6 +5,7 @@ import sys
 import traceback
 import re
 import warnings
+from packaging.version import Version
 from signal import SIGINT
 import ctypes
 from ctypes.util import find_library
@@ -55,7 +56,7 @@ class StdOutput(object):
                 t = time.time()
                 if t - self._previousFlush > 0.2:
                     self.outputView.scrollToEnd()
-                    if macOSVersion >= "10.10":
+                    if macOSVersion >= Version("10.10"):
                         AppKit.NSRunLoop.mainRunLoop().runUntilDate_(AppKit.NSDate.dateWithTimeIntervalSinceNow_(0.0001))
                     self._previousFlush = t
         else:
