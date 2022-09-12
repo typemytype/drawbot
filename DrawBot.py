@@ -151,7 +151,7 @@ class DrawBotAppDelegate(AppKit.NSObject):
         return getDefault("shouldOpenUntitledFile", True)
 
     def sheduleIconTimer(self):
-        if getDefault("DrawBotAnimateIcon", True):
+        if getDefault("DrawBotAnimateIcon", False):
             self._iconTimer = AppKit.NSTimer.scheduledTimerWithTimeInterval_target_selector_userInfo_repeats_(0.1, self, "animateApplicationIcon:", None, False)
 
     _iconCounter = 0

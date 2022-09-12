@@ -3,6 +3,7 @@ import AppKit
 import functools
 import sys
 import os
+import io
 import subprocess
 from fontTools.misc.transform import Transform
 
@@ -148,6 +149,15 @@ def isGIF(url):
         return False, None
     rep = AppKit.NSImageRep.imageRepWithContentsOfURL_(url)
     return rep is not None, rep
+
+
+def pilToNSImage(pilImage):
+    buffer = io.BytesIO()
+    pilImage.save(buffer, "PNG")
+    data = buffer.getvalue()
+    data = AppKit.NSData.dataWithBytes_length_(data, len(data))
+    nsImage = AppKit.NSImage.alloc().initWithData_(data)
+    return nsImage
 
 
 # =============

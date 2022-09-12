@@ -6,6 +6,7 @@ import math
 import os
 import random
 from collections import namedtuple
+from contextlib import contextmanager
 
 from .context import getContextForFileExt, getContextOptions, getFileExtensions, getContextOptionsDocs
 from .context.baseContext import BezierPath, FormattedString, makeTextBoxes, getNSFontFromNameOrPath, getFontName
@@ -14,6 +15,7 @@ from .context.dummyContext import DummyContext
 from .context.tools.imageObject import ImageObject
 from .context.tools import gifTools
 from .context.tools import openType
+from .context.tools import drawBotbuiltins
 
 from .misc import DrawBotError, warnings, VariableController, optimizePath, isPDF, isEPS, isGIF, transformationAtCenter, clearMemoizeCache
 
@@ -53,26 +55,6 @@ for key, (w, h) in list(_paperSizes.items()):
     _paperSizes["%sLandscape" % key] = (h, w)
 
 
-class SavedStateContextManager(object):
-    """
-    Internal helper class for DrawBotDrawingTool.savedState() allowing 'with' notation:
-
-        with savedState()
-            translate(x, y)
-            ...draw stuff...
-    """
-
-    def __init__(self, drawingTools):
-        self._drawingTools = drawingTools
-
-    def __enter__(self):
-        self._drawingTools.save()
-        return self
-
-    def __exit__(self, type, value, traceback):
-        self._drawingTools.restore()
-
-
 class DrawBotDrawingTool(object):
 
     def __init__(self):
@@ -98,6 +80,7 @@ class DrawBotDrawingTool(object):
         namespace.update(_getmodulecontents(self, self.__all__))
         namespace.update(_getmodulecontents(random, ["random", "randint", "choice", "shuffle"]))
         namespace.update(_getmodulecontents(math))
+        namespace.update(_getmodulecontents(drawBotbuiltins))
 
     def _addInstruction(self, callback, *args, **kwargs):
         if callback == "newPage":
@@ -177,6 +160,33 @@ class DrawBotDrawingTool(object):
         """
         self._uninstallAllFonts()
         gifTools.clearExplodedGifCache()
+
+    @contextmanager
+    def drawing(self):
+        """
+        Reset and clean the drawing stack in a `with` statement.
+
+        .. downloadcode:: drawing.py
+
+            # Use the 'with' statement.
+            # This will make sure that the stack of pages is cleaned and reset
+            # once the interpreter exits the `with` statement
+            # The following example shows how to create three PDF booklets
+            # and it uses the `with drawing()` statement to ensure that page numbers
+            # restart from 1 in each PDF
+            for eachBooklet in range(1, 4):
+                with drawing():
+                    for eachPage in range(10):
+                        newPage(100, 100)
+                        text(f"{pageCount()}", (40, 40))
+                    saveImage(f"book_{eachBooklet}.pdf")
+        """
+        self.newDrawing()
+        try:
+            yield
+        finally:
+            self.endDrawing()
+            self.newDrawing()
 
     # magic variables
 
@@ -394,6 +404,8 @@ class DrawBotDrawingTool(object):
             saveImage("~/Desktop/firstImage300.png", imageResolution=300)
 
         """
+        if not isinstance(path, (str, os.PathLike)):
+            raise TypeError("Cannot apply saveImage options to multiple output formats, expected 'str' or 'os.PathLike', got '%s'" % type(path).__name__)
         # args are not supported anymore
         if args:
             if len(args) == 1:
@@ -403,18 +415,6 @@ class DrawBotDrawingTool(object):
             else:
                 # if there are more just raise a TypeError
                 raise TypeError("saveImage(path, **options) takes only keyword arguments")
-        # support for multiple paths in a single saveImage is deprecated
-        if isinstance(path, (list, tuple)):
-            if options:
-                # multiple paths with options is not possible
-                raise DrawBotError("Cannot apply saveImage options to multiple output formats.")
-            else:
-                # warn and solve when multiple paths are given
-                warnings.warn("saveImage([path, path, ...]) is deprecated, use multiple saveImage statements.")
-                for p in path:
-                    self.saveImage(p, **options)
-                return
-
         originalPath = path
         path = optimizePath(path)
         dirName = os.path.dirname(path)
@@ -433,7 +433,7 @@ class DrawBotDrawingTool(object):
                 if optionName not in allowedSaveImageOptions:
                     warnings.warn("Unrecognized saveImage() option found for %s: %s" % (context.__class__.__name__, optionName))
         self._drawInContext(context)
-        context.saveImage(path, options)
+        return context.saveImage(path, options)
 
     # filling docs with content from all possible and installed contexts
     saveImage.__doc__ = saveImage.__doc__ % dict(
@@ -498,6 +498,7 @@ class DrawBotDrawingTool(object):
         self._requiresNewFirstPage = True
         self._addInstruction("restore")
 
+    @contextmanager
     def savedState(self):
         """
         Save and restore the current graphics state in a `with` statement.
@@ -520,7 +521,11 @@ class DrawBotDrawingTool(object):
             # so this will be a black rectangle
             rect(0, 0, 50, 50)
         """
-        return SavedStateContextManager(self)
+        self.save()
+        try:
+            yield
+        finally:
+            self.restore()
 
     # basic shapes
 
@@ -1526,7 +1531,7 @@ class DrawBotDrawingTool(object):
 
         ::
 
-            c2pc, c2sc, calt, case, cpsp, cswh, dlig, frac, liga, lnum, onum, ordn, pnum, rlig, sinf, smcp, ss01, ss02, ss03, ss04, ss05, ss06, ss07, ss08, ss09, ss10, ss11, ss12, ss13, ss14, ss15, ss16, ss17, ss18, ss19, ss20, subs, sups, swsh, titl, tnum
+            c2pc, c2sc, calt, case, cpsp, cswh, dlig, frac, liga, kern, lnum, onum, ordn, pnum, rlig, sinf, smcp, ss01, ss02, ss03, ss04, ss05, ss06, ss07, ss08, ss09, ss10, ss11, ss12, ss13, ss14, ss15, ss16, ss17, ss18, ss19, ss20, subs, sups, swsh, titl, tnum
 
         A `resetFeatures` argument can be set to `True` in order to get back to the default state.
 
