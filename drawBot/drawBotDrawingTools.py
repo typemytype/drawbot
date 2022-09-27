@@ -6,6 +6,7 @@ import math
 import os
 import random
 from collections import namedtuple
+from contextlib import contextmanager
 
 from .context import getContextForFileExt, getContextOptions, getFileExtensions, getContextOptionsDocs
 from .context.baseContext import BezierPath, FormattedString, makeTextBoxes, getNSFontFromNameOrPath, getFontName
@@ -52,26 +53,6 @@ _paperSizes = {
 
 for key, (w, h) in list(_paperSizes.items()):
     _paperSizes["%sLandscape" % key] = (h, w)
-
-
-class SavedStateContextManager(object):
-    """
-    Internal helper class for DrawBotDrawingTool.savedState() allowing 'with' notation:
-
-        with savedState()
-            translate(x, y)
-            ...draw stuff...
-    """
-
-    def __init__(self, drawingTools):
-        self._drawingTools = drawingTools
-
-    def __enter__(self):
-        self._drawingTools.save()
-        return self
-
-    def __exit__(self, type, value, traceback):
-        self._drawingTools.restore()
 
 
 class DrawBotDrawingTool(object):
@@ -179,6 +160,33 @@ class DrawBotDrawingTool(object):
         """
         self._uninstallAllFonts()
         gifTools.clearExplodedGifCache()
+
+    @contextmanager
+    def drawing(self):
+        """
+        Reset and clean the drawing stack in a `with` statement.
+
+        .. downloadcode:: drawing.py
+
+            # Use the 'with' statement.
+            # This will make sure that the stack of pages is cleaned and reset
+            # once the interpreter exits the `with` statement
+            # The following example shows how to create three PDF booklets
+            # and it uses the `with drawing()` statement to ensure that page numbers
+            # restart from 1 in each PDF
+            for eachBooklet in range(1, 4):
+                with drawing():
+                    for eachPage in range(10):
+                        newPage(100, 100)
+                        text(f"{pageCount()}", (40, 40))
+                    saveImage(f"book_{eachBooklet}.pdf")
+        """
+        self.newDrawing()
+        try:
+            yield
+        finally:
+            self.endDrawing()
+            self.newDrawing()
 
     # magic variables
 
@@ -490,6 +498,7 @@ class DrawBotDrawingTool(object):
         self._requiresNewFirstPage = True
         self._addInstruction("restore")
 
+    @contextmanager
     def savedState(self):
         """
         Save and restore the current graphics state in a `with` statement.
@@ -512,7 +521,11 @@ class DrawBotDrawingTool(object):
             # so this will be a black rectangle
             rect(0, 0, 50, 50)
         """
-        return SavedStateContextManager(self)
+        self.save()
+        try:
+            yield
+        finally:
+            self.restore()
 
     # basic shapes
 
@@ -1518,7 +1531,7 @@ class DrawBotDrawingTool(object):
 
         ::
 
-            c2pc, c2sc, calt, case, cpsp, cswh, dlig, frac, liga, lnum, onum, ordn, pnum, rlig, sinf, smcp, ss01, ss02, ss03, ss04, ss05, ss06, ss07, ss08, ss09, ss10, ss11, ss12, ss13, ss14, ss15, ss16, ss17, ss18, ss19, ss20, subs, sups, swsh, titl, tnum
+            c2pc, c2sc, calt, case, cpsp, cswh, dlig, frac, liga, kern, lnum, onum, ordn, pnum, rlig, sinf, smcp, ss01, ss02, ss03, ss04, ss05, ss06, ss07, ss08, ss09, ss10, ss11, ss12, ss13, ss14, ss15, ss16, ss17, ss18, ss19, ss20, subs, sups, swsh, titl, tnum
 
         A `resetFeatures` argument can be set to `True` in order to get back to the default state.
 

@@ -163,7 +163,7 @@ skip = {
     "test_linkRect",  # skipping, we dont compare raw pdf data
 }
 expectedFailures = {}
-dontSaveImage = {"test_imageSize"}
+dontSaveImage = {"test_imageSize", "test_drawing"}
 
 def _addExampleTests():
     allExamples = _collectExamples([

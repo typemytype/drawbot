@@ -36,6 +36,16 @@ class ExportTest(DrawBotBaseTest):
             fileSize = os.stat(tmp.path).st_size
         return fileSize
 
+    def test_with_drawing(self):
+        drawBot.newDrawing()
+        self.assertEqual(drawBot.pageCount(), 0)
+        with drawBot.drawing():
+            for i in range(10):
+                drawBot.newPage()
+                drawBot.rect(10, 10, 10, 10)
+            self.assertEqual(drawBot.pageCount(), 10)
+        self.assertEqual(drawBot.pageCount(), 0)
+
     def test_ffmpegCodec(self):
         self.makeTestAnimation()
         size_h264 = self._saveImageAndReturnSize(".mp4")
