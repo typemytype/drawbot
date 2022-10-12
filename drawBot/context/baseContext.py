@@ -2559,10 +2559,10 @@ class BaseContext(object):
             x, y, w, h = box
             if w < 0:
                 x += w
-                w = abs(w)
+                w = -w
             if h < 0:
                 y += h
-                h = abs(h)
+                h = -h
             path = CoreText.CGPathCreateMutable()
             CoreText.CGPathAddRect(path, None, CoreText.CGRectMake(x, y, w, h))
         return path, (x, y)
