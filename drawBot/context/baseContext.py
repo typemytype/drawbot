@@ -2557,6 +2557,12 @@ class BaseContext(object):
             (x, y), (w, h) = CoreText.CGPathGetPathBoundingBox(path)
         else:
             x, y, w, h = box
+            if w < 0:
+                x += w
+                w = abs(w)
+            if h < 0:
+                y += h
+                h = abs(h)
             path = CoreText.CGPathCreateMutable()
             CoreText.CGPathAddRect(path, None, CoreText.CGRectMake(x, y, w, h))
         return path, (x, y)
