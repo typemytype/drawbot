@@ -2221,7 +2221,10 @@ class DrawBotDrawingTool(object):
             fontAttributes = {CoreText.NSFontCharacterSetAttribute: characterSet}
             fontDescriptor = CoreText.CTFontDescriptorCreateWithAttributes(fontAttributes)
             descriptions = fontDescriptor.matchingFontDescriptorsWithMandatoryKeys_(None)
-            return [str(description[CoreText.NSFontNameAttribute]) for description in descriptions]
+            if descriptions is not None:
+                return [str(description[CoreText.NSFontNameAttribute]) for description in descriptions]
+            else:
+                return []  # No font was found that supports the requested characters
         return [str(f) for f in AppKit.NSFontManager.sharedFontManager().availableFonts()]
 
     def installFont(self, path):
