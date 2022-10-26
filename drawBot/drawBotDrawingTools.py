@@ -2211,7 +2211,7 @@ class DrawBotDrawingTool(object):
         Returns a list of all installed fonts.
 
         Optionally a string with `supportsCharacters` can be provided,
-        the list of available installed fonts will be filterd by
+        the list of available installed fonts will be filtered by
         support of these characters,
         """
         if supportsCharacters is not None:
