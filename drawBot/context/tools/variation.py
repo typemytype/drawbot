@@ -39,7 +39,7 @@ def getVariationAxesForFont(font):
         return axes
     for variationAxesDescription in variationAxesDescriptions:
         tag = convertIntToVariationTag(variationAxesDescription[CoreText.kCTFontVariationAxisIdentifierKey])
-        name = variationAxesDescription[CoreText.kCTFontVariationAxisNameKey]
+        name = variationAxesDescription.get(CoreText.kCTFontVariationAxisNameKey, tag)
         minValue = variationAxesDescription[CoreText.kCTFontVariationAxisMinimumValueKey]
         maxValue = variationAxesDescription[CoreText.kCTFontVariationAxisMaximumValueKey]
         defaultValue = variationAxesDescription[CoreText.kCTFontVariationAxisDefaultValueKey]
