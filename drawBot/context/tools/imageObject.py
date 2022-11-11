@@ -189,14 +189,24 @@ class ImageObject(object):
                 ciFilter.setValue_forKey_(value, key)
 
             if filterDict.get("isGenerator", False):
-                w, h = filterDict["size"]
-                dummy = AppKit.NSImage.alloc().initWithSize_((w, h))
                 generator = ciFilter.valueForKey_("outputImage")
+                extent = generator.extent()
+                w, h = filterDict.get("size", extent.size)
+                dummy = AppKit.NSImage.alloc().initWithSize_((w, h))
+
+                scaleX = w / extent.size.width
+                scaleY = h / extent.size.height
                 dummy.lockFocus()
                 ctx = AppKit.NSGraphicsContext.currentContext()
                 ctx.setShouldAntialias_(False)
                 ctx.setImageInterpolation_(AppKit.NSImageInterpolationNone)
-                generator.drawAtPoint_fromRect_operation_fraction_((0, 0), ((0, 0), (w, h)), AppKit.NSCompositeCopy, 1)
+                fromRect = (0, 0), (w, h)
+                if filterDict.get("fitImage", False):
+                    transform = AppKit.NSAffineTransform.transform()
+                    transform.scaleXBy_yBy_(scaleX, scaleY)
+                    transform.concat()
+                    fromRect = extent
+                generator.drawAtPoint_fromRect_operation_fraction_((0, 0), fromRect, AppKit.NSCompositeCopy, 1)
                 dummy.unlockFocus()
                 rep = _makeBitmapImageRep(dummy)
                 self._cachedImage = AppKit.CIImage.alloc().initWithBitmapImageRep_(rep)
@@ -1251,7 +1261,7 @@ class ImageObject(object):
         filterDict = dict(name="CIVortexDistortion", attributes=attr)
         self._addFilter(filterDict)
 
-    def aztecCodeGenerator(self, size, message=None, correctionLevel=None, layers=None, compactStyle=None):
+    def aztecCodeGenerator(self, size=None, message=None, correctionLevel=None, layers=None, compactStyle=None):
         """
         Generates an Aztec code (two-dimensional barcode) from input data.
 
@@ -1267,11 +1277,13 @@ class ImageObject(object):
         if compactStyle:
             attr["inputCompactStyle"] = compactStyle
         filterDict = dict(name="CIAztecCodeGenerator", attributes=attr)
-        filterDict["size"] = size
+        if size:
+            filterDict["size"] = size
         filterDict["isGenerator"] = True
+        filterDict["fitImage"] = True
         self._addFilter(filterDict)
 
-    def QRCodeGenerator(self, size, message=None, correctionLevel=None):
+    def QRCodeGenerator(self, size=None, message=None, correctionLevel=None):
         """
         Generates a Quick Response code (two-dimensional barcode) from input data.
 
@@ -1285,11 +1297,13 @@ class ImageObject(object):
             assert correctionLevel in "LMQH", "'correctionLevel' must be either 'L', 'M', 'Q', 'H'"
             attr["inputCorrectionLevel"] = correctionLevel
         filterDict = dict(name="CIQRCodeGenerator", attributes=attr)
-        filterDict["size"] = size
+        if size:
+            filterDict["size"] = size
         filterDict["isGenerator"] = True
+        filterDict["fitImage"] = True
         self._addFilter(filterDict)
 
-    def code128BarcodeGenerator(self, size, message=None, quietSpace=None):
+    def code128BarcodeGenerator(self, size=None, message=None, quietSpace=None):
         """
         Generates a Code 128 one-dimensional barcode from input data.
 
@@ -1301,8 +1315,10 @@ class ImageObject(object):
         if quietSpace:
             attr["inputQuietSpace"] = quietSpace
         filterDict = dict(name="CICode128BarcodeGenerator", attributes=attr)
-        filterDict["size"] = size
+        if size:
+            filterDict["size"] = size
         filterDict["isGenerator"] = True
+        filterDict["fitImage"] = True
         self._addFilter(filterDict)
 
     def checkerboardGenerator(self, size, center=None, color0=None, color1=None, width=None, sharpness=None):
@@ -1341,7 +1357,7 @@ class ImageObject(object):
         filterDict["isGenerator"] = True
         self._addFilter(filterDict)
 
-    def lenticularHaloGenerator(self, size, center=None, color=None, haloRadius=None, haloWidth=None, haloOverlap=None, striationStrength=None, striationContrast=None, time=None):
+    def lenticularHaloGenerator(self, size=None, center=None, color=None, haloRadius=None, haloWidth=None, haloOverlap=None, striationStrength=None, striationContrast=None, time=None):
         """
         Simulates a lens flare.
 
@@ -1365,11 +1381,13 @@ class ImageObject(object):
         if time:
             attr["inputTime"] = time
         filterDict = dict(name="CILenticularHaloGenerator", attributes=attr)
-        filterDict["size"] = size
+        if size:
+            filterDict["size"] = size
         filterDict["isGenerator"] = True
+        filterDict["fitImage"] = True
         self._addFilter(filterDict)
 
-    def PDF417BarcodeGenerator(self, size, message=None, minWidth=None, maxWidth=None, minHeight=None, maxHeight=None, dataColumns=None, rows=None, preferredAspectRatio=None, compactionMode=None, compactStyle=None, correctionLevel=None, alwaysSpecifyCompaction=None):
+    def PDF417BarcodeGenerator(self, size=None, message=None, minWidth=None, maxWidth=None, minHeight=None, maxHeight=None, dataColumns=None, rows=None, preferredAspectRatio=None, compactionMode=None, compactStyle=None, correctionLevel=None, alwaysSpecifyCompaction=None):
         """
         Generates a PDF417 code (two-dimensional barcode) from input data.
 
@@ -1401,8 +1419,10 @@ class ImageObject(object):
         if alwaysSpecifyCompaction:
             attr["inputAlwaysSpecifyCompaction"] = alwaysSpecifyCompaction
         filterDict = dict(name="CIPDF417BarcodeGenerator", attributes=attr)
-        filterDict["size"] = size
+        if size:
+            filterDict["size"] = size
         filterDict["isGenerator"] = True
+        filterDict["fitImage"] = True
         self._addFilter(filterDict)
 
     def randomGenerator(self, size):
@@ -1465,7 +1485,7 @@ class ImageObject(object):
         filterDict["isGenerator"] = True
         self._addFilter(filterDict)
 
-    def sunbeamsGenerator(self, size, center=None, color=None, sunRadius=None, maxStriationRadius=None, striationStrength=None, striationContrast=None, time=None):
+    def sunbeamsGenerator(self, size=None, center=None, color=None, sunRadius=None, maxStriationRadius=None, striationStrength=None, striationContrast=None, time=None):
         """
         Generates a sun effect.
 
@@ -1487,8 +1507,10 @@ class ImageObject(object):
         if time:
             attr["inputTime"] = time
         filterDict = dict(name="CISunbeamsGenerator", attributes=attr)
-        filterDict["size"] = size
+        if size:
+            filterDict["size"] = size
         filterDict["isGenerator"] = True
+        filterDict["fitImage"] = True
         self._addFilter(filterDict)
 
     def crop(self, rectangle=None):
