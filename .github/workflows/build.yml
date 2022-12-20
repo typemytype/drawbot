@@ -25,9 +25,9 @@ jobs:
         rm -fr *.p12
         security find-identity -v -p codesigning
 
-    - name: Set up Python 3.7
+    - name: Set up Python 3.9
       run: |
-        curl https://www.python.org/ftp/python/3.7.6/python-3.7.6-macosx10.9.pkg --output pythonInstaller.pkg
+        curl https://www.python.org/ftp/python/3.9.13/python-3.9.13-macosx10.9.pkg --output pythonInstaller.pkg
         sudo installer -pkg pythonInstaller.pkg -target /
 
     - name: Check python
@@ -50,9 +50,6 @@ jobs:
         pip install --upgrade pip
         pip install -r ./requirements.txt
         pip install .
-        pip install --upgrade ./app/customWheels/lxml-4.5.0-cp37-cp37m-macosx_10_9_x86_64.whl
-        pip install --upgrade ./app/customWheels/uharfbuzz-0.8.0-cp37-cp37m-macosx_10_9_x86_64.whl
-        pip install --upgrade ./app/customWheels/xattr-0.9.7-cp37-cp37m-macosx_10_9_x86_64.whl
 
     - name: Run tests
       run:
