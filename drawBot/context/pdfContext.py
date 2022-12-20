@@ -2,6 +2,8 @@ import AppKit
 import CoreText
 import Quartz
 
+from packaging.version import Version
+
 from .tools import gifTools
 
 from .baseContext import BaseContext, FormattedString
@@ -211,7 +213,7 @@ class PDFContext(BaseContext):
                         Quartz.CGContextSetLineJoin(self._pdfContext, self._state.lineJoin)
                 if fillColor is not None and strokeColor is not None:
                     drawingMode = Quartz.kCGTextFillStroke
-                    if macOSVersion >= "10.11" and macOSVersion < "10.13":
+                    if macOSVersion >= Version("10.11") and macOSVersion < Version("10.13"):
                         # solve bug in OSX where the stroke color is the same as the fill color
                         # simple solution: draw it twice...
                         drawingMode = Quartz.kCGTextFill

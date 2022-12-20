@@ -8,7 +8,7 @@ import tempfile
 import ssl
 from urllib.request import urlopen, Request
 
-from distutils.version import StrictVersion
+from packaging.version import Version
 
 import vanilla
 from vanilla.dialogs import message
@@ -93,7 +93,7 @@ class Updater(object):
         if not getDefault("DrawBotCheckForUpdatesAtStartup", True):
             return
         self.currentVersion, self.currentVersionErrors = getCurrentVersion()
-        self.needsUpdate = StrictVersion(__version__) < StrictVersion(self.currentVersion)
+        self.needsUpdate = Version(__version__) < Version(self.currentVersion)
         if self.currentVersionErrors:
             # print them out so the debugger window catch this
             print("\n".join(self.currentVersionErrors))
