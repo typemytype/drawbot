@@ -7,7 +7,6 @@ cocoa-vanilla==0.2.0
 defcon
 git+https://github.com/robotools/defconAppKit
 fontTools[ufo,lxml,woff,unicode,type1]
-uharfbuzz
 fs
 brotli
 pygments
