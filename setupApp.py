@@ -199,6 +199,7 @@ setup(
                 "setuptools",
                 "packaging",
                 "PIL",
+                "black",
             ],
             includes=[
                 # 'csv',
