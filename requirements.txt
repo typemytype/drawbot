@@ -27,5 +27,5 @@ git+https://github.com/typesupply/feaPyFoFum
 git+https://github.com/typesupply/feaTools2
 pip
 packaging
-black==22.8.0
+black==21.12b0  # pin to older version to avoid dependency problems; see https://github.com/ronaldoussoren/py2app/issues/476
 pytz
