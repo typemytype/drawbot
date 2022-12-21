@@ -1,5 +1,21 @@
 # Changelog For DrawBot
 
+## [3.130] ...
+
+## [3.129] 2022-12-21
+
+- Upgrade to python 3.9!!
+- `textBox` box: negative rectangles will be normalized.
+- Fix bug while extracting variable font name ids.
+- Improve `ImageObject` generators.
+- Add support for formatting code, see Python menu.
+- Improve support for `Pathlib.Path` where ever a path is needed.
+- Support for `saveImage("NSImage")` and `saveImage("PIL")` returning image objects.
+- Add support for `norm`, `lerp` and `remap`.
+- Support `formattedText.appendGlyph(index)`: adding glyphs by index.
+- Add `with drawing()` wrapping `newDrawing()` and `endDrawing()`.
+
+
 ## [3.128] 2021-08-09
 
 - Fixing bug when adding glyphNames to a formattedString with fontVariation settings.
