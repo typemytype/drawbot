@@ -28,3 +28,4 @@ git+https://github.com/typesupply/feaTools2
 pip
 packaging
 black==22.8.0
+pytz
