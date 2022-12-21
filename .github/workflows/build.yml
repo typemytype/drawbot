@@ -74,7 +74,8 @@ jobs:
         GITHUB_REF: ${{ github.ref }}
       run: |
         source venv/bin/activate
-        echo "::set-output name=body::$(python app/extract_changes.py)"
+        # echo "::set-output name=body::$(python app/extract_changes.py)"
+        echo "body=$(python app/extract_changes.py)" >> $GITHUB_OUTPUT
 
     - name: Create Release
       id: create_release
