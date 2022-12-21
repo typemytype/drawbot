@@ -27,4 +27,4 @@ git+https://github.com/typesupply/feaPyFoFum
 git+https://github.com/typesupply/feaTools2
 pip
 packaging
-black
+black==22.8.0
