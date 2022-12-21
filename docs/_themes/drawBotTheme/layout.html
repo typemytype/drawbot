@@ -102,6 +102,8 @@
         <div class="body" id="content">
           {% block body %} {% endblock %}
           {%- if pagename == "index" %}
+          <h2>Toots</h2>
+          <iframe allowfullscreen sandbox="allow-top-navigation allow-scripts" width="640" height="500" src="https://www.mastofeed.com/apiv2/feed?userurl=https%3A%2F%2Ftypo.social%2Fusers%2FDrawBot&theme=auto&size=100&header=false&replies=false&boosts=false"></iframe>
           <h2>Tweets</h2>
           <a class="twitter-timeline" width="640" height="500" data-chrome="noheader nofooter noborders transparent" href="https://twitter.com/drawbotapp" data-widget-id="379328957260124160">Tweets by @drawbotapp</a>
           <script>
