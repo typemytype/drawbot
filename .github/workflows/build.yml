@@ -84,7 +84,7 @@ jobs:
       with:
         tag_name: ${{ github.ref }}
         release_name: DrawBot version ${{ github.ref }}
-        draft: false
+        draft: true
         prerelease: false
         body: ${{ steps.changelog.outputs.body }}
 
