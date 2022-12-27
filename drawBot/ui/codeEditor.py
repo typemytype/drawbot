@@ -285,7 +285,7 @@ def _pythonWordCompletions(text, charRange):
                     if charRange.location - columns + 1 <= 1:
                         break
                     columns += 1
-        script = jedi.api.Script(source=text)
+        script = jedi.api.Script(code=text)
         keyWords += [c.name for c in script.complete(line=lineCount, column=columns)]
     except Exception:
         import traceback
