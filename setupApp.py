@@ -64,7 +64,7 @@ def getStdLibModules():
     stdLibPath = get_python_lib(standard_lib=True)
     isSystemPython = stdLibPath.startswith("/System/")
     extensions = {"py"}
-    extensions.add("cpython-%s%sm-darwin.so" % (sys.version_info.major, sys.version_info.minor))
+    extensions.add("cpython-%s%s-darwin.so" % (sys.version_info.major, sys.version_info.minor))
     skip = {"site-packages", "test", "turtledemo", "tkinter", "idlelib", "lib2to3"}
     return list(_findModules(stdLibPath, extensions, skip)), isSystemPython
 
