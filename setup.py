@@ -52,7 +52,8 @@ setup(name="drawBot",
         "pyobjc",
         "fontTools",
         "booleanOperations",
-        "pillow"
+        "pillow",
+        "packaging",
     ],
     include_package_data=True,
 )
