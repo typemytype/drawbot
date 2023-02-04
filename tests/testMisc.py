@@ -1,8 +1,11 @@
 import sys
 import os
+import pathlib
 import unittest
 import io
+import tempfile
 from collections import OrderedDict
+from fontTools.ttLib import TTFont
 import drawBot
 from drawBot.misc import DrawBotError, warnings
 from drawBot.scriptTools import ScriptRunner
@@ -18,17 +21,17 @@ class MiscTest(unittest.TestCase):
     def test_openTypeFeatures(self):
         drawBot.newDrawing()
         fea = drawBot.listOpenTypeFeatures()
-        self.assertEqual(fea, {'liga': True})
+        self.assertEqual(fea, ['liga'])
         drawBot.font("Helvetica")
         fea = drawBot.listOpenTypeFeatures()
-        self.assertEqual(fea, {'liga': True, 'tnum': True, 'pnum': False})
+        self.assertEqual(fea, ['liga', 'pnum', 'tnum'])
         fea = drawBot.listOpenTypeFeatures("HoeflerText-Regular")
-        self.assertEqual(fea, {'liga': True, 'dlig': False, 'tnum': True, 'pnum': False, 'titl': True, 'onum': True, 'lnum': False})
+        self.assertEqual(fea, ['dlig', 'liga', 'lnum', 'onum', 'pnum', 'titl', 'tnum'])
         fea = drawBot.openTypeFeatures(liga=False)
-        self.assertEqual(fea, {'liga': False, 'tnum': True, 'pnum': False})
+        self.assertEqual(fea, {'liga': False})
         drawBot.font("LucidaGrande")
         fea = drawBot.openTypeFeatures(resetFeatures=True)
-        self.assertEqual(fea, {'liga': True})
+        self.assertEqual(fea, {})
 
     def test_openTypeFeatures_saveRestore(self):
         drawBot.newDrawing()
@@ -215,6 +218,152 @@ class MiscTest(unittest.TestCase):
         self.assertEqual(drawBot.width(), 400)
         self.assertEqual(drawBot.height(), 500)
         self.assertEqual(drawBot.pageCount(), 2)
+
+    def test_font_install(self):
+        fontPath = os.path.join(testDataDir, "MutatorSans.ttf")
+        drawBot.newDrawing()
+        drawBot.newPage()
+        postscriptName = drawBot.font(fontPath)
+        self.assertEqual(postscriptName, "MutatorMathTest-LightCondensed")
+        variations = drawBot.listFontVariations()
+        self.assertEqual(variations, {'wdth': {'name': 'Width', 'minValue': 0.0, 'maxValue': 1000.0, 'defaultValue': 0.0}, 'wght': {'name': 'Weight', 'minValue': 0.0, 'maxValue': 1000.0, 'defaultValue': 0.0}})
+
+    def test_font_install_pathlib(self):
+        import pathlib
+        fontPath = os.path.join(testDataDir, "MutatorSans.ttf")
+        fontPath = pathlib.Path(fontPath)
+        drawBot.newDrawing()
+        drawBot.newPage()
+        postscriptName = drawBot.font(fontPath)
+        self.assertEqual(postscriptName, "MutatorMathTest-LightCondensed")
+        variations = drawBot.listFontVariations()
+        self.assertEqual(variations, {'wdth': {'name': 'Width', 'minValue': 0.0, 'maxValue': 1000.0, 'defaultValue': 0.0}, 'wght': {'name': 'Weight', 'minValue': 0.0, 'maxValue': 1000.0, 'defaultValue': 0.0}})
+
+    def test_formattedString_issue337(self):
+        # https://github.com/typemytype/drawbot/issues/337
+        drawBot.newDrawing()
+        fs = drawBot.FormattedString("A\n")
+        drawBot.text(fs, (0, 0))
+
+    def test_formattedString_issue337_part2(self):
+        # https://github.com/typemytype/drawbot/issues/337
+        drawBot.newDrawing()
+        fs = drawBot.FormattedString("A\n\n")
+        drawBot.text(fs, (0, 0))
+
+    def test_formattedString_issue337_part3(self):
+        # Verifying we get the correct line height on an empty string
+        expected = [
+            'reset None',
+            'newPage 1000 1000',
+            'textBox A 0 -34.0 26.8994140625 104.0 left',
+            'textBox B 0 -46.0 25.751953125 104.0 left',
+            'textBox C 0 -58.0 26.9189453125 104.0 left',
+            'textBox A 10 -34.0 26.8994140625 104.0 left',
+            'textBox  10 48.0 20.0 104.0 left',
+            'textBox C 10 -58.0 26.9189453125 104.0 left',
+            'saveImage * {}'
+        ]
+        with StdOutCollector() as output:
+            drawBot.newDrawing()
+            fs = drawBot.FormattedString("A\nB\nC\n")
+            drawBot.text(fs, (0, 60))
+            fs = drawBot.FormattedString("A\n\nC\n")
+            drawBot.text(fs, (10, 60))
+            drawBot.saveImage("*")
+            drawBot.endDrawing()
+        self.assertEqual(output.lines(), expected)
+
+    def test_textBoxBaselines(self):
+        drawBot.newDrawing()
+        baselines = drawBot.textBoxBaselines("hello foo bar world " * 10, (10, 10, 300, 300))
+        self.assertEqual(baselines, [(10.0, 300.0), (10.0, 288.0), (10.0, 276.0), (10.0, 264.0)])
+
+        t = drawBot.FormattedString()
+        t += "hello " * 2
+        t.fontSize(30)
+        t += "foo " * 2
+        t.font("Times")
+        t += "bar " * 2
+        t.fontSize(40)
+        t += "world " * 2
+        baselines = drawBot.textBoxBaselines(t, (10, 10, 300, 300))
+        self.assertEqual(baselines, [(10.0, 281.0), (10.0, 235.0)])
+
+    def test_textBoxCharacterBounds(self):
+        drawBot.newDrawing()
+        t = drawBot.FormattedString()
+        t += "hello " * 2
+        t.fontSize(30)
+        t += "foo " * 2
+        t.font("Times")
+        t += "bar " * 2
+        t.fontSize(40)
+        t += "world " * 2
+        bounds = drawBot.textBoxCharacterBounds(t, (10, 10, 300, 300))
+        self.assertEqual([i.bounds for i in bounds], [(10.0, 278.890625, 53.73046875, 11.77734375), (63.73046875, 274.671875, 114.755859375, 35.33203125), (178.486328125, 273.5, 91.611328125, 30.0), (10.0, 225.0, 206.640625, 40.0)])
+        self.assertEqual([i.baselineOffset for i in bounds], [2.109375, 6.328125, 7.5, 10.0])
+        self.assertEqual([str(i.formattedSubString) for i in bounds], ['hello hello ', 'foo foo ', 'bar bar ', 'world world '])
+
+    def test_reloadFont(self):
+        src = pathlib.Path(__file__).resolve().parent / "data" / "MutatorSans.ttf"
+        assert src.exists()
+        with tempfile.NamedTemporaryFile(suffix=".ttf") as ff:
+            ff.write(src.read_bytes())
+            firstModTime = os.stat(ff.name).st_mtime
+            drawBot.newDrawing()
+            drawBot.font(ff.name)
+            self.assertEqual(ff.name, drawBot.fontFilePath())
+            path = drawBot.BezierPath()
+            path.text("E", font=ff.name, fontSize=1000)
+            self.assertEqual((60.0, 0.0, 340.0, 700.0), path.bounds())
+            ff.seek(0)
+            ttf = TTFont(ff)
+            ttf["glyf"]["E"].coordinates[0] = (400, 800)
+            ff.seek(0)
+            ttf.save(ff)
+            secondModTime = os.stat(ff.name).st_mtime
+            assert firstModTime != secondModTime, (firstModTime, secondModTime)
+            drawBot.newDrawing()  # to clear the memoize cache in baseContext
+            drawBot.font(ff.name)
+            self.assertEqual(ff.name, drawBot.fontFilePath())
+            path = drawBot.BezierPath()
+            path.text("E", font=ff.name, fontSize=1000)
+            self.assertEqual((60.0, 0.0, 400.0, 800.0), path.bounds())
+
+    def test_ttc_IndexError(self):
+        src = pathlib.Path(__file__).resolve().parent / "data" / "MutatorSans.ttc"
+        self.assertEqual("MutatorMathTest-LightCondensed", drawBot.font(src, fontNumber=0))
+        self.assertEqual("MutatorMathTest-LightWide", drawBot.font(src, fontNumber=1))
+        self.assertEqual("MutatorMathTest-BoldCondensed", drawBot.font(src, fontNumber=2))
+        self.assertEqual("MutatorMathTest-BoldWide", drawBot.font(src, fontNumber=3))
+        with self.assertRaises(IndexError):
+            drawBot.font(src, fontNumber=4)
+        with self.assertRaises(IndexError):
+            drawBot.font(src, fontNumber=-1)
+
+    def test_norm(self):
+        assert drawBot.norm(20, 10, 30) == 0.5
+        assert drawBot.norm(-10, 10, 30) == -1
+        with self.assertRaises(ZeroDivisionError):
+            drawBot.norm(20, 10, 10)
+
+    def test_lerp(self):
+        assert drawBot.lerp(10, 30, 0.5) == 20
+        assert drawBot.lerp(10, 10, 0.5) == 10
+        assert drawBot.lerp(10, 30, 0) == 10
+        assert drawBot.lerp(10, 30, 1) == 30
+        assert drawBot.lerp(10, 30, 2) == 50
+
+    def test_remap(self):
+        assert drawBot.remap(15, 10, 20, 30, 50) == 40
+        with self.assertRaises(ZeroDivisionError):
+            drawBot.remap(15, 20, 20, 30, 50)
+        assert drawBot.remap(5, 10, 20, 30, 50) == 20
+        assert drawBot.remap(5, 10, 20, 30, 50, clamp=True) == 30
+        assert drawBot.remap(25, 10, 20, 30, 50) == 60
+        assert drawBot.remap(25, 10, 20, 30, 50, clamp=True) == 50
+
 
 
 def _roundInstanceLocations(instanceLocations):

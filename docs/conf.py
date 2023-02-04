@@ -27,6 +27,12 @@ class MetaMock(type):
     def __getattr__(self, name):
         return self
 
+    def __len__(self):
+        return 0
+
+    def __iter__(self):
+        return iter([])
+
 
 class Mock(object, metaclass=MetaMock):
 
@@ -48,10 +54,13 @@ MOCK_MODULES = ['py2app',
         'AppKit', 'Quartz', 'CoreText', 'QTKit',
         'fontTools',
         'fontTools.ttLib',
+        'fontTools.ttLib.ttCollection',
         'fontTools.misc',
         'fontTools.misc.transform',
         'fontTools.misc.xmlWriter',
         'fontTools.misc.py23',
+        'fontTools.misc.macCreatorType',
+        'fontTools.misc.macRes',
         'fontTools.pens',
         'fontTools.pens.basePen',
         'fontTools.pens.areaPen',

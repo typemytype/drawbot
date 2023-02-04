@@ -6,7 +6,7 @@ import tempfile
 from drawBot.misc import executeExternalProcess, getExternalToolPath
 
 
-def generateGif(sourcePaths, destPath, delays):
+def generateGif(sourcePaths, destPath, delays, loop=True):
     gifsiclePath = getExternalToolPath(os.path.dirname(__file__), "gifsicle")
     assert gifsiclePath is not None
     cmds = [
@@ -18,9 +18,10 @@ def generateGif(sourcePaths, destPath, delays):
         "-w",
         # force to 256 colors
         "--colors", "256",
-        # make it loop
-        "--loop",
     ]
+    if loop:
+        # make it loop
+        cmds.append("--loop")
     # add source paths with delay for each frame
     for i, inputPath in enumerate(sourcePaths):
         cmds += [
@@ -60,7 +61,7 @@ def _explodeGif(path):
     files = os.listdir(destRoot)
     _explodedGifCache[path] = dict(
         source=destRoot,
-        fileNames=files,
+        fileNames=sorted(files),
     )
 
 

@@ -3,14 +3,17 @@ Download
 
 .. cssclass:: app-download-link
 
-> `Download DrawBot (Python 3.6) <http://static.typemytype.com/drawBot/DrawBot.dmg>`_
+> `Download DrawBot <https://github.com/typemytype/drawbot/releases/latest/download/DrawBot.dmg>`_
+
 
 requirements: osX 10.9+
 
 Older Downloads
 ---------------
 
-`Version History <http://static.typemytype.com/drawBot/versionHistory>`_
+`Version History <https://github.com/typemytype/drawbot/releases>`_
+
+`Very Old Version History <http://versionhistory.drawbot.com>`_
 
 License
 -------

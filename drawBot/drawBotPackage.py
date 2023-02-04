@@ -1,8 +1,8 @@
 import os
 import shutil
 import attr
-from plistlib import readPlist, writePlist
-from distutils.version import LooseVersion
+import plistlib
+from packaging import version
 import tempfile
 
 from drawBot.drawBotSettings import __version__
@@ -32,7 +32,7 @@ DrawBot support for .drawbot packages.
 
 """
 
-drawBotVersion = LooseVersion(__version__)
+drawBotVersion = version.Version(__version__)
 
 
 @attr.s(slots=True)
@@ -78,7 +78,8 @@ class DrawBotPackage(object):
         # get the info.plist path
         infoPath = self.infoPath()
         if infoPath and os.path.exists(infoPath):
-            info = readPlist(infoPath)
+            with open(infoPath, "rb") as f:
+                info = plistlib.load(f)
             self.info.fromDict(info)
             # validate incoming info
             attr.validate(self.info)
@@ -107,7 +108,7 @@ class DrawBotPackage(object):
         Return if executing was succesfull with a report on failure.
         """
         # check if the package can run in this version of DrawBot
-        if LooseVersion(self.info.requiresVersion) > drawBotVersion:
+        if version.Version(self.info.requiresVersion) > drawBotVersion:
             return False, "Requires a newer version of DrawBot (%s)." % self.info.requiresVersion
         # get the main scriptin path
         path = self.mainScriptPath()
@@ -146,7 +147,8 @@ class DrawBotPackage(object):
         infoData = self.info.asDict()
         # only write info that is different from
         if infoData:
-            writePlist(infoData, self.infoPath())
+            with open(self.infoPath(), "wb") as f:
+                plistlib.dump(infoData, f)
         # build lib root path
         libRoot = os.path.join(self.path, "lib")
         # copy the script root

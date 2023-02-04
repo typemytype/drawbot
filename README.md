@@ -1,3 +1,7 @@
+![DrawBot Test Bench](https://github.com/typemytype/drawbot/workflows/DrawBot%20Test%20Bench/badge.svg)
+![DrawBot App Builder](https://github.com/typemytype/drawbot/workflows/DrawBot%20App%20Builder/badge.svg)
+[![codecov](https://codecov.io/gh/typemytype/drawbot/branch/master/graph/badge.svg)](https://codecov.io/gh/typemytype/drawbot)
+
 # DrawBot
 
 DrawBot is a powerful, free application for macOS that invites you to write Python scripts to generate two-dimensional graphics. The built-in graphics primitives support rectangles, ovals, (bezier) paths, polygons, text objects, colors, transparency and much more. You can program multi-page documents and stop-motion animations. Export formats include PDF, SVG, PNG, JPEG, TIFF, animated GIF and MP4 video.
@@ -13,6 +17,12 @@ DrawBot can also be installed as a Python module, the app is not required.
 
 #### Install 
 
+The easiest way is to use pip:
+
+	$ pip install git+https://github.com/typemytype/drawbot
+
+To install it manually, follow these instructions:
+
 download: https://github.com/typemytype/drawbot/archive/master.zip
 
 run `cd <path/where/you/have/downloaded/and/unzipped/drawBot>`
@@ -21,13 +31,13 @@ run `python setup.py install`
 #### Usage
 
 ```Python
-    import drawBot
+import drawBot
 
-    drawBot.newDrawing()
-    drawBot.newPage(1000, 1000)
-    drawBot.rect(10, 10, 100, 100)
-    drawBot.saveImage("~/Desktop/aRect.png")
-    drawBot.endDrawing()
+drawBot.newDrawing()
+drawBot.newPage(1000, 1000)
+drawBot.rect(10, 10, 100, 100)
+drawBot.saveImage("~/Desktop/aRect.png")
+drawBot.endDrawing()
 ```
 
 It is adviced to start with `newDrawing()` and end with `endDrawing()`, to clear the instruction stack and remove installed fonts.
@@ -83,3 +93,6 @@ __Compile:__
 
 	cd path/To/drawBot
     python setup.py install
+
+
+## [Release protocol](https://github.com/typemytype/drawbot/wiki/DrawBot-release-protocol)

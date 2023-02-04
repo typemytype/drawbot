@@ -9,7 +9,7 @@ from fontTools.misc.xmlWriter import XMLWriter
 from fontTools.misc.transform import Transform
 
 from .tools.openType import getFeatureTagsForFontAttributes
-from .baseContext import BaseContext, GraphicsState, Shadow, Color, Gradient
+from .baseContext import BaseContext, GraphicsState, Shadow, Color, Gradient, BezierPath, FormattedString
 from .imageContext import _makeBitmapImageRep
 
 from drawBot.misc import warnings, formatNumber
@@ -236,11 +236,11 @@ class SVGContext(BaseContext):
 
     _svgFileClass = SVGFile
 
-    _svgTagArguments = {
-        "version": "1.1",
-        "xmlns": "http://www.w3.org/2000/svg",
-        "xmlns:xlink": "http://www.w3.org/1999/xlink"
-    }
+    _svgTagArguments = [
+        ("version", "1.1"),
+        ("xmlns", "http://www.w3.org/2000/svg"),
+        ("xmlns:xlink", "http://www.w3.org/1999/xlink")
+    ]
 
     _svgLineJoinStylesMap = {
         AppKit.NSMiterLineJoinStyle: "miter",
@@ -252,6 +252,12 @@ class SVGContext(BaseContext):
         AppKit.NSButtLineCapStyle: "butt",
         AppKit.NSSquareLineCapStyle: "square",
         AppKit.NSRoundLineCapStyle: "round",
+    }
+
+    _svgUnderlineStylesMap = {
+        AppKit.NSUnderlineStyleSingle: "",
+        AppKit.NSUnderlineStyleThick: "",
+        AppKit.NSUnderlineStyleDouble: "double",
     }
 
     indentation = " "
@@ -316,7 +322,8 @@ class SVGContext(BaseContext):
         self._svgContext = XMLWriter(self._svgData, encoding="utf-8", indentwhite=self.indentation)
         self._svgContext.width = self.width
         self._svgContext.height = self.height
-        self._svgContext.begintag("svg", width=self.width, height=self.height, **self._svgTagArguments)
+        attrs = [('width', self.width), ('height', self.height), ('viewBox', f"0 0 {self.width} {self.height}")]
+        self._svgContext.begintag("svg", attrs + self._svgTagArguments)
         self._svgContext.newline()
         self._state.transformMatrix = self._state.transformMatrix.scale(1, -1).translate(0, -self.height)
 
@@ -349,13 +356,23 @@ class SVGContext(BaseContext):
             self._svgBeginClipPath()
             data = self._svgDrawingAttributes()
             data["d"] = self._svgPath(self._state.path)
+            if self._state.path.svgID:
+                data["id"] = self._state.path.svgID
+            if self._state.path.svgClass:
+                data["class"] = self._state.path.svgClass
             data["transform"] = self._svgTransform(self._state.transformMatrix)
             if self._state.shadow is not None:
                 data["filter"] = "url(#%s)" % self._state.shadow.tagID
             if self._state.gradient is not None:
                 data["fill"] = "url(#%s)" % self._state.gradient.tagID
+            if self._state.path.svgLink:
+                self._svgContext.begintag("a", **{"xlink:href": self._state.path.svgLink})
+                self._svgContext.newline()
             self._svgContext.simpletag("path", **data)
             self._svgContext.newline()
+            if self._state.path.svgLink:
+                self._svgContext.endtag("a")
+                self._svgContext.newline()
             self._svgEndClipPath()
 
     def _clipPath(self):
@@ -372,12 +389,12 @@ class SVGContext(BaseContext):
         self._svgContext.newline()
         self._state.clipPathID = uniqueID
 
-    def _textBox(self, txt, box, align):
+    def _textBox(self, rawTxt, box, align):
         path, (x, y) = self._getPathForFrameSetter(box)
         canDoGradients = True
         if align == "justified":
             warnings.warn("justified text is not supported in a svg context")
-        attrString = self.attributedString(txt, align=align)
+        attrString = self.attributedString(rawTxt, align=align)
         if self._state.hyphenation:
             attrString = self.hyphenateAttributedString(attrString, path)
         txt = attrString.string()
@@ -393,6 +410,14 @@ class SVGContext(BaseContext):
         }
         if self._state.shadow is not None:
             data["filter"] = "url(#%s_flipped)" % self._state.shadow.tagID
+        if isinstance(rawTxt, FormattedString):
+            if rawTxt.svgID:
+                data["id"] = rawTxt.svgID
+            if rawTxt.svgClass:
+                data["class"] = rawTxt.svgClass
+            if rawTxt.svgLink:
+                self._svgContext.begintag("a", **{"xlink:href": rawTxt.svgLink})
+                self._svgContext.newline()
         self._svgContext.begintag("text", **data)
         self._svgContext.newline()
 
@@ -409,18 +434,20 @@ class SVGContext(BaseContext):
                 attributes = CoreText.CTRunGetAttributes(ctRun)
                 font = attributes.get(AppKit.NSFontAttributeName)
                 fontDescriptor = font.fontDescriptor()
-                fontAttributes = fontDescriptor.fontAttributes()
                 fillColor = attributes.get(AppKit.NSForegroundColorAttributeName)
                 strokeColor = attributes.get(AppKit.NSStrokeColorAttributeName)
                 strokeWidth = attributes.get(AppKit.NSStrokeWidthAttributeName, self._state.strokeWidth)
                 baselineShift = attributes.get(AppKit.NSBaselineOffsetAttributeName, 0)
-                openTypeFeatures = fontAttributes.get(CoreText.NSFontFeatureSettingsAttribute)
+                openTypeFeatures = attributes.get("drawbot.openTypeFeatures")
+                underline = attributes.get(AppKit.NSUnderlineStyleAttributeName)
+                url = attributes.get(AppKit.NSLinkAttributeName)
 
                 fontName = font.fontName()
                 fontSize = font.pointSize()
                 fontFallbacks = [fallbackFont.postscriptName() for fallbackFont in fontDescriptor.get(CoreText.NSFontCascadeListAttribute, [])]
                 fontNames = ", ".join([fontName] + fontFallbacks)
 
+                style = dict()
                 spanData = dict(defaultData)
                 fill = self._colorClass(fillColor).svgColor()
                 if fill:
@@ -439,15 +466,19 @@ class SVGContext(BaseContext):
                 spanData["font-size"] = formatNumber(fontSize)
 
                 if openTypeFeatures:
-                    featureTags = getFeatureTagsForFontAttributes(openTypeFeatures)
-                    spanData["style"] = self._svgStyle(**{
-                            "font-feature-settings": self._svgStyleOpenTypeFeatures(featureTags)
-                        }
-                    )
+                    style["font-feature-settings"] = self._svgStyleOpenTypeFeatures(openTypeFeatures)
 
                 if canDoGradients and self._state.gradient is not None:
                     spanData["fill"] = "url(#%s_flipped)" % self._state.gradient.tagID
 
+                if underline is not None:
+                    style["text-decoration"] = "underline"
+                    underlineStyle = self._svgUnderlineStylesMap.get(underline)
+                    if underlineStyle:
+                        style["text-decoration-style"] = underlineStyle
+
+                if style:
+                    spanData["style"] = self._svgStyle(**style)
                 self._save()
 
                 runTxt = txt.substringWithRange_((stringRange.location, stringRange.length))
@@ -464,16 +495,25 @@ class SVGContext(BaseContext):
 
                 spanData["x"] = formatNumber(originX + runX)
                 spanData["y"] = formatNumber(self.height - originY - runY + baselineShift)
+                if url is not None:
+                    self._svgContext.begintag("a", href=url.absoluteString())
+                    self._svgContext.newline()
                 self._svgContext.begintag("tspan", **spanData)
                 self._svgContext.newline()
                 self._svgContext.write(runTxt)
                 self._svgContext.newline()
                 self._svgContext.endtag("tspan")
                 self._svgContext.newline()
+                if url is not None:
+                    self._svgContext.endtag("a")
+                    self._svgContext.newline()
                 self._restore()
 
         self._svgContext.endtag("text")
         self._svgContext.newline()
+        if isinstance(rawTxt, FormattedString) and rawTxt.svgLink:
+            self._svgContext.endtag("a")
+            self._svgContext.newline()
         self._svgEndClipPath()
 
     def _image(self, path, xy, alpha, pageNumber):
@@ -620,48 +660,28 @@ class SVGContext(BaseContext):
         return None
 
     def _svgStyleOpenTypeFeatures(self, featureTags):
-        return ", ".join(["'%s'" % tag for tag in featureTags])
+        return ", ".join(["'%s' %s" % (tag, int(value)) for tag, value in featureTags.items()])
 
     def _svgStyle(self, **kwargs):
         style = []
         if self._state.blendMode is not None:
             style.append("mix-blend-mode: %s;" % self._state.blendMode)
-        for key, value in kwargs.items():
+        for key, value in sorted(kwargs.items()):
             style.append("%s: %s;" % (key, value))
         return " ".join(style)
 
-    def installFont(self, path):
-        success, error = super(self.__class__, self).installFont(path)
-        # if path not in self._embeddedFonts:
-        #     warnings.warn("Your font will be embedded and accessibele")
-        #     self._embeddedFonts.add(path)
-
-        #     f = open(path, "r")
-        #     fontData = f.read()
-        #     f.close()
-        #     fontName = self._fontNameForPath(path)
-
-        #     ctx = self._svgContext
-        #     ctx.begintag("defs")
-        #     ctx.newline()
-        #     ctx.begintag("style", type="text/css")
-        #     ctx.newline()
-        #     ctx.write("@font-face {")
-        #     ctx.newline()
-        #     ctx.indent()
-        #     ctx.write("font-family: %s;" % fontName)
-        #     ctx.newline()
-        #     if path.startswith("http"):
-        #         ctx.write("src: url(%s');" % path)
-        #     else:
-        #         ctx.write("src: url('data:application/font-woff;charset=utf-8;base64,%s');" % base64.b64encode(fontData))
-        #     ctx.newline()
-        #     ctx.dedent()
-        #     ctx.write("}")
-        #     ctx.newline()
-        #     ctx.endtag("style")
-        #     ctx.newline()
-        #     ctx.endtag("defs")
-        #     ctx.newline()
-
-        return success, error
+    def _linkURL(self, url, xywh):
+        x, y, w, h = xywh
+        rectData = dict(
+            x=x,
+            y=self.height-y-h,
+            width=w,
+            height=h,
+            fill="transparent",
+        )
+        self._svgContext.begintag("a", href=url)
+        self._svgContext.newline()
+        self._svgContext.simpletag('rect', **rectData)
+        self._svgContext.newline()
+        self._svgContext.endtag("a")
+        self._svgContext.newline()

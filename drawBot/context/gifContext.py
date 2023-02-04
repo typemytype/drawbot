@@ -1,5 +1,4 @@
 import Quartz
-
 import tempfile
 
 from .imageContext import ImageContext, getSaveImageOptions
@@ -15,7 +14,9 @@ class GIFContext(ImageContext):
         "imageGIFDitherTransparency",
         "imageGIFRGBColorTable",
         "imageColorSyncProfileData",
-    ])
+    ]) + [
+        ("imageGIFLoop", "Boolean that indicates whether the animated gif should loop")
+    ]
 
     _delay = 10
 
@@ -41,7 +42,13 @@ class GIFContext(ImageContext):
             options["multipage"] = True
             tempPath = tempfile.mkstemp(suffix=".gif")[1]
 
-        inputPaths = super(GIFContext, self)._writeDataToFile(data, tempPath, options)
+        self._inputPaths = []
+        super()._writeDataToFile(data, tempPath, options)
 
         if shouldBeAnimated:
-            generateGif(inputPaths, path, self._delayData)
+            generateGif(self._inputPaths, path, self._delayData, options.get("imageGIFLoop", True))
+        del self._inputPaths
+
+    def _storeImageData(self, imageData, imagePath):
+        super()._storeImageData(imageData, imagePath)
+        self._inputPaths.append(imagePath)

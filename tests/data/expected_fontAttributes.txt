@@ -1,0 +1,46 @@
+Times
+Times-Roman
+True
+True
+False
+True
+True
+False
+Times.ttc
+['.null', 'nonmarkingreturn', 'space', 'exclam', 'quotedbl', 'numbersign']
+37.5
+-12.5
+22.6806640625
+33.0810546875
+0.0
+61.0
+
+../data/MutatorSans.ttf
+MutatorMathTest-LightCondensed
+True
+False
+False
+True
+False
+False
+MutatorSans.ttf
+['A', 'B', 'C', 'D', 'E', 'F']
+40.000152587890625
+-9.999847412109375
+25.0
+35.0
+9.999847412109375
+60.0
+
+MutatorMathTest-LightCondensed
+MutatorSans.ttc 0
+MutatorMathTest-LightWide
+MutatorSans.ttc 1
+MutatorMathTest-BoldCondensed
+MutatorSans.ttc 2
+MutatorMathTest-BoldWide
+MutatorSans.ttc 3
+
+Courier Courier.dfont 0
+Courier-Bold Courier.dfont 1
+Courier-Oblique Courier.dfont 2

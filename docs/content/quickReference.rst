@@ -44,7 +44,7 @@ Quick Reference
 
     newPage()
     # image: path, (x, y), alpha
-    image("http://f.cl.ly/items/1T3x1y372J371p0v1F2Z/drawBot.jpg", (10, 10), .5)
+    image("https://github.com/typemytype/drawbot/raw/master/docs/content/assets/drawBot.jpg", (10, 10), .5)
 
     newPage()
     print("pageCount:", pageCount())

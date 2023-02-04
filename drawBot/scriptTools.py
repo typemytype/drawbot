@@ -3,20 +3,16 @@ import time
 import os
 import sys
 import traceback
-import site
 import re
 import warnings
+from packaging.version import Version
 from signal import SIGINT
 import ctypes
 from ctypes.util import find_library
 import threading
-from distutils.version import StrictVersion
-import platform
-from drawBot.misc import getDefault
+from .misc import getDefault
+from .macOSVersion import macOSVersion
 from objc import super
-
-osVersionCurrent = StrictVersion(platform.mac_ver()[0])
-osVersion10_10 = StrictVersion("10.10")
 
 
 # Pulling in CheckEventQueueForUserCancel from Carbon.framework
@@ -60,7 +56,7 @@ class StdOutput(object):
                 t = time.time()
                 if t - self._previousFlush > 0.2:
                     self.outputView.scrollToEnd()
-                    if osVersionCurrent >= osVersion10_10:
+                    if macOSVersion >= Version("10.10"):
                         AppKit.NSRunLoop.mainRunLoop().runUntilDate_(AppKit.NSDate.dateWithTimeIntervalSinceNow_(0.0001))
                     self._previousFlush = t
         else:
@@ -75,24 +71,6 @@ class StdOutput(object):
 
     def close(self):
         pass
-
-
-def _addLocalSysPaths():
-    version = "%s.%s" % (sys.version_info.major, sys.version_info.minor)
-    paths = [
-        # add local stdlib and site-packages; TODO: this needs editing once we embed the full stdlib
-        '/Library/Frameworks/Python.framework/Versions/%s/lib/python%s' % (version, version),
-        '/Library/Frameworks/Python.framework/Versions/%s/lib/python%s/lib-dynload' % (version, version),
-        '/Library/Frameworks/Python.framework/Versions/%s/lib/python%s/site-packages' % (version, version),
-    ]
-
-    paths.append('/Library/Python/%s/site-packages' % version)
-
-    for path in paths:
-        if path not in sys.path and os.path.exists(path):
-            site.addsitedir(path)
-
-_addLocalSysPaths()
 
 
 class _Helper(object):

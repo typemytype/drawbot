@@ -1,5 +1,3 @@
-from __future__ import print_function
-
 import py2app
 from distutils.core import setup
 from distutils.sysconfig import get_python_lib
@@ -138,7 +136,7 @@ plist = dict(
     LSMinimumSystemVersion=osxMinVersion,
     LSApplicationCategoryType="public.app-category.graphics-design",
     LSMinimumSystemVersionByArchitecture=dict(i386=osxMinVersion, x86_64=osxMinVersion),
-    LSArchitecturePriority=["x86_64", "i386"],
+    LSArchitecturePriority=["arm64", "x86_64", "i386"],
     CFBundleShortVersionString=__version__,
     CFBundleVersion=__version__,
     CFBundleIconFile=iconFile,
@@ -173,6 +171,7 @@ for fileName in os.listdir("Resources/externalTools"):
 setup(
     name=appName,
     data_files=dataFiles,
+    packages=[],
     app=[dict(script="DrawBot.py", plist=plist)],
     options=dict(
         py2app=dict(
@@ -188,7 +187,6 @@ setup(
                 'ufo2svg',
                 'fontPens',
                 'booleanOperations',
-                'uharfbuzz',
                 # 'pyclipper',
                 'pygments',
                 'jedi',
@@ -197,6 +195,11 @@ setup(
                 # 'xml'
                 'pkg_resources',
                 'parso',
+                'pip',
+                "setuptools",
+                "packaging",
+                "PIL",
+                "black",
             ],
             includes=[
                 # 'csv',
@@ -206,7 +209,6 @@ setup(
                 "numpy",
                 "scipy",
                 "matplotlib",
-                "PIL",
                 "pygame",
                 "wx",
                 "sphinx",
@@ -235,6 +237,15 @@ existingDmgLocation = os.path.join(distLocation, "%s.dmg" % appName)
 dmgLocation = os.path.join(distLocation, appName)
 pythonVersion = "python%s.%i" % (sys.version_info[0], sys.version_info[1])
 pythonLibPath = os.path.join(resourcesPath, "lib", pythonVersion)
+appToolsRoot = os.path.join(drawBotRoot, "app")
+
+if "-A" in sys.argv:
+    for path, currentDirectory, files in os.walk(appLocation):
+        for file in files:
+            if file == ".DS_Store":
+                filePath = os.path.join(path, file)
+                os.remove(filePath)
+
 
 if "-A" not in sys.argv:
     # make sure the external tools have the correct permissions
@@ -284,29 +295,10 @@ if buildDMG or ftpHost is not None:
 
     if codeSignDeveloperName:
         # ================
-        # = code singing =
+        # = code signing =
         # ================
-        print("---------------------")
-        print("-   code signing    -")
-        cmds = ["codesign", "--force", "--deep", "--sign", "Developer ID Application: %s" % codeSignDeveloperName, appLocation]
-        popen = subprocess.Popen(cmds)
+        popen = subprocess.Popen([os.path.join(appToolsRoot, "codesign-app.sh"), "Developer ID Application: %s" % codeSignDeveloperName, appLocation, os.path.join(appToolsRoot, "entitlements.xml")])
         popen.wait()
-        print("- done code singing -")
-        print("---------------------")
-
-        print("------------------------------")
-        print("- verifying with codesign... -")
-        cmds = ["codesign", "--verify", "--verbose=4", appLocation]
-        popen = subprocess.Popen(cmds)
-        popen.wait()
-        print("------------------------------")
-
-        print("---------------------------")
-        print("- verifying with spctl... -")
-        cmds = ["spctl", "--verbose=4", "--raw", "--assess", "--type", "execute", appLocation]
-        popen = subprocess.Popen(cmds)
-        popen.wait()
-        print("---------------------------")
 
     # ================
     # = creating dmg =
@@ -384,9 +376,9 @@ if buildDMG or ftpHost is not None:
                 "--notarization-info", notarisationRequestUUID,
                 "-u", notarizeDeveloper,
                 "-p", notarizePassword,
-                "--output-format",  "xml"
+                "--output-format", "xml"
                 ]
-            countDown = 2
+            countDown = 16
             while countDown:
                 with tempfile.TemporaryFile(mode='w+b') as stdoutFile:
                     popen = subprocess.Popen(notarizeInfo, stdout=stdoutFile)
@@ -397,6 +389,7 @@ if buildDMG or ftpHost is not None:
 
                     if "notarization-info" in data:
                         status = data["notarization-info"].get("Status", "").lower()
+                        print("     notarization status:", status)
                         if status == "success":
                             notarisationSucces = True
                             print("notarization succes")
@@ -404,9 +397,20 @@ if buildDMG or ftpHost is not None:
                         if status == "invalid":
                             print("notarization invalid")
                             break
-                    print("Not completed yet. Sleeping for 30 seconds")
+                    print("     Not completed yet. Sleeping for 30 seconds")
                 countDown -= 1
                 time.sleep(30)
+
+            if "notarization-info" in data:
+                logURL = data["notarization-info"].get("LogFileURL")
+                print("get notarization log")
+                notarizeLogPath = os.path.join(distLocation, 'notarize_log.txt')
+                if logURL:
+                    os.system(f"curl -s {logURL} > {notarizeLogPath}")
+                else:
+                    # create the file
+                    open(notarizeLogPath, 'w').close()
+
             print("done getting notarization info")
 
         if notarisationSucces:

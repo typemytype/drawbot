@@ -1,6 +1,9 @@
+setuptools>=45.2.0
+packaging
 pyobjc
+corefoundationasyncio
 py2app
-git+https://github.com/robotools/vanilla
+cocoa-vanilla==0.2.0
 defcon
 git+https://github.com/robotools/defconAppKit
 fontTools[ufo,lxml,woff,unicode,type1]
@@ -8,6 +11,7 @@ fs
 brotli
 pygments
 jedi
+pillow
 attrs
 booleanOperations
 mutatorMath
@@ -18,7 +22,10 @@ git+https://github.com/typesupply/woffTools
 git+https://github.com/robotools/compositor
 git+https://github.com/robotools/extractor
 git+https://github.com/typesupply/ufo2svg
-git+https://github.com/typemytype/ufo2fdk
+git+https://github.com/robotools/ufo2fdk
 git+https://github.com/typesupply/feaPyFoFum
 git+https://github.com/typesupply/feaTools2
-uharfbuzz
+pip
+packaging
+black==21.12b0  # Pin to older version to avoid dependency problems; see https://github.com/ronaldoussoren/py2app/issues/476
+pytz

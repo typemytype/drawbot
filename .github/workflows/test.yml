@@ -1,0 +1,67 @@
+name: DrawBot Test Bench
+
+on:
+  push:
+    branches:
+    - master
+  pull_request:
+    branches:
+    - master
+
+jobs:
+  test:
+
+    runs-on: macos-latest
+
+    steps:
+    - name: Set up Python 3.9
+      run: |
+        curl https://www.python.org/ftp/python/3.9.13/python-3.9.13-macosx10.9.pkg --output pythonInstaller.pkg
+        sudo installer -pkg pythonInstaller.pkg -target /
+
+    - name: Check python
+      run: |
+        python3 --version
+        python3 -c "import platform; print('macOS version:', platform.mac_ver()[0])"
+
+    - name: Checkout
+      uses: actions/checkout@v1
+
+    - name: Setup Virtual Environment
+      run: |
+        python3 -m venv venv
+        source venv/bin/activate
+        python -c "import sys; print('\n'.join(sys.path))"
+
+    - name: Install dependencies
+      run: |
+        source venv/bin/activate
+        pip install -r ./test-requirements.txt
+        pip install .
+        pip install codecov
+
+    - name: Run tests
+      run: |
+        source venv/bin/activate
+        coverage run ./tests/runAllTests.py
+
+    - name: Storing Test Data Artifacts
+      if: failure()
+      uses: actions/upload-artifact@master
+      with:
+        name: DrawBot Temp Data Results
+        path: ./tests/tempTestData
+
+    - name: Building Test Differences
+      if: failure()
+      run: |
+        source venv/bin/activate
+        python ./tests/differenceBuilder.py ./tests/tempTestData ./tests/differences.pdf
+
+    - name: Storing Test Differences
+      if: failure()
+      uses: actions/upload-artifact@master
+      with:
+        name: DrawBot Test Differences
+        path: ./tests/differences.pdf
+
