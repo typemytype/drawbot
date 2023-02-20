@@ -4,7 +4,7 @@
 
 ## [3.130] 2023-02-20
 
-- Disable `cmd .` cancel short cut as does crash DrawBot.
+- Disable `cmd .` cancel short cut.
 - Fix bug in auto completion.
 - Fix missing standard lib modules.
 - Switch to notarytool for notarizing the app bundle.
