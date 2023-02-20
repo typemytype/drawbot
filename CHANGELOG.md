@@ -1,6 +1,11 @@
 # Changelog For DrawBot
 
-## [3.130] ...
+## [3.130] 2023-02-20
+
+- Disable `cmd .` cancel short cut as does crash DrawBot.
+- Fix bug in auto completion.
+- Fix missing standard lib modules.
+- Switch to notarytool for notarizing the app bundle.
 
 ## [3.129] 2022-12-21
 
@@ -20,11 +25,11 @@
 
 - Fixing bug when adding glyphNames to a formattedString with fontVariation settings.
 - Always set the ligature default to workaround a bug in macOS
-- Improve error messages for ill-specified fonts 
+- Improve error messages for ill-specified fonts
 
 ## [3.127] 2021-04-29
 
-- Allow `Path` objects in places where a path is an argument: `saveImage(pathObject)`, `image(pathObject, ...)` 
+- Allow `Path` objects in places where a path is an argument: `saveImage(pathObject)`, `image(pathObject, ...)`
 - Add support for asyncio by lauching the app with corefoundationasyncio.
 - Remove `mov` context in favor of `mp4` as `QTKit` is not supported anymore.
 - Always draw a white background while rendering to `mp4`.
@@ -41,7 +46,7 @@
 - Add `textBoxCharacterBounds(text, box)` returning a list of typesetted bounding boxes.
 - Improve `text(..)` typesetting with multiline text and paragraph styles.
 - Add `formattedString.url(url)`.
-- Add `linkURL(url, box)`. 
+- Add `linkURL(url, box)`.
 - Add option `continuous` in `Variable(.., continuous=False)`.
 
 ## [3.125] 2020-04-22
