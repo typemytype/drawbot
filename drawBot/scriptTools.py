@@ -19,6 +19,11 @@ from objc import super
 CheckEventQueueForUserCancel = None
 
 def retrieveCheckEventQueueForUserCancelFromCarbon():
+    # something to fix later
+    # cmd . to cancel a script does not work and even crashes the app
+    # see https://github.com/typemytype/drawbot/issues/501
+    #     https://github.com/typemytype/drawbot/issues/505
+    return None
     # call this function explicit from the app didFinishLaunching
     global CheckEventQueueForUserCancel
     _carbonPath = find_library("Carbon")
