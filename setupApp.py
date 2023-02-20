@@ -7,6 +7,7 @@ import sys
 import subprocess
 import shutil
 import tempfile
+import json
 import time
 import datetime
 import re
@@ -105,6 +106,7 @@ runTests = getValueFromSysArgv("--runTests", isBooleanFlag=True)
 
 notarizeDeveloper = getValueFromSysArgv("--notarizedeveloper")
 notarizePassword = getValueFromSysArgv("--notarizePassword")
+notarizeTeamID = getValueFromSysArgv("--notarizeTeamID")
 
 
 osxMinVersion = "10.9.0"
@@ -333,91 +335,65 @@ if buildDMG or ftpHost is not None:
         print("-    notarizing dmg   -")
         notarize = [
             "xcrun",
-            "altool",
-            "--notarize-app",
-            "-t",
-            "osx",
-            "--file",
-            existingDmgLocation,
-            "--primary-bundle-id", bundleIdentifier,
-            "-u", notarizeDeveloper,
-            "-p", notarizePassword,
-            "--output-format", "xml"
-        ]
-
-        notarizeStapler = [
-            "xcrun",
-            "stapler",
-            "staple", existingDmgLocation
+            "notarytool",
+            "submit",
+            "--apple-id", notarizeDeveloper,
+            "--team-id", notarizeTeamID,
+            "--password", notarizePassword,
+            "--output-format", "json",
+            "--wait",
+            existingDmgLocation
         ]
 
         print("notarizing app")
-        notarisationRequestUUID = None
+        notarisationRequestID = None
+
         with tempfile.TemporaryFile(mode='w+b') as stdoutFile:
             popen = subprocess.Popen(notarize, stdout=stdoutFile)
             popen.wait()
             stdoutFile.seek(0)
             data = stdoutFile.read()
-            data = plistlib.loads(data)
-            if "notarization-upload" in data:
-                notarisationRequestUUID = data["notarization-upload"].get("RequestUUID")
-                print("notarisation Request UUID:", notarisationRequestUUID)
+            data = json.loads(data)
+            print("notarisation data:")
+            print("\n".join([f"     {k}: {v}" for k, v, in data.items()]))
 
-            if "product-errors" in data:
-                print("\n".join([e["message"] for e in data["product-errors"]]))
+            if "id" in data:
+                notarisationRequestID = data["id"]
+                print("notarisation Request ID:", notarisationRequestID)
+
         print("done notarizing app")
 
-        notarisationSucces = False
-        if notarisationRequestUUID:
+        if notarisationRequestID:
             print("getting notarization info")
             notarizeInfo = [
                 "xcrun",
-                "altool",
-                "--notarization-info", notarisationRequestUUID,
-                "-u", notarizeDeveloper,
-                "-p", notarizePassword,
-                "--output-format", "xml"
-                ]
-            countDown = 16
-            while countDown:
-                with tempfile.TemporaryFile(mode='w+b') as stdoutFile:
-                    popen = subprocess.Popen(notarizeInfo, stdout=stdoutFile)
-                    popen.wait()
-                    stdoutFile.seek(0)
-                    data = stdoutFile.read()
-                    data = plistlib.loads(data)
+                "notarytool",
+                "log",
+                "--apple-id", notarizeDeveloper,
+                "--team-id", notarizeTeamID,
+                "--password", notarizePassword,
+                notarisationRequestID,
+            ]
 
-                    if "notarization-info" in data:
-                        status = data["notarization-info"].get("Status", "").lower()
-                        print("     notarization status:", status)
-                        if status == "success":
-                            notarisationSucces = True
-                            print("notarization succes")
-                            break
-                        if status == "invalid":
-                            print("notarization invalid")
-                            break
-                    print("     Not completed yet. Sleeping for 30 seconds")
-                countDown -= 1
-                time.sleep(30)
-
-            if "notarization-info" in data:
-                logURL = data["notarization-info"].get("LogFileURL")
-                print("get notarization log")
-                notarizeLogPath = os.path.join(distLocation, 'notarize_log.txt')
-                if logURL:
-                    os.system(f"curl -s {logURL} > {notarizeLogPath}")
-                else:
-                    # create the file
-                    open(notarizeLogPath, 'w').close()
+            with open(os.path.join(distLocation, 'notarize_log.txt'), "w+b") as stdoutFile:
+                popen = subprocess.Popen(notarizeInfo, stdout=stdoutFile)
+                popen.wait()
 
             print("done getting notarization info")
+        else:
+            print("*" * 50)
+            print("notarization failed")
+            print("*" * 50)
 
-        if notarisationSucces:
-            print("stapler")
-            popen = subprocess.Popen(notarizeStapler)
-            popen.wait()
-            print("done stapler")
+        print("stapler")
+        notarizeStapler = [
+            "xcrun",
+            "stapler",
+            "staple", existingDmgLocation
+        ]
+        popen = subprocess.Popen(notarizeStapler)
+        popen.wait()
+        print("done stapler")
 
         print("- done notarizing dmg -")
         print("----------------------")
