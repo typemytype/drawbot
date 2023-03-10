@@ -81,6 +81,29 @@ class MiscTest(unittest.TestCase):
         namedInstances = _roundInstanceLocations(namedInstances)
         self.assertEqual(namedInstances, expectedNamedInstances)
 
+    def test_textProperties(self):
+        drawBot.newDrawing()
+        fs = drawBot.FormattedString()
+        self.assertEqual(fs.textProperties(), fs._formattedAttributes)
+        fs.font("Skia")
+        self.assertEqual(fs.textProperties()["font"], "Skia")
+        fs.fill(1, 0, 0)
+        self.assertEqual(fs.textProperties()["fill"], (1, 0, 0))
+        fs.openTypeFeatures(liga=True)
+        self.assertEqual(fs.textProperties()["openTypeFeatures"], dict(liga=True))
+
+        fs += "foo"
+        fs.fill(0, 1, 0)
+        fs += "bar"
+        fs.fill(None)
+        fs += "world"
+        characterBounds = drawBot.textBoxCharacterBounds(fs, (0, 0, 1000, 1000))
+        fillColors = []
+        for characterBound in characterBounds:
+            fillColors.append(characterBound.formattedSubString.textProperties()["fill"])
+        self.assertEqual(fillColors, [(1, 0, 0), (0, 1, 0), None])
+
+
     def test_polygon_notEnoughPoints(self):
         drawBot.newDrawing()
         with self.assertRaises(TypeError):

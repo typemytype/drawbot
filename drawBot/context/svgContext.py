@@ -438,7 +438,7 @@ class SVGContext(BaseContext):
                 strokeColor = attributes.get(AppKit.NSStrokeColorAttributeName)
                 strokeWidth = attributes.get(AppKit.NSStrokeWidthAttributeName, self._state.strokeWidth)
                 baselineShift = attributes.get(AppKit.NSBaselineOffsetAttributeName, 0)
-                openTypeFeatures = attributes.get("drawbot.openTypeFeatures")
+                openTypeFeatures = attributes.get("drawBot.formattedString.properties", dict()).get("openTypeFeatures")
                 underline = attributes.get(AppKit.NSUnderlineStyleAttributeName)
                 url = attributes.get(AppKit.NSLinkAttributeName)
 
