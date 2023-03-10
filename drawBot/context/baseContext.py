@@ -1103,10 +1103,14 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
         """
         Return a dict with all current stylistic text properties.
         """
-        return {
-            attributeName: getattr(self, f"_{attributeName}", defaultValue)
-            for attributeName, defaultValue in self._formattedAttributes.items()
-        }
+        properties = dict()
+        for attributeName, defaultValue in self._formattedAttributes.items():
+            value = getattr(self, f"_{attributeName}", defaultValue)
+            # create new object if the value is a dictionary
+            if isinstance(value, dict):
+                value = dict(value)
+            properties[attributeName] = value
+        return properties
 
     def _setAttribute(self, attribute, value):
         method = getattr(self, attribute)
