@@ -1902,7 +1902,7 @@ class DrawBotDrawingTool(object):
     def image(self, path, position, alpha=1, pageNumber=None):
         """
         Add an image from a `path` with an `offset` and an `alpha` value.
-        This should accept most common file types like pdf, jpg, png, tiff and gif.
+        This should accept most common file types like pdf, jpg, png, tiff, gif and `NSImage`.
 
         Optionally an `alpha` can be provided, which is a value between 0 and 1.
 
@@ -1922,7 +1922,7 @@ class DrawBotDrawingTool(object):
 
     def imageSize(self, path, pageNumber=None):
         """
-        Return the `width` and `height` of an image.
+        Return the `width` and `height` of an image. Supports pdf, jpg, png, tiff, gif and `NSImage`.
 
         .. downloadcode:: imageSize.py
 
@@ -1974,7 +1974,8 @@ class DrawBotDrawingTool(object):
 
     def imagePixelColor(self, path, xy):
         """
-        Return the color `r, g, b, a` of an image at a specified `x`, `y` possition.
+        Return the color `r, g, b, a` of an image at a specified `x`, `y` position.
+        Supports pdf, jpg, png, tiff, gif and `NSImage`.
 
         .. downloadcode:: pixelColor.py
 
@@ -2034,7 +2035,7 @@ class DrawBotDrawingTool(object):
 
     def imageResolution(self, path):
         """
-        Return the image resolution for a given image.
+        Return the image resolution for a given image. Supports pdf, jpg, png, tiff, gif and `NSImage`.
         """
         if isinstance(path, AppKit.NSImage):
             # its an NSImage
@@ -2438,7 +2439,7 @@ class DrawBotDrawingTool(object):
     def ImageObject(self, path=None):
         """
         Return a Image object, packed with filters.
-        This is a reusable object.
+        This is a reusable object. Supports pdf, jpg, png, tiff, gif and `NSImage`.
 
         .. downloadcode:: imageObject.py
 
