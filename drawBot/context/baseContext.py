@@ -1630,6 +1630,25 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
         font = getNSFontFromNameOrPath(fontNameOrPath, 10, fontNumber)
         return variation.getVariationAxesForFont(font)
 
+    def fontNamedInstance(self, name, fontNameOrPath=None):
+        """
+        Set a font with `name` of a named instance.
+        The `name` of the named instance must be listed in `listNamedInstances()`,
+
+        Optionally a `fontNameOrPath` can be given. If a font path is given that `fontNameOrPath` will be set.
+        """
+        if fontNameOrPath:
+            self.font(fontNameOrPath)
+        instances = self.listNamedInstances()
+        if name in instances:
+            self.fontVariations(**instances[name])
+        else:
+            font = getNSFontFromNameOrPath(self._font, self._fontSize, self._fontNumber)
+            fontName = getFontName(font)
+            if fontName is None:
+                fontName = self._font
+            raise DrawBotError(f"Can not find instance with name: '{name}' for '{fontName}'.")
+
     def listNamedInstances(self, fontNameOrPath=None, fontNumber=0):
         """
         List all named instances from a variable font for the current font.
@@ -2424,6 +2443,9 @@ class BaseContext(object):
 
     def fontVariations(self, *args, **axes):
         return self._state.text.fontVariations(*args, **axes)
+
+    def fontNamedInstance(self, name, fontNameOrPath):
+        self._state.text.fontNamedInstance(name, fontNameOrPath)
 
     def attributedString(self, txt, align=None):
         if isinstance(txt, FormattedString):
