@@ -1482,7 +1482,7 @@ class DrawBotDrawingTool(object):
         Set the preferred language as language tag or None to use the default language.
         A language tag might be a [iso639-2 or iso639-1](https://www.loc.gov/standards/iso639-2/php/English_list.php)
         code or a locale identifier supported by local OS.
-        A warning will be raised if the language tag is not supported.
+        A warning will be issued if the language tag is not supported.
 
         `language()` will activate the `locl` OpenType features, if supported by the current font.
 
