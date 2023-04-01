@@ -21,6 +21,10 @@ for fontName in ["Times", "../data/MutatorSans.ttf"]:
     print(drawBot.fontLineHeight())
     print()
 
+print(drawBot.font("Apple Color Emoji"))
+print(drawBot.fontContainsCharacters(chr(0x1F004)))
+print()
+
 for i in range(4):
     print(drawBot.font("../data/MutatorSans.ttc", fontNumber=i))
     print(os.path.basename(drawBot.fontFilePath()), drawBot.fontFileFontNumber())

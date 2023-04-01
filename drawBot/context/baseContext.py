@@ -1801,7 +1801,10 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
         font = self._getNSFontWithFallback()
         if font is None:
             return False
-        result, glyphs = CoreText.CTFontGetGlyphsForCharacters(font, characters, None, len(characters))
+        # Issue 524: we need to pass the number of UTF-16 characters or it won't work for
+        # characters > U+FFFF
+        count = len(characters.encode("utf-16-be")) // 2
+        result, glyphs = CoreText.CTFontGetGlyphsForCharacters(font, characters, None, count)
         return result
 
     def fontContainsGlyph(self, glyphName):
