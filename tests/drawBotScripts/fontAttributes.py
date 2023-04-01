@@ -21,6 +21,7 @@ for fontName in ["Times", "../data/MutatorSans.ttf"]:
     print(drawBot.fontLineHeight())
     print()
 
+# https://github.com/typemytype/drawbot/issues/524
 print(drawBot.font("Apple Color Emoji"))
 print(drawBot.fontContainsCharacters(chr(0x1F004)))
 print()
