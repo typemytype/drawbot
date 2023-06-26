@@ -96,6 +96,9 @@ class PDFContext(BaseContext):
         value = self._blendModeMap[operation]
         Quartz.CGContextSetBlendMode(self._pdfContext, value)
 
+    def _opacity(self, value):
+        Quartz.CGContextSetAlpha(self._pdfContext, value)
+
     def _drawPath(self):
         if self._state.path:
             self._save()
@@ -279,6 +282,7 @@ class PDFContext(BaseContext):
         self._save()
         _isPDF, image = self._getImageSource(path, pageNumber)
         if image is not None:
+            alpha *= self._state.opacity
             Quartz.CGContextSetAlpha(self._pdfContext, alpha)
             if _isPDF:
                 Quartz.CGContextSaveGState(self._pdfContext)

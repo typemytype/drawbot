@@ -937,6 +937,13 @@ class DrawBotDrawingTool(object):
         self._requiresNewFirstPage = True
         self._addInstruction("cmykStroke", c, m, y, k, alpha)
 
+    def opacity(self, value):
+        """
+        Sets the current opacity value. The `value` argument must be a value between 0.0 and 1.0.
+        """
+        self._requiresNewFirstPage = True
+        self._addInstruction("opacity", value)
+
     def shadow(self, offset, blur=None, color=None):
         """
         Adds a shadow with an `offset` (x, y), `blur` and a `color`.

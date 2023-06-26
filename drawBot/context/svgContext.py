@@ -565,7 +565,7 @@ class SVGContext(BaseContext):
         data = [
             ("x", 0),
             ("y", 0),
-            ("opacity", alpha),
+            ("opacity", alpha * self._state.opacity),
             ("transform", self._svgTransform(self._state.transformMatrix.translate(x, y + height).scale(1, -1))),
             ("xlink:href", "#%s" % imageID)
         ]
@@ -631,7 +631,7 @@ class SVGContext(BaseContext):
             c, a = fill
             data["fill"] = c
             if a != 1:
-                data["fill-opacity"] = a
+                data["fill-opacity"] = a * self._state.opacity
         else:
             data["fill"] = "none"
         stroke = self._svgStrokeColor()
@@ -639,7 +639,7 @@ class SVGContext(BaseContext):
             c, a = stroke
             data["stroke"] = c
             if a != 1:
-                data["stroke-opacity"] = a
+                data["stroke-opacity"] = a * self._state.opacity
             data["stroke-width"] = formatNumber(abs(self._state.strokeWidth))
         if self._state.lineDash:
             data["stroke-dasharray"] = ",".join([str(i) for i in self._state.lineDash])
@@ -665,9 +665,11 @@ class SVGContext(BaseContext):
     def _svgStyle(self, **kwargs):
         style = []
         if self._state.blendMode is not None:
-            style.append("mix-blend-mode: %s;" % self._state.blendMode)
+            style.append(f"mix-blend-mode: {self._state.blendMode};")
+        if self._state.opacity != 1:
+            style.append(f"opacity: {self._state.opacity};")
         for key, value in sorted(kwargs.items()):
-            style.append("%s: %s;" % (key, value))
+            style.append(f"{key}: {value};")
         return " ".join(style)
 
     def _linkURL(self, url, xywh):
