@@ -2172,9 +2172,11 @@ class DrawBotDrawingTool(object):
             # start a loop over all wanted pages
             for i in range(totalPages):
                 # set a random fill color
-                fill(random(), random(), random())
+                fill(i/(totalPages-1), .5, i/(totalPages-1))
                 # draw a rectangle
                 rect(10, 50 * i, 50, 50)
+                fill(1)
+                textBox(f"{i}", (10, 50 * i, 50, 50))
                 # add a clickable link rectangle with a unique name
                 linkRect(f"beginPage_{i}", (10, 10 + 50 * i, 50, 50))
 
@@ -2182,9 +2184,12 @@ class DrawBotDrawingTool(object):
             for i in range(totalPages):
                 # create a new page
                 newPage()
+                fontSize(200)
+                text(f"Page {i}", (30, 30))
                 # add a link destination with a given name
                 # the name must refer to a linkRect name
-                linkDestination(f"beginPage_{i}", (0, 0))
+                oval(width()/2-10, height()/2-10, 20, 20)
+                linkDestination(f"beginPage_{i}", (width()/2, height()/2))
 
         """
         x, y, w, h = xywh
