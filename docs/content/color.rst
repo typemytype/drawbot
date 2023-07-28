@@ -9,6 +9,11 @@ Colors
 	color/cmykFill
 	color/cmykStroke
 
+Opacity
+-------
+
+.. autofucntion:: drawBot.opacity
+
 Color Blend
 -----------
 
