@@ -1419,6 +1419,23 @@ class DrawBotDrawingTool(object):
         self._dummyContext.underline(value)
         self._addInstruction("underline", value)
 
+    def strikethrough(self, value):
+        """
+        Set the strikethrough value.
+        Underline must be `single`, `thick`, `double` or `None`.
+
+        .. downloadcode:: strikethrough.py
+
+            size(1000, 200)
+            strikethrough("single")
+            fontSize(100)
+            text("hello strikethrough", (40, 60))
+        """
+        if value is not None and value not in self._dummyContext._textstrikethroughMap:
+            raise DrawBotError("strikethrough must be %s" % (", ".join(sorted(self._dummyContext._textstrikethroughMap.keys()))))
+        self._dummyContext.strikethrough(value)
+        self._addInstruction("strikethrough", value)
+
     def url(self, value):
         """
         Set the url value for text.
