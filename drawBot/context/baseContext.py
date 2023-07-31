@@ -1555,8 +1555,6 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
         Set the strikethrough value.
         Underline must be `single`, `thick`, `double` or `None`.
         """
-        if macOSVersion < Version("12.0"):
-            warnings.warn("strikethrough is only supported from macOS 12.")
         self._strikethrough = strikethrough
 
     def url(self, url):
