@@ -1809,7 +1809,7 @@ class DrawBotDrawingTool(object):
         if not isinstance(txt, (str, FormattedString)):
             raise TypeError("expected 'str' or 'FormattedString', got '%s'" % type(txt).__name__)
         path, (x, y) = self._dummyContext._getPathForFrameSetter(box)
-        attrString = self._dummyContext.attributedString(txt)
+        attrString = self._dummyContext.attributedString(txt, align=align)
         setter = CoreText.CTFramesetterCreateWithAttributedString(attrString)
         box = CoreText.CTFramesetterCreateFrame(setter, (0, 0), path, None)
         ctLines = CoreText.CTFrameGetLines(box)
