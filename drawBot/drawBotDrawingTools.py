@@ -1935,7 +1935,7 @@ class DrawBotDrawingTool(object):
         _hasPixels = False
 
         if isinstance(path, AppKit.NSImage):
-            # its an NSImage
+            # it is an NSImage
             reps = path.representations()
             if not reps:
                 # raise error when no representation are found
