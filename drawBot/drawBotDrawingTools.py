@@ -1936,7 +1936,13 @@ class DrawBotDrawingTool(object):
 
         if isinstance(path, AppKit.NSImage):
             # its an NSImage
-            rep = path
+            reps = path.representations()
+            if not reps:
+                # raise error when no representation are found
+                raise DrawBotError("Cannot extract bitmap data from given nsImage object")
+            # get the bitmap representation
+            _hasPixels = True
+            rep = reps[0]
         else:
             if isinstance(path, (str, os.PathLike)):
                 path = optimizePath(path)
