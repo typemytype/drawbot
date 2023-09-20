@@ -177,8 +177,8 @@ class ExportTest(DrawBotBaseTest):
             drawBot.saveImage(tmp.path, antiAliasing=False)
             self.assertImageFilesEqual(tmp.path, expectedPath)
 
-    def test_imageSubpixelRendering(self):
-        expectedPath = os.path.join(testDataDir, "expected_imageSubpixelRendering.png")
+    def test_imageFontSubpixelQuantization(self):
+        expectedPath = os.path.join(testDataDir, "expected_imageFontSubpixelQuantization.png")
 
         drawBot.newDrawing()
         drawBot.size(30, 30)
@@ -188,7 +188,7 @@ class ExportTest(DrawBotBaseTest):
         drawBot.text("abc\nxyz", (6, 18))
 
         with TempFile(suffix=".png") as tmp:
-            drawBot.saveImage(tmp.path, subpixelRendering=False)
+            drawBot.saveImage(tmp.path, fontSubpixelQuantization=False)
             self.assertImageFilesEqual(tmp.path, expectedPath)
 
     def _testMultipage(self, extension, numFrames, expectedMultipageCount):

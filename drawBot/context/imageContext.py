@@ -68,7 +68,7 @@ class ImageContext(PDFContext):
     saveImageOptions = [
         ("imageResolution", "The resolution of the output image in PPI. Default is 72."),
         ("antiAliasing", "Indicate if a the image should be rendedered with anti-aliasing. Default is True."),
-        ("subpixelRendering", "Indicate if a text should be rendedered with subpixel rendering. Default is True."),
+        ("fontSubpixelQuantization", "A Boolean value that specifies whether subpixel quantization of glyphs is allowed. Default is True."),
         ("multipage", "Output a numbered image for each page or frame in the document."),
     ]
 
@@ -89,7 +89,7 @@ class ImageContext(PDFContext):
             pathAdd = ""
         imageResolution = options.get("imageResolution", 72.0)
         antiAliasing = options.get("antiAliasing", True)
-        subpixelRendering = options.get("subpixelRendering", True)
+        fontSubpixelQuantization = options.get("fontSubpixelQuantization", True)
         properties = {}
         for key, value in options.items():
             if key in _nsImageOptions:
@@ -104,7 +104,7 @@ class ImageContext(PDFContext):
                 imageRep = _makeBitmapImageRep(
                     pdfPage=page,
                     antiAliasing=antiAliasing,
-                    subpixelRendering=subpixelRendering,
+                    fontSubpixelQuantization=fontSubpixelQuantization,
                     imageResolution=imageResolution
                 )
                 if self.ensureEvenPixelDimensions:
@@ -122,7 +122,7 @@ class ImageContext(PDFContext):
         imageData.writeToFile_atomically_(imagePath, True)
 
 
-def _makeBitmapImageRep(nsImage=None, pdfPage=None, imageResolution=72.0, antiAliasing=True, subpixelRendering=True, colorSpaceName=AppKit.NSCalibratedRGBColorSpace):
+def _makeBitmapImageRep(nsImage=None, pdfPage=None, imageResolution=72.0, antiAliasing=True, fontSubpixelQuantization=True, colorSpaceName=AppKit.NSCalibratedRGBColorSpace):
     """Construct a bitmap image representation at a given resolution."""
     if nsImage is None and pdfPage is None:
         raise DrawBotError("At least a image or a pdf page must be provided to create a bitmap representaion.")
@@ -157,7 +157,7 @@ def _makeBitmapImageRep(nsImage=None, pdfPage=None, imageResolution=72.0, antiAl
             if not antiAliasing:
                 Quartz.CGContextSetInterpolationQuality(context, Quartz.kCGInterpolationNone)
                 Quartz.CGContextSetAllowsAntialiasing(context, False)
-            if not subpixelRendering:
+            if not fontSubpixelQuantization:
                 Quartz.CGContextSetAllowsFontSubpixelQuantization(context, False)
             Quartz.CGContextDrawPDFPage(context, pdfPage.pageRef())
         elif nsImage is not None:
