@@ -157,7 +157,6 @@ def _makeBitmapImageRep(nsImage=None, pdfPage=None, imageResolution=72.0, antiAl
             if not antiAliasing:
                 Quartz.CGContextSetInterpolationQuality(context, Quartz.kCGInterpolationNone)
                 Quartz.CGContextSetAllowsAntialiasing(context, False)
-            print("subpixelRendering", subpixelRendering)
             if not subpixelRendering:
                 Quartz.CGContextSetAllowsFontSubpixelQuantization(context, False)
             Quartz.CGContextDrawPDFPage(context, pdfPage.pageRef())
