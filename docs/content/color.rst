@@ -12,7 +12,7 @@ Colors
 Opacity
 -------
 
-.. autofucntion:: drawBot.opacity
+.. autofunction:: drawBot.opacity
 
 Color Blend
 -----------
