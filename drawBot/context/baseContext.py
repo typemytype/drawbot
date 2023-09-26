@@ -1997,6 +1997,7 @@ class GraphicsState(object):
     def __init__(self):
         self.colorSpace = self._colorClass.colorSpace
         self.blendMode = None
+        self.opacity = 1
         self.fillColor = self._colorClass(0)
         self.strokeColor = None
         self.cmykFillColor = None
@@ -2016,6 +2017,7 @@ class GraphicsState(object):
         new = self.__class__()
         new.colorSpace = self.colorSpace
         new.blendMode = self.blendMode
+        new.opacity = self.opacity
         if self.fillColor is not None:
             new.fillColor = self.fillColor.copy()
         else:
@@ -2133,6 +2135,9 @@ class BaseContext(object):
         pass
 
     def _blendMode(self, operation):
+        pass
+
+    def _opacity(self, value):
         pass
 
     def _drawPath(self):
@@ -2272,6 +2277,10 @@ class BaseContext(object):
     def blendMode(self, operation):
         self._state.blendMode = operation
         self._blendMode(operation)
+
+    def opacity(self, value):
+        self._state.opacity = value
+        self._opacity(value)
 
     def fill(self, r, g=None, b=None, a=1):
         self._state.text.fill(r, g, b, a)

@@ -937,6 +937,25 @@ class DrawBotDrawingTool(object):
         self._requiresNewFirstPage = True
         self._addInstruction("cmykStroke", c, m, y, k, alpha)
 
+    def opacity(self, value):
+        """
+        Sets the current opacity value. The `value` argument must be a value between 0.0 and 1.0.
+
+        .. downloadcode:: opacity.py
+            # set an opacity value
+            opacity(.5)
+            # set a color and draw some rect and text
+            fill(1, 0, 0)
+            rect(10, 10, 600, 600)
+            fill(0, 1, 0)
+            rect(390, 390, 600, 600)
+            fontSize(400)
+            fill(0, 0, 1)
+            text("draw", (500, 500), align="center")
+        """
+        self._requiresNewFirstPage = True
+        self._addInstruction("opacity", value)
+
     def shadow(self, offset, blur=None, color=None):
         """
         Adds a shadow with an `offset` (x, y), `blur` and a `color`.
