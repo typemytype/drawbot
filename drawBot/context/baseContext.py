@@ -1099,6 +1099,19 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
                 self._setAttribute(key, value)
             self._setColorAttributes(attributes)
 
+    def textProperties(self):
+        """
+        Return a dict with all current stylistic text properties.
+        """
+        properties = dict()
+        for attributeName, defaultValue in self._formattedAttributes.items():
+            value = getattr(self, f"_{attributeName}", defaultValue)
+            # create new object if the value is a dictionary
+            if isinstance(value, dict):
+                value = dict(value)
+            properties[attributeName] = value
+        return properties
+
     def _setAttribute(self, attribute, value):
         method = getattr(self, attribute)
         if isinstance(value, (list, tuple)):
@@ -1113,7 +1126,7 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
         for key in colorAttributeNames:
             value = attributes.get(key)
             if value is not None:
-                setattr(self, "_%s" % key, value)
+                setattr(self, f"_{key}", value)
 
         if self._fill is not None:
             try:
@@ -1195,14 +1208,14 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
         elif not isinstance(txt, (str, FormattedString)):
             raise TypeError("expected 'str' or 'FormattedString', got '%s'" % type(txt).__name__)
         attributes = {}
+        # store all formattedString settings in a custom attributes key
+        attributes["drawBot.formattedString.properties"] = self.textProperties()
         attributes[AppKit.NSLigatureAttributeName] = 1  # https://github.com/typemytype/drawbot/issues/427
         if self._font:
             font = self._getNSFontWithFallback()
             coreTextFontFeatures = []
             nsFontFeatures = []  # fallback for macOS < 10.13
             if self._openTypeFeatures:
-                # store openTypeFeatures in a custom attributes key
-                attributes["drawbot.openTypeFeatures"] = dict(self._openTypeFeatures)
                 # get existing openTypeFeatures for the font
                 existingOpenTypeFeatures = openType.getFeatureTagsForFont(font)
                 # sort features by their on/off state
@@ -1389,7 +1402,10 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
                 length = 0
 
             rng = location, length
-            attributes = {key: getattr(self, "_%s" % key) for key in self._formattedAttributes}
+            if textLength == 0:
+                attributes = self.textProperties()
+            else:
+                attributes, _ = self._attributedString.attribute_atIndex_effectiveRange_("drawBot.formattedString.properties", location + length - 1, None)
             new = self.__class__(**attributes)
             try:
                 new._attributedString = self._attributedString.attributedSubstringFromRange_(rng)

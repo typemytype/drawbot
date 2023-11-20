@@ -1620,6 +1620,11 @@ class DrawBotDrawingTool(object):
 
     listNamedInstances.__doc__ = FormattedString.listNamedInstances.__doc__
 
+    def textProperties(self):
+        return self._dummyContext._state.text.textProperties()
+
+    textProperties.__doc__ = FormattedString.textProperties.__doc__
+
     # drawing text
 
     def text(self, txt, position, align=None):

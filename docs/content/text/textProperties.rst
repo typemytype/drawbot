@@ -16,6 +16,7 @@ Text Properties
 .. autofunction:: drawBot.listNamedInstances
 .. autofunction:: drawBot.tabs
 .. autofunction:: drawBot.language
+.. autofunction:: drawBot.textProperties
 
 Font Properties
 ---------------
