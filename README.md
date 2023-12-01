@@ -33,14 +33,13 @@ run `python setup.py install`
 ```Python
 import drawBot
 
-drawBot.newDrawing()
-drawBot.newPage(1000, 1000)
-drawBot.rect(10, 10, 100, 100)
-drawBot.saveImage("~/Desktop/aRect.png")
-drawBot.endDrawing()
+with drawBot.drawing():
+    drawBot.newPage(1000, 1000)
+    drawBot.rect(10, 10, 100, 100)
+    drawBot.saveImage("~/Desktop/aRect.png")
 ```
 
-It is adviced to start with `newDrawing()` and end with `endDrawing()`, to clear the instruction stack and remove installed fonts.
+It is adviced to wrap your drawing instructions into a `with drawbot.drawing()` statement, to clear the instruction stack and remove installed fonts.
 
 ---
 
