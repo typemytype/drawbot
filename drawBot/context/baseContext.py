@@ -1049,6 +1049,18 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
         # byWord=0x8000 # AppKit.NSUnderlineByWord,
     )
 
+    _textstrikethroughMap = dict(
+        single=AppKit.NSUnderlineStyleSingle,
+        thick=AppKit.NSUnderlineStyleThick,
+        double=AppKit.NSUnderlineStyleDouble,
+        # solid=AppKit.NSUnderlinePatternSolid,
+        # dotted=AppKit.NSUnderlinePatternDot,
+        # dashed=AppKit.NSUnderlinePatternDash,
+        # dotDashed=AppKit.NSUnderlinePatternDashDot,
+        # dotDotted=AppKit.NSUnderlinePatternDashDotDot,
+        # byWord=0x8000 # AppKit.NSUnderlineByWord,
+    )
+
     _formattedAttributes = dict(
         font=_FALLBACKFONT,
         fallbackFont=None,
@@ -1067,6 +1079,7 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
         tracking=None,
         baselineShift=None,
         underline=None,
+        strikethrough=None,
         url=None,
         openTypeFeatures=dict(),
         fontVariations=dict(),
@@ -1339,6 +1352,8 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
             attributes[AppKit.NSBaselineOffsetAttributeName] = self._baselineShift
         if self._underline in self._textUnderlineMap:
             attributes[AppKit.NSUnderlineStyleAttributeName] = self._textUnderlineMap[self._underline]
+        if self._strikethrough in self._textstrikethroughMap:
+            attributes[AppKit.NSStrikethroughStyleAttributeName] = self._textstrikethroughMap[self._strikethrough]
         if self._url is not None:
             attributes[AppKit.NSLinkAttributeName] = AppKit.NSURL.URLWithString_(self._url)
         if self._language:
@@ -1550,6 +1565,13 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
         Underline must be `single`, `thick`, `double` or `None`.
         """
         self._underline = underline
+
+    def strikethrough(self, strikethrough):
+        """
+        Set the strikethrough value.
+        Underline must be `single`, `thick`, `double` or `None`.
+        """
+        self._strikethrough = strikethrough
 
     def url(self, url):
         """
@@ -2091,6 +2113,7 @@ class BaseContext(object):
     _textAlignMap = FormattedString._textAlignMap
     _textTabAlignMap = FormattedString._textTabAlignMap
     _textUnderlineMap = FormattedString._textUnderlineMap
+    _textstrikethroughMap = FormattedString._textstrikethroughMap
 
     _colorSpaceMap = dict(
         genericRGB=AppKit.NSColorSpace.genericRGBColorSpace(),
@@ -2434,6 +2457,9 @@ class BaseContext(object):
 
     def underline(self, underline):
         self._state.text.underline(underline)
+
+    def strikethrough(self, strikethrough):
+        self._state.text.strikethrough(strikethrough)
 
     def url(self, value):
         self._state.text.url(value)
