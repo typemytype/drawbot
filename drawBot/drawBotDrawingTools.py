@@ -17,7 +17,7 @@ from .context.tools import gifTools
 from .context.tools import openType
 from .context.tools import drawBotbuiltins
 
-from .misc import DrawBotError, warnings, VariableController, optimizePath, isPDF, isEPS, isGIF, transformationAtCenter, clearMemoizeCache
+from .misc import DrawBotError, warnings, VariableController, optimizePath, isPDF, isEPS, isGIF, transformationAtCenter, clearMemoizeCache, validateLanguageCode
 
 
 def _getmodulecontents(module, names=None):
@@ -1438,6 +1438,23 @@ class DrawBotDrawingTool(object):
         self._dummyContext.underline(value)
         self._addInstruction("underline", value)
 
+    def strikethrough(self, value):
+        """
+        Set the strikethrough value.
+        Underline must be `single`, `thick`, `double` or `None`.
+
+        .. downloadcode:: strikethrough.py
+
+            size(1000, 200)
+            strikethrough("single")
+            fontSize(100)
+            text("hello strikethrough", (40, 60))
+        """
+        if value is not None and value not in self._dummyContext._textstrikethroughMap:
+            raise DrawBotError("strikethrough must be %s" % (", ".join(sorted(self._dummyContext._textstrikethroughMap.keys()))))
+        self._dummyContext.strikethrough(value)
+        self._addInstruction("strikethrough", value)
+
     def url(self, value):
         """
         Set the url value for text.
@@ -1499,8 +1516,9 @@ class DrawBotDrawingTool(object):
     def language(self, language):
         """
         Set the preferred language as language tag or None to use the default language.
-
-        Support is depending on local OS.
+        A language tag might be a [iso639-2 or iso639-1](https://www.loc.gov/standards/iso639-2/php/English_list.php)
+        code or a locale identifier supported by local OS.
+        A warning will be issued if the language tag is not supported.
 
         `language()` will activate the `locl` OpenType features, if supported by the current font.
 
@@ -1524,6 +1542,8 @@ class DrawBotDrawingTool(object):
             # darw the text again with a language set
             textBox(word, box)
         """
+        if not validateLanguageCode(language):
+            warnings.warn(f"Language '{language}' is not available.")
         self._dummyContext.language(language)
         self._checkLanguageHyphenation()
         self._addInstruction("language", language)
@@ -1540,7 +1560,7 @@ class DrawBotDrawingTool(object):
         if language and self._dummyContext._state.hyphenation:
             locale = CoreText.CFLocaleCreate(None, language)
             if not CoreText.CFStringIsHyphenationAvailableForLocale(locale):
-                warnings.warn("Language '%s' has no hyphenation available." % language)
+                warnings.warn(f"Language '{language}' has no hyphenation available.")
 
     def openTypeFeatures(self, *args, **features):
         """
@@ -1614,6 +1634,26 @@ class DrawBotDrawingTool(object):
         return self._dummyContext._state.text.listFontVariations(fontNameOrPath)
 
     listFontVariations.__doc__ = FormattedString.listFontVariations.__doc__
+
+    def fontNamedInstance(self, name, fontNameOrPath=None):
+        """
+        Set a font with `name` of a named instance.
+        The `name` of the named instance must be listed in `listNamedInstances()`,
+
+        Optionally a `fontNameOrPath` can be given. If a font path is given that `fontNameOrPath` will be set.
+
+        .. downloadcode:: fontNamedInstance.py
+
+            newPage(500, 250)
+            # pick font
+            font("Skia", 200)
+            # select a named instance
+            fontNamedInstance("Skia-Regular_Black-Extended")
+            # draw text!!
+            text("abc", (50, 50))
+        """
+        self._dummyContext._state.text.fontNamedInstance(name, fontNameOrPath)
+        self._addInstruction("fontNamedInstance", name, fontNameOrPath)
 
     def listNamedInstances(self, fontNameOrPath=None):
         return self._dummyContext._state.text.listNamedInstances(fontNameOrPath)
