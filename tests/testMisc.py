@@ -66,7 +66,7 @@ class MiscTest(unittest.TestCase):
         var = drawBot.fontVariations(wght=5)
         self.assertEqual(var, {"wght": 5})
 
-    def test_fontVariationNamedInstances(self):
+    def test_listFontNamedInstances(self):
         drawBot.newDrawing()
         namedInstances = drawBot.listNamedInstances()
         self.assertEqual(namedInstances, {})
@@ -80,6 +80,14 @@ class MiscTest(unittest.TestCase):
         namedInstances = drawBot.listNamedInstances("Skia")
         namedInstances = _roundInstanceLocations(namedInstances)
         self.assertEqual(namedInstances, expectedNamedInstances)
+
+    def test_fontNamedInstance(self):
+        drawBot.newDrawing()
+        drawBot.font("Skia")
+        drawBot.fontNamedInstance("Skia-Regular_Black-Extended")
+        with self.assertRaises(DrawBotError) as cm:
+            drawBot.fontNamedInstance("foo bar")
+        self.assertEqual(cm.exception.args[0], "Can not find instance with name: 'foo bar' for 'Skia-Regular'.")
 
     def test_textProperties(self):
         drawBot.newDrawing()
@@ -102,7 +110,6 @@ class MiscTest(unittest.TestCase):
         for characterBound in characterBounds:
             fillColors.append(characterBound.formattedSubString.textProperties()["fill"])
         self.assertEqual(fillColors, [(1, 0, 0), (0, 1, 0), None])
-
 
     def test_polygon_notEnoughPoints(self):
         drawBot.newDrawing()

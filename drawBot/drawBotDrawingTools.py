@@ -1632,6 +1632,26 @@ class DrawBotDrawingTool(object):
 
     listFontVariations.__doc__ = FormattedString.listFontVariations.__doc__
 
+    def fontNamedInstance(self, name, fontNameOrPath=None):
+        """
+        Set a font with `name` of a named instance.
+        The `name` of the named instance must be listed in `listNamedInstances()`,
+
+        Optionally a `fontNameOrPath` can be given. If a font path is given that `fontNameOrPath` will be set.
+
+        .. downloadcode:: fontNamedInstance.py
+
+            newPage(500, 250)
+            # pick font
+            font("Skia", 200)
+            # select a named instance
+            fontNamedInstance("Skia-Regular_Black-Extended")
+            # draw text!!
+            text("abc", (50, 50))
+        """
+        self._dummyContext._state.text.fontNamedInstance(name, fontNameOrPath)
+        self._addInstruction("fontNamedInstance", name, fontNameOrPath)
+
     def listNamedInstances(self, fontNameOrPath=None):
         return self._dummyContext._state.text.listNamedInstances(fontNameOrPath)
 
