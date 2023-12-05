@@ -324,7 +324,6 @@ import inspect
 
 from sphinx import addnodes
 from sphinx.directives.code import LiteralInclude, CodeBlock
-from inspect import getargspec
 from sphinx.ext import autodoc
 from sphinx.writers.html import HTMLTranslator
 from sphinx.util import DownloadFiles
@@ -455,15 +454,15 @@ class DrawBotDocumenter(autodoc.FunctionDocumenter):
             # cannot introspect arguments of a C function or method
             return None
         try:
-            argspec = getargspec(self.object)
+            argspec = inspect.getfullargspec(self.object)
         except TypeError:
             # if a class should be documented as function (yay duck
             # typing) we try to use the constructor signature as function
             # signature without the first argument.
             try:
-                argspec = getargspec(self.object.__new__)
+                argspec = inspect.getfullargspec(self.object.__new__)
             except TypeError:
-                argspec = getargspec(self.object.__init__)
+                argspec = inspect.getfullargspec(self.object.__init__)
                 if argspec[0]:
                     del argspec[0][0]
         if "self" in argspec.args:
