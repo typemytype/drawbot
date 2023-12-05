@@ -7,7 +7,7 @@ import tempfile
 from collections import OrderedDict
 from fontTools.ttLib import TTFont
 import drawBot
-from drawBot.misc import DrawBotError, warnings
+from drawBot.misc import DrawBotError, warnings, validateLanguageCode
 from drawBot.scriptTools import ScriptRunner
 from testSupport import StdOutCollector, testDataDir
 
@@ -394,6 +394,34 @@ class MiscTest(unittest.TestCase):
         assert drawBot.remap(25, 10, 20, 30, 50) == 60
         assert drawBot.remap(25, 10, 20, 30, 50, clamp=True) == 50
 
+    def test_validateLanguageCode(self):
+        expectedLanguageValidation = [
+            ("ab", False),
+            ("abk", False),
+            ("abz", False),
+            ("AB", False),
+            ("af", True),
+            ("afr", True),
+            ("af_NA", True),
+            ("afr_NA", True),
+            ("af_ZZ", False),
+            ("afr_ZZ", False),
+            ("en-us", True),
+            ("en_us", True),
+            ("EN-US", True),
+            ("en-zz", False),
+            ("sr_Cyrl_ME", True),
+            ("en", True),
+        ]
+        for language, expectedValue in expectedLanguageValidation:
+            assert validateLanguageCode(language) == expectedValue
+
+            with StdOutCollector(captureStdErr=True) as output:
+                drawBot.language(language)
+            if expectedValue:
+                assert output.lines() == []
+            else:
+                assert output.lines() == [f"*** DrawBot warning: Language '{language}' is not available. ***"]
 
 
 def _roundInstanceLocations(instanceLocations):

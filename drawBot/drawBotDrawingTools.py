@@ -17,7 +17,7 @@ from .context.tools import gifTools
 from .context.tools import openType
 from .context.tools import drawBotbuiltins
 
-from .misc import DrawBotError, warnings, VariableController, optimizePath, isPDF, isEPS, isGIF, transformationAtCenter, clearMemoizeCache
+from .misc import DrawBotError, warnings, VariableController, optimizePath, isPDF, isEPS, isGIF, transformationAtCenter, clearMemoizeCache, validateLanguageCode
 
 
 def _getmodulecontents(module, names=None):
@@ -1516,8 +1516,9 @@ class DrawBotDrawingTool(object):
     def language(self, language):
         """
         Set the preferred language as language tag or None to use the default language.
-
-        Support is depending on local OS.
+        A language tag might be a [iso639-2 or iso639-1](https://www.loc.gov/standards/iso639-2/php/English_list.php)
+        code or a locale identifier supported by local OS.
+        A warning will be issued if the language tag is not supported.
 
         `language()` will activate the `locl` OpenType features, if supported by the current font.
 
@@ -1541,6 +1542,8 @@ class DrawBotDrawingTool(object):
             # darw the text again with a language set
             textBox(word, box)
         """
+        if not validateLanguageCode(language):
+            warnings.warn(f"Language '{language}' is not available.")
         self._dummyContext.language(language)
         self._checkLanguageHyphenation()
         self._addInstruction("language", language)
@@ -1557,7 +1560,7 @@ class DrawBotDrawingTool(object):
         if language and self._dummyContext._state.hyphenation:
             locale = CoreText.CFLocaleCreate(None, language)
             if not CoreText.CFStringIsHyphenationAvailableForLocale(locale):
-                warnings.warn("Language '%s' has no hyphenation available." % language)
+                warnings.warn(f"Language '{language}' has no hyphenation available.")
 
     def openTypeFeatures(self, *args, **features):
         """
