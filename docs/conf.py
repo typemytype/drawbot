@@ -324,7 +324,7 @@ import inspect
 
 from sphinx import addnodes
 from sphinx.directives.code import LiteralInclude, CodeBlock
-from sphinx.util.inspect import getargspec
+from inspect import getargspec
 from sphinx.ext import autodoc
 from sphinx.writers.html import HTMLTranslator
 from sphinx.util import DownloadFiles
