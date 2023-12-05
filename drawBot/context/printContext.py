@@ -53,6 +53,9 @@ class PrintContext(BaseContext):
     def _blendMode(self, operation):
         print("blendMode %s" % operation)
 
+    def _opacity(self, value):
+        print("opacity %s" % value)
+
     def _drawPath(self):
         pen = StringPen()
         self._state.path.drawToPen(pen)

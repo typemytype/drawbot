@@ -22,7 +22,7 @@ jobs:
     - name: Check python
       run: |
         python3 --version
-        python3 -c "import platform; print('macOS version:', platform.mac_ver()[0])"
+        python3 -c "import platform; print('macOS version:', platform.mac_ver()[0]); print('processor:', platform.processor())"
 
     - name: Checkout
       uses: actions/checkout@v1

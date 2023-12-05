@@ -32,6 +32,9 @@ MutatorSans.ttf
 9.999847412109375
 60.0
 
+AppleColorEmoji
+True
+
 MutatorMathTest-LightCondensed
 MutatorSans.ttc 0
 MutatorMathTest-LightWide

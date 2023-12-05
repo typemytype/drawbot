@@ -937,6 +937,25 @@ class DrawBotDrawingTool(object):
         self._requiresNewFirstPage = True
         self._addInstruction("cmykStroke", c, m, y, k, alpha)
 
+    def opacity(self, value):
+        """
+        Sets the current opacity value. The `value` argument must be a value between 0.0 and 1.0.
+
+        .. downloadcode:: opacity.py
+            # set an opacity value
+            opacity(.5)
+            # set a color and draw some rect and text
+            fill(1, 0, 0)
+            rect(10, 10, 600, 600)
+            fill(0, 1, 0)
+            rect(390, 390, 600, 600)
+            fontSize(400)
+            fill(0, 0, 1)
+            text("draw", (500, 500), align="center")
+        """
+        self._requiresNewFirstPage = True
+        self._addInstruction("opacity", value)
+
     def shadow(self, offset, blur=None, color=None):
         """
         Adds a shadow with an `offset` (x, y), `blur` and a `color`.
@@ -1419,6 +1438,23 @@ class DrawBotDrawingTool(object):
         self._dummyContext.underline(value)
         self._addInstruction("underline", value)
 
+    def strikethrough(self, value):
+        """
+        Set the strikethrough value.
+        Underline must be `single`, `thick`, `double` or `None`.
+
+        .. downloadcode:: strikethrough.py
+
+            size(1000, 200)
+            strikethrough("single")
+            fontSize(100)
+            text("hello strikethrough", (40, 60))
+        """
+        if value is not None and value not in self._dummyContext._textstrikethroughMap:
+            raise DrawBotError("strikethrough must be %s" % (", ".join(sorted(self._dummyContext._textstrikethroughMap.keys()))))
+        self._dummyContext.strikethrough(value)
+        self._addInstruction("strikethrough", value)
+
     def url(self, value):
         """
         Set the url value for text.
@@ -1620,6 +1656,11 @@ class DrawBotDrawingTool(object):
         return self._dummyContext._state.text.listNamedInstances(fontNameOrPath)
 
     listNamedInstances.__doc__ = FormattedString.listNamedInstances.__doc__
+
+    def textProperties(self):
+        return self._dummyContext._state.text.textProperties()
+
+    textProperties.__doc__ = FormattedString.textProperties.__doc__
 
     # drawing text
 
@@ -1829,7 +1870,7 @@ class DrawBotDrawingTool(object):
         if not isinstance(txt, (str, FormattedString)):
             raise TypeError("expected 'str' or 'FormattedString', got '%s'" % type(txt).__name__)
         path, (x, y) = self._dummyContext._getPathForFrameSetter(box)
-        attrString = self._dummyContext.attributedString(txt)
+        attrString = self._dummyContext.attributedString(txt, align=align)
         setter = CoreText.CTFramesetterCreateWithAttributedString(attrString)
         box = CoreText.CTFramesetterCreateFrame(setter, (0, 0), path, None)
         ctLines = CoreText.CTFrameGetLines(box)
@@ -1955,8 +1996,14 @@ class DrawBotDrawingTool(object):
         _hasPixels = False
 
         if isinstance(path, AppKit.NSImage):
-            # its an NSImage
-            rep = path
+            # it is an NSImage
+            reps = path.representations()
+            if not reps:
+                # raise error when no representation are found
+                raise DrawBotError("Cannot extract bitmap data from given nsImage object")
+            # get the bitmap representation
+            _hasPixels = True
+            rep = reps[0]
         else:
             if isinstance(path, (str, os.PathLike)):
                 path = optimizePath(path)
@@ -2192,9 +2239,11 @@ class DrawBotDrawingTool(object):
             # start a loop over all wanted pages
             for i in range(totalPages):
                 # set a random fill color
-                fill(random(), random(), random())
+                fill(i/(totalPages-1), .5, i/(totalPages-1))
                 # draw a rectangle
                 rect(10, 50 * i, 50, 50)
+                fill(1)
+                textBox(f"{i}", (10, 50 * i, 50, 50))
                 # add a clickable link rectangle with a unique name
                 linkRect(f"beginPage_{i}", (10, 10 + 50 * i, 50, 50))
 
@@ -2202,9 +2251,12 @@ class DrawBotDrawingTool(object):
             for i in range(totalPages):
                 # create a new page
                 newPage()
+                fontSize(200)
+                text(f"Page {i}", (30, 30))
                 # add a link destination with a given name
                 # the name must refer to a linkRect name
-                linkDestination(f"beginPage_{i}", (0, 0))
+                oval(width()/2-10, height()/2-10, 20, 20)
+                linkDestination(f"beginPage_{i}", (width()/2, height()/2))
 
         """
         x, y, w, h = xywh

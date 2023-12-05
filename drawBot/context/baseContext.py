@@ -1049,6 +1049,18 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
         # byWord=0x8000 # AppKit.NSUnderlineByWord,
     )
 
+    _textstrikethroughMap = dict(
+        single=AppKit.NSUnderlineStyleSingle,
+        thick=AppKit.NSUnderlineStyleThick,
+        double=AppKit.NSUnderlineStyleDouble,
+        # solid=AppKit.NSUnderlinePatternSolid,
+        # dotted=AppKit.NSUnderlinePatternDot,
+        # dashed=AppKit.NSUnderlinePatternDash,
+        # dotDashed=AppKit.NSUnderlinePatternDashDot,
+        # dotDotted=AppKit.NSUnderlinePatternDashDotDot,
+        # byWord=0x8000 # AppKit.NSUnderlineByWord,
+    )
+
     _formattedAttributes = dict(
         font=_FALLBACKFONT,
         fallbackFont=None,
@@ -1067,6 +1079,7 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
         tracking=None,
         baselineShift=None,
         underline=None,
+        strikethrough=None,
         url=None,
         openTypeFeatures=dict(),
         fontVariations=dict(),
@@ -1099,6 +1112,19 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
                 self._setAttribute(key, value)
             self._setColorAttributes(attributes)
 
+    def textProperties(self):
+        """
+        Return a dict with all current stylistic text properties.
+        """
+        properties = dict()
+        for attributeName, defaultValue in self._formattedAttributes.items():
+            value = getattr(self, f"_{attributeName}", defaultValue)
+            # create new object if the value is a dictionary
+            if isinstance(value, dict):
+                value = dict(value)
+            properties[attributeName] = value
+        return properties
+
     def _setAttribute(self, attribute, value):
         method = getattr(self, attribute)
         if isinstance(value, (list, tuple)):
@@ -1113,7 +1139,7 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
         for key in colorAttributeNames:
             value = attributes.get(key)
             if value is not None:
-                setattr(self, "_%s" % key, value)
+                setattr(self, f"_{key}", value)
 
         if self._fill is not None:
             try:
@@ -1195,14 +1221,14 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
         elif not isinstance(txt, (str, FormattedString)):
             raise TypeError("expected 'str' or 'FormattedString', got '%s'" % type(txt).__name__)
         attributes = {}
+        # store all formattedString settings in a custom attributes key
+        attributes["drawBot.formattedString.properties"] = self.textProperties()
         attributes[AppKit.NSLigatureAttributeName] = 1  # https://github.com/typemytype/drawbot/issues/427
         if self._font:
             font = self._getNSFontWithFallback()
             coreTextFontFeatures = []
             nsFontFeatures = []  # fallback for macOS < 10.13
             if self._openTypeFeatures:
-                # store openTypeFeatures in a custom attributes key
-                attributes["drawbot.openTypeFeatures"] = dict(self._openTypeFeatures)
                 # get existing openTypeFeatures for the font
                 existingOpenTypeFeatures = openType.getFeatureTagsForFont(font)
                 # sort features by their on/off state
@@ -1326,6 +1352,8 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
             attributes[AppKit.NSBaselineOffsetAttributeName] = self._baselineShift
         if self._underline in self._textUnderlineMap:
             attributes[AppKit.NSUnderlineStyleAttributeName] = self._textUnderlineMap[self._underline]
+        if self._strikethrough in self._textstrikethroughMap:
+            attributes[AppKit.NSStrikethroughStyleAttributeName] = self._textstrikethroughMap[self._strikethrough]
         if self._url is not None:
             attributes[AppKit.NSLinkAttributeName] = AppKit.NSURL.URLWithString_(self._url)
         if self._language:
@@ -1389,7 +1417,10 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
                 length = 0
 
             rng = location, length
-            attributes = {key: getattr(self, "_%s" % key) for key in self._formattedAttributes}
+            if textLength == 0:
+                attributes = self.textProperties()
+            else:
+                attributes, _ = self._attributedString.attribute_atIndex_effectiveRange_("drawBot.formattedString.properties", location + length - 1, None)
             new = self.__class__(**attributes)
             try:
                 new._attributedString = self._attributedString.attributedSubstringFromRange_(rng)
@@ -1534,6 +1565,13 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
         Underline must be `single`, `thick`, `double` or `None`.
         """
         self._underline = underline
+
+    def strikethrough(self, strikethrough):
+        """
+        Set the strikethrough value.
+        Underline must be `single`, `thick`, `double` or `None`.
+        """
+        self._strikethrough = strikethrough
 
     def url(self, url):
         """
@@ -1820,7 +1858,10 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
         font = self._getNSFontWithFallback()
         if font is None:
             return False
-        result, glyphs = CoreText.CTFontGetGlyphsForCharacters(font, characters, None, len(characters))
+        # Issue 524: we need to pass the number of UTF-16 characters or it won't work for
+        # characters > U+FFFF
+        count = len(characters.encode("utf-16-be")) // 2
+        result, glyphs = CoreText.CTFontGetGlyphsForCharacters(font, characters, None, count)
         return result
 
     def fontContainsGlyph(self, glyphName):
@@ -2013,6 +2054,7 @@ class GraphicsState(object):
     def __init__(self):
         self.colorSpace = self._colorClass.colorSpace
         self.blendMode = None
+        self.opacity = 1
         self.fillColor = self._colorClass(0)
         self.strokeColor = None
         self.cmykFillColor = None
@@ -2032,6 +2074,7 @@ class GraphicsState(object):
         new = self.__class__()
         new.colorSpace = self.colorSpace
         new.blendMode = self.blendMode
+        new.opacity = self.opacity
         if self.fillColor is not None:
             new.fillColor = self.fillColor.copy()
         else:
@@ -2089,6 +2132,7 @@ class BaseContext(object):
     _textAlignMap = FormattedString._textAlignMap
     _textTabAlignMap = FormattedString._textTabAlignMap
     _textUnderlineMap = FormattedString._textUnderlineMap
+    _textstrikethroughMap = FormattedString._textstrikethroughMap
 
     _colorSpaceMap = dict(
         genericRGB=AppKit.NSColorSpace.genericRGBColorSpace(),
@@ -2149,6 +2193,9 @@ class BaseContext(object):
         pass
 
     def _blendMode(self, operation):
+        pass
+
+    def _opacity(self, value):
         pass
 
     def _drawPath(self):
@@ -2289,6 +2336,10 @@ class BaseContext(object):
         self._state.blendMode = operation
         self._blendMode(operation)
 
+    def opacity(self, value):
+        self._state.opacity = value
+        self._opacity(value)
+
     def fill(self, r, g=None, b=None, a=1):
         self._state.text.fill(r, g, b, a)
         self._state.cmykFillColor = None
@@ -2425,6 +2476,9 @@ class BaseContext(object):
 
     def underline(self, underline):
         self._state.text.underline(underline)
+
+    def strikethrough(self, strikethrough):
+        self._state.text.strikethrough(strikethrough)
 
     def url(self, value):
         self._state.text.url(value)

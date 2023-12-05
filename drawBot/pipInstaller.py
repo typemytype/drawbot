@@ -248,7 +248,7 @@ def _testTimeout():
     callExternalProcess("pip", arguments, env, print, print, print, timeout=1)
 
 
-def callExternalProcess(name, arguments, env, stdoutCallback, stderrCallback, resultCallback, timeout=15):
+def callExternalProcess(name, arguments, env, stdoutCallback, stderrCallback, resultCallback, timeout=120):
     def worker():
         process = subprocess.Popen(arguments, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
                                    env=env, encoding="utf-8", bufsize=1)

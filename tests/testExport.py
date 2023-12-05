@@ -160,8 +160,6 @@ class ExportTest(DrawBotBaseTest):
             self.assertEqual((round(r, 1), round(g, 1), round(b, 1)), (1, 0.0, 0))
 
     def test_imageAntiAliasing(self):
-        from testScripts import DrawBotTest
-
         expectedPath = os.path.join(testDataDir, "expected_imageAntiAliasing.png")
 
         drawBot.newDrawing()
@@ -177,6 +175,20 @@ class ExportTest(DrawBotBaseTest):
 
         with TempFile(suffix=".png") as tmp:
             drawBot.saveImage(tmp.path, antiAliasing=False)
+            self.assertImageFilesEqual(tmp.path, expectedPath)
+
+    def test_imageFontSubpixelQuantization(self):
+        expectedPath = os.path.join(testDataDir, "expected_imageFontSubpixelQuantization.png")
+
+        drawBot.newDrawing()
+        drawBot.size(30, 30)
+        drawBot.fontSize(10)
+        drawBot.font("Skia")
+        drawBot.fontVariations(wght=0.789)
+        drawBot.text("abc\nxyz", (6, 18))
+
+        with TempFile(suffix=".png") as tmp:
+            drawBot.saveImage(tmp.path, fontSubpixelQuantization=False)
             self.assertImageFilesEqual(tmp.path, expectedPath)
 
     def _testMultipage(self, extension, numFrames, expectedMultipageCount):
