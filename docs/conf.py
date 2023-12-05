@@ -450,7 +450,7 @@ class DrawBotDocumenter(autodoc.FunctionDocumenter):
 
     def format_args(self):
         if inspect.isbuiltin(self.object) or \
-               inspect.ismethoddescriptor(self.object):
+                inspect.ismethoddescriptor(self.object):
             # cannot introspect arguments of a C function or method
             return None
         try:
