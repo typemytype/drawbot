@@ -454,20 +454,20 @@ class DrawBotDocumenter(autodoc.FunctionDocumenter):
             # cannot introspect arguments of a C function or method
             return None
         try:
-            argspec = inspect.getfullargspec(self.object)
+            signature = inspect.signature(self.object)
         except TypeError:
             # if a class should be documented as function (yay duck
             # typing) we try to use the constructor signature as function
             # signature without the first argument.
             try:
-                argspec = inspect.getfullargspec(self.object.__new__)
+                signature = inspect.signature(self.object.__new__)
             except TypeError:
-                argspec = inspect.getfullargspec(self.object.__init__)
-                if argspec[0]:
-                    del argspec[0][0]
-        if "self" in argspec.args:
-            argspec.args.remove("self")
-        args = inspect.formatargspec(*argspec)
+                signature = inspect.signature(self.object.__init__)
+                if signature[0]:
+                    del signature[0][0]
+        if "self" in signature.parameters:  # remove self
+            signature = signature.replace(parameters=tuple(signature.parameters.values())[1:])
+        args = inspect.formatargspec(*signature)
         # escape backslashes for reST
         args = args.replace('\\', '\\\\')
         return args
