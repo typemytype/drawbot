@@ -330,7 +330,6 @@ from sphinx.util import DownloadFiles
 
 
 def add_file_overwrite(self, docname, filename):
-    # type: (str, str) -> None
     if filename not in self:
         dest = os.path.basename(filename)
         self[filename] = (set(), dest)
@@ -467,9 +466,8 @@ class DrawBotDocumenter(autodoc.FunctionDocumenter):
                     del signature[0][0]
         if "self" in signature.parameters:  # remove self
             signature = signature.replace(parameters=tuple(signature.parameters.values())[1:])
-        args = inspect.formatargspec(*signature)
         # escape backslashes for reST
-        args = args.replace('\\', '\\\\')
+        args = str(signature).replace('\\', '\\\\')
         return args
 
 
