@@ -324,14 +324,12 @@ import inspect
 
 from sphinx import addnodes
 from sphinx.directives.code import LiteralInclude, CodeBlock
-from sphinx.util.inspect import getargspec
 from sphinx.ext import autodoc
 from sphinx.writers.html import HTMLTranslator
 from sphinx.util import DownloadFiles
 
 
 def add_file_overwrite(self, docname, filename):
-    # type: (str, str) -> None
     if filename not in self:
         dest = os.path.basename(filename)
         self[filename] = (set(), dest)
@@ -451,26 +449,25 @@ class DrawBotDocumenter(autodoc.FunctionDocumenter):
 
     def format_args(self):
         if inspect.isbuiltin(self.object) or \
-               inspect.ismethoddescriptor(self.object):
+                inspect.ismethoddescriptor(self.object):
             # cannot introspect arguments of a C function or method
             return None
         try:
-            argspec = getargspec(self.object)
+            signature = inspect.signature(self.object)
         except TypeError:
             # if a class should be documented as function (yay duck
             # typing) we try to use the constructor signature as function
             # signature without the first argument.
             try:
-                argspec = getargspec(self.object.__new__)
+                signature = inspect.signature(self.object.__new__)
             except TypeError:
-                argspec = getargspec(self.object.__init__)
-                if argspec[0]:
-                    del argspec[0][0]
-        if "self" in argspec.args:
-            argspec.args.remove("self")
-        args = inspect.formatargspec(*argspec)
+                signature = inspect.signature(self.object.__init__)
+                if signature[0]:
+                    del signature[0][0]
+        if "self" in signature.parameters:  # remove self
+            signature = signature.replace(parameters=tuple(signature.parameters.values())[1:])
         # escape backslashes for reST
-        args = args.replace('\\', '\\\\')
+        args = str(signature).replace('\\', '\\\\')
         return args
 
 
