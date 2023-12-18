@@ -19,7 +19,7 @@ class ShowHideFloatingWindow(FloatingWindow):
     nsWindowClass = ShowHideNSPanel
 
 
-class DebugWindowController(object):
+class DebugWindowController():
 
     """
     Debugger catching all sys.stdout and sys.sterr outside a script.

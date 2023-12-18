@@ -6,7 +6,7 @@ from drawBot.misc import DrawBotError, optimizePath
 from drawBot.context.imageContext import _makeBitmapImageRep
 
 
-class ImageObject(object):
+class ImageObject():
 
     """
     An image object with support for filters.

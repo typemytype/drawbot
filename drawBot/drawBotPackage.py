@@ -36,7 +36,7 @@ drawBotVersion = version.Version(__version__)
 
 
 @attr.s(slots=True)
-class DrawBotPackageInfo(object):
+class DrawBotPackageInfo():
 
     name = attr.ib(default="", init=False, type=str, validator=attr.validators.instance_of(str))
     version = attr.ib(default="0.0", init=False, type=str, validator=attr.validators.instance_of(str))
@@ -64,7 +64,7 @@ class DrawBotPackageInfo(object):
             setattr(self, key, value)
 
 
-class DrawBotPackage(object):
+class DrawBotPackage():
 
     def __init__(self, path=None):
         self.path = path
