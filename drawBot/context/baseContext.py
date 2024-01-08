@@ -7,6 +7,8 @@ import os
 from packaging.version import Version
 
 from fontTools.pens.basePen import BasePen
+from fontTools.pens.basePen import AbstractPen
+from fontTools.pens.pointPen import AbstractPointPen
 
 from drawBot.misc import DrawBotError, cmyk2rgb, warnings, transformationAtCenter
 from drawBot.macOSVersion import macOSVersion
@@ -16,12 +18,22 @@ from .tools import openType
 from .tools import variation
 from .tools import SFNTLayoutTypes
 
+from typing_extensions import Self
+from aliases import (
+    Box,
+    Point,
+    OptionalFloat,
+    OptionalStr,
+    AffineTransformation,
+    SomePath,
+    Points,
+)
 
 _FALLBACKFONT = "LucidaGrande"
 _LINEJOINSTYLESMAP = dict(
     miter=Quartz.kCGLineJoinMiter,
     round=Quartz.kCGLineJoinRound,
-    bevel=Quartz.kCGLineJoinBevel
+    bevel=Quartz.kCGLineJoinBevel,
 )
 _LINECAPSTYLESMAP = dict(
     butt=Quartz.kCGLineCapButt,
@@ -166,7 +178,7 @@ class BezierPath(BasePen, SVGContextPropertyMixin, ContextPropertyMixin):
 
     # pen support
 
-    def moveTo(self, point):
+    def moveTo(self, point: Point):
         """
         Move to a point `x`, `y`.
         """
@@ -175,7 +187,7 @@ class BezierPath(BasePen, SVGContextPropertyMixin, ContextPropertyMixin):
     def _moveTo(self, pt):
         self._path.moveToPoint_(pt)
 
-    def lineTo(self, point):
+    def lineTo(self, point: Point):
         """
         Line to a point `x`, `y`.
         """
@@ -184,7 +196,7 @@ class BezierPath(BasePen, SVGContextPropertyMixin, ContextPropertyMixin):
     def _lineTo(self, pt):
         self._path.lineToPoint_(pt)
 
-    def curveTo(self, *points):
+    def curveTo(self, *points: Point):
         """
         Draw a cubic bezier with an arbitrary number of control points.
 
@@ -193,7 +205,7 @@ class BezierPath(BasePen, SVGContextPropertyMixin, ContextPropertyMixin):
         """
         super(BezierPath, self).curveTo(*points)
 
-    def qCurveTo(self, *points):
+    def qCurveTo(self, *points: Point):
         """
         Draw a whole string of quadratic curve segments.
 
@@ -223,7 +235,15 @@ class BezierPath(BasePen, SVGContextPropertyMixin, ContextPropertyMixin):
         self._pointToSegmentPen = PointToSegmentPen(self)
         self._pointToSegmentPen.beginPath()
 
-    def addPoint(self, point, segmentType=None, smooth=False, name=None, identifier=None, **kwargs):
+    def addPoint(
+        self,
+        point: Point,
+        segmentType: OptionalStr = None,
+        smooth: bool = False,
+        name: OptionalStr = None,
+        identifier=None,
+        **kwargs,
+    ):
         """
         Use the path as a point pen and add a point to the current subpath. `beginPath` must
         have been called prior to adding points with `addPoint` calls.
@@ -236,7 +256,7 @@ class BezierPath(BasePen, SVGContextPropertyMixin, ContextPropertyMixin):
             smooth=smooth,
             name=name,
             identifier=identifier,
-            **kwargs
+            **kwargs,
         )
 
     def endPath(self):
@@ -260,7 +280,7 @@ class BezierPath(BasePen, SVGContextPropertyMixin, ContextPropertyMixin):
             # with NSBezierPath, nothing special needs to be done for an open subpath.
             pass
 
-    def addComponent(self, glyphName, transformation):
+    def addComponent(self, glyphName: str, transformation: AffineTransformation):
         """
         Add a sub glyph. The 'transformation' argument must be a 6-tuple
         containing an affine transformation, or a Transform object from the
@@ -271,7 +291,7 @@ class BezierPath(BasePen, SVGContextPropertyMixin, ContextPropertyMixin):
         """
         super(BezierPath, self).addComponent(glyphName, transformation)
 
-    def drawToPen(self, pen):
+    def drawToPen(self, pen: AbstractPen):
         """
         Draw the bezier path into a pen
         """
@@ -279,7 +299,7 @@ class BezierPath(BasePen, SVGContextPropertyMixin, ContextPropertyMixin):
         for contour in contours:
             contour.drawToPen(pen)
 
-    def drawToPointPen(self, pointPen):
+    def drawToPointPen(self, pointPen: AbstractPointPen):
         """
         Draw the bezier path into a point pen.
         """
@@ -287,41 +307,48 @@ class BezierPath(BasePen, SVGContextPropertyMixin, ContextPropertyMixin):
         for contour in contours:
             contour.drawToPointPen(pointPen)
 
-    def arc(self, center, radius, startAngle, endAngle, clockwise):
+    def arc(
+        self,
+        center: Point,
+        radius: float,
+        startAngle: float,
+        endAngle: float,
+        clockwise: bool,
+    ):
         """
         Arc with `center` and a given `radius`, from `startAngle` to `endAngle`, going clockwise if `clockwise` is True and counter clockwise if `clockwise` is False.
         """
         self._path.appendBezierPathWithArcWithCenter_radius_startAngle_endAngle_clockwise_(
             center, radius, startAngle, endAngle, clockwise)
 
-    def arcTo(self, point1, point2, radius):
+    def arcTo(self, point1: Point, point2: Point, radius: float):
         """
         Arc  defined by a circle inscribed inside the angle specified by three points:
         the current point, `point1`, and `point2`. The arc is drawn between the two points of the circle that are tangent to the two legs of the angle.
         """
         self._path.appendBezierPathWithArcFromPoint_toPoint_radius_(point1, point2, radius)
 
-    def rect(self, x, y, w, h):
+    def rect(self, x: float, y: float, w: float, h: float):
         """
         Add a rectangle at possition `x`, `y` with a size of `w`, `h`
         """
         self._path.appendBezierPathWithRect_(((x, y), (w, h)))
 
-    def oval(self, x, y, w, h):
+    def oval(self, x: float, y: float, w: float, h: float):
         """
         Add a oval at possition `x`, `y` with a size of `w`, `h`
         """
         self._path.appendBezierPathWithOvalInRect_(((x, y), (w, h)))
         self.closePath()
 
-    def line(self, point1, point2):
+    def line(self, point1: Point, point2: Point):
         """
         Add a line between two given points.
         """
         self.moveTo(point1)
         self.lineTo(point2)
 
-    def polygon(self, *points, **kwargs):
+    def polygon(self, *points: Point, **kwargs):
         """
         Draws a polygon with n-amount of points.
         Optionally a `close` argument can be provided to open or close the path.
@@ -339,7 +366,15 @@ class BezierPath(BasePen, SVGContextPropertyMixin, ContextPropertyMixin):
         if doClose:
             self.closePath()
 
-    def text(self, txt, offset=None, font=_FALLBACKFONT, fontSize=10, align=None, fontNumber=0):
+    def text(
+        self,
+        txt,
+        offset: OptionalFloat = None,
+        font=_FALLBACKFONT,
+        fontSize: float = 10,
+        align: OptionalStr = None,
+        fontNumber: int = 0,
+    ):
         """
         Draws a `txt` with a `font` and `fontSize` at an `offset` in the bezier path.
         If a font path is given the font will be installed and used directly.
@@ -366,7 +401,16 @@ class BezierPath(BasePen, SVGContextPropertyMixin, ContextPropertyMixin):
         for subTxt, box in makeTextBoxes(attributedString, (x, y), align=align, plainText=not isinstance(txt, FormattedString)):
             self.textBox(subTxt, box, font=font, fontSize=fontSize, align=align)
 
-    def textBox(self, txt, box, font=_FALLBACKFONT, fontSize=10, align=None, hyphenation=None, fontNumber=0):
+    def textBox(
+        self,
+        txt,
+        box: Box,
+        font: str | SomePath = _FALLBACKFONT,
+        fontSize: float = 10,
+        align: OptionalStr = None,
+        hyphenation=None,
+        fontNumber: int = 0,
+    ):
         """
         Draws a `txt` with a `font` and `fontSize` in a `box` in the bezier path.
         If a font path is given the font will be installed and used directly.
@@ -414,7 +458,16 @@ class BezierPath(BasePen, SVGContextPropertyMixin, ContextPropertyMixin):
         self.optimizePath()
         return context.clippedText(txt, box, align)
 
-    def traceImage(self, path, threshold=.2, blur=None, invert=False, turd=2, tolerance=0.2, offset=None):
+    def traceImage(
+        self,
+        path: SomePath,
+        threshold: float = 0.2,
+        blur=None, # FIXME why not a boolean?
+        invert: bool = False,
+        turd: int = 2,
+        tolerance: float = 0.2,
+        offset=None, # FIXME shouldn't this default to zero?
+    ):
         """
         Convert a given image to a vector outline.
 
@@ -477,7 +530,7 @@ class BezierPath(BasePen, SVGContextPropertyMixin, ContextPropertyMixin):
         """
         self._path = path
 
-    def pointInside(self, xy):
+    def pointInside(self, xy: Point) -> bool:
         """
         Check if a point `x`, `y` is inside a path.
         """
@@ -537,7 +590,7 @@ class BezierPath(BasePen, SVGContextPropertyMixin, ContextPropertyMixin):
         """
         self._path = self._path.bezierPathByReversingPath()
 
-    def appendPath(self, otherPath):
+    def appendPath(self, otherPath: Self):
         """
         Append a path.
         """
@@ -554,13 +607,13 @@ class BezierPath(BasePen, SVGContextPropertyMixin, ContextPropertyMixin):
 
     # transformations
 
-    def translate(self, x=0, y=0):
+    def translate(self, x: float = 0, y: float = 0):
         """
         Translate the path with a given offset.
         """
         self.transform((1, 0, 0, 1, x, y))
 
-    def rotate(self, angle, center=(0, 0)):
+    def rotate(self, angle: float, center: Point = (0, 0)):
         """
         Rotate the path around the `center` point (which is the origin by default) with a given angle in degrees.
         """
@@ -569,7 +622,7 @@ class BezierPath(BasePen, SVGContextPropertyMixin, ContextPropertyMixin):
         s = math.sin(angle)
         self.transform((c, s, -s, c, 0, 0), center)
 
-    def scale(self, x=1, y=None, center=(0, 0)):
+    def scale(self, x: float = 1, y: OptionalFloat = None, center: Point = (0, 0)):
         """
         Scale the path with a given `x` (horizontal scale) and `y` (vertical scale).
 
@@ -581,7 +634,7 @@ class BezierPath(BasePen, SVGContextPropertyMixin, ContextPropertyMixin):
             y = x
         self.transform((x, 0, 0, y, 0, 0), center)
 
-    def skew(self, angle1, angle2=0, center=(0, 0)):
+    def skew(self, angle1: float, angle2: float=0, center: Point=(0, 0)):
         """
         Skew the path with given `angle1` and `angle2`.
 
@@ -593,7 +646,7 @@ class BezierPath(BasePen, SVGContextPropertyMixin, ContextPropertyMixin):
         angle2 = math.radians(angle2)
         self.transform((1, math.tan(angle2), math.tan(angle1), 1, 0, 0), center)
 
-    def transform(self, transformMatrix, center=(0, 0)):
+    def transform(self, transformMatrix: AffineTransformation, center: Point = (0, 0)):
         """
         Transform a path with a transform matrix (xy, xx, yy, yx, x, y).
         """
@@ -637,7 +690,7 @@ class BezierPath(BasePen, SVGContextPropertyMixin, ContextPropertyMixin):
         self.setNSBezierPath(result.getNSBezierPath())
         return self
 
-    def difference(self, other):
+    def difference(self, other: Self):
         """
         Return the difference between two bezier paths.
         """
@@ -649,19 +702,20 @@ class BezierPath(BasePen, SVGContextPropertyMixin, ContextPropertyMixin):
         booleanOperations.difference(subjectContours, clipContours, result)
         return result
 
-    def intersection(self, other):
+    def intersection(self, other: Self):
         """
         Return the intersection between two bezier paths.
         """
         assert isinstance(other, self.__class__)
         import booleanOperations
+
         subjectContours = self._contoursForBooleanOperations()
         clipContours = other._contoursForBooleanOperations()
         result = self.__class__()
         booleanOperations.intersection(subjectContours, clipContours, result)
         return result
 
-    def xor(self, other):
+    def xor(self, other: Self):
         """
         Return the xor between two bezier paths.
         """
@@ -673,7 +727,7 @@ class BezierPath(BasePen, SVGContextPropertyMixin, ContextPropertyMixin):
         booleanOperations.xor(subjectContours, clipContours, result)
         return result
 
-    def intersectionPoints(self, other=None):
+    def intersectionPoints(self, other: Self | None = None):
         """
         Return a list of intersection points as `x`, `y` tuples.
 
@@ -686,7 +740,7 @@ class BezierPath(BasePen, SVGContextPropertyMixin, ContextPropertyMixin):
             contours += other._contoursForBooleanOperations()
         return booleanOperations.getIntersections(contours)
 
-    def expandStroke(self, width, lineCap="round", lineJoin="round", miterLimit=10):
+    def expandStroke(self, width: float, lineCap: str = "round", lineJoin: str = "round", miterLimit: float = 10):
         """
         Returns a new bezier path with an expanded stroke around the original path,
         with a given `width`. Note: the new path will not contain the original path.
@@ -1163,7 +1217,7 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
     def clear(self):
         self._attributedString = AppKit.NSMutableAttributedString.alloc().init()
 
-    def append(self, txt, **kwargs):
+    def append(self, txt: str | Self, **kwargs): # FIXME should we remove kwargs everywhere?
         """
         Add `txt` to the formatted string with some additional text formatting attributes:
 
@@ -1419,7 +1473,12 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
     def __repr__(self):
         return self._attributedString.string()
 
-    def font(self, fontNameOrPath, fontSize=None, fontNumber=0):
+    def font(
+        self,
+        fontNameOrPath: SomePath,
+        fontSize: OptionalFloat = None,
+        fontNumber: int = 0,
+    ):
         """
         Set a font with the name of the font.
         If a font path is given the font will used directly.
@@ -1439,10 +1498,10 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
         font = getNSFontFromNameOrPath(fontNameOrPath, fontSize or 10, fontNumber)
         return getFontName(font)
 
-    def fontNumber(self, fontNumber):
+    def fontNumber(self, fontNumber: int):
         self._fontNumber = fontNumber
 
-    def fallbackFont(self, fontNameOrPath, fontNumber=0):
+    def fallbackFont(self, fontNameOrPath: SomePath, fontNumber: int = 0):
         """
         Set a fallback font, used whenever a glyph is not available in the normal font.
         If a font path is given the font will be installed and used directly.
@@ -1457,10 +1516,10 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
         self._fallbackFontNumber = fontNumber
         return fontName
 
-    def fallbackFontNumber(self, fontNumber):
+    def fallbackFontNumber(self, fontNumber: int):
         self._fallbackFontNumber = fontNumber
 
-    def fontSize(self, fontSize):
+    def fontSize(self, fontSize: float):
         """
         Set the font size in points.
         The default `fontSize` is 10pt.
@@ -1515,14 +1574,14 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
         """
         self._strokeWidth = strokeWidth
 
-    def align(self, align):
+    def align(self, align: str):
         """
         Sets the text alignment.
         Possible `align` values are: `left`, `center` and `right`.
         """
         self._align = align
 
-    def lineHeight(self, lineHeight):
+    def lineHeight(self, lineHeight: float):
         """
         Set the line height.
         """
@@ -1800,7 +1859,9 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
         """
         Copy the formatted string.
         """
-        attributes = {key: getattr(self, "_%s" % key) for key in self._formattedAttributes}
+        attributes = {
+            key: getattr(self, "_%s" % key) for key in self._formattedAttributes
+        }
         new = self.__class__(**attributes)
         new._attributedString = self._attributedString.mutableCopy()
         new.copyContextProperties(self)
