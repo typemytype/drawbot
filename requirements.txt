@@ -29,3 +29,4 @@ pip
 packaging
 black==21.12b0  # Pin to older version to avoid dependency problems; see https://github.com/ronaldoussoren/py2app/issues/476
 pytz
+typing-extensions
