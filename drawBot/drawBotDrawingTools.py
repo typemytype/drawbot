@@ -31,10 +31,10 @@ from .aliases import (
     SomePath,
     CMYKColor,
     RGBColor,
-    Box,
+    BoundingBox,
     OptionalStr,
     OptionalInt,
-    AffineTransformation,
+    Transform,
 )
 
 
@@ -1366,7 +1366,7 @@ class DrawBotDrawingTool():
 
     # transform
 
-    def transform(self, matrix: AffineTransformation, center: Point = (0, 0)):
+    def transform(self, matrix: Transform, center: Point = (0, 0)):
         """
         Transform the canvas with a transformation matrix.
         """
@@ -1745,7 +1745,7 @@ class DrawBotDrawingTool():
                 subTxt.copyContextProperties(txt)
             self.textBox(subTxt, box, align=align)
 
-    def textOverflow(self, txt, box: Box, align: OptionalStr = None):
+    def textOverflow(self, txt, box: BoundingBox, align: OptionalStr = None):
         """
         Returns the overflowed text without drawing the text.
 
@@ -1769,7 +1769,7 @@ class DrawBotDrawingTool():
             raise DrawBotError("align must be %s" % (", ".join(self._dummyContext._textAlignMap.keys())))
         return self._dummyContext.clippedText(txt, box, align)
 
-    def textBox(self, txt, box: Box, align: OptionalStr = None):
+    def textBox(self, txt, box: BoundingBox, align: OptionalStr = None):
         """
         Draw a text in a provided rectangle.
 
@@ -1907,7 +1907,7 @@ class DrawBotDrawingTool():
         self._addInstruction("textBox", txt, box, align)
         return self._dummyContext.clippedText(txt, box, align)
 
-    def textBoxBaselines(self, txt, box: Box, align: OptionalStr = None):
+    def textBoxBaselines(self, txt, box: BoundingBox, align: OptionalStr = None):
         """
         Returns a list of `x, y` coordinates
         indicating the start of each line
@@ -1928,7 +1928,7 @@ class DrawBotDrawingTool():
         origins = CoreText.CTFrameGetLineOrigins(box, (0, len(ctLines)), None)
         return [(x + o.x, y + o.y) for o in origins]
 
-    def textBoxCharacterBounds(self, txt, box: Box, align: OptionalStr = None):
+    def textBoxCharacterBounds(self, txt, box: BoundingBox, align: OptionalStr = None):
         """
         Returns a list of typesetted bounding boxes `((x, y, w, h), baseLineOffset, formattedSubString)`.
 
@@ -2261,7 +2261,7 @@ class DrawBotDrawingTool():
 
     # pdf links
 
-    def linkURL(self, url: str, xywh: Box):
+    def linkURL(self, url: str, xywh: BoundingBox):
         """
         Add a clickable rectangle for an external url link.
 
@@ -2282,7 +2282,7 @@ class DrawBotDrawingTool():
         self._requiresNewFirstPage = True
         self._addInstruction("linkDestination", name, (x, y))
 
-    def linkRect(self, name: str, xywh: Box):
+    def linkRect(self, name: str, xywh: BoundingBox):
         """
         Add a clickable rectangle for a link within a PDF.
         Use `linkDestination(name, (x, y))` with the same name to set the destination of the clickable rectangle.

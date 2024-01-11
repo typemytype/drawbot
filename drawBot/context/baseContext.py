@@ -20,11 +20,11 @@ from .tools import SFNTLayoutTypes
 
 from typing_extensions import Self
 from aliases import (
-    Box,
+    BoundingBox,
     Point,
     OptionalFloat,
     OptionalStr,
-    AffineTransformation,
+    Transform,
     SomePath,
     Points,
 )
@@ -280,7 +280,7 @@ class BezierPath(BasePen, SVGContextPropertyMixin, ContextPropertyMixin):
             # with NSBezierPath, nothing special needs to be done for an open subpath.
             pass
 
-    def addComponent(self, glyphName: str, transformation: AffineTransformation):
+    def addComponent(self, glyphName: str, transformation: Transform):
         """
         Add a sub glyph. The 'transformation' argument must be a 6-tuple
         containing an affine transformation, or a Transform object from the
@@ -404,7 +404,7 @@ class BezierPath(BasePen, SVGContextPropertyMixin, ContextPropertyMixin):
     def textBox(
         self,
         txt,
-        box: Box,
+        box: BoundingBox,
         font: str | SomePath = _FALLBACKFONT,
         fontSize: float = 10,
         align: OptionalStr = None,
@@ -646,7 +646,7 @@ class BezierPath(BasePen, SVGContextPropertyMixin, ContextPropertyMixin):
         angle2 = math.radians(angle2)
         self.transform((1, math.tan(angle2), math.tan(angle1), 1, 0, 0), center)
 
-    def transform(self, transformMatrix: AffineTransformation, center: Point = (0, 0)):
+    def transform(self, transformMatrix: Transform, center: Point = (0, 0)):
         """
         Transform a path with a transform matrix (xy, xx, yy, yx, x, y).
         """
