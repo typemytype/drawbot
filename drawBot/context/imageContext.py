@@ -32,6 +32,12 @@ def _tiffCompressionConverter(value):
         return t.get(value.lower(), AppKit.NSTIFFCompressionNone)
 
 
+def _colorSpaceConverter(value):
+    if value == "CMYK":
+        return AppKit.NSDeviceCMYKColorSpace
+    return AppKit.NSCalibratedRGBColorSpace
+
+
 _nsImageOptions = {
     # DrawBot Key: (
     #   NSImage property key,
@@ -118,6 +124,7 @@ class ImageContext(PDFContext):
             "A Boolean value that specifies whether subpixel quantization of glyphs is allowed. Default is True.",
         ),
         ("multipage", "Output a numbered image for each page or frame in the document."),
+        ("colorSpace", "Set color space (RGB, CMYK). Default is RGB."),
     ]
 
     ensureEvenPixelDimensions = False
@@ -138,6 +145,10 @@ class ImageContext(PDFContext):
         imageResolution = options.get("imageResolution", 72.0)
         antiAliasing = options.get("antiAliasing", True)
         fontSubpixelQuantization = options.get("fontSubpixelQuantization", True)
+
+        colorSpace = options.get("colorSpace", "RGB")
+        colorSpaceName = _colorSpaceConverter(colorSpace)
+
         properties = {}
         for key, value in options.items():
             if key in _nsImageOptions:
@@ -154,7 +165,12 @@ class ImageContext(PDFContext):
                     antiAliasing=antiAliasing,
                     fontSubpixelQuantization=fontSubpixelQuantization,
                     imageResolution=imageResolution,
+                    colorSpaceName=colorSpaceName,
                 )
+
+                if "imageColorSyncProfileData" in options:
+                    imageRep.setProperty_withValue_(AppKit.NSImageColorSyncProfileData, options["imageColorSyncProfileData"])  # doing this with representationUsingType_properties_ does not work
+
                 if self.ensureEvenPixelDimensions:
                     if imageRep.pixelsWide() % 2 or imageRep.pixelsHigh() % 2:
                         msg = f"Exporting to {', '.join(self.fileExtensions)} doesn't support odd pixel dimensions for width and height."
@@ -189,13 +205,17 @@ def _makeBitmapImageRep(
     elif nsImage is not None:
         width, height = nsImage.size()
 
+    hasAlpha = True
+    if colorSpaceName == AppKit.NSDeviceCMYKColorSpace:
+        hasAlpha = False  # Quartz doesn’t support alpha for CMYK bitmaps.
+
     rep = AppKit.NSBitmapImageRep.alloc().initWithBitmapDataPlanes_pixelsWide_pixelsHigh_bitsPerSample_samplesPerPixel_hasAlpha_isPlanar_colorSpaceName_bytesPerRow_bitsPerPixel_(
         None,  # planes
         int(width * scaleFactor),  # pixelsWide
         int(height * scaleFactor),  # pixelsHigh
         8,  # bitsPerSample
         4,  # samplesPerPixel
-        True,  # hasAlpha
+        hasAlpha,  # hasAlpha
         False,  # isPlanar
         colorSpaceName,  # colorSpaceName
         0,  # bytesPerRow
