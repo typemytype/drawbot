@@ -393,7 +393,6 @@ class BezierPath(BasePen, SVGContextPropertyMixin, ContextPropertyMixin):
         path, (x, y) = context._getPathForFrameSetter(box)
         attributedString = context.attributedString(txt, align)
 
-        print("hip", hyphenation)
         if hyphenation:
             attributedString = context.hyphenateAttributedString(attributedString, path)
 
