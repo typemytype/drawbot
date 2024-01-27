@@ -3,7 +3,7 @@ packaging
 pyobjc
 corefoundationasyncio
 py2app
-cocoa-vanilla==0.2.0
+cocoa-vanilla==0.5.0
 defcon
 git+https://github.com/robotools/defconAppKit
 fontTools[ufo,lxml,woff,unicode,type1]
