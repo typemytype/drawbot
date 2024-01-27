@@ -1,4 +1,3 @@
-from distutils.version import StrictVersion
 from packaging.version import Version
 import platform
 
