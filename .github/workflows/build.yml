@@ -28,7 +28,6 @@ jobs:
 
     - name: Set up Python 3.12
       run: |
-
         curl https://www.python.org/ftp/python/3.12.1/python-3.12.1-macos11.pkg --output pythonInstaller.pkg
         sudo installer -pkg pythonInstaller.pkg -target /
 
