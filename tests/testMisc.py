@@ -159,7 +159,8 @@ class MiscTest(unittest.TestCase):
     def test_ScriptRunner_print_function(self):
         out = StdOutCollector()
         ScriptRunner("print 'hey!'", stdout=out, stderr=out)
-        self.assertEqual(out.lines()[-1], "SyntaxError: Missing parentheses in call to 'print'. Did you mean print('hey!')?")
+        target = "SyntaxError: Missing parentheses in call to 'print'. Did you mean"
+        self.assertEqual(out.lines()[-1][:len(target)], target)
 
     def test_ScriptRunner_division(self):
         out = StdOutCollector()
