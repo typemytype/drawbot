@@ -29,3 +29,4 @@ pip
 packaging
 black
 pytz
+delocate==0.10.7  # for merging intel+silicon wheels into universal2
