@@ -66,7 +66,9 @@ def main():
         wheel_base, platform = wheel_names[-1].rsplit("-", 1)
         platform_base, arch = platform.rsplit("_", 1)
 
-        universal_wheel_path = wheels_dir / f"{wheel_base}-{platform_base}_universal2.whl"
+        universal_wheel_path = (
+            wheels_dir / f"{wheel_base}-{platform_base}_universal2.whl"
+        )
         fuse_wheels(wheel_paths[0], wheel_paths[1], universal_wheel_path)
         print(universal_wheel_path)
 
