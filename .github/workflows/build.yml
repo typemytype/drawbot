@@ -51,6 +51,7 @@ jobs:
         pip install --upgrade pip
         pip install -r ./requirements.txt
         pip install .
+        ./app/install_custom_universal_wheels.sh
 
     - name: Run tests
       run:
