@@ -34,7 +34,6 @@ def find_wheels(package, version=None, python_version=None):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("package")
-    parser.add_argument("--package-version")
     parser.add_argument("--wheels-dir", default="build/universal_wheels")
 
     args = parser.parse_args()
@@ -42,7 +41,12 @@ def main():
     wheels_dir = pathlib.Path(args.wheels_dir).resolve()
     wheels_dir.mkdir(exist_ok=True, parents=True)
 
-    wheels_urls, version = find_wheels(args.package, args.package_version)
+    package = args.package
+    version = None
+    if "==" in package:
+        package, version = package.split("==")
+
+    wheels_urls, version = find_wheels(package, version)
     assert len(wheels_urls) == 2
 
     with TemporaryDirectory() as tmpdir:
