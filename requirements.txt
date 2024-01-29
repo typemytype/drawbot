@@ -11,7 +11,7 @@ fs
 brotli
 pygments
 jedi
-pillow
+pillow==10.1.0  # 10.2.0 has an incompatibility with older x86 macOS: https://github.com/python-pillow/Pillow/issues/6862#issuecomment-1913552472
 attrs
 booleanOperations
 mutatorMath
