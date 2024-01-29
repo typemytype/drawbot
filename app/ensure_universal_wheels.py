@@ -26,7 +26,7 @@ from delocate.fuse import fuse_wheels
 #   - Else if there are x86 and arm64 wheels, download both and merge, write to
 #     `build/universal_wheels/*.whl`
 #   - Else: error
-# - `pip install --force location_for_special_universal_wheels/*.whl`
+# - `pip install --force build/universal_wheels/*.whl`
 #
 
 python_version = f"cp{sys.version_info.major}{sys.version_info.minor}"
