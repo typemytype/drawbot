@@ -49,9 +49,11 @@ jobs:
       run: |
         source venv/bin/activate
         pip install --upgrade pip
-        pip install -r ./requirements.txt
+        pip install -r ./requirements.txt > pip_log.txt
+        cat pip_log.txt
+        python app/ensure_universal_wheels.py pip_log.txt
+        pip install --force build/universal_wheels/*.whl
         pip install .
-        ./app/install_custom_universal_wheels.sh
 
     - name: Run tests
       run:
