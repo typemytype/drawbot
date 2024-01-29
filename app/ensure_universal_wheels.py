@@ -109,7 +109,7 @@ def main():
             merge_wheels(platform_wheels[0], platform_wheels[1], wheels_dir)
         else:
             raise IncompatibleWheelError(
-                f"No universal solution found for {wheel_filename}"
+                f"No universal2 solution found for non-portable wheel {wheel_filename}"
             )
 
 
