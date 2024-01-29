@@ -10,6 +10,10 @@ from packaging.utils import parse_wheel_filename
 from delocate.fuse import fuse_wheels
 
 
+class IncompatibleWheelError(Exception):
+    pass
+
+
 def url_filename(url):
     return url.rsplit("/", 1)[-1]
 
@@ -78,7 +82,7 @@ def main():
             assert non_portable_wheels.get(package, wheel_filename) == wheel_filename
             non_portable_wheels[package] = wheel_filename
 
-    for package, wheel_filename in non_portable_wheels.items():
+    for wheel_filename in non_portable_wheels.values():
         package, version, build, tags = parse_wheel_filename(wheel_filename)
         response = urlopen(f"https://pypi.org/pypi/{package}/{version}/json")
         data = json.load(response)
@@ -103,6 +107,10 @@ def main():
         elif platform_wheels:
             assert len(platform_wheels) == 2
             merge_wheels(platform_wheels[0], platform_wheels[1], wheels_dir)
+        else:
+            raise IncompatibleWheelError(
+                f"No universal solution found for {wheel_filename}"
+            )
 
 
 if __name__ == "__main__":
