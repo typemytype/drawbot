@@ -2,12 +2,16 @@ import argparse
 import json
 import pathlib
 import re
+import sys
 from tempfile import TemporaryDirectory
 from urllib.request import urlopen
 
 from packaging.utils import parse_wheel_filename
 
 from delocate.fuse import fuse_wheels
+
+
+python_version = f"cp{sys.version_info.major}{sys.version_info.minor}"
 
 
 class IncompatibleWheelError(Exception):
@@ -91,7 +95,7 @@ def main():
         platform_wheels = []
 
         for file_descriptor in data["urls"]:
-            if file_descriptor["python_version"] != "cp312":
+            if file_descriptor["python_version"] != python_version:
                 continue
             wheel_filename = file_descriptor["filename"]
             package, version, build, tags = parse_wheel_filename(wheel_filename)
