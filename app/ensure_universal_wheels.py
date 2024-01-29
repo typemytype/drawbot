@@ -2,11 +2,11 @@ import argparse
 import json
 import pathlib
 import re
-import sys
-
-from urllib.request import urlopen
-from packaging.utils import parse_wheel_filename
 from tempfile import TemporaryDirectory
+from urllib.request import urlopen
+
+from packaging.utils import parse_wheel_filename
+
 from delocate.fuse import fuse_wheels
 
 
