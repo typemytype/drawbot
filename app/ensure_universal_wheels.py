@@ -1,0 +1,109 @@
+import argparse
+import json
+import pathlib
+import re
+import sys
+
+from urllib.request import urlopen
+from packaging.utils import parse_wheel_filename
+from tempfile import TemporaryDirectory
+from delocate.fuse import fuse_wheels
+
+
+def url_filename(url):
+    return url.rsplit("/", 1)[-1]
+
+
+def download_file(url, dest_dir):
+    filename = url_filename(url)
+    print("downloading wheel", filename)
+    response = urlopen(url)
+    with open(dest_dir / filename, "wb") as f:
+        f.write(response.read())
+
+
+def merge_wheels(url1, url2, dest_dir):
+    wheel_name1 = url_filename(url1)
+    wheel_name2 = url_filename(url2)
+    print("merging wheels", wheel_name1, "and", wheel_name2)
+
+    with TemporaryDirectory() as tmpdir:
+        tmpdir = pathlib.Path(tmpdir)
+
+        download_file(url1, tmpdir)
+        download_file(url2, tmpdir)
+
+        wheel_names = [wheel_name1, wheel_name2]
+        wheel_names.sort()
+
+        assert any("x86" in name for name in wheel_names)
+        assert any("arm64" in name for name in wheel_names)
+
+        package, version, build, tags = parse_wheel_filename(wheel_names[0])
+
+        wheel_base, platform = wheel_names[0].rsplit("-", 1)
+        platform_base_parts = platform.split("_")
+        platform_base = "_".join(platform_base_parts[:3])
+
+        universal_wheel_path = (
+            dest_dir / f"{wheel_base.lower()}-{platform_base}_universal2.whl"
+        )
+        print("writing universal wheel", universal_wheel_path.name)
+        fuse_wheels(tmpdir / wheel_name1, tmpdir / wheel_name2, universal_wheel_path)
+
+
+wheel_filename_pattern = re.compile(r"[^\s]+.whl")
+
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("pip_log")
+    parser.add_argument("--wheels-dir", default="build/universal_wheels")
+
+    args = parser.parse_args()
+
+    wheels_dir = pathlib.Path(args.wheels_dir).resolve()
+    wheels_dir.mkdir(exist_ok=True, parents=True)
+
+    pip_log_path = args.pip_log
+    with open(pip_log_path) as f:
+        pip_log = f.read()
+
+    non_portable_wheels = {}
+
+    for wheel_filename in wheel_filename_pattern.findall(pip_log):
+        package, version, build, tags = parse_wheel_filename(wheel_filename)
+        package = package.lower()
+        if any("x86" in tag.platform or "arm64" in tag.platform for tag in tags):
+            assert non_portable_wheels.get(package, wheel_filename) == wheel_filename
+            non_portable_wheels[package] = wheel_filename
+
+    for package, wheel_filename in non_portable_wheels.items():
+        package, version, build, tags = parse_wheel_filename(wheel_filename)
+        response = urlopen(f"https://pypi.org/pypi/{package}/{version}/json")
+        data = json.load(response)
+
+        universal_wheels = []
+        platform_wheels = []
+
+        for file_descriptor in data["urls"]:
+            if file_descriptor["python_version"] != "cp312":
+                continue
+            wheel_filename = file_descriptor["filename"]
+            package, version, build, tags = parse_wheel_filename(wheel_filename)
+            if any("macosx" in tag.platform for tag in tags):
+                if any("universal2" in tag.platform for tag in tags):
+                    universal_wheels.append(file_descriptor["url"])
+                else:
+                    platform_wheels.append(file_descriptor["url"])
+
+        if universal_wheels:
+            assert len(universal_wheels) == 1
+            download_file(universal_wheels[0], wheels_dir)
+        elif platform_wheels:
+            assert len(platform_wheels) == 2
+            merge_wheels(platform_wheels[0], platform_wheels[1], wheels_dir)
+
+
+if __name__ == "__main__":
+    main()
