@@ -10,7 +10,6 @@ from packaging.utils import parse_wheel_filename
 
 from delocate.fuse import fuse_wheels
 
-
 python_version = f"cp{sys.version_info.major}{sys.version_info.minor}"
 
 
