@@ -10,6 +10,25 @@ from packaging.utils import parse_wheel_filename
 
 from delocate.fuse import fuse_wheels
 
+#
+# The problem we are trying to solve is:
+# - To build a universal2 app with py2app, we need _all_ compiled packages to be universal2
+# - This is hard for two reasons:
+#   - Not all packages offer universal2 wheels
+#   - When running on x86, pip will serve x86, even if universal2 is available
+#
+# We take the following approach:
+# - Run `pip install -r requirements.txt` and capture the output
+# - Find and parse all wheel filenames
+# - Any wheel that is x86 or arm64 needs attention (eg. we ignore "any" and "universal2"):
+#   - Check the pypi json for the package + version
+#   - If there is a universal2 wheel, download it, write to `build/universal_wheels/*.whl`
+#   - Else if there are x86 and arm64 wheels, download both and merge, write to
+#     `build/universal_wheels/*.whl`
+#   - Else: error
+# - `pip install --force location_for_special_universal_wheels/*.whl`
+#
+
 python_version = f"cp{sys.version_info.major}{sys.version_info.minor}"
 
 
