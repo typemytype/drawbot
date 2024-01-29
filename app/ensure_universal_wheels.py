@@ -52,7 +52,7 @@ def merge_wheels(url1, url2, dest_dir):
         fuse_wheels(tmpdir / wheel_name1, tmpdir / wheel_name2, universal_wheel_path)
 
 
-wheel_filename_pattern = re.compile(r"[^\s]+.whl")
+wheel_filename_pattern = re.compile(r"[^\s=]+.whl")
 
 
 def main():
