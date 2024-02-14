@@ -26,9 +26,9 @@ jobs:
         rm -fr *.p12
         security find-identity -v -p codesigning
 
-    - name: Set up Python 3.9
+    - name: Set up Python 3.12
       run: |
-        curl https://www.python.org/ftp/python/3.9.13/python-3.9.13-macosx10.9.pkg --output pythonInstaller.pkg
+        curl https://www.python.org/ftp/python/3.12.1/python-3.12.1-macos11.pkg --output pythonInstaller.pkg
         sudo installer -pkg pythonInstaller.pkg -target /
 
     - name: Check python
@@ -49,7 +49,9 @@ jobs:
       run: |
         source venv/bin/activate
         pip install --upgrade pip
-        pip install -r ./requirements.txt
+        pip install -r ./requirements.txt | tee pip_log.txt
+        python app/ensure_universal_wheels.py pip_log.txt
+        pip install --force build/universal_wheels/*.whl
         pip install .
 
     - name: Run tests

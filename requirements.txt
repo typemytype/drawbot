@@ -11,7 +11,7 @@ fs
 brotli
 pygments
 jedi
-pillow
+pillow==10.1.0  # 10.2.0 has an incompatibility with older x86 macOS: https://github.com/python-pillow/Pillow/issues/6862#issuecomment-1913552472
 attrs
 booleanOperations
 mutatorMath
@@ -27,5 +27,6 @@ git+https://github.com/typesupply/feaPyFoFum
 git+https://github.com/typesupply/feaTools2
 pip
 packaging
-black
+black==23.10.0  # pin to older version, see https://github.com/ronaldoussoren/py2app/issues/518
 pytz
+delocate==0.10.7  # for merging intel+silicon wheels into universal2
