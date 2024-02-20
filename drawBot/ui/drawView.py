@@ -1,6 +1,7 @@
 from Foundation import NSURL
 from AppKit import NSDragOperationNone, NSBezelBorder
 from Quartz import PDFView, PDFThumbnailView, PDFDocument
+from objc import super
 
 from vanilla import Group
 
