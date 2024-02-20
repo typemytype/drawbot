@@ -655,6 +655,8 @@ class SVGContext(BaseContext):
                 data["stroke-opacity"] = a * self._state.opacity
             data["stroke-width"] = formatNumber(abs(self._state.strokeWidth))
         if self._state.lineDash:
+            if self._state.lineDashOffset:
+                data["stroke-dashoffset"] = self._state.lineDashOffset
             data["stroke-dasharray"] = ",".join([str(i) for i in self._state.lineDash])
         if self._state.lineJoin in self._svgLineJoinStylesMap:
             data["stroke-linejoin"] = self._svgLineJoinStylesMap[self._state.lineJoin]
