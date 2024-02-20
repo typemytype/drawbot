@@ -1239,10 +1239,12 @@ class DrawBotDrawingTool(object):
         self._requiresNewFirstPage = True
         self._addInstruction("lineCap", value)
 
-    def lineDash(self, *value):
+    def lineDash(self, *value, offset=0):
         """
         Set a line dash with any given amount of lenghts.
         Uneven lenghts will have a visible stroke, even lenghts will be invisible.
+
+        optionally an `offset` can be given to set the offset of the first dash.
 
         .. downloadcode:: lineDash.py
 
@@ -1274,7 +1276,7 @@ class DrawBotDrawingTool(object):
         if isinstance(value[0], (list, tuple)):
             value = value[0]
         self._requiresNewFirstPage = True
-        self._addInstruction("lineDash", value)
+        self._addInstruction("lineDash", value, offset)
 
     # transform
 

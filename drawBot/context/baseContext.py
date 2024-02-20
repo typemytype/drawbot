@@ -2063,6 +2063,7 @@ class GraphicsState(object):
         self.gradient = None
         self.strokeWidth = 1
         self.lineDash = None
+        self.lineDashOffset = 0
         self.lineCap = None
         self.lineJoin = None
         self.miterLimit = 10
@@ -2097,6 +2098,7 @@ class GraphicsState(object):
         new.lineCap = self.lineCap
         if self.lineDash is not None:
             new.lineDash = list(self.lineDash)
+        new.lineDashOffset = self.lineDashOffset
         new.lineJoin = self.lineJoin
         new.miterLimit = self.miterLimit
         return new
@@ -2447,11 +2449,12 @@ class BaseContext(object):
             raise DrawBotError("lineCap() argument must be 'butt', 'square' or 'round'")
         self._state.lineCap = _LINECAPSTYLESMAP[cap]
 
-    def lineDash(self, dash):
+    def lineDash(self, dash, offset):
         if dash[0] is None:
             self._state.lineDash = None
             return
         self._state.lineDash = list(dash)
+        self._state.lineDashOffset = offset
 
     def transform(self, matrix):
         self._transform(matrix)
