@@ -4,7 +4,7 @@
 
 - UNIVERSAL BUILD !!!
 - Jumping to python 3.12 !!!
-- Check `language settings and warn if a language tag is not available.
+- Check `language(..)` settings and warn if a language tag is not available.
 - Improve infinite imageObject generators.
 - Adding `strikethrough(..)`.
 - Adding `fontNamedInstance("instanceName")`.
