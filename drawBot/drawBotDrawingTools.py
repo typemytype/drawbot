@@ -1259,13 +1259,19 @@ class DrawBotDrawingTool(object):
             # draw a line
             line((0, 200), (0, 800))
             # translate the canvas
-            translate(300, 0)
+            translate(200, 0)
             # set a line dash
             lineDash(2, 10, 5, 5)
             # draw a line
             line((0, 200), (0, 800))
+            # translate the canvas
+            translate(200, 0)
+            # set a line dash and offset
+            lineDash(2, 10, 5, 5, offset=2)
+            # draw a line
+            line((0, 200), (0, 800))
             # translate the canvase
-            translate(300, 0)
+            translate(200, 0)
             # reset the line dash
             lineDash(None)
             # draw a line
