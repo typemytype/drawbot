@@ -7,6 +7,7 @@ import os
 from packaging.version import Version
 
 from fontTools.pens.basePen import BasePen
+from fontTools.ttLib import TTFont, TTLibError
 
 from drawBot.misc import DrawBotError, cmyk2rgb, warnings, transformationAtCenter
 from drawBot.macOSVersion import macOSVersion
@@ -1061,6 +1062,11 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
         # byWord=0x8000 # AppKit.NSUnderlineByWord,
     )
 
+    _writingDirectionMap = dict(
+        LTR=AppKit.NSWritingDirectionLeftToRight,
+        RTL=AppKit.NSWritingDirectionRightToLeft
+    )
+
     _formattedAttributes = dict(
         font=_FALLBACKFONT,
         fallbackFont=None,
@@ -1091,6 +1097,7 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
         paragraphBottomSpacing=None,
 
         language=None,
+        writingDirection=None,
     )
 
     def __init__(self, txt=None, **kwargs):
@@ -1358,6 +1365,9 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
             attributes[AppKit.NSLinkAttributeName] = AppKit.NSURL.URLWithString_(self._url)
         if self._language:
             attributes["NSLanguage"] = self._language
+        if self._writingDirection in self._writingDirectionMap:
+            para.setBaseWritingDirection_(self._writingDirectionMap[self._writingDirection])
+
         attributes[AppKit.NSParagraphStyleAttributeName] = para
         txt = AppKit.NSAttributedString.alloc().initWithString_attributes_(txt, attributes)
         self._attributedString.appendAttributedString_(txt)
@@ -1831,6 +1841,12 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
         """
         self._language = language
 
+    def writingDirection(self, direction):
+        """
+        Set the writing direction: `None`, `'LTR'` or `'RTL'`.
+        """
+        self._writingDirection = direction
+
     def size(self):
         """
         Return the size of the text.
@@ -2135,6 +2151,7 @@ class BaseContext(object):
     _textTabAlignMap = FormattedString._textTabAlignMap
     _textUnderlineMap = FormattedString._textUnderlineMap
     _textstrikethroughMap = FormattedString._textstrikethroughMap
+    _writingDirectionMap = FormattedString._writingDirectionMap
 
     _colorSpaceMap = dict(
         genericRGB=AppKit.NSColorSpace.genericRGBColorSpace(),
@@ -2495,6 +2512,9 @@ class BaseContext(object):
     def language(self, language):
         self._state.text.language(language)
 
+    def writingDirection(self, direction):
+        self._state.text.writingDirection(direction)
+
     def openTypeFeatures(self, *args, **features):
         return self._state.text.openTypeFeatures(*args, **features)
 
@@ -2751,6 +2771,37 @@ def _getNSFontFromNameOrPath(fontNameOrPath, fontSize, fontNumber):
     return CoreText.CTFontCreateWithFontDescriptor(descriptors[fontNumber], fontSize, None)
 
 
+@memoize
+def getTTFontFromNameOrPath(fontNameOrPath, fontSize, fontNumber):
+    if not isinstance(fontNameOrPath, (str, os.PathLike)):
+        tp = type(fontNameOrPath).__name__
+        raise TypeError(
+            f"'fontNameOrPath' should be str or path-like, '{tp}' found"
+        )
+    if fontSize is None:
+        fontSize = 10
+    if isinstance(fontNameOrPath, str) and not fontNameOrPath.startswith("."):
+        # skip dot prefix font names, those are system fonts
+        nsFont = AppKit.NSFont.fontWithName_size_(fontNameOrPath, fontSize)
+        if nsFont is not None:
+            url = CoreText.CTFontDescriptorCopyAttribute(nsFont.fontDescriptor(), CoreText.kCTFontURLAttribute)
+            if url is not None:
+                fontNameOrPath = url.path()
+            else:
+                raise DrawBotError("Cannot find the path to the font '%s'." % fontNameOrPath)
+
+    res_name_or_index = None
+    collectionFontNumber = None
+    ext = os.path.splitext(fontNameOrPath)[-1].lower()
+    if ext in (".ttc", ".otc"):
+        collectionFontNumber = fontNumber
+    elif ext == ".dfont":
+        res_name_or_index = fontNumber + 1
+    try:
+        ftFont = TTFont(fontNameOrPath, fontNumber=collectionFontNumber, res_name_or_index=res_name_or_index)
+    except TTLibError:
+        raise DrawBotError(f"Cannot read the font file at the path '{fontNameOrPath}'")
+    return ftFont
 #
 # Cache for font descriptors that have been reloaded after a font file
 # changed on disk. Keys are absolute paths to font files, values are

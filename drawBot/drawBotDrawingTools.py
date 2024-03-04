@@ -1570,6 +1570,15 @@ class DrawBotDrawingTool(object):
             if not CoreText.CFStringIsHyphenationAvailableForLocale(locale):
                 warnings.warn(f"Language '{language}' has no hyphenation available.")
 
+    def writingDirection(self, direction):
+        """
+        Set the writing direction: `None`, `'LTR'` or `'RTL'`.
+        """
+        if direction is not None and direction not in self._dummyContext._writingDirectionMap.keys():
+            raise DrawBotError("strikethrough must be %s" % (", ".join(sorted(self._dummyContext._writingDirectionMap.keys()))))
+        self._dummyContext.writingDirection(direction)
+        self._addInstruction("writingDirection", direction)
+
     def openTypeFeatures(self, *args, **features):
         """
         Enable OpenType features.
