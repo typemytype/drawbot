@@ -2771,37 +2771,6 @@ def _getNSFontFromNameOrPath(fontNameOrPath, fontSize, fontNumber):
     return CoreText.CTFontCreateWithFontDescriptor(descriptors[fontNumber], fontSize, None)
 
 
-@memoize
-def getTTFontFromNameOrPath(fontNameOrPath, fontSize, fontNumber):
-    if not isinstance(fontNameOrPath, (str, os.PathLike)):
-        tp = type(fontNameOrPath).__name__
-        raise TypeError(
-            f"'fontNameOrPath' should be str or path-like, '{tp}' found"
-        )
-    if fontSize is None:
-        fontSize = 10
-    if isinstance(fontNameOrPath, str) and not fontNameOrPath.startswith("."):
-        # skip dot prefix font names, those are system fonts
-        nsFont = AppKit.NSFont.fontWithName_size_(fontNameOrPath, fontSize)
-        if nsFont is not None:
-            url = CoreText.CTFontDescriptorCopyAttribute(nsFont.fontDescriptor(), CoreText.kCTFontURLAttribute)
-            if url is not None:
-                fontNameOrPath = url.path()
-            else:
-                raise DrawBotError("Cannot find the path to the font '%s'." % fontNameOrPath)
-
-    res_name_or_index = None
-    collectionFontNumber = None
-    ext = os.path.splitext(fontNameOrPath)[-1].lower()
-    if ext in (".ttc", ".otc"):
-        collectionFontNumber = fontNumber
-    elif ext == ".dfont":
-        res_name_or_index = fontNumber + 1
-    try:
-        ftFont = TTFont(fontNameOrPath, fontNumber=collectionFontNumber, res_name_or_index=res_name_or_index)
-    except TTLibError:
-        raise DrawBotError(f"Cannot read the font file at the path '{fontNameOrPath}'")
-    return ftFont
 #
 # Cache for font descriptors that have been reloaded after a font file
 # changed on disk. Keys are absolute paths to font files, values are
