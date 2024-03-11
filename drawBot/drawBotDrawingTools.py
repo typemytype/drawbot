@@ -1580,7 +1580,7 @@ class DrawBotDrawingTool(object):
 
             size(400, 100)
             # A bi-directional string
-            s = "Grtsk میتوان در بسیاری"
+            s = "Latin میتوان در بسیاری"
             # Set the writing direction to Right-To-Left
             writingDirection("RTL")
             fontSize(40)
