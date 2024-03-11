@@ -1573,6 +1573,18 @@ class DrawBotDrawingTool(object):
     def writingDirection(self, direction):
         """
         Set the writing direction: `None`, `'LTR'` or `'RTL'`.
+
+        Use this when mixing writing directions.
+
+        .. downloadcode:: textRTL.py
+
+            size(400, 100)
+            # A bi-directional string
+            s = "Grtsk میتوان در بسیاری"
+            # Set the writing direction to Right-To-Left
+            writingDirection("RTL")
+            fontSize(40)
+            text(s, (10, 40))
         """
         if direction is not None and direction not in self._dummyContext._writingDirectionMap.keys():
             raise DrawBotError("strikethrough must be %s" % (", ".join(sorted(self._dummyContext._writingDirectionMap.keys()))))
