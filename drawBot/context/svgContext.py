@@ -318,7 +318,7 @@ class SVGContext(BaseContext):
         self._embeddedFonts = set()
         self._embeddedImages = dict()
 
-    def _newPage(self, width, height):
+    def _newPage(self, width, height, pageOptions):
         if hasattr(self, "_svgContext"):
             self._svgContext.endtag("svg")
         self.reset()

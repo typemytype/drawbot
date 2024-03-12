@@ -28,8 +28,8 @@ class GIFContext(ImageContext):
         # gifsicle -h: Set frame delay to TIME (in 1/100sec).
         self._delayData[-1] = int(seconds * 100)
 
-    def _newPage(self, width, height):
-        super(GIFContext, self)._newPage(width, height)
+    def _newPage(self, width, height, pageOptions):
+        super(GIFContext, self)._newPage(width, height, pageOptions)
         self._delayData.append(self._delay)
 
     def _writeDataToFile(self, data, path, options):
