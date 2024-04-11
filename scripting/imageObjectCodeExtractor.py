@@ -1,13 +1,14 @@
-import AppKit
 from pathlib import Path
 
+import AppKit
+import Quartz
 
 """
 Notes 10/01:
-- hook output to imageObject.py
-- add necessary import for typing + type aliases
-- run generators.py from Frederik
+- remove double comments (inside and outside the docstring)
+- check hints + syntax
 - add very simple test to suite, just run each filter
+- remove “ ” typographical quotes from docstrings
 
 """
 
@@ -88,7 +89,7 @@ converters = {
 }
 
 variableValues = {
-    "mask" : "an Image object",
+    "image" : "an Image object",
     "size" : "a tuple (w, h)",
     "center" : "a tuple (x, y)",
     "angle": "a float in degrees",
@@ -111,7 +112,8 @@ variableValues = {
     "shadowOffset" : "a tuple (x, y)",
     "lightPosition" : "a tulple (x, y, z)",
     "correctionLevel" : "a string, options are 'L', 'M', 'Q', 'H'",
-    "transform" : "a tuple (xx, xy, yx, yy, x, y)"
+    "transform" : "a tuple (xx, xy, yx, yy, x, y)",
+    "colorSpace": "a CoreGraphics color space"
 }
 
 numbers = [
@@ -145,7 +147,8 @@ argumentToHint = {
 
 toCopy = {
 
-    "mask" : ("texture", "displacementImage", "gradientImage", "backgroundImage", "backsideImage", "maskImage", "shadingImage", "targetImage"),
+    "image" : ("mask", "disparityImage", "texture", "displacementImage", "gradientImage", "backgroundImage", "backsideImage", "maskImage", "shadingImage", "targetImage", "gainMap", "glassesImage", "hairImage", "matteImage"),
+    "message": ("cube0Data", "cube1Data"),
     "rectangle" : ("extent", "minComponents", "maxComponents", "shadowExtent", "RVector", "GVector", "BVector", "AVector", "BiasVector", "redCoefficients", "greenCoefficients", "blueCoefficients", "alphaCoefficients", "biasVector"),
     "color" : ("replacementColor3", "color0", "centerColor1", "centerColor3", "replacementColor1", "centerColor2", "replacementColor2", "color1", "color2"),
 
@@ -178,7 +181,6 @@ generators.extend([
 
 
 allFilterNames =  AppKit.CIFilter.filterNamesInCategory_(None) # type: ignore
-allFilterNames = allFilterNames[:20]
 
 excludeFilterNames = [
     "CIBarcodeGenerator",
@@ -186,6 +188,10 @@ excludeFilterNames = [
     "CIMedianFilter",
     "CIColorCube",
     "CIColorCubeWithColorSpace",
+    # this one requires a colorspace which is difficult to express for regular drawBot users
+    # little use for a filter like this, it does not make sense to abstract this for now
+    # no default value for the colorspace makes it difficult to use it
+    "CIColorCubesMixedWithMask",
     "CIAffineTransform",
 ]
 
@@ -199,7 +205,10 @@ def pythonifyDescription(description):
         ("@YES", "`True`"),
         ("@NO", "`False`"),
         ("radians", "degrees"),
-        ("nil", "`None`")
+        ("nil", "`None`"),
+        ("CGColorSpaceRef", "color space"),
+        ("CGColorSpace", "color space"),
+
     ]
     for s, r in search:
         description = description.replace(s, r)
@@ -221,6 +230,9 @@ if __name__ == '__main__':
         inputCode = CodeWriter()
 
         inputKeys = [inputKey for inputKey in ciFilter.inputKeys() if inputKey not in ignoreInputKeys]
+        # this sorts the arguments by setting the ones without default first to avoid a syntax error
+        # in the python code generated automatically
+        inputKeys.sort(key=lambda x: bool(ciFilterAttributes.get(x, dict()).get("CIAttributeDefault") is not None))
 
         attributes = dict()
 
@@ -235,18 +247,23 @@ if __name__ == '__main__':
                 info = ciFilterAttributes.get(inputKey)
 
                 default = info.get("CIAttributeDefault")
-                description = info.get("CIAttributeDescription")
+                description = info.get("CIAttributeDescription", "")
                 inputKey = camelCase(inputKey[5:])
                 arg = inputKey
 
-                if "Set to nil for automatic." in description:
-                    default = "None"
+                # if "Set to nil for automatic." in description:
+                #     default = "None"
 
-                if inputKey.endswith("Image"):
+                if inputKey in toCopy["image"]:
                     arg += ": Self"
 
                 if inputKey in argumentToHint:
                     arg += argumentToHint[inputKey]
+
+                # if filterName == "CIPDF417BarcodeGenerator":
+                #     print(inputKeys)
+                #     print(ciFilterAttributes)
+                #     raise Exception
 
                 if default is not None:
                     if isinstance(default, AppKit.CIVector): # type: ignore
@@ -256,14 +273,25 @@ if __name__ == '__main__':
                         elif default.count() == 4:
                             default = default.X(), default.Y(), default.Z(), default.W()
                             arg += ": BoundingBox"
+                        else:
+                            default = tuple(default.valueAtIndex_(i) for i in range(default.count()))
+                            arg += ": tuple"
+
                     elif isinstance(default, AppKit.NSAffineTransform): # type: ignore
                         default = tuple(default.transformStruct())
                         arg += ": Transform"
+                    elif isinstance(default, AppKit.CIColor):
+                        default = default.red(), default.green(), default.blue(), default.alpha()
+                        arg += ": RGBColor"
+                    elif isinstance(default, AppKit.NSData):
+                        default = None
+                        arg += ": bytes | None"
+                    elif isinstance(default, type(Quartz.CGColorSpaceCreateDeviceCMYK())):
+                        default = None
                     else:
                         arg += ": float"
                         if default == "None":
                             arg += " | None"
-
                     arg += f" = {default}"
 
                 if filterName in degreesAngleFilterNames:
@@ -277,7 +305,7 @@ if __name__ == '__main__':
                 args.append(arg)
             doc.dedent()
 
-        code.add(f"def {camelCase(filterName[2:])}(self, {', '.join(args)}):")
+        code.add(f"def {camelCase(filterName[2:])}" + (f"(self, {', '.join(args)}):" if args else f"(self):"))
         code.indent()
         code.add("\"\"\"")
         code.appendCode(doc)
