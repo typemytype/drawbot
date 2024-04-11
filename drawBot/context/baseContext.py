@@ -22,11 +22,8 @@ from typing_extensions import Self
 from aliases import (
     BoundingBox,
     Point,
-    OptionalFloat,
-    OptionalStr,
     Transform,
     SomePath,
-    Points,
 )
 
 _FALLBACKFONT = "LucidaGrande"
@@ -238,9 +235,9 @@ class BezierPath(BasePen, SVGContextPropertyMixin, ContextPropertyMixin):
     def addPoint(
         self,
         point: Point,
-        segmentType: OptionalStr = None,
+        segmentType: str | None = None,
         smooth: bool = False,
-        name: OptionalStr = None,
+        name: str | None = None,
         identifier=None,
         **kwargs,
     ):
@@ -369,10 +366,10 @@ class BezierPath(BasePen, SVGContextPropertyMixin, ContextPropertyMixin):
     def text(
         self,
         txt,
-        offset: OptionalFloat = None,
+        offset: float | None = None,
         font=_FALLBACKFONT,
         fontSize: float = 10,
-        align: OptionalStr = None,
+        align: str | None = None,
         fontNumber: int = 0,
     ):
         """
@@ -407,7 +404,7 @@ class BezierPath(BasePen, SVGContextPropertyMixin, ContextPropertyMixin):
         box: BoundingBox,
         font: str | SomePath = _FALLBACKFONT,
         fontSize: float = 10,
-        align: OptionalStr = None,
+        align: str | None = None,
         hyphenation=None,
         fontNumber: int = 0,
     ):
@@ -622,7 +619,7 @@ class BezierPath(BasePen, SVGContextPropertyMixin, ContextPropertyMixin):
         s = math.sin(angle)
         self.transform((c, s, -s, c, 0, 0), center)
 
-    def scale(self, x: float = 1, y: OptionalFloat = None, center: Point = (0, 0)):
+    def scale(self, x: float = 1, y: float | None = None, center: Point = (0, 0)):
         """
         Scale the path with a given `x` (horizontal scale) and `y` (vertical scale).
 
@@ -1476,7 +1473,7 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
     def font(
         self,
         fontNameOrPath: SomePath,
-        fontSize: OptionalFloat = None,
+        fontSize: float | None = None,
         fontNumber: int = 0,
     ):
         """

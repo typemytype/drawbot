@@ -25,15 +25,11 @@ from .context.tools import drawBotbuiltins
 from .misc import DrawBotError, warnings, VariableController, optimizePath, isPDF, isEPS, isGIF, transformationAtCenter, clearMemoizeCache
 from .aliases import (
     Point,
-    OptionalPoint,
     Points,
-    OptionalFloat,
     SomePath,
     CMYKColor,
     RGBColor,
     BoundingBox,
-    OptionalStr,
-    OptionalInt,
     Transform,
 )
 
@@ -213,6 +209,7 @@ class DrawBotDrawingTool():
         """
         if self._width is None:
             return 1000
+        # FIXME what happens if this is a float?
         return self._width
 
     def height(self) -> float:
@@ -245,7 +242,7 @@ class DrawBotDrawingTool():
 
     # size and pages
 
-    def size(self, width: float | str, height: OptionalFloat = None):
+    def size(self, width: float | str, height: float | None = None):
         """
         Set the width and height of the canvas.
         Without calling `size()` the default drawing board is 1000 by 1000 points.
@@ -287,7 +284,7 @@ class DrawBotDrawingTool():
         else:
             raise DrawBotError("Can't use 'size()' after drawing has begun. Try to move it to the top of your script.")
 
-    def newPage(self, width: str  | float | None = None, height: OptionalFloat = None):
+    def newPage(self, width: str  | float | None = None, height: float | None = None):
         """
         Create a new canvas to draw in.
         This will act like a page in a pdf or a frame in a mov.
@@ -839,9 +836,9 @@ class DrawBotDrawingTool():
 
     def fill(
         self,
-        r: OptionalFloat = None,
-        g: OptionalFloat = None,
-        b: OptionalFloat = None,
+        r: float | None = None,
+        g: float | None = None,
+        b: float | None = None,
         alpha: float = 1,
     ):
         """
@@ -879,9 +876,9 @@ class DrawBotDrawingTool():
 
     def stroke(
         self,
-        r: OptionalFloat = None,
-        g: OptionalFloat = None,
-        b: OptionalFloat = None,
+        r: float | None = None,
+        g: float | None = None,
+        b: float | None = None,
         alpha: float = 1,
     ):
         """
@@ -923,10 +920,10 @@ class DrawBotDrawingTool():
 
     def cmykFill(
         self,
-        c: OptionalFloat,
-        m: OptionalFloat = None,
-        y: OptionalFloat = None,
-        k: OptionalFloat = None,
+        c: float | None,
+        m: float | None = None,
+        y: float | None = None,
+        k: float | None = None,
         alpha: float = 1,
     ):
         """
@@ -954,10 +951,10 @@ class DrawBotDrawingTool():
 
     def cmykStroke(
         self,
-        c: OptionalFloat,
-        m: OptionalFloat = None,
-        y: OptionalFloat = None,
-        k: OptionalFloat = None,
+        c: float | None,
+        m: float | None = None,
+        y: float | None = None,
+        k: float | None = None,
         alpha: float = 1,
     ):
         """
@@ -1009,7 +1006,7 @@ class DrawBotDrawingTool():
     def shadow(
         self,
         offset: Point,
-        blur: OptionalFloat = None,
+        blur: float | None = None,
         color: tuple[float, ...] | None = None,
     ):
         """
@@ -1034,7 +1031,7 @@ class DrawBotDrawingTool():
     def cmykShadow(
         self,
         offset: Point,
-        blur: OptionalFloat = None,
+        blur: float | None = None,
         color: tuple[float, ...] | None = None,
     ):
         """
@@ -1057,8 +1054,8 @@ class DrawBotDrawingTool():
 
     def linearGradient(
         self,
-        startPoint: OptionalPoint = None,
-        endPoint: OptionalPoint = None,
+        startPoint: Point | None = None,
+        endPoint: Point | None = None,
         colors: list[RGBColor] | None = None,
         locations: list[float] | None = None,
     ):
@@ -1089,8 +1086,8 @@ class DrawBotDrawingTool():
 
     def cmykLinearGradient(
         self,
-        startPoint: OptionalPoint = None,
-        endPoint: OptionalPoint = None,
+        startPoint: Point | None = None,
+        endPoint: Point | None = None,
         colors: list[CMYKColor] | None = None,
         locations=None,
     ):
@@ -1121,8 +1118,8 @@ class DrawBotDrawingTool():
 
     def radialGradient(
         self,
-        startPoint: OptionalPoint = None,
-        endPoint: OptionalPoint = None,
+        startPoint: Point | None = None,
+        endPoint: Point | None = None,
         colors: list[RGBColor] | None = None,
         locations: list[float] | None = None,
         startRadius: float = 0,
@@ -1159,8 +1156,8 @@ class DrawBotDrawingTool():
 
     def cmykRadialGradient(
         self,
-        startPoint: OptionalPoint = None,
-        endPoint: OptionalPoint = None,
+        startPoint: Point | None = None,
+        endPoint: Point | None = None,
         colors: list[CMYKColor] | None = None,
         locations: list[float] | None = None,
         startRadius: float = 0,
@@ -1390,7 +1387,7 @@ class DrawBotDrawingTool():
         s = math.sin(angle)
         self.transform((c, s, -s, c, 0, 0), center)
 
-    def scale(self, x: float = 1, y: OptionalFloat = None, center: Point = (0, 0)):
+    def scale(self, x: float = 1, y: float | None = None, center: Point = (0, 0)):
         """
         Scale the canvas with a given `x` (horizontal scale) and `y` (vertical scale).
 
@@ -1745,7 +1742,7 @@ class DrawBotDrawingTool():
                 subTxt.copyContextProperties(txt)
             self.textBox(subTxt, box, align=align)
 
-    def textOverflow(self, txt, box: BoundingBox, align: OptionalStr = None):
+    def textOverflow(self, txt, box: BoundingBox, align: str | None = None):
         """
         Returns the overflowed text without drawing the text.
 
@@ -1769,7 +1766,7 @@ class DrawBotDrawingTool():
             raise DrawBotError("align must be %s" % (", ".join(self._dummyContext._textAlignMap.keys())))
         return self._dummyContext.clippedText(txt, box, align)
 
-    def textBox(self, txt, box: BoundingBox, align: OptionalStr = None):
+    def textBox(self, txt, box: BoundingBox, align: str | None = None):
         """
         Draw a text in a provided rectangle.
 
@@ -1907,7 +1904,7 @@ class DrawBotDrawingTool():
         self._addInstruction("textBox", txt, box, align)
         return self._dummyContext.clippedText(txt, box, align)
 
-    def textBoxBaselines(self, txt, box: BoundingBox, align: OptionalStr = None):
+    def textBoxBaselines(self, txt, box: BoundingBox, align: str | None = None):
         """
         Returns a list of `x, y` coordinates
         indicating the start of each line
@@ -1928,7 +1925,7 @@ class DrawBotDrawingTool():
         origins = CoreText.CTFrameGetLineOrigins(box, (0, len(ctLines)), None)
         return [(x + o.x, y + o.y) for o in origins]
 
-    def textBoxCharacterBounds(self, txt, box: BoundingBox, align: OptionalStr = None):
+    def textBoxCharacterBounds(self, txt, box: BoundingBox, align: str | None = None):
         """
         Returns a list of typesetted bounding boxes `((x, y, w, h), baseLineOffset, formattedSubString)`.
 
@@ -2016,7 +2013,7 @@ class DrawBotDrawingTool():
         path: SomePath,
         position: Point,
         alpha: float = 1,
-        pageNumber: OptionalInt = None,
+        pageNumber: int | None = None,
     ):
         """
         Add an image from a `path` with an `offset` and an `alpha` value.
@@ -2041,7 +2038,7 @@ class DrawBotDrawingTool():
     def imageSize(
         self,
         path: SomePath,
-        pageNumber: OptionalInt = None,
+        pageNumber: int | None = None,
     ) -> tuple[float, float]:
         """
         Return the `width` and `height` of an image. Supports pdf, jpg, png, tiff and gif file formats. `NSImage` objects are supported too.
@@ -2329,9 +2326,9 @@ class DrawBotDrawingTool():
     def textSize(
         self,
         txt,
-        align: OptionalStr = None,
-        width: OptionalFloat = None,
-        height: OptionalFloat = None,
+        align: str | None = None,
+        width: float | None = None,
+        height: float | None = None,
     ):
         """
         Returns the size of a text with the current settings,
@@ -2346,7 +2343,7 @@ class DrawBotDrawingTool():
             raise DrawBotError("Calculating textSize can only have one constrain, either width or height must be None")
         return self._dummyContext.textSize(txt, align, width, height)
 
-    def installedFonts(self, supportsCharacters: OptionalStr = None):
+    def installedFonts(self, supportsCharacters: str | None = None):
         """
         Returns a list of all installed fonts.
 
