@@ -227,14 +227,8 @@ class ImageObject:
             raise DrawBotError("Image does not contain any data. Draw into the image object first or set image data from a path.")
 
     # --- filters ---
-    # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-    # please, do not attempt to edit it manually as it will be overriden in the future
-    
-    def accordionFoldTransition(self, targetImage: Self, bottomHeight: float = 0.0, numberOfFolds: float = 3, foldShadowAmount: float = 0.1, time: float = 0.0):
+    def accordionFoldTransition(self, targetImage: Self, bottomHeight: float = 0.0, numberOfFolds: float = 3.0, foldShadowAmount: float = 0.1, time: float = 0.0):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Transitions from one image to another of a differing dimensions by unfolding.
         
         Attributes:
@@ -246,7 +240,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIAccordionFoldTransition',
             attributes=dict(
@@ -261,9 +254,6 @@ class ImageObject:
     
     def additionCompositing(self, backgroundImage: Self):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Adds color components to achieve a brightening effect. This filter is typically used to add highlights and lens flare effects.
         
         Attributes:
@@ -271,7 +261,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIAdditionCompositing',
             attributes=dict(
@@ -282,9 +271,6 @@ class ImageObject:
     
     def affineClamp(self, transform: Transform = (0.4, 0.0, 0.0, 0.4, 0.0, 0.0)):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Performs an affine transformation on a source image and then clamps the pixels at the edge of the transformed image, extending them outwards. This filter performs similarly to the “Affine Transform” filter except that it produces an image with infinite extent. You can use this filter when you need to blur an image but you want to avoid a soft, black fringe along the edges.
         
         Attributes:
@@ -292,7 +278,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIAffineClamp',
             attributes=dict(
@@ -303,9 +288,6 @@ class ImageObject:
     
     def affineTile(self, transform: Transform = (0.4, 0.0, 0.0, 0.4, 0.0, 0.0)):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Applies an affine transformation to an image and then tiles the transformed image.
         
         Attributes:
@@ -313,7 +295,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIAffineTile',
             attributes=dict(
@@ -324,9 +305,6 @@ class ImageObject:
     
     def areaAverage(self, extent: BoundingBox = (0.0, 0.0, 640.0, 80.0)):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Calculates the average color for the specified area in an image, returning the result in a pixel.
         
         Attributes:
@@ -334,7 +312,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIAreaAverage',
             attributes=dict(
@@ -345,9 +322,6 @@ class ImageObject:
     
     def areaHistogram(self, extent: BoundingBox = (0.0, 0.0, 640.0, 80.0), scale: float = 1.0, count: float = 64.0):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Calculates histograms of the R, G, B, and A channels of the specified area of an image. The output image is a one pixel tall image containing the histogram data for all four channels.
         
         Attributes:
@@ -357,7 +331,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIAreaHistogram',
             attributes=dict(
@@ -368,11 +341,8 @@ class ImageObject:
         )
         self._addFilter(filterDict)
     
-    def areaLogarithmicHistogram(self, extent: BoundingBox = (0.0, 0.0, 640.0, 80.0), scale: float = 1.0, count: float = 64.0, minimumStop: float = -10, maximumStop: float = 4):
+    def areaLogarithmicHistogram(self, extent: BoundingBox = (0.0, 0.0, 640.0, 80.0), scale: float = 1.0, count: float = 64.0, minimumStop: float = -10.0, maximumStop: float = 4.0):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Calculates histogram of the R, G, B, and A channels of the specified area of an image. Before binning, the R, G, and B channel values are transformed by the log base two function. The output image is a one pixel tall image containing the histogram data for all four channels.
         
         Attributes:
@@ -384,7 +354,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIAreaLogarithmicHistogram',
             attributes=dict(
@@ -399,9 +368,6 @@ class ImageObject:
     
     def areaMaximum(self, extent: BoundingBox = (0.0, 0.0, 640.0, 80.0)):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Calculates the maximum component values for the specified area in an image, returning the result in a pixel.
         
         Attributes:
@@ -409,7 +375,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIAreaMaximum',
             attributes=dict(
@@ -420,9 +385,6 @@ class ImageObject:
     
     def areaMaximumAlpha(self, extent: BoundingBox = (0.0, 0.0, 640.0, 80.0)):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Finds and returns the pixel with the maximum alpha value.
         
         Attributes:
@@ -430,7 +392,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIAreaMaximumAlpha',
             attributes=dict(
@@ -441,9 +402,6 @@ class ImageObject:
     
     def areaMinimum(self, extent: BoundingBox = (0.0, 0.0, 640.0, 80.0)):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Calculates the minimum component values for the specified area in an image, returning the result in a pixel.
         
         Attributes:
@@ -451,7 +409,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIAreaMinimum',
             attributes=dict(
@@ -462,9 +419,6 @@ class ImageObject:
     
     def areaMinimumAlpha(self, extent: BoundingBox = (0.0, 0.0, 640.0, 80.0)):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Finds and returns the pixel with the minimum alpha value.
         
         Attributes:
@@ -472,7 +426,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIAreaMinimumAlpha',
             attributes=dict(
@@ -483,9 +436,6 @@ class ImageObject:
     
     def areaMinMax(self, extent: BoundingBox = (0.0, 0.0, 640.0, 80.0)):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Calculates the per-component minimum and maximum value for the specified area in an image. The result is returned in a 2x1 image where the component minimum values are stored in the pixel on the left.
         
         Attributes:
@@ -493,7 +443,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIAreaMinMax',
             attributes=dict(
@@ -504,9 +453,6 @@ class ImageObject:
     
     def areaMinMaxRed(self, extent: BoundingBox = (0.0, 0.0, 640.0, 80.0)):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Calculates the minimum and maximum red component value for the specified area in an image. The result is returned in the red and green channels of a one pixel image.
         
         Attributes:
@@ -514,7 +460,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIAreaMinMaxRed',
             attributes=dict(
@@ -523,11 +468,8 @@ class ImageObject:
         )
         self._addFilter(filterDict)
     
-    def attributedTextImageGenerator(self, size: Size, text: FormattedString, scaleFactor: float = 1, padding: float = 0):
+    def attributedTextImageGenerator(self, size: Size, text: FormattedString, scaleFactor: float = 1.0, padding: float = 0.0):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Generate an image attributed string.
         
         Attributes:
@@ -538,7 +480,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIAttributedTextImageGenerator',
             attributes=dict(
@@ -551,11 +492,8 @@ class ImageObject:
         ),
         self._addFilter(filterDict)
     
-    def aztecCodeGenerator(self, size: Size, message: str, layers, compactStyle, correctionLevel: float = 23):
+    def aztecCodeGenerator(self, size: Size, message: str, layers, compactStyle, correctionLevel: float = 23.0):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Generate an Aztec barcode image for message data.
         
         Attributes:
@@ -567,7 +505,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIAztecCodeGenerator',
             attributes=dict(
@@ -584,9 +521,6 @@ class ImageObject:
     
     def barsSwipeTransition(self, targetImage: Self, angle: float = 3.141592653589793, width: float = 30.0, barOffset: float = 10.0, time: float = 0.0):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Transitions from one image to another by swiping rectangular portions of the foreground image to disclose the target image.
         
         Attributes:
@@ -598,7 +532,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIBarsSwipeTransition',
             attributes=dict(
@@ -613,9 +546,6 @@ class ImageObject:
     
     def blendWithAlphaMask(self, backgroundImage: Self, maskImage: Self):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Uses values from a mask image to interpolate between an image and the background. When a mask alpha value is 0.0, the result is the background. When the mask alpha value is 1.0, the result is the image.
         
         Attributes:
@@ -624,7 +554,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIBlendWithAlphaMask',
             attributes=dict(
@@ -636,9 +565,6 @@ class ImageObject:
     
     def blendWithBlueMask(self, backgroundImage: Self, maskImage: Self):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Uses values from a mask image to interpolate between an image and the background. When a mask blue value is 0.0, the result is the background. When the mask blue value is 1.0, the result is the image.
         
         Attributes:
@@ -647,7 +573,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIBlendWithBlueMask',
             attributes=dict(
@@ -659,9 +584,6 @@ class ImageObject:
     
     def blendWithMask(self, backgroundImage: Self, maskImage: Self):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Uses values from a grayscale mask to interpolate between an image and the background. When a mask green value is 0.0, the result is the background. When the mask green value is 1.0, the result is the image.
         
         Attributes:
@@ -670,7 +592,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIBlendWithMask',
             attributes=dict(
@@ -682,9 +603,6 @@ class ImageObject:
     
     def blendWithRedMask(self, backgroundImage: Self, maskImage: Self):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Uses values from a mask image to interpolate between an image and the background. When a mask red value is 0.0, the result is the background. When the mask red value is 1.0, the result is the image.
         
         Attributes:
@@ -693,7 +611,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIBlendWithRedMask',
             attributes=dict(
@@ -705,9 +622,6 @@ class ImageObject:
     
     def bloom(self, radius: float = 10.0, intensity: float = 0.5):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Softens edges and applies a pleasant glow to an image.
         
         Attributes:
@@ -716,7 +630,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIBloom',
             attributes=dict(
@@ -726,11 +639,8 @@ class ImageObject:
         )
         self._addFilter(filterDict)
     
-    def blurredRectangleGenerator(self, size: Size, extent: BoundingBox = (0.0, 0.0, 100.0, 100.0), sigma: float = 10, color: RGBColor = (1.0, 1.0, 1.0, 1.0)):
+    def blurredRectangleGenerator(self, size: Size, extent: BoundingBox = (0.0, 0.0, 100.0, 100.0), sigma: float = 10.0, color: RGBColor = (1.0, 1.0, 1.0, 1.0)):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Generates a blurred rectangle image with the specified extent, blur sigma, and color.
         
         Attributes:
@@ -741,7 +651,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIBlurredRectangleGenerator',
             attributes=dict(
@@ -756,9 +665,6 @@ class ImageObject:
     
     def bokehBlur(self, radius: float = 20.0, ringAmount: float = 0.0, ringSize: float = 0.1, softness: float = 1.0):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Smooths an image using a disc-shaped convolution kernel.
         
         Attributes:
@@ -769,7 +675,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIBokehBlur',
             attributes=dict(
@@ -783,9 +688,6 @@ class ImageObject:
     
     def boxBlur(self, radius: float = 10.0):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Smooths or sharpens an image using a box-shaped convolution kernel.
         
         Attributes:
@@ -793,7 +695,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIBoxBlur',
             attributes=dict(
@@ -804,9 +705,6 @@ class ImageObject:
     
     def bumpDistortion(self, center: Point = (150.0, 150.0), radius: float = 300.0, scale: float = 0.5):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Creates a concave or convex bump that originates at a specified point in the image.
         
         Attributes:
@@ -816,7 +714,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIBumpDistortion',
             attributes=dict(
@@ -829,9 +726,6 @@ class ImageObject:
     
     def bumpDistortionLinear(self, center: Point = (150.0, 150.0), radius: float = 300.0, angle: float = 0.0, scale: float = 0.5):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Creates a bump that originates from a linear portion of the image.
         
         Attributes:
@@ -842,7 +736,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIBumpDistortionLinear',
             attributes=dict(
@@ -854,34 +747,8 @@ class ImageObject:
         )
         self._addFilter(filterDict)
     
-    def cameraCalibrationLensCorrection(self, AVCameraCalibrationData, useInverseLookUpTable: float = False):
+    def cannyEdgeDetector(self, gaussianSigma: float = 1.6, perceptual: bool = False, thresholdHigh: float = 0.05, thresholdLow: float = 0.02, hysteresisPasses: float = 1.0):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
-        Geometrically distorts an image by altering the magnification based on the radial distance from the optical center to the farthest radius.
-        
-        Attributes:
-            `AVCameraCalibrationData` a float. AVCameraCalibrationData for the correction. Will be set from the input image if available and can be overridden here.
-            `useInverseLookUpTable` a float. Boolean value used to select the Look Up Table from the AVCameraCalibrationData.
-        """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
-        filterDict = dict(
-            name='CICameraCalibrationLensCorrection',
-            attributes=dict(
-                AVCameraCalibrationData=AVCameraCalibrationData,
-                useInverseLookUpTable=useInverseLookUpTable
-            )
-        )
-        self._addFilter(filterDict)
-    
-    def cannyEdgeDetector(self, gaussianSigma: float = 1.6, perceptual: float = False, thresholdHigh: float = 0.05, thresholdLow: float = 0.02, hysteresisPasses: float = 1):
-        """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Applies the Canny Edge Detection algorithm to an image.
         
         Attributes:
@@ -893,7 +760,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CICannyEdgeDetector',
             attributes=dict(
@@ -908,9 +774,6 @@ class ImageObject:
     
     def checkerboardGenerator(self, size: Size, center: Point = (150.0, 150.0), color0: RGBColor = (1.0, 1.0, 1.0, 1.0), color1: RGBColor = (0.0, 0.0, 0.0, 1.0), width: float = 80.0, sharpness: float = 1.0):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Generates a pattern of squares of alternating colors. You can specify the size, colors, and the sharpness of the pattern.
         
         Attributes:
@@ -923,7 +786,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CICheckerboardGenerator',
             attributes=dict(
@@ -940,9 +802,6 @@ class ImageObject:
     
     def circleSplashDistortion(self, center: Point = (150.0, 150.0), radius: float = 150.0):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Distorts the pixels starting at the circumference of a circle and emanating outward.
         
         Attributes:
@@ -951,7 +810,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CICircleSplashDistortion',
             attributes=dict(
@@ -963,9 +821,6 @@ class ImageObject:
     
     def circularScreen(self, center: Point = (150.0, 150.0), width: float = 6.0, sharpness: float = 0.7):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Simulates a circular-shaped halftone screen.
         
         Attributes:
@@ -975,7 +830,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CICircularScreen',
             attributes=dict(
@@ -988,9 +842,6 @@ class ImageObject:
     
     def circularWrap(self, center: Point = (150.0, 150.0), radius: float = 150.0, angle: float = 0.0):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Wraps an image around a transparent circle. The distortion of the image increases with the distance from the center of the circle.
         
         Attributes:
@@ -1000,7 +851,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CICircularWrap',
             attributes=dict(
@@ -1013,9 +863,6 @@ class ImageObject:
     
     def clamp(self, extent: BoundingBox = (0.0, 0.0, 640.0, 80.0)):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Clamps an image so the pixels with the specified extent are left unchanged but those at the boundary of the extent are extended outwards. This filter produces an image with infinite extent. You can use this filter when you need to blur an image but you want to avoid a soft, black fringe along the edges.
         
         Attributes:
@@ -1023,7 +870,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIClamp',
             attributes=dict(
@@ -1034,9 +880,6 @@ class ImageObject:
     
     def CMYKHalftone(self, center: Point = (150.0, 150.0), width: float = 6.0, angle: float = 0.0, sharpness: float = 0.7, GCR: float = 1.0, UCR: float = 0.5):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Creates a color, halftoned rendition of the source image, using cyan, magenta, yellow, and black inks over a white page.
         
         Attributes:
@@ -1049,7 +892,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CICMYKHalftone',
             attributes=dict(
@@ -1063,11 +905,8 @@ class ImageObject:
         )
         self._addFilter(filterDict)
     
-    def code128BarcodeGenerator(self, size: Size, message: str, quietSpace: float = 10, barcodeHeight: float = 32):
+    def code128BarcodeGenerator(self, size: Size, message: str, quietSpace: float = 10.0, barcodeHeight: float = 32.0):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Generate a Code 128 barcode image for message data.
         
         Attributes:
@@ -1078,7 +917,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CICode128BarcodeGenerator',
             attributes=dict(
@@ -1093,9 +931,6 @@ class ImageObject:
     
     def colorAbsoluteDifference(self, image2):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Produces an image that is the absolute value of the color difference between two images. The alpha channel of the result will be the product of the two image alpha channels.
         
         Attributes:
@@ -1103,7 +938,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIColorAbsoluteDifference',
             attributes=dict(
@@ -1114,9 +948,6 @@ class ImageObject:
     
     def colorBlendMode(self, backgroundImage: Self):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Uses the luminance values of the background with the hue and saturation values of the source image. This mode preserves the gray levels in the image.
         
         Attributes:
@@ -1124,7 +955,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIColorBlendMode',
             attributes=dict(
@@ -1135,9 +965,6 @@ class ImageObject:
     
     def colorBurnBlendMode(self, backgroundImage: Self):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Darkens the background image samples to reflect the source image samples. Source image sample values that specify white do not produce a change.
         
         Attributes:
@@ -1145,7 +972,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIColorBurnBlendMode',
             attributes=dict(
@@ -1156,9 +982,6 @@ class ImageObject:
     
     def colorClamp(self, minComponents: BoundingBox = (0.0, 0.0, 0.0, 0.0), maxComponents: BoundingBox = (1.0, 1.0, 1.0, 1.0)):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Clamp color to a certain range.
         
         Attributes:
@@ -1167,7 +990,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIColorClamp',
             attributes=dict(
@@ -1179,9 +1001,6 @@ class ImageObject:
     
     def colorControls(self, saturation: float = 1.0, brightness: float = 0.0, contrast: float = 1.0):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Adjusts saturation, brightness, and contrast values.
         
         Attributes:
@@ -1191,7 +1010,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIColorControls',
             attributes=dict(
@@ -1204,9 +1022,6 @@ class ImageObject:
     
     def colorCrossPolynomial(self, redCoefficients: tuple = (1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0), greenCoefficients: tuple = (0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0), blueCoefficients: tuple = (0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Adjusts the color of an image with polynomials.
         
         Attributes:
@@ -1216,7 +1031,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIColorCrossPolynomial',
             attributes=dict(
@@ -1229,9 +1043,6 @@ class ImageObject:
     
     def colorCurves(self, colorSpace, curvesData: bytes | None = None, curvesDomain: Point = (0.0, 1.0)):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Uses a three-channel one-dimensional color table to transform the source image pixels.
         
         Attributes:
@@ -1241,7 +1052,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIColorCurves',
             attributes=dict(
@@ -1254,9 +1064,6 @@ class ImageObject:
     
     def colorDodgeBlendMode(self, backgroundImage: Self):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Brightens the background image samples to reflect the source image samples. Source image sample values that specify black do not produce a change.
         
         Attributes:
@@ -1264,7 +1071,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIColorDodgeBlendMode',
             attributes=dict(
@@ -1275,14 +1081,10 @@ class ImageObject:
     
     def colorInvert(self):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Inverts the colors in an image.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIColorInvert',
         )
@@ -1290,9 +1092,6 @@ class ImageObject:
     
     def colorMap(self, gradientImage: Self):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Performs a nonlinear transformation of source color values using mapping values provided in a table.
         
         Attributes:
@@ -1300,7 +1099,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIColorMap',
             attributes=dict(
@@ -1311,9 +1109,6 @@ class ImageObject:
     
     def colorMatrix(self, RVector: BoundingBox = (1.0, 0.0, 0.0, 0.0), GVector: BoundingBox = (0.0, 1.0, 0.0, 0.0), BVector: BoundingBox = (0.0, 0.0, 1.0, 0.0), AVector: BoundingBox = (0.0, 0.0, 0.0, 1.0), biasVector: BoundingBox = (0.0, 0.0, 0.0, 0.0)):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Multiplies source color values and adds a bias factor to each color component.
         
         Attributes:
@@ -1325,7 +1120,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIColorMatrix',
             attributes=dict(
@@ -1340,9 +1134,6 @@ class ImageObject:
     
     def colorMonochrome(self, color: RGBColor = (0.6, 0.45, 0.3, 1.0), intensity: float = 1.0):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Remaps colors so they fall within shades of a single color.
         
         Attributes:
@@ -1351,7 +1142,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIColorMonochrome',
             attributes=dict(
@@ -1363,9 +1153,6 @@ class ImageObject:
     
     def colorPolynomial(self, redCoefficients: BoundingBox = (0.0, 1.0, 0.0, 0.0), greenCoefficients: BoundingBox = (0.0, 1.0, 0.0, 0.0), blueCoefficients: BoundingBox = (0.0, 1.0, 0.0, 0.0), alphaCoefficients: BoundingBox = (0.0, 1.0, 0.0, 0.0)):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Adjusts the color of an image with polynomials.
         
         Attributes:
@@ -1376,7 +1163,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIColorPolynomial',
             attributes=dict(
@@ -1390,9 +1176,6 @@ class ImageObject:
     
     def colorPosterize(self, levels: float = 6.0):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Remaps red, green, and blue color components to the number of brightness values you specify for each color component. This filter flattens colors to achieve a look similar to that of a silk-screened poster.
         
         Attributes:
@@ -1400,7 +1183,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIColorPosterize',
             attributes=dict(
@@ -1411,9 +1193,6 @@ class ImageObject:
     
     def colorThreshold(self, threshold: float = 0.5):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Produces a binarized image from an image and a threshold value. The red, green and blue channels of the resulting image will be one if its value is greater than the threshold and zero otherwise.
         
         Attributes:
@@ -1421,7 +1200,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIColorThreshold',
             attributes=dict(
@@ -1432,14 +1210,10 @@ class ImageObject:
     
     def colorThresholdOtsu(self):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Produces a binarized image from an image with finite extent. The threshold is calculated from the image histogram using Otsu’s method. The red, green and blue channels of the resulting image will be one if its value is greater than the threshold and zero otherwise.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIColorThresholdOtsu',
         )
@@ -1447,9 +1221,6 @@ class ImageObject:
     
     def columnAverage(self, extent: BoundingBox = (0.0, 0.0, 640.0, 80.0)):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Calculates the average color for each column of the specified area in an image, returning the result in a 1D image.
         
         Attributes:
@@ -1457,7 +1228,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIColumnAverage',
             attributes=dict(
@@ -1468,14 +1238,10 @@ class ImageObject:
     
     def comicEffect(self):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Simulates a comic book drawing by outlining edges and applying a color halftone effect.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIComicEffect',
         )
@@ -1483,9 +1249,6 @@ class ImageObject:
     
     def constantColorGenerator(self, size: Size, color: RGBColor = (1.0, 0.0, 0.0, 1.0)):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Generates a solid color. You typically use the output of this filter as the input to another filter.
         
         Attributes:
@@ -1494,7 +1257,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIConstantColorGenerator',
             attributes=dict(
@@ -1505,11 +1267,8 @@ class ImageObject:
         ),
         self._addFilter(filterDict)
     
-    def convertLabToRGB(self, normalize: float = False):
+    def convertLabToRGB(self, normalize: bool = False):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Converts an image from La*b* color space to the Core Image RGB working space.
         
         Attributes:
@@ -1517,7 +1276,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIConvertLabToRGB',
             attributes=dict(
@@ -1526,11 +1284,8 @@ class ImageObject:
         )
         self._addFilter(filterDict)
     
-    def convertRGBtoLab(self, normalize: float = False):
+    def convertRGBtoLab(self, normalize: bool = False):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Converts an image from the Core Image RGB working space to La*b* color space.
         
         Attributes:
@@ -1538,7 +1293,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIConvertRGBtoLab',
             attributes=dict(
@@ -1549,9 +1303,6 @@ class ImageObject:
     
     def convolution3X3(self, weights: tuple = (0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0), bias: float = 0.0):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Convolution with 3 by 3 matrix.
         
         Attributes:
@@ -1560,7 +1311,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIConvolution3X3',
             attributes=dict(
@@ -1572,9 +1322,6 @@ class ImageObject:
     
     def convolution5X5(self, weights: tuple = (0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0), bias: float = 0.0):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Convolution with 5 by 5 matrix.
         
         Attributes:
@@ -1583,7 +1330,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIConvolution5X5',
             attributes=dict(
@@ -1595,9 +1341,6 @@ class ImageObject:
     
     def convolution7X7(self, weights: tuple = (0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0), bias: float = 0.0):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Convolution with 7 by 7 matrix.
         
         Attributes:
@@ -1606,7 +1349,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIConvolution7X7',
             attributes=dict(
@@ -1618,9 +1360,6 @@ class ImageObject:
     
     def convolution9Horizontal(self, weights: tuple = (0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0), bias: float = 0.0):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Horizontal Convolution with 9 values.
         
         Attributes:
@@ -1629,7 +1368,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIConvolution9Horizontal',
             attributes=dict(
@@ -1641,9 +1379,6 @@ class ImageObject:
     
     def convolution9Vertical(self, weights: tuple = (0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0), bias: float = 0.0):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Vertical Convolution with 9 values.
         
         Attributes:
@@ -1652,7 +1387,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIConvolution9Vertical',
             attributes=dict(
@@ -1664,9 +1398,6 @@ class ImageObject:
     
     def convolutionRGB3X3(self, weights: tuple = (0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0), bias: float = 0.0):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Convolution of RGB channels with 3 by 3 matrix.
         
         Attributes:
@@ -1675,7 +1406,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIConvolutionRGB3X3',
             attributes=dict(
@@ -1687,9 +1417,6 @@ class ImageObject:
     
     def convolutionRGB5X5(self, weights: tuple = (0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0), bias: float = 0.0):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Convolution of RGB channels with 5 by 5 matrix.
         
         Attributes:
@@ -1698,7 +1425,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIConvolutionRGB5X5',
             attributes=dict(
@@ -1710,9 +1436,6 @@ class ImageObject:
     
     def convolutionRGB7X7(self, weights: tuple = (0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0), bias: float = 0.0):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Convolution of RGB channels with 7 by 7 matrix.
         
         Attributes:
@@ -1721,7 +1444,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIConvolutionRGB7X7',
             attributes=dict(
@@ -1733,9 +1455,6 @@ class ImageObject:
     
     def convolutionRGB9Horizontal(self, weights: tuple = (0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0), bias: float = 0.0):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Horizontal Convolution of RGB channels with 9 values.
         
         Attributes:
@@ -1744,7 +1463,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIConvolutionRGB9Horizontal',
             attributes=dict(
@@ -1756,9 +1474,6 @@ class ImageObject:
     
     def convolutionRGB9Vertical(self, weights: tuple = (0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0), bias: float = 0.0):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Vertical Convolution of RGB channels with 9 values.
         
         Attributes:
@@ -1767,7 +1482,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIConvolutionRGB9Vertical',
             attributes=dict(
@@ -1779,9 +1493,6 @@ class ImageObject:
     
     def copyMachineTransition(self, targetImage: Self, extent: BoundingBox = (0.0, 0.0, 300.0, 300.0), color: RGBColor = (0.6, 1.0, 0.8, 1.0), time: float = 0.0, angle: float = 0.0, width: float = 200.0, opacity: float = 1.3):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Transitions from one image to another by simulating the effect of a copy machine.
         
         Attributes:
@@ -1795,7 +1506,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CICopyMachineTransition',
             attributes=dict(
@@ -1810,11 +1520,8 @@ class ImageObject:
         )
         self._addFilter(filterDict)
     
-    def coreMLModelFilter(self, model, headIndex: float = 0, softmaxNormalization: float = False):
+    def coreMLModelFilter(self, model, headIndex: float = 0.0, softmaxNormalization: bool = False):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Generates output image by applying input CoreML model to the input image.
         
         Attributes:
@@ -1824,7 +1531,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CICoreMLModelFilter',
             attributes=dict(
@@ -1837,9 +1543,6 @@ class ImageObject:
     
     def crop(self, rectangle: BoundingBox = (-8.988465674311579e+307, -8.988465674311579e+307, 1.7976931348623157e+308, 1.7976931348623157e+308)):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Applies a crop to an image. The size and shape of the cropped image depend on the rectangle you specify.
         
         Attributes:
@@ -1847,7 +1550,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CICrop',
             attributes=dict(
@@ -1858,9 +1560,6 @@ class ImageObject:
     
     def crystallize(self, radius: float = 20.0, center: Point = (150.0, 150.0)):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Creates polygon-shaped color blocks by aggregating source pixel-color values.
         
         Attributes:
@@ -1869,7 +1568,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CICrystallize',
             attributes=dict(
@@ -1881,9 +1579,6 @@ class ImageObject:
     
     def darkenBlendMode(self, backgroundImage: Self):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Creates composite image samples by choosing the darker samples (from either the source image or the background). The result is that the background image samples are replaced by any source image samples that are darker. Otherwise, the background image samples are left unchanged.
         
         Attributes:
@@ -1891,7 +1586,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIDarkenBlendMode',
             attributes=dict(
@@ -1902,9 +1596,6 @@ class ImageObject:
     
     def depthBlurEffect(self, disparityImage: Self, matteImage: Self, hairImage: Self, glassesImage: Self, gainMap: Self, focusRect, calibrationData, auxDataMetadata, shape, aperture: float = 0.0, leftEyePositions: Point = (-1.0, -1.0), rightEyePositions: Point = (-1.0, -1.0), chinPositions: Point = (-1.0, -1.0), nosePositions: Point = (-1.0, -1.0), lumaNoiseScale: float = 0.0, scaleFactor: float = 1.0):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Applies a variable radius disc blur to an image where areas in the background are softened more than those in the foreground.
         
         Attributes:
@@ -1927,7 +1618,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIDepthBlurEffect',
             attributes=dict(
@@ -1953,9 +1643,6 @@ class ImageObject:
     
     def depthOfField(self, point0: Point = (0.0, 300.0), point1: Point = (300.0, 300.0), saturation: float = 1.5, unsharpMaskRadius: float = 2.5, unsharpMaskIntensity: float = 0.5, radius: float = 6.0):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Simulates miniaturization effect created by Tilt & Shift lens by performing depth of field effects.
         
         Attributes:
@@ -1968,7 +1655,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIDepthOfField',
             attributes=dict(
@@ -1984,14 +1670,10 @@ class ImageObject:
     
     def depthToDisparity(self):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Convert a depth data image to disparity data.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIDepthToDisparity',
         )
@@ -1999,9 +1681,6 @@ class ImageObject:
     
     def differenceBlendMode(self, backgroundImage: Self):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Subtracts either the source image sample color from the background image sample color, or the reverse, depending on which sample has the greater brightness value. Source image sample values that are black produce no change; white inverts the background color values.
         
         Attributes:
@@ -2009,7 +1688,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIDifferenceBlendMode',
             attributes=dict(
@@ -2020,9 +1698,6 @@ class ImageObject:
     
     def discBlur(self, radius: float = 8.0):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Smooths an image using a disc-shaped convolution kernel.
         
         Attributes:
@@ -2030,7 +1705,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIDiscBlur',
             attributes=dict(
@@ -2041,9 +1715,6 @@ class ImageObject:
     
     def disintegrateWithMaskTransition(self, targetImage: Self, maskImage: Self, time: float = 0.0, shadowRadius: float = 8.0, shadowDensity: float = 0.65, shadowOffset: Point = (0.0, -10.0)):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Transitions from one image to another using the shape defined by a mask.
         
         Attributes:
@@ -2056,7 +1727,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIDisintegrateWithMaskTransition',
             attributes=dict(
@@ -2072,14 +1742,10 @@ class ImageObject:
     
     def disparityToDepth(self):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Convert a disparity data image to depth data.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIDisparityToDepth',
         )
@@ -2087,9 +1753,6 @@ class ImageObject:
     
     def displacementDistortion(self, displacementImage: Self, scale: float = 50.0):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Applies the grayscale values of the second image to the first image. The output image has a texture defined by the grayscale values.
         
         Attributes:
@@ -2098,7 +1761,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIDisplacementDistortion',
             attributes=dict(
@@ -2110,9 +1772,6 @@ class ImageObject:
     
     def dissolveTransition(self, targetImage: Self, time: float = 0.0):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Uses a dissolve to transition from one image to another.
         
         Attributes:
@@ -2121,7 +1780,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIDissolveTransition',
             attributes=dict(
@@ -2133,9 +1791,6 @@ class ImageObject:
     
     def dither(self, intensity: float = 0.1):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Apply dithering to an image. This operation is usually performed in a perceptual color space.
         
         Attributes:
@@ -2143,7 +1798,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIDither',
             attributes=dict(
@@ -2154,9 +1808,6 @@ class ImageObject:
     
     def divideBlendMode(self, backgroundImage: Self):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Divides the background image sample color from the source image sample color.
         
         Attributes:
@@ -2164,7 +1815,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIDivideBlendMode',
             attributes=dict(
@@ -2175,9 +1825,6 @@ class ImageObject:
     
     def documentEnhancer(self, amount: float = 1.0):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Enhance a document image by removing unwanted shadows, whitening the background, and enhancing contrast.
         
         Attributes:
@@ -2185,7 +1832,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIDocumentEnhancer',
             attributes=dict(
@@ -2196,9 +1842,6 @@ class ImageObject:
     
     def dotScreen(self, center: Point = (150.0, 150.0), angle: float = 0.0, width: float = 6.0, sharpness: float = 0.7):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Simulates the dot patterns of a halftone screen.
         
         Attributes:
@@ -2209,7 +1852,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIDotScreen',
             attributes=dict(
@@ -2223,9 +1865,6 @@ class ImageObject:
     
     def droste(self, insetPoint0: Point = (200.0, 200.0), insetPoint1: Point = (400.0, 400.0), strands: float = 1.0, periodicity: float = 1.0, rotation: float = 0.0, zoom: float = 1.0):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Performs M.C. Escher Droste style deformation.
         
         Attributes:
@@ -2238,7 +1877,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIDroste',
             attributes=dict(
@@ -2254,9 +1892,6 @@ class ImageObject:
     
     def edgePreserveUpsampleFilter(self, smallImage, spatialSigma: float = 3.0, lumaSigma: float = 0.15):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Upsamples a small image to the size of the input image using the luminance of the input image as a guide to preserve detail.
         
         Attributes:
@@ -2266,7 +1901,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIEdgePreserveUpsampleFilter',
             attributes=dict(
@@ -2279,9 +1913,6 @@ class ImageObject:
     
     def edges(self, intensity: float = 1.0):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Finds all edges in an image and displays them in color.
         
         Attributes:
@@ -2289,7 +1920,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIEdges',
             attributes=dict(
@@ -2300,9 +1930,6 @@ class ImageObject:
     
     def edgeWork(self, radius: float = 3.0):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Produces a stylized black-and-white rendition of an image that looks similar to a woodblock cutout.
         
         Attributes:
@@ -2310,7 +1937,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIEdgeWork',
             attributes=dict(
@@ -2321,9 +1947,6 @@ class ImageObject:
     
     def eightfoldReflectedTile(self, center: Point = (150.0, 150.0), angle: float = 0.0, width: float = 100.0):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Produces a tiled image from a source image by applying an 8-way reflected symmetry.
         
         Attributes:
@@ -2333,7 +1956,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIEightfoldReflectedTile',
             attributes=dict(
@@ -2346,9 +1968,6 @@ class ImageObject:
     
     def exclusionBlendMode(self, backgroundImage: Self):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Produces an effect similar to that produced by the “Difference Blend Mode” filter but with lower contrast. Source image sample values that are black do not produce a change; white inverts the background color values.
         
         Attributes:
@@ -2356,7 +1975,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIExclusionBlendMode',
             attributes=dict(
@@ -2367,9 +1985,6 @@ class ImageObject:
     
     def exposureAdjust(self, EV: float = 0.0):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Adjusts the exposure setting for an image similar to the way you control exposure for a camera when you change the F-stop.
         
         Attributes:
@@ -2377,7 +1992,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIExposureAdjust',
             attributes=dict(
@@ -2388,9 +2002,6 @@ class ImageObject:
     
     def falseColor(self, color0: RGBColor = (0.3, 0.0, 0.0, 1.0), color1: RGBColor = (1.0, 0.9, 0.8, 1.0)):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Maps luminance to a color ramp of two colors. False color is often used to process astronomical and other scientific data, such as ultraviolet and X-ray images.
         
         Attributes:
@@ -2399,7 +2010,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIFalseColor',
             attributes=dict(
@@ -2411,9 +2021,6 @@ class ImageObject:
     
     def flashTransition(self, targetImage: Self, center: Point = (150.0, 150.0), extent: BoundingBox = (0.0, 0.0, 300.0, 300.0), color: RGBColor = (1.0, 0.8, 0.6, 1.0), time: float = 0.0, maxStriationRadius: float = 2.58, striationStrength: float = 0.5, striationContrast: float = 1.375, fadeThreshold: float = 0.85):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Transitions from one image to another by creating a flash. The flash originates from a point you specify. Small at first, it rapidly expands until the image frame is completely filled with the flash color. As the color fades, the target image begins to appear.
         
         Attributes:
@@ -2429,7 +2036,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIFlashTransition',
             attributes=dict(
@@ -2448,9 +2054,6 @@ class ImageObject:
     
     def fourfoldReflectedTile(self, center: Point = (150.0, 150.0), angle: float = 0.0, width: float = 100.0, acuteAngle: float = 1.5707963267948966):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Produces a tiled image from a source image by applying a 4-way reflected symmetry.
         
         Attributes:
@@ -2461,7 +2064,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIFourfoldReflectedTile',
             attributes=dict(
@@ -2475,9 +2077,6 @@ class ImageObject:
     
     def fourfoldRotatedTile(self, center: Point = (150.0, 150.0), angle: float = 0.0, width: float = 100.0):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Produces a tiled image from a source image by rotating the source at increments of 90 degrees.
         
         Attributes:
@@ -2487,7 +2086,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIFourfoldRotatedTile',
             attributes=dict(
@@ -2500,9 +2098,6 @@ class ImageObject:
     
     def fourfoldTranslatedTile(self, center: Point = (150.0, 150.0), angle: float = 0.0, width: float = 100.0, acuteAngle: float = 1.5707963267948966):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Produces a tiled image from a source image by applying 4 translation operations.
         
         Attributes:
@@ -2513,7 +2108,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIFourfoldTranslatedTile',
             attributes=dict(
@@ -2527,14 +2121,10 @@ class ImageObject:
     
     def gaborGradients(self):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Applies multichannel 5 by 5 Gabor gradient filter to an image. The resulting image has maximum horizontal gradient in the red channel and the maximum vertical gradient in the green channel. The gradient values can be positive or negative.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIGaborGradients',
         )
@@ -2542,9 +2132,6 @@ class ImageObject:
     
     def gammaAdjust(self, power: float = 1.0):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Adjusts midtone brightness. This filter is typically used to compensate for nonlinear effects of displays. Adjusting the gamma effectively changes the slope of the transition between black and white.
         
         Attributes:
@@ -2552,7 +2139,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIGammaAdjust',
             attributes=dict(
@@ -2563,9 +2149,6 @@ class ImageObject:
     
     def gaussianBlur(self, radius: float = 10.0):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Spreads source pixels by an amount specified by a Gaussian distribution.
         
         Attributes:
@@ -2573,7 +2156,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIGaussianBlur',
             attributes=dict(
@@ -2584,9 +2166,6 @@ class ImageObject:
     
     def gaussianGradient(self, size: Size, center: Point = (150.0, 150.0), color0: RGBColor = (1.0, 1.0, 1.0, 1.0), color1: RGBColor = (0.0, 0.0, 0.0, 0.0), radius: float = 300.0):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Generates a gradient that varies from one color to another using a Gaussian distribution.
         
         Attributes:
@@ -2598,7 +2177,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIGaussianGradient',
             attributes=dict(
@@ -2614,9 +2192,6 @@ class ImageObject:
     
     def glassDistortion(self, texture: Self, center: Point = (150.0, 150.0), scale: float = 200.0):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Distorts an image by applying a glass-like texture. The raised portions of the output image are the result of applying a texture map.
         
         Attributes:
@@ -2626,7 +2201,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIGlassDistortion',
             attributes=dict(
@@ -2639,9 +2213,6 @@ class ImageObject:
     
     def glassLozenge(self, point0: Point = (150.0, 150.0), point1: Point = (350.0, 150.0), radius: float = 100.0, refraction: float = 1.7):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Creates a lozenge-shaped lens and distorts the portion of the image over which the lens is placed.
         
         Attributes:
@@ -2652,7 +2223,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIGlassLozenge',
             attributes=dict(
@@ -2666,9 +2236,6 @@ class ImageObject:
     
     def glideReflectedTile(self, center: Point = (150.0, 150.0), angle: float = 0.0, width: float = 100.0):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Produces a tiled image from a source image by translating and smearing the image.
         
         Attributes:
@@ -2678,7 +2245,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIGlideReflectedTile',
             attributes=dict(
@@ -2691,9 +2257,6 @@ class ImageObject:
     
     def gloom(self, radius: float = 10.0, intensity: float = 0.5):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Dulls the highlights of an image.
         
         Attributes:
@@ -2702,7 +2265,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIGloom',
             attributes=dict(
@@ -2714,9 +2276,6 @@ class ImageObject:
     
     def guidedFilter(self, guideImage, radius: float = 1.0, epsilon: float = 0.0001):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Upsamples a small image to the size of the guide image using the content of the guide to preserve detail.
         
         Attributes:
@@ -2726,7 +2285,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIGuidedFilter',
             attributes=dict(
@@ -2739,9 +2297,6 @@ class ImageObject:
     
     def hardLightBlendMode(self, backgroundImage: Self):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Either multiplies or screens colors, depending on the source image sample color. If the source image sample color is lighter than 50% gray, the background is lightened, similar to screening. If the source image sample color is darker than 50% gray, the background is darkened, similar to multiplying. If the source image sample color is equal to 50% gray, the source image is not changed. Image samples that are equal to pure black or pure white result in pure black or white. The overall effect is similar to what you would achieve by shining a harsh spotlight on the source image.
         
         Attributes:
@@ -2749,7 +2304,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIHardLightBlendMode',
             attributes=dict(
@@ -2760,9 +2314,6 @@ class ImageObject:
     
     def hatchedScreen(self, center: Point = (150.0, 150.0), angle: float = 0.0, width: float = 6.0, sharpness: float = 0.7):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Simulates the hatched pattern of a halftone screen.
         
         Attributes:
@@ -2773,7 +2324,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIHatchedScreen',
             attributes=dict(
@@ -2787,9 +2337,6 @@ class ImageObject:
     
     def heightFieldFromMask(self, radius: float = 10.0):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Produces a continuous three-dimensional, loft-shaped height field from a grayscale mask. The white values of the mask define those pixels that are inside the height field while the black values define those pixels that are outside. The field varies smoothly and continuously inside the mask, reaching the value 0 at the edge of the mask. You can use this filter with the Shaded Material filter to produce extremely realistic shaded objects.
         
         Attributes:
@@ -2797,7 +2344,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIHeightFieldFromMask',
             attributes=dict(
@@ -2808,9 +2354,6 @@ class ImageObject:
     
     def hexagonalPixellate(self, center: Point = (150.0, 150.0), scale: float = 8.0):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Displays an image as colored hexagons whose color is an average of the pixels they replace.
         
         Attributes:
@@ -2819,7 +2362,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIHexagonalPixellate',
             attributes=dict(
@@ -2831,9 +2373,6 @@ class ImageObject:
     
     def highlightShadowAdjust(self, radius: float = 0.0, shadowAmount: float = 0.0, highlightAmount: float = 1.0):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Adjust the tonal mapping of an image while preserving spatial detail.
         
         Attributes:
@@ -2843,7 +2382,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIHighlightShadowAdjust',
             attributes=dict(
@@ -2856,9 +2394,6 @@ class ImageObject:
     
     def histogramDisplayFilter(self, height: float = 100.0, highLimit: float = 1.0, lowLimit: float = 0.0):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Generates a displayable histogram image from the output of the “Area Histogram” filter.
         
         Attributes:
@@ -2868,7 +2403,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIHistogramDisplayFilter',
             attributes=dict(
@@ -2881,9 +2415,6 @@ class ImageObject:
     
     def holeDistortion(self, center: Point = (150.0, 150.0), radius: float = 150.0):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Creates a circular area that pushes the image pixels outward, distorting those pixels closest to the circle the most.
         
         Attributes:
@@ -2892,7 +2423,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIHoleDistortion',
             attributes=dict(
@@ -2904,9 +2434,6 @@ class ImageObject:
     
     def hueAdjust(self, angle: float = 0.0):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Changes the overall hue, or tint, of the source pixels.
         
         Attributes:
@@ -2914,7 +2441,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIHueAdjust',
             attributes=dict(
@@ -2925,9 +2451,6 @@ class ImageObject:
     
     def hueBlendMode(self, backgroundImage: Self):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Uses the luminance and saturation values of the background with the hue of the source image.
         
         Attributes:
@@ -2935,7 +2458,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIHueBlendMode',
             attributes=dict(
@@ -2946,9 +2468,6 @@ class ImageObject:
     
     def hueSaturationValueGradient(self, value: float = 1.0, radius: float = 300.0, softness: float = 1.0, dither: float = 1.0, colorSpace = None):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Generates a color wheel that shows hues and saturations for a specified value.
         
         Attributes:
@@ -2960,7 +2479,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIHueSaturationValueGradient',
             attributes=dict(
@@ -2975,9 +2493,6 @@ class ImageObject:
     
     def kaleidoscope(self, count: float = 6.0, center: Point = (150.0, 150.0), angle: float = 0.0):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Produces a kaleidoscopic image from a source image by applying 12-way symmetry.
         
         Attributes:
@@ -2987,7 +2502,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIKaleidoscope',
             attributes=dict(
@@ -2998,11 +2512,8 @@ class ImageObject:
         )
         self._addFilter(filterDict)
     
-    def keystoneCorrectionCombined(self, topLeft, topRight, bottomRight, bottomLeft, focalLength: float = 28):
+    def keystoneCorrectionCombined(self, topLeft, topRight, bottomRight, bottomLeft, focalLength: float = 28.0):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Apply keystone correction to an image with combined horizontal and vertical guides.
         
         Attributes:
@@ -3014,7 +2525,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIKeystoneCorrectionCombined',
             attributes=dict(
@@ -3027,11 +2537,8 @@ class ImageObject:
         )
         self._addFilter(filterDict)
     
-    def keystoneCorrectionHorizontal(self, topLeft, topRight, bottomRight, bottomLeft, focalLength: float = 28):
+    def keystoneCorrectionHorizontal(self, topLeft, topRight, bottomRight, bottomLeft, focalLength: float = 28.0):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Apply horizontal keystone correction to an image with guides.
         
         Attributes:
@@ -3043,7 +2550,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIKeystoneCorrectionHorizontal',
             attributes=dict(
@@ -3056,11 +2562,8 @@ class ImageObject:
         )
         self._addFilter(filterDict)
     
-    def keystoneCorrectionVertical(self, topLeft, topRight, bottomRight, bottomLeft, focalLength: float = 28):
+    def keystoneCorrectionVertical(self, topLeft, topRight, bottomRight, bottomLeft, focalLength: float = 28.0):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Apply vertical keystone correction to an image with guides.
         
         Attributes:
@@ -3072,7 +2575,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIKeystoneCorrectionVertical',
             attributes=dict(
@@ -3085,11 +2587,8 @@ class ImageObject:
         )
         self._addFilter(filterDict)
     
-    def KMeans(self, means, extent: BoundingBox = (0.0, 0.0, 640.0, 80.0), count: float = 8, passes: float = 5, perceptual: float = False):
+    def KMeans(self, means, extent: BoundingBox = (0.0, 0.0, 640.0, 80.0), count: float = 8.0, passes: float = 5.0, perceptual: bool = False):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Create a palette of the most common colors found in the image.
         
         Attributes:
@@ -3101,7 +2600,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIKMeans',
             attributes=dict(
@@ -3116,9 +2614,6 @@ class ImageObject:
     
     def labDeltaE(self, image2):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Produces an image with the Lab ∆E difference values between two images. The result image will contain ∆E 1994 values between 0.0 and 100.0 where 2.0 is considered a just noticeable difference.
         
         Attributes:
@@ -3126,7 +2621,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CILabDeltaE',
             attributes=dict(
@@ -3137,9 +2631,6 @@ class ImageObject:
     
     def lanczosScaleTransform(self, scale: float = 1.0, aspectRatio: float = 1.0):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Produces a high-quality, scaled version of a source image. You typically use this filter to scale down an image.
         
         Attributes:
@@ -3148,7 +2639,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CILanczosScaleTransform',
             attributes=dict(
@@ -3160,9 +2650,6 @@ class ImageObject:
     
     def lenticularHaloGenerator(self, size: Size, center: Point = (150.0, 150.0), color: RGBColor = (1.0, 0.9, 0.8, 1.0), haloRadius: float = 70.0, haloWidth: float = 87.0, haloOverlap: float = 0.77, striationStrength: float = 0.5, striationContrast: float = 1.0, time: float = 0.0):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Simulates a halo that is generated by the diffraction associated with the spread of a lens. This filter is typically applied to another image to simulate lens flares and similar effects.
         
         Attributes:
@@ -3178,7 +2665,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CILenticularHaloGenerator',
             attributes=dict(
@@ -3198,9 +2684,6 @@ class ImageObject:
     
     def lightenBlendMode(self, backgroundImage: Self):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Creates composite image samples by choosing the lighter samples (either from the source image or the background). The result is that the background image samples are replaced by any source image samples that are lighter. Otherwise, the background image samples are left unchanged.
         
         Attributes:
@@ -3208,7 +2691,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CILightenBlendMode',
             attributes=dict(
@@ -3219,9 +2701,6 @@ class ImageObject:
     
     def lightTunnel(self, center: Point = (150.0, 150.0), rotation: float = 0.0, radius: float = 100.0):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Light tunnel distortion.
         
         Attributes:
@@ -3231,7 +2710,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CILightTunnel',
             attributes=dict(
@@ -3244,9 +2722,6 @@ class ImageObject:
     
     def linearBurnBlendMode(self, backgroundImage: Self):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Inverts the unpremultiplied source and background image sample color, inverts the sum, and then blends the result with the background according to the PDF basic compositing formula. Source image values that are white produce no change. Source image values that are black invert the background color values.
         
         Attributes:
@@ -3254,7 +2729,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CILinearBurnBlendMode',
             attributes=dict(
@@ -3265,9 +2739,6 @@ class ImageObject:
     
     def linearDodgeBlendMode(self, backgroundImage: Self):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Unpremultiplies the source and background image sample colors, adds them, and then blends the result with the background according to the PDF basic compositing formula. Source image values that are black produces output that is the same as the background. Source image values that are non-black brighten the background color values.
         
         Attributes:
@@ -3275,7 +2746,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CILinearDodgeBlendMode',
             attributes=dict(
@@ -3286,9 +2756,6 @@ class ImageObject:
     
     def linearGradient(self, size: Size, point0: Point = (0.0, 0.0), point1: Point = (200.0, 200.0), color0: RGBColor = (1.0, 1.0, 1.0, 1.0), color1: RGBColor = (0.0, 0.0, 0.0, 1.0)):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Generates a gradient that varies along a linear axis between two defined endpoints.
         
         Attributes:
@@ -3300,7 +2767,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CILinearGradient',
             attributes=dict(
@@ -3316,9 +2782,6 @@ class ImageObject:
     
     def linearLightBlendMode(self, backgroundImage: Self):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         A blend mode that is a combination of linear burn and linear dodge blend modes.
         
         Attributes:
@@ -3326,7 +2789,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CILinearLightBlendMode',
             attributes=dict(
@@ -3337,14 +2799,10 @@ class ImageObject:
     
     def linearToSRGBToneCurve(self):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Converts an image in linear space to sRGB space.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CILinearToSRGBToneCurve',
         )
@@ -3352,9 +2810,6 @@ class ImageObject:
     
     def lineOverlay(self, NRNoiseLevel: float = 0.07, NRSharpness: float = 0.71, edgeIntensity: float = 1.0, threshold: float = 0.1, contrast: float = 50.0):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Creates a sketch that outlines the edges of an image in black, leaving the non-outlined portions of the image transparent. The result has alpha and is rendered in black, so it won’t look like much until you render it over another image using source over compositing.
         
         Attributes:
@@ -3366,7 +2821,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CILineOverlay',
             attributes=dict(
@@ -3381,9 +2835,6 @@ class ImageObject:
     
     def lineScreen(self, center: Point = (150.0, 150.0), angle: float = 0.0, width: float = 6.0, sharpness: float = 0.7):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Simulates the line pattern of a halftone screen.
         
         Attributes:
@@ -3394,7 +2845,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CILineScreen',
             attributes=dict(
@@ -3408,9 +2858,6 @@ class ImageObject:
     
     def luminosityBlendMode(self, backgroundImage: Self):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Uses the hue and saturation of the background with the luminance of the source image. This mode creates an effect that is inverse to the effect created by the “Color Blend Mode” filter.
         
         Attributes:
@@ -3418,7 +2865,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CILuminosityBlendMode',
             attributes=dict(
@@ -3429,9 +2875,6 @@ class ImageObject:
     
     def maskedVariableBlur(self, mask: Self, radius: float = 5.0):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Blurs an image according to the brightness levels in a mask image.
         
         Attributes:
@@ -3440,7 +2883,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIMaskedVariableBlur',
             attributes=dict(
@@ -3452,14 +2894,10 @@ class ImageObject:
     
     def maskToAlpha(self):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Converts a grayscale image to a white image that is masked by alpha. The white values from the source image produce the inside of the mask; the black values become completely transparent.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIMaskToAlpha',
         )
@@ -3467,14 +2905,10 @@ class ImageObject:
     
     def maximumComponent(self):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Converts an image to grayscale using the maximum of the three color components.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIMaximumComponent',
         )
@@ -3482,9 +2916,6 @@ class ImageObject:
     
     def maximumCompositing(self, backgroundImage: Self):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Computes the maximum value, by color component, of two input images and creates an output image using the maximum values. This is similar to dodging.
         
         Attributes:
@@ -3492,7 +2923,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIMaximumCompositing',
             attributes=dict(
@@ -3503,9 +2933,6 @@ class ImageObject:
     
     def meshGenerator(self, size: Size, mesh, width: float = 1.5, color: RGBColor = (1.0, 1.0, 1.0, 1.0)):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Generates a mesh from an array of line segments.
         
         Attributes:
@@ -3516,7 +2943,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIMeshGenerator',
             attributes=dict(
@@ -3531,14 +2957,10 @@ class ImageObject:
     
     def minimumComponent(self):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Converts an image to grayscale using the minimum of the three color components.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIMinimumComponent',
         )
@@ -3546,9 +2968,6 @@ class ImageObject:
     
     def minimumCompositing(self, backgroundImage: Self):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Computes the minimum value, by color component, of two input images and creates an output image using the minimum values. This is similar to burning.
         
         Attributes:
@@ -3556,7 +2975,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIMinimumCompositing',
             attributes=dict(
@@ -3567,9 +2985,6 @@ class ImageObject:
     
     def mix(self, backgroundImage: Self, amount: float = 1.0):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Uses an amount parameter to interpolate between an image and a background image. When value is 0.0 or less, the result is the background image. When the value is 1.0 or more, the result is the image.
         
         Attributes:
@@ -3578,7 +2993,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIMix',
             attributes=dict(
@@ -3590,9 +3004,6 @@ class ImageObject:
     
     def modTransition(self, targetImage: Self, center: Point = (150.0, 150.0), time: float = 0.0, angle: float = 2.0, radius: float = 150.0, compression: float = 300.0):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Transitions from one image to another by revealing the target image through irregularly shaped holes.
         
         Attributes:
@@ -3605,7 +3016,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIModTransition',
             attributes=dict(
@@ -3621,9 +3031,6 @@ class ImageObject:
     
     def morphologyGradient(self, radius: float = 5.0):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Finds the edges of an image by returning the difference between the morphological minimum and maximum operations to the image.
         
         Attributes:
@@ -3631,7 +3038,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIMorphologyGradient',
             attributes=dict(
@@ -3642,9 +3048,6 @@ class ImageObject:
     
     def morphologyMaximum(self, radius: float = 0.0):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Lightens areas of an image by applying a circular morphological maximum operation to the image.
         
         Attributes:
@@ -3652,7 +3055,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIMorphologyMaximum',
             attributes=dict(
@@ -3663,9 +3065,6 @@ class ImageObject:
     
     def morphologyMinimum(self, radius: float = 0.0):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Darkens areas of an image by applying a circular morphological maximum operation to the image.
         
         Attributes:
@@ -3673,7 +3072,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIMorphologyMinimum',
             attributes=dict(
@@ -3684,9 +3082,6 @@ class ImageObject:
     
     def morphologyRectangleMaximum(self, width: float = 5.0, height: float = 5.0):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Lightens areas of an image by applying a rectangular morphological maximum operation to the image.
         
         Attributes:
@@ -3695,7 +3090,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIMorphologyRectangleMaximum',
             attributes=dict(
@@ -3707,9 +3101,6 @@ class ImageObject:
     
     def morphologyRectangleMinimum(self, width: float = 5.0, height: float = 5.0):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Darkens areas of an image by applying a rectangular morphological maximum operation to the image.
         
         Attributes:
@@ -3718,7 +3109,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIMorphologyRectangleMinimum',
             attributes=dict(
@@ -3730,9 +3120,6 @@ class ImageObject:
     
     def motionBlur(self, radius: float = 20.0, angle: float = 0.0):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Blurs an image to simulate the effect of using a camera that moves a specified angle and distance while capturing the image.
         
         Attributes:
@@ -3741,7 +3128,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIMotionBlur',
             attributes=dict(
@@ -3753,9 +3139,6 @@ class ImageObject:
     
     def multiplyBlendMode(self, backgroundImage: Self):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Multiplies the source image samples with the background image samples. This results in colors that are at least as dark as either of the two contributing sample colors.
         
         Attributes:
@@ -3763,7 +3146,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIMultiplyBlendMode',
             attributes=dict(
@@ -3774,9 +3156,6 @@ class ImageObject:
     
     def multiplyCompositing(self, backgroundImage: Self):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Multiplies the color component of two input images and creates an output image using the multiplied values. This filter is typically used to add a spotlight or similar lighting effect to an image.
         
         Attributes:
@@ -3784,7 +3163,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIMultiplyCompositing',
             attributes=dict(
@@ -3795,9 +3173,6 @@ class ImageObject:
     
     def ninePartStretched(self, breakpoint0: Point = (50.0, 50.0), breakpoint1: Point = (150.0, 150.0), growAmount: Point = (100.0, 100.0)):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Distorts an image by stretching an image based on two input breakpoints.
         
         Attributes:
@@ -3807,7 +3182,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CINinePartStretched',
             attributes=dict(
@@ -3818,11 +3192,8 @@ class ImageObject:
         )
         self._addFilter(filterDict)
     
-    def ninePartTiled(self, breakpoint0: Point = (50.0, 50.0), breakpoint1: Point = (150.0, 150.0), growAmount: Point = (100.0, 100.0), flipYTiles: float = True):
+    def ninePartTiled(self, breakpoint0: Point = (50.0, 50.0), breakpoint1: Point = (150.0, 150.0), growAmount: Point = (100.0, 100.0), flipYTiles: bool = True):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Distorts an image by tiling an image based on two input breakpoints.
         
         Attributes:
@@ -3833,7 +3204,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CINinePartTiled',
             attributes=dict(
@@ -3847,9 +3217,6 @@ class ImageObject:
     
     def noiseReduction(self, noiseLevel: float = 0.02, sharpness: float = 0.4):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Reduces noise using a threshold value to define what is considered noise. Small changes in luminance below that value are considered noise and get a noise reduction treatment, which is a local blur. Changes above the threshold value are considered edges, so they are sharpened.
         
         Attributes:
@@ -3858,7 +3225,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CINoiseReduction',
             attributes=dict(
@@ -3870,9 +3236,6 @@ class ImageObject:
     
     def opTile(self, center: Point = (150.0, 150.0), scale: float = 2.8, angle: float = 0.0, width: float = 65.0):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Segments an image, applying any specified scaling and rotation, and then assembles the image again to give an op art appearance.
         
         Attributes:
@@ -3883,7 +3246,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIOpTile',
             attributes=dict(
@@ -3897,9 +3259,6 @@ class ImageObject:
     
     def overlayBlendMode(self, backgroundImage: Self):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Either multiplies or screens the source image samples with the background image samples, depending on the background color. The result is to overlay the existing image samples while preserving the highlights and shadows of the background. The background color mixes with the source image to reflect the lightness or darkness of the background.
         
         Attributes:
@@ -3907,7 +3266,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIOverlayBlendMode',
             attributes=dict(
@@ -3918,9 +3276,6 @@ class ImageObject:
     
     def pageCurlTransition(self, targetImage: Self, backsideImage: Self, shadingImage: Self, extent: BoundingBox = (0.0, 0.0, 300.0, 300.0), time: float = 0.0, angle: float = 0.0, radius: float = 100.0):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Transitions from one image to another by simulating a curling page, revealing the new image as the page curls.
         
         Attributes:
@@ -3934,7 +3289,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIPageCurlTransition',
             attributes=dict(
@@ -3951,9 +3305,6 @@ class ImageObject:
     
     def pageCurlWithShadowTransition(self, targetImage: Self, backsideImage: Self, extent: BoundingBox = (0.0, 0.0, 0.0, 0.0), time: float = 0.0, angle: float = 0.0, radius: float = 100.0, shadowSize: float = 0.5, shadowAmount: float = 0.7, shadowExtent: BoundingBox = (0.0, 0.0, 0.0, 0.0)):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Transitions from one image to another by simulating a curling page, revealing the new image as the page curls.
         
         Attributes:
@@ -3969,7 +3320,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIPageCurlWithShadowTransition',
             attributes=dict(
@@ -3986,11 +3336,8 @@ class ImageObject:
         )
         self._addFilter(filterDict)
     
-    def paletteCentroid(self, paletteImage, perceptual: float = False):
+    def paletteCentroid(self, paletteImage, perceptual: bool = False):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Calculate the mean (x,y) image coordinates of a color palette.
         
         Attributes:
@@ -3999,7 +3346,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIPaletteCentroid',
             attributes=dict(
@@ -4009,11 +3355,8 @@ class ImageObject:
         )
         self._addFilter(filterDict)
     
-    def palettize(self, paletteImage, perceptual: float = False):
+    def palettize(self, paletteImage, perceptual: bool = False):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Paint an image from a color palette obtained using “CIKMeans“.
         
         Attributes:
@@ -4022,7 +3365,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIPalettize',
             attributes=dict(
@@ -4034,9 +3376,6 @@ class ImageObject:
     
     def parallelogramTile(self, center: Point = (150.0, 150.0), angle: float = 0.0, acuteAngle: float = 1.5707963267948966, width: float = 100.0):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Warps an image by reflecting it in a parallelogram, and then tiles the result.
         
         Attributes:
@@ -4047,7 +3386,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIParallelogramTile',
             attributes=dict(
@@ -4061,9 +3399,6 @@ class ImageObject:
     
     def PDF417BarcodeGenerator(self, size: Size, message: str, minWidth, maxWidth, minHeight, maxHeight, dataColumns, rows, preferredAspectRatio, compactionMode, compactStyle, correctionLevel, alwaysSpecifyCompaction):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Generate a PDF417 barcode image for message data.
         
         Attributes:
@@ -4083,7 +3418,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIPDF417BarcodeGenerator',
             attributes=dict(
@@ -4105,11 +3439,8 @@ class ImageObject:
         ),
         self._addFilter(filterDict)
     
-    def personSegmentation(self, qualityLevel: float = 0):
+    def personSegmentation(self, qualityLevel: float = 0.0):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Returns a segmentation mask that is red in the portions of an image that are likely to be persons. The returned image may have a different size and aspect ratio from the input image.
         
         Attributes:
@@ -4117,7 +3448,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIPersonSegmentation',
             attributes=dict(
@@ -4126,11 +3456,8 @@ class ImageObject:
         )
         self._addFilter(filterDict)
     
-    def perspectiveCorrection(self, topLeft: Point = (118.0, 484.0), topRight: Point = (646.0, 507.0), bottomRight: Point = (548.0, 140.0), bottomLeft: Point = (155.0, 153.0), crop: float = True):
+    def perspectiveCorrection(self, topLeft: Point = (118.0, 484.0), topRight: Point = (646.0, 507.0), bottomRight: Point = (548.0, 140.0), bottomLeft: Point = (155.0, 153.0), crop: bool = True):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Apply a perspective correction to an image.
         
         Attributes:
@@ -4142,7 +3469,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIPerspectiveCorrection',
             attributes=dict(
@@ -4155,11 +3481,8 @@ class ImageObject:
         )
         self._addFilter(filterDict)
     
-    def perspectiveRotate(self, focalLength: float = 28, pitch: float = 0, yaw: float = 0, roll: float = 0):
+    def perspectiveRotate(self, focalLength: float = 28.0, pitch: float = 0.0, yaw: float = 0.0, roll: float = 0.0):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Apply a homogenous rotation transform to an image.
         
         Attributes:
@@ -4170,7 +3493,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIPerspectiveRotate',
             attributes=dict(
@@ -4184,9 +3506,6 @@ class ImageObject:
     
     def perspectiveTile(self, topLeft: Point = (118.0, 484.0), topRight: Point = (646.0, 507.0), bottomRight: Point = (548.0, 140.0), bottomLeft: Point = (155.0, 153.0)):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Applies a perspective transform to an image and then tiles the result.
         
         Attributes:
@@ -4197,7 +3516,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIPerspectiveTile',
             attributes=dict(
@@ -4211,9 +3529,6 @@ class ImageObject:
     
     def perspectiveTransform(self, topLeft: Point = (118.0, 484.0), topRight: Point = (646.0, 507.0), bottomRight: Point = (548.0, 140.0), bottomLeft: Point = (155.0, 153.0)):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Alters the geometry of an image to simulate the observer changing viewing position. You can use the perspective filter to skew an image.
         
         Attributes:
@@ -4224,7 +3539,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIPerspectiveTransform',
             attributes=dict(
@@ -4238,9 +3552,6 @@ class ImageObject:
     
     def perspectiveTransformWithExtent(self, extent: BoundingBox = (0.0, 0.0, 300.0, 300.0), topLeft: Point = (118.0, 484.0), topRight: Point = (646.0, 507.0), bottomRight: Point = (548.0, 140.0), bottomLeft: Point = (155.0, 153.0)):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Alters the geometry of an image to simulate the observer changing viewing position. You can use the perspective filter to skew an image.
         
         Attributes:
@@ -4252,7 +3563,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIPerspectiveTransformWithExtent',
             attributes=dict(
@@ -4265,11 +3575,8 @@ class ImageObject:
         )
         self._addFilter(filterDict)
     
-    def photoEffectChrome(self, extrapolate: float = False):
+    def photoEffectChrome(self, extrapolate: bool = False):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Apply a “Chrome” style effect to an image.
         
         Attributes:
@@ -4277,7 +3584,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIPhotoEffectChrome',
             attributes=dict(
@@ -4286,11 +3592,8 @@ class ImageObject:
         )
         self._addFilter(filterDict)
     
-    def photoEffectFade(self, extrapolate: float = False):
+    def photoEffectFade(self, extrapolate: bool = False):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Apply a “Fade” style effect to an image.
         
         Attributes:
@@ -4298,7 +3601,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIPhotoEffectFade',
             attributes=dict(
@@ -4307,11 +3609,8 @@ class ImageObject:
         )
         self._addFilter(filterDict)
     
-    def photoEffectInstant(self, extrapolate: float = False):
+    def photoEffectInstant(self, extrapolate: bool = False):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Apply an “Instant” style effect to an image.
         
         Attributes:
@@ -4319,7 +3618,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIPhotoEffectInstant',
             attributes=dict(
@@ -4328,11 +3626,8 @@ class ImageObject:
         )
         self._addFilter(filterDict)
     
-    def photoEffectMono(self, extrapolate: float = False):
+    def photoEffectMono(self, extrapolate: bool = False):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Apply a “Mono” style effect to an image.
         
         Attributes:
@@ -4340,7 +3635,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIPhotoEffectMono',
             attributes=dict(
@@ -4349,11 +3643,8 @@ class ImageObject:
         )
         self._addFilter(filterDict)
     
-    def photoEffectNoir(self, extrapolate: float = False):
+    def photoEffectNoir(self, extrapolate: bool = False):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Apply a “Noir” style effect to an image.
         
         Attributes:
@@ -4361,7 +3652,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIPhotoEffectNoir',
             attributes=dict(
@@ -4370,11 +3660,8 @@ class ImageObject:
         )
         self._addFilter(filterDict)
     
-    def photoEffectProcess(self, extrapolate: float = False):
+    def photoEffectProcess(self, extrapolate: bool = False):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Apply a “Process” style effect to an image.
         
         Attributes:
@@ -4382,7 +3669,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIPhotoEffectProcess',
             attributes=dict(
@@ -4391,11 +3677,8 @@ class ImageObject:
         )
         self._addFilter(filterDict)
     
-    def photoEffectTonal(self, extrapolate: float = False):
+    def photoEffectTonal(self, extrapolate: bool = False):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Apply a “Tonal” style effect to an image.
         
         Attributes:
@@ -4403,7 +3686,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIPhotoEffectTonal',
             attributes=dict(
@@ -4412,11 +3694,8 @@ class ImageObject:
         )
         self._addFilter(filterDict)
     
-    def photoEffectTransfer(self, extrapolate: float = False):
+    def photoEffectTransfer(self, extrapolate: bool = False):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Apply a “Transfer” style effect to an image.
         
         Attributes:
@@ -4424,7 +3703,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIPhotoEffectTransfer',
             attributes=dict(
@@ -4435,9 +3713,6 @@ class ImageObject:
     
     def pinchDistortion(self, center: Point = (150.0, 150.0), radius: float = 300.0, scale: float = 0.5):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Creates a rectangular-shaped area that pinches source pixels inward, distorting those pixels closest to the rectangle the most.
         
         Attributes:
@@ -4447,7 +3722,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIPinchDistortion',
             attributes=dict(
@@ -4460,9 +3734,6 @@ class ImageObject:
     
     def pinLightBlendMode(self, backgroundImage: Self):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Unpremultiplies the source and background image sample color, combines them according to the relative difference, and then blends the result with the background according to the PDF basic compositing formula. Source image values that are brighter than the destination will produce an output that is lighter than the destination. Source image values that are darker than the destination will produce an output that is darker than the destination.
         
         Attributes:
@@ -4470,7 +3741,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIPinLightBlendMode',
             attributes=dict(
@@ -4481,9 +3751,6 @@ class ImageObject:
     
     def pixellate(self, center: Point = (150.0, 150.0), scale: float = 8.0):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Makes an image blocky.
         
         Attributes:
@@ -4492,7 +3759,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIPixellate',
             attributes=dict(
@@ -4504,9 +3770,6 @@ class ImageObject:
     
     def pointillize(self, radius: float = 20.0, center: Point = (150.0, 150.0)):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Renders the source image in a pointillistic style.
         
         Attributes:
@@ -4515,7 +3778,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIPointillize',
             attributes=dict(
@@ -4525,21 +3787,17 @@ class ImageObject:
         )
         self._addFilter(filterDict)
     
-    def QRCodeGenerator(self, size: Size, message: str, correctionLevel: float = M):
+    def QRCodeGenerator(self, size: Size, message: str, correctionLevel: str = 'M'):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Generate a QR Code image for message data.
         
         Attributes:
             `size` a tuple (w, h)
             `message` a string. The message to encode in the QR Code
-            `correctionLevel` a float. QR Code correction level L, M, Q, or H.
+            `correctionLevel` a string. QR Code correction level L, M, Q, or H.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIQRCodeGenerator',
             attributes=dict(
@@ -4554,9 +3812,6 @@ class ImageObject:
     
     def radialGradient(self, size: Size, center: Point = (150.0, 150.0), radius0: float = 5.0, radius1: float = 100.0, color0: RGBColor = (1.0, 1.0, 1.0, 1.0), color1: RGBColor = (0.0, 0.0, 0.0, 1.0)):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Generates a gradient that varies radially between two circles having the same center. It is valid for one of the two circles to have a radius of 0.
         
         Attributes:
@@ -4569,7 +3824,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIRadialGradient',
             attributes=dict(
@@ -4586,14 +3840,10 @@ class ImageObject:
     
     def randomGenerator(self):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Generates an image of infinite extent whose pixel values are made up of four independent, uniformly-distributed random numbers in the 0 to 1 range.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIRandomGenerator',
             size=size,
@@ -4603,9 +3853,6 @@ class ImageObject:
     
     def rippleTransition(self, targetImage: Self, shadingImage: Self, center: Point = (150.0, 150.0), extent: BoundingBox = (0.0, 0.0, 300.0, 300.0), time: float = 0.0, width: float = 100.0, scale: float = 50.0):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Transitions from one image to another by creating a circular wave that expands from the center point, revealing the new image in the wake of the wave.
         
         Attributes:
@@ -4619,7 +3866,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIRippleTransition',
             attributes=dict(
@@ -4634,11 +3880,8 @@ class ImageObject:
         )
         self._addFilter(filterDict)
     
-    def roundedRectangleGenerator(self, size: Size, extent: BoundingBox = (0.0, 0.0, 100.0, 100.0), radius: float = 10, color: RGBColor = (1.0, 1.0, 1.0, 1.0)):
+    def roundedRectangleGenerator(self, size: Size, extent: BoundingBox = (0.0, 0.0, 100.0, 100.0), radius: float = 10.0, color: RGBColor = (1.0, 1.0, 1.0, 1.0)):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Generates a rounded rectangle image with the specified extent, corner radius, and color.
         
         Attributes:
@@ -4649,7 +3892,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIRoundedRectangleGenerator',
             attributes=dict(
@@ -4662,11 +3904,8 @@ class ImageObject:
         ),
         self._addFilter(filterDict)
     
-    def roundedRectangleStrokeGenerator(self, size: Size, extent: BoundingBox = (0.0, 0.0, 100.0, 100.0), radius: float = 10, color: RGBColor = (1.0, 1.0, 1.0, 1.0), width: float = 10):
+    def roundedRectangleStrokeGenerator(self, size: Size, extent: BoundingBox = (0.0, 0.0, 100.0, 100.0), radius: float = 10.0, color: RGBColor = (1.0, 1.0, 1.0, 1.0), width: float = 10.0):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Generates a rounded rectangle stroke image with the specified extent, corner radius, stroke width, and color.
         
         Attributes:
@@ -4678,7 +3917,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIRoundedRectangleStrokeGenerator',
             attributes=dict(
@@ -4694,9 +3932,6 @@ class ImageObject:
     
     def rowAverage(self, extent: BoundingBox = (0.0, 0.0, 640.0, 80.0)):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Calculates the average color for each row of the specified area in an image, returning the result in a 1D image.
         
         Attributes:
@@ -4704,7 +3939,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIRowAverage',
             attributes=dict(
@@ -4715,14 +3949,10 @@ class ImageObject:
     
     def saliencyMapFilter(self):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Generates output image as a saliency map of the input image.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CISaliencyMapFilter',
         )
@@ -4730,14 +3960,10 @@ class ImageObject:
     
     def sampleNearest(self):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Produces an image that forces the image sampling to “nearest” mode instead of the default “linear” mode. This filter can be used to alter the behavior of filters that alter the geometry of an image. The output of this filter should be passed as the input to the geometry filter. For example, passing the output of this filter to CIAffineTransform can be used to produce a pixelated upsampled image.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CISampleNearest',
         )
@@ -4745,9 +3971,6 @@ class ImageObject:
     
     def saturationBlendMode(self, backgroundImage: Self):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Uses the luminance and hue values of the background with the saturation of the source image. Areas of the background that have no saturation (that is, pure gray areas) do not produce a change.
         
         Attributes:
@@ -4755,7 +3978,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CISaturationBlendMode',
             attributes=dict(
@@ -4766,9 +3988,6 @@ class ImageObject:
     
     def screenBlendMode(self, backgroundImage: Self):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Multiplies the inverse of the source image samples with the inverse of the background image samples. This results in colors that are at least as light as either of the two contributing sample colors.
         
         Attributes:
@@ -4776,7 +3995,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIScreenBlendMode',
             attributes=dict(
@@ -4787,9 +4005,6 @@ class ImageObject:
     
     def sepiaTone(self, intensity: float = 1.0):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Maps the colors of an image to various shades of brown.
         
         Attributes:
@@ -4797,7 +4012,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CISepiaTone',
             attributes=dict(
@@ -4808,9 +4022,6 @@ class ImageObject:
     
     def shadedMaterial(self, shadingImage: Self, scale: float = 10.0):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Produces a shaded image from a height field. The height field is defined to have greater heights with lighter shades, and lesser heights (lower areas) with darker shades. You can combine this filter with the “Height Field From Mask” filter to produce quick shadings of masks, such as text.
         
         Attributes:
@@ -4819,7 +4030,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIShadedMaterial',
             attributes=dict(
@@ -4831,9 +4041,6 @@ class ImageObject:
     
     def sharpenLuminance(self, sharpness: float = 0.4, radius: float = 1.69):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Increases image detail by sharpening. It operates on the luminance of the image; the chrominance of the pixels remains unaffected.
         
         Attributes:
@@ -4842,7 +4049,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CISharpenLuminance',
             attributes=dict(
@@ -4854,9 +4060,6 @@ class ImageObject:
     
     def sixfoldReflectedTile(self, center: Point = (150.0, 150.0), angle: float = 0.0, width: float = 100.0):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Produces a tiled image from a source image by applying a 6-way reflected symmetry.
         
         Attributes:
@@ -4866,7 +4069,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CISixfoldReflectedTile',
             attributes=dict(
@@ -4879,9 +4081,6 @@ class ImageObject:
     
     def sixfoldRotatedTile(self, center: Point = (150.0, 150.0), angle: float = 0.0, width: float = 100.0):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Produces a tiled image from a source image by rotating the source at increments of 60 degrees.
         
         Attributes:
@@ -4891,7 +4090,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CISixfoldRotatedTile',
             attributes=dict(
@@ -4904,9 +4102,6 @@ class ImageObject:
     
     def smoothLinearGradient(self, size: Size, point0: Point = (0.0, 0.0), point1: Point = (200.0, 200.0), color0: RGBColor = (1.0, 1.0, 1.0, 1.0), color1: RGBColor = (0.0, 0.0, 0.0, 1.0)):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Generates a gradient that varies along a linear axis between two defined endpoints.
         
         Attributes:
@@ -4918,7 +4113,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CISmoothLinearGradient',
             attributes=dict(
@@ -4934,14 +4128,10 @@ class ImageObject:
     
     def sobelGradients(self):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Applies multichannel 3 by 3 Sobel gradient filter to an image. The resulting image has maximum horizontal gradient in the red channel and the maximum vertical gradient in the green channel. The gradient values can be positive or negative.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CISobelGradients',
         )
@@ -4949,9 +4139,6 @@ class ImageObject:
     
     def softLightBlendMode(self, backgroundImage: Self):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Either darkens or lightens colors, depending on the source image sample color. If the source image sample color is lighter than 50% gray, the background is lightened, similar to dodging. If the source image sample color is darker than 50% gray, the background is darkened, similar to burning. If the source image sample color is equal to 50% gray, the background is not changed. Image samples that are equal to pure black or pure white produce darker or lighter areas, but do not result in pure black or white. The overall effect is similar to what you would achieve by shining a diffuse spotlight on the source image.
         
         Attributes:
@@ -4959,7 +4146,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CISoftLightBlendMode',
             attributes=dict(
@@ -4970,9 +4156,6 @@ class ImageObject:
     
     def sourceAtopCompositing(self, backgroundImage: Self):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Places the source image over the background image, then uses the luminance of the background image to determine what to show. The composite shows the background image and only those portions of the source image that are over visible parts of the background.
         
         Attributes:
@@ -4980,7 +4163,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CISourceAtopCompositing',
             attributes=dict(
@@ -4991,9 +4173,6 @@ class ImageObject:
     
     def sourceInCompositing(self, backgroundImage: Self):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Uses the second image to define what to leave in the source image, effectively cropping the image.
         
         Attributes:
@@ -5001,7 +4180,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CISourceInCompositing',
             attributes=dict(
@@ -5012,9 +4190,6 @@ class ImageObject:
     
     def sourceOutCompositing(self, backgroundImage: Self):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Uses the second image to define what to take out of the first image.
         
         Attributes:
@@ -5022,7 +4197,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CISourceOutCompositing',
             attributes=dict(
@@ -5033,9 +4207,6 @@ class ImageObject:
     
     def sourceOverCompositing(self, backgroundImage: Self):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Places the second image over the first.
         
         Attributes:
@@ -5043,7 +4214,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CISourceOverCompositing',
             attributes=dict(
@@ -5054,9 +4224,6 @@ class ImageObject:
     
     def spotColor(self, centerColor1: RGBColor = (0.0784, 0.0627, 0.0706, 1.0), replacementColor1: RGBColor = (0.4392, 0.1922, 0.1961, 1.0), closeness1: float = 0.22, contrast1: float = 0.98, centerColor2: RGBColor = (0.5255, 0.3059, 0.3451, 1.0), replacementColor2: RGBColor = (0.9137, 0.5608, 0.5059, 1.0), closeness2: float = 0.15, contrast2: float = 0.98, centerColor3: RGBColor = (0.9216, 0.4549, 0.3333, 1.0), replacementColor3: RGBColor = (0.9098, 0.7529, 0.6078, 1.0), closeness3: float = 0.5, contrast3: float = 0.99):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Replaces one or more color ranges with spot colors.
         
         Attributes:
@@ -5075,7 +4242,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CISpotColor',
             attributes=dict(
@@ -5097,9 +4263,6 @@ class ImageObject:
     
     def spotLight(self, lightPosition: tuple = (400.0, 600.0, 150.0), lightPointsAt: tuple = (200.0, 200.0, 0.0), brightness: float = 3.0, concentration: float = 0.1, color: RGBColor = (1.0, 1.0, 1.0, 1.0)):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Applies a directional spotlight effect to an image.
         
         Attributes:
@@ -5111,7 +4274,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CISpotLight',
             attributes=dict(
@@ -5126,14 +4288,10 @@ class ImageObject:
     
     def SRGBToneCurveToLinear(self):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Converts an image in sRGB space to linear space.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CISRGBToneCurveToLinear',
         )
@@ -5141,9 +4299,6 @@ class ImageObject:
     
     def starShineGenerator(self, size: Size, center: Point = (150.0, 150.0), color: RGBColor = (1.0, 0.8, 0.6, 1.0), radius: float = 50.0, crossScale: float = 15.0, crossAngle: float = 0.6, crossOpacity: float = -2.0, crossWidth: float = 2.5, epsilon: float = -2.0):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Generates a starburst pattern. The output image is typically used as input to another filter.
         
         Attributes:
@@ -5159,7 +4314,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIStarShineGenerator',
             attributes=dict(
@@ -5179,9 +4333,6 @@ class ImageObject:
     
     def straightenFilter(self, angle: float = 0.0):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Rotates a source image by the specified angle in radians. The image is then scaled and cropped so that the rotated image fits the extent of the input image.
         
         Attributes:
@@ -5189,7 +4340,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIStraightenFilter',
             attributes=dict(
@@ -5200,9 +4350,6 @@ class ImageObject:
     
     def stretchCrop(self, size: Point = (1280.0, 720.0), cropAmount: float = 0.25, centerStretchAmount: float = 0.25):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Distorts an image by stretching and or cropping to fit a target size.
         
         Attributes:
@@ -5212,7 +4359,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIStretchCrop',
             attributes=dict(
@@ -5225,9 +4371,6 @@ class ImageObject:
     
     def stripesGenerator(self, size: Size, center: Point = (150.0, 150.0), color0: RGBColor = (1.0, 1.0, 1.0, 1.0), color1: RGBColor = (0.0, 0.0, 0.0, 1.0), width: float = 80.0, sharpness: float = 1.0):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Generates a stripe pattern. You can control the color of the stripes, the spacing, and the contrast.
         
         Attributes:
@@ -5240,7 +4383,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIStripesGenerator',
             attributes=dict(
@@ -5257,9 +4399,6 @@ class ImageObject:
     
     def subtractBlendMode(self, backgroundImage: Self):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Unpremultiplies the source and background image sample colors, subtracts the source from the background, and then blends the result with the background according to the PDF basic compositing formula. Source image values that are black produces output that is the same as the background. Source image values that are non-black darken the background color values.
         
         Attributes:
@@ -5267,7 +4406,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CISubtractBlendMode',
             attributes=dict(
@@ -5278,9 +4416,6 @@ class ImageObject:
     
     def sunbeamsGenerator(self, size: Size, center: Point = (150.0, 150.0), color: RGBColor = (1.0, 0.5, 0.0, 1.0), sunRadius: float = 40.0, maxStriationRadius: float = 2.58, striationStrength: float = 0.5, striationContrast: float = 1.375, time: float = 0.0):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Generates a sun effect. You typically use the output of the sunbeams filter as input to a composite filter.
         
         Attributes:
@@ -5295,7 +4430,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CISunbeamsGenerator',
             attributes=dict(
@@ -5314,9 +4448,6 @@ class ImageObject:
     
     def swipeTransition(self, targetImage: Self, extent: BoundingBox = (0.0, 0.0, 300.0, 300.0), color: RGBColor = (1.0, 1.0, 1.0, 1.0), time: float = 0.0, angle: float = 0.0, width: float = 300.0, opacity: float = 0.0):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Transitions from one image to another by simulating a swiping action.
         
         Attributes:
@@ -5330,7 +4461,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CISwipeTransition',
             attributes=dict(
@@ -5347,9 +4477,6 @@ class ImageObject:
     
     def temperatureAndTint(self, neutral: Point = (6500.0, 0.0), targetNeutral: Point = (6500.0, 0.0)):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Adapt the reference white point for an image.
         
         Attributes:
@@ -5358,7 +4485,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CITemperatureAndTint',
             attributes=dict(
@@ -5368,11 +4494,8 @@ class ImageObject:
         )
         self._addFilter(filterDict)
     
-    def textImageGenerator(self, size: Size, text: FormattedString, fontName: float = HelveticaNeue, fontSize: float = 12, scaleFactor: float = 1, padding: float = 0):
+    def textImageGenerator(self, size: Size, text: FormattedString, fontName: str = 'HelveticaNeue', fontSize: float = 12.0, scaleFactor: float = 1.0, padding: float = 0.0):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Generate an image from a string and font information.
         
         Attributes:
@@ -5385,7 +4508,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CITextImageGenerator',
             attributes=dict(
@@ -5402,14 +4524,10 @@ class ImageObject:
     
     def thermal(self):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Apply a “Thermal” style effect to an image.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIThermal',
         )
@@ -5417,9 +4535,6 @@ class ImageObject:
     
     def toneCurve(self, point0: Point = (0.0, 0.0), point1: Point = (0.25, 0.25), point2: Point = (0.5, 0.5), point3: Point = (0.75, 0.75), point4: Point = (1.0, 1.0)):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Adjusts tone response of the R, G, and B channels of an image. The input points are five x,y values that are interpolated using a spline curve. The curve is applied in a perceptual (gamma 2) version of the working space.
         
         Attributes:
@@ -5431,7 +4546,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIToneCurve',
             attributes=dict(
@@ -5446,9 +4560,6 @@ class ImageObject:
     
     def torusLensDistortion(self, center: Point = (150.0, 150.0), radius: float = 160.0, width: float = 80.0, refraction: float = 1.7):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Creates a torus-shaped lens and distorts the portion of the image over which the lens is placed.
         
         Attributes:
@@ -5459,7 +4570,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CITorusLensDistortion',
             attributes=dict(
@@ -5473,9 +4583,6 @@ class ImageObject:
     
     def triangleKaleidoscope(self, point: Point = (150.0, 150.0), size: float = 700.0, rotation: float = 5.924285296593801, decay: float = 0.85):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Maps a triangular portion of image to a triangular area and then generates a kaleidoscope effect.
         
         Attributes:
@@ -5486,7 +4593,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CITriangleKaleidoscope',
             attributes=dict(
@@ -5500,9 +4606,6 @@ class ImageObject:
     
     def triangleTile(self, center: Point = (150.0, 150.0), angle: float = 0.0, width: float = 100.0):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Maps a triangular portion of image to a triangular area and then tiles the result.
         
         Attributes:
@@ -5512,7 +4615,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CITriangleTile',
             attributes=dict(
@@ -5525,9 +4627,6 @@ class ImageObject:
     
     def twelvefoldReflectedTile(self, center: Point = (150.0, 150.0), angle: float = 0.0, width: float = 100.0):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Produces a tiled image from a source image by applying a 12-way reflected symmetry.
         
         Attributes:
@@ -5537,7 +4636,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CITwelvefoldReflectedTile',
             attributes=dict(
@@ -5550,9 +4648,6 @@ class ImageObject:
     
     def twirlDistortion(self, center: Point = (150.0, 150.0), radius: float = 300.0, angle: float = 3.141592653589793):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Rotates pixels around a point to give a twirling effect. You can specify the number of rotations as well as the center and radius of the effect.
         
         Attributes:
@@ -5562,7 +4657,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CITwirlDistortion',
             attributes=dict(
@@ -5575,9 +4669,6 @@ class ImageObject:
     
     def unsharpMask(self, radius: float = 2.5, intensity: float = 0.5):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Increases the contrast of the edges between pixels of different colors in an image.
         
         Attributes:
@@ -5586,7 +4677,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIUnsharpMask',
             attributes=dict(
@@ -5598,9 +4688,6 @@ class ImageObject:
     
     def vibrance(self, amount: float = 0.0):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Adjusts the saturation of an image while keeping pleasing skin tones.
         
         Attributes:
@@ -5608,7 +4695,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIVibrance',
             attributes=dict(
@@ -5619,9 +4705,6 @@ class ImageObject:
     
     def vignette(self, intensity: float = 0.0, radius: float = 1.0):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Applies a vignette shading to the corners of an image.
         
         Attributes:
@@ -5630,7 +4713,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIVignette',
             attributes=dict(
@@ -5642,9 +4724,6 @@ class ImageObject:
     
     def vignetteEffect(self, center: Point = (150.0, 150.0), radius: float = 150.0, intensity: float = 1.0, falloff: float = 0.5):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Applies a vignette shading to the corners of an image.
         
         Attributes:
@@ -5655,7 +4734,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIVignetteEffect',
             attributes=dict(
@@ -5669,9 +4747,6 @@ class ImageObject:
     
     def vividLightBlendMode(self, backgroundImage: Self):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         A blend mode that is a combination of color burn and color dodge blend modes.
         
         Attributes:
@@ -5679,7 +4754,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIVividLightBlendMode',
             attributes=dict(
@@ -5690,9 +4764,6 @@ class ImageObject:
     
     def vortexDistortion(self, center: Point = (150.0, 150.0), radius: float = 300.0, angle: float = 56.548667764616276):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Rotates pixels around a point to simulate a vortex. You can specify the number of rotations as well the center and radius of the effect. 
         
         Attributes:
@@ -5702,7 +4773,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIVortexDistortion',
             attributes=dict(
@@ -5715,9 +4785,6 @@ class ImageObject:
     
     def whitePointAdjust(self, color: RGBColor = (1.0, 1.0, 1.0, 1.0)):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Adjusts the reference white point for an image and maps all colors in the source using the new reference.
         
         Attributes:
@@ -5725,7 +4792,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIWhitePointAdjust',
             attributes=dict(
@@ -5736,14 +4802,10 @@ class ImageObject:
     
     def XRay(self):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Apply an “XRay” style effect to an image.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIXRay',
         )
@@ -5751,9 +4813,6 @@ class ImageObject:
     
     def zoomBlur(self, center: Point = (150.0, 150.0), amount: float = 20.0):
         """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        
         Simulates the effect of zooming the camera while capturing the image.
         
         Attributes:
@@ -5762,7 +4821,6 @@ class ImageObject:
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
-        
         filterDict = dict(
             name='CIZoomBlur',
             attributes=dict(
