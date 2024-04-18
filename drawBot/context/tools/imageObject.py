@@ -271,7 +271,7 @@ class ImageObject:
     
     def affineClamp(self, transform: Transform = (0.4, 0.0, 0.0, 0.4, 0.0, 0.0)):
         """
-        Performs an affine transformation on a source image and then clamps the pixels at the edge of the transformed image, extending them outwards. This filter performs similarly to the “Affine Transform” filter except that it produces an image with infinite extent. You can use this filter when you need to blur an image but you want to avoid a soft, black fringe along the edges.
+        Performs an affine transformation on a source image and then clamps the pixels at the edge of the transformed image, extending them outwards. This filter performs similarly to the "Affine Transform" filter except that it produces an image with infinite extent. You can use this filter when you need to blur an image but you want to avoid a soft, black fringe along the edges.
         
         Attributes:
             `transform` a tuple (xx, xy, yx, yy, x, y). The transform to apply to the image.
@@ -1968,7 +1968,7 @@ class ImageObject:
     
     def exclusionBlendMode(self, backgroundImage: Self):
         """
-        Produces an effect similar to that produced by the “Difference Blend Mode” filter but with lower contrast. Source image sample values that are black do not produce a change; white inverts the background color values.
+        Produces an effect similar to that produced by the "Difference Blend Mode" filter but with lower contrast. Source image sample values that are black do not produce a change; white inverts the background color values.
         
         Attributes:
             `backgroundImage` an Image object. The image to use as a background image.
@@ -2394,7 +2394,7 @@ class ImageObject:
     
     def histogramDisplayFilter(self, height: float = 100.0, highLimit: float = 1.0, lowLimit: float = 0.0):
         """
-        Generates a displayable histogram image from the output of the “Area Histogram” filter.
+        Generates a displayable histogram image from the output of the "Area Histogram" filter.
         
         Attributes:
             `height` a float. The height of the displayable histogram image.
@@ -2858,7 +2858,7 @@ class ImageObject:
     
     def luminosityBlendMode(self, backgroundImage: Self):
         """
-        Uses the hue and saturation of the background with the luminance of the source image. This mode creates an effect that is inverse to the effect created by the “Color Blend Mode” filter.
+        Uses the hue and saturation of the background with the luminance of the source image. This mode creates an effect that is inverse to the effect created by the "Color Blend Mode" filter.
         
         Attributes:
             `backgroundImage` an Image object. The image to use as a background image.
@@ -3341,7 +3341,7 @@ class ImageObject:
         Calculate the mean (x,y) image coordinates of a color palette.
         
         Attributes:
-            `paletteImage` a float. The input color palette, obtained using “CIKMeans“ filter.
+            `paletteImage` a float. The input color palette, obtained using "CIKMeans" filter.
             `perceptual` a float. Specifies whether the color palette should be applied in a perceptual color space.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
@@ -3357,10 +3357,10 @@ class ImageObject:
     
     def palettize(self, paletteImage, perceptual: bool = False):
         """
-        Paint an image from a color palette obtained using “CIKMeans“.
+        Paint an image from a color palette obtained using "CIKMeans".
         
         Attributes:
-            `paletteImage` a float. The input color palette, obtained using “CIKMeans“ filter.
+            `paletteImage` a float. The input color palette, obtained using "CIKMeans" filter.
             `perceptual` a float. Specifies whether the color palette should be applied in a perceptual color space.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
@@ -3577,7 +3577,7 @@ class ImageObject:
     
     def photoEffectChrome(self, extrapolate: bool = False):
         """
-        Apply a “Chrome” style effect to an image.
+        Apply a "Chrome" style effect to an image.
         
         Attributes:
             `extrapolate` a float. If true, then the color effect will be extrapolated if the input image contains RGB component values outside the range 0.0 to 1.0.
@@ -3594,7 +3594,7 @@ class ImageObject:
     
     def photoEffectFade(self, extrapolate: bool = False):
         """
-        Apply a “Fade” style effect to an image.
+        Apply a "Fade" style effect to an image.
         
         Attributes:
             `extrapolate` a float. If true, then the color effect will be extrapolated if the input image contains RGB component values outside the range 0.0 to 1.0.
@@ -3611,7 +3611,7 @@ class ImageObject:
     
     def photoEffectInstant(self, extrapolate: bool = False):
         """
-        Apply an “Instant” style effect to an image.
+        Apply an "Instant" style effect to an image.
         
         Attributes:
             `extrapolate` a float. If true, then the color effect will be extrapolated if the input image contains RGB component values outside the range 0.0 to 1.0.
@@ -3628,7 +3628,7 @@ class ImageObject:
     
     def photoEffectMono(self, extrapolate: bool = False):
         """
-        Apply a “Mono” style effect to an image.
+        Apply a "Mono" style effect to an image.
         
         Attributes:
             `extrapolate` a float. If true, then the color effect will be extrapolated if the input image contains RGB component values outside the range 0.0 to 1.0.
@@ -3645,7 +3645,7 @@ class ImageObject:
     
     def photoEffectNoir(self, extrapolate: bool = False):
         """
-        Apply a “Noir” style effect to an image.
+        Apply a "Noir" style effect to an image.
         
         Attributes:
             `extrapolate` a float. If true, then the color effect will be extrapolated if the input image contains RGB component values outside the range 0.0 to 1.0.
@@ -3662,7 +3662,7 @@ class ImageObject:
     
     def photoEffectProcess(self, extrapolate: bool = False):
         """
-        Apply a “Process” style effect to an image.
+        Apply a "Process" style effect to an image.
         
         Attributes:
             `extrapolate` a float. If true, then the color effect will be extrapolated if the input image contains RGB component values outside the range 0.0 to 1.0.
@@ -3679,7 +3679,7 @@ class ImageObject:
     
     def photoEffectTonal(self, extrapolate: bool = False):
         """
-        Apply a “Tonal” style effect to an image.
+        Apply a "Tonal" style effect to an image.
         
         Attributes:
             `extrapolate` a float. If true, then the color effect will be extrapolated if the input image contains RGB component values outside the range 0.0 to 1.0.
@@ -3696,7 +3696,7 @@ class ImageObject:
     
     def photoEffectTransfer(self, extrapolate: bool = False):
         """
-        Apply a “Transfer” style effect to an image.
+        Apply a "Transfer" style effect to an image.
         
         Attributes:
             `extrapolate` a float. If true, then the color effect will be extrapolated if the input image contains RGB component values outside the range 0.0 to 1.0.
@@ -3960,7 +3960,7 @@ class ImageObject:
     
     def sampleNearest(self):
         """
-        Produces an image that forces the image sampling to “nearest” mode instead of the default “linear” mode. This filter can be used to alter the behavior of filters that alter the geometry of an image. The output of this filter should be passed as the input to the geometry filter. For example, passing the output of this filter to CIAffineTransform can be used to produce a pixelated upsampled image.
+        Produces an image that forces the image sampling to "nearest" mode instead of the default "linear" mode. This filter can be used to alter the behavior of filters that alter the geometry of an image. The output of this filter should be passed as the input to the geometry filter. For example, passing the output of this filter to CIAffineTransform can be used to produce a pixelated upsampled image.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -4022,7 +4022,7 @@ class ImageObject:
     
     def shadedMaterial(self, shadingImage: Self, scale: float = 10.0):
         """
-        Produces a shaded image from a height field. The height field is defined to have greater heights with lighter shades, and lesser heights (lower areas) with darker shades. You can combine this filter with the “Height Field From Mask” filter to produce quick shadings of masks, such as text.
+        Produces a shaded image from a height field. The height field is defined to have greater heights with lighter shades, and lesser heights (lower areas) with darker shades. You can combine this filter with the "Height Field From Mask" filter to produce quick shadings of masks, such as text.
         
         Attributes:
             `shadingImage` an Image object. The image to use as the height field. The resulting image has greater heights with lighter shades, and lesser heights (lower areas) with darker shades.
@@ -4524,7 +4524,7 @@ class ImageObject:
     
     def thermal(self):
         """
-        Apply a “Thermal” style effect to an image.
+        Apply a "Thermal" style effect to an image.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -4802,7 +4802,7 @@ class ImageObject:
     
     def XRay(self):
         """
-        Apply an “XRay” style effect to an image.
+        Apply an "XRay" style effect to an image.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future

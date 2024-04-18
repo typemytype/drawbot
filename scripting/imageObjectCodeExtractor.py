@@ -4,11 +4,8 @@ import AppKit
 import Quartz
 
 """
-Notes 10/01:
-- remove double comments (inside and outside the docstring)
-- check hints + syntax
+Notes 18/04:
 - add very simple test to suite, just run each filter
-- remove “ ” typographical quotes from docstrings
 
 """
 
@@ -420,11 +417,11 @@ if __name__ == "__main__":
                     elif isinstance(default, bool):
                         arg += ": bool"
 
-                    elif isinstance(default, (AppKit.NSString, str)):
+                    elif isinstance(default, (AppKit.NSString, str)): # type: ignore
                         default = f"'{default}'"
                         arg += ": str"
 
-                    elif isinstance(default, AppKit.NSNumber):
+                    elif isinstance(default, AppKit.NSNumber): # type: ignore
                         default = float(default)
                         arg += ": float"
 
@@ -432,7 +429,7 @@ if __name__ == "__main__":
                         default = tuple(default.transformStruct())
                         arg += ": Transform"
 
-                    elif isinstance(default, AppKit.CIColor):
+                    elif isinstance(default, AppKit.CIColor): # type: ignore
                         default = (
                             default.red(),
                             default.green(),
@@ -441,11 +438,11 @@ if __name__ == "__main__":
                         )
                         arg += ": RGBColor"
 
-                    elif isinstance(default, AppKit.NSData):
+                    elif isinstance(default, AppKit.NSData): # type: ignore
                         default = None
                         arg += ": bytes | None"
 
-                    elif isinstance(default, type(Quartz.CGColorSpaceCreateDeviceCMYK())):
+                    elif isinstance(default, type(Quartz.CGColorSpaceCreateDeviceCMYK())): # type: ignore
                         default = None
 
                     else:
@@ -512,7 +509,7 @@ if __name__ == "__main__":
             break
 
     with open(imageObjectPath, mode="w") as txtFile:
-        txtFile.write("\n".join(beforeFilters) + "\n" + code.get(indentLevel=1))
+        txtFile.write("\n".join(beforeFilters) + "\n" + code.get(indentLevel=1).replace("“", '"').replace("”", '"'))
 
     unitTestsPath = Path(
         Path(__file__).parent.parent / "tests/testImageObject.py"
