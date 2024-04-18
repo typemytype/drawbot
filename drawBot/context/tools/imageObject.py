@@ -3,7 +3,7 @@ from math import radians
 from typing import Any
 
 import AppKit
-from typing_extensions import Self
+from typing import Self
 
 from drawBot.aliases import (BoundingBox, Point, RGBColor, Size, SomePath,
                              Transform)

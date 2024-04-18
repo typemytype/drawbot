@@ -18,8 +18,8 @@ from .tools import openType
 from .tools import variation
 from .tools import SFNTLayoutTypes
 
-from typing_extensions import Self
-from aliases import (
+from typing import Self
+from drawBot.aliases import (
     BoundingBox,
     Point,
     Transform,
