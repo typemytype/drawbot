@@ -7,6 +7,7 @@ import os
 from packaging.version import Version
 
 from fontTools.pens.basePen import BasePen
+from fontTools.ttLib import TTFont, TTLibError
 
 from drawBot.misc import DrawBotError, cmyk2rgb, warnings, transformationAtCenter
 from drawBot.macOSVersion import macOSVersion
@@ -1061,6 +1062,11 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
         # byWord=0x8000 # AppKit.NSUnderlineByWord,
     )
 
+    _writingDirectionMap = dict(
+        LTR=AppKit.NSWritingDirectionLeftToRight,
+        RTL=AppKit.NSWritingDirectionRightToLeft
+    )
+
     _formattedAttributes = dict(
         font=_FALLBACKFONT,
         fallbackFont=None,
@@ -1091,6 +1097,7 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
         paragraphBottomSpacing=None,
 
         language=None,
+        writingDirection=None,
     )
 
     def __init__(self, txt=None, **kwargs):
@@ -1358,6 +1365,9 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
             attributes[AppKit.NSLinkAttributeName] = AppKit.NSURL.URLWithString_(self._url)
         if self._language:
             attributes["NSLanguage"] = self._language
+        if self._writingDirection in self._writingDirectionMap:
+            para.setBaseWritingDirection_(self._writingDirectionMap[self._writingDirection])
+
         attributes[AppKit.NSParagraphStyleAttributeName] = para
         txt = AppKit.NSAttributedString.alloc().initWithString_attributes_(txt, attributes)
         self._attributedString.appendAttributedString_(txt)
@@ -1831,6 +1841,12 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
         """
         self._language = language
 
+    def writingDirection(self, direction):
+        """
+        Set the writing direction: `None`, `'LTR'` or `'RTL'`.
+        """
+        self._writingDirection = direction
+
     def size(self):
         """
         Return the size of the text.
@@ -2063,6 +2079,7 @@ class GraphicsState(object):
         self.gradient = None
         self.strokeWidth = 1
         self.lineDash = None
+        self.lineDashOffset = 0
         self.lineCap = None
         self.lineJoin = None
         self.miterLimit = 10
@@ -2097,6 +2114,7 @@ class GraphicsState(object):
         new.lineCap = self.lineCap
         if self.lineDash is not None:
             new.lineDash = list(self.lineDash)
+        new.lineDashOffset = self.lineDashOffset
         new.lineJoin = self.lineJoin
         new.miterLimit = self.miterLimit
         return new
@@ -2133,6 +2151,7 @@ class BaseContext(object):
     _textTabAlignMap = FormattedString._textTabAlignMap
     _textUnderlineMap = FormattedString._textUnderlineMap
     _textstrikethroughMap = FormattedString._textstrikethroughMap
+    _writingDirectionMap = FormattedString._writingDirectionMap
 
     _colorSpaceMap = dict(
         genericRGB=AppKit.NSColorSpace.genericRGBColorSpace(),
@@ -2447,11 +2466,12 @@ class BaseContext(object):
             raise DrawBotError("lineCap() argument must be 'butt', 'square' or 'round'")
         self._state.lineCap = _LINECAPSTYLESMAP[cap]
 
-    def lineDash(self, dash):
+    def lineDash(self, dash, offset):
         if dash[0] is None:
             self._state.lineDash = None
             return
         self._state.lineDash = list(dash)
+        self._state.lineDashOffset = offset
 
     def transform(self, matrix):
         self._transform(matrix)
@@ -2491,6 +2511,9 @@ class BaseContext(object):
 
     def language(self, language):
         self._state.text.language(language)
+
+    def writingDirection(self, direction):
+        self._state.text.writingDirection(direction)
 
     def openTypeFeatures(self, *args, **features):
         return self._state.text.openTypeFeatures(*args, **features)

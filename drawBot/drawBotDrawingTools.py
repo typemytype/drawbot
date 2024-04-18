@@ -1239,10 +1239,12 @@ class DrawBotDrawingTool(object):
         self._requiresNewFirstPage = True
         self._addInstruction("lineCap", value)
 
-    def lineDash(self, *value):
+    def lineDash(self, *value, offset=0):
         """
         Set a line dash with any given amount of lenghts.
         Uneven lenghts will have a visible stroke, even lenghts will be invisible.
+
+        optionally an `offset` can be given to set the offset of the first dash.
 
         .. downloadcode:: lineDash.py
 
@@ -1257,13 +1259,19 @@ class DrawBotDrawingTool(object):
             # draw a line
             line((0, 200), (0, 800))
             # translate the canvas
-            translate(300, 0)
+            translate(200, 0)
             # set a line dash
             lineDash(2, 10, 5, 5)
             # draw a line
             line((0, 200), (0, 800))
+            # translate the canvas
+            translate(200, 0)
+            # set a line dash and offset
+            lineDash(2, 10, 5, 5, offset=2)
+            # draw a line
+            line((0, 200), (0, 800))
             # translate the canvase
-            translate(300, 0)
+            translate(200, 0)
             # reset the line dash
             lineDash(None)
             # draw a line
@@ -1274,7 +1282,7 @@ class DrawBotDrawingTool(object):
         if isinstance(value[0], (list, tuple)):
             value = value[0]
         self._requiresNewFirstPage = True
-        self._addInstruction("lineDash", value)
+        self._addInstruction("lineDash", value, offset)
 
     # transform
 
@@ -1561,6 +1569,27 @@ class DrawBotDrawingTool(object):
             locale = CoreText.CFLocaleCreate(None, language)
             if not CoreText.CFStringIsHyphenationAvailableForLocale(locale):
                 warnings.warn(f"Language '{language}' has no hyphenation available.")
+
+    def writingDirection(self, direction):
+        """
+        Set the writing direction: `None`, `'LTR'` or `'RTL'`.
+
+        Use this when mixing writing directions.
+
+        .. downloadcode:: textRTL.py
+
+            size(400, 100)
+            # A bi-directional string
+            s = "Latin میتوان در بسیاری"
+            # Set the writing direction to Right-To-Left
+            writingDirection("RTL")
+            fontSize(40)
+            text(s, (10, 40))
+        """
+        if direction is not None and direction not in self._dummyContext._writingDirectionMap.keys():
+            raise DrawBotError("strikethrough must be %s" % (", ".join(sorted(self._dummyContext._writingDirectionMap.keys()))))
+        self._dummyContext.writingDirection(direction)
+        self._addInstruction("writingDirection", direction)
 
     def openTypeFeatures(self, *args, **features):
         """
