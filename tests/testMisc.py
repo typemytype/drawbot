@@ -7,7 +7,7 @@ import tempfile
 from collections import OrderedDict
 from fontTools.ttLib import TTFont
 import drawBot
-from drawBot.misc import DrawBotError, warnings
+from drawBot.misc import DrawBotError, warnings, validateLanguageCode
 from drawBot.scriptTools import ScriptRunner
 from testSupport import StdOutCollector, testDataDir
 
@@ -66,7 +66,7 @@ class MiscTest(unittest.TestCase):
         var = drawBot.fontVariations(wght=5)
         self.assertEqual(var, {"wght": 5})
 
-    def test_fontVariationNamedInstances(self):
+    def test_listFontNamedInstances(self):
         drawBot.newDrawing()
         namedInstances = drawBot.listNamedInstances()
         self.assertEqual(namedInstances, {})
@@ -80,6 +80,14 @@ class MiscTest(unittest.TestCase):
         namedInstances = drawBot.listNamedInstances("Skia")
         namedInstances = _roundInstanceLocations(namedInstances)
         self.assertEqual(namedInstances, expectedNamedInstances)
+
+    def test_fontNamedInstance(self):
+        drawBot.newDrawing()
+        drawBot.font("Skia")
+        drawBot.fontNamedInstance("Skia-Regular_Black-Extended")
+        with self.assertRaises(DrawBotError) as cm:
+            drawBot.fontNamedInstance("foo bar")
+        self.assertEqual(cm.exception.args[0], "Can not find instance with name: 'foo bar' for 'Skia-Regular'.")
 
     def test_textProperties(self):
         drawBot.newDrawing()
@@ -102,7 +110,6 @@ class MiscTest(unittest.TestCase):
         for characterBound in characterBounds:
             fillColors.append(characterBound.formattedSubString.textProperties()["fill"])
         self.assertEqual(fillColors, [(1, 0, 0), (0, 1, 0), None])
-
 
     def test_polygon_notEnoughPoints(self):
         drawBot.newDrawing()
@@ -152,7 +159,8 @@ class MiscTest(unittest.TestCase):
     def test_ScriptRunner_print_function(self):
         out = StdOutCollector()
         ScriptRunner("print 'hey!'", stdout=out, stderr=out)
-        self.assertEqual(out.lines()[-1], "SyntaxError: Missing parentheses in call to 'print'. Did you mean print('hey!')?")
+        target = "SyntaxError: Missing parentheses in call to 'print'. Did you mean"
+        self.assertEqual(out.lines()[-1][:len(target)], target)
 
     def test_ScriptRunner_division(self):
         out = StdOutCollector()
@@ -387,6 +395,34 @@ class MiscTest(unittest.TestCase):
         assert drawBot.remap(25, 10, 20, 30, 50) == 60
         assert drawBot.remap(25, 10, 20, 30, 50, clamp=True) == 50
 
+    def test_validateLanguageCode(self):
+        expectedLanguageValidation = [
+            ("ab", False),
+            ("abk", False),
+            ("abz", False),
+            ("AB", False),
+            ("af", True),
+            ("afr", True),
+            ("af_NA", True),
+            ("afr_NA", True),
+            ("af_ZZ", False),
+            ("afr_ZZ", False),
+            ("en-us", True),
+            ("en_us", True),
+            ("EN-US", True),
+            ("en-zz", False),
+            ("sr_Cyrl_ME", True),
+            ("en", True),
+        ]
+        for language, expectedValue in expectedLanguageValidation:
+            assert validateLanguageCode(language) == expectedValue
+
+            with StdOutCollector(captureStdErr=True) as output:
+                drawBot.language(language)
+            if expectedValue:
+                assert output.lines() == []
+            else:
+                assert output.lines() == [f"*** DrawBot warning: Language '{language}' is not available. ***"]
 
 
 def _roundInstanceLocations(instanceLocations):

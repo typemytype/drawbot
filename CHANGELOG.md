@@ -1,6 +1,17 @@
 # Changelog For DrawBot
 
-## [3.131] ...
+## [3.131] 2024-02-...
+
+- UNIVERSAL BUILD !!!
+- Jumping to python 3.12 !!!
+- Check `language(..)` settings and warn if a language tag is not available.
+- Improve infinite imageObject generators.
+- Adding `strikethrough(..)`.
+- Adding `fontNamedInstance("instanceName")`.
+- Addding `textProperties()`, returning a dict of text properties.
+- Adding `opacity(value)`.
+- Adding support for `lineDash(..., offset=10)`.
+- Adding support for `fontSubpixelQuantization` while exporting to an image.
 
 ## [3.130] 2023-02-20
 

@@ -1097,6 +1097,23 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
         # byWord=0x8000 # AppKit.NSUnderlineByWord,
     )
 
+    _textstrikethroughMap = dict(
+        single=AppKit.NSUnderlineStyleSingle,
+        thick=AppKit.NSUnderlineStyleThick,
+        double=AppKit.NSUnderlineStyleDouble,
+        # solid=AppKit.NSUnderlinePatternSolid,
+        # dotted=AppKit.NSUnderlinePatternDot,
+        # dashed=AppKit.NSUnderlinePatternDash,
+        # dotDashed=AppKit.NSUnderlinePatternDashDot,
+        # dotDotted=AppKit.NSUnderlinePatternDashDotDot,
+        # byWord=0x8000 # AppKit.NSUnderlineByWord,
+    )
+
+    _writingDirectionMap = dict(
+        LTR=AppKit.NSWritingDirectionLeftToRight,
+        RTL=AppKit.NSWritingDirectionRightToLeft
+    )
+
     _formattedAttributes = dict(
         font=_FALLBACKFONT,
         fallbackFont=None,
@@ -1115,6 +1132,7 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
         tracking=None,
         baselineShift=None,
         underline=None,
+        strikethrough=None,
         url=None,
         openTypeFeatures=dict(),
         fontVariations=dict(),
@@ -1126,6 +1144,7 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
         paragraphBottomSpacing=None,
 
         language=None,
+        writingDirection=None,
     )
 
     def __init__(self, txt=None, **kwargs):
@@ -1387,10 +1406,15 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
             attributes[AppKit.NSBaselineOffsetAttributeName] = self._baselineShift
         if self._underline in self._textUnderlineMap:
             attributes[AppKit.NSUnderlineStyleAttributeName] = self._textUnderlineMap[self._underline]
+        if self._strikethrough in self._textstrikethroughMap:
+            attributes[AppKit.NSStrikethroughStyleAttributeName] = self._textstrikethroughMap[self._strikethrough]
         if self._url is not None:
             attributes[AppKit.NSLinkAttributeName] = AppKit.NSURL.URLWithString_(self._url)
         if self._language:
             attributes["NSLanguage"] = self._language
+        if self._writingDirection in self._writingDirectionMap:
+            para.setBaseWritingDirection_(self._writingDirectionMap[self._writingDirection])
+
         attributes[AppKit.NSParagraphStyleAttributeName] = para
         txt = AppKit.NSAttributedString.alloc().initWithString_attributes_(txt, attributes)
         self._attributedString.appendAttributedString_(txt)
@@ -1472,7 +1496,7 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
 
     def font(
         self,
-        fontNameOrPath: SomePath,
+        fontNameOrPath: str | SomePath,
         fontSize: float | None = None,
         fontNumber: int = 0,
     ):
@@ -1604,6 +1628,13 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
         """
         self._underline = underline
 
+    def strikethrough(self, strikethrough: str | None):
+        """
+        Set the strikethrough value.
+        Strikethrough must be `single`, `thick`, `double` or `None`.
+        """
+        self._strikethrough = strikethrough
+
     def url(self, url):
         """
         set the url value.
@@ -1698,6 +1729,25 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
             fontNameOrPath = self._font
         font = getNSFontFromNameOrPath(fontNameOrPath, 10, fontNumber)
         return variation.getVariationAxesForFont(font)
+
+    def fontNamedInstance(self, name: str, fontNameOrPath: str | SomePath | None = None):
+        """
+        Set a font with `name` of a named instance.
+        The `name` of the named instance must be listed in `listNamedInstances()`,
+
+        Optionally a `fontNameOrPath` can be given. If a font path is given that `fontNameOrPath` will be set.
+        """
+        if fontNameOrPath:
+            self.font(fontNameOrPath)
+        instances = self.listNamedInstances()
+        if name in instances:
+            self.fontVariations(**instances[name])
+        else:
+            font = getNSFontFromNameOrPath(self._font, self._fontSize, self._fontNumber)
+            fontName = getFontName(font)
+            if fontName is None:
+                fontName = self._font
+            raise DrawBotError(f"Can not find instance with name: '{name}' for '{fontName}'.")
 
     def listNamedInstances(self, fontNameOrPath=None, fontNumber=0):
         """
@@ -1842,6 +1892,12 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
         `language()` will activate the `locl` OpenType features, if supported by the current font.
         """
         self._language = language
+
+    def writingDirection(self, direction: str | None):
+        """
+        Set the writing direction: `None`, `'LTR'` or `'RTL'`.
+        """
+        self._writingDirection = direction
 
     def size(self):
         """
@@ -2076,6 +2132,7 @@ class GraphicsState():
         self.gradient = None
         self.strokeWidth = 1
         self.lineDash = None
+        self.lineDashOffset = 0
         self.lineCap = None
         self.lineJoin = None
         self.miterLimit = 10
@@ -2110,6 +2167,7 @@ class GraphicsState():
         new.lineCap = self.lineCap
         if self.lineDash is not None:
             new.lineDash = list(self.lineDash)
+        new.lineDashOffset = self.lineDashOffset
         new.lineJoin = self.lineJoin
         new.miterLimit = self.miterLimit
         return new
@@ -2144,6 +2202,8 @@ class BaseContext():
     _textAlignMap = FormattedString._textAlignMap
     _textTabAlignMap = FormattedString._textTabAlignMap
     _textUnderlineMap = FormattedString._textUnderlineMap
+    _textstrikethroughMap = FormattedString._textstrikethroughMap
+    _writingDirectionMap = FormattedString._writingDirectionMap
 
     _colorSpaceMap = dict(
         genericRGB=AppKit.NSColorSpace.genericRGBColorSpace(),
@@ -2458,11 +2518,12 @@ class BaseContext():
             raise DrawBotError("lineCap() argument must be 'butt', 'square' or 'round'")
         self._state.lineCap = _LINECAPSTYLESMAP[cap]
 
-    def lineDash(self, dash):
+    def lineDash(self, dash, offset):
         if dash[0] is None:
             self._state.lineDash = None
             return
         self._state.lineDash = list(dash)
+        self._state.lineDashOffset = offset
 
     def transform(self, matrix):
         self._transform(matrix)
@@ -2488,6 +2549,9 @@ class BaseContext():
     def underline(self, underline):
         self._state.text.underline(underline)
 
+    def strikethrough(self, strikethrough):
+        self._state.text.strikethrough(strikethrough)
+
     def url(self, value):
         self._state.text.url(value)
 
@@ -2500,11 +2564,17 @@ class BaseContext():
     def language(self, language):
         self._state.text.language(language)
 
+    def writingDirection(self, direction):
+        self._state.text.writingDirection(direction)
+
     def openTypeFeatures(self, *args, **features):
         return self._state.text.openTypeFeatures(*args, **features)
 
     def fontVariations(self, *args, **axes):
         return self._state.text.fontVariations(*args, **axes)
+
+    def fontNamedInstance(self, name, fontNameOrPath):
+        self._state.text.fontNamedInstance(name, fontNameOrPath)
 
     def attributedString(self, txt, align=None):
         if isinstance(txt, FormattedString):

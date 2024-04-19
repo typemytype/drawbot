@@ -1,3 +1,6 @@
+import AppKit
+import Quartz
+from math import radians
 import os
 from math import radians
 from typing import Any
@@ -125,7 +128,7 @@ class ImageObject:
         data = self.imageDrawingTool.pdfImage()
         # get the last page
         pageCount = data.pageCount()
-        page = data.pageAtIndex_(pageCount-1)
+        page = data.pageAtIndex_(pageCount - 1)
         # create an image
         im = AppKit.NSImage.alloc().initWithData_(page.dataRepresentation()) # type: ignore
         # create an CIImage object
@@ -189,6 +192,7 @@ class ImageObject:
         """
         if hasattr(self, "_source"):
             self._cachedImage = self._source.copy()
+        sourceSize = self.size()
         for filterDict in self._filters:
             filterName = filterDict.get("name")
             ciFilter = AppKit.CIFilter.filterWithName_(filterName) # type: ignore
@@ -223,8 +227,20 @@ class ImageObject:
             elif hasattr(self, "_cachedImage"):
                 ciFilter.setValue_forKey_(self._cachedImage, "inputImage")
                 self._cachedImage = ciFilter.valueForKey_("outputImage")
+
         if not hasattr(self, "_cachedImage"):
             raise DrawBotError("Image does not contain any data. Draw into the image object first or set image data from a path.")
+        elif Quartz.CGRectIsInfinite(self._cachedImage.extent()):
+            # an infinite image
+            w, h = self.size()
+            dummy = AppKit.NSImage.alloc().initWithSize_(sourceSize)
+            dummy.lockFocus()
+            self._cachedImage.drawAtPoint_fromRect_operation_fraction_((0, 0), ((0, 0), sourceSize), AppKit.NSCompositeCopy, 1)
+            dummy.unlockFocus()
+            rep = _makeBitmapImageRep(dummy)
+            self._cachedImage = AppKit.CIImage.alloc().initWithBitmapImageRep_(rep)
+            self._cachedImage = AppKit.CIImage.alloc().initWithBitmapImageRep_(rep)
+            del dummy
 
     # --- filters ---
     def accordionFoldTransition(self, targetImage: Self, bottomHeight: float = 0.0, numberOfFolds: float = 3.0, foldShadowAmount: float = 0.1, time: float = 0.0):

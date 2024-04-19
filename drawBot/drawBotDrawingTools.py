@@ -22,7 +22,7 @@ from .context.tools.imageObject import ImageObject
 from .context.tools import gifTools
 from .context.tools import drawBotbuiltins
 
-from .misc import DrawBotError, warnings, VariableController, optimizePath, isPDF, isEPS, isGIF, transformationAtCenter, clearMemoizeCache
+from .misc import DrawBotError, warnings, VariableController, optimizePath, isPDF, isEPS, isGIF, transformationAtCenter, clearMemoizeCache, validateLanguageCode
 from .aliases import (
     Point,
     Points,
@@ -32,7 +32,6 @@ from .aliases import (
     BoundingBox,
     Transform,
 )
-
 
 def _getmodulecontents(module, names=None):
     d = {}
@@ -1324,10 +1323,12 @@ class DrawBotDrawingTool():
         self._requiresNewFirstPage = True
         self._addInstruction("lineCap", value)
 
-    def lineDash(self, *value: list[float]):
+    def lineDash(self, *value: list[float], offset=0):
         """
         Set a line dash with any given amount of lenghts.
         Uneven lenghts will have a visible stroke, even lenghts will be invisible.
+
+        optionally an `offset` can be given to set the offset of the first dash.
 
         .. downloadcode:: lineDash.py
 
@@ -1342,13 +1343,19 @@ class DrawBotDrawingTool():
             # draw a line
             line((0, 200), (0, 800))
             # translate the canvas
-            translate(300, 0)
+            translate(200, 0)
             # set a line dash
             lineDash(2, 10, 5, 5)
             # draw a line
             line((0, 200), (0, 800))
+            # translate the canvas
+            translate(200, 0)
+            # set a line dash and offset
+            lineDash(2, 10, 5, 5, offset=2)
+            # draw a line
+            line((0, 200), (0, 800))
             # translate the canvase
-            translate(300, 0)
+            translate(200, 0)
             # reset the line dash
             lineDash(None)
             # draw a line
@@ -1359,7 +1366,7 @@ class DrawBotDrawingTool():
         if isinstance(value[0], (list, tuple)):
             value = value[0]
         self._requiresNewFirstPage = True
-        self._addInstruction("lineDash", value)
+        self._addInstruction("lineDash", value, offset)
 
     # transform
 
@@ -1523,6 +1530,23 @@ class DrawBotDrawingTool():
         self._dummyContext.underline(value)
         self._addInstruction("underline", value)
 
+    def strikethrough(self, value):
+        """
+        Set the strikethrough value.
+        Underline must be `single`, `thick`, `double` or `None`.
+
+        .. downloadcode:: strikethrough.py
+
+            size(1000, 200)
+            strikethrough("single")
+            fontSize(100)
+            text("hello strikethrough", (40, 60))
+        """
+        if value is not None and value not in self._dummyContext._textstrikethroughMap:
+            raise DrawBotError("strikethrough must be %s" % (", ".join(sorted(self._dummyContext._textstrikethroughMap.keys()))))
+        self._dummyContext.strikethrough(value)
+        self._addInstruction("strikethrough", value)
+
     def url(self, value):
         """
         Set the url value for text.
@@ -1584,8 +1608,9 @@ class DrawBotDrawingTool():
     def language(self, language):
         """
         Set the preferred language as language tag or None to use the default language.
-
-        Support is depending on local OS.
+        A language tag might be a [iso639-2 or iso639-1](https://www.loc.gov/standards/iso639-2/php/English_list.php)
+        code or a locale identifier supported by local OS.
+        A warning will be issued if the language tag is not supported.
 
         `language()` will activate the `locl` OpenType features, if supported by the current font.
 
@@ -1609,6 +1634,8 @@ class DrawBotDrawingTool():
             # darw the text again with a language set
             textBox(word, box)
         """
+        if not validateLanguageCode(language):
+            warnings.warn(f"Language '{language}' is not available.")
         self._dummyContext.language(language)
         self._checkLanguageHyphenation()
         self._addInstruction("language", language)
@@ -1625,7 +1652,28 @@ class DrawBotDrawingTool():
         if language and self._dummyContext._state.hyphenation:
             locale = CoreText.CFLocaleCreate(None, language)
             if not CoreText.CFStringIsHyphenationAvailableForLocale(locale):
-                warnings.warn("Language '%s' has no hyphenation available." % language)
+                warnings.warn(f"Language '{language}' has no hyphenation available.")
+
+    def writingDirection(self, direction):
+        """
+        Set the writing direction: `None`, `'LTR'` or `'RTL'`.
+
+        Use this when mixing writing directions.
+
+        .. downloadcode:: textRTL.py
+
+            size(400, 100)
+            # A bi-directional string
+            s = "Latin میتوان در بسیاری"
+            # Set the writing direction to Right-To-Left
+            writingDirection("RTL")
+            fontSize(40)
+            text(s, (10, 40))
+        """
+        if direction is not None and direction not in self._dummyContext._writingDirectionMap.keys():
+            raise DrawBotError("strikethrough must be %s" % (", ".join(sorted(self._dummyContext._writingDirectionMap.keys()))))
+        self._dummyContext.writingDirection(direction)
+        self._addInstruction("writingDirection", direction)
 
     def openTypeFeatures(self, *args, **features):
         """
@@ -1699,6 +1747,26 @@ class DrawBotDrawingTool():
         return self._dummyContext._state.text.listFontVariations(fontNameOrPath)
 
     listFontVariations.__doc__ = FormattedString.listFontVariations.__doc__
+
+    def fontNamedInstance(self, name, fontNameOrPath=None):
+        """
+        Set a font with `name` of a named instance.
+        The `name` of the named instance must be listed in `listNamedInstances()`,
+
+        Optionally a `fontNameOrPath` can be given. If a font path is given that `fontNameOrPath` will be set.
+
+        .. downloadcode:: fontNamedInstance.py
+
+            newPage(500, 250)
+            # pick font
+            font("Skia", 200)
+            # select a named instance
+            fontNamedInstance("Skia-Regular_Black-Extended")
+            # draw text!!
+            text("abc", (50, 50))
+        """
+        self._dummyContext._state.text.fontNamedInstance(name, fontNameOrPath)
+        self._addInstruction("fontNamedInstance", name, fontNameOrPath)
 
     def listNamedInstances(self, fontNameOrPath=None):
         return self._dummyContext._state.text.listNamedInstances(fontNameOrPath)

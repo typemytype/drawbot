@@ -52,3 +52,5 @@ env/*
 tests/temp_data/*  # obsolete
 tests/tempTestData/*
 
+# Virtual Environments
+/venv*/

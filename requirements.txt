@@ -3,7 +3,7 @@ packaging
 pyobjc
 corefoundationasyncio
 py2app
-cocoa-vanilla==0.2.0
+cocoa-vanilla==0.5.0
 defcon
 git+https://github.com/robotools/defconAppKit
 fontTools[ufo,lxml,woff,unicode,type1]
@@ -11,7 +11,7 @@ fs
 brotli
 pygments
 jedi
-pillow
+pillow==10.1.0  # 10.2.0 has an incompatibility with older x86 macOS: https://github.com/python-pillow/Pillow/issues/6862#issuecomment-1913552472
 attrs
 booleanOperations
 mutatorMath
@@ -27,6 +27,6 @@ git+https://github.com/typesupply/feaPyFoFum
 git+https://github.com/typesupply/feaTools2
 pip
 packaging
-black==21.12b0  # Pin to older version to avoid dependency problems; see https://github.com/ronaldoussoren/py2app/issues/476
+black==23.10.0  # pin to older version, see https://github.com/ronaldoussoren/py2app/issues/518
 pytz
-typing-extensions
+delocate==0.10.7  # for merging intel+silicon wheels into universal2

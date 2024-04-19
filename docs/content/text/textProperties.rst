@@ -5,6 +5,7 @@ Text Properties
 .. autofunction:: drawBot.fontSize
 .. autofunction:: drawBot.fallbackFont
 .. autofunction:: drawBot.underline
+.. autofunction:: drawBot.strikethrough
 .. autofunction:: drawBot.hyphenation
 .. autofunction:: drawBot.lineHeight
 .. autofunction:: drawBot.tracking
@@ -13,6 +14,7 @@ Text Properties
 .. autofunction:: drawBot.listOpenTypeFeatures
 .. autofunction:: drawBot.fontVariations(wdth=0.6, wght=0.1, ...)
 .. autofunction:: drawBot.listFontVariations
+.. autofunction:: drawBot.fontNamedInstance
 .. autofunction:: drawBot.listNamedInstances
 .. autofunction:: drawBot.tabs
 .. autofunction:: drawBot.language
