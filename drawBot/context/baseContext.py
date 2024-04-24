@@ -1147,7 +1147,7 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
         writingDirection=None,
     )
 
-    def __init__(self, txt=None, **kwargs):
+    def __init__(self, txt: str | None = None, **kwargs):
         self.clear()
         # create all _<attributes> in the formatted text object
         # with default values
@@ -1432,7 +1432,7 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
             font = getNSFontFromNameOrPath(ff, self._fontSize, ffNumber)
         return font
 
-    def __add__(self, txt):
+    def __add__(self, txt: str | Self):
         new = self.copy()
         if isinstance(txt, self.__class__):
             new.getNSObject().appendAttributedString_(txt.getNSObject())
@@ -1442,7 +1442,7 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
             new.append(txt)
         return new
 
-    def __getitem__(self, index):
+    def __getitem__(self, index: int | slice) -> str | Self:
         if isinstance(index, slice):
             start = index.start
             stop = index.stop
@@ -1488,10 +1488,10 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
             text = self._attributedString.string()
             return text[index]
 
-    def __len__(self):
+    def __len__(self) -> int:
         return self._attributedString.length()
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return self._attributedString.string()
 
     def font(
@@ -1499,7 +1499,7 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
         fontNameOrPath: str | SomePath,
         fontSize: float | None = None,
         fontNumber: int = 0,
-    ):
+    ) -> str | None:
         """
         Set a font with the name of the font.
         If a font path is given the font will used directly.
@@ -1522,7 +1522,7 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
     def fontNumber(self, fontNumber: int):
         self._fontNumber = fontNumber
 
-    def fallbackFont(self, fontNameOrPath: SomePath, fontNumber: int = 0):
+    def fallbackFont(self, fontNameOrPath: SomePath, fontNumber: int = 0) -> str | None:
         """
         Set a fallback font, used whenever a glyph is not available in the normal font.
         If a font path is given the font will be installed and used directly.
@@ -1547,7 +1547,7 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
         """
         self._fontSize = fontSize
 
-    def fill(self, *fill):
+    def fill(self, *fill): # FIXME how could we annotate this?
         """
         Sets the fill color with a `red`, `green`, `blue` and `alpha` value.
         Each argument must a value float between 0 and 1.
@@ -1557,7 +1557,7 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
         self._fill = fill
         self._cmykFill = None
 
-    def stroke(self, *stroke):
+    def stroke(self, *stroke): # FIXME how could we annotate this?
         """
         Sets the stroke color with a `red`, `green`, `blue` and `alpha` value.
         Each argument must a value float between 0 and 1.
@@ -1589,7 +1589,7 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
         self._cmykStroke = cmykStroke
         self._stroke = None
 
-    def strokeWidth(self, strokeWidth):
+    def strokeWidth(self, strokeWidth: float):
         """
         Sets stroke width.
         """
@@ -1608,34 +1608,34 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
         """
         self._lineHeight = lineHeight
 
-    def tracking(self, tracking):
+    def tracking(self, tracking: float):
         """
         Set the tracking between characters. It adds an absolute number of
         points between the characters.
         """
         self._tracking = tracking
 
-    def baselineShift(self, baselineShift):
+    def baselineShift(self, baselineShift: float):
         """
         Set the shift of the baseline.
         """
         self._baselineShift = baselineShift
 
-    def underline(self, underline):
+    def underline(self, underline: str): # FIXME an enum would be ideal, but we could simply put an assertion?
         """
         Set the underline value.
         Underline must be `single`, `thick`, `double` or `None`.
         """
         self._underline = underline
 
-    def strikethrough(self, strikethrough: str | None):
+    def strikethrough(self, strikethrough: str | None): # FIXME as above
         """
         Set the strikethrough value.
         Strikethrough must be `single`, `thick`, `double` or `None`.
         """
         self._strikethrough = strikethrough
 
-    def url(self, url):
+    def url(self, url: str | None):
         """
         set the url value.
         url must be a string or `None`
@@ -1681,7 +1681,7 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
             self._openTypeFeatures.update(features)
         return dict(self._openTypeFeatures)
 
-    def listOpenTypeFeatures(self, fontNameOrPath=None, fontNumber=0):
+    def listOpenTypeFeatures(self, fontNameOrPath: SomePath | None = None, fontNumber: int = 0) -> list[str]:
         """
         List all OpenType feature tags for the current font.
 
@@ -1692,7 +1692,7 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
         font = getNSFontFromNameOrPath(fontNameOrPath, 10, fontNumber)
         return openType.getFeatureTagsForFont(font)
 
-    def fontVariations(self, *args, **axes):
+    def fontVariations(self, *args, **axes) -> dict[str, float]: # FIXME how could we annotate args and kwargs?
         """
         Pick a variation by axes values and return the current font variations settings.
 
@@ -1716,7 +1716,7 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
         currentVariation.update(self._fontVariations)
         return currentVariation
 
-    def listFontVariations(self, fontNameOrPath=None, fontNumber=0):
+    def listFontVariations(self, fontNameOrPath: SomePath | None = None, fontNumber: int = 0) -> dict[str, dict]:
         """
         List all variation axes for the current font.
 
@@ -1749,7 +1749,7 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
                 fontName = self._font
             raise DrawBotError(f"Can not find instance with name: '{name}' for '{fontName}'.")
 
-    def listNamedInstances(self, fontNameOrPath=None, fontNumber=0):
+    def listNamedInstances(self, fontNameOrPath: SomePath | None = None, fontNumber: int = 0) -> dict[str, dict]:
         """
         List all named instances from a variable font for the current font.
 
@@ -1763,7 +1763,7 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
         font = getNSFontFromNameOrPath(fontNameOrPath, 10, fontNumber)
         return variation.getNamedInstancesForFont(font)
 
-    def tabs(self, *tabs):
+    def tabs(self, *tabs: tuple[float, str]):
         """
         Set tabs,tuples of (`float`, `alignment`)
         Aligment can be `"left"`, `"center"`, `"right"` or any other character.
@@ -1785,7 +1785,7 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
         else:
             self._tabs = tabs
 
-    def indent(self, indent):
+    def indent(self, indent: float):
         """
         Set indent of text left of the paragraph.
 
@@ -1858,7 +1858,7 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
         """
         self._indent = indent
 
-    def tailIndent(self, indent):
+    def tailIndent(self, indent: float):
         """
         Set indent of text right of the paragraph.
 
@@ -1867,25 +1867,25 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
         """
         self._tailIndent = indent
 
-    def firstLineIndent(self, indent):
+    def firstLineIndent(self, indent: float):
         """
         Set indent of the text only for the first line.
         """
         self._firstLineIndent = indent
 
-    def paragraphTopSpacing(self, value):
+    def paragraphTopSpacing(self, value: float):
         """
         set paragraph spacing at the top.
         """
         self._paragraphTopSpacing = value
 
-    def paragraphBottomSpacing(self, value):
+    def paragraphBottomSpacing(self, value: float):
         """
         set paragraph spacing at the bottom.
         """
         self._paragraphBottomSpacing = value
 
-    def language(self, language):
+    def language(self, language: str): # FIXME some validation would be cool
         """
         Set the preferred language as language tag or None to use the default language.
 
@@ -1893,13 +1893,13 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
         """
         self._language = language
 
-    def writingDirection(self, direction: str | None):
+    def writingDirection(self, direction: str | None): # FIXME maybe an assertion?
         """
         Set the writing direction: `None`, `'LTR'` or `'RTL'`.
         """
         self._writingDirection = direction
 
-    def size(self):
+    def size(self) -> tuple[float, float]:
         """
         Return the size of the text.
         """
@@ -1908,7 +1908,7 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
     def getNSObject(self):
         return self._attributedString
 
-    def copy(self):
+    def copy(self) -> Self:
         """
         Copy the formatted string.
         """
@@ -1920,7 +1920,7 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
         new.copyContextProperties(self)
         return new
 
-    def fontContainsCharacters(self, characters):
+    def fontContainsCharacters(self, characters: str) -> bool:
         """
         Return a bool if the current font contains the provided `characters`.
         Characters is a string containing one or more characters.
@@ -1934,14 +1934,14 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
         result, glyphs = CoreText.CTFontGetGlyphsForCharacters(font, characters, None, count)
         return result
 
-    def fontContainsGlyph(self, glyphName):
+    def fontContainsGlyph(self, glyphName: str) -> bool:
         font = self._getNSFontWithFallback()
         if font is None:
             return False
         glyph = font.glyphWithName_(glyphName)
         return bool(glyph)
 
-    def fontFilePath(self):
+    def fontFilePath(self) -> SomePath | None:
         """
         Return the path to the file of the current font.
         """
@@ -1957,7 +1957,7 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
         warnings.warn("Cannot find the path to the font '%s'." % self._font)
         return None
 
-    def fontFileFontNumber(self):
+    def fontFileFontNumber(self) -> int:
         fontNumber = 0
         path = self.fontFilePath()
         if path is not None:
@@ -1970,7 +1970,7 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
                 warnings.warn(f"Cannot find the fontNumber for '{self._font}'.")
         return fontNumber
 
-    def listFontGlyphNames(self):
+    def listFontGlyphNames(self) -> list[str]:
         """
         Return a list of glyph names supported by the current font.
         """
@@ -2000,42 +2000,42 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
             glyphNames.remove(".notdef")
         return glyphNames
 
-    def fontAscender(self):
+    def fontAscender(self) -> float:
         """
         Returns the current font ascender, based on the current `font` and `fontSize`.
         """
         font = self._getNSFontWithFallback()
         return font.ascender()
 
-    def fontDescender(self):
+    def fontDescender(self) -> float:
         """
         Returns the current font descender, based on the current `font` and `fontSize`.
         """
         font = self._getNSFontWithFallback()
         return font.descender()
 
-    def fontXHeight(self):
+    def fontXHeight(self) -> float:
         """
         Returns the current font x-height, based on the current `font` and `fontSize`.
         """
         font = self._getNSFontWithFallback()
         return font.xHeight()
 
-    def fontCapHeight(self):
+    def fontCapHeight(self) -> float:
         """
         Returns the current font cap height, based on the current `font` and `fontSize`.
         """
         font = self._getNSFontWithFallback()
         return font.capHeight()
 
-    def fontLeading(self):
+    def fontLeading(self) -> float:
         """
         Returns the current font leading, based on the current `font` and `fontSize`.
         """
         font = self._getNSFontWithFallback()
         return font.leading()
 
-    def fontLineHeight(self):
+    def fontLineHeight(self) -> float:
         """
         Returns the current line height, based on the current `font` and `fontSize`.
         If a `lineHeight` is set, this value will be returned.
@@ -2045,7 +2045,7 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
         font = self._getNSFontWithFallback()
         return font.defaultLineHeightForFont()
 
-    def appendGlyph(self, *glyphNames):
+    def appendGlyph(self, *glyphNames: str):
         """
         Append a glyph by his glyph name or glyph index using the current `font`.
         Multiple glyph names are possible.
@@ -2865,7 +2865,7 @@ def getFontDescriptorsFromPath(fontPath):
     return descriptors
 
 
-def getFontName(font):
+def getFontName(font) -> str | None:
     if font is None:
         return None
     fontName = CoreText.CTFontDescriptorCopyAttribute(font.fontDescriptor(), CoreText.kCTFontNameAttribute)
