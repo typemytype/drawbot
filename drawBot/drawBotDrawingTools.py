@@ -604,7 +604,7 @@ class DrawBotDrawingTool():
         self._requiresNewFirstPage = True
         self._addInstruction("curveTo", (x1, y1), (x2, y2), (x3, y3))
 
-    def qCurveTo(self, *points: Points):
+    def qCurveTo(self, *points: Point):
         """
         Quadratic curve with a given set of off curves to a on curve.
         """
@@ -748,7 +748,7 @@ class DrawBotDrawingTool():
         path.line(point1, point2)
         self.drawPath(path)
 
-    def polygon(self, *points: Points, **kwargs):
+    def polygon(self, *points: Point, **kwargs):
         """
         Draws a polygon with n-amount of points.
         Optionally a `close` argument can be provided to open or close the path.
