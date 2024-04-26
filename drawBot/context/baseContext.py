@@ -366,7 +366,7 @@ class BezierPath(BasePen, SVGContextPropertyMixin, ContextPropertyMixin):
     def text(
         self,
         txt,
-        offset: float | None = None,
+        offset: tuple[float, float] | None = None,
         font=_FALLBACKFONT,
         fontSize: float = 10,
         align: str | None = None,
