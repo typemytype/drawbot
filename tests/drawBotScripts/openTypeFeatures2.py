@@ -1,8 +1,8 @@
-from drawBot import *
+import drawBot
 
-size(200, 200)
+drawBot.size(200, 200)
 
-s = FormattedString()
+s = drawBot.FormattedString()
 s.font("HoeflerText-Regular")
 s.fontSize(20)
 
@@ -26,4 +26,4 @@ s.append("Hoefler Fact #123\n", openTypeFeatures=dict(liga=False, resetFeatures=
 
 s.append("Hoefler Fact #123\n", openTypeFeatures=dict(dlig=True, resetFeatures=False))
 
-textBox(s, (20, 0, 200, 190))
+drawBot.textBox(s, (20, 0, 200, 190))
