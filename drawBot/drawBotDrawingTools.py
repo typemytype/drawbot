@@ -373,6 +373,7 @@ class DrawBotDrawingTool():
                     break
         return tuple(DrawBotPage(instructionSet) for instructionSet in instructions)
 
+    # FIXME path can also be a list of strings, correct?
     def saveImage(self, path: SomePath, *args, **options):
         """
         Save or export the canvas to a specified format.
@@ -2078,7 +2079,7 @@ class DrawBotDrawingTool():
 
     def image(
         self,
-        path: SomePath,
+        path: SomePath, # FIXME path could also be a ImageObject
         position: Point,
         alpha: float = 1,
         pageNumber: int | None = None,
@@ -2105,7 +2106,7 @@ class DrawBotDrawingTool():
 
     def imageSize(
         self,
-        path: SomePath,
+        path: SomePath, # FIXME path could also be a ImageObject
         pageNumber: int | None = None,
     ) -> tuple[float, float]:
         """
@@ -2165,6 +2166,7 @@ class DrawBotDrawingTool():
             w, h = rep.size()
         return w, h
 
+    # FIXME path could also be a ImageObject
     def imagePixelColor(self, path: SomePath, xy: Point) -> RGBColor:
         """
         Return the color `r, g, b, a` of an image at a specified `x`, `y` position.

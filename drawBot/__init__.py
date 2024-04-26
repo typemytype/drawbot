@@ -2,6 +2,11 @@ from .drawBotDrawingTools import _drawBotDrawingTool
 
 _drawBotDrawingTool._addToNamespace(globals())
 
+# FIXME is this list updated automatically somehow? There are some missing functions:
+# - fontNamedInstance
+# - norm
+# - lerp
+# - remap
 newDrawing = _drawBotDrawingTool.newDrawing
 endDrawing = _drawBotDrawingTool.endDrawing
 drawing = _drawBotDrawingTool.drawing
