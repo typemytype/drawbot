@@ -1,7 +1,6 @@
 import AppKit
 import CoreText
 import Quartz
-
 import math
 import os
 import random
@@ -22,13 +21,13 @@ from .context.tools.imageObject import ImageObject
 from .context.tools import gifTools
 from .context.tools import drawBotbuiltins
 
-from .misc import DrawBotError, warnings, VariableController, optimizePath, isPDF, isEPS, isGIF, transformationAtCenter, clearMemoizeCache, validateLanguageCode
+from .misc import DrawBotError, warnings, VariableController, optimizePath, isPDF, isEPS, isGIF, transformationAtCenter, clearMemoizeCache
 from .aliases import (
     Point,
-    Points,
     SomePath,
     CMYKColor,
     RGBColor,
+    RGBAColorTuple,
     BoundingBox,
     Transform,
 )
@@ -208,7 +207,6 @@ class DrawBotDrawingTool():
         """
         if self._width is None:
             return 1000
-        # FIXME what happens if this is a float?
         return self._width
 
     def height(self) -> float:
@@ -373,7 +371,6 @@ class DrawBotDrawingTool():
                     break
         return tuple(DrawBotPage(instructionSet) for instructionSet in instructions)
 
-    # FIXME path can also be a list of strings, correct?
     def saveImage(self, path: SomePath, *args, **options):
         """
         Save or export the canvas to a specified format.
@@ -1526,8 +1523,6 @@ class DrawBotDrawingTool():
             fontSize(140)
             text("hello underline", (50, 50))
         """
-        if value is not None and value not in self._dummyContext._textUnderlineMap:
-            raise DrawBotError("underline must be %s" % (", ".join(sorted(self._dummyContext._textUnderlineMap.keys()))))
         self._dummyContext.underline(value)
         self._addInstruction("underline", value)
 
@@ -1543,8 +1538,6 @@ class DrawBotDrawingTool():
             fontSize(100)
             text("hello strikethrough", (40, 60))
         """
-        if value is not None and value not in self._dummyContext._textstrikethroughMap:
-            raise DrawBotError("strikethrough must be %s" % (", ".join(sorted(self._dummyContext._textstrikethroughMap.keys()))))
         self._dummyContext.strikethrough(value)
         self._addInstruction("strikethrough", value)
 
@@ -1635,8 +1628,6 @@ class DrawBotDrawingTool():
             # darw the text again with a language set
             textBox(word, box)
         """
-        if not validateLanguageCode(language):
-            warnings.warn(f"Language '{language}' is not available.")
         self._dummyContext.language(language)
         self._checkLanguageHyphenation()
         self._addInstruction("language", language)
@@ -1671,8 +1662,6 @@ class DrawBotDrawingTool():
             fontSize(40)
             text(s, (10, 40))
         """
-        if direction is not None and direction not in self._dummyContext._writingDirectionMap.keys():
-            raise DrawBotError("strikethrough must be %s" % (", ".join(sorted(self._dummyContext._writingDirectionMap.keys()))))
         self._dummyContext.writingDirection(direction)
         self._addInstruction("writingDirection", direction)
 
@@ -1717,7 +1706,7 @@ class DrawBotDrawingTool():
 
     listOpenTypeFeatures.__doc__ = FormattedString.listOpenTypeFeatures.__doc__
 
-    def fontVariations(self, *args, **axes):
+    def fontVariations(self, *args: None, **axes: float | bool):
         """
         Pick a variation by axes values.
 
@@ -2076,10 +2065,9 @@ class DrawBotDrawingTool():
         return self._formattedStringClass(*args, **kwargs)
 
     # images
-
     def image(
         self,
-        path: SomePath, # FIXME path could also be a ImageObject
+        path: SomePath | ImageObject, # FIXME path as argument name might be misleading
         position: Point,
         alpha: float = 1,
         pageNumber: int | None = None,
@@ -2106,7 +2094,7 @@ class DrawBotDrawingTool():
 
     def imageSize(
         self,
-        path: SomePath, # FIXME path could also be a ImageObject
+        path: SomePath | ImageObject, # FIXME path as argument name might be misleading
         pageNumber: int | None = None,
     ) -> tuple[float, float]:
         """
@@ -2166,8 +2154,9 @@ class DrawBotDrawingTool():
             w, h = rep.size()
         return w, h
 
-    # FIXME path could also be a ImageObject
-    def imagePixelColor(self, path: SomePath, xy: Point) -> RGBColor:
+    def imagePixelColor(self,
+                       path: SomePath | ImageObject, # FIXME path as argument name might be misleading
+                       xy: Point) -> RGBAColorTuple:
         """
         Return the color `r, g, b, a` of an image at a specified `x`, `y` position.
         Supports pdf, jpg, png, tiff and gif file formats. `NSImage` objects are supported too.

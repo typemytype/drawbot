@@ -12,7 +12,7 @@ from fontTools.pens.pointPen import AbstractPointPen
 
 from drawBot.misc import DrawBotError, cmyk2rgb, warnings, transformationAtCenter
 from drawBot.macOSVersion import macOSVersion
-from drawBot.misc import memoize
+from drawBot.misc import memoize, validateLanguageCode
 
 from .tools import openType
 from .tools import variation
@@ -459,11 +459,11 @@ class BezierPath(BasePen, SVGContextPropertyMixin, ContextPropertyMixin):
         self,
         path: SomePath,
         threshold: float = 0.2,
-        blur=None, # FIXME why not a boolean?
+        blur: float | None = None,
         invert: bool = False,
         turd: int = 2,
         tolerance: float = 0.2,
-        offset=None, # FIXME shouldn't this default to zero?
+        offset: tuple[float, float] = (0, 0),
     ):
         """
         Convert a given image to a vector outline.
@@ -1233,7 +1233,7 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
     def clear(self):
         self._attributedString = AppKit.NSMutableAttributedString.alloc().init()
 
-    def append(self, txt: str | Self, **kwargs): # FIXME should we remove kwargs everywhere?
+    def append(self, txt: str | Self, **kwargs):
         """
         Add `txt` to the formatted string with some additional text formatting attributes:
 
@@ -1547,45 +1547,75 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
         """
         self._fontSize = fontSize
 
-    def fill(self, *fill): # FIXME how could we annotate this?
+    def fill(self, 
+            r: float | None = None,
+            g: float | None = None,
+            b: float | None = None,
+            alpha: float = 1
+        ):
         """
         Sets the fill color with a `red`, `green`, `blue` and `alpha` value.
         Each argument must a value float between 0 and 1.
         """
-        if fill and fill[0] is None:
+        if r is None:
             fill = None
+        else:
+            fill = (i for i in [r, g, b, alpha] if i is not None)
         self._fill = fill
         self._cmykFill = None
 
-    def stroke(self, *stroke): # FIXME how could we annotate this?
+    def stroke(self, 
+              r: float | None = None,
+              g: float | None = None,
+              b: float | None = None,
+              alpha: float = 1
+        ):
         """
         Sets the stroke color with a `red`, `green`, `blue` and `alpha` value.
         Each argument must a value float between 0 and 1.
         """
-        if stroke and stroke[0] is None:
+        if r is None:
             stroke = None
+        else:
+            stroke = (i for i in [r, g, b, alpha] if i is not None)
         self._stroke = stroke
         self._cmykStroke = None
 
-    def cmykFill(self, *cmykFill):
+    def cmykFill(self,
+                c: float | None = None,
+                m: float | None = None,
+                y: float | None = None,
+                k: float | None = None,
+                alpha: float = 1
+        ):
         """
         Set a fill using a CMYK color before drawing a shape. This is handy if the file is intended for print.
 
         Sets the CMYK fill color. Each value must be a float between 0.0 and 1.0.
         """
-        if cmykFill and cmykFill[0] is None:
+        if c is None:
             cmykFill = None
+        else:
+            cmykFill = c, m, y, k, alpha
         self._cmykFill = cmykFill
         self._fill = None
 
-    def cmykStroke(self, *cmykStroke):
+    def cmykStroke(self,
+                  c: float | None = None,
+                  m: float | None = None,
+                  y: float | None = None,
+                  k: float | None = None,
+                  alpha: float = 1
+        ):
         """
         Set a stroke using a CMYK color before drawing a shape. This is handy if the file is intended for print.
 
         Sets the CMYK stroke color. Each value must be a float between 0.0 and 1.0.
         """
-        if cmykStroke and cmykStroke[0] is None:
+        if c is None:
             cmykStroke = None
+        else:
+            cmykStroke = c, m, y, k, alpha
         self._cmykStroke = cmykStroke
         self._stroke = None
 
@@ -1621,18 +1651,22 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
         """
         self._baselineShift = baselineShift
 
-    def underline(self, underline: str): # FIXME an enum would be ideal, but we could simply put an assertion?
+    def underline(self, underline: str | None):
         """
         Set the underline value.
         Underline must be `single`, `thick`, `double` or `None`.
         """
+        if underline is not None and underline not in self._textUnderlineMap:
+            raise DrawBotError("underline must be %s" % (", ".join(sorted(self._textUnderlineMap.keys()))))
         self._underline = underline
 
-    def strikethrough(self, strikethrough: str | None): # FIXME as above
+    def strikethrough(self, strikethrough: str | None):
         """
         Set the strikethrough value.
         Strikethrough must be `single`, `thick`, `double` or `None`.
         """
+        if strikethrough is not None and strikethrough not in self._textstrikethroughMap:
+            raise DrawBotError("strikethrough must be %s" % (", ".join(sorted(self._textstrikethroughMap.keys()))))
         self._strikethrough = strikethrough
 
     def url(self, url: str | None):
@@ -1692,7 +1726,7 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
         font = getNSFontFromNameOrPath(fontNameOrPath, 10, fontNumber)
         return openType.getFeatureTagsForFont(font)
 
-    def fontVariations(self, *args, **axes) -> dict[str, float]: # FIXME how could we annotate args and kwargs?
+    def fontVariations(self, *args: None, **axes: float | bool) -> dict[str, float]:
         """
         Pick a variation by axes values and return the current font variations settings.
 
@@ -1885,18 +1919,22 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
         """
         self._paragraphBottomSpacing = value
 
-    def language(self, language: str): # FIXME some validation would be cool
+    def language(self, language: str):
         """
         Set the preferred language as language tag or None to use the default language.
 
         `language()` will activate the `locl` OpenType features, if supported by the current font.
         """
+        if not validateLanguageCode(language):
+            warnings.warn(f"Language '{language}' is not available.")
         self._language = language
 
-    def writingDirection(self, direction: str | None): # FIXME maybe an assertion?
+    def writingDirection(self, direction: str | None):
         """
         Set the writing direction: `None`, `'LTR'` or `'RTL'`.
         """
+        if direction is not None and direction not in self._writingDirectionMap.keys():
+            raise DrawBotError("writing direction must be %s" % (", ".join(sorted(self._writingDirectionMap.keys()))))
         self._writingDirection = direction
 
     def size(self) -> tuple[float, float]:
