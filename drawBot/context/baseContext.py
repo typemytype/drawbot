@@ -1560,7 +1560,7 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
         if r is None:
             fill = None
         else:
-            fill = (i for i in [r, g, b, alpha] if i is not None)
+            fill = [i for i in [r, g, b, alpha] if i is not None]
         self._fill = fill
         self._cmykFill = None
 
