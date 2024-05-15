@@ -309,7 +309,6 @@ generators.extend(
     ]
 )
 
-
 allFilterNames = AppKit.CIFilter.filterNamesInCategory_(None)  # type: ignore
 
 excludeFilterNames = [
@@ -374,7 +373,7 @@ if __name__ == "__main__":
 
         attributes = dict()
 
-        if inputKeys:
+        if inputKeys or filterName == "CIRandomGenerator":
             doc.newline()
             doc.add("Attributes:")
             doc.indent()

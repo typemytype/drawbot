@@ -3854,9 +3854,12 @@ class ImageObject:
         ),
         self._addFilter(filterDict)
     
-    def randomGenerator(self):
+    def randomGenerator(self, size: Size):
         """
         Generates an image of infinite extent whose pixel values are made up of four independent, uniformly-distributed random numbers in the 0 to 1 range.
+        
+        Attributes:
+            `size` a tuple (w, h)
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
