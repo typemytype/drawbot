@@ -26,7 +26,7 @@ class DrawBotTest(DrawBotBaseTest):
             "drawPath moveTo 10.0 10.0 lineTo 110.0 10.0 lineTo 110.0 110.0 lineTo 10.0 110.0 closePath",
             "textBox foo bar 72.48291015625 84.0 55.0341796875 26.0 center",
             "frameDuration 10",
-            "saveImage * {'myExtraAgrument': True}"
+            "saveImage * {'myExtraArgument': True}"
         ]
         with StdOutCollector() as output:
             import drawBot
@@ -47,7 +47,7 @@ class DrawBotTest(DrawBotBaseTest):
             drawBot.rect(10, 10, 100, 100)
             drawBot.text("foo bar", (100, 100), align="center")
             drawBot.frameDuration(10)
-            drawBot.saveImage("*", myExtraAgrument=True)
+            drawBot.saveImage("*", myExtraArgument=True)
             drawBot.endDrawing()
         self.assertEqual(output.lines(), expected)
 
