@@ -1919,13 +1919,13 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
         """
         self._paragraphBottomSpacing = value
 
-    def language(self, language: str):
+    def language(self, language: str | None):
         """
         Set the preferred language as language tag or None to use the default language.
 
         `language()` will activate the `locl` OpenType features, if supported by the current font.
         """
-        if not validateLanguageCode(language):
+        if language is not None and not validateLanguageCode(language):
             warnings.warn(f"Language '{language}' is not available.")
         self._language = language
 
