@@ -1,9 +1,9 @@
 import os
 import shutil
-import attr
 import plistlib
 from packaging import version
 import tempfile
+from dataclasses import dataclass
 
 from drawBot.drawBotSettings import __version__
 from drawBot.scriptTools import ScriptRunner
@@ -34,23 +34,26 @@ DrawBot support for .drawbot packages.
 
 drawBotVersion = version.Version(__version__)
 
-
-@attr.s(slots=True)
+@dataclass
 class DrawBotPackageInfo():
 
-    name = attr.ib(default="", init=False, type=str, validator=attr.validators.instance_of(str))
-    version = attr.ib(default="0.0", init=False, type=str, validator=attr.validators.instance_of(str))
-    developer = attr.ib(default="", init=False, type=str, validator=attr.validators.instance_of(str))
-    developerURL = attr.ib(default="", init=False, type=str, validator=attr.validators.instance_of(str))
-    requiresVersion = attr.ib(default="0.0", init=False, type=str, validator=attr.validators.instance_of(str))
-    mainScript = attr.ib(default="main.py", init=False, type=str, validator=attr.validators.instance_of(str))
+    name: str = ""
+    version:  str = "0.0"
+    developer: str = ""
+    developerURL: str = ""
+    requiresVersion:str = "0.0"
+    mainScript: str = "main.py"
+
+    def validate(self):
+        for key, value in self.__annotations__.items():
+            assert isinstance(getattr(self, key), value)
 
     def asDict(self):
         """
         Return only keys which are different from the defaults.
         """
-        defaults = attr.asdict(self.__class__())
-        data = attr.asdict(self)
+        defaults = dict(self.__class__().__dataclass_fields__)
+        data = self.__dataclass_fields__
         for key, value in defaults.items():
             if data[key] == value:
                 del data[key]
@@ -82,7 +85,7 @@ class DrawBotPackage():
                 info = plistlib.load(f)
             self.info.fromDict(info)
             # validate incoming info
-            attr.validate(self.info)
+            self.info.validate()
 
     def infoPath(self):
         """
@@ -142,7 +145,7 @@ class DrawBotPackage():
         # set the temp folder
         self.path = tempDir
         # validate info
-        attr.validate(self.info)
+        self.info.validate()
         # write the plist
         infoData = self.info.asDict()
         # only write info that is different from
