@@ -6,7 +6,7 @@ import random
 import AppKit
 import drawBot
 from drawBot.drawBotDrawingTools import DrawBotDrawingTool
-from testSupport import StdOutCollector, randomSeed, testRootDir, tempTestDataDir, testDataDir, readData, compareImages
+from testSupport import StdOutCollector, randomSeed, testRootDir, tempTestDataDir, testDataDir, compareImages
 
 
 _namePattern = re.compile(r"( +).. downloadcode:: ([A-Za-z0-9_]+).py\s*$")

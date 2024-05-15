@@ -5,7 +5,7 @@ import glob
 import warnings
 from packaging.version import Version
 from drawBot.macOSVersion import macOSVersion
-from testSupport import DrawBotBaseTest, StdOutCollector, randomSeed, testRootDir, tempTestDataDir, testDataDir, readData, compareImages
+from testSupport import DrawBotBaseTest, StdOutCollector, testRootDir, tempTestDataDir, testDataDir
 
 
 drawBotScriptDir = os.path.join(testRootDir, "drawBotScripts")
