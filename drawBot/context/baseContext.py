@@ -1560,7 +1560,7 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
         if r is None:
             fill = None
         else:
-            fill = [i for i in (r, g, b, alpha) if i is not None]
+            fill = tuple([i for i in (r, g, b, alpha) if i is not None])
         self._fill = fill
         self._cmykFill = None
 
@@ -1577,7 +1577,7 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
         if r is None:
             stroke = None
         else:
-            stroke = [i for i in (r, g, b, alpha) if i is not None]
+            stroke = tuple([i for i in (r, g, b, alpha) if i is not None])
         self._stroke = stroke
         self._cmykStroke = None
 

@@ -96,7 +96,7 @@ class MiscTest(unittest.TestCase):
         fs.font("Skia")
         self.assertEqual(fs.textProperties()["font"], "Skia")
         fs.fill(1, 0, 0)
-        self.assertEqual(fs.textProperties()["fill"], (1, 0, 0))
+        self.assertEqual(fs.textProperties()["fill"], (1, 0, 0, 1))
         fs.openTypeFeatures(liga=True)
         self.assertEqual(fs.textProperties()["openTypeFeatures"], dict(liga=True))
 
@@ -109,7 +109,7 @@ class MiscTest(unittest.TestCase):
         fillColors = []
         for characterBound in characterBounds:
             fillColors.append(characterBound.formattedSubString.textProperties()["fill"])
-        self.assertEqual(fillColors, [(1, 0, 0), (0, 1, 0), None])
+        self.assertEqual(fillColors, [(1, 0, 0, 1), (0, 1, 0, 1), None])
 
     def test_polygon_notEnoughPoints(self):
         drawBot.newDrawing()
