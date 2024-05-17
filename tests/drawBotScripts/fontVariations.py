@@ -11,9 +11,9 @@ variations = drawBot.listFontVariations()
 for axisTag in sorted(variations):
     data = variations[axisTag]
     # we're rounding the values so we don't trip over small differences between OSes
-    data['defaultValue'] = round(data['defaultValue'], 3)
-    data['minValue'] = round(data['minValue'], 3)
-    data['maxValue'] = round(data['maxValue'], 3)
+    data['defaultValue'] = round(float(data['defaultValue']), 3) # we need floats to make sure that 1 becomes 1.0
+    data['minValue'] = round(float(data['minValue']), 3)
+    data['maxValue'] = round(float(data['maxValue']), 3)
     data['name'] = str(data['name'])
     print(axisTag, [(k, data[k]) for k in sorted(data)])
 
