@@ -1,7 +1,8 @@
 import os
 from typing import Sequence
 
-Point = Size = tuple[float, float]
+Point = tuple[float, float]
+Size = tuple[float, float]
 Points = Sequence[Point]
 SomePath = os.PathLike | str
 CMYKColor = float | tuple[float, ...]
