@@ -31,7 +31,7 @@ from .aliases import (
     RGBColor,
     RGBAColorTuple,
     BoundingBox,
-    Transform,
+    TransformTuple,
     SomePath,
 )
 
@@ -1371,7 +1371,7 @@ class DrawBotDrawingTool():
 
     # transform
 
-    def transform(self, matrix: Transform, center: Point = (0, 0)):
+    def transform(self, matrix: TransformTuple, center: Point = (0, 0)):
         """
         Transform the canvas with a transformation matrix.
         """

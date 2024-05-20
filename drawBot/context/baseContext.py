@@ -22,7 +22,7 @@ from typing import Self
 from drawBot.aliases import (
     BoundingBox,
     Point,
-    Transform,
+    TransformTuple,
     SomePath,
 )
 
@@ -277,7 +277,7 @@ class BezierPath(BasePen, SVGContextPropertyMixin, ContextPropertyMixin):
             # with NSBezierPath, nothing special needs to be done for an open subpath.
             pass
 
-    def addComponent(self, glyphName: str, transformation: Transform):
+    def addComponent(self, glyphName: str, transformation: TransformTuple):
         """
         Add a sub glyph. The 'transformation' argument must be a 6-tuple
         containing an affine transformation, or a Transform object from the
@@ -643,7 +643,7 @@ class BezierPath(BasePen, SVGContextPropertyMixin, ContextPropertyMixin):
         angle2 = math.radians(angle2)
         self.transform((1, math.tan(angle2), math.tan(angle1), 1, 0, 0), center)
 
-    def transform(self, transformMatrix: Transform, center: Point = (0, 0)):
+    def transform(self, transformMatrix: TransformTuple, center: Point = (0, 0)):
         """
         Transform a path with a transform matrix (xy, xx, yy, yx, x, y).
         """

@@ -9,7 +9,7 @@ import AppKit
 from typing import Self
 
 from drawBot.aliases import (BoundingBox, Point, RGBColor, Size, SomePath,
-                             Transform)
+                             TransformTuple)
 from drawBot.context.baseContext import FormattedString
 from drawBot.context.imageContext import _makeBitmapImageRep
 from drawBot.misc import DrawBotError, optimizePath
@@ -285,7 +285,7 @@ class ImageObject:
         )
         self._addFilter(filterDict)
     
-    def affineClamp(self, transform: Transform = (0.4, 0.0, 0.0, 0.4, 0.0, 0.0)):
+    def affineClamp(self, transform: TransformTuple = (0.4, 0.0, 0.0, 0.4, 0.0, 0.0)):
         """
         Performs an affine transformation on a source image and then clamps the pixels at the edge of the transformed image, extending them outwards. This filter performs similarly to the "Affine Transform" filter except that it produces an image with infinite extent. You can use this filter when you need to blur an image but you want to avoid a soft, black fringe along the edges.
         
@@ -302,7 +302,7 @@ class ImageObject:
         )
         self._addFilter(filterDict)
     
-    def affineTile(self, transform: Transform = (0.4, 0.0, 0.0, 0.4, 0.0, 0.0)):
+    def affineTile(self, transform: TransformTuple = (0.4, 0.0, 0.0, 0.4, 0.0, 0.0)):
         """
         Applies an affine transformation to an image and then tiles the transformed image.
         
