@@ -1,7 +1,7 @@
 from typing import Any, Sequence
-import AppKit
-import CoreText
-import Quartz
+import AppKit # type: ignore
+import CoreText # type: ignore
+import Quartz # type: ignore
 import math
 import os
 import random
