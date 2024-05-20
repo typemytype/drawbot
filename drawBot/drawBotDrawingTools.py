@@ -1324,7 +1324,7 @@ class DrawBotDrawingTool():
         self._requiresNewFirstPage = True
         self._addInstruction("lineCap", value)
 
-    def lineDash(self, *value: float | Sequence[float], offset=0):
+    def lineDash(self, *value: float | Sequence[float] | None, offset=0):
         """
         Set a line dash with any given amount of lenghts.
         Uneven lenghts will have a visible stroke, even lenghts will be invisible.
