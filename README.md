@@ -63,7 +63,7 @@ __Required packages:__
 * [compositor](https://github.com/typesupply/compositor)
 * [feaTools2](https://github.com/typesupply/feaTools2)
 * [ufo2svg](https://github.com/typesupply/ufo2svg)
-* [PyObjC](https://pythonhosted.org/pyobjc/)
+* [PyObjC](https://github.com/ronaldoussoren/pyobjc)
 * [PIL](https://github.com/python-pillow/Pillow) (only for running tests)
 
 __Compile:__
