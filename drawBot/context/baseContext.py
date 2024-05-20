@@ -1676,7 +1676,7 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
         """
         self._url = url
 
-    def openTypeFeatures(self, *args, **features):
+    def openTypeFeatures(self, *args: None, **features: dict[str, bool]) -> dict[str, bool]:
         """
         Enable OpenType features and return the current openType features settings.
 
@@ -2605,7 +2605,7 @@ class BaseContext():
     def writingDirection(self, direction):
         self._state.text.writingDirection(direction)
 
-    def openTypeFeatures(self, *args, **features):
+    def openTypeFeatures(self, *args: None, **features: dict[str, bool]) -> dict[str, bool]:
         return self._state.text.openTypeFeatures(*args, **features)
 
     def fontVariations(self, *args, **axes):
