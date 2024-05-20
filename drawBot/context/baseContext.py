@@ -405,7 +405,7 @@ class BezierPath(BasePen, SVGContextPropertyMixin, ContextPropertyMixin):
         font: str | SomePath = _FALLBACKFONT,
         fontSize: float = 10,
         align: str | None = None,
-        hyphenation=None,
+        hyphenation: bool | None = None,
         fontNumber: int = 0,
     ):
         """
