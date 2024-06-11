@@ -40,6 +40,12 @@ jobs:
         pip install .
         pip install codecov
 
+    - name: Run MyPy on public API
+      run: |
+        mypy --follow-imports=skip drawBot/drawBotDrawingTools.py
+        mypy --follow-imports=skip drawBot/context/baseContext.py
+        mypy --follow-imports=skip drawBot/context/tools/imageObject.py
+
     - name: Run tests
       run: |
         source venv/bin/activate
