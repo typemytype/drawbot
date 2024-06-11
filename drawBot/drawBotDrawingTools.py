@@ -381,7 +381,7 @@ class DrawBotDrawingTool():
 
         The file extension is important because it will determine the format in which the image will be exported.
 
-        All supported file extensions: %(supporttedExtensions)s.
+        All supported file extensions: %(supportedExtensions)s.
         (`*` will print out all actions.)
 
         When exporting an animation or movie, each page represents a frame and the framerate is set by calling `frameDuration()` after each `newPage()`.
@@ -450,8 +450,8 @@ class DrawBotDrawingTool():
         return context.saveImage(path, options)
 
     # filling docs with content from all possible and installed contexts
-    saveImage.__doc__ = saveImage.__doc__ % dict(
-        supporttedExtensions="`%s`" % "`, `".join(getFileExtensions()),
+    saveImage.__doc__ = saveImage.__doc__ % dict( # type: ignore
+        supportedExtensions="`%s`" % "`, `".join(getFileExtensions()),
         supportedOptions="\n        ".join(getContextOptionsDocs())
     )
 
