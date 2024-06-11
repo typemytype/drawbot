@@ -42,6 +42,7 @@ jobs:
 
     - name: Run MyPy on public API
       run: |
+        source venv/bin/activate
         mypy --follow-imports=skip drawBot/drawBotDrawingTools.py
         mypy --follow-imports=skip drawBot/context/baseContext.py
         mypy --follow-imports=skip drawBot/context/tools/imageObject.py
