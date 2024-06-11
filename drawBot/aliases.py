@@ -1,7 +1,7 @@
 import os
 from typing import Sequence
 
-Size = tuple[float, float]
+Size = tuple[int, int]
 Point = tuple[float, float]
 Points = Sequence[Point]
 SomePath = os.PathLike | str

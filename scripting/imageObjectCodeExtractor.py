@@ -1,14 +1,7 @@
 from pathlib import Path
 
-import AppKit
-import Quartz
-
-"""
-Notes 18/04:
-- add very simple test to suite, just run each filter
-
-"""
-
+import AppKit # type: ignore
+import Quartz # type: ignore
 
 class CodeWriter:
 
@@ -426,7 +419,7 @@ if __name__ == "__main__":
 
                     elif isinstance(default, AppKit.NSAffineTransform):  # type: ignore
                         default = tuple(default.transformStruct())
-                        arg += ": Transform"
+                        arg += ": TransformTuple"
 
                     elif isinstance(default, AppKit.CIColor): # type: ignore
                         default = (
@@ -435,7 +428,7 @@ if __name__ == "__main__":
                             default.blue(),
                             default.alpha(),
                         )
-                        arg += ": RGBColor"
+                        arg += ": RGBAColorTuple"
 
                     elif isinstance(default, AppKit.NSData): # type: ignore
                         default = None

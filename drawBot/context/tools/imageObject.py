@@ -1,5 +1,5 @@
-import AppKit
-import Quartz
+import AppKit # type: ignore
+import Quartz # type: ignore
 from math import radians
 import os
 from math import radians
@@ -8,7 +8,7 @@ from typing import Any
 import AppKit
 from typing import Self
 
-from drawBot.aliases import (BoundingBox, Point, RGBColor, Size, SomePath,
+from drawBot.aliases import (BoundingBox, Point, RGBAColorTuple, Size, SomePath,
                              TransformTuple)
 from drawBot.context.baseContext import FormattedString
 from drawBot.context.imageContext import _makeBitmapImageRep
@@ -67,7 +67,7 @@ class ImageObject:
             im = path
         elif isinstance(path, (str, os.PathLike)):
             path = optimizePath(path)
-            if path.startswith("http"):
+            if isinstance(path, str) and path.startswith("http"):
                 url = AppKit.NSURL.URLWithString_(path) # type: ignore
             else:
                 if not os.path.exists(path):
@@ -177,9 +177,9 @@ class ImageObject:
                 del self._cachedImage
         self._source = ciImage
 
-    def _addFilter(self, filterDict: dict[str, Any]):
+    def _addFilter(self, filterDict):
         """
-        Add an filter.
+        Add a filter.
         """
         self._filters.append(filterDict)
         if hasattr(self, "_cachedImage"):
@@ -655,7 +655,7 @@ class ImageObject:
         )
         self._addFilter(filterDict)
     
-    def blurredRectangleGenerator(self, size: Size, extent: BoundingBox = (0.0, 0.0, 100.0, 100.0), sigma: float = 10.0, color: RGBColor = (1.0, 1.0, 1.0, 1.0)):
+    def blurredRectangleGenerator(self, size: Size, extent: BoundingBox = (0.0, 0.0, 100.0, 100.0), sigma: float = 10.0, color: RGBAColorTuple = (1.0, 1.0, 1.0, 1.0)):
         """
         Generates a blurred rectangle image with the specified extent, blur sigma, and color.
         
@@ -788,7 +788,7 @@ class ImageObject:
         )
         self._addFilter(filterDict)
     
-    def checkerboardGenerator(self, size: Size, center: Point = (150.0, 150.0), color0: RGBColor = (1.0, 1.0, 1.0, 1.0), color1: RGBColor = (0.0, 0.0, 0.0, 1.0), width: float = 80.0, sharpness: float = 1.0):
+    def checkerboardGenerator(self, size: Size, center: Point = (150.0, 150.0), color0: RGBAColorTuple = (1.0, 1.0, 1.0, 1.0), color1: RGBAColorTuple = (0.0, 0.0, 0.0, 1.0), width: float = 80.0, sharpness: float = 1.0):
         """
         Generates a pattern of squares of alternating colors. You can specify the size, colors, and the sharpness of the pattern.
         
@@ -1148,7 +1148,7 @@ class ImageObject:
         )
         self._addFilter(filterDict)
     
-    def colorMonochrome(self, color: RGBColor = (0.6, 0.45, 0.3, 1.0), intensity: float = 1.0):
+    def colorMonochrome(self, color: RGBAColorTuple = (0.6, 0.45, 0.3, 1.0), intensity: float = 1.0):
         """
         Remaps colors so they fall within shades of a single color.
         
@@ -1263,7 +1263,7 @@ class ImageObject:
         )
         self._addFilter(filterDict)
     
-    def constantColorGenerator(self, size: Size, color: RGBColor = (1.0, 0.0, 0.0, 1.0)):
+    def constantColorGenerator(self, size: Size, color: RGBAColorTuple = (1.0, 0.0, 0.0, 1.0)):
         """
         Generates a solid color. You typically use the output of this filter as the input to another filter.
         
@@ -1507,7 +1507,7 @@ class ImageObject:
         )
         self._addFilter(filterDict)
     
-    def copyMachineTransition(self, targetImage: Self, extent: BoundingBox = (0.0, 0.0, 300.0, 300.0), color: RGBColor = (0.6, 1.0, 0.8, 1.0), time: float = 0.0, angle: float = 0.0, width: float = 200.0, opacity: float = 1.3):
+    def copyMachineTransition(self, targetImage: Self, extent: BoundingBox = (0.0, 0.0, 300.0, 300.0), color: RGBAColorTuple = (0.6, 1.0, 0.8, 1.0), time: float = 0.0, angle: float = 0.0, width: float = 200.0, opacity: float = 1.3):
         """
         Transitions from one image to another by simulating the effect of a copy machine.
         
@@ -2016,7 +2016,7 @@ class ImageObject:
         )
         self._addFilter(filterDict)
     
-    def falseColor(self, color0: RGBColor = (0.3, 0.0, 0.0, 1.0), color1: RGBColor = (1.0, 0.9, 0.8, 1.0)):
+    def falseColor(self, color0: RGBAColorTuple = (0.3, 0.0, 0.0, 1.0), color1: RGBAColorTuple = (1.0, 0.9, 0.8, 1.0)):
         """
         Maps luminance to a color ramp of two colors. False color is often used to process astronomical and other scientific data, such as ultraviolet and X-ray images.
         
@@ -2035,7 +2035,7 @@ class ImageObject:
         )
         self._addFilter(filterDict)
     
-    def flashTransition(self, targetImage: Self, center: Point = (150.0, 150.0), extent: BoundingBox = (0.0, 0.0, 300.0, 300.0), color: RGBColor = (1.0, 0.8, 0.6, 1.0), time: float = 0.0, maxStriationRadius: float = 2.58, striationStrength: float = 0.5, striationContrast: float = 1.375, fadeThreshold: float = 0.85):
+    def flashTransition(self, targetImage: Self, center: Point = (150.0, 150.0), extent: BoundingBox = (0.0, 0.0, 300.0, 300.0), color: RGBAColorTuple = (1.0, 0.8, 0.6, 1.0), time: float = 0.0, maxStriationRadius: float = 2.58, striationStrength: float = 0.5, striationContrast: float = 1.375, fadeThreshold: float = 0.85):
         """
         Transitions from one image to another by creating a flash. The flash originates from a point you specify. Small at first, it rapidly expands until the image frame is completely filled with the flash color. As the color fades, the target image begins to appear.
         
@@ -2180,7 +2180,7 @@ class ImageObject:
         )
         self._addFilter(filterDict)
     
-    def gaussianGradient(self, size: Size, center: Point = (150.0, 150.0), color0: RGBColor = (1.0, 1.0, 1.0, 1.0), color1: RGBColor = (0.0, 0.0, 0.0, 0.0), radius: float = 300.0):
+    def gaussianGradient(self, size: Size, center: Point = (150.0, 150.0), color0: RGBAColorTuple = (1.0, 1.0, 1.0, 1.0), color1: RGBAColorTuple = (0.0, 0.0, 0.0, 0.0), radius: float = 300.0):
         """
         Generates a gradient that varies from one color to another using a Gaussian distribution.
         
@@ -2664,7 +2664,7 @@ class ImageObject:
         )
         self._addFilter(filterDict)
     
-    def lenticularHaloGenerator(self, size: Size, center: Point = (150.0, 150.0), color: RGBColor = (1.0, 0.9, 0.8, 1.0), haloRadius: float = 70.0, haloWidth: float = 87.0, haloOverlap: float = 0.77, striationStrength: float = 0.5, striationContrast: float = 1.0, time: float = 0.0):
+    def lenticularHaloGenerator(self, size: Size, center: Point = (150.0, 150.0), color: RGBAColorTuple = (1.0, 0.9, 0.8, 1.0), haloRadius: float = 70.0, haloWidth: float = 87.0, haloOverlap: float = 0.77, striationStrength: float = 0.5, striationContrast: float = 1.0, time: float = 0.0):
         """
         Simulates a halo that is generated by the diffraction associated with the spread of a lens. This filter is typically applied to another image to simulate lens flares and similar effects.
         
@@ -2770,7 +2770,7 @@ class ImageObject:
         )
         self._addFilter(filterDict)
     
-    def linearGradient(self, size: Size, point0: Point = (0.0, 0.0), point1: Point = (200.0, 200.0), color0: RGBColor = (1.0, 1.0, 1.0, 1.0), color1: RGBColor = (0.0, 0.0, 0.0, 1.0)):
+    def linearGradient(self, size: Size, point0: Point = (0.0, 0.0), point1: Point = (200.0, 200.0), color0: RGBAColorTuple = (1.0, 1.0, 1.0, 1.0), color1: RGBAColorTuple = (0.0, 0.0, 0.0, 1.0)):
         """
         Generates a gradient that varies along a linear axis between two defined endpoints.
         
@@ -2947,7 +2947,7 @@ class ImageObject:
         )
         self._addFilter(filterDict)
     
-    def meshGenerator(self, size: Size, mesh, width: float = 1.5, color: RGBColor = (1.0, 1.0, 1.0, 1.0)):
+    def meshGenerator(self, size: Size, mesh, width: float = 1.5, color: RGBAColorTuple = (1.0, 1.0, 1.0, 1.0)):
         """
         Generates a mesh from an array of line segments.
         
@@ -3826,7 +3826,7 @@ class ImageObject:
         ),
         self._addFilter(filterDict)
     
-    def radialGradient(self, size: Size, center: Point = (150.0, 150.0), radius0: float = 5.0, radius1: float = 100.0, color0: RGBColor = (1.0, 1.0, 1.0, 1.0), color1: RGBColor = (0.0, 0.0, 0.0, 1.0)):
+    def radialGradient(self, size: Size, center: Point = (150.0, 150.0), radius0: float = 5.0, radius1: float = 100.0, color0: RGBAColorTuple = (1.0, 1.0, 1.0, 1.0), color1: RGBAColorTuple = (0.0, 0.0, 0.0, 1.0)):
         """
         Generates a gradient that varies radially between two circles having the same center. It is valid for one of the two circles to have a radius of 0.
         
@@ -3899,7 +3899,7 @@ class ImageObject:
         )
         self._addFilter(filterDict)
     
-    def roundedRectangleGenerator(self, size: Size, extent: BoundingBox = (0.0, 0.0, 100.0, 100.0), radius: float = 10.0, color: RGBColor = (1.0, 1.0, 1.0, 1.0)):
+    def roundedRectangleGenerator(self, size: Size, extent: BoundingBox = (0.0, 0.0, 100.0, 100.0), radius: float = 10.0, color: RGBAColorTuple = (1.0, 1.0, 1.0, 1.0)):
         """
         Generates a rounded rectangle image with the specified extent, corner radius, and color.
         
@@ -3923,7 +3923,7 @@ class ImageObject:
         ),
         self._addFilter(filterDict)
     
-    def roundedRectangleStrokeGenerator(self, size: Size, extent: BoundingBox = (0.0, 0.0, 100.0, 100.0), radius: float = 10.0, color: RGBColor = (1.0, 1.0, 1.0, 1.0), width: float = 10.0):
+    def roundedRectangleStrokeGenerator(self, size: Size, extent: BoundingBox = (0.0, 0.0, 100.0, 100.0), radius: float = 10.0, color: RGBAColorTuple = (1.0, 1.0, 1.0, 1.0), width: float = 10.0):
         """
         Generates a rounded rectangle stroke image with the specified extent, corner radius, stroke width, and color.
         
@@ -4119,7 +4119,7 @@ class ImageObject:
         )
         self._addFilter(filterDict)
     
-    def smoothLinearGradient(self, size: Size, point0: Point = (0.0, 0.0), point1: Point = (200.0, 200.0), color0: RGBColor = (1.0, 1.0, 1.0, 1.0), color1: RGBColor = (0.0, 0.0, 0.0, 1.0)):
+    def smoothLinearGradient(self, size: Size, point0: Point = (0.0, 0.0), point1: Point = (200.0, 200.0), color0: RGBAColorTuple = (1.0, 1.0, 1.0, 1.0), color1: RGBAColorTuple = (0.0, 0.0, 0.0, 1.0)):
         """
         Generates a gradient that varies along a linear axis between two defined endpoints.
         
@@ -4241,7 +4241,7 @@ class ImageObject:
         )
         self._addFilter(filterDict)
     
-    def spotColor(self, centerColor1: RGBColor = (0.0784, 0.0627, 0.0706, 1.0), replacementColor1: RGBColor = (0.4392, 0.1922, 0.1961, 1.0), closeness1: float = 0.22, contrast1: float = 0.98, centerColor2: RGBColor = (0.5255, 0.3059, 0.3451, 1.0), replacementColor2: RGBColor = (0.9137, 0.5608, 0.5059, 1.0), closeness2: float = 0.15, contrast2: float = 0.98, centerColor3: RGBColor = (0.9216, 0.4549, 0.3333, 1.0), replacementColor3: RGBColor = (0.9098, 0.7529, 0.6078, 1.0), closeness3: float = 0.5, contrast3: float = 0.99):
+    def spotColor(self, centerColor1: RGBAColorTuple = (0.0784, 0.0627, 0.0706, 1.0), replacementColor1: RGBAColorTuple = (0.4392, 0.1922, 0.1961, 1.0), closeness1: float = 0.22, contrast1: float = 0.98, centerColor2: RGBAColorTuple = (0.5255, 0.3059, 0.3451, 1.0), replacementColor2: RGBAColorTuple = (0.9137, 0.5608, 0.5059, 1.0), closeness2: float = 0.15, contrast2: float = 0.98, centerColor3: RGBAColorTuple = (0.9216, 0.4549, 0.3333, 1.0), replacementColor3: RGBAColorTuple = (0.9098, 0.7529, 0.6078, 1.0), closeness3: float = 0.5, contrast3: float = 0.99):
         """
         Replaces one or more color ranges with spot colors.
         
@@ -4280,7 +4280,7 @@ class ImageObject:
         )
         self._addFilter(filterDict)
     
-    def spotLight(self, lightPosition: tuple = (400.0, 600.0, 150.0), lightPointsAt: tuple = (200.0, 200.0, 0.0), brightness: float = 3.0, concentration: float = 0.1, color: RGBColor = (1.0, 1.0, 1.0, 1.0)):
+    def spotLight(self, lightPosition: tuple = (400.0, 600.0, 150.0), lightPointsAt: tuple = (200.0, 200.0, 0.0), brightness: float = 3.0, concentration: float = 0.1, color: RGBAColorTuple = (1.0, 1.0, 1.0, 1.0)):
         """
         Applies a directional spotlight effect to an image.
         
@@ -4316,7 +4316,7 @@ class ImageObject:
         )
         self._addFilter(filterDict)
     
-    def starShineGenerator(self, size: Size, center: Point = (150.0, 150.0), color: RGBColor = (1.0, 0.8, 0.6, 1.0), radius: float = 50.0, crossScale: float = 15.0, crossAngle: float = 0.6, crossOpacity: float = -2.0, crossWidth: float = 2.5, epsilon: float = -2.0):
+    def starShineGenerator(self, size: Size, center: Point = (150.0, 150.0), color: RGBAColorTuple = (1.0, 0.8, 0.6, 1.0), radius: float = 50.0, crossScale: float = 15.0, crossAngle: float = 0.6, crossOpacity: float = -2.0, crossWidth: float = 2.5, epsilon: float = -2.0):
         """
         Generates a starburst pattern. The output image is typically used as input to another filter.
         
@@ -4388,7 +4388,7 @@ class ImageObject:
         )
         self._addFilter(filterDict)
     
-    def stripesGenerator(self, size: Size, center: Point = (150.0, 150.0), color0: RGBColor = (1.0, 1.0, 1.0, 1.0), color1: RGBColor = (0.0, 0.0, 0.0, 1.0), width: float = 80.0, sharpness: float = 1.0):
+    def stripesGenerator(self, size: Size, center: Point = (150.0, 150.0), color0: RGBAColorTuple = (1.0, 1.0, 1.0, 1.0), color1: RGBAColorTuple = (0.0, 0.0, 0.0, 1.0), width: float = 80.0, sharpness: float = 1.0):
         """
         Generates a stripe pattern. You can control the color of the stripes, the spacing, and the contrast.
         
@@ -4433,7 +4433,7 @@ class ImageObject:
         )
         self._addFilter(filterDict)
     
-    def sunbeamsGenerator(self, size: Size, center: Point = (150.0, 150.0), color: RGBColor = (1.0, 0.5, 0.0, 1.0), sunRadius: float = 40.0, maxStriationRadius: float = 2.58, striationStrength: float = 0.5, striationContrast: float = 1.375, time: float = 0.0):
+    def sunbeamsGenerator(self, size: Size, center: Point = (150.0, 150.0), color: RGBAColorTuple = (1.0, 0.5, 0.0, 1.0), sunRadius: float = 40.0, maxStriationRadius: float = 2.58, striationStrength: float = 0.5, striationContrast: float = 1.375, time: float = 0.0):
         """
         Generates a sun effect. You typically use the output of the sunbeams filter as input to a composite filter.
         
@@ -4465,7 +4465,7 @@ class ImageObject:
         ),
         self._addFilter(filterDict)
     
-    def swipeTransition(self, targetImage: Self, extent: BoundingBox = (0.0, 0.0, 300.0, 300.0), color: RGBColor = (1.0, 1.0, 1.0, 1.0), time: float = 0.0, angle: float = 0.0, width: float = 300.0, opacity: float = 0.0):
+    def swipeTransition(self, targetImage: Self, extent: BoundingBox = (0.0, 0.0, 300.0, 300.0), color: RGBAColorTuple = (1.0, 1.0, 1.0, 1.0), time: float = 0.0, angle: float = 0.0, width: float = 300.0, opacity: float = 0.0):
         """
         Transitions from one image to another by simulating a swiping action.
         
@@ -4802,7 +4802,7 @@ class ImageObject:
         )
         self._addFilter(filterDict)
     
-    def whitePointAdjust(self, color: RGBColor = (1.0, 1.0, 1.0, 1.0)):
+    def whitePointAdjust(self, color: RGBAColorTuple = (1.0, 1.0, 1.0, 1.0)):
         """
         Adjusts the reference white point for an image and maps all colors in the source using the new reference.
         

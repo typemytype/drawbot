@@ -225,7 +225,8 @@ class DrawBotDrawingTool():
         Returns the width and height of a specified canvas size.
         If no canvas size is given it will return the dictionary containing all possible page sizes.
         """
-        _paperSizes["screen"] = tuple(AppKit.NSScreen.mainScreen().frame().size)
+        w, h = AppKit.NSScreen.mainScreen().frame().size
+        _paperSizes["screen"] = int(w), int(h)
         if paperSize:
             return _paperSizes[paperSize]
         return _paperSizes
@@ -271,12 +272,12 @@ class DrawBotDrawingTool():
         if self._isSinglePage:
             # dont allow to set a page size
             raise DrawBotError("Cannot set 'size' into a single page.")
-        if width in _paperSizes:
+        if width in _paperSizes and isinstance(width, str):
             width, height = _paperSizes[width]
         if width == "screen":
             width, height = AppKit.NSScreen.mainScreen().frame().size
-        if height is None:
-            width, height = width
+        if height is None and isinstance(width, float):
+            width, height = width, width
         self._width = width
         self._height = height
         if not self._instructionsStack:
@@ -310,7 +311,7 @@ class DrawBotDrawingTool():
         if self._isSinglePage:
             # dont allow to add a page
             raise DrawBotError("Cannot add a 'newPage' into a single page.")
-        if width in _paperSizes:
+        if width in _paperSizes and isinstance(width, str):
             width, height = _paperSizes[width]
         if width == "screen":
             width, height = AppKit.NSScreen.mainScreen().frame().size
@@ -1324,7 +1325,7 @@ class DrawBotDrawingTool():
         self._requiresNewFirstPage = True
         self._addInstruction("lineCap", value)
 
-    def lineDash(self, *value: float | Sequence[float] | None, offset=0):
+    def lineDash(self, value: float | None, *values: float, offset: float = 0):
         """
         Set a line dash with any given amount of lenghts.
         Uneven lenghts will have a visible stroke, even lenghts will be invisible.
@@ -1362,12 +1363,11 @@ class DrawBotDrawingTool():
             # draw a line
             line((0, 200), (0, 800))
         """
-        if not value:
-            raise DrawBotError("lineDash must be a list of dashes or None")
-        if isinstance(value[0], (list, tuple)):
-            value = value[0]
+        if isinstance(value, float):
+            combinedDashes: list[float] = [value]
+            combinedDashes.extend(values)
         self._requiresNewFirstPage = True
-        self._addInstruction("lineDash", value, offset)
+        self._addInstruction("lineDash", combinedDashes or None, offset)
 
     # transform
 
@@ -2123,10 +2123,10 @@ class DrawBotDrawingTool():
         else:
             if isinstance(path, (str, os.PathLike)):
                 path = optimizePath(path)
-            if path.startswith("http"):
+            if isinstance(path, str) and path.startswith("http"):
                 url = AppKit.NSURL.URLWithString_(path)
             else:
-                if not os.path.exists(path):
+                if isinstance(path, str) and not os.path.exists(path):
                     raise DrawBotError("Image does not exist")
                 url = AppKit.NSURL.fileURLWithPath_(path)
             # check if the file is an .pdf
@@ -2157,7 +2157,7 @@ class DrawBotDrawingTool():
 
     def imagePixelColor(self,
                        path: SomePath | ImageObject, # FIXME path as argument name might be misleading
-                       xy: Point) -> RGBAColorTuple:
+                       xy: Point) -> RGBAColorTuple | None:
         """
         Return the color `r, g, b, a` of an image at a specified `x`, `y` position.
         Supports pdf, jpg, png, tiff and gif file formats. `NSImage` objects are supported too.
@@ -2203,7 +2203,7 @@ class DrawBotDrawingTool():
             elif isinstance(path, AppKit.NSImage):
                 source = path
             else:
-                if path.startswith("http"):
+                if isinstance(path, str) and path.startswith("http"):
                     url = AppKit.NSURL.URLWithString_(path)
                 else:
                     url = AppKit.NSURL.fileURLWithPath_(path)
@@ -2247,12 +2247,14 @@ class DrawBotDrawingTool():
 
         return rep.pixelsWide() / rep.size().width * 72.0
 
-    def numberOfPages(self, path: SomePath) -> int:
+    def numberOfPages(self, path: SomePath) -> int | None:
         """
         Return the number of pages for a given pdf or (animated) gif.
+        Return `None` for non compatible file types.
+
         """
         path = optimizePath(path)
-        if path.startswith("http"):
+        if isinstance(path, str) and path.startswith("http"):
             url = AppKit.NSURL.URLWithString_(path)
         else:
             url = AppKit.NSURL.fileURLWithPath_(path)

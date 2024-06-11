@@ -1,14 +1,15 @@
-import AppKit
-import CoreText
-import Quartz
+import AppKit # type: ignore
+import CoreText # type: ignore
+import Quartz # type: ignore
 
 import math
+from typing import Any
 import os
 from packaging.version import Version
 
-from fontTools.pens.basePen import BasePen
+from fontTools.pens.basePen import BasePen # type: ignore
 from fontTools.pens.basePen import AbstractPen
-from fontTools.pens.pointPen import AbstractPointPen
+from fontTools.pens.pointPen import AbstractPointPen # type: ignore
 
 from drawBot.misc import DrawBotError, cmyk2rgb, warnings, transformationAtCenter
 from drawBot.macOSVersion import macOSVersion
@@ -108,7 +109,7 @@ class BezierContour(list):
         return "<BezierContour>"
 
     def _get_clockwise(self):
-        from fontTools.pens.areaPen import AreaPen
+        from fontTools.pens.areaPen import AreaPen # type: ignore
         pen = AreaPen()
         pen.endPath = pen.closePath
         self.drawToPen(pen)
@@ -670,7 +671,7 @@ class BezierPath(BasePen, SVGContextPropertyMixin, ContextPropertyMixin):
         Return the union between two bezier paths.
         """
         assert isinstance(other, self.__class__)
-        import booleanOperations
+        import booleanOperations # type: ignore
         contours = self._contoursForBooleanOperations() + other._contoursForBooleanOperations()
         result = self.__class__()
         booleanOperations.union(contours, result)
@@ -1114,7 +1115,7 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
         RTL=AppKit.NSWritingDirectionRightToLeft
     )
 
-    _formattedAttributes = dict(
+    _formattedAttributes: dict[str, Any] = dict(
         font=_FALLBACKFONT,
         fallbackFont=None,
         fallbackFontNumber=0,
@@ -1146,6 +1147,12 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
         language=None,
         writingDirection=None,
     )
+
+    # typing of private dictionary attributes
+    # generated from the _formattedAttributes during init
+    _openTypeFeatures: dict[str, bool]
+    _fontVariations: dict[str, float]
+    _tabs: list[tuple[float, str]] | None
 
     def __init__(self, txt: str | None = None, **kwargs):
         self.clear()
@@ -1676,7 +1683,7 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
         """
         self._url = url
 
-    def openTypeFeatures(self, *args: None, **features: dict[str, bool]) -> dict[str, bool]:
+    def openTypeFeatures(self, *args: None, **features: bool) -> dict[str, bool]:
         """
         Enable OpenType features and return the current openType features settings.
 
@@ -1778,7 +1785,7 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
             self.fontVariations(**instances[name])
         else:
             font = getNSFontFromNameOrPath(self._font, self._fontSize, self._fontNumber)
-            fontName = getFontName(font)
+            fontName: SomePath | None = getFontName(font)
             if fontName is None:
                 fontName = self._font
             raise DrawBotError(f"Can not find instance with name: '{name}' for '{fontName}'.")
@@ -1797,7 +1804,7 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
         font = getNSFontFromNameOrPath(fontNameOrPath, 10, fontNumber)
         return variation.getNamedInstancesForFont(font)
 
-    def tabs(self, *tabs: tuple[float, str]):
+    def tabs(self, tab: tuple[float, str] | None, *tabs: tuple[float, str]):
         """
         Set tabs,tuples of (`float`, `alignment`)
         Aligment can be `"left"`, `"center"`, `"right"` or any other character.
@@ -1814,10 +1821,12 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
             # draw the string
             text(t, (10, 10))
         """
-        if tabs and tabs[0] is None:
+        if tab is None:
             self._tabs = None
         else:
-            self._tabs = tabs
+            combinedTabs: list[tuple[float, str]] = [tab]
+            combinedTabs.extend(tabs)
+            self._tabs = combinedTabs
 
     def indent(self, indent: float):
         """
@@ -2012,7 +2021,7 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
         """
         Return a list of glyph names supported by the current font.
         """
-        from fontTools.ttLib import TTFont, TTLibError
+        from fontTools.ttLib import TTFont, TTLibError # type: ignore
 
         path = self.fontFilePath()
         if path is None:
@@ -2127,8 +2136,8 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
         font = AppKit.NSFont.fontWithDescriptor_size_(fontDescriptor, self._fontSize)
 
         fallbackFont = self._fallbackFont
-        self._fallbackFont = None
-        _openTypeFeatures = dict(self._openTypeFeatures)
+        self._fallbackFont = None # type: ignore
+        _openTypeFeatures: dict[str, bool] = dict(self._openTypeFeatures)
         self._openTypeFeatures = dict(calt=False)
         for glyphName in glyphNames:
             if isinstance(glyphName, int):
@@ -2233,8 +2242,8 @@ class BaseContext():
     _bezierPathClass = BezierPath
     _gradientClass = Gradient
 
-    fileExtensions = []
-    saveImageOptions = []
+    fileExtensions: list[str] = []
+    saveImageOptions: list[str] = []
     validateSaveImageOptions = True
 
     _textAlignMap = FormattedString._textAlignMap
@@ -2876,7 +2885,7 @@ def _getNSFontFromNameOrPath(fontNameOrPath, fontSize, fontNumber):
 # a maximum size, using Python 3.7's insertion order preserving dict
 # behavior, but it may not be worth the effort.
 #
-_reloadedFontDescriptors = {}
+_reloadedFontDescriptors: dict[SomePath, tuple[float, Any]] = {}
 
 
 @memoize
