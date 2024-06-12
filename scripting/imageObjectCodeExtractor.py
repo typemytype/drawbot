@@ -54,6 +54,10 @@ class UnitTestWriter(CodeWriter):
         self.add("import drawBot")
         self.add("from testSupport import DrawBotBaseTest")
         self.newline()
+        self.add('sampleImage = drawBot.ImageObject("tests/data/drawBot.png")')
+        self.add('fs = drawBot.FormattedString("Hello World")')
+        self.newline()
+        self.newline()
         self.add("class ImageObjectTest(DrawBotBaseTest):")
         self.indent()
         self.newline()
@@ -349,6 +353,7 @@ if __name__ == "__main__":
         doc.add(AppKit.CIFilter.localizedDescriptionForFilterName_(filterName))  # type: ignore
 
         args = []
+        unitTestsArgs = []
         inputCode = CodeWriter()
 
         inputKeys = [
@@ -372,6 +377,7 @@ if __name__ == "__main__":
             doc.indent()
             if filterName in generators:
                 args.append("size: Size")
+                unitTestsArgs.append("size=(100, 100)")
                 doc.add(f"`size` {variableValues['size']}")
             for inputKey in inputKeys:
                 info = ciFilterAttributes.get(inputKey)
@@ -453,6 +459,22 @@ if __name__ == "__main__":
                 doc.add(f"`{inputKey}` {docValue}. {pythonifyDescription(description)}")
                 args.append(arg)
 
+                
+                match inputKey:
+                    case inputKey if inputKey.endswith("Image"):
+                        value = "sampleImage"
+                    case "gainMap" | "texture" | "mask":
+                        value = "sampleImage"
+                    case "text":
+                        value = "fs"
+                    case "message":
+                        value = "b'Hello World'"
+                    case "topLeft" | "topRight" | "bottomRight" | "bottomLeft":
+                        value = "(2, 2)"
+                    case _:
+                        value = default
+                unitTestsArgs.append(f"{inputKey}={value}")
+
             doc.dedent()
         drawBotFilterName = camelCase(filterName[2:])
         code.add(
@@ -477,15 +499,12 @@ if __name__ == "__main__":
 
         code.add("self._addFilter(filterDict)")
         code.dedent()
-        code.newline()
-
+        code.newline() 
+ 
         unitTests.add(f"def test_{drawBotFilterName}(self):")
         unitTests.indent()
-        if filterName in generators:
-            unitTests.add("img = drawBot.ImageObject()")
-            unitTests.add(f"img.{drawBotFilterName}((100, 100), b'hello world')")
-        else:
-            unitTests.add("pass")
+        unitTests.add("img = drawBot.ImageObject()")
+        unitTests.add(f"img.{drawBotFilterName}({', '.join(unitTestsArgs)})")
         unitTests.newline()
         unitTests.dedent()
 
