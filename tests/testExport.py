@@ -8,7 +8,7 @@ import AppKit
 import PIL
 from drawBot.context.tools.gifTools import gifFrameCount
 from drawBot.misc import DrawBotError
-from testSupport import DrawBotBaseTest, StdOutCollector, TempFile, TempFolder, randomSeed, readData, testDataDir
+from testSupport import DrawBotBaseTest, StdOutCollector, TempFile, TempFolder, randomSeed, readData, testDataDir, tempTestDataDir
 
 
 class ExportTest(DrawBotBaseTest):
@@ -369,9 +369,10 @@ class ExportTest(DrawBotBaseTest):
         drawBot.fallbackFont("Courier")
         drawBot.font("Times")
         drawBot.text("a", (10, 10))
-        with TempFile(suffix=".svg") as tmp:
-            drawBot.saveImage(tmp.path)
-            self.assertEqual(readData(tmp.path), readData(expectedPath), "Files %r and %s are not the same" % (tmp.path, expectedPath))
+
+        path = os.path.join(tempTestDataDir, "svgSaveFallback.svg")
+        drawBot.saveImage(path)
+        self.assertEqual(readData(path), readData(expectedPath), "Files %r and %s are not the same" % (path, expectedPath))
 
     def test_linkURL_svg(self):
         expectedPath = os.path.join(testDataDir, "expected_svgLinkURL.svg")
