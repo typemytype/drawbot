@@ -1363,11 +1363,11 @@ class DrawBotDrawingTool():
             # draw a line
             line((0, 200), (0, 800))
         """
+        combinedDashes: list[float | None] = [value]
         if isinstance(value, float):
-            combinedDashes: list[float] = [value]
             combinedDashes.extend(values)
         self._requiresNewFirstPage = True
-        self._addInstruction("lineDash", combinedDashes or None, offset)
+        self._addInstruction("lineDash", combinedDashes, offset)
 
     # transform
 
