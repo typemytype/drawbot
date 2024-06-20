@@ -153,7 +153,67 @@ class BezierContour(list):
 class BezierPath(BasePen, SVGContextPropertyMixin, ContextPropertyMixin):
 
     """
-    A bezier path object, if you want to draw the same over and over again.
+    Return a BezierPath object.
+    This is a reusable object, if you want to draw the same over and over again.
+
+    .. downloadcode:: bezierPath.py
+
+        # create a bezier path
+        path = BezierPath()
+
+        # move to a point
+        path.moveTo((100, 100))
+        # line to a point
+        path.lineTo((100, 200))
+        path.lineTo((200, 200))
+        # close the path
+        path.closePath()
+
+        # loop over a range of 10
+        for i in range(10):
+            # set a random color with alpha value of .3
+            fill(random(), random(), random(), .3)
+            # in each loop draw the path
+            drawPath(path)
+            # translate the canvas
+            translate(50, 50)
+
+        path.text("Hello world", font="Helvetica", fontSize=30, offset=(210, 210))
+
+        print("All Points:")
+        print(path.points)
+
+        print("On Curve Points:")
+        print(path.onCurvePoints)
+
+        print("Off Curve Points:")
+        print(path.offCurvePoints)
+
+        # print out all points from all segments in all contours
+        for contour in path.contours:
+            for segment in contour:
+                for x, y in segment:
+                    print((x, y))
+            print(["contour is closed", "contour is open"][contour.open])
+
+        # translate the path
+        path.translate(0, -100)
+        # draw the path again
+        drawPath(path)
+        # translate the path
+        path.translate(-300, 0)
+        path.scale(2)
+        # draw the path again
+        drawPath(path)
+
+
+    .. autoclass:: drawBot.BezierPath
+        :members:
+        :undoc-members:
+        :inherited-members:
+        :show-inheritance:
+        :exclude-members: copyContextProperties
+
     """
 
     contourClass = BezierContour
@@ -1066,8 +1126,44 @@ def makeTextBoxes(attributedString, xy, align, plainText):
 class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
 
     """
-    FormattedString is a reusable object, if you want to draw the same over and over again.
-    FormattedString objects can be drawn with the `text(txt, (x, y))` and `textBox(txt, (x, y, w, h))` methods.
+    Return a string object that can handle text formatting.
+
+    .. downloadcode:: formattedString.py
+
+        size(1000, 200)
+        # create a formatted string
+        txt = FormattedString()
+
+        # adding some text with some formatting
+        txt.append("hello", font="Helvetica", fontSize=100, fill=(1, 0, 0))
+        # adding more text
+        txt.append("world", font="Times-Italic", fontSize=50, fill=(0, 1, 0))
+
+        # setting a font
+        txt.font("Helvetica-Bold")
+        txt.fontSize(75)
+        txt += "hello again"
+
+        # drawing the formatted string
+        text(txt, (10, 30))
+
+        # create a formatted string
+        txt = FormattedString()
+
+        # adding some text with some formatting
+        txt.append("hello", font="Didot", fontSize=50)
+        # adding more text with an
+        txt.append("world", font="Didot", fontSize=50, openTypeFeatures=dict(smcp=True))
+
+        text(txt, (10, 150))
+
+    .. autoclass:: drawBot.FormattedString
+        :members:
+        :undoc-members:
+        :inherited-members:
+        :show-inheritance:
+        :exclude-members: copyContextProperties
+
     """
 
     _colorClass = Color

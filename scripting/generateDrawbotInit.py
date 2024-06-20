@@ -17,6 +17,11 @@ if __name__ == '__main__':
         code.append(f"{name} = _drawBotDrawingTool.{name}")
 
     code.append("")
+    code.append("# directly import FormattedString, BezierPath, and ImageObject as classes")
+    code.append("from drawBot.context.baseContext import FormattedString, BezierPath")
+    code.append("from drawBot.context.tools.imageObject import ImageObject")
+
+    code.append("")
     code.append("from drawBot.context.tools import drawBotbuiltins")
     for name in dir(drawBotbuiltins):
         if name.startswith("_"):

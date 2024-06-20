@@ -3,7 +3,7 @@ import os
 import unittest
 import re
 import random
-import AppKit
+import AppKit # type: ignore
 import drawBot
 from drawBot.drawBotDrawingTools import DrawBotDrawingTool
 from testSupport import StdOutCollector, randomSeed, testRootDir, tempTestDataDir, testDataDir, compareImages
@@ -72,7 +72,7 @@ mockedImagePath = os.path.join(testRootDir, "data", "drawBot.jpg")
 assert os.path.exists(mockedImagePath)
 
 def mockImage(path, position, alpha=1):
-    if isinstance(path, DrawBotDrawingTool._imageClass):
+    if isinstance(path, drawBot.ImageObject):
         drawBot.image(path, position, alpha)
     else:
         drawBot.image(mockedImagePath, position, alpha)
@@ -166,11 +166,12 @@ expectedFailures = {}
 dontSaveImage = {"test_imageSize", "test_drawing"}
 
 def _addExampleTests():
+
     allExamples = _collectExamples([
         DrawBotDrawingTool,
-        DrawBotDrawingTool._formattedStringClass,
-        DrawBotDrawingTool._bezierPathClass,
-        DrawBotDrawingTool._imageClass
+        drawBot.FormattedString,
+        drawBot.BezierPath,
+        drawBot.ImageObject,
     ])
 
     for exampleName, source in allExamples.items():

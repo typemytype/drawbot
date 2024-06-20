@@ -18,14 +18,45 @@ from drawBot.misc import DrawBotError, optimizePath
 class ImageObject:
 
     """
-    An image object with support for filters.
+    Return a Image object, packed with filters.
+    This is a reusable object. Supports pdf, jpg, png, tiff and gif file formats. `NSImage` objects are supported too.
 
-    Optional a `path` to an existing image can be provided.
+    .. downloadcode:: imageObject.py
 
-    For more info see: `Core Image Filter Reference`_.
+        size(550, 300)
+        # initiate a new image object
+        im = ImageObject()
 
-    .. _Core Image Filter Reference: https://developer.apple.com/library/mac/documentation/GraphicsImaging/Reference/CoreImageFilterReference/index.html
+        # draw in the image
+        # the 'with' statement will create a custom context
+        # only drawing in the image object
+        with im:
+            # set a size for the image
+            size(200, 200)
+            # draw something
+            fill(1, 0, 0)
+            rect(0, 0, width(), height())
+            fill(1)
+            fontSize(30)
+            text("Hello World", (10, 10))
+
+        # draw in the image in the main context
+        image(im, (10, 50))
+        # apply some filters
+        im.gaussianBlur()
+
+        # get the offset (with a blur this will be negative)
+        x, y = im.offset()
+        # draw in the image in the main context
+        image(im, (300+x, 50+y))
+
+    .. autoclass:: drawBot.context.tools.imageObject.ImageObject
+        :members:
+
     """
+
+    # For more info see: `Core Image Filter Reference`_.
+    # .. _Core Image Filter Reference: https://developer.apple.com/library/mac/documentation/GraphicsImaging/Reference/CoreImageFilterReference/index.html
 
     def __init__(self, path=None):
         self._filters = []

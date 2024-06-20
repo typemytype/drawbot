@@ -10,12 +10,11 @@ from contextlib import contextmanager
 
 from .context import getContextForFileExt, getFileExtensions, getContextOptionsDocs
 from .context.baseContext import (
-    BezierPath,
     makeTextBoxes,
     getNSFontFromNameOrPath,
     getFontName,
 )
-from .context.baseContext import FormattedString as FormattedStringClass
+from .context.baseContext import FormattedString, BezierPath
 from .context.dummyContext import DummyContext
 
 from .context.tools.imageObject import ImageObject
@@ -95,6 +94,9 @@ class DrawBotDrawingTool():
         namespace.update(_getmodulecontents(random, ["random", "randint", "choice", "shuffle"]))
         namespace.update(_getmodulecontents(math))
         namespace.update(_getmodulecontents(drawBotbuiltins))
+        namespace["FormattedString"] = FormattedString
+        namespace["BezierPath"] = BezierPath
+        namespace["ImageObject"] = ImageObject
 
     def _addInstruction(self, callback, *args, **kwargs):
         if callback == "newPage":
@@ -697,8 +699,8 @@ class DrawBotDrawingTool():
             drawPath()
         """
         if isinstance(path, AppKit.NSBezierPath):
-            path = self._bezierPathClass(path)
-        if isinstance(path, self._bezierPathClass):
+            path = BezierPath(path)
+        if isinstance(path, BezierPath):
             path = path.copy()
         self._requiresNewFirstPage = True
         self._addInstruction("drawPath", path)
@@ -746,7 +748,7 @@ class DrawBotDrawingTool():
             # draw a line between two given points
             line((100, 100), (900, 900))
         """
-        path = self._bezierPathClass()
+        path = BezierPath()
         path.line(point1, point2)
         self.drawPath(path)
 
@@ -761,7 +763,7 @@ class DrawBotDrawingTool():
             # draw a polygon with x-amount of points
             polygon((100, 100), (100, 900), (900, 900), (200, 800), close=True)
         """
-        path = self._bezierPathClass()
+        path = BezierPath()
         path.polygon(*points, **kwargs)
         self.drawPath(path)
 
@@ -1707,7 +1709,7 @@ class DrawBotDrawingTool():
     def listOpenTypeFeatures(self, fontNameOrPath: SomePath | None = None) -> list[str]:
         return self._dummyContext._state.text.listOpenTypeFeatures(fontNameOrPath)
 
-    listOpenTypeFeatures.__doc__ = FormattedStringClass.listOpenTypeFeatures.__doc__
+    listOpenTypeFeatures.__doc__ = FormattedString.listOpenTypeFeatures.__doc__
 
     def fontVariations(self, *args: None, **axes: float | bool):
         """
@@ -1739,7 +1741,7 @@ class DrawBotDrawingTool():
     def listFontVariations(self, fontNameOrPath: SomePath | None = None) -> dict[str, dict]:
         return self._dummyContext._state.text.listFontVariations(fontNameOrPath)
 
-    listFontVariations.__doc__ = FormattedStringClass.listFontVariations.__doc__
+    listFontVariations.__doc__ = FormattedString.listFontVariations.__doc__
 
     def fontNamedInstance(self, name: str, fontNameOrPath: SomePath | None = None):
         """
@@ -1764,16 +1766,16 @@ class DrawBotDrawingTool():
     def listNamedInstances(self, fontNameOrPath=None) -> dict[str, dict]:
         return self._dummyContext._state.text.listNamedInstances(fontNameOrPath)
 
-    listNamedInstances.__doc__ = FormattedStringClass.listNamedInstances.__doc__
+    listNamedInstances.__doc__ = FormattedString.listNamedInstances.__doc__
 
     def textProperties(self) -> dict[str, Any]:
         return self._dummyContext._state.text.textProperties()
 
-    textProperties.__doc__ = FormattedStringClass.textProperties.__doc__
+    textProperties.__doc__ = FormattedString.textProperties.__doc__
 
     # drawing text
 
-    def text(self, txt: FormattedStringClass | str, position: Point, align: str | None = None):
+    def text(self, txt: FormattedString | str, position: Point, align: str | None = None):
         """
         Draw a text at a provided position.
 
@@ -1792,18 +1794,18 @@ class DrawBotDrawingTool():
             text("hallo", (200, 600))
             text("I'm Times", (100, 300))
         """
-        if not isinstance(txt, (str, FormattedStringClass)):
+        if not isinstance(txt, (str, FormattedString)):
             raise TypeError("expected 'str' or 'FormattedString', got '%s'" % type(txt).__name__)
         x, y = position
         if align not in ("left", "center", "right", None):
             raise DrawBotError("align must be left, right, center")
         attributedString = self._dummyContext.attributedString(txt, align=align)
-        for subTxt, box in makeTextBoxes(attributedString, (x, y), align=align, plainText=not isinstance(txt, FormattedStringClass)):
-            if isinstance(txt, FormattedStringClass):
+        for subTxt, box in makeTextBoxes(attributedString, (x, y), align=align, plainText=not isinstance(txt, FormattedString)):
+            if isinstance(txt, FormattedString):
                 subTxt.copyContextProperties(txt)
             self.textBox(subTxt, box, align=align)
 
-    def textOverflow(self, txt: FormattedStringClass | str, box: BoundingBox, align: str | None = None):
+    def textOverflow(self, txt: FormattedString | str, box: BoundingBox, align: str | None = None):
         """
         Returns the overflowed text without drawing the text.
 
@@ -1817,9 +1819,9 @@ class DrawBotDrawingTool():
         Optionally `txt` can be a `FormattedString`.
         Optionally `box` can be a `BezierPath`.
         """
-        if isinstance(txt, FormattedStringClass):
+        if isinstance(txt, FormattedString):
             txt = txt.copy()
-        elif not isinstance(txt, (str, FormattedStringClass)):
+        elif not isinstance(txt, (str, FormattedString)):
             raise TypeError("expected 'str' or 'FormattedString', got '%s'" % type(txt).__name__)
         if align is None:
             align = "left"
@@ -1827,7 +1829,7 @@ class DrawBotDrawingTool():
             raise DrawBotError("align must be %s" % (", ".join(self._dummyContext._textAlignMap.keys())))
         return self._dummyContext.clippedText(txt, box, align)
 
-    def textBox(self, txt: FormattedStringClass | str, box: BoundingBox, align: str | None = None):
+    def textBox(self, txt: FormattedString | str, box: BoundingBox, align: str | None = None):
         """
         Draw a text in a provided rectangle.
 
@@ -1955,7 +1957,7 @@ class DrawBotDrawingTool():
             # draw some text in the path
             textBox("abcdefghijklmnopqrstuvwxyz"*30000, path)
         """
-        if not isinstance(txt, (str, FormattedStringClass)):
+        if not isinstance(txt, (str, FormattedString)):
             raise TypeError("expected 'str' or 'FormattedString', got '%s'" % type(txt).__name__)
         if align is None:
             align = "left"
@@ -1965,7 +1967,7 @@ class DrawBotDrawingTool():
         self._addInstruction("textBox", txt, box, align)
         return self._dummyContext.clippedText(txt, box, align)
 
-    def textBoxBaselines(self, txt: FormattedStringClass | str, box: BoundingBox, align: str | None = None):
+    def textBoxBaselines(self, txt: FormattedString | str, box: BoundingBox, align: str | None = None):
         """
         Returns a list of `x, y` coordinates
         indicating the start of each line
@@ -1976,7 +1978,7 @@ class DrawBotDrawingTool():
         Optionally an alignment can be set.
         Possible `align` values are: `"left"`, `"center"`, `"right"` and `"justified"`.
         """
-        if not isinstance(txt, (str, FormattedStringClass)):
+        if not isinstance(txt, (str, FormattedString)):
             raise TypeError("expected 'str' or 'FormattedString', got '%s'" % type(txt).__name__)
         path, (x, y) = self._dummyContext._getPathForFrameSetter(box)
         attrString = self._dummyContext.attributedString(txt, align=align)
@@ -1986,7 +1988,7 @@ class DrawBotDrawingTool():
         origins = CoreText.CTFrameGetLineOrigins(box, (0, len(ctLines)), None)
         return [(x + o.x, y + o.y) for o in origins]
 
-    def textBoxCharacterBounds(self, txt: FormattedStringClass | str, box: BoundingBox, align: str | None = None):
+    def textBoxCharacterBounds(self, txt: FormattedString | str, box: BoundingBox, align: str | None = None):
         """
         Returns a list of typesetted bounding boxes `((x, y, w, h), baseLineOffset, formattedSubString)`.
 
@@ -1995,7 +1997,7 @@ class DrawBotDrawingTool():
         Optionally an alignment can be set.
         Possible `align` values are: `"left"`, `"center"`, `"right"` and `"justified"`.
         """
-        if not isinstance(txt, (str, FormattedStringClass)):
+        if not isinstance(txt, (str, FormattedString)):
             raise TypeError("expected 'str' or 'FormattedString', got '%s'" % type(txt).__name__)
 
         CharactersBounds = namedtuple('CharactersBounds', ['bounds', 'baselineOffset', 'formattedSubString'])
@@ -2021,50 +2023,6 @@ class DrawBotDrawingTool():
                 ))
         return bounds
 
-    def FormattedString(self, *args, **kwargs) -> FormattedStringClass:
-        """
-        Return a string object that can handle text formatting.
-
-        .. downloadcode:: formattedString.py
-
-            size(1000, 200)
-            # create a formatted string
-            txt = FormattedString()
-
-            # adding some text with some formatting
-            txt.append("hello", font="Helvetica", fontSize=100, fill=(1, 0, 0))
-            # adding more text
-            txt.append("world", font="Times-Italic", fontSize=50, fill=(0, 1, 0))
-
-            # setting a font
-            txt.font("Helvetica-Bold")
-            txt.fontSize(75)
-            txt += "hello again"
-
-            # drawing the formatted string
-            text(txt, (10, 30))
-
-
-            # create a formatted string
-            txt = FormattedString()
-
-            # adding some text with some formatting
-            txt.append("hello", font="Didot", fontSize=50)
-            # adding more text with an
-            txt.append("world", font="Didot", fontSize=50, openTypeFeatures=dict(smcp=True))
-
-            text(txt, (10, 150))
-
-        .. autoclass:: drawBot.context.baseContext.FormattedString
-            :members:
-            :undoc-members:
-            :inherited-members:
-            :show-inheritance:
-            :exclude-members: copyContextProperties
-
-        """
-        return FormattedStringClass(*args, **kwargs)
-
     # images
     def image(
         self,
@@ -2086,7 +2044,7 @@ class DrawBotDrawingTool():
             # the path can be a path to a file or a url, image from https://www.wired.com/2012/08/a1-art-0-99-vending-machines-as-art-galleries/
             image("https://raw.githubusercontent.com/typemytype/drawbot/master/tests/data/drawBot.jpg", (100, 100), alpha=.3)
         """
-        if isinstance(path, self._imageClass):
+        if isinstance(path, ImageObject):
             path = path._nsImage()
         if isinstance(path, (str, os.PathLike)):
             path = optimizePath(path)
@@ -2105,7 +2063,7 @@ class DrawBotDrawingTool():
 
             print(imageSize("https://raw.githubusercontent.com/typemytype/drawbot/master/tests/data/drawBot.jpg"))
         """
-        if isinstance(path, self._imageClass):
+        if isinstance(path, ImageObject):
             # its an drawBot.ImageObject, just return the size from that obj
             return path.size()
 
@@ -2198,7 +2156,7 @@ class DrawBotDrawingTool():
             path = optimizePath(path)
         bitmap = self._cachedPixelColorBitmaps.get(path)
         if bitmap is None:
-            if isinstance(path, self._imageClass):
+            if isinstance(path, ImageObject):
                 source = path._nsImage()
             elif isinstance(path, AppKit.NSImage):
                 source = path
@@ -2387,7 +2345,7 @@ class DrawBotDrawingTool():
 
     def textSize(
         self,
-        txt: FormattedStringClass | str,
+        txt: FormattedString | str,
         align: str | None = None,
         width: float | None = None,
         height: float | None = None,
@@ -2399,7 +2357,7 @@ class DrawBotDrawingTool():
         Optionally a `width` constrain or `height` constrain can be provided
         to calculate the lenght or width of text with the given constrain.
         """
-        if not isinstance(txt, (str, FormattedStringClass)):
+        if not isinstance(txt, (str, FormattedString)):
             raise TypeError("expected 'str' or 'FormattedString', got '%s'" % type(txt).__name__)
         if width is not None and height is not None:
             raise DrawBotError("Calculating textSize can only have one constrain, either width or height must be None")
@@ -2563,116 +2521,6 @@ class DrawBotDrawingTool():
         If a `lineHeight` is set, this value will be returned.
         """
         return self._dummyContext._state.text.fontLineHeight()
-
-    _bezierPathClass = BezierPath
-
-    def BezierPath(self, path=None, glyphSet=None) -> BezierPath:
-        """
-        Return a BezierPath object.
-        This is a reusable object, if you want to draw the same over and over again.
-
-        .. downloadcode:: bezierPath.py
-
-            # create a bezier path
-            path = BezierPath()
-
-            # move to a point
-            path.moveTo((100, 100))
-            # line to a point
-            path.lineTo((100, 200))
-            path.lineTo((200, 200))
-            # close the path
-            path.closePath()
-
-            # loop over a range of 10
-            for i in range(10):
-                # set a random color with alpha value of .3
-                fill(random(), random(), random(), .3)
-                # in each loop draw the path
-                drawPath(path)
-                # translate the canvas
-                translate(50, 50)
-
-            path.text("Hello world", font="Helvetica", fontSize=30, offset=(210, 210))
-
-            print("All Points:")
-            print(path.points)
-
-            print("On Curve Points:")
-            print(path.onCurvePoints)
-
-            print("Off Curve Points:")
-            print(path.offCurvePoints)
-
-            # print out all points from all segments in all contours
-            for contour in path.contours:
-                for segment in contour:
-                    for x, y in segment:
-                        print((x, y))
-                print(["contour is closed", "contour is open"][contour.open])
-
-            # translate the path
-            path.translate(0, -100)
-            # draw the path again
-            drawPath(path)
-            # translate the path
-            path.translate(-300, 0)
-            path.scale(2)
-            # draw the path again
-            drawPath(path)
-
-
-        .. autoclass:: drawBot.context.baseContext.BezierPath
-            :members:
-            :undoc-members:
-            :inherited-members:
-            :show-inheritance:
-            :exclude-members: copyContextProperties
-
-        """
-        return self._bezierPathClass(path, glyphSet)
-
-    _imageClass = ImageObject
-
-    def ImageObject(self, path: SomePath | None = None) -> ImageObject:
-        """
-        Return a Image object, packed with filters.
-        This is a reusable object. Supports pdf, jpg, png, tiff and gif file formats. `NSImage` objects are supported too.
-
-        .. downloadcode:: imageObject.py
-
-            size(550, 300)
-            # initiate a new image object
-            im = ImageObject()
-
-            # draw in the image
-            # the 'with' statement will create a custom context
-            # only drawing in the image object
-            with im:
-                # set a size for the image
-                size(200, 200)
-                # draw something
-                fill(1, 0, 0)
-                rect(0, 0, width(), height())
-                fill(1)
-                fontSize(30)
-                text("Hello World", (10, 10))
-
-            # draw in the image in the main context
-            image(im, (10, 50))
-            # apply some filters
-            im.gaussianBlur()
-
-            # get the offset (with a blur this will be negative)
-            x, y = im.offset()
-            # draw in the image in the main context
-            image(im, (300+x, 50+y))
-
-        .. autoclass:: drawBot.context.tools.imageObject.ImageObject
-            :members:
-
-        """
-        return self._imageClass(path)
 
     def Variable(self, variables, workSpace, continuous=True):
         """

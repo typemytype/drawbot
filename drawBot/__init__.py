@@ -9,9 +9,6 @@ _drawBotDrawingTool._addToNamespace(globals())
 # static analysis on drawBot's code
 
 # --- section automatically generated --- #
-BezierPath = _drawBotDrawingTool.BezierPath
-FormattedString = _drawBotDrawingTool.FormattedString
-ImageObject = _drawBotDrawingTool.ImageObject
 Variable = _drawBotDrawingTool.Variable
 arc = _drawBotDrawingTool.arc
 arcTo = _drawBotDrawingTool.arcTo
@@ -43,7 +40,7 @@ fontLeading = _drawBotDrawingTool.fontLeading
 fontLineHeight = _drawBotDrawingTool.fontLineHeight
 fontNamedInstance = _drawBotDrawingTool.fontNamedInstance
 fontSize = _drawBotDrawingTool.fontSize
-fontVariations = _drawBotDrawingTool.fontVariations # FIXME check args annotation
+fontVariations = _drawBotDrawingTool.fontVariations
 fontXHeight = _drawBotDrawingTool.fontXHeight
 frameDuration = _drawBotDrawingTool.frameDuration
 height = _drawBotDrawingTool.height
@@ -91,7 +88,7 @@ rect = _drawBotDrawingTool.rect
 restore = _drawBotDrawingTool.restore
 rotate = _drawBotDrawingTool.rotate
 save = _drawBotDrawingTool.save
-saveImage = _drawBotDrawingTool.saveImage # FIXME should args be a bool? how does the old multipage arg work? should we remove it?
+saveImage = _drawBotDrawingTool.saveImage
 savedState = _drawBotDrawingTool.savedState
 scale = _drawBotDrawingTool.scale
 shadow = _drawBotDrawingTool.shadow
@@ -105,7 +102,7 @@ tabs = _drawBotDrawingTool.tabs
 text = _drawBotDrawingTool.text
 textBox = _drawBotDrawingTool.textBox
 textBoxBaselines = _drawBotDrawingTool.textBoxBaselines
-textBoxCharacterBounds = _drawBotDrawingTool.textBoxCharacterBounds # FIXME align argument seems unused
+textBoxCharacterBounds = _drawBotDrawingTool.textBoxCharacterBounds
 textOverflow = _drawBotDrawingTool.textOverflow
 textProperties = _drawBotDrawingTool.textProperties
 textSize = _drawBotDrawingTool.textSize
@@ -117,6 +114,10 @@ uninstallFont = _drawBotDrawingTool.uninstallFont
 url = _drawBotDrawingTool.url
 width = _drawBotDrawingTool.width
 writingDirection = _drawBotDrawingTool.writingDirection
+
+# directly import FormattedString, BezierPath, and ImageObject as classes
+from drawBot.context.baseContext import FormattedString, BezierPath
+from drawBot.context.tools.imageObject import ImageObject
 
 from drawBot.context.tools import drawBotbuiltins
 lerp = drawBotbuiltins.lerp
