@@ -1366,7 +1366,7 @@ class DrawBotDrawingTool():
             line((0, 200), (0, 800))
         """
         combinedDashes: list[float | None] = [value]
-        if isinstance(value, float):
+        if isinstance(value, float | int):
             combinedDashes.extend(values)
         self._requiresNewFirstPage = True
         self._addInstruction("lineDash", combinedDashes, offset)
