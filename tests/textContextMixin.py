@@ -109,9 +109,9 @@ class SVGMixinTest(unittest.TestCase):
         txt.svgLink = "drawbot.com"
         drawBot.text(txt, (20, 20))
 
-        with TempFile(suffix=".svg") as tmp:
-            drawBot.saveImage(tmp.path)
-            self.assertEqual(readData(tmp.path), readData(expectedPath), "Files %r and %s are not the same" % (tmp.path, expectedPath))
+        path = os.path.join(tempTestDataDir, "svgMixin.svg")
+        drawBot.saveImage(path)
+        self.assertEqual(readData(path), readData(expectedPath), "Files %r and %s are not the same" % (path, expectedPath))
 
 
 if __name__ == '__main__':
