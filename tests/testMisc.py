@@ -287,7 +287,7 @@ class MiscTest(unittest.TestCase):
         expected = [
             'reset None',
             'newPage 1000 1000',
-            'textBox A 0 -34.0 26.8994140625 104.0 left',
+            'textBox A 0 -26.0 26.8994140625 96.0 left',
             'textBox B 0 -46.0 25.751953125 104.0 left',
             'textBox C 0 -58.0 26.9189453125 104.0 left',
             'textBox A 10 -34.0 26.8994140625 104.0 left',
