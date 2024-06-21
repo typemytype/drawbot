@@ -288,11 +288,11 @@ class MiscTest(unittest.TestCase):
             'reset None',
             'newPage 1000 1000',
             'textBox A 0 -26.0 26.8994140625 96.0 left',
-            'textBox B 0 -46.0 25.751953125 104.0 left',
-            'textBox C 0 -58.0 26.9189453125 104.0 left',
-            'textBox A 10 -34.0 26.8994140625 104.0 left',
-            'textBox  10 48.0 20.0 104.0 left',
-            'textBox C 10 -58.0 26.9189453125 104.0 left',
+            'textBox B 0 -38.0 25.751953125 96.0 left',
+            'textBox C 0 -50.0 26.9189453125 96.0 left',
+            'textBox A 10 -26.0 26.8994140625 96.0 left',
+            'textBox  10 48.0 20.0 96.0 left',
+            'textBox C 10 -50.0 26.9189453125 96.0 left',
             'saveImage * {}'
         ]
         with StdOutCollector() as output:
