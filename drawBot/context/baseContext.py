@@ -7,8 +7,7 @@ from typing import Any
 import os
 from packaging.version import Version
 
-from fontTools.pens.basePen import BasePen # type: ignore
-from fontTools.pens.basePen import AbstractPen
+from fontTools.pens.basePen import BasePen, AbstractPen # type: ignore
 from fontTools.pens.pointPen import AbstractPointPen # type: ignore
 
 from drawBot.misc import DrawBotError, cmyk2rgb, warnings, transformationAtCenter
