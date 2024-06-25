@@ -12,6 +12,7 @@
 - Adding `opacity(value)`.
 - Adding support for `lineDash(..., offset=10)`.
 - Adding support for `fontSubpixelQuantization` while exporting to an image.
+- Add support for `writingDirection()`, `None`, `'LTR', `'RTL'`.
 
 ## [3.130] 2023-02-20
 
