@@ -205,14 +205,6 @@ class BezierPath(BasePen, SVGContextPropertyMixin, ContextPropertyMixin):
         # draw the path again
         drawPath(path)
 
-
-    .. autoclass:: drawBot.BezierPath
-        :members:
-        :undoc-members:
-        :inherited-members:
-        :show-inheritance:
-        :exclude-members: copyContextProperties
-
     """
 
     contourClass = BezierContour
@@ -1156,13 +1148,6 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
 
         text(txt, (10, 150))
 
-    .. autoclass:: drawBot.FormattedString
-        :members:
-        :undoc-members:
-        :inherited-members:
-        :show-inheritance:
-        :exclude-members: copyContextProperties
-
     """
 
     _colorClass = Color
@@ -1649,7 +1634,7 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
         """
         self._fontSize = fontSize
 
-    def fill(self, 
+    def fill(self,
             r: float | None = None,
             g: float | None = None,
             b: float | None = None,
@@ -1666,7 +1651,7 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
         self._fill = fill
         self._cmykFill = None
 
-    def stroke(self, 
+    def stroke(self,
               r: float | None = None,
               g: float | None = None,
               b: float | None = None,

@@ -992,6 +992,7 @@ class DrawBotDrawingTool():
         Sets the current opacity value. The `value` argument must be a value between 0.0 and 1.0.
 
         .. downloadcode:: opacity.py
+
             # set an opacity value
             opacity(.5)
             # set a color and draw some rect and text

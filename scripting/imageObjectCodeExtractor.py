@@ -18,7 +18,7 @@ class CodeWriter:
 
     def add(self, line):
         self.code.append(f"{self.INDENT * self.indentLevel}{line}")
-    
+
     def newline(self):
         self.code.append("")
 
@@ -47,7 +47,7 @@ class CodeWriter:
         return self.INDENT*indentLevel + f"\n{self.INDENT*indentLevel}".join(self.code)
 
 class UnitTestWriter(CodeWriter):
-    
+
     def header(self):
         self.add("import unittest")
         self.add("import sys")
@@ -61,7 +61,7 @@ class UnitTestWriter(CodeWriter):
         self.add("class ImageObjectTest(DrawBotBaseTest):")
         self.indent()
         self.newline()
-    
+
     def footer(self):
         self.dedent()
         self.add("if __name__ == '__main__':")
@@ -373,8 +373,8 @@ if __name__ == "__main__":
 
         if inputKeys or filterName == "CIRandomGenerator":
             doc.newline()
-            doc.add("Attributes:")
-            doc.indent()
+            doc.add("**Arguments:**")
+            doc.newline()
             if filterName in generators:
                 args.append("size: Size")
                 unitTestsArgs.append("size=(100, 100)")
@@ -459,7 +459,7 @@ if __name__ == "__main__":
                 doc.add(f"`{inputKey}` {docValue}. {pythonifyDescription(description)}")
                 args.append(arg)
 
-                
+
                 match inputKey:
                     case inputKey if inputKey.endswith("Image"):
                         value = "sampleImage"
@@ -475,7 +475,6 @@ if __name__ == "__main__":
                         value = default
                 unitTestsArgs.append(f"{inputKey}={value}")
 
-            doc.dedent()
         drawBotFilterName = camelCase(filterName[2:])
         code.add(
             f"def {drawBotFilterName}"
@@ -499,8 +498,8 @@ if __name__ == "__main__":
 
         code.add("self._addFilter(filterDict)")
         code.dedent()
-        code.newline() 
- 
+        code.newline()
+
         unitTests.add(f"def test_{drawBotFilterName}(self):")
         unitTests.indent()
         unitTests.add("img = drawBot.ImageObject()")
