@@ -1,303 +1,303 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg width="100" height="100" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
- <path d="M0,0 l5,0 l0,10 l-5,0 Z M0,0" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M5,0 l5,0 l0,5 l-5,0 Z M5,0" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M5,5 l5,0 l0,5 l-5,0 Z M5,5" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M0,10 l5,0 l0,10 l-5,0 Z M0,10" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M5,10 l5,0 l0,5 l-5,0 Z M5,10" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M5,15 l5,0 l0,5 l-5,0 Z M5,15" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M0,20 l5,0 l0,10 l-5,0 Z M0,20" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M5,20 l5,0 l0,5 l-5,0 Z M5,20" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M5,25 l5,0 l0,5 l-5,0 Z M5,25" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M0,30 l5,0 l0,10 l-5,0 Z M0,30" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M5,30 l5,0 l0,5 l-5,0 Z M5,30" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M5,35 l5,0 l0,5 l-5,0 Z M5,35" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M0,40 l5,0 l0,10 l-5,0 Z M0,40" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M5,40 l5,0 l0,5 l-5,0 Z M5,40" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M5,45 l5,0 l0,5 l-5,0 Z M5,45" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M0,50 l5,0 l0,10 l-5,0 Z M0,50" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M5,50 l5,0 l0,5 l-5,0 Z M5,50" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M5,55 l5,0 l0,5 l-5,0 Z M5,55" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M0,60 l5,0 l0,10 l-5,0 Z M0,60" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M5,60 l5,0 l0,5 l-5,0 Z M5,60" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M5,65 l5,0 l0,5 l-5,0 Z M5,65" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M0,70 l5,0 l0,10 l-5,0 Z M0,70" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M5,70 l5,0 l0,5 l-5,0 Z M5,70" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M5,75 l5,0 l0,5 l-5,0 Z M5,75" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M0,80 l5,0 l0,10 l-5,0 Z M0,80" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M5,80 l5,0 l0,5 l-5,0 Z M5,80" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M5,85 l5,0 l0,5 l-5,0 Z M5,85" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M0,90 l5,0 l0,10 l-5,0 Z M0,90" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M5,90 l5,0 l0,5 l-5,0 Z M5,90" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M5,95 l5,0 l0,5 l-5,0 Z M5,95" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M10,0 l5,0 l0,10 l-5,0 Z M10,0" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M15,0 l5,0 l0,5 l-5,0 Z M15,0" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M15,5 l5,0 l0,5 l-5,0 Z M15,5" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M10,10 l5,0 l0,10 l-5,0 Z M10,10" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M15,10 l5,0 l0,5 l-5,0 Z M15,10" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M15,15 l5,0 l0,5 l-5,0 Z M15,15" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M10,20 l5,0 l0,10 l-5,0 Z M10,20" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M15,20 l5,0 l0,5 l-5,0 Z M15,20" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M15,25 l5,0 l0,5 l-5,0 Z M15,25" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M10,30 l5,0 l0,10 l-5,0 Z M10,30" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M15,30 l5,0 l0,5 l-5,0 Z M15,30" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M15,35 l5,0 l0,5 l-5,0 Z M15,35" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M10,40 l5,0 l0,10 l-5,0 Z M10,40" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M15,40 l5,0 l0,5 l-5,0 Z M15,40" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M15,45 l5,0 l0,5 l-5,0 Z M15,45" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M10,50 l5,0 l0,10 l-5,0 Z M10,50" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M15,50 l5,0 l0,5 l-5,0 Z M15,50" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M15,55 l5,0 l0,5 l-5,0 Z M15,55" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M10,60 l5,0 l0,10 l-5,0 Z M10,60" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M15,60 l5,0 l0,5 l-5,0 Z M15,60" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M15,65 l5,0 l0,5 l-5,0 Z M15,65" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M10,70 l5,0 l0,10 l-5,0 Z M10,70" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M15,70 l5,0 l0,5 l-5,0 Z M15,70" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M15,75 l5,0 l0,5 l-5,0 Z M15,75" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M10,80 l5,0 l0,10 l-5,0 Z M10,80" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M15,80 l5,0 l0,5 l-5,0 Z M15,80" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M15,85 l5,0 l0,5 l-5,0 Z M15,85" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M10,90 l5,0 l0,10 l-5,0 Z M10,90" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M15,90 l5,0 l0,5 l-5,0 Z M15,90" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M15,95 l5,0 l0,5 l-5,0 Z M15,95" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M20,0 l5,0 l0,10 l-5,0 Z M20,0" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M25,0 l5,0 l0,5 l-5,0 Z M25,0" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M25,5 l5,0 l0,5 l-5,0 Z M25,5" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M20,10 l5,0 l0,10 l-5,0 Z M20,10" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M25,10 l5,0 l0,5 l-5,0 Z M25,10" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M25,15 l5,0 l0,5 l-5,0 Z M25,15" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M20,20 l5,0 l0,10 l-5,0 Z M20,20" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M25,20 l5,0 l0,5 l-5,0 Z M25,20" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M25,25 l5,0 l0,5 l-5,0 Z M25,25" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M20,30 l5,0 l0,10 l-5,0 Z M20,30" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M25,30 l5,0 l0,5 l-5,0 Z M25,30" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M25,35 l5,0 l0,5 l-5,0 Z M25,35" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M20,40 l5,0 l0,10 l-5,0 Z M20,40" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M25,40 l5,0 l0,5 l-5,0 Z M25,40" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M25,45 l5,0 l0,5 l-5,0 Z M25,45" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M20,50 l5,0 l0,10 l-5,0 Z M20,50" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M25,50 l5,0 l0,5 l-5,0 Z M25,50" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M25,55 l5,0 l0,5 l-5,0 Z M25,55" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M20,60 l5,0 l0,10 l-5,0 Z M20,60" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M25,60 l5,0 l0,5 l-5,0 Z M25,60" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M25,65 l5,0 l0,5 l-5,0 Z M25,65" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M20,70 l5,0 l0,10 l-5,0 Z M20,70" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M25,70 l5,0 l0,5 l-5,0 Z M25,70" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M25,75 l5,0 l0,5 l-5,0 Z M25,75" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M20,80 l5,0 l0,10 l-5,0 Z M20,80" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M25,80 l5,0 l0,5 l-5,0 Z M25,80" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M25,85 l5,0 l0,5 l-5,0 Z M25,85" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M20,90 l5,0 l0,10 l-5,0 Z M20,90" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M25,90 l5,0 l0,5 l-5,0 Z M25,90" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M25,95 l5,0 l0,5 l-5,0 Z M25,95" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M30,0 l5,0 l0,10 l-5,0 Z M30,0" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M35,0 l5,0 l0,5 l-5,0 Z M35,0" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M35,5 l5,0 l0,5 l-5,0 Z M35,5" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M30,10 l5,0 l0,10 l-5,0 Z M30,10" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M35,10 l5,0 l0,5 l-5,0 Z M35,10" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M35,15 l5,0 l0,5 l-5,0 Z M35,15" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M30,20 l5,0 l0,10 l-5,0 Z M30,20" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M35,20 l5,0 l0,5 l-5,0 Z M35,20" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M35,25 l5,0 l0,5 l-5,0 Z M35,25" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M30,30 l5,0 l0,10 l-5,0 Z M30,30" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M35,30 l5,0 l0,5 l-5,0 Z M35,30" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M35,35 l5,0 l0,5 l-5,0 Z M35,35" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M30,40 l5,0 l0,10 l-5,0 Z M30,40" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M35,40 l5,0 l0,5 l-5,0 Z M35,40" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M35,45 l5,0 l0,5 l-5,0 Z M35,45" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M30,50 l5,0 l0,10 l-5,0 Z M30,50" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M35,50 l5,0 l0,5 l-5,0 Z M35,50" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M35,55 l5,0 l0,5 l-5,0 Z M35,55" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M30,60 l5,0 l0,10 l-5,0 Z M30,60" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M35,60 l5,0 l0,5 l-5,0 Z M35,60" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M35,65 l5,0 l0,5 l-5,0 Z M35,65" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M30,70 l5,0 l0,10 l-5,0 Z M30,70" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M35,70 l5,0 l0,5 l-5,0 Z M35,70" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M35,75 l5,0 l0,5 l-5,0 Z M35,75" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M30,80 l5,0 l0,10 l-5,0 Z M30,80" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M35,80 l5,0 l0,5 l-5,0 Z M35,80" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M35,85 l5,0 l0,5 l-5,0 Z M35,85" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M30,90 l5,0 l0,10 l-5,0 Z M30,90" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M35,90 l5,0 l0,5 l-5,0 Z M35,90" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M35,95 l5,0 l0,5 l-5,0 Z M35,95" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M40,0 l5,0 l0,10 l-5,0 Z M40,0" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M45,0 l5,0 l0,5 l-5,0 Z M45,0" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M45,5 l5,0 l0,5 l-5,0 Z M45,5" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M40,10 l5,0 l0,10 l-5,0 Z M40,10" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M45,10 l5,0 l0,5 l-5,0 Z M45,10" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M45,15 l5,0 l0,5 l-5,0 Z M45,15" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M40,20 l5,0 l0,10 l-5,0 Z M40,20" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M45,20 l5,0 l0,5 l-5,0 Z M45,20" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M45,25 l5,0 l0,5 l-5,0 Z M45,25" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M40,30 l5,0 l0,10 l-5,0 Z M40,30" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M45,30 l5,0 l0,5 l-5,0 Z M45,30" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M45,35 l5,0 l0,5 l-5,0 Z M45,35" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M40,40 l5,0 l0,10 l-5,0 Z M40,40" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M45,40 l5,0 l0,5 l-5,0 Z M45,40" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M45,45 l5,0 l0,5 l-5,0 Z M45,45" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M40,50 l5,0 l0,10 l-5,0 Z M40,50" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M45,50 l5,0 l0,5 l-5,0 Z M45,50" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M45,55 l5,0 l0,5 l-5,0 Z M45,55" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M40,60 l5,0 l0,10 l-5,0 Z M40,60" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M45,60 l5,0 l0,5 l-5,0 Z M45,60" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M45,65 l5,0 l0,5 l-5,0 Z M45,65" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M40,70 l5,0 l0,10 l-5,0 Z M40,70" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M45,70 l5,0 l0,5 l-5,0 Z M45,70" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M45,75 l5,0 l0,5 l-5,0 Z M45,75" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M40,80 l5,0 l0,10 l-5,0 Z M40,80" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M45,80 l5,0 l0,5 l-5,0 Z M45,80" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M45,85 l5,0 l0,5 l-5,0 Z M45,85" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M40,90 l5,0 l0,10 l-5,0 Z M40,90" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M45,90 l5,0 l0,5 l-5,0 Z M45,90" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M45,95 l5,0 l0,5 l-5,0 Z M45,95" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M50,0 l5,0 l0,10 l-5,0 Z M50,0" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M55,0 l5,0 l0,5 l-5,0 Z M55,0" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M55,5 l5,0 l0,5 l-5,0 Z M55,5" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M50,10 l5,0 l0,10 l-5,0 Z M50,10" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M55,10 l5,0 l0,5 l-5,0 Z M55,10" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M55,15 l5,0 l0,5 l-5,0 Z M55,15" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M50,20 l5,0 l0,10 l-5,0 Z M50,20" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M55,20 l5,0 l0,5 l-5,0 Z M55,20" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M55,25 l5,0 l0,5 l-5,0 Z M55,25" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M50,30 l5,0 l0,10 l-5,0 Z M50,30" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M55,30 l5,0 l0,5 l-5,0 Z M55,30" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M55,35 l5,0 l0,5 l-5,0 Z M55,35" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M50,40 l5,0 l0,10 l-5,0 Z M50,40" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M55,40 l5,0 l0,5 l-5,0 Z M55,40" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M55,45 l5,0 l0,5 l-5,0 Z M55,45" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M50,50 l5,0 l0,10 l-5,0 Z M50,50" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M55,50 l5,0 l0,5 l-5,0 Z M55,50" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M55,55 l5,0 l0,5 l-5,0 Z M55,55" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M50,60 l5,0 l0,10 l-5,0 Z M50,60" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M55,60 l5,0 l0,5 l-5,0 Z M55,60" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M55,65 l5,0 l0,5 l-5,0 Z M55,65" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M50,70 l5,0 l0,10 l-5,0 Z M50,70" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M55,70 l5,0 l0,5 l-5,0 Z M55,70" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M55,75 l5,0 l0,5 l-5,0 Z M55,75" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M50,80 l5,0 l0,10 l-5,0 Z M50,80" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M55,80 l5,0 l0,5 l-5,0 Z M55,80" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M55,85 l5,0 l0,5 l-5,0 Z M55,85" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M50,90 l5,0 l0,10 l-5,0 Z M50,90" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M55,90 l5,0 l0,5 l-5,0 Z M55,90" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M55,95 l5,0 l0,5 l-5,0 Z M55,95" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M60,0 l5,0 l0,10 l-5,0 Z M60,0" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M65,0 l5,0 l0,5 l-5,0 Z M65,0" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M65,5 l5,0 l0,5 l-5,0 Z M65,5" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M60,10 l5,0 l0,10 l-5,0 Z M60,10" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M65,10 l5,0 l0,5 l-5,0 Z M65,10" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M65,15 l5,0 l0,5 l-5,0 Z M65,15" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M60,20 l5,0 l0,10 l-5,0 Z M60,20" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M65,20 l5,0 l0,5 l-5,0 Z M65,20" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M65,25 l5,0 l0,5 l-5,0 Z M65,25" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M60,30 l5,0 l0,10 l-5,0 Z M60,30" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M65,30 l5,0 l0,5 l-5,0 Z M65,30" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M65,35 l5,0 l0,5 l-5,0 Z M65,35" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M60,40 l5,0 l0,10 l-5,0 Z M60,40" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M65,40 l5,0 l0,5 l-5,0 Z M65,40" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M65,45 l5,0 l0,5 l-5,0 Z M65,45" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M60,50 l5,0 l0,10 l-5,0 Z M60,50" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M65,50 l5,0 l0,5 l-5,0 Z M65,50" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M65,55 l5,0 l0,5 l-5,0 Z M65,55" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M60,60 l5,0 l0,10 l-5,0 Z M60,60" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M65,60 l5,0 l0,5 l-5,0 Z M65,60" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M65,65 l5,0 l0,5 l-5,0 Z M65,65" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M60,70 l5,0 l0,10 l-5,0 Z M60,70" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M65,70 l5,0 l0,5 l-5,0 Z M65,70" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M65,75 l5,0 l0,5 l-5,0 Z M65,75" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M60,80 l5,0 l0,10 l-5,0 Z M60,80" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M65,80 l5,0 l0,5 l-5,0 Z M65,80" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M65,85 l5,0 l0,5 l-5,0 Z M65,85" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M60,90 l5,0 l0,10 l-5,0 Z M60,90" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M65,90 l5,0 l0,5 l-5,0 Z M65,90" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M65,95 l5,0 l0,5 l-5,0 Z M65,95" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M70,0 l5,0 l0,10 l-5,0 Z M70,0" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M75,0 l5,0 l0,5 l-5,0 Z M75,0" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M75,5 l5,0 l0,5 l-5,0 Z M75,5" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M70,10 l5,0 l0,10 l-5,0 Z M70,10" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M75,10 l5,0 l0,5 l-5,0 Z M75,10" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M75,15 l5,0 l0,5 l-5,0 Z M75,15" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M70,20 l5,0 l0,10 l-5,0 Z M70,20" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M75,20 l5,0 l0,5 l-5,0 Z M75,20" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M75,25 l5,0 l0,5 l-5,0 Z M75,25" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M70,30 l5,0 l0,10 l-5,0 Z M70,30" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M75,30 l5,0 l0,5 l-5,0 Z M75,30" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M75,35 l5,0 l0,5 l-5,0 Z M75,35" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M70,40 l5,0 l0,10 l-5,0 Z M70,40" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M75,40 l5,0 l0,5 l-5,0 Z M75,40" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M75,45 l5,0 l0,5 l-5,0 Z M75,45" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M70,50 l5,0 l0,10 l-5,0 Z M70,50" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M75,50 l5,0 l0,5 l-5,0 Z M75,50" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M75,55 l5,0 l0,5 l-5,0 Z M75,55" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M70,60 l5,0 l0,10 l-5,0 Z M70,60" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M75,60 l5,0 l0,5 l-5,0 Z M75,60" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M75,65 l5,0 l0,5 l-5,0 Z M75,65" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M70,70 l5,0 l0,10 l-5,0 Z M70,70" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M75,70 l5,0 l0,5 l-5,0 Z M75,70" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M75,75 l5,0 l0,5 l-5,0 Z M75,75" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M70,80 l5,0 l0,10 l-5,0 Z M70,80" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M75,80 l5,0 l0,5 l-5,0 Z M75,80" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M75,85 l5,0 l0,5 l-5,0 Z M75,85" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M70,90 l5,0 l0,10 l-5,0 Z M70,90" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M75,90 l5,0 l0,5 l-5,0 Z M75,90" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M75,95 l5,0 l0,5 l-5,0 Z M75,95" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M80,0 l5,0 l0,10 l-5,0 Z M80,0" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M85,0 l5,0 l0,5 l-5,0 Z M85,0" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M85,5 l5,0 l0,5 l-5,0 Z M85,5" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M80,10 l5,0 l0,10 l-5,0 Z M80,10" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M85,10 l5,0 l0,5 l-5,0 Z M85,10" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M85,15 l5,0 l0,5 l-5,0 Z M85,15" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M80,20 l5,0 l0,10 l-5,0 Z M80,20" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M85,20 l5,0 l0,5 l-5,0 Z M85,20" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M85,25 l5,0 l0,5 l-5,0 Z M85,25" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M80,30 l5,0 l0,10 l-5,0 Z M80,30" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M85,30 l5,0 l0,5 l-5,0 Z M85,30" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M85,35 l5,0 l0,5 l-5,0 Z M85,35" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M80,40 l5,0 l0,10 l-5,0 Z M80,40" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M85,40 l5,0 l0,5 l-5,0 Z M85,40" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M85,45 l5,0 l0,5 l-5,0 Z M85,45" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M80,50 l5,0 l0,10 l-5,0 Z M80,50" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M85,50 l5,0 l0,5 l-5,0 Z M85,50" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M85,55 l5,0 l0,5 l-5,0 Z M85,55" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M80,60 l5,0 l0,10 l-5,0 Z M80,60" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M85,60 l5,0 l0,5 l-5,0 Z M85,60" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M85,65 l5,0 l0,5 l-5,0 Z M85,65" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M80,70 l5,0 l0,10 l-5,0 Z M80,70" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M85,70 l5,0 l0,5 l-5,0 Z M85,70" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M85,75 l5,0 l0,5 l-5,0 Z M85,75" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M80,80 l5,0 l0,10 l-5,0 Z M80,80" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M85,80 l5,0 l0,5 l-5,0 Z M85,80" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M85,85 l5,0 l0,5 l-5,0 Z M85,85" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M80,90 l5,0 l0,10 l-5,0 Z M80,90" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M85,90 l5,0 l0,5 l-5,0 Z M85,90" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M85,95 l5,0 l0,5 l-5,0 Z M85,95" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M90,0 l5,0 l0,10 l-5,0 Z M90,0" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M95,0 l5,0 l0,5 l-5,0 Z M95,0" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M95,5 l5,0 l0,5 l-5,0 Z M95,5" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M90,10 l5,0 l0,10 l-5,0 Z M90,10" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M95,10 l5,0 l0,5 l-5,0 Z M95,10" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M95,15 l5,0 l0,5 l-5,0 Z M95,15" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M90,20 l5,0 l0,10 l-5,0 Z M90,20" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M95,20 l5,0 l0,5 l-5,0 Z M95,20" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M95,25 l5,0 l0,5 l-5,0 Z M95,25" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M90,30 l5,0 l0,10 l-5,0 Z M90,30" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M95,30 l5,0 l0,5 l-5,0 Z M95,30" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M95,35 l5,0 l0,5 l-5,0 Z M95,35" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M90,40 l5,0 l0,10 l-5,0 Z M90,40" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M95,40 l5,0 l0,5 l-5,0 Z M95,40" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M95,45 l5,0 l0,5 l-5,0 Z M95,45" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M90,50 l5,0 l0,10 l-5,0 Z M90,50" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M95,50 l5,0 l0,5 l-5,0 Z M95,50" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M95,55 l5,0 l0,5 l-5,0 Z M95,55" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M90,60 l5,0 l0,10 l-5,0 Z M90,60" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M95,60 l5,0 l0,5 l-5,0 Z M95,60" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M95,65 l5,0 l0,5 l-5,0 Z M95,65" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M90,70 l5,0 l0,10 l-5,0 Z M90,70" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M95,70 l5,0 l0,5 l-5,0 Z M95,70" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M95,75 l5,0 l0,5 l-5,0 Z M95,75" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M90,80 l5,0 l0,10 l-5,0 Z M90,80" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M95,80 l5,0 l0,5 l-5,0 Z M95,80" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M95,85 l5,0 l0,5 l-5,0 Z M95,85" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M90,90 l5,0 l0,10 l-5,0 Z M90,90" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M95,90 l5,0 l0,5 l-5,0 Z M95,90" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
- <path d="M95,95 l5,0 l0,5 l-5,0 Z M95,95" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M0,0 l5,0 l0,10 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M5,0 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M5,5 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M0,10 l5,0 l0,10 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M5,10 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M5,15 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M0,20 l5,0 l0,10 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M5,20 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M5,25 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M0,30 l5,0 l0,10 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M5,30 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M5,35 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M0,40 l5,0 l0,10 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M5,40 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M5,45 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M0,50 l5,0 l0,10 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M5,50 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M5,55 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M0,60 l5,0 l0,10 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M5,60 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M5,65 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M0,70 l5,0 l0,10 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M5,70 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M5,75 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M0,80 l5,0 l0,10 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M5,80 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M5,85 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M0,90 l5,0 l0,10 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M5,90 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M5,95 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M10,0 l5,0 l0,10 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M15,0 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M15,5 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M10,10 l5,0 l0,10 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M15,10 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M15,15 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M10,20 l5,0 l0,10 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M15,20 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M15,25 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M10,30 l5,0 l0,10 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M15,30 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M15,35 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M10,40 l5,0 l0,10 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M15,40 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M15,45 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M10,50 l5,0 l0,10 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M15,50 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M15,55 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M10,60 l5,0 l0,10 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M15,60 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M15,65 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M10,70 l5,0 l0,10 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M15,70 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M15,75 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M10,80 l5,0 l0,10 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M15,80 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M15,85 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M10,90 l5,0 l0,10 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M15,90 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M15,95 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M20,0 l5,0 l0,10 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M25,0 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M25,5 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M20,10 l5,0 l0,10 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M25,10 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M25,15 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M20,20 l5,0 l0,10 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M25,20 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M25,25 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M20,30 l5,0 l0,10 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M25,30 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M25,35 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M20,40 l5,0 l0,10 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M25,40 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M25,45 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M20,50 l5,0 l0,10 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M25,50 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M25,55 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M20,60 l5,0 l0,10 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M25,60 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M25,65 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M20,70 l5,0 l0,10 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M25,70 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M25,75 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M20,80 l5,0 l0,10 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M25,80 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M25,85 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M20,90 l5,0 l0,10 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M25,90 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M25,95 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M30,0 l5,0 l0,10 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M35,0 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M35,5 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M30,10 l5,0 l0,10 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M35,10 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M35,15 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M30,20 l5,0 l0,10 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M35,20 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M35,25 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M30,30 l5,0 l0,10 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M35,30 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M35,35 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M30,40 l5,0 l0,10 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M35,40 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M35,45 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M30,50 l5,0 l0,10 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M35,50 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M35,55 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M30,60 l5,0 l0,10 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M35,60 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M35,65 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M30,70 l5,0 l0,10 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M35,70 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M35,75 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M30,80 l5,0 l0,10 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M35,80 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M35,85 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M30,90 l5,0 l0,10 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M35,90 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M35,95 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M40,0 l5,0 l0,10 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M45,0 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M45,5 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M40,10 l5,0 l0,10 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M45,10 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M45,15 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M40,20 l5,0 l0,10 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M45,20 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M45,25 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M40,30 l5,0 l0,10 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M45,30 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M45,35 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M40,40 l5,0 l0,10 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M45,40 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M45,45 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M40,50 l5,0 l0,10 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M45,50 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M45,55 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M40,60 l5,0 l0,10 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M45,60 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M45,65 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M40,70 l5,0 l0,10 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M45,70 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M45,75 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M40,80 l5,0 l0,10 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M45,80 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M45,85 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M40,90 l5,0 l0,10 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M45,90 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M45,95 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M50,0 l5,0 l0,10 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M55,0 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M55,5 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M50,10 l5,0 l0,10 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M55,10 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M55,15 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M50,20 l5,0 l0,10 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M55,20 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M55,25 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M50,30 l5,0 l0,10 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M55,30 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M55,35 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M50,40 l5,0 l0,10 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M55,40 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M55,45 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M50,50 l5,0 l0,10 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M55,50 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M55,55 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M50,60 l5,0 l0,10 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M55,60 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M55,65 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M50,70 l5,0 l0,10 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M55,70 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M55,75 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M50,80 l5,0 l0,10 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M55,80 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M55,85 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M50,90 l5,0 l0,10 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M55,90 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M55,95 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M60,0 l5,0 l0,10 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M65,0 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M65,5 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M60,10 l5,0 l0,10 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M65,10 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M65,15 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M60,20 l5,0 l0,10 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M65,20 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M65,25 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M60,30 l5,0 l0,10 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M65,30 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M65,35 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M60,40 l5,0 l0,10 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M65,40 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M65,45 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M60,50 l5,0 l0,10 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M65,50 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M65,55 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M60,60 l5,0 l0,10 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M65,60 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M65,65 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M60,70 l5,0 l0,10 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M65,70 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M65,75 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M60,80 l5,0 l0,10 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M65,80 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M65,85 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M60,90 l5,0 l0,10 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M65,90 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M65,95 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M70,0 l5,0 l0,10 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M75,0 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M75,5 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M70,10 l5,0 l0,10 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M75,10 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M75,15 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M70,20 l5,0 l0,10 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M75,20 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M75,25 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M70,30 l5,0 l0,10 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M75,30 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M75,35 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M70,40 l5,0 l0,10 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M75,40 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M75,45 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M70,50 l5,0 l0,10 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M75,50 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M75,55 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M70,60 l5,0 l0,10 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M75,60 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M75,65 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M70,70 l5,0 l0,10 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M75,70 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M75,75 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M70,80 l5,0 l0,10 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M75,80 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M75,85 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M70,90 l5,0 l0,10 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M75,90 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M75,95 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M80,0 l5,0 l0,10 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M85,0 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M85,5 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M80,10 l5,0 l0,10 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M85,10 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M85,15 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M80,20 l5,0 l0,10 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M85,20 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M85,25 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M80,30 l5,0 l0,10 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M85,30 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M85,35 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M80,40 l5,0 l0,10 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M85,40 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M85,45 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M80,50 l5,0 l0,10 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M85,50 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M85,55 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M80,60 l5,0 l0,10 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M85,60 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M85,65 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M80,70 l5,0 l0,10 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M85,70 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M85,75 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M80,80 l5,0 l0,10 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M85,80 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M85,85 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M80,90 l5,0 l0,10 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M85,90 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M85,95 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M90,0 l5,0 l0,10 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M95,0 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M95,5 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M90,10 l5,0 l0,10 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M95,10 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M95,15 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M90,20 l5,0 l0,10 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M95,20 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M95,25 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M90,30 l5,0 l0,10 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M95,30 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M95,35 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M90,40 l5,0 l0,10 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M95,40 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M95,45 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M90,50 l5,0 l0,10 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M95,50 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M95,55 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M90,60 l5,0 l0,10 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M95,60 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M95,65 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M90,70 l5,0 l0,10 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M95,70 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M95,75 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M90,80 l5,0 l0,10 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M95,80 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M95,85 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M90,90 l5,0 l0,10 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M95,90 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
+ <path d="M95,95 l5,0 l0,5 l-5,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,100)"/>
 </svg>

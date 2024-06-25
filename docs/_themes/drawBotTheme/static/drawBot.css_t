@@ -129,7 +129,7 @@ ul ul, ul ol, ol ol, ol ul {
 
 /* auto doc classes */
 
-.function dt {
+.function dt, .class dt {
 	font-size: 1.5em;
 	margin-bottom: 10px;
 	font-family: {{ theme_headerfont }};
@@ -137,7 +137,7 @@ ul ul, ul ol, ol ol, ol ul {
 	color: lightgray;
 }
 
-.function dt .descname {
+.function dt .descname, .class dt .descname {
 	color: #F7B805;
 }
 
@@ -228,6 +228,10 @@ div.navbar li a {
 
 div.navbar li a:hover {
 	font-weight: normal;
+}
+
+div.sphinxsidebarwrapper {
+	white-space: nowrap;
 }
 
 form {

@@ -83,7 +83,7 @@ def downloadCurrentVersion():
         message("Something went wrong while downloading %s" % path, exc)
 
 
-class Updater(object):
+class Updater():
     """
     Small controller poping up if a update is found.
     """

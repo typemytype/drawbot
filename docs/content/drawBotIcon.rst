@@ -5,7 +5,7 @@ The making of (by Andy Clymer)
 
 .. downloadcode:: drawBotIcon.py
 
-    from ufoLib.glifLib import readGlyphFromString
+    from fontTools.ufoLib.glifLib import readGlyphFromString
     from fontTools.pens.cocoaPen import CocoaPen
     from fontParts.fontshell.glyph import RGlyph
     import random

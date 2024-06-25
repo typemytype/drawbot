@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg width="200" height="200" viewBox="0 0 200 200" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
- <text text-anchor="start" transform="matrix(1,0,0,1,10.0,6.0)">
-  <tspan fill="rgb(0,0,0)" font-family="LucidaGrande" font-size="10" x="0" y="184">
+ <text text-anchor="start" transform="matrix(1,0,0,1,10.0,4.0)">
+  <tspan fill="rgb(0,0,0)" font-family="LucidaGrande" font-size="10" x="0" y="186">
    hello world
   </tspan>
  </text>
- <text text-anchor="start" transform="matrix(1,0,0,1,10.0,-14.0)">
-  <tspan fill="rgb(255,0,0)" font-family="LucidaGrande" font-size="10" x="0" y="184">
+ <text text-anchor="start" transform="matrix(1,0,0,1,10.0,-16.0)">
+  <tspan fill="rgb(255,0,0)" font-family="LucidaGrande" font-size="10" x="0" y="186">
    foo bar
   </tspan>
  </text>
- <text text-anchor="start" transform="matrix(1,0,0,1,10.0,26.0)">
-  <tspan fill="rgb(255,0,255)" font-family="Times-Roman" font-size="50" stroke="rgb(0,255,0)" stroke-width="2" x="0" y="124">
+ <text text-anchor="start" transform="matrix(1,0,0,1,10.0,24.0)">
+  <tspan fill="rgb(255,0,255)" font-family="Times-Roman" font-size="50" stroke="rgb(0,255,0)" stroke-width="2" x="0" y="126">
    foo bar
   </tspan>
  </text>

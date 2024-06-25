@@ -15,7 +15,7 @@ from .imageContext import _makeBitmapImageRep
 from drawBot.misc import warnings, formatNumber
 
 
-class _UniqueIDGenerator(object):
+class _UniqueIDGenerator():
 
     def __init__(self, prefix):
         self._prefix = prefix
@@ -35,7 +35,7 @@ class _UniqueIDGenerator(object):
 # simple file object
 
 
-class SVGFile(object):
+class SVGFile():
 
     optimize = False
 

@@ -1,32 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg width="130" height="130" viewBox="0 0 130 130" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
- <text text-anchor="start" transform="matrix(1,0,0,1,10.0,8.0)">
-  <tspan fill="rgb(0,0,0)" font-family="Times-Roman" font-size="10" x="0" y="112">
+ <text text-anchor="start" transform="matrix(1,0,0,1,10.0,6.0)">
+  <tspan fill="rgb(0,0,0)" font-family="Times-Roman" font-size="10" x="0" y="114">
    ToTAVAT.
   </tspan>
  </text>
- <text text-anchor="start" transform="matrix(1,0,0,1,10.0,-12.0)">
-  <tspan fill="rgb(0,0,0)" font-family="Times-Roman" font-size="10" style="font-feature-settings: 'kern' 0;" x="0" y="112">
+ <text text-anchor="start" transform="matrix(1,0,0,1,10.0,-14.0)">
+  <tspan fill="rgb(0,0,0)" font-family="Times-Roman" font-size="10" style="font-feature-settings: 'kern' 0;" x="0" y="114">
    ToTAVAT.
   </tspan>
  </text>
- <text text-anchor="start" transform="matrix(1,0,0,1,10.0,-32.0)">
-  <tspan fill="rgb(0,0,0)" font-family="Times-Roman" font-size="10" style="font-feature-settings: 'kern' 1;" x="0" y="112">
+ <text text-anchor="start" transform="matrix(1,0,0,1,10.0,-34.0)">
+  <tspan fill="rgb(0,0,0)" font-family="Times-Roman" font-size="10" style="font-feature-settings: 'kern' 1;" x="0" y="114">
    ToTAVAT.
   </tspan>
  </text>
- <text text-anchor="start" transform="matrix(1,0,0,1,10.0,-52.0)">
-  <tspan fill="rgb(0,0,0)" font-family="Times-Roman" font-size="10" style="font-feature-settings: 'kern' 1;" x="0" y="112">
+ <text text-anchor="start" transform="matrix(1,0,0,1,10.0,-54.0)">
+  <tspan fill="rgb(0,0,0)" font-family="Times-Roman" font-size="10" style="font-feature-settings: 'kern' 1;" x="0" y="114">
    ToTAVAT.
   </tspan>
  </text>
- <text text-anchor="start" transform="matrix(1,0,0,1,10.0,-72.0)">
-  <tspan fill="rgb(0,0,0)" font-family="Times-Roman" font-size="10" style="font-feature-settings: 'kern' 0;" x="0" y="112">
+ <text text-anchor="start" transform="matrix(1,0,0,1,10.0,-74.0)">
+  <tspan fill="rgb(0,0,0)" font-family="Times-Roman" font-size="10" style="font-feature-settings: 'kern' 0;" x="0" y="114">
    ToTAVAT.
   </tspan>
  </text>
- <text text-anchor="start" transform="matrix(1,0,0,1,10.0,-92.0)">
-  <tspan fill="rgb(0,0,0)" font-family="Times-Roman" font-size="10" style="font-feature-settings: 'kern' 1;" x="0" y="112">
+ <text text-anchor="start" transform="matrix(1,0,0,1,10.0,-94.0)">
+  <tspan fill="rgb(0,0,0)" font-family="Times-Roman" font-size="10" style="font-feature-settings: 'kern' 1;" x="0" y="114">
    ToTAVAT.
   </tspan>
  </text>
