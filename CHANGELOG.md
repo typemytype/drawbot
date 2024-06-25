@@ -1,6 +1,6 @@
 # Changelog For DrawBot
 
-## [3.131] 2024-02-...
+## [3.131] 2024-07-...
 
 - UNIVERSAL BUILD !!!
 - Jumping to python 3.12 !!!
@@ -12,7 +12,7 @@
 - Adding `opacity(value)`.
 - Adding support for `lineDash(..., offset=10)`.
 - Adding support for `fontSubpixelQuantization` while exporting to an image.
-- Add support for `writingDirection()`, `None`, `'LTR', `'RTL'`.
+- Add support for `writingDirection()`, `None`, `'LTR'`, `'RTL'`.
 
 ## [3.130] 2023-02-20
 
