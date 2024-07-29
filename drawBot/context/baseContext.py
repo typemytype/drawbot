@@ -2322,8 +2322,8 @@ class BaseContext:
     _bezierPathClass = BezierPath
     _gradientClass = Gradient
 
-    fileExtensions: list[tuple[str, str]] = []
-    saveImageOptions: list[tuple[str, str]] = []
+    fileExtensions: list[str] = []
+    saveImageOptions: list[str] = []
     validateSaveImageOptions = True
 
     _textAlignMap = FormattedString._textAlignMap
