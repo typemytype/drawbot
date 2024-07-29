@@ -35,7 +35,7 @@ DrawBot support for .drawbot packages.
 drawBotVersion = version.Version(__version__)
 
 @dataclass
-class DrawBotPackageInfo():
+class DrawBotPackageInfo:
 
     name: str = ""
     version:  str = "0.0"
@@ -67,7 +67,7 @@ class DrawBotPackageInfo():
             setattr(self, key, value)
 
 
-class DrawBotPackage():
+class DrawBotPackage:
 
     def __init__(self, path=None):
         self.path = path

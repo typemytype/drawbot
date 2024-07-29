@@ -909,7 +909,7 @@ class BezierPath(BasePen, SVGContextPropertyMixin, ContextPropertyMixin):
             index += 1
 
 
-class Color():
+class Color:
     colorSpace = AppKit.NSColorSpace.genericRGBColorSpace()
 
     def __init__(self, r=None, g=None, b=None, a=1):
@@ -974,7 +974,7 @@ class CMYKColor(Color):
         self._cmyka = c, m, y, k, a
 
 
-class Shadow():
+class Shadow:
     _colorClass = Color
 
     def __init__(self, offset=None, blur=None, color=None):
@@ -996,7 +996,7 @@ class Shadow():
         return new
 
 
-class Gradient():
+class Gradient:
     _colorClass = Color
 
     def __init__(self, gradientType=None, start=None, end=None, colors=None, positions=None, startRadius=None, endRadius=None):
@@ -2243,7 +2243,7 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
         self._fallbackFont = fallbackFont
 
 
-class GraphicsState():
+class GraphicsState:
     _textClass = FormattedString
     _colorClass = Color
 
@@ -2312,7 +2312,7 @@ class GraphicsState():
         self._colorClass.colorSpace = self.colorSpace
 
 
-class BaseContext():
+class BaseContext:
     _graphicsStateClass = GraphicsState
 
     _cmykColorClass = CMYKColor

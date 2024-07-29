@@ -126,7 +126,7 @@ def outputTextAttributesForStyles(styles=None, isError=False):
     return attr
 
 
-class _JumpToLineSheet():
+class _JumpToLineSheet:
 
     def __init__(self, callback, parentWindow):
         self._callback = callback

@@ -220,7 +220,7 @@ def validateLanguageCode(localeCode):
 # = warnings =
 # ============
 
-class Warnings():
+class Warnings:
 
     def __init__(self):
         self._warnMessages = set()
@@ -241,7 +241,7 @@ class Warnings():
 warnings = Warnings()
 
 
-class VariableController():
+class VariableController:
 
     def __init__(self, attributes, callback, document=None, continuous=True):
         import vanilla

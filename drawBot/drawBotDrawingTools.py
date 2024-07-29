@@ -69,7 +69,7 @@ for key, (w, h) in list(_paperSizes.items()):
     _paperSizes["%sLandscape" % key] = (h, w)
 
 
-class DrawBotDrawingTool():
+class DrawBotDrawingTool:
     def __init__(self):
         self._reset()
         self._isSinglePage = False

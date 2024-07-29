@@ -17,7 +17,7 @@ class DummyDrawBotDrawingTool(DrawBotDrawingTool):
         pass
 
 
-class DrawBotPage():
+class DrawBotPage:
 
     def __init__(self, instructionSet):
         self._instructionSet = instructionSet
