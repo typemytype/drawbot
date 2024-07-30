@@ -3,6 +3,9 @@ from pathlib import Path
 import AppKit # type: ignore
 import Quartz # type: ignore
 
+IMAGE_OBJECT_PATH = Path(__file__).parent.parent / "drawBot/context/tools/imageObject.py"
+UNIT_TESTS_PATH = Path(__file__).parent.parent / "tests/testImageObject.py"
+
 class CodeWriter:
 
     def __init__(self, INDENT="    "):
@@ -339,11 +342,11 @@ def pythonifyDescription(description):
     return description
 
 
-if __name__ == "__main__":
+def generateImageObjectCode() -> tuple[str, str]:
     code = CodeWriter()
     unitTests = UnitTestWriter()
     unitTests.header()
-
+    
     for filterName in allFilterNames:
         if filterName in excludeFilterNames:
             continue
@@ -351,11 +354,11 @@ if __name__ == "__main__":
         ciFilterAttributes = ciFilter.attributes()
         doc = CodeWriter()
         doc.add(AppKit.CIFilter.localizedDescriptionForFilterName_(filterName))  # type: ignore
-
+    
         args = []
         unitTestsArgs = []
         inputCode = CodeWriter()
-
+    
         inputKeys = [
             inputKey
             for inputKey in ciFilter.inputKeys()
@@ -368,9 +371,9 @@ if __name__ == "__main__":
                 ciFilterAttributes.get(x, dict()).get("CIAttributeDefault") is not None
             )
         )
-
+    
         attributes = dict()
-
+    
         if inputKeys or filterName == "CIRandomGenerator":
             doc.newline()
             doc.add("**Arguments:**")
@@ -383,21 +386,21 @@ if __name__ == "__main__":
                 info = ciFilterAttributes.get(inputKey)
                 default = info.get("CIAttributeDefault")
                 defaultClass = info.get("CIAttributeClass")
-
+    
                 description = info.get("CIAttributeDescription", "")
                 inputKey = camelCase(inputKey[5:])
                 arg = inputKey
-
+    
                 if inputKey in toCopy["image"]:
                     arg += ": Self"
-
+    
                 if inputKey in argumentToHint:
                     arg += argumentToHint[inputKey]
-
+    
                 # if filterName == "CIAztecCodeGenerator":
                 #     print(inputKeys)
                 #     print(ciFilterAttributes)
-
+    
                 if default is not None:
                     if isinstance(default, AppKit.CIVector):  # type: ignore
                         if default.count() == 2:
@@ -411,22 +414,22 @@ if __name__ == "__main__":
                                 default.valueAtIndex_(i) for i in range(default.count())
                             )
                             arg += ": tuple"
-
+    
                     elif isinstance(default, bool):
                         arg += ": bool"
-
+    
                     elif isinstance(default, (AppKit.NSString, str)): # type: ignore
                         default = f"'{default}'"
                         arg += ": str"
-
+    
                     elif isinstance(default, AppKit.NSNumber): # type: ignore
                         default = float(default)
                         arg += ": float"
-
+    
                     elif isinstance(default, AppKit.NSAffineTransform):  # type: ignore
                         default = tuple(default.transformStruct())
                         arg += ": TransformTuple"
-
+    
                     elif isinstance(default, AppKit.CIColor): # type: ignore
                         default = (
                             default.red(),
@@ -435,31 +438,31 @@ if __name__ == "__main__":
                             default.alpha(),
                         )
                         arg += ": RGBAColorTuple"
-
+    
                     elif isinstance(default, AppKit.NSData): # type: ignore
                         default = None
                         arg += ": bytes | None"
-
+    
                     elif isinstance(default, type(Quartz.CGColorSpaceCreateDeviceCMYK())): # type: ignore
                         default = None
-
+    
                     else:
                         print(filterName, ciFilterAttributes)
                         raise ValueError(f"We can't parse this default class of `{inputKey}`: {defaultClass}, {default}, {type(default)}")
-
+    
                     arg += f" = {default}"
-
+    
                 if filterName in degreesAngleFilterNames:
                     value = inputKey
                 else:
                     value = converters.get(inputKey, inputKey).format(inputKey=inputKey)
                 docValue = getVariableValue((inputKey, filterName), "a float")
                 attributes[inputKey] = value
-
+    
                 doc.add(f"`{inputKey}` {docValue}. {pythonifyDescription(description)}")
                 args.append(arg)
-
-
+    
+    
                 match inputKey:
                     case inputKey if inputKey.endswith("Image"):
                         value = "sampleImage"
@@ -474,7 +477,7 @@ if __name__ == "__main__":
                     case _:
                         value = default
                 unitTestsArgs.append(f"{inputKey}={value}")
-
+    
         drawBotFilterName = camelCase(filterName[2:])
         code.add(
             f"def {drawBotFilterName}"
@@ -493,36 +496,35 @@ if __name__ == "__main__":
             filterDict["isGenerator"] = "True"
         if filterName.endswith("CodeGenerator"):
             filterDict["fitImage"] = "True"
-
+    
         code.addDict("filterDict", filterDict)
-
+    
         code.add("self._addFilter(filterDict)")
         code.dedent()
         code.newline()
-
+    
         unitTests.add(f"def test_{drawBotFilterName}(self):")
         unitTests.indent()
         unitTests.add("img = drawBot.ImageObject()")
         unitTests.add(f"img.{drawBotFilterName}({', '.join(unitTestsArgs)})")
         unitTests.newline()
         unitTests.dedent()
-
-    imageObjectPath = Path(
-        Path(__file__).parent.parent / "drawBot/context/tools/imageObject.py"
-    )
-    imageObjectText = imageObjectPath.read_text()
-
+    
+    imageObjectText = IMAGE_OBJECT_PATH.read_text()
+    
     beforeFilters = []
     for eachLine in imageObjectText.splitlines():
         beforeFilters.append(eachLine)
         if eachLine == "    # --- filters ---":
             break
-
-    with open(imageObjectPath, mode="w") as txtFile:
-        txtFile.write("\n".join(beforeFilters) + "\n" + code.get(indentLevel=1).replace("“", '"').replace("”", '"'))
-
-    unitTestsPath = Path(
-        Path(__file__).parent.parent / "tests/testImageObject.py"
-    )
+    
+    imageObjectCode = "\n".join(beforeFilters) + "\n" + code.get(indentLevel=1).replace("“", '"').replace("”", '"')
     unitTests.footer()
-    unitTestsPath.write_text(unitTests.get())
+    unitTestsCode = unitTests.get()
+
+    return imageObjectCode, unitTestsCode
+
+if __name__ == "__main__":
+    imageObjectCode, unitTestsCode = generateImageObjectCode()
+    IMAGE_OBJECT_PATH.write_text(imageObjectCode)
+    UNIT_TESTS_PATH.write_text(unitTestsCode)
