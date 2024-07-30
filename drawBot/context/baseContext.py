@@ -2323,7 +2323,7 @@ class BaseContext:
     _gradientClass = Gradient
 
     fileExtensions: list[str] = []
-    saveImageOptions: list[str] = []
+    saveImageOptions: list[tuple[str, str]] = []
     validateSaveImageOptions = True
 
     _textAlignMap = FormattedString._textAlignMap
