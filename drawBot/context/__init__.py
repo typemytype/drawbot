@@ -62,9 +62,7 @@ def getContextOptionsDocs(formatter="* `%s`: %s") -> list[str]:
             ext = ", ".join(context.fileExtensions)
             docs.append("*%s options:*" % ext)
             docs.append("")
-            for option in context.saveImageOptions:
-                assert len(option) == 2
-                key, doc = option
+            for key, doc in context.saveImageOptions:
                 docs.append(formatter % (key, doc))
             docs.append("")
     return docs
