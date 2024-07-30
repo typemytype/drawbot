@@ -27,7 +27,9 @@ from .aliases import (
     Size,
     SomePath,
     CMYKColor,
+    CMYKColorTuple,
     RGBColor,
+    RGBColorTuple,
     RGBAColorTuple,
     BoundingBox,
     TransformTuple,
@@ -1060,7 +1062,7 @@ class DrawBotDrawingTool:
         self,
         startPoint: Point | None = None,
         endPoint: Point | None = None,
-        colors: list[RGBColor] | None = None,
+        colors: list[RGBColor | RGBColorTuple] | None = None,
         locations: list[float] | None = None,
     ):
         """
@@ -1068,7 +1070,7 @@ class DrawBotDrawingTool:
 
         * `startPoint` as (x, y)
         * `endPoint` as (x, y)
-        * `colors` as a list of colors, described similary as `fill`
+        * `colors` as a list of colors, tuples of floating point values (0 → 1)
         * `locations` of each color as a list of floats. (optionally)
 
         Setting a gradient will ignore the `fill`.
@@ -1092,7 +1094,7 @@ class DrawBotDrawingTool:
         self,
         startPoint: Point | None = None,
         endPoint: Point | None = None,
-        colors: list[CMYKColor] | None = None,
+        colors: list[CMYKColorTuple] | None = None,
         locations=None,
     ):
         """
@@ -1100,7 +1102,7 @@ class DrawBotDrawingTool:
 
         * `startPoint` as (x, y)
         * `endPoint` as (x, y)
-        * `colors` as a list of colors, described similary as `cmykFill`
+        * `colors` as a list of colors, tuples of floating point values (0 → 1)
         * `locations` of each color as a list of floats. (optionally)
 
         Setting a gradient will ignore the `fill`.
