@@ -532,7 +532,7 @@ class BezierPath(BasePen, SVGContextPropertyMixin, ContextPropertyMixin):
         from .tools import traceImage
         traceImage.TraceImage(path, self, threshold, blur, invert, turd, tolerance, offset)
 
-    def getNSBezierPath(self):
+    def getNSBezierPath(self) -> AppKit.NSBezierPath:
         """
         Return the nsBezierPath.
         """
@@ -573,7 +573,7 @@ class BezierPath(BasePen, SVGContextPropertyMixin, ContextPropertyMixin):
                 self._path.closePath()
         Quartz.CGPathApply(cgpath, None, _addPoints)
 
-    def setNSBezierPath(self, path):
+    def setNSBezierPath(self, path: AppKit.NSBezierPath):
         """
         Set a nsBezierPath.
         """
@@ -586,7 +586,7 @@ class BezierPath(BasePen, SVGContextPropertyMixin, ContextPropertyMixin):
         x, y = xy
         return self._path.containsPoint_((x, y))
 
-    def bounds(self):
+    def bounds(self) -> BoundingBox | None:
         """
         Return the bounding box of the path in the form
         `(x minimum, y minimum, x maximum, y maximum)`` or,
@@ -597,7 +597,7 @@ class BezierPath(BasePen, SVGContextPropertyMixin, ContextPropertyMixin):
         (x, y), (w, h) = self._path.bounds()
         return x, y, x + w, y + h
 
-    def controlPointBounds(self):
+    def controlPointBounds(self) -> BoundingBox | None:
         """
         Return the bounding box of the path including the offcurve points
         in the form `(x minimum, y minimum, x maximum, y maximum)`` or,
@@ -624,7 +624,7 @@ class BezierPath(BasePen, SVGContextPropertyMixin, ContextPropertyMixin):
                 optimizedPath.closePath()
         self._path = optimizedPath
 
-    def copy(self):
+    def copy(self) -> Self:
         """
         Copy the bezier path.
         """
@@ -645,12 +645,12 @@ class BezierPath(BasePen, SVGContextPropertyMixin, ContextPropertyMixin):
         """
         self._path.appendBezierPath_(otherPath.getNSBezierPath())
 
-    def __add__(self, otherPath):
+    def __add__(self, otherPath: Self) -> Self:
         new = self.copy()
         new.appendPath(otherPath)
         return new
 
-    def __iadd__(self, other):
+    def __iadd__(self, other: Self) -> Self:
         self.appendPath(other)
         return self
 
@@ -717,7 +717,7 @@ class BezierPath(BasePen, SVGContextPropertyMixin, ContextPropertyMixin):
                 raise DrawBotError("open contours are not supported during boolean operations")
         return contours
 
-    def union(self, other):
+    def union(self, other: Self) -> Self:
         """
         Return the union between two bezier paths.
         """
@@ -728,7 +728,7 @@ class BezierPath(BasePen, SVGContextPropertyMixin, ContextPropertyMixin):
         booleanOperations.union(contours, result)
         return result
 
-    def removeOverlap(self):
+    def removeOverlap(self) -> Self:
         """
         Remove all overlaps in a bezier path.
         """
@@ -739,7 +739,7 @@ class BezierPath(BasePen, SVGContextPropertyMixin, ContextPropertyMixin):
         self.setNSBezierPath(result.getNSBezierPath())
         return self
 
-    def difference(self, other: Self):
+    def difference(self, other: Self) -> Self:
         """
         Return the difference between two bezier paths.
         """
@@ -751,7 +751,7 @@ class BezierPath(BasePen, SVGContextPropertyMixin, ContextPropertyMixin):
         booleanOperations.difference(subjectContours, clipContours, result)
         return result
 
-    def intersection(self, other: Self):
+    def intersection(self, other: Self) -> Self:
         """
         Return the intersection between two bezier paths.
         """
@@ -764,7 +764,7 @@ class BezierPath(BasePen, SVGContextPropertyMixin, ContextPropertyMixin):
         booleanOperations.intersection(subjectContours, clipContours, result)
         return result
 
-    def xor(self, other: Self):
+    def xor(self, other: Self) -> Self:
         """
         Return the xor between two bezier paths.
         """
@@ -776,7 +776,7 @@ class BezierPath(BasePen, SVGContextPropertyMixin, ContextPropertyMixin):
         booleanOperations.xor(subjectContours, clipContours, result)
         return result
 
-    def intersectionPoints(self, other: Self | None = None):
+    def intersectionPoints(self, other: Self | None = None) -> list[Point]:
         """
         Return a list of intersection points as `x`, `y` tuples.
 
@@ -809,42 +809,42 @@ class BezierPath(BasePen, SVGContextPropertyMixin, ContextPropertyMixin):
         result._setCGPath(strokedCGPath)
         return result
 
-    def __mod__(self, other):
+    def __mod__(self, other: Self) -> Self:
         return self.difference(other)
 
     __rmod__ = __mod__
 
-    def __imod__(self, other):
+    def __imod__(self, other: Self) -> Self:
         result = self.difference(other)
         self.setNSBezierPath(result.getNSBezierPath())
         return self
 
-    def __or__(self, other):
+    def __or__(self, other: Self) -> Self:
         return self.union(other)
 
     __ror__ = __or__
 
-    def __ior__(self, other):
+    def __ior__(self, other: Self) -> Self:
         result = self.union(other)
         self.setNSBezierPath(result.getNSBezierPath())
         return self
 
-    def __and__(self, other):
+    def __and__(self, other: Self) -> Self:
         return self.intersection(other)
 
     __rand__ = __and__
 
-    def __iand__(self, other):
+    def __iand__(self, other: Self) -> Self:
         result = self.intersection(other)
         self.setNSBezierPath(result.getNSBezierPath())
         return self
 
-    def __xor__(self, other):
+    def __xor__(self, other: Self) -> Self:
         return self.xor(other)
 
     __rxor__ = __xor__
 
-    def __ixor__(self, other):
+    def __ixor__(self, other: Self) -> Self:
         result = self.xor(other)
         self.setNSBezierPath(result.getNSBezierPath())
         return self
@@ -893,7 +893,7 @@ class BezierPath(BasePen, SVGContextPropertyMixin, ContextPropertyMixin):
 
     contours = property(_get_contours, doc="Return an immutable list of contours with all point coordinates sorted in segments. A contour object has an `open` attribute.")
 
-    def __len__(self):
+    def __len__(self) -> int:
         return len(self.contours)
 
     def __getitem__(self, index):
