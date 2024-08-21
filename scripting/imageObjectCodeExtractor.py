@@ -298,7 +298,7 @@ for k, v in toCopy.items():
 
 ignoreInputKeys = ["inputImage"]
 
-generators = list(AppKit.CIFilter.filterNamesInCategory_("CICategoryGenerator"))  # type: ignore
+generators = list(AppKit.CIFilter.filterNamesInCategory_("CICategoryGenerator")) 
 generators.extend(
     [
         "CIPDF417BarcodeGenerator",
@@ -309,7 +309,7 @@ generators.extend(
     ]
 )
 
-allFilterNames = AppKit.CIFilter.filterNamesInCategory_(None)  # type: ignore
+allFilterNames = AppKit.CIFilter.filterNamesInCategory_(None) 
 
 excludeFilterNames = [
     "CIBarcodeGenerator",
@@ -350,10 +350,10 @@ def generateImageObjectCode() -> tuple[str, str]:
     for filterName in allFilterNames:
         if filterName in excludeFilterNames:
             continue
-        ciFilter = AppKit.CIFilter.filterWithName_(filterName)  # type: ignore
+        ciFilter = AppKit.CIFilter.filterWithName_(filterName) 
         ciFilterAttributes = ciFilter.attributes()
         doc = CodeWriter()
-        doc.add(AppKit.CIFilter.localizedDescriptionForFilterName_(filterName))  # type: ignore
+        doc.add(AppKit.CIFilter.localizedDescriptionForFilterName_(filterName)) 
     
         args = []
         unitTestsArgs = []
@@ -402,7 +402,7 @@ def generateImageObjectCode() -> tuple[str, str]:
                 #     print(ciFilterAttributes)
     
                 if default is not None:
-                    if isinstance(default, AppKit.CIVector):  # type: ignore
+                    if isinstance(default, AppKit.CIVector): 
                         if default.count() == 2:
                             default = default.X(), default.Y()
                             arg += ": Point"
@@ -418,19 +418,19 @@ def generateImageObjectCode() -> tuple[str, str]:
                     elif isinstance(default, bool):
                         arg += ": bool"
     
-                    elif isinstance(default, (AppKit.NSString, str)): # type: ignore
+                    elif isinstance(default, (AppKit.NSString, str)):
                         default = f"'{default}'"
                         arg += ": str"
     
-                    elif isinstance(default, AppKit.NSNumber): # type: ignore
+                    elif isinstance(default, AppKit.NSNumber):
                         default = float(default)
                         arg += ": float"
     
-                    elif isinstance(default, AppKit.NSAffineTransform):  # type: ignore
+                    elif isinstance(default, AppKit.NSAffineTransform): 
                         default = tuple(default.transformStruct())
                         arg += ": TransformTuple"
     
-                    elif isinstance(default, AppKit.CIColor): # type: ignore
+                    elif isinstance(default, AppKit.CIColor):
                         default = (
                             default.red(),
                             default.green(),
@@ -439,7 +439,7 @@ def generateImageObjectCode() -> tuple[str, str]:
                         )
                         arg += ": RGBAColorTuple"
     
-                    elif isinstance(default, AppKit.NSData): # type: ignore
+                    elif isinstance(default, AppKit.NSData):
                         default = None
                         arg += ": bytes | None"
     

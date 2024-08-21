@@ -91,21 +91,21 @@ class ImageObject:
         """
         Open an image with a given `path`.
         """
-        if isinstance(path, AppKit.NSImage): # type: ignore
+        if isinstance(path, AppKit.NSImage):
             im = path
         elif isinstance(path, (str, os.PathLike)):
             path = optimizePath(path)
             if isinstance(path, str) and path.startswith("http"):
-                url = AppKit.NSURL.URLWithString_(path) # type: ignore
+                url = AppKit.NSURL.URLWithString_(path)
             else:
                 if not os.path.exists(path):
                     raise DrawBotError("Image path '%s' does not exists." % path)
-                url = AppKit.NSURL.fileURLWithPath_(path) # type: ignore
-            im = AppKit.NSImage.alloc().initByReferencingURL_(url) # type: ignore
+                url = AppKit.NSURL.fileURLWithPath_(path)
+            im = AppKit.NSImage.alloc().initByReferencingURL_(url)
         else:
             raise DrawBotError("Cannot read image path '%s'." % path)
         rep = _makeBitmapImageRep(im)
-        ciImage = AppKit.CIImage.alloc().initWithBitmapImageRep_(rep) # type: ignore
+        ciImage = AppKit.CIImage.alloc().initWithBitmapImageRep_(rep)
         self._merge(ciImage, doCrop=True)
 
     def copy(self) -> Self:
@@ -158,10 +158,10 @@ class ImageObject:
         pageCount = data.pageCount()
         page = data.pageAtIndex_(pageCount - 1)
         # create an image
-        im = AppKit.NSImage.alloc().initWithData_(page.dataRepresentation()) # type: ignore
+        im = AppKit.NSImage.alloc().initWithData_(page.dataRepresentation())
         # create an CIImage object
         rep = _makeBitmapImageRep(im)
-        ciImage = AppKit.CIImage.alloc().initWithBitmapImageRep_(rep) # type: ignore
+        ciImage = AppKit.CIImage.alloc().initWithBitmapImageRep_(rep)
         # merge it with the already set data, if there already an image
         self._merge(ciImage)
 
@@ -184,8 +184,8 @@ class ImageObject:
         """
         Return the NSImage object.
         """
-        rep = AppKit.NSCIImageRep.imageRepWithCIImage_(self._ciImage()) # type: ignore
-        nsImage = AppKit.NSImage.alloc().initWithSize_(rep.size()) # type: ignore
+        rep = AppKit.NSCIImageRep.imageRepWithCIImage_(self._ciImage())
+        nsImage = AppKit.NSImage.alloc().initWithSize_(rep.size())
         nsImage.addRepresentation_(rep)
         return nsImage
 
@@ -223,7 +223,7 @@ class ImageObject:
         sourceSize = self.size()
         for filterDict in self._filters:
             filterName = filterDict.get("name")
-            ciFilter = AppKit.CIFilter.filterWithName_(filterName) # type: ignore
+            ciFilter = AppKit.CIFilter.filterWithName_(filterName)
             ciFilter.setDefaults()
 
             for key, value in filterDict.get("attributes", {}).items():
@@ -233,24 +233,24 @@ class ImageObject:
                 generator = ciFilter.valueForKey_("outputImage")
                 extent = generator.extent()
                 w, h = filterDict.get("size", extent.size)
-                dummy = AppKit.NSImage.alloc().initWithSize_((w, h)) # type: ignore
+                dummy = AppKit.NSImage.alloc().initWithSize_((w, h))
 
                 scaleX = w / extent.size.width
                 scaleY = h / extent.size.height
                 dummy.lockFocus()
-                ctx = AppKit.NSGraphicsContext.currentContext() # type: ignore
+                ctx = AppKit.NSGraphicsContext.currentContext()
                 ctx.setShouldAntialias_(False)
-                ctx.setImageInterpolation_(AppKit.NSImageInterpolationNone) # type: ignore
+                ctx.setImageInterpolation_(AppKit.NSImageInterpolationNone)
                 fromRect = (0, 0), (w, h)
                 if filterDict.get("fitImage", False):
-                    transform = AppKit.NSAffineTransform.transform() # type: ignore
+                    transform = AppKit.NSAffineTransform.transform()
                     transform.scaleXBy_yBy_(scaleX, scaleY)
                     transform.concat()
                     fromRect = extent
-                generator.drawAtPoint_fromRect_operation_fraction_((0, 0), fromRect, AppKit.NSCompositeCopy, 1) # type: ignore
+                generator.drawAtPoint_fromRect_operation_fraction_((0, 0), fromRect, AppKit.NSCompositeCopy, 1)
                 dummy.unlockFocus()
                 rep = _makeBitmapImageRep(dummy)
-                self._cachedImage = AppKit.CIImage.alloc().initWithBitmapImageRep_(rep) # type: ignore # type: ignore
+                self._cachedImage = AppKit.CIImage.alloc().initWithBitmapImageRep_(rep)
                 del dummy
             elif hasattr(self, "_cachedImage"):
                 ciFilter.setValue_forKey_(self._cachedImage, "inputImage")
