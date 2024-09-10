@@ -2004,7 +2004,7 @@ class DrawBotDrawingTool(object):
         .. downloadcode:: image.py
 
             # the path can be a path to a file or a url
-            image("https://d1sz9tkli0lfjq.cloudfront.net/items/1T3x1y372J371p0v1F2Z/drawBot.jpg", (100, 100), alpha=.3)
+            image("https://github.com/typemytype/drawbot/raw/master/docs/content/assets/drawBot.jpg", (100, 100), alpha=.3)
         """
         if isinstance(path, self._imageClass):
             path = path._nsImage()
@@ -2019,7 +2019,7 @@ class DrawBotDrawingTool(object):
 
         .. downloadcode:: imageSize.py
 
-            print(imageSize("https://d1sz9tkli0lfjq.cloudfront.net/items/1T3x1y372J371p0v1F2Z/drawBot.jpg"))
+            print(imageSize("https://github.com/typemytype/drawbot/raw/master/docs/content/assets/drawBot.jpg"))
         """
         if isinstance(path, self._imageClass):
             # its an drawBot.ImageObject, just return the size from that obj
@@ -2079,7 +2079,7 @@ class DrawBotDrawingTool(object):
         .. downloadcode:: pixelColor.py
 
             # path to the image
-            path = u"https://d1sz9tkli0lfjq.cloudfront.net/items/1T3x1y372J371p0v1F2Z/drawBot.jpg"
+            path = u"https://github.com/typemytype/drawbot/raw/master/docs/content/assets/drawBot.jpg"
 
             # get the size of the image
             w, h = imageSize(path)
