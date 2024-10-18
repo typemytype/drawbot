@@ -754,7 +754,7 @@ class DrawBotDrawingTool:
         path.line(point1, point2)
         self.drawPath(path)
 
-    def polygon(self, *points: Point, **kwargs: dict[str, bool]):
+    def polygon(self, *points: Point, **kwargs: bool):
         """
         Draws a polygon with n-amount of points.
         Optionally a `close` argument can be provided to open or close the path.
