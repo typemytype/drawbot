@@ -363,8 +363,7 @@ def getExternalToolPath(root, toolName):
     if not os.path.exists(toolPath):
         toolPath = AppKit.NSBundle.mainBundle().pathForResource_ofType_(toolName, None)
         if toolPath is None or not os.path.exists(toolPath):
-            import drawBot
-            root = os.path.dirname(drawBot.__file__)
+            root = os.path.dirname(__file__)
             toolPath = os.path.join(root, "..", "Resources", "externalTools", toolName)
     return toolPath
 
