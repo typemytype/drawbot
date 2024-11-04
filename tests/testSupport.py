@@ -100,7 +100,7 @@ class DrawBotBaseTest(unittest.TestCase):
         return output.lines()
 
 
-class StdOutCollector(object):
+class StdOutCollector:
 
     def __init__(self, **kwargs):
         # force captureStdErr to be a keyword argument
@@ -134,7 +134,7 @@ class StdOutCollector(object):
         return self._stream.getvalue().splitlines()
 
 
-class TempFile(object):
+class TempFile:
 
     """This context manager will deliver a pathname for a temporary file, and will
     remove it upon exit, if it indeed exists at that time. Note: it does _not_

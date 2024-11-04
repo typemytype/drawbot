@@ -12,5 +12,5 @@
    <stop offset="1" stop-color="rgb(0,255,0)"/>
   </linearGradient>
  </defs>
- <path d="M0,0 l200,0 l0,200 l-200,0 Z M0,0" fill="url(#gradient1)" transform="matrix(1,0,0,-1,0,200)"/>
+ <path d="M0,0 l200,0 l0,200 l-200,0 Z" fill="url(#gradient1)" transform="matrix(1,0,0,-1,0,200)"/>
 </svg>

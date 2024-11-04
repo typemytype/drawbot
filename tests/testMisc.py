@@ -96,7 +96,7 @@ class MiscTest(unittest.TestCase):
         fs.font("Skia")
         self.assertEqual(fs.textProperties()["font"], "Skia")
         fs.fill(1, 0, 0)
-        self.assertEqual(fs.textProperties()["fill"], (1, 0, 0))
+        self.assertEqual(fs.textProperties()["fill"], (1, 0, 0, 1))
         fs.openTypeFeatures(liga=True)
         self.assertEqual(fs.textProperties()["openTypeFeatures"], dict(liga=True))
 
@@ -109,7 +109,7 @@ class MiscTest(unittest.TestCase):
         fillColors = []
         for characterBound in characterBounds:
             fillColors.append(characterBound.formattedSubString.textProperties()["fill"])
-        self.assertEqual(fillColors, [(1, 0, 0), (0, 1, 0), None])
+        self.assertEqual(fillColors, [(1, 0, 0, 1), (0, 1, 0, 1), None])
 
     def test_polygon_notEnoughPoints(self):
         drawBot.newDrawing()
@@ -287,12 +287,12 @@ class MiscTest(unittest.TestCase):
         expected = [
             'reset None',
             'newPage 1000 1000',
-            'textBox A 0 -34.0 26.8994140625 104.0 left',
-            'textBox B 0 -46.0 25.751953125 104.0 left',
-            'textBox C 0 -58.0 26.9189453125 104.0 left',
-            'textBox A 10 -34.0 26.8994140625 104.0 left',
-            'textBox  10 48.0 20.0 104.0 left',
-            'textBox C 10 -58.0 26.9189453125 104.0 left',
+            'textBox A 0 -26.0 26.8994140625 96.0 left',
+            'textBox B 0 -38.0 25.751953125 96.0 left',
+            'textBox C 0 -50.0 26.9189453125 96.0 left',
+            'textBox A 10 -26.0 26.8994140625 96.0 left',
+            'textBox  10 48.0 20.0 96.0 left',
+            'textBox C 10 -50.0 26.9189453125 96.0 left',
             'saveImage * {}'
         ]
         with StdOutCollector() as output:

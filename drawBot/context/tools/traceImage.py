@@ -47,7 +47,7 @@ def _getPath(element, path=None, pathItems=None):
     return pathItems
 
 
-class BaseSegment(object):
+class BaseSegment:
 
     def __init__(self):
         self._points = []
