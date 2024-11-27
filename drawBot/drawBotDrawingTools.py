@@ -1,4 +1,4 @@
-from typing import Any, Sequence
+from typing import Any
 import AppKit # type: ignore
 import CoreText # type: ignore
 import Quartz # type: ignore
@@ -33,7 +33,6 @@ from .aliases import (
     RGBAColorTuple,
     BoundingBox,
     TransformTuple,
-    SomePath,
 )
 
 def _getmodulecontents(module, names=None):
