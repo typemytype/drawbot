@@ -1673,7 +1673,7 @@ class DrawBotDrawingTool:
         self._dummyContext.writingDirection(direction)
         self._addInstruction("writingDirection", direction)
 
-    def openTypeFeatures(self, *args: None, **features: dict[str, bool]) -> dict[str, bool]:
+    def openTypeFeatures(self, *args: bool | None, **features: bool) -> dict[str, bool]:
         """
         Enable OpenType features.
 
