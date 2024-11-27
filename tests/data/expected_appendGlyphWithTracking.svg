@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg width="200" height="200" viewBox="0 0 200 200" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
- <text text-anchor="start" transform="matrix(1,0,0,1,30.0,-38.0)">
-  <tspan fill="rgb(0,0,0)" font-family="LucidaGrande" font-size="50" style="font-feature-settings: 'calt' 0;" x="0" y="128">
+ <text text-anchor="start" transform="matrix(1,0,0,1,30.0,-40.0)">
+  <tspan fill="rgb(0,0,0)" font-family="LucidaGrande" font-size="50" style="font-feature-settings: 'calt' 0;" x="0" y="130">
    �
   </tspan>
-  <tspan fill="rgb(0,0,0)" font-family="LucidaGrande" font-size="50" style="font-feature-settings: 'calt' 0;" x="36.74" y="128">
+  <tspan fill="rgb(0,0,0)" font-family="LucidaGrande" font-size="50" style="font-feature-settings: 'calt' 0;" x="36.74" y="130">
    �
   </tspan>
  </text>
- <text text-anchor="start" transform="matrix(1,0,0,1,30.0,22.0)">
-  <tspan fill="rgb(0,0,0)" font-family="LucidaGrande" font-size="50" style="font-feature-settings: 'calt' 0;" x="0" y="128">
+ <text text-anchor="start" transform="matrix(1,0,0,1,30.0,20.0)">
+  <tspan fill="rgb(0,0,0)" font-family="LucidaGrande" font-size="50" style="font-feature-settings: 'calt' 0;" x="0" y="130">
    �
   </tspan>
-  <tspan fill="rgb(0,0,0)" font-family="LucidaGrande" font-size="50" style="font-feature-settings: 'calt' 0;" x="46.74" y="128">
+  <tspan fill="rgb(0,0,0)" font-family="LucidaGrande" font-size="50" style="font-feature-settings: 'calt' 0;" x="46.74" y="130">
    �
   </tspan>
  </text>
