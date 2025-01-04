@@ -31,26 +31,41 @@ class PDFContext(BaseContext):
         self._hasContext = False
         self._cachedImages = {}
 
-    def _newPage(self, width, height):
+    def _newPage(self, width, height, options):
         self.size(width, height)
         mediaBox = Quartz.CGRectMake(0, 0, self.width, self.height)
+
+        auxiliaryInfo = {
+            Quartz.kCGPDFContextAuthor: "DrawBot"
+        }
+        # auxiliaryInfo[Quartz.kCGPDFContextMediaBox] = AppKit.NSValue.valueWithRect_(mediaBox)
+        if "bleed" in options:
+            leftBleed, topBleed, rightBleed, bottomBleed = options["bleed"]
+
+            mediaBox = Quartz.CGRectMake(0, 0, self.width + leftBleed + rightBleed, self.height + topBleed + bottomBleed)
+            bleedBox = Quartz.CGRectMake(leftBleed, topBleed, self.width, self.height)
+
+            auxiliaryInfo[Quartz.kCGPDFContextBleedBox] = AppKit.NSValue.valueWithRect_(bleedBox)
+            auxiliaryInfo[Quartz.kCGPDFContextTrimBox] = AppKit.NSValue.valueWithRect_(bleedBox)
+
+        auxiliaryInfo[Quartz.kCGPDFContextMediaBox] = AppKit.NSValue.valueWithRect_(mediaBox)
 
         # reset the context
         self.reset()
         if self._hasContext:
             # add a new page
-            Quartz.CGContextEndPage(self._pdfContext)
-            Quartz.CGContextBeginPage(self._pdfContext, mediaBox)
+            Quartz.CGPDFContextEndPage(self._pdfContext)
+            Quartz.CGPDFContextBeginPage(self._pdfContext, auxiliaryInfo)
         else:
             # create a new pdf document
             self._pdfData = Quartz.CFDataCreateMutable(None, 0)
             dataConsumer = Quartz.CGDataConsumerCreateWithCFData(self._pdfData)
-            self._pdfContext = Quartz.CGPDFContextCreate(dataConsumer, mediaBox, None)
-            Quartz.CGContextBeginPage(self._pdfContext, mediaBox)
+            self._pdfContext = Quartz.CGPDFContextCreate(dataConsumer, mediaBox, auxiliaryInfo)
+            Quartz.CGPDFContextBeginPage(self._pdfContext, auxiliaryInfo)
             self._hasContext = True
 
     def _closeContext(self):
-        Quartz.CGContextEndPage(self._pdfContext)
+        Quartz.CGPDFContextEndPage(self._pdfContext)
         Quartz.CGPDFContextClose(self._pdfContext)
         self._hasContext = False
 

@@ -2202,7 +2202,7 @@ class BaseContext(object):
 
     # overwrite by a subclass
 
-    def _newPage(self, width, height):
+    def _newPage(self, width, height, pageOptions):
         pass
 
     def _save(self):
@@ -2267,13 +2267,13 @@ class BaseContext(object):
         if height is not None:
             self.height = height
 
-    def newPage(self, width=None, height=None):
+    def newPage(self, width=None, height=None, options=None):
         if self.width is None and width is None:
             raise DrawBotError("A page must have a width")
         if self.height is None and height is None:
             raise DrawBotError("A page must have a height")
         self.hasPage = True
-        self._newPage(width, height)
+        self._newPage(width, height, options)
 
     def saveImage(self, path, options):
         if not self.hasPage:
