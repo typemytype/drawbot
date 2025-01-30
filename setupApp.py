@@ -137,8 +137,8 @@ plist = dict(
     CFBundleIdentifier=bundleIdentifier,
     LSMinimumSystemVersion=osxMinVersion,
     LSApplicationCategoryType="public.app-category.graphics-design",
-    LSMinimumSystemVersionByArchitecture=dict(i386=osxMinVersion, x86_64=osxMinVersion),
-    LSArchitecturePriority=["arm64", "x86_64", "i386"],
+    # LSMinimumSystemVersionByArchitecture=dict(i386=osxMinVersion, x86_64=osxMinVersion),
+    # LSArchitecturePriority=["arm64", "x86_64", "i386"],
     CFBundleShortVersionString=__version__,
     CFBundleVersion=__version__,
     CFBundleIconFile=iconFile,
@@ -148,7 +148,7 @@ plist = dict(
             CFBundleURLName="com.drawbot",
             CFBundleURLSchemes=[appName.lower()])
     ],
-    NSRequiresAquaSystemAppearance=False,
+    # NSRequiresAquaSystemAppearance=False,
 )
 
 
