@@ -702,35 +702,9 @@ class BezierPath(BasePen, SVGContextPropertyMixin, ContextPropertyMixin):
         if lineCap not in _LINECAPSTYLESMAP:
             raise DrawBotError("lineCap must be 'butt', 'square' or 'round'")
 
-        strokedCGPath = Quartz.CGPathCreateCopyByStrokingPath(
-            self._getCGPath(),
-            None,
-            width,
-            _LINECAPSTYLESMAP[lineCap],
-            _LINEJOINSTYLESMAP[lineJoin],
-            miterLimit
-        )
+        strokedCGPath = Quartz.CGPathCreateCopyByStrokingPath(self._getCGPath(), None, width, _LINECAPSTYLESMAP[lineCap], _LINEJOINSTYLESMAP[lineJoin], miterLimit)
         result = self.__class__()
         result._setCGPath(strokedCGPath)
-        return result
-
-    def dashStroke(self, *dash, offset=0):
-        """
-        Return a new bezier path with a dashed stroke of the original path,
-        with a given `dash`.
-
-        The following optional arguments are:
-        * `offset`: set the offset of the first dash.
-        """
-        dashedCGPath = Quartz.CGPathCreateCopyByDashingPath(
-            self._getCGPath(),
-            None,
-            offset,
-            dash,
-            len(dash)
-        )
-        result = self.__class__()
-        result._setCGPath(dashedCGPath)
         return result
 
     def __mod__(self, other):

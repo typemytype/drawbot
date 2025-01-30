@@ -615,9 +615,6 @@ class CodeNSTextView(AppKit.NSTextView):
                 nextChar = nextChar.strip()
                 if char in "\"'":
                     if prevChar != char:
-                        # special python case for row unicode and f strings
-                        if prevChar in ["r", "u", "f"]:
-                            prevChar = ""
                         # special python case triple quotes
                         triplets = ""
                         try:
