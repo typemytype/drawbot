@@ -80,9 +80,8 @@ jobs:
         GITHUB_REF: ${{ github.ref }}
       run: |
         source venv/bin/activate
-        # echo "::set-output name=body::$(python app/extract_changes.py)"
-        echo 'CHANGELOG<<EOF' >> $GITHUB_OUTPUT
-        echo "body=$(python app/extract_changes.py)" >> $GITHUB_OUTPUT
+        echo 'body<<EOF' >> $GITHUB_OUTPUT
+        echo "$(python app/extract_changes.py)" >> $GITHUB_OUTPUT
         echo 'EOF' >> $GITHUB_OUTPUT
 
     - name: Storing App Artifact
