@@ -789,7 +789,7 @@ class BezierPath(BasePen, SVGContextPropertyMixin, ContextPropertyMixin):
             contours += other._contoursForBooleanOperations()
         return booleanOperations.getIntersections(contours)
 
-    def expandStroke(self, width: float, lineCap: str = "round", lineJoin: str = "round", miterLimit: float = 10):
+    def expandStroke(self, width: float, lineCap: str = "round", lineJoin: str = "round", miterLimit: float = 10) -> Self:
         """
         Returns a new bezier path with an expanded stroke around the original path,
         with a given `width`. Note: the new path will not contain the original path.
@@ -804,9 +804,35 @@ class BezierPath(BasePen, SVGContextPropertyMixin, ContextPropertyMixin):
         if lineCap not in _LINECAPSTYLESMAP:
             raise DrawBotError("lineCap must be 'butt', 'square' or 'round'")
 
-        strokedCGPath = Quartz.CGPathCreateCopyByStrokingPath(self._getCGPath(), None, width, _LINECAPSTYLESMAP[lineCap], _LINEJOINSTYLESMAP[lineJoin], miterLimit)
+        strokedCGPath = Quartz.CGPathCreateCopyByStrokingPath(
+            self._getCGPath(),
+            None,
+            width,
+            _LINECAPSTYLESMAP[lineCap],
+            _LINEJOINSTYLESMAP[lineJoin],
+            miterLimit
+        )
         result = self.__class__()
         result._setCGPath(strokedCGPath)
+        return result
+
+    def dashStroke(self, *dash: float, offset: float = 0) -> Self:
+        """
+        Return a new bezier path with a dashed stroke of the original path,
+        with a given `dash`.
+
+        The following optional arguments are:
+        * `offset`: set the offset of the first dash.
+        """
+        dashedCGPath = Quartz.CGPathCreateCopyByDashingPath(
+            self._getCGPath(),
+            None,
+            offset,
+            dash,
+            len(dash)
+        )
+        result = self.__class__()
+        result._setCGPath(dashedCGPath)
         return result
 
     def __mod__(self, other: Self) -> Self:
