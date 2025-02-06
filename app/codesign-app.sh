@@ -38,6 +38,6 @@ codesign --verify --verbose=4 "$APP_PATH"
 
 echo "verify with spctl"
 # verify with spctl
- spctl --verbose=4 --raw --assess --type execute "$APP_PATH"
+spctl --verbose=4 --raw --assess --type execute "$APP_PATH"
 
 echo "Done codesign"
