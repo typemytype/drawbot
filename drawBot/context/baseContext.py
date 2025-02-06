@@ -835,7 +835,7 @@ class BezierPath(BasePen, SVGContextPropertyMixin, ContextPropertyMixin):
         result._setCGPath(dashedCGPath)
         return result
 
-    def __mod__(self, other) -> Self:
+    def __mod__(self, other: Self) -> Self:
         return self.difference(other)
 
     __rmod__ = __mod__
