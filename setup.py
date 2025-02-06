@@ -34,6 +34,7 @@ setup(name="drawBot",
     author_email="frederik@typemytype.com",
     url="http://drawbot.com",
     license="BSD",
+    python_requires=">=3.11",
     packages=[
         "drawBot",
         "drawBot.context",
