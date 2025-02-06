@@ -26,24 +26,26 @@ jobs:
         rm -fr *.p12
         security find-identity -v -p codesigning
 
+    - name: Checkout
+      uses: actions/checkout@v1
+
     - name: Set up Python 3.12
       run: |
         curl https://www.python.org/ftp/python/3.12.1/python-3.12.1-macos11.pkg --output pythonInstaller.pkg
         sudo installer -pkg pythonInstaller.pkg -target /
-
-    - name: Check python
-      run: |
-        python3 --version
-        python3 -c "import platform; print('macOS version:', platform.mac_ver()[0])"
-
-    - name: Checkout
-      uses: actions/checkout@v1
-
-    - name: Setup Virtual Environment
-      run: |
-        python3 -m venv venv
+        # Somehow using plain "python3" gives us the runner's homebrew Python,
+        # so let's be explicit about the path:
+        ourpython=/Library/Frameworks/Python.framework/Versions/3.12/bin/python3.12
+        ls -l $ourpython
+        $ourpython --version
+        $ourpython -c "import platform; print('platform:', platform.platform())"
+        $ourpython -c "import platform; print('macOS version:', platform.mac_ver()[0])"
+        $ourpython -m venv venv
         source venv/bin/activate
+        python -c "print('venv')"
         python -c "import sys; print('\n'.join(sys.path))"
+        python -c "import platform; print('platform:', platform.platform())"
+        python -c "import platform; print('macOS version:', platform.mac_ver()[0])"
 
     - name: Install dependencies
       run: |
