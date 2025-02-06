@@ -1,4 +1,5 @@
-ImageObject
-===========
+Image Objects
+=============
 
-.. autofunction::  drawBot.ImageObject
+.. autoclass::  drawBot.ImageObject
+    :members:

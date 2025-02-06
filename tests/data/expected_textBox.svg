@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg width="200" height="400" viewBox="0 0 200 400" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
- <path d="M10,10 l180,0 l0,180 l-180,0 Z M10,10" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,400)"/>
+ <path d="M10,10 l180,0 l0,180 l-180,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,400)"/>
  <text text-anchor="start" transform="matrix(1,0,0,1,10,-10)">
   <tspan fill="rgb(255,255,255)" font-family="LucidaGrande" font-size="30" x="0" y="249">
    Hello there,
@@ -12,7 +12,7 @@
    dear reader.
   </tspan>
  </text>
- <path d="M190,190 l-180,0 l0,-180 l180,0 Z M190,190" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,200)"/>
+ <path d="M10,10 l180,0 l0,180 l-180,0 Z" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,200)"/>
  <text text-anchor="start" transform="matrix(1,0,0,1,10,-210)">
   <tspan fill="rgb(255,255,255)" font-family="LucidaGrande" font-size="30" x="0" y="249">
    Hello there,

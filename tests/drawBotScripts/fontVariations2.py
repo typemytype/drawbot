@@ -1,8 +1,8 @@
-from drawBot import *
+import drawBot
 
-size(200, 200)
+drawBot.size(200, 200)
 
-s = FormattedString()
+s = drawBot.FormattedString()
 
 s.font("Skia")
 s.fontSize(30)
@@ -22,4 +22,4 @@ s.append("Hello Q\n", fontVariations=dict(wdth=0.6, resetVariations=True))
 s.fontVariations(wght=2.8, resetVariations=False)
 s.append("Hello Q\n")
 
-textBox(s, (10, 0, 190, 193))
+drawBot.textBox(s, (10, 0, 190, 193))
