@@ -795,6 +795,7 @@ class BezierPath(BasePen, SVGContextPropertyMixin, ContextPropertyMixin):
         with a given `width`. Note: the new path will not contain the original path.
 
         The following optional arguments are available with respect to line caps and joins:
+
         * `lineCap`: Possible values are `"butt"`, `"square"` or `"round"`
         * `lineJoin`: Possible values are `"bevel"`, `"miter"` or `"round"`
         * `miterLimit`: The miter limit to use for `"miter"` lineJoin option
@@ -822,6 +823,7 @@ class BezierPath(BasePen, SVGContextPropertyMixin, ContextPropertyMixin):
         with a given `dash`.
 
         The following optional arguments are:
+
         * `offset`: set the offset of the first dash.
         """
         dashedCGPath = Quartz.CGPathCreateCopyByDashingPath(
