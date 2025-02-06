@@ -2,11 +2,11 @@
 # It ensures that rgb values specified in fill() end up in image output without
 # being mangled by a color space (within 8-bit resulution).
 
-from drawBot import *
+import drawBot
 from PIL import Image
 
 canvasSize = 400
-size(canvasSize, canvasSize)
+drawBot.size(canvasSize, canvasSize)
 
 # colorSpace("sRGB")
 # colorSpace("genericRGB")
@@ -15,7 +15,7 @@ size(canvasSize, canvasSize)
 bands = 4
 bandWidth = canvasSize / bands
 
-fontSize(10)
+drawBot.fontSize(10)
 
 for i in range(bands):
     x = i * bandWidth
@@ -24,13 +24,13 @@ for i in range(bands):
         r = i / bands
         g = j / bands
         b = 0.5
-        fill(r, g, b)
-        rect(x, y, bandWidth, bandWidth)
-        fill(0)
-        text("%s,%s,%s" % (r, g, b), (x + 3, y + 5))
+        drawBot.fill(r, g, b)
+        drawBot.rect(x, y, bandWidth, bandWidth)
+        drawBot.fill(0)
+        drawBot.text("%s,%s,%s" % (r, g, b), (x + 3, y + 5))
 
 fn = "../tempTestData/tmp_imagePixelColor.png"
-saveImage(fn)
+drawBot.saveImage(fn)
 
 im = Image.open(fn)
 
@@ -38,7 +38,7 @@ for i in range(bands):
     x = (i + 0.5) * bandWidth
     for j in range(bands):
         y = (j + 0.5) * bandWidth
-        r, g, b, a = imagePixelColor(fn, (x, y))
+        r, g, b, a = drawBot.imagePixelColor(fn, (x, y))
         print(" CG:", round(r, 4), round(g, 4), round(b, 4))
         r, g, b, a = im.getpixel((x, canvasSize - y))
         print("PIL:", round(r/255, 4), round(g/255, 4), round(b/255, 4))

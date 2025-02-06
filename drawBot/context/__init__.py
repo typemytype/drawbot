@@ -46,7 +46,7 @@ def getContextOptions():
     return options
 
 
-def getFileExtensions():
+def getFileExtensions() -> list[str]:
     extensions = []
     for context in allContexts:
         for ext in context.fileExtensions:
@@ -55,7 +55,7 @@ def getFileExtensions():
     return extensions
 
 
-def getContextOptionsDocs(formatter="* `%s`: %s"):
+def getContextOptionsDocs(formatter="* `%s`: %s") -> list[str]:
     docs = []
     for context in allContexts:
         if context.saveImageOptions:

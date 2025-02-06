@@ -38,7 +38,7 @@ def retrieveCheckEventQueueForUserCancelFromCarbon():
 cancelLock = threading.Lock()
 
 
-class StdOutput(object):
+class StdOutput:
 
     def __init__(self, output, isError=False, outputView=None):
         self.data = output
@@ -78,7 +78,7 @@ class StdOutput(object):
         pass
 
 
-class _Helper(object):
+class _Helper:
     """
     Define the builtin 'help'.
     This is a wrapper around pydoc.help (with a twist).

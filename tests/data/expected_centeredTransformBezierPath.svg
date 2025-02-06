@@ -5,5 +5,5 @@
  <path d="M125,25 l50,0 l0,50 l-50,0 Z M125,25" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,200)"/>
  <path d="M125,16.18 l50,8.82 l8.82,50 l-50,-8.82 Z M125,16.18" fill="rgb(255,0,0)" fill-opacity="0.5" transform="matrix(1,0,0,-1,0,200)"/>
  <path d="M25,125 l50,0 l0,50 l-50,0 Z M25,125" fill="rgb(0,0,0)" transform="matrix(1,0,0,-1,0,200)"/>
- <path d="M25,105.0 l60,0 l0,70.0 l-60,0 Z M25,105.0" fill="rgb(255,0,0)" fill-opacity="0.5" transform="matrix(1,0,0,-1,0,200)"/>
+ <path d="M25,105.0 l60,0 l0,70 l-60,0 Z M25,105.0" fill="rgb(255,0,0)" fill-opacity="0.5" transform="matrix(1,0,0,-1,0,200)"/>
 </svg>

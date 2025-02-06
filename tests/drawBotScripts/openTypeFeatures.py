@@ -1,28 +1,28 @@
-from drawBot import *
+import drawBot
 
-size(200, 200)
+drawBot.size(200, 200)
 
 # ['liga', 'dlig', 'tnum', 'pnum', 'titl', 'onum', 'lnum']
 
-font("HoeflerText-Regular")
-fontSize(20)
-print(listOpenTypeFeatures())
+drawBot.font("HoeflerText-Regular")
+drawBot.fontSize(20)
+print(drawBot.listOpenTypeFeatures())
 
-text("Hoefler Fact #123", (20, 170))
+drawBot.text("Hoefler Fact #123", (20, 170))
 
-openTypeFeatures(None)
+drawBot.openTypeFeatures(None)
 
-openTypeFeatures(dlig=True)
-text("Hoefler Fact #123", (20, 140))
+drawBot.openTypeFeatures(dlig=True)
+drawBot.text("Hoefler Fact #123", (20, 140))
 
-openTypeFeatures(lnum=True)
-text("Hoefler Fact #123", (20, 110))
+drawBot.openTypeFeatures(lnum=True)
+drawBot.text("Hoefler Fact #123", (20, 110))
 
-openTypeFeatures(liga=False)
-text("Hoefler Fact #123", (20, 80))
+drawBot.openTypeFeatures(liga=False)
+drawBot.text("Hoefler Fact #123", (20, 80))
 
-openTypeFeatures(liga=True, resetFeatures=False)
-text("Hoefler Fact #123", (20, 50))
+drawBot.openTypeFeatures(liga=True, resetFeatures=False)
+drawBot.text("Hoefler Fact #123", (20, 50))
 
-openTypeFeatures(liga=False, resetFeatures=True)
-text("Hoefler Fact #123", (20, 20))
+drawBot.openTypeFeatures(liga=False, resetFeatures=True)
+drawBot.text("Hoefler Fact #123", (20, 20))

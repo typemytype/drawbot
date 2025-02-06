@@ -8,7 +8,7 @@ import AppKit
 import PIL
 from drawBot.context.tools.gifTools import gifFrameCount
 from drawBot.misc import DrawBotError
-from testSupport import DrawBotBaseTest, StdOutCollector, TempFile, TempFolder, randomSeed, readData, testDataDir
+from testSupport import DrawBotBaseTest, StdOutCollector, TempFile, TempFolder, randomSeed, readData, testDataDir, tempTestDataDir
 
 
 class ExportTest(DrawBotBaseTest):
@@ -369,9 +369,10 @@ class ExportTest(DrawBotBaseTest):
         drawBot.fallbackFont("Courier")
         drawBot.font("Times")
         drawBot.text("a", (10, 10))
-        with TempFile(suffix=".svg") as tmp:
-            drawBot.saveImage(tmp.path)
-            self.assertEqual(readData(tmp.path), readData(expectedPath), "Files %r and %s are not the same" % (tmp.path, expectedPath))
+
+        path = os.path.join(tempTestDataDir, "svgSaveFallback.svg")
+        drawBot.saveImage(path)
+        self.assertEqual(readData(path), readData(expectedPath), "Files %r and %s are not the same" % (path, expectedPath))
 
     def test_linkURL_svg(self):
         expectedPath = os.path.join(testDataDir, "expected_svgLinkURL.svg")
@@ -379,9 +380,10 @@ class ExportTest(DrawBotBaseTest):
         drawBot.newPage(200, 200)
         drawBot.rect(10, 10, 20, 20)
         drawBot.linkURL("http://drawbot.com", (10, 10, 20, 20))
-        with TempFile(suffix=".svg") as tmp:
-            drawBot.saveImage(tmp.path)
-            self.assertEqual(readData(tmp.path), readData(expectedPath), "Files %r and %s are not the same" % (tmp.path, expectedPath))
+
+        path = os.path.join(tempTestDataDir, "svgLinkURL.svg")
+        drawBot.saveImage(path)
+        self.assertEqual(readData(path), readData(expectedPath), "Files %r and %s are not the same" % (path, expectedPath))
 
     def test_formattedStringURL_svg(self):
         expectedPath = os.path.join(testDataDir, "expected_formattedStringURL.svg")
@@ -390,9 +392,10 @@ class ExportTest(DrawBotBaseTest):
         drawBot.underline("single")
         drawBot.url("http://drawbot.com")
         drawBot.text("foo", (10, 10))
-        with TempFile(suffix=".svg") as tmp:
-            drawBot.saveImage(tmp.path)
-            self.assertEqual(readData(tmp.path), readData(expectedPath), "Files %r and %s are not the same" % (tmp.path, expectedPath))
+
+        path = os.path.join(tempTestDataDir, "formattedStringURL.svg")
+        drawBot.saveImage(path)
+        self.assertEqual(readData(path), readData(expectedPath), "Files %r and %s are not the same" % (path, expectedPath))
 
 
 if __name__ == '__main__':
