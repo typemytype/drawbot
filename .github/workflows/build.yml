@@ -65,7 +65,7 @@ jobs:
         python setupApp.py py2app --dmg --codesign "${{ secrets.CODESIGN_NAME }}" --notarizedeveloper "${{ secrets.NOTARIZE_DEVELOPER }}" --notarizeTeamID "${{ secrets.NOTARIZE_TEAMID }}" --notarizePassword "${{ secrets.NOTARIZE_PASSWORD }}"
 
     - name: Upload Notarization Log
-      uses: actions/upload-artifact@v1
+      uses: actions/upload-artifact@v4
       if: always()
       with:
         name: notarize_log.txt
