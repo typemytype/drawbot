@@ -16,7 +16,7 @@
 - Adding support for `fontSubpixelQuantization` while exporting to an image.
 - Add support for `writingDirection()`, `None`, `'LTR'`, `'RTL'`.
 - Adding type annotations!! thanks Roberto!!
-- Improve `ImageObject`, thanks Roverto!!
+- Improve `ImageObject`, thanks Roberto!!
 - Fixing code editor when using f-strings.
 - Adding `bezierPath.dashStroke(10, 2, 10, offset=0)` to dash a stroke.
 
