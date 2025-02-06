@@ -1,6 +1,8 @@
 # Changelog For DrawBot
 
-## [3.131] 2024-07-...
+## [3.132] 2025-02-...
+
+## [3.131] 2025-02-06
 
 - UNIVERSAL BUILD !!!
 - Jumping to python 3.12 !!!
@@ -13,6 +15,10 @@
 - Adding support for `lineDash(..., offset=10)`.
 - Adding support for `fontSubpixelQuantization` while exporting to an image.
 - Add support for `writingDirection()`, `None`, `'LTR'`, `'RTL'`.
+- Adding type annotations!! thanks Roberto!!
+- Improve `ImageObject`, thanks Roverto!!
+- Fixing code editor when using f-strings.
+- Adding `bezierPath.dashStroke(10, 2, 10, offset=0)` to dash a stroke.
 
 ## [3.130] 2023-02-20
 
