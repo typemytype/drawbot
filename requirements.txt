@@ -1,4 +1,5 @@
-setuptools>=45.2.0
+# https://stackoverflow.com/questions/78859635/py2app-error-17-file-exists-when-running-py2app-for-the-first-time
+setuptools==70.3.0
 packaging
 pyobjc
 corefoundationasyncio
