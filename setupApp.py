@@ -315,11 +315,24 @@ if buildDMG or ftpHost is not None:
     tempDmgName = "%s.tmp.dmg" % appName
 
     # add a link to the Applications
-    os.system("ln -s /Applications %s" % imgLocation)
 
-    os.system("hdiutil create -fs HFS+ -size 800m -srcfolder \"%s\" -volname %s -format UDZO \"%s\"" % (imgLocation, appName, os.path.join(distLocation, tempDmgName)))
+    subprocess.run([
+        "ln", "-s", "/Applications", imgLocation
+    ], check=True)
 
-    os.system("hdiutil convert -format UDZO -imagekey zlib-level=9 -o \"%s\" \"%s\"" % (dmgLocation, os.path.join(distLocation, tempDmgName)))
+    subprocess.run([
+        "hdiutil", "create", "-fs", "HFS+",
+        "-size", "400m",
+        "-srcfolder", imgLocation,
+        "-volname", appName,
+        "-format", "UDZO",
+        os.path.join(distLocation, tempDmgName)
+    ], check=True)
+
+    subprocess.run([
+        "hdiutil", "convert", "-format", "UDZO", "-imagekey", "zlib-level=9",
+        "-o", dmgLocation, os.path.join(distLocation, tempDmgName)
+    ], check=True)
 
     os.remove(os.path.join(distLocation, tempDmgName))
 
