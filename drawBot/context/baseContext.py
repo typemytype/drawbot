@@ -485,6 +485,9 @@ class BezierPath(BasePen, SVGContextPropertyMixin, ContextPropertyMixin):
         path, (x, y) = context._getPathForFrameSetter(box)
         attributedString = context.attributedString(txt, align)
 
+        if hyphenation:
+            attributedString = context.hyphenateAttributedString(attributedString, path)
+
         setter = CoreText.CTFramesetterCreateWithAttributedString(attributedString)
         frame = CoreText.CTFramesetterCreateFrame(setter, (0, 0), path, None)
         ctLines = CoreText.CTFrameGetLines(frame)
