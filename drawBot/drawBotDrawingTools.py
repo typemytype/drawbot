@@ -4,7 +4,9 @@ import CoreText # type: ignore
 import Quartz # type: ignore
 import math
 import os
+import tempfile
 import random
+import time
 from collections import namedtuple
 from contextlib import contextmanager
 
@@ -489,6 +491,60 @@ class DrawBotDrawingTool:
         context = DrawBotContext()
         self._drawInContext(context)
         return context.getNSPDFDocument()
+
+    def shareImage(self, format="pdf", service="airdrop", **kwargs):
+        """
+        Share the canvas to a service with a specified format.
+
+        As default the `format` is `pdf`, any suffix drawBot supports is possible.
+
+        `service` options are `airdrop`, `mail` or `message`.
+
+        .. downloadcode:: shareImage.py
+
+            # set A4 page size
+            newPage(200, 200)
+            # draw something
+            text("Foo, bar", (10, 10))
+            # share it over airdrop
+            shareImage('pdf', service="airdrop")
+        """
+        class SharingServiceDelegate:
+
+            def __init__(self, path):
+                self.path = path
+
+            def _removePath(self):
+                if os.path.exists(self.path):
+                    os.remove(self.path)
+
+            def sharingService_didShareItems_(self, sharingService, items):
+                # wait a sec to be sure the serice (like mail) has started up
+                # and collected all the assets from disk
+                time.sleep(1)
+                self._removePath()
+
+            def sharingService_didFailToShareItems_error_(self, sharingService, items, error):
+                self._removePath()
+
+        serviceMap = dict(
+            airdrop=AppKit.NSSharingServiceNameSendViaAirDrop,
+            mail=AppKit.NSSharingServiceNameComposeEmail,
+            message=AppKit.NSSharingServiceNameComposeMessage,
+        )
+        if service not in serviceMap:
+            raise DrawBotError(f"service must be {', '.join(serviceMap.keys())}")
+
+        path = tempfile.mkstemp(suffix=f".{format}")[1]
+        self.saveImage(path, **kwargs)
+
+        if os.path.exists(path):
+            # only pop up the sharing service when saveImage is succes full
+            sharingService = AppKit.NSSharingService.sharingServiceNamed_(serviceMap[service])
+            sharingService.setDelegate_(SharingServiceDelegate(path))
+            sharingService.performWithItems_([
+                AppKit.NSURL.fileURLWithPath_(path)
+            ])
 
     # graphics state
 
