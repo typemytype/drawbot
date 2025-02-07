@@ -6,7 +6,7 @@ Download
 > `Download DrawBot <https://github.com/typemytype/drawbot/releases/latest/download/DrawBot.dmg>`_
 
 
-requirements: osX 10.9+
+requirements: osX 10.12+
 
 Older Downloads
 ---------------
