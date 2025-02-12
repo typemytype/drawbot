@@ -373,7 +373,15 @@ excludeFilterNames = [
     "CIConvolutionRGB9Vertical",
     "CIConvolutionRGB9Horizontal",
     "CIConvolutionRGB5X5",
-    "CIConvolutionRGB3X3"
+    "CIConvolutionRGB3X3",
+    "CIAreaAlphaWeightedHistogram",
+    "CIAreaBoundsRed",
+
+    "CIDistanceGradientFromRedMask",  # macos15+
+    "CIMaximumScaleTransform",  # macos15+
+    "CIToneCurve",  # macos15+
+    "CIToneMapHeadroom"  # macos15+
+
 
 ]
 

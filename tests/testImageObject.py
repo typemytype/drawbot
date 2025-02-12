@@ -31,19 +31,9 @@ class ImageObjectTest(DrawBotBaseTest):
         img.affineTile(transform=(0.4, 0.0, 0.0, 0.4, 0.0, 0.0))
         img._applyFilters()
 
-    def test_areaAlphaWeightedHistogram(self):
-        img = drawBot.ImageObject(sourceImagePath)
-        img.areaAlphaWeightedHistogram(extent=(0.0, 0.0, 640.0, 80.0), scale=1.0, count=64.0)
-        img._applyFilters()
-
     def test_areaAverage(self):
         img = drawBot.ImageObject(sourceImagePath)
         img.areaAverage(extent=(0.0, 0.0, 640.0, 80.0))
-        img._applyFilters()
-
-    def test_areaBoundsRed(self):
-        img = drawBot.ImageObject(sourceImagePath)
-        img.areaBoundsRed(extent=(0.0, 0.0, 640.0, 80.0))
         img._applyFilters()
 
     def test_areaHistogram(self):
@@ -631,11 +621,6 @@ class ImageObjectTest(DrawBotBaseTest):
         img.maximumCompositing(backgroundImage=sampleImage)
         img._applyFilters()
 
-    def test_maximumScaleTransform(self):
-        img = drawBot.ImageObject(sourceImagePath)
-        img.maximumScaleTransform(scale=1.0, aspectRatio=1.0)
-        img._applyFilters()
-
     def test_meshGenerator(self):
         img = drawBot.ImageObject(sourceImagePath)
         img.meshGenerator(size=(100, 100), mesh=None, width=1.5, color=(1.0, 1.0, 1.0, 1.0))
@@ -1019,16 +1004,6 @@ class ImageObjectTest(DrawBotBaseTest):
     def test_thermal(self):
         img = drawBot.ImageObject(sourceImagePath)
         img.thermal()
-        img._applyFilters()
-
-    def test_toneCurve(self):
-        img = drawBot.ImageObject(sourceImagePath)
-        img.toneCurve(point0=(0.0, 0.0), point1=(0.25, 0.25), point2=(0.5, 0.5), point3=(0.75, 0.75), point4=(1.0, 1.0), extrapolate=False)
-        img._applyFilters()
-
-    def test_toneMapHeadroom(self):
-        img = drawBot.ImageObject(sourceImagePath)
-        img.toneMapHeadroom(sourceHeadroom=None, targetHeadroom=1.0)
         img._applyFilters()
 
     def test_torusLensDistortion(self):

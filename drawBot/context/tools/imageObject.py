@@ -355,28 +355,6 @@ class ImageObject:
         )
         self._addFilter(filterDict)
     
-    def areaAlphaWeightedHistogram(self, extent: BoundingBox = (0.0, 0.0, 640.0, 80.0), scale: float = 1.0, count: float = 64.0):
-        """
-        Calculates alpha-weighted histograms of the unpremultiplied R, G, B channels for the specified area of an image. The output image is a one pixel tall image containing the histogram data for the RGB channels.
-        
-        **Arguments:**
-        
-        `extent` a tuple (x, y, w, h). A rectangle that defines the extent of the effect.
-        `scale` a float. The scale value to use for the histogram values. If the scale is 1.0 and the image is opaque, then the bins in the resulting image will add up to 1.0.
-        `count` a float. The number of bins for the histogram. This value will determine the width of the output image.
-        """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        filterDict = dict(
-            name='CIAreaAlphaWeightedHistogram',
-            attributes=dict(
-                inputExtent=AppKit.CIVector.vectorWithValues_count_(extent, 4),
-                inputScale=scale,
-                inputCount=count
-            )
-        )
-        self._addFilter(filterDict)
-    
     def areaAverage(self, extent: BoundingBox = (0.0, 0.0, 640.0, 80.0)):
         """
         Calculates the average color for the specified area in an image, returning the result in a pixel.
@@ -389,24 +367,6 @@ class ImageObject:
         # please, do not attempt to edit it manually as it will be overriden in the future
         filterDict = dict(
             name='CIAreaAverage',
-            attributes=dict(
-                inputExtent=AppKit.CIVector.vectorWithValues_count_(extent, 4)
-            )
-        )
-        self._addFilter(filterDict)
-    
-    def areaBoundsRed(self, extent: BoundingBox = (0.0, 0.0, 640.0, 80.0)):
-        """
-        Calculates the approximate bounding box of pixels within the specified area of an image where the red component values are non-zero. The result is 1x1 pixel image where the RGBA values contain the normalized X,Y,W,H dimensions of the bounding box.
-        
-        **Arguments:**
-        
-        `extent` a tuple (x, y, w, h). A rectangle that specifies the subregion of the image that you want to process.
-        """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        filterDict = dict(
-            name='CIAreaBoundsRed',
             attributes=dict(
                 inputExtent=AppKit.CIVector.vectorWithValues_count_(extent, 4)
             )
@@ -2821,26 +2781,6 @@ class ImageObject:
         )
         self._addFilter(filterDict)
     
-    def maximumScaleTransform(self, scale: float = 1.0, aspectRatio: float = 1.0):
-        """
-        Produces a scaled version of a source image that uses the maximum of neighboring pixels instead of linear averaging.
-        
-        **Arguments:**
-        
-        `scale` a float. The scaling factor to use on the image. Values less than 1.0 scale down the images. Values greater than 1.0 scale up the image.
-        `aspectRatio` a float. The additional horizontal scaling factor to use on the image.
-        """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        filterDict = dict(
-            name='CIMaximumScaleTransform',
-            attributes=dict(
-                inputScale=scale,
-                inputAspectRatio=aspectRatio
-            )
-        )
-        self._addFilter(filterDict)
-    
     def meshGenerator(self, size: Size, mesh, width: float = 1.5, color: RGBAColorTuple = (1.0, 1.0, 1.0, 1.0)):
         """
         Generates a mesh from an array of line segments.
@@ -4486,54 +4426,6 @@ class ImageObject:
         # please, do not attempt to edit it manually as it will be overriden in the future
         filterDict = dict(
             name='CIThermal',
-        )
-        self._addFilter(filterDict)
-    
-    def toneCurve(self, point0: Point = (0.0, 0.0), point1: Point = (0.25, 0.25), point2: Point = (0.5, 0.5), point3: Point = (0.75, 0.75), point4: Point = (1.0, 1.0), extrapolate: bool = False):
-        """
-        Adjusts tone response of the R, G, and B channels of an image. The input points are five x,y values that are interpolated using a spline curve. The curve is applied in a perceptual (gamma 2) version of the working space.
-        
-        **Arguments:**
-        
-        `point0` a tuple (x, y). 
-        `point1` a tuple (x, y). 
-        `point2` a tuple (x, y). 
-        `point3` a tuple (x, y). 
-        `point4` a tuple (x, y). 
-        `extrapolate` a float. If true, then the color effect will be extrapolated if the input image contains RGB component values outside the range 0.0 to 1.0.
-        """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        filterDict = dict(
-            name='CIToneCurve',
-            attributes=dict(
-                inputPoint0=AppKit.CIVector.vectorWithValues_count_(point0, 2),
-                inputPoint1=AppKit.CIVector.vectorWithValues_count_(point1, 2),
-                inputPoint2=AppKit.CIVector.vectorWithValues_count_(point2, 2),
-                inputPoint3=AppKit.CIVector.vectorWithValues_count_(point3, 2),
-                inputPoint4=AppKit.CIVector.vectorWithValues_count_(point4, 2),
-                inputExtrapolate=extrapolate
-            )
-        )
-        self._addFilter(filterDict)
-    
-    def toneMapHeadroom(self, sourceHeadroom, targetHeadroom: float = 1.0):
-        """
-        Apply a global tone curve to an image that reduces colors from a source headroom value to a target headroom value.
-        
-        **Arguments:**
-        
-        `sourceHeadroom` a float. Specifies the headroom of the input image.
-        `targetHeadroom` a float. Specifies the target headroom of the output image.
-        """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        filterDict = dict(
-            name='CIToneMapHeadroom',
-            attributes=dict(
-                inputSourceHeadroom=sourceHeadroom,
-                inputTargetHeadroom=targetHeadroom
-            )
         )
         self._addFilter(filterDict)
     
