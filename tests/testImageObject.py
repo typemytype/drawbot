@@ -3,8 +3,8 @@ import sys
 import drawBot
 from testSupport import DrawBotBaseTest
 
-sourceImagePath = "data/drawBot144.png"
-sampleImage = drawBot.ImageObject("data/drawBot.png")
+sourceImagePath = "tests/data/drawBot144.png"
+sampleImage = drawBot.ImageObject("tests/data/drawBot.png")
 sampleFormattedString = drawBot.FormattedString("Hello World")
 sampleText = drawBot.FormattedString("Hello World")
 
