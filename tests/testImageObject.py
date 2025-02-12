@@ -336,11 +336,6 @@ class ImageObjectTest(DrawBotBaseTest):
         img.dissolveTransition(targetImage=sampleImage, time=0.0)
         img._applyFilters()
 
-    def test_distanceGradientFromRedMask(self):
-        img = drawBot.ImageObject(sourceImagePath)
-        img.distanceGradientFromRedMask(maximumDistance=10.0)
-        img._applyFilters()
-
     def test_dither(self):
         img = drawBot.ImageObject(sourceImagePath)
         img.dither(intensity=0.1)

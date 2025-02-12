@@ -1594,24 +1594,6 @@ class ImageObject:
         )
         self._addFilter(filterDict)
     
-    def distanceGradientFromRedMask(self, maximumDistance: float = 10.0):
-        """
-        Produces an infinite image where the red channel contains the distance in pixels from each pixel to the mask.
-        
-        **Arguments:**
-        
-        `maximumDistance` a float. Determines the maximum distance to the mask that can be measured. Distances between zero and the maximum will be normalized to zero and one.
-        """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        filterDict = dict(
-            name='CIDistanceGradientFromRedMask',
-            attributes=dict(
-                inputMaximumDistance=maximumDistance
-            )
-        )
-        self._addFilter(filterDict)
-    
     def dither(self, intensity: float = 0.1):
         """
         Apply dithering to an image. This operation is usually performed in a perceptual color space.
