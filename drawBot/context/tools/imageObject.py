@@ -235,8 +235,12 @@ class ImageObject:
                 w, h = filterDict.get("size", extent.size)
                 dummy = AppKit.NSImage.alloc().initWithSize_((w, h))
 
-                scaleX = w / extent.size.width
-                scaleY = h / extent.size.height
+                scaleX = 1
+                if extent.size.width != 0:
+                    scaleX = w / extent.size.width
+                scaleY = 1
+                if extent.size.height != 0:
+                    scaleY = h / extent.size.height
                 dummy.lockFocus()
                 ctx = AppKit.NSGraphicsContext.currentContext()
                 ctx.setShouldAntialias_(False)
@@ -288,11 +292,11 @@ class ImageObject:
         filterDict = dict(
             name='CIAccordionFoldTransition',
             attributes=dict(
-                targetImage=targetImage,
-                bottomHeight=bottomHeight,
-                numberOfFolds=numberOfFolds,
-                foldShadowAmount=foldShadowAmount,
-                time=time
+                inputTargetImage=targetImage._ciImage(),
+                inputBottomHeight=bottomHeight,
+                inputNumberOfFolds=numberOfFolds,
+                inputFoldShadowAmount=foldShadowAmount,
+                inputTime=time
             )
         )
         self._addFilter(filterDict)
@@ -310,7 +314,7 @@ class ImageObject:
         filterDict = dict(
             name='CIAdditionCompositing',
             attributes=dict(
-                backgroundImage=backgroundImage
+                inputBackgroundImage=backgroundImage._ciImage()
             )
         )
         self._addFilter(filterDict)
@@ -328,7 +332,7 @@ class ImageObject:
         filterDict = dict(
             name='CIAffineClamp',
             attributes=dict(
-                transform=transform
+                inputTransform=transform
             )
         )
         self._addFilter(filterDict)
@@ -346,7 +350,29 @@ class ImageObject:
         filterDict = dict(
             name='CIAffineTile',
             attributes=dict(
-                transform=transform
+                inputTransform=transform
+            )
+        )
+        self._addFilter(filterDict)
+    
+    def areaAlphaWeightedHistogram(self, extent: BoundingBox = (0.0, 0.0, 640.0, 80.0), scale: float = 1.0, count: float = 64.0):
+        """
+        Calculates alpha-weighted histograms of the unpremultiplied R, G, B channels for the specified area of an image. The output image is a one pixel tall image containing the histogram data for the RGB channels.
+        
+        **Arguments:**
+        
+        `extent` a tuple (x, y, w, h). A rectangle that defines the extent of the effect.
+        `scale` a float. The scale value to use for the histogram values. If the scale is 1.0 and the image is opaque, then the bins in the resulting image will add up to 1.0.
+        `count` a float. The number of bins for the histogram. This value will determine the width of the output image.
+        """
+        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
+        # please, do not attempt to edit it manually as it will be overriden in the future
+        filterDict = dict(
+            name='CIAreaAlphaWeightedHistogram',
+            attributes=dict(
+                inputExtent=AppKit.CIVector.vectorWithValues_count_(extent, 4),
+                inputScale=scale,
+                inputCount=count
             )
         )
         self._addFilter(filterDict)
@@ -364,7 +390,25 @@ class ImageObject:
         filterDict = dict(
             name='CIAreaAverage',
             attributes=dict(
-                extent=AppKit.CIVector.vectorWithValues_count_(extent, 4)
+                inputExtent=AppKit.CIVector.vectorWithValues_count_(extent, 4)
+            )
+        )
+        self._addFilter(filterDict)
+    
+    def areaBoundsRed(self, extent: BoundingBox = (0.0, 0.0, 640.0, 80.0)):
+        """
+        Calculates the approximate bounding box of pixels within the specified area of an image where the red component values are non-zero. The result is 1x1 pixel image where the RGBA values contain the normalized X,Y,W,H dimensions of the bounding box.
+        
+        **Arguments:**
+        
+        `extent` a tuple (x, y, w, h). A rectangle that specifies the subregion of the image that you want to process.
+        """
+        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
+        # please, do not attempt to edit it manually as it will be overriden in the future
+        filterDict = dict(
+            name='CIAreaBoundsRed',
+            attributes=dict(
+                inputExtent=AppKit.CIVector.vectorWithValues_count_(extent, 4)
             )
         )
         self._addFilter(filterDict)
@@ -384,9 +428,9 @@ class ImageObject:
         filterDict = dict(
             name='CIAreaHistogram',
             attributes=dict(
-                extent=AppKit.CIVector.vectorWithValues_count_(extent, 4),
-                scale=scale,
-                count=count
+                inputExtent=AppKit.CIVector.vectorWithValues_count_(extent, 4),
+                inputScale=scale,
+                inputCount=count
             )
         )
         self._addFilter(filterDict)
@@ -408,11 +452,11 @@ class ImageObject:
         filterDict = dict(
             name='CIAreaLogarithmicHistogram',
             attributes=dict(
-                extent=AppKit.CIVector.vectorWithValues_count_(extent, 4),
-                scale=scale,
-                count=count,
-                minimumStop=minimumStop,
-                maximumStop=maximumStop
+                inputExtent=AppKit.CIVector.vectorWithValues_count_(extent, 4),
+                inputScale=scale,
+                inputCount=count,
+                inputMinimumStop=minimumStop,
+                inputMaximumStop=maximumStop
             )
         )
         self._addFilter(filterDict)
@@ -430,7 +474,7 @@ class ImageObject:
         filterDict = dict(
             name='CIAreaMaximum',
             attributes=dict(
-                extent=AppKit.CIVector.vectorWithValues_count_(extent, 4)
+                inputExtent=AppKit.CIVector.vectorWithValues_count_(extent, 4)
             )
         )
         self._addFilter(filterDict)
@@ -448,7 +492,7 @@ class ImageObject:
         filterDict = dict(
             name='CIAreaMaximumAlpha',
             attributes=dict(
-                extent=AppKit.CIVector.vectorWithValues_count_(extent, 4)
+                inputExtent=AppKit.CIVector.vectorWithValues_count_(extent, 4)
             )
         )
         self._addFilter(filterDict)
@@ -466,7 +510,7 @@ class ImageObject:
         filterDict = dict(
             name='CIAreaMinimum',
             attributes=dict(
-                extent=AppKit.CIVector.vectorWithValues_count_(extent, 4)
+                inputExtent=AppKit.CIVector.vectorWithValues_count_(extent, 4)
             )
         )
         self._addFilter(filterDict)
@@ -484,7 +528,7 @@ class ImageObject:
         filterDict = dict(
             name='CIAreaMinimumAlpha',
             attributes=dict(
-                extent=AppKit.CIVector.vectorWithValues_count_(extent, 4)
+                inputExtent=AppKit.CIVector.vectorWithValues_count_(extent, 4)
             )
         )
         self._addFilter(filterDict)
@@ -502,7 +546,7 @@ class ImageObject:
         filterDict = dict(
             name='CIAreaMinMax',
             attributes=dict(
-                extent=AppKit.CIVector.vectorWithValues_count_(extent, 4)
+                inputExtent=AppKit.CIVector.vectorWithValues_count_(extent, 4)
             )
         )
         self._addFilter(filterDict)
@@ -520,34 +564,9 @@ class ImageObject:
         filterDict = dict(
             name='CIAreaMinMaxRed',
             attributes=dict(
-                extent=AppKit.CIVector.vectorWithValues_count_(extent, 4)
+                inputExtent=AppKit.CIVector.vectorWithValues_count_(extent, 4)
             )
         )
-        self._addFilter(filterDict)
-    
-    def attributedTextImageGenerator(self, size: Size, text: FormattedString, scaleFactor: float = 1.0, padding: float = 0.0):
-        """
-        Generate an image attributed string.
-        
-        **Arguments:**
-        
-        `size` a tuple (w, h)
-        `text` a `FormattedString`. The attributed text to render.
-        `scaleFactor` a float. The scale of the font to use for the generated text.
-        `padding` a float. A value for an additional number of pixels to pad around the text’s bounding box.
-        """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        filterDict = dict(
-            name='CIAttributedTextImageGenerator',
-            attributes=dict(
-                text=text.getNSObject(),
-                scaleFactor=scaleFactor,
-                padding=padding
-            ),
-            size=size,
-            isGenerator=True
-        ),
         self._addFilter(filterDict)
     
     def aztecCodeGenerator(self, size: Size, message: str, layers, compactStyle, correctionLevel: float = 23.0):
@@ -567,15 +586,15 @@ class ImageObject:
         filterDict = dict(
             name='CIAztecCodeGenerator',
             attributes=dict(
-                message=AppKit.NSData.dataWithBytes_length_(message, len(message)),
-                layers=layers,
-                compactStyle=compactStyle,
-                correctionLevel=correctionLevel
+                inputMessage=AppKit.NSData.dataWithBytes_length_(message, len(message)),
+                inputLayers=layers,
+                inputCompactStyle=compactStyle,
+                inputCorrectionLevel=correctionLevel
             ),
             size=size,
             isGenerator=True,
             fitImage=True
-        ),
+        )
         self._addFilter(filterDict)
     
     def barsSwipeTransition(self, targetImage: Self, angle: float = 3.141592653589793, width: float = 30.0, barOffset: float = 10.0, time: float = 0.0):
@@ -595,11 +614,11 @@ class ImageObject:
         filterDict = dict(
             name='CIBarsSwipeTransition',
             attributes=dict(
-                targetImage=targetImage,
-                angle=radians(angle),
-                width=width,
-                barOffset=barOffset,
-                time=time
+                inputTargetImage=targetImage._ciImage(),
+                inputAngle=radians(angle),
+                inputWidth=width,
+                inputBarOffset=barOffset,
+                inputTime=time
             )
         )
         self._addFilter(filterDict)
@@ -618,8 +637,8 @@ class ImageObject:
         filterDict = dict(
             name='CIBlendWithAlphaMask',
             attributes=dict(
-                backgroundImage=backgroundImage,
-                maskImage=maskImage
+                inputBackgroundImage=backgroundImage._ciImage(),
+                inputMaskImage=maskImage._ciImage()
             )
         )
         self._addFilter(filterDict)
@@ -638,8 +657,8 @@ class ImageObject:
         filterDict = dict(
             name='CIBlendWithBlueMask',
             attributes=dict(
-                backgroundImage=backgroundImage,
-                maskImage=maskImage
+                inputBackgroundImage=backgroundImage._ciImage(),
+                inputMaskImage=maskImage._ciImage()
             )
         )
         self._addFilter(filterDict)
@@ -658,8 +677,8 @@ class ImageObject:
         filterDict = dict(
             name='CIBlendWithMask',
             attributes=dict(
-                backgroundImage=backgroundImage,
-                maskImage=maskImage
+                inputBackgroundImage=backgroundImage._ciImage(),
+                inputMaskImage=maskImage._ciImage()
             )
         )
         self._addFilter(filterDict)
@@ -678,8 +697,8 @@ class ImageObject:
         filterDict = dict(
             name='CIBlendWithRedMask',
             attributes=dict(
-                backgroundImage=backgroundImage,
-                maskImage=maskImage
+                inputBackgroundImage=backgroundImage._ciImage(),
+                inputMaskImage=maskImage._ciImage()
             )
         )
         self._addFilter(filterDict)
@@ -698,8 +717,8 @@ class ImageObject:
         filterDict = dict(
             name='CIBloom',
             attributes=dict(
-                radius=radius,
-                intensity=intensity
+                inputRadius=radius,
+                inputIntensity=intensity
             )
         )
         self._addFilter(filterDict)
@@ -720,13 +739,13 @@ class ImageObject:
         filterDict = dict(
             name='CIBlurredRectangleGenerator',
             attributes=dict(
-                extent=AppKit.CIVector.vectorWithValues_count_(extent, 4),
-                sigma=sigma,
-                color=AppKit.CIColor.colorWithRed_green_blue_alpha_(color[0], color[1], color[2], color[3])
+                inputExtent=AppKit.CIVector.vectorWithValues_count_(extent, 4),
+                inputSigma=sigma,
+                inputColor=AppKit.CIColor.colorWithRed_green_blue_alpha_(color[0], color[1], color[2], color[3])
             ),
             size=size,
             isGenerator=True
-        ),
+        )
         self._addFilter(filterDict)
     
     def bokehBlur(self, radius: float = 20.0, ringAmount: float = 0.0, ringSize: float = 0.1, softness: float = 1.0):
@@ -745,10 +764,10 @@ class ImageObject:
         filterDict = dict(
             name='CIBokehBlur',
             attributes=dict(
-                radius=radius,
-                ringAmount=ringAmount,
-                ringSize=ringSize,
-                softness=softness
+                inputRadius=radius,
+                inputRingAmount=ringAmount,
+                inputRingSize=ringSize,
+                inputSoftness=softness
             )
         )
         self._addFilter(filterDict)
@@ -766,7 +785,7 @@ class ImageObject:
         filterDict = dict(
             name='CIBoxBlur',
             attributes=dict(
-                radius=radius
+                inputRadius=radius
             )
         )
         self._addFilter(filterDict)
@@ -786,9 +805,9 @@ class ImageObject:
         filterDict = dict(
             name='CIBumpDistortion',
             attributes=dict(
-                center=AppKit.CIVector.vectorWithX_Y_(center[0], center[1]),
-                radius=radius,
-                scale=scale
+                inputCenter=AppKit.CIVector.vectorWithX_Y_(center[0], center[1]),
+                inputRadius=radius,
+                inputScale=scale
             )
         )
         self._addFilter(filterDict)
@@ -809,10 +828,10 @@ class ImageObject:
         filterDict = dict(
             name='CIBumpDistortionLinear',
             attributes=dict(
-                center=AppKit.CIVector.vectorWithX_Y_(center[0], center[1]),
-                radius=radius,
-                angle=radians(angle),
-                scale=scale
+                inputCenter=AppKit.CIVector.vectorWithX_Y_(center[0], center[1]),
+                inputRadius=radius,
+                inputAngle=radians(angle),
+                inputScale=scale
             )
         )
         self._addFilter(filterDict)
@@ -834,11 +853,11 @@ class ImageObject:
         filterDict = dict(
             name='CICannyEdgeDetector',
             attributes=dict(
-                gaussianSigma=gaussianSigma,
-                perceptual=perceptual,
-                thresholdHigh=thresholdHigh,
-                thresholdLow=thresholdLow,
-                hysteresisPasses=hysteresisPasses
+                inputGaussianSigma=gaussianSigma,
+                inputPerceptual=perceptual,
+                inputThresholdHigh=thresholdHigh,
+                inputThresholdLow=thresholdLow,
+                inputHysteresisPasses=hysteresisPasses
             )
         )
         self._addFilter(filterDict)
@@ -861,15 +880,15 @@ class ImageObject:
         filterDict = dict(
             name='CICheckerboardGenerator',
             attributes=dict(
-                center=AppKit.CIVector.vectorWithX_Y_(center[0], center[1]),
-                color0=AppKit.CIColor.colorWithRed_green_blue_alpha_(color0[0], color0[1], color0[2], color0[3]),
-                color1=AppKit.CIColor.colorWithRed_green_blue_alpha_(color1[0], color1[1], color1[2], color1[3]),
-                width=width,
-                sharpness=sharpness
+                inputCenter=AppKit.CIVector.vectorWithX_Y_(center[0], center[1]),
+                inputColor0=AppKit.CIColor.colorWithRed_green_blue_alpha_(color0[0], color0[1], color0[2], color0[3]),
+                inputColor1=AppKit.CIColor.colorWithRed_green_blue_alpha_(color1[0], color1[1], color1[2], color1[3]),
+                inputWidth=width,
+                inputSharpness=sharpness
             ),
             size=size,
             isGenerator=True
-        ),
+        )
         self._addFilter(filterDict)
     
     def circleSplashDistortion(self, center: Point = (150.0, 150.0), radius: float = 150.0):
@@ -886,8 +905,8 @@ class ImageObject:
         filterDict = dict(
             name='CICircleSplashDistortion',
             attributes=dict(
-                center=AppKit.CIVector.vectorWithX_Y_(center[0], center[1]),
-                radius=radius
+                inputCenter=AppKit.CIVector.vectorWithX_Y_(center[0], center[1]),
+                inputRadius=radius
             )
         )
         self._addFilter(filterDict)
@@ -907,9 +926,9 @@ class ImageObject:
         filterDict = dict(
             name='CICircularScreen',
             attributes=dict(
-                center=AppKit.CIVector.vectorWithX_Y_(center[0], center[1]),
-                width=width,
-                sharpness=sharpness
+                inputCenter=AppKit.CIVector.vectorWithX_Y_(center[0], center[1]),
+                inputWidth=width,
+                inputSharpness=sharpness
             )
         )
         self._addFilter(filterDict)
@@ -929,9 +948,9 @@ class ImageObject:
         filterDict = dict(
             name='CICircularWrap',
             attributes=dict(
-                center=AppKit.CIVector.vectorWithX_Y_(center[0], center[1]),
-                radius=radius,
-                angle=radians(angle)
+                inputCenter=AppKit.CIVector.vectorWithX_Y_(center[0], center[1]),
+                inputRadius=radius,
+                inputAngle=radians(angle)
             )
         )
         self._addFilter(filterDict)
@@ -949,7 +968,7 @@ class ImageObject:
         filterDict = dict(
             name='CIClamp',
             attributes=dict(
-                extent=AppKit.CIVector.vectorWithValues_count_(extent, 4)
+                inputExtent=AppKit.CIVector.vectorWithValues_count_(extent, 4)
             )
         )
         self._addFilter(filterDict)
@@ -972,12 +991,12 @@ class ImageObject:
         filterDict = dict(
             name='CICMYKHalftone',
             attributes=dict(
-                center=AppKit.CIVector.vectorWithX_Y_(center[0], center[1]),
-                width=width,
-                angle=radians(angle),
-                sharpness=sharpness,
-                GCR=GCR,
-                UCR=UCR
+                inputCenter=AppKit.CIVector.vectorWithX_Y_(center[0], center[1]),
+                inputWidth=width,
+                inputAngle=radians(angle),
+                inputSharpness=sharpness,
+                inputGCR=GCR,
+                inputUCR=UCR
             )
         )
         self._addFilter(filterDict)
@@ -998,13 +1017,13 @@ class ImageObject:
         filterDict = dict(
             name='CICode128BarcodeGenerator',
             attributes=dict(
-                message=AppKit.NSData.dataWithBytes_length_(message, len(message)),
-                quietSpace=quietSpace,
-                barcodeHeight=barcodeHeight
+                inputMessage=AppKit.NSData.dataWithBytes_length_(message, len(message)),
+                inputQuietSpace=quietSpace,
+                inputBarcodeHeight=barcodeHeight
             ),
             size=size,
             isGenerator=True
-        ),
+        )
         self._addFilter(filterDict)
     
     def colorAbsoluteDifference(self, image2):
@@ -1020,7 +1039,7 @@ class ImageObject:
         filterDict = dict(
             name='CIColorAbsoluteDifference',
             attributes=dict(
-                image2=image2
+                inputImage2=image2
             )
         )
         self._addFilter(filterDict)
@@ -1038,7 +1057,7 @@ class ImageObject:
         filterDict = dict(
             name='CIColorBlendMode',
             attributes=dict(
-                backgroundImage=backgroundImage
+                inputBackgroundImage=backgroundImage._ciImage()
             )
         )
         self._addFilter(filterDict)
@@ -1056,7 +1075,7 @@ class ImageObject:
         filterDict = dict(
             name='CIColorBurnBlendMode',
             attributes=dict(
-                backgroundImage=backgroundImage
+                inputBackgroundImage=backgroundImage._ciImage()
             )
         )
         self._addFilter(filterDict)
@@ -1075,8 +1094,8 @@ class ImageObject:
         filterDict = dict(
             name='CIColorClamp',
             attributes=dict(
-                minComponents=AppKit.CIVector.vectorWithValues_count_(minComponents, 4),
-                maxComponents=AppKit.CIVector.vectorWithValues_count_(maxComponents, 4)
+                inputMinComponents=AppKit.CIVector.vectorWithValues_count_(minComponents, 4),
+                inputMaxComponents=AppKit.CIVector.vectorWithValues_count_(maxComponents, 4)
             )
         )
         self._addFilter(filterDict)
@@ -1096,9 +1115,9 @@ class ImageObject:
         filterDict = dict(
             name='CIColorControls',
             attributes=dict(
-                saturation=saturation,
-                brightness=brightness,
-                contrast=contrast
+                inputSaturation=saturation,
+                inputBrightness=brightness,
+                inputContrast=contrast
             )
         )
         self._addFilter(filterDict)
@@ -1118,31 +1137,9 @@ class ImageObject:
         filterDict = dict(
             name='CIColorCrossPolynomial',
             attributes=dict(
-                redCoefficients=AppKit.CIVector.vectorWithValues_count_(redCoefficients, 4),
-                greenCoefficients=AppKit.CIVector.vectorWithValues_count_(greenCoefficients, 4),
-                blueCoefficients=AppKit.CIVector.vectorWithValues_count_(blueCoefficients, 4)
-            )
-        )
-        self._addFilter(filterDict)
-    
-    def colorCurves(self, colorSpace, curvesData: bytes | None = None, curvesDomain: Point = (0.0, 1.0)):
-        """
-        Uses a three-channel one-dimensional color table to transform the source image pixels.
-        
-        **Arguments:**
-        
-        `colorSpace` a CoreGraphics color space. The color space that defines the RGB values in the color table.
-        `curvesData` a float. Data containing a color table of floating-point RGB values.
-        `curvesDomain` a float. A two-element vector that defines the minimum and maximum RGB component values that are used to look up result values from the color table.
-        """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        filterDict = dict(
-            name='CIColorCurves',
-            attributes=dict(
-                colorSpace=colorSpace,
-                curvesData=curvesData,
-                curvesDomain=curvesDomain
+                inputRedCoefficients=AppKit.CIVector.vectorWithValues_count_(redCoefficients, 4),
+                inputGreenCoefficients=AppKit.CIVector.vectorWithValues_count_(greenCoefficients, 4),
+                inputBlueCoefficients=AppKit.CIVector.vectorWithValues_count_(blueCoefficients, 4)
             )
         )
         self._addFilter(filterDict)
@@ -1160,7 +1157,7 @@ class ImageObject:
         filterDict = dict(
             name='CIColorDodgeBlendMode',
             attributes=dict(
-                backgroundImage=backgroundImage
+                inputBackgroundImage=backgroundImage._ciImage()
             )
         )
         self._addFilter(filterDict)
@@ -1189,7 +1186,7 @@ class ImageObject:
         filterDict = dict(
             name='CIColorMap',
             attributes=dict(
-                gradientImage=gradientImage
+                inputGradientImage=gradientImage._ciImage()
             )
         )
         self._addFilter(filterDict)
@@ -1211,11 +1208,11 @@ class ImageObject:
         filterDict = dict(
             name='CIColorMatrix',
             attributes=dict(
-                RVector=AppKit.CIVector.vectorWithValues_count_(RVector, 4),
-                GVector=AppKit.CIVector.vectorWithValues_count_(GVector, 4),
-                BVector=AppKit.CIVector.vectorWithValues_count_(BVector, 4),
-                AVector=AppKit.CIVector.vectorWithValues_count_(AVector, 4),
-                biasVector=AppKit.CIVector.vectorWithValues_count_(biasVector, 4)
+                inputRVector=AppKit.CIVector.vectorWithValues_count_(RVector, 4),
+                inputGVector=AppKit.CIVector.vectorWithValues_count_(GVector, 4),
+                inputBVector=AppKit.CIVector.vectorWithValues_count_(BVector, 4),
+                inputAVector=AppKit.CIVector.vectorWithValues_count_(AVector, 4),
+                inputBiasVector=AppKit.CIVector.vectorWithValues_count_(biasVector, 4)
             )
         )
         self._addFilter(filterDict)
@@ -1234,8 +1231,8 @@ class ImageObject:
         filterDict = dict(
             name='CIColorMonochrome',
             attributes=dict(
-                color=AppKit.CIColor.colorWithRed_green_blue_alpha_(color[0], color[1], color[2], color[3]),
-                intensity=intensity
+                inputColor=AppKit.CIColor.colorWithRed_green_blue_alpha_(color[0], color[1], color[2], color[3]),
+                inputIntensity=intensity
             )
         )
         self._addFilter(filterDict)
@@ -1256,10 +1253,10 @@ class ImageObject:
         filterDict = dict(
             name='CIColorPolynomial',
             attributes=dict(
-                redCoefficients=AppKit.CIVector.vectorWithValues_count_(redCoefficients, 4),
-                greenCoefficients=AppKit.CIVector.vectorWithValues_count_(greenCoefficients, 4),
-                blueCoefficients=AppKit.CIVector.vectorWithValues_count_(blueCoefficients, 4),
-                alphaCoefficients=AppKit.CIVector.vectorWithValues_count_(alphaCoefficients, 4)
+                inputRedCoefficients=AppKit.CIVector.vectorWithValues_count_(redCoefficients, 4),
+                inputGreenCoefficients=AppKit.CIVector.vectorWithValues_count_(greenCoefficients, 4),
+                inputBlueCoefficients=AppKit.CIVector.vectorWithValues_count_(blueCoefficients, 4),
+                inputAlphaCoefficients=AppKit.CIVector.vectorWithValues_count_(alphaCoefficients, 4)
             )
         )
         self._addFilter(filterDict)
@@ -1277,7 +1274,7 @@ class ImageObject:
         filterDict = dict(
             name='CIColorPosterize',
             attributes=dict(
-                levels=levels
+                inputLevels=levels
             )
         )
         self._addFilter(filterDict)
@@ -1295,7 +1292,7 @@ class ImageObject:
         filterDict = dict(
             name='CIColorThreshold',
             attributes=dict(
-                threshold=threshold
+                inputThreshold=threshold
             )
         )
         self._addFilter(filterDict)
@@ -1324,7 +1321,7 @@ class ImageObject:
         filterDict = dict(
             name='CIColumnAverage',
             attributes=dict(
-                extent=AppKit.CIVector.vectorWithValues_count_(extent, 4)
+                inputExtent=AppKit.CIVector.vectorWithValues_count_(extent, 4)
             )
         )
         self._addFilter(filterDict)
@@ -1354,11 +1351,11 @@ class ImageObject:
         filterDict = dict(
             name='CIConstantColorGenerator',
             attributes=dict(
-                color=AppKit.CIColor.colorWithRed_green_blue_alpha_(color[0], color[1], color[2], color[3])
+                inputColor=AppKit.CIColor.colorWithRed_green_blue_alpha_(color[0], color[1], color[2], color[3])
             ),
             size=size,
             isGenerator=True
-        ),
+        )
         self._addFilter(filterDict)
     
     def convertLabToRGB(self, normalize: bool = False):
@@ -1374,7 +1371,7 @@ class ImageObject:
         filterDict = dict(
             name='CIConvertLabToRGB',
             attributes=dict(
-                normalize=normalize
+                inputNormalize=normalize
             )
         )
         self._addFilter(filterDict)
@@ -1392,207 +1389,7 @@ class ImageObject:
         filterDict = dict(
             name='CIConvertRGBtoLab',
             attributes=dict(
-                normalize=normalize
-            )
-        )
-        self._addFilter(filterDict)
-    
-    def convolution3X3(self, weights: tuple = (0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0), bias: float = 0.0):
-        """
-        Convolution with 3 by 3 matrix.
-        
-        **Arguments:**
-        
-        `weights` a float. A vector containing the 9 weights of the convolution kernel.
-        `bias` a float. A value that is added to the RGBA components of the output pixel.
-        """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        filterDict = dict(
-            name='CIConvolution3X3',
-            attributes=dict(
-                weights=weights,
-                bias=bias
-            )
-        )
-        self._addFilter(filterDict)
-    
-    def convolution5X5(self, weights: tuple = (0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0), bias: float = 0.0):
-        """
-        Convolution with 5 by 5 matrix.
-        
-        **Arguments:**
-        
-        `weights` a float. A vector containing the 25 weights of the convolution kernel.
-        `bias` a float. A value that is added to the RGBA components of the output pixel.
-        """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        filterDict = dict(
-            name='CIConvolution5X5',
-            attributes=dict(
-                weights=weights,
-                bias=bias
-            )
-        )
-        self._addFilter(filterDict)
-    
-    def convolution7X7(self, weights: tuple = (0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0), bias: float = 0.0):
-        """
-        Convolution with 7 by 7 matrix.
-        
-        **Arguments:**
-        
-        `weights` a float. A vector containing the 49 weights of the convolution kernel.
-        `bias` a float. A value that is added to the RGBA components of the output pixel.
-        """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        filterDict = dict(
-            name='CIConvolution7X7',
-            attributes=dict(
-                weights=weights,
-                bias=bias
-            )
-        )
-        self._addFilter(filterDict)
-    
-    def convolution9Horizontal(self, weights: tuple = (0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0), bias: float = 0.0):
-        """
-        Horizontal Convolution with 9 values.
-        
-        **Arguments:**
-        
-        `weights` a float. A vector containing the 9 weights of the convolution kernel.
-        `bias` a float. A value that is added to the RGBA components of the output pixel.
-        """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        filterDict = dict(
-            name='CIConvolution9Horizontal',
-            attributes=dict(
-                weights=weights,
-                bias=bias
-            )
-        )
-        self._addFilter(filterDict)
-    
-    def convolution9Vertical(self, weights: tuple = (0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0), bias: float = 0.0):
-        """
-        Vertical Convolution with 9 values.
-        
-        **Arguments:**
-        
-        `weights` a float. A vector containing the 9 weights of the convolution kernel.
-        `bias` a float. A value that is added to the RGBA components of the output pixel.
-        """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        filterDict = dict(
-            name='CIConvolution9Vertical',
-            attributes=dict(
-                weights=weights,
-                bias=bias
-            )
-        )
-        self._addFilter(filterDict)
-    
-    def convolutionRGB3X3(self, weights: tuple = (0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0), bias: float = 0.0):
-        """
-        Convolution of RGB channels with 3 by 3 matrix.
-        
-        **Arguments:**
-        
-        `weights` a float. A vector containing the 9 weights of the convolution kernel.
-        `bias` a float. A value that is added to the RGB components of the output pixel.
-        """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        filterDict = dict(
-            name='CIConvolutionRGB3X3',
-            attributes=dict(
-                weights=weights,
-                bias=bias
-            )
-        )
-        self._addFilter(filterDict)
-    
-    def convolutionRGB5X5(self, weights: tuple = (0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0), bias: float = 0.0):
-        """
-        Convolution of RGB channels with 5 by 5 matrix.
-        
-        **Arguments:**
-        
-        `weights` a float. A vector containing the 25 weights of the convolution kernel.
-        `bias` a float. A value that is added to the RGB components of the output pixel.
-        """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        filterDict = dict(
-            name='CIConvolutionRGB5X5',
-            attributes=dict(
-                weights=weights,
-                bias=bias
-            )
-        )
-        self._addFilter(filterDict)
-    
-    def convolutionRGB7X7(self, weights: tuple = (0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0), bias: float = 0.0):
-        """
-        Convolution of RGB channels with 7 by 7 matrix.
-        
-        **Arguments:**
-        
-        `weights` a float. A vector containing the 49 weights of the convolution kernel.
-        `bias` a float. A value that is added to the RGB components of the output pixel.
-        """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        filterDict = dict(
-            name='CIConvolutionRGB7X7',
-            attributes=dict(
-                weights=weights,
-                bias=bias
-            )
-        )
-        self._addFilter(filterDict)
-    
-    def convolutionRGB9Horizontal(self, weights: tuple = (0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0), bias: float = 0.0):
-        """
-        Horizontal Convolution of RGB channels with 9 values.
-        
-        **Arguments:**
-        
-        `weights` a float. A vector containing the 9 weights of the convolution kernel.
-        `bias` a float. A value that is added to the RGB components of the output pixel.
-        """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        filterDict = dict(
-            name='CIConvolutionRGB9Horizontal',
-            attributes=dict(
-                weights=weights,
-                bias=bias
-            )
-        )
-        self._addFilter(filterDict)
-    
-    def convolutionRGB9Vertical(self, weights: tuple = (0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0), bias: float = 0.0):
-        """
-        Vertical Convolution of RGB channels with 9 values.
-        
-        **Arguments:**
-        
-        `weights` a float. A vector containing the 9 weights of the convolution kernel.
-        `bias` a float. A value that is added to the RGB components of the output pixel.
-        """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        filterDict = dict(
-            name='CIConvolutionRGB9Vertical',
-            attributes=dict(
-                weights=weights,
-                bias=bias
+                inputNormalize=normalize
             )
         )
         self._addFilter(filterDict)
@@ -1616,35 +1413,13 @@ class ImageObject:
         filterDict = dict(
             name='CICopyMachineTransition',
             attributes=dict(
-                targetImage=targetImage,
-                extent=AppKit.CIVector.vectorWithValues_count_(extent, 4),
-                color=AppKit.CIColor.colorWithRed_green_blue_alpha_(color[0], color[1], color[2], color[3]),
-                time=time,
-                angle=radians(angle),
-                width=width,
-                opacity=opacity
-            )
-        )
-        self._addFilter(filterDict)
-    
-    def coreMLModelFilter(self, model, headIndex: float = 0.0, softmaxNormalization: bool = False):
-        """
-        Generates output image by applying input CoreML model to the input image.
-        
-        **Arguments:**
-        
-        `model` a float. The CoreML model to be used for applying effect on the image.
-        `headIndex` a float. A number to specify which output of a multi-head CoreML model should be used for applying effect on the image.
-        `softmaxNormalization` a float. A boolean value to specify that Softmax normalization should be applied to the output of the model.
-        """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        filterDict = dict(
-            name='CICoreMLModelFilter',
-            attributes=dict(
-                model=model,
-                headIndex=headIndex,
-                softmaxNormalization=softmaxNormalization
+                inputTargetImage=targetImage._ciImage(),
+                inputExtent=AppKit.CIVector.vectorWithValues_count_(extent, 4),
+                inputColor=AppKit.CIColor.colorWithRed_green_blue_alpha_(color[0], color[1], color[2], color[3]),
+                inputTime=time,
+                inputAngle=radians(angle),
+                inputWidth=width,
+                inputOpacity=opacity
             )
         )
         self._addFilter(filterDict)
@@ -1662,7 +1437,7 @@ class ImageObject:
         filterDict = dict(
             name='CICrop',
             attributes=dict(
-                rectangle=AppKit.CIVector.vectorWithValues_count_(rectangle, 4)
+                inputRectangle=AppKit.CIVector.vectorWithValues_count_(rectangle, 4)
             )
         )
         self._addFilter(filterDict)
@@ -1681,8 +1456,8 @@ class ImageObject:
         filterDict = dict(
             name='CICrystallize',
             attributes=dict(
-                radius=radius,
-                center=AppKit.CIVector.vectorWithX_Y_(center[0], center[1])
+                inputRadius=radius,
+                inputCenter=AppKit.CIVector.vectorWithX_Y_(center[0], center[1])
             )
         )
         self._addFilter(filterDict)
@@ -1700,55 +1475,7 @@ class ImageObject:
         filterDict = dict(
             name='CIDarkenBlendMode',
             attributes=dict(
-                backgroundImage=backgroundImage
-            )
-        )
-        self._addFilter(filterDict)
-    
-    def depthBlurEffect(self, disparityImage: Self, matteImage: Self, hairImage: Self, glassesImage: Self, gainMap: Self, focusRect, calibrationData, auxDataMetadata, shape, aperture: float = 0.0, leftEyePositions: Point = (-1.0, -1.0), rightEyePositions: Point = (-1.0, -1.0), chinPositions: Point = (-1.0, -1.0), nosePositions: Point = (-1.0, -1.0), lumaNoiseScale: float = 0.0, scaleFactor: float = 1.0):
-        """
-        Applies a variable radius disc blur to an image where areas in the background are softened more than those in the foreground.
-        
-        **Arguments:**
-        
-        `disparityImage` an Image object. 
-        `matteImage` an Image object. A matting image.
-        `hairImage` an Image object. A segmentation matte image that corresponds to people’s hair.
-        `glassesImage` an Image object. A segmentation matte image that corresponds to people’s glasses.
-        `gainMap` an Image object. 
-        `focusRect` a float. 
-        `calibrationData` a float. 
-        `auxDataMetadata` a float. 
-        `shape` a float. 
-        `aperture` a float. 
-        `leftEyePositions` a float. 
-        `rightEyePositions` a float. 
-        `chinPositions` a float. 
-        `nosePositions` a float. 
-        `lumaNoiseScale` a float. 
-        `scaleFactor` a float. 
-        """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        filterDict = dict(
-            name='CIDepthBlurEffect',
-            attributes=dict(
-                disparityImage=disparityImage,
-                matteImage=matteImage,
-                hairImage=hairImage,
-                glassesImage=glassesImage,
-                gainMap=gainMap,
-                focusRect=focusRect,
-                calibrationData=calibrationData,
-                auxDataMetadata=auxDataMetadata,
-                shape=shape,
-                aperture=aperture,
-                leftEyePositions=leftEyePositions,
-                rightEyePositions=rightEyePositions,
-                chinPositions=chinPositions,
-                nosePositions=nosePositions,
-                lumaNoiseScale=lumaNoiseScale,
-                scaleFactor=scaleFactor
+                inputBackgroundImage=backgroundImage._ciImage()
             )
         )
         self._addFilter(filterDict)
@@ -1771,12 +1498,12 @@ class ImageObject:
         filterDict = dict(
             name='CIDepthOfField',
             attributes=dict(
-                point0=AppKit.CIVector.vectorWithValues_count_(point0, 2),
-                point1=AppKit.CIVector.vectorWithValues_count_(point1, 2),
-                saturation=saturation,
-                unsharpMaskRadius=unsharpMaskRadius,
-                unsharpMaskIntensity=unsharpMaskIntensity,
-                radius=radius
+                inputPoint0=AppKit.CIVector.vectorWithValues_count_(point0, 2),
+                inputPoint1=AppKit.CIVector.vectorWithValues_count_(point1, 2),
+                inputSaturation=saturation,
+                inputUnsharpMaskRadius=unsharpMaskRadius,
+                inputUnsharpMaskIntensity=unsharpMaskIntensity,
+                inputRadius=radius
             )
         )
         self._addFilter(filterDict)
@@ -1805,7 +1532,7 @@ class ImageObject:
         filterDict = dict(
             name='CIDifferenceBlendMode',
             attributes=dict(
-                backgroundImage=backgroundImage
+                inputBackgroundImage=backgroundImage._ciImage()
             )
         )
         self._addFilter(filterDict)
@@ -1823,7 +1550,7 @@ class ImageObject:
         filterDict = dict(
             name='CIDiscBlur',
             attributes=dict(
-                radius=radius
+                inputRadius=radius
             )
         )
         self._addFilter(filterDict)
@@ -1846,12 +1573,12 @@ class ImageObject:
         filterDict = dict(
             name='CIDisintegrateWithMaskTransition',
             attributes=dict(
-                targetImage=targetImage,
-                maskImage=maskImage,
-                time=time,
-                shadowRadius=shadowRadius,
-                shadowDensity=shadowDensity,
-                shadowOffset=AppKit.CIVector.vectorWithValues_count_(shadowOffset, 2)
+                inputTargetImage=targetImage._ciImage(),
+                inputMaskImage=maskImage._ciImage(),
+                inputTime=time,
+                inputShadowRadius=shadowRadius,
+                inputShadowDensity=shadowDensity,
+                inputShadowOffset=AppKit.CIVector.vectorWithValues_count_(shadowOffset, 2)
             )
         )
         self._addFilter(filterDict)
@@ -1881,8 +1608,8 @@ class ImageObject:
         filterDict = dict(
             name='CIDisplacementDistortion',
             attributes=dict(
-                displacementImage=displacementImage,
-                scale=scale
+                inputDisplacementImage=displacementImage._ciImage(),
+                inputScale=scale
             )
         )
         self._addFilter(filterDict)
@@ -1901,8 +1628,26 @@ class ImageObject:
         filterDict = dict(
             name='CIDissolveTransition',
             attributes=dict(
-                targetImage=targetImage,
-                time=time
+                inputTargetImage=targetImage._ciImage(),
+                inputTime=time
+            )
+        )
+        self._addFilter(filterDict)
+    
+    def distanceGradientFromRedMask(self, maximumDistance: float = 10.0):
+        """
+        Produces an infinite image where the red channel contains the distance in pixels from each pixel to the mask.
+        
+        **Arguments:**
+        
+        `maximumDistance` a float. Determines the maximum distance to the mask that can be measured. Distances between zero and the maximum will be normalized to zero and one.
+        """
+        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
+        # please, do not attempt to edit it manually as it will be overriden in the future
+        filterDict = dict(
+            name='CIDistanceGradientFromRedMask',
+            attributes=dict(
+                inputMaximumDistance=maximumDistance
             )
         )
         self._addFilter(filterDict)
@@ -1920,7 +1665,7 @@ class ImageObject:
         filterDict = dict(
             name='CIDither',
             attributes=dict(
-                intensity=intensity
+                inputIntensity=intensity
             )
         )
         self._addFilter(filterDict)
@@ -1938,7 +1683,7 @@ class ImageObject:
         filterDict = dict(
             name='CIDivideBlendMode',
             attributes=dict(
-                backgroundImage=backgroundImage
+                inputBackgroundImage=backgroundImage._ciImage()
             )
         )
         self._addFilter(filterDict)
@@ -1956,7 +1701,7 @@ class ImageObject:
         filterDict = dict(
             name='CIDocumentEnhancer',
             attributes=dict(
-                amount=amount
+                inputAmount=amount
             )
         )
         self._addFilter(filterDict)
@@ -1977,10 +1722,10 @@ class ImageObject:
         filterDict = dict(
             name='CIDotScreen',
             attributes=dict(
-                center=AppKit.CIVector.vectorWithX_Y_(center[0], center[1]),
-                angle=radians(angle),
-                width=width,
-                sharpness=sharpness
+                inputCenter=AppKit.CIVector.vectorWithX_Y_(center[0], center[1]),
+                inputAngle=radians(angle),
+                inputWidth=width,
+                inputSharpness=sharpness
             )
         )
         self._addFilter(filterDict)
@@ -2003,23 +1748,23 @@ class ImageObject:
         filterDict = dict(
             name='CIDroste',
             attributes=dict(
-                insetPoint0=AppKit.CIVector.vectorWithValues_count_(insetPoint0, 2),
-                insetPoint1=AppKit.CIVector.vectorWithValues_count_(insetPoint1, 2),
-                strands=strands,
-                periodicity=periodicity,
-                rotation=rotation,
-                zoom=zoom
+                inputInsetPoint0=AppKit.CIVector.vectorWithValues_count_(insetPoint0, 2),
+                inputInsetPoint1=AppKit.CIVector.vectorWithValues_count_(insetPoint1, 2),
+                inputStrands=strands,
+                inputPeriodicity=periodicity,
+                inputRotation=radians(rotation),
+                inputZoom=zoom
             )
         )
         self._addFilter(filterDict)
     
-    def edgePreserveUpsampleFilter(self, smallImage, spatialSigma: float = 3.0, lumaSigma: float = 0.15):
+    def edgePreserveUpsampleFilter(self, smallImage: Self, spatialSigma: float = 3.0, lumaSigma: float = 0.15):
         """
         Upsamples a small image to the size of the input image using the luminance of the input image as a guide to preserve detail.
         
         **Arguments:**
         
-        `smallImage` a float. 
+        `smallImage` an Image object. 
         `spatialSigma` a float. 
         `lumaSigma` a float. 
         """
@@ -2028,9 +1773,9 @@ class ImageObject:
         filterDict = dict(
             name='CIEdgePreserveUpsampleFilter',
             attributes=dict(
-                smallImage=smallImage,
-                spatialSigma=spatialSigma,
-                lumaSigma=lumaSigma
+                inputSmallImage=smallImage._ciImage(),
+                inputSpatialSigma=spatialSigma,
+                inputLumaSigma=lumaSigma
             )
         )
         self._addFilter(filterDict)
@@ -2048,7 +1793,7 @@ class ImageObject:
         filterDict = dict(
             name='CIEdges',
             attributes=dict(
-                intensity=intensity
+                inputIntensity=intensity
             )
         )
         self._addFilter(filterDict)
@@ -2066,7 +1811,7 @@ class ImageObject:
         filterDict = dict(
             name='CIEdgeWork',
             attributes=dict(
-                radius=radius
+                inputRadius=radius
             )
         )
         self._addFilter(filterDict)
@@ -2086,9 +1831,9 @@ class ImageObject:
         filterDict = dict(
             name='CIEightfoldReflectedTile',
             attributes=dict(
-                center=AppKit.CIVector.vectorWithX_Y_(center[0], center[1]),
-                angle=radians(angle),
-                width=width
+                inputCenter=AppKit.CIVector.vectorWithX_Y_(center[0], center[1]),
+                inputAngle=radians(angle),
+                inputWidth=width
             )
         )
         self._addFilter(filterDict)
@@ -2106,7 +1851,7 @@ class ImageObject:
         filterDict = dict(
             name='CIExclusionBlendMode',
             attributes=dict(
-                backgroundImage=backgroundImage
+                inputBackgroundImage=backgroundImage._ciImage()
             )
         )
         self._addFilter(filterDict)
@@ -2124,7 +1869,7 @@ class ImageObject:
         filterDict = dict(
             name='CIExposureAdjust',
             attributes=dict(
-                EV=EV
+                inputEV=EV
             )
         )
         self._addFilter(filterDict)
@@ -2143,8 +1888,8 @@ class ImageObject:
         filterDict = dict(
             name='CIFalseColor',
             attributes=dict(
-                color0=AppKit.CIColor.colorWithRed_green_blue_alpha_(color0[0], color0[1], color0[2], color0[3]),
-                color1=AppKit.CIColor.colorWithRed_green_blue_alpha_(color1[0], color1[1], color1[2], color1[3])
+                inputColor0=AppKit.CIColor.colorWithRed_green_blue_alpha_(color0[0], color0[1], color0[2], color0[3]),
+                inputColor1=AppKit.CIColor.colorWithRed_green_blue_alpha_(color1[0], color1[1], color1[2], color1[3])
             )
         )
         self._addFilter(filterDict)
@@ -2170,15 +1915,15 @@ class ImageObject:
         filterDict = dict(
             name='CIFlashTransition',
             attributes=dict(
-                targetImage=targetImage,
-                center=AppKit.CIVector.vectorWithX_Y_(center[0], center[1]),
-                extent=AppKit.CIVector.vectorWithValues_count_(extent, 4),
-                color=AppKit.CIColor.colorWithRed_green_blue_alpha_(color[0], color[1], color[2], color[3]),
-                time=time,
-                maxStriationRadius=maxStriationRadius,
-                striationStrength=striationStrength,
-                striationContrast=striationContrast,
-                fadeThreshold=fadeThreshold
+                inputTargetImage=targetImage._ciImage(),
+                inputCenter=AppKit.CIVector.vectorWithX_Y_(center[0], center[1]),
+                inputExtent=AppKit.CIVector.vectorWithValues_count_(extent, 4),
+                inputColor=AppKit.CIColor.colorWithRed_green_blue_alpha_(color[0], color[1], color[2], color[3]),
+                inputTime=time,
+                inputMaxStriationRadius=maxStriationRadius,
+                inputStriationStrength=striationStrength,
+                inputStriationContrast=striationContrast,
+                inputFadeThreshold=fadeThreshold
             )
         )
         self._addFilter(filterDict)
@@ -2199,10 +1944,10 @@ class ImageObject:
         filterDict = dict(
             name='CIFourfoldReflectedTile',
             attributes=dict(
-                center=AppKit.CIVector.vectorWithX_Y_(center[0], center[1]),
-                angle=radians(angle),
-                width=width,
-                acuteAngle=radians(acuteAngle)
+                inputCenter=AppKit.CIVector.vectorWithX_Y_(center[0], center[1]),
+                inputAngle=radians(angle),
+                inputWidth=width,
+                inputAcuteAngle=radians(acuteAngle)
             )
         )
         self._addFilter(filterDict)
@@ -2222,9 +1967,9 @@ class ImageObject:
         filterDict = dict(
             name='CIFourfoldRotatedTile',
             attributes=dict(
-                center=AppKit.CIVector.vectorWithX_Y_(center[0], center[1]),
-                angle=radians(angle),
-                width=width
+                inputCenter=AppKit.CIVector.vectorWithX_Y_(center[0], center[1]),
+                inputAngle=radians(angle),
+                inputWidth=width
             )
         )
         self._addFilter(filterDict)
@@ -2245,10 +1990,10 @@ class ImageObject:
         filterDict = dict(
             name='CIFourfoldTranslatedTile',
             attributes=dict(
-                center=AppKit.CIVector.vectorWithX_Y_(center[0], center[1]),
-                angle=radians(angle),
-                width=width,
-                acuteAngle=radians(acuteAngle)
+                inputCenter=AppKit.CIVector.vectorWithX_Y_(center[0], center[1]),
+                inputAngle=radians(angle),
+                inputWidth=width,
+                inputAcuteAngle=radians(acuteAngle)
             )
         )
         self._addFilter(filterDict)
@@ -2277,7 +2022,7 @@ class ImageObject:
         filterDict = dict(
             name='CIGammaAdjust',
             attributes=dict(
-                power=power
+                inputPower=power
             )
         )
         self._addFilter(filterDict)
@@ -2295,7 +2040,7 @@ class ImageObject:
         filterDict = dict(
             name='CIGaussianBlur',
             attributes=dict(
-                radius=radius
+                inputRadius=radius
             )
         )
         self._addFilter(filterDict)
@@ -2317,14 +2062,14 @@ class ImageObject:
         filterDict = dict(
             name='CIGaussianGradient',
             attributes=dict(
-                center=AppKit.CIVector.vectorWithX_Y_(center[0], center[1]),
-                color0=AppKit.CIColor.colorWithRed_green_blue_alpha_(color0[0], color0[1], color0[2], color0[3]),
-                color1=AppKit.CIColor.colorWithRed_green_blue_alpha_(color1[0], color1[1], color1[2], color1[3]),
-                radius=radius
+                inputCenter=AppKit.CIVector.vectorWithX_Y_(center[0], center[1]),
+                inputColor0=AppKit.CIColor.colorWithRed_green_blue_alpha_(color0[0], color0[1], color0[2], color0[3]),
+                inputColor1=AppKit.CIColor.colorWithRed_green_blue_alpha_(color1[0], color1[1], color1[2], color1[3]),
+                inputRadius=radius
             ),
             size=size,
             isGenerator=True
-        ),
+        )
         self._addFilter(filterDict)
     
     def glassDistortion(self, texture: Self, center: Point = (150.0, 150.0), scale: float = 200.0):
@@ -2342,9 +2087,9 @@ class ImageObject:
         filterDict = dict(
             name='CIGlassDistortion',
             attributes=dict(
-                texture=texture,
-                center=AppKit.CIVector.vectorWithX_Y_(center[0], center[1]),
-                scale=scale
+                inputTexture=texture._ciImage(),
+                inputCenter=AppKit.CIVector.vectorWithX_Y_(center[0], center[1]),
+                inputScale=scale
             )
         )
         self._addFilter(filterDict)
@@ -2365,10 +2110,10 @@ class ImageObject:
         filterDict = dict(
             name='CIGlassLozenge',
             attributes=dict(
-                point0=AppKit.CIVector.vectorWithValues_count_(point0, 2),
-                point1=AppKit.CIVector.vectorWithValues_count_(point1, 2),
-                radius=radius,
-                refraction=refraction
+                inputPoint0=AppKit.CIVector.vectorWithValues_count_(point0, 2),
+                inputPoint1=AppKit.CIVector.vectorWithValues_count_(point1, 2),
+                inputRadius=radius,
+                inputRefraction=refraction
             )
         )
         self._addFilter(filterDict)
@@ -2388,9 +2133,9 @@ class ImageObject:
         filterDict = dict(
             name='CIGlideReflectedTile',
             attributes=dict(
-                center=AppKit.CIVector.vectorWithX_Y_(center[0], center[1]),
-                angle=radians(angle),
-                width=width
+                inputCenter=AppKit.CIVector.vectorWithX_Y_(center[0], center[1]),
+                inputAngle=radians(angle),
+                inputWidth=width
             )
         )
         self._addFilter(filterDict)
@@ -2409,19 +2154,19 @@ class ImageObject:
         filterDict = dict(
             name='CIGloom',
             attributes=dict(
-                radius=radius,
-                intensity=intensity
+                inputRadius=radius,
+                inputIntensity=intensity
             )
         )
         self._addFilter(filterDict)
     
-    def guidedFilter(self, guideImage, radius: float = 1.0, epsilon: float = 0.0001):
+    def guidedFilter(self, guideImage: Self, radius: float = 1.0, epsilon: float = 0.0001):
         """
         Upsamples a small image to the size of the guide image using the content of the guide to preserve detail.
         
         **Arguments:**
         
-        `guideImage` a float. A larger image to use as a guide.
+        `guideImage` an Image object. A larger image to use as a guide.
         `radius` a float. The distance from the center of the effect.
         `epsilon` a float. 
         """
@@ -2430,9 +2175,9 @@ class ImageObject:
         filterDict = dict(
             name='CIGuidedFilter',
             attributes=dict(
-                guideImage=guideImage,
-                radius=radius,
-                epsilon=epsilon
+                inputGuideImage=guideImage._ciImage(),
+                inputRadius=radius,
+                inputEpsilon=epsilon
             )
         )
         self._addFilter(filterDict)
@@ -2450,7 +2195,7 @@ class ImageObject:
         filterDict = dict(
             name='CIHardLightBlendMode',
             attributes=dict(
-                backgroundImage=backgroundImage
+                inputBackgroundImage=backgroundImage._ciImage()
             )
         )
         self._addFilter(filterDict)
@@ -2471,10 +2216,10 @@ class ImageObject:
         filterDict = dict(
             name='CIHatchedScreen',
             attributes=dict(
-                center=AppKit.CIVector.vectorWithX_Y_(center[0], center[1]),
-                angle=radians(angle),
-                width=width,
-                sharpness=sharpness
+                inputCenter=AppKit.CIVector.vectorWithX_Y_(center[0], center[1]),
+                inputAngle=radians(angle),
+                inputWidth=width,
+                inputSharpness=sharpness
             )
         )
         self._addFilter(filterDict)
@@ -2492,7 +2237,7 @@ class ImageObject:
         filterDict = dict(
             name='CIHeightFieldFromMask',
             attributes=dict(
-                radius=radius
+                inputRadius=radius
             )
         )
         self._addFilter(filterDict)
@@ -2511,8 +2256,8 @@ class ImageObject:
         filterDict = dict(
             name='CIHexagonalPixellate',
             attributes=dict(
-                center=AppKit.CIVector.vectorWithX_Y_(center[0], center[1]),
-                scale=scale
+                inputCenter=AppKit.CIVector.vectorWithX_Y_(center[0], center[1]),
+                inputScale=scale
             )
         )
         self._addFilter(filterDict)
@@ -2532,9 +2277,9 @@ class ImageObject:
         filterDict = dict(
             name='CIHighlightShadowAdjust',
             attributes=dict(
-                radius=radius,
-                shadowAmount=shadowAmount,
-                highlightAmount=highlightAmount
+                inputRadius=radius,
+                inputShadowAmount=shadowAmount,
+                inputHighlightAmount=highlightAmount
             )
         )
         self._addFilter(filterDict)
@@ -2554,9 +2299,9 @@ class ImageObject:
         filterDict = dict(
             name='CIHistogramDisplayFilter',
             attributes=dict(
-                height=height,
-                highLimit=highLimit,
-                lowLimit=lowLimit
+                inputHeight=height,
+                inputHighLimit=highLimit,
+                inputLowLimit=lowLimit
             )
         )
         self._addFilter(filterDict)
@@ -2575,8 +2320,8 @@ class ImageObject:
         filterDict = dict(
             name='CIHoleDistortion',
             attributes=dict(
-                center=AppKit.CIVector.vectorWithX_Y_(center[0], center[1]),
-                radius=radius
+                inputCenter=AppKit.CIVector.vectorWithX_Y_(center[0], center[1]),
+                inputRadius=radius
             )
         )
         self._addFilter(filterDict)
@@ -2594,7 +2339,7 @@ class ImageObject:
         filterDict = dict(
             name='CIHueAdjust',
             attributes=dict(
-                angle=radians(angle)
+                inputAngle=radians(angle)
             )
         )
         self._addFilter(filterDict)
@@ -2612,33 +2357,7 @@ class ImageObject:
         filterDict = dict(
             name='CIHueBlendMode',
             attributes=dict(
-                backgroundImage=backgroundImage
-            )
-        )
-        self._addFilter(filterDict)
-    
-    def hueSaturationValueGradient(self, value: float = 1.0, radius: float = 300.0, softness: float = 1.0, dither: float = 1.0, colorSpace = None):
-        """
-        Generates a color wheel that shows hues and saturations for a specified value.
-        
-        **Arguments:**
-        
-        `value` a float. The color value used to generate the color wheel.
-        `radius` a float. The distance from the center of the effect.
-        `softness` a float. 
-        `dither` a float. 
-        `colorSpace` a CoreGraphics color space. The color space that the color wheel should be generated in.
-        """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        filterDict = dict(
-            name='CIHueSaturationValueGradient',
-            attributes=dict(
-                value=value,
-                radius=radius,
-                softness=softness,
-                dither=dither,
-                colorSpace=colorSpace
+                inputBackgroundImage=backgroundImage._ciImage()
             )
         )
         self._addFilter(filterDict)
@@ -2658,9 +2377,9 @@ class ImageObject:
         filterDict = dict(
             name='CIKaleidoscope',
             attributes=dict(
-                count=count,
-                center=AppKit.CIVector.vectorWithX_Y_(center[0], center[1]),
-                angle=radians(angle)
+                inputCount=count,
+                inputCenter=AppKit.CIVector.vectorWithX_Y_(center[0], center[1]),
+                inputAngle=radians(angle)
             )
         )
         self._addFilter(filterDict)
@@ -2682,11 +2401,11 @@ class ImageObject:
         filterDict = dict(
             name='CIKeystoneCorrectionCombined',
             attributes=dict(
-                topLeft=AppKit.CIVector.vectorWithValues_count_(topLeft, 2),
-                topRight=AppKit.CIVector.vectorWithValues_count_(topRight, 2),
-                bottomRight=AppKit.CIVector.vectorWithValues_count_(bottomRight, 2),
-                bottomLeft=AppKit.CIVector.vectorWithValues_count_(bottomLeft, 2),
-                focalLength=focalLength
+                inputTopLeft=AppKit.CIVector.vectorWithValues_count_(topLeft, 2),
+                inputTopRight=AppKit.CIVector.vectorWithValues_count_(topRight, 2),
+                inputBottomRight=AppKit.CIVector.vectorWithValues_count_(bottomRight, 2),
+                inputBottomLeft=AppKit.CIVector.vectorWithValues_count_(bottomLeft, 2),
+                inputFocalLength=focalLength
             )
         )
         self._addFilter(filterDict)
@@ -2708,11 +2427,11 @@ class ImageObject:
         filterDict = dict(
             name='CIKeystoneCorrectionHorizontal',
             attributes=dict(
-                topLeft=AppKit.CIVector.vectorWithValues_count_(topLeft, 2),
-                topRight=AppKit.CIVector.vectorWithValues_count_(topRight, 2),
-                bottomRight=AppKit.CIVector.vectorWithValues_count_(bottomRight, 2),
-                bottomLeft=AppKit.CIVector.vectorWithValues_count_(bottomLeft, 2),
-                focalLength=focalLength
+                inputTopLeft=AppKit.CIVector.vectorWithValues_count_(topLeft, 2),
+                inputTopRight=AppKit.CIVector.vectorWithValues_count_(topRight, 2),
+                inputBottomRight=AppKit.CIVector.vectorWithValues_count_(bottomRight, 2),
+                inputBottomLeft=AppKit.CIVector.vectorWithValues_count_(bottomLeft, 2),
+                inputFocalLength=focalLength
             )
         )
         self._addFilter(filterDict)
@@ -2734,11 +2453,11 @@ class ImageObject:
         filterDict = dict(
             name='CIKeystoneCorrectionVertical',
             attributes=dict(
-                topLeft=AppKit.CIVector.vectorWithValues_count_(topLeft, 2),
-                topRight=AppKit.CIVector.vectorWithValues_count_(topRight, 2),
-                bottomRight=AppKit.CIVector.vectorWithValues_count_(bottomRight, 2),
-                bottomLeft=AppKit.CIVector.vectorWithValues_count_(bottomLeft, 2),
-                focalLength=focalLength
+                inputTopLeft=AppKit.CIVector.vectorWithValues_count_(topLeft, 2),
+                inputTopRight=AppKit.CIVector.vectorWithValues_count_(topRight, 2),
+                inputBottomRight=AppKit.CIVector.vectorWithValues_count_(bottomRight, 2),
+                inputBottomLeft=AppKit.CIVector.vectorWithValues_count_(bottomLeft, 2),
+                inputFocalLength=focalLength
             )
         )
         self._addFilter(filterDict)
@@ -2760,11 +2479,11 @@ class ImageObject:
         filterDict = dict(
             name='CIKMeans',
             attributes=dict(
-                means=means,
-                extent=AppKit.CIVector.vectorWithValues_count_(extent, 4),
-                count=count,
-                passes=passes,
-                perceptual=perceptual
+                inputMeans=means,
+                inputExtent=AppKit.CIVector.vectorWithValues_count_(extent, 4),
+                inputCount=count,
+                inputPasses=passes,
+                inputPerceptual=perceptual
             )
         )
         self._addFilter(filterDict)
@@ -2782,7 +2501,7 @@ class ImageObject:
         filterDict = dict(
             name='CILabDeltaE',
             attributes=dict(
-                image2=image2
+                inputImage2=image2
             )
         )
         self._addFilter(filterDict)
@@ -2801,8 +2520,8 @@ class ImageObject:
         filterDict = dict(
             name='CILanczosScaleTransform',
             attributes=dict(
-                scale=scale,
-                aspectRatio=aspectRatio
+                inputScale=scale,
+                inputAspectRatio=aspectRatio
             )
         )
         self._addFilter(filterDict)
@@ -2828,18 +2547,18 @@ class ImageObject:
         filterDict = dict(
             name='CILenticularHaloGenerator',
             attributes=dict(
-                center=AppKit.CIVector.vectorWithX_Y_(center[0], center[1]),
-                color=AppKit.CIColor.colorWithRed_green_blue_alpha_(color[0], color[1], color[2], color[3]),
-                haloRadius=haloRadius,
-                haloWidth=haloWidth,
-                haloOverlap=haloOverlap,
-                striationStrength=striationStrength,
-                striationContrast=striationContrast,
-                time=time
+                inputCenter=AppKit.CIVector.vectorWithX_Y_(center[0], center[1]),
+                inputColor=AppKit.CIColor.colorWithRed_green_blue_alpha_(color[0], color[1], color[2], color[3]),
+                inputHaloRadius=haloRadius,
+                inputHaloWidth=haloWidth,
+                inputHaloOverlap=haloOverlap,
+                inputStriationStrength=striationStrength,
+                inputStriationContrast=striationContrast,
+                inputTime=time
             ),
             size=size,
             isGenerator=True
-        ),
+        )
         self._addFilter(filterDict)
     
     def lightenBlendMode(self, backgroundImage: Self):
@@ -2855,7 +2574,7 @@ class ImageObject:
         filterDict = dict(
             name='CILightenBlendMode',
             attributes=dict(
-                backgroundImage=backgroundImage
+                inputBackgroundImage=backgroundImage._ciImage()
             )
         )
         self._addFilter(filterDict)
@@ -2875,9 +2594,9 @@ class ImageObject:
         filterDict = dict(
             name='CILightTunnel',
             attributes=dict(
-                center=AppKit.CIVector.vectorWithX_Y_(center[0], center[1]),
-                rotation=rotation,
-                radius=radius
+                inputCenter=AppKit.CIVector.vectorWithX_Y_(center[0], center[1]),
+                inputRotation=radians(rotation),
+                inputRadius=radius
             )
         )
         self._addFilter(filterDict)
@@ -2895,7 +2614,7 @@ class ImageObject:
         filterDict = dict(
             name='CILinearBurnBlendMode',
             attributes=dict(
-                backgroundImage=backgroundImage
+                inputBackgroundImage=backgroundImage._ciImage()
             )
         )
         self._addFilter(filterDict)
@@ -2913,7 +2632,7 @@ class ImageObject:
         filterDict = dict(
             name='CILinearDodgeBlendMode',
             attributes=dict(
-                backgroundImage=backgroundImage
+                inputBackgroundImage=backgroundImage._ciImage()
             )
         )
         self._addFilter(filterDict)
@@ -2935,14 +2654,14 @@ class ImageObject:
         filterDict = dict(
             name='CILinearGradient',
             attributes=dict(
-                point0=AppKit.CIVector.vectorWithValues_count_(point0, 2),
-                point1=AppKit.CIVector.vectorWithValues_count_(point1, 2),
-                color0=AppKit.CIColor.colorWithRed_green_blue_alpha_(color0[0], color0[1], color0[2], color0[3]),
-                color1=AppKit.CIColor.colorWithRed_green_blue_alpha_(color1[0], color1[1], color1[2], color1[3])
+                inputPoint0=AppKit.CIVector.vectorWithValues_count_(point0, 2),
+                inputPoint1=AppKit.CIVector.vectorWithValues_count_(point1, 2),
+                inputColor0=AppKit.CIColor.colorWithRed_green_blue_alpha_(color0[0], color0[1], color0[2], color0[3]),
+                inputColor1=AppKit.CIColor.colorWithRed_green_blue_alpha_(color1[0], color1[1], color1[2], color1[3])
             ),
             size=size,
             isGenerator=True
-        ),
+        )
         self._addFilter(filterDict)
     
     def linearLightBlendMode(self, backgroundImage: Self):
@@ -2958,7 +2677,7 @@ class ImageObject:
         filterDict = dict(
             name='CILinearLightBlendMode',
             attributes=dict(
-                backgroundImage=backgroundImage
+                inputBackgroundImage=backgroundImage._ciImage()
             )
         )
         self._addFilter(filterDict)
@@ -2991,11 +2710,11 @@ class ImageObject:
         filterDict = dict(
             name='CILineOverlay',
             attributes=dict(
-                NRNoiseLevel=NRNoiseLevel,
-                NRSharpness=NRSharpness,
-                edgeIntensity=edgeIntensity,
-                threshold=threshold,
-                contrast=contrast
+                inputNRNoiseLevel=NRNoiseLevel,
+                inputNRSharpness=NRSharpness,
+                inputEdgeIntensity=edgeIntensity,
+                inputThreshold=threshold,
+                inputContrast=contrast
             )
         )
         self._addFilter(filterDict)
@@ -3016,10 +2735,10 @@ class ImageObject:
         filterDict = dict(
             name='CILineScreen',
             attributes=dict(
-                center=AppKit.CIVector.vectorWithX_Y_(center[0], center[1]),
-                angle=radians(angle),
-                width=width,
-                sharpness=sharpness
+                inputCenter=AppKit.CIVector.vectorWithX_Y_(center[0], center[1]),
+                inputAngle=radians(angle),
+                inputWidth=width,
+                inputSharpness=sharpness
             )
         )
         self._addFilter(filterDict)
@@ -3037,7 +2756,7 @@ class ImageObject:
         filterDict = dict(
             name='CILuminosityBlendMode',
             attributes=dict(
-                backgroundImage=backgroundImage
+                inputBackgroundImage=backgroundImage._ciImage()
             )
         )
         self._addFilter(filterDict)
@@ -3056,8 +2775,8 @@ class ImageObject:
         filterDict = dict(
             name='CIMaskedVariableBlur',
             attributes=dict(
-                mask=mask._ciImage(),
-                radius=radius
+                inputMask=mask._ciImage(),
+                inputRadius=radius
             )
         )
         self._addFilter(filterDict)
@@ -3097,7 +2816,27 @@ class ImageObject:
         filterDict = dict(
             name='CIMaximumCompositing',
             attributes=dict(
-                backgroundImage=backgroundImage
+                inputBackgroundImage=backgroundImage._ciImage()
+            )
+        )
+        self._addFilter(filterDict)
+    
+    def maximumScaleTransform(self, scale: float = 1.0, aspectRatio: float = 1.0):
+        """
+        Produces a scaled version of a source image that uses the maximum of neighboring pixels instead of linear averaging.
+        
+        **Arguments:**
+        
+        `scale` a float. The scaling factor to use on the image. Values less than 1.0 scale down the images. Values greater than 1.0 scale up the image.
+        `aspectRatio` a float. The additional horizontal scaling factor to use on the image.
+        """
+        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
+        # please, do not attempt to edit it manually as it will be overriden in the future
+        filterDict = dict(
+            name='CIMaximumScaleTransform',
+            attributes=dict(
+                inputScale=scale,
+                inputAspectRatio=aspectRatio
             )
         )
         self._addFilter(filterDict)
@@ -3118,13 +2857,13 @@ class ImageObject:
         filterDict = dict(
             name='CIMeshGenerator',
             attributes=dict(
-                mesh=mesh,
-                width=width,
-                color=AppKit.CIColor.colorWithRed_green_blue_alpha_(color[0], color[1], color[2], color[3])
+                inputMesh=mesh,
+                inputWidth=width,
+                inputColor=AppKit.CIColor.colorWithRed_green_blue_alpha_(color[0], color[1], color[2], color[3])
             ),
             size=size,
             isGenerator=True
-        ),
+        )
         self._addFilter(filterDict)
     
     def minimumComponent(self):
@@ -3151,7 +2890,7 @@ class ImageObject:
         filterDict = dict(
             name='CIMinimumCompositing',
             attributes=dict(
-                backgroundImage=backgroundImage
+                inputBackgroundImage=backgroundImage._ciImage()
             )
         )
         self._addFilter(filterDict)
@@ -3170,8 +2909,8 @@ class ImageObject:
         filterDict = dict(
             name='CIMix',
             attributes=dict(
-                backgroundImage=backgroundImage,
-                amount=amount
+                inputBackgroundImage=backgroundImage._ciImage(),
+                inputAmount=amount
             )
         )
         self._addFilter(filterDict)
@@ -3194,12 +2933,12 @@ class ImageObject:
         filterDict = dict(
             name='CIModTransition',
             attributes=dict(
-                targetImage=targetImage,
-                center=AppKit.CIVector.vectorWithX_Y_(center[0], center[1]),
-                time=time,
-                angle=radians(angle),
-                radius=radius,
-                compression=compression
+                inputTargetImage=targetImage._ciImage(),
+                inputCenter=AppKit.CIVector.vectorWithX_Y_(center[0], center[1]),
+                inputTime=time,
+                inputAngle=radians(angle),
+                inputRadius=radius,
+                inputCompression=compression
             )
         )
         self._addFilter(filterDict)
@@ -3217,7 +2956,7 @@ class ImageObject:
         filterDict = dict(
             name='CIMorphologyGradient',
             attributes=dict(
-                radius=radius
+                inputRadius=radius
             )
         )
         self._addFilter(filterDict)
@@ -3235,7 +2974,7 @@ class ImageObject:
         filterDict = dict(
             name='CIMorphologyMaximum',
             attributes=dict(
-                radius=radius
+                inputRadius=radius
             )
         )
         self._addFilter(filterDict)
@@ -3253,7 +2992,7 @@ class ImageObject:
         filterDict = dict(
             name='CIMorphologyMinimum',
             attributes=dict(
-                radius=radius
+                inputRadius=radius
             )
         )
         self._addFilter(filterDict)
@@ -3272,8 +3011,8 @@ class ImageObject:
         filterDict = dict(
             name='CIMorphologyRectangleMaximum',
             attributes=dict(
-                width=width,
-                height=height
+                inputWidth=width,
+                inputHeight=height
             )
         )
         self._addFilter(filterDict)
@@ -3292,8 +3031,8 @@ class ImageObject:
         filterDict = dict(
             name='CIMorphologyRectangleMinimum',
             attributes=dict(
-                width=width,
-                height=height
+                inputWidth=width,
+                inputHeight=height
             )
         )
         self._addFilter(filterDict)
@@ -3312,8 +3051,8 @@ class ImageObject:
         filterDict = dict(
             name='CIMotionBlur',
             attributes=dict(
-                radius=radius,
-                angle=radians(angle)
+                inputRadius=radius,
+                inputAngle=radians(angle)
             )
         )
         self._addFilter(filterDict)
@@ -3331,7 +3070,7 @@ class ImageObject:
         filterDict = dict(
             name='CIMultiplyBlendMode',
             attributes=dict(
-                backgroundImage=backgroundImage
+                inputBackgroundImage=backgroundImage._ciImage()
             )
         )
         self._addFilter(filterDict)
@@ -3349,7 +3088,7 @@ class ImageObject:
         filterDict = dict(
             name='CIMultiplyCompositing',
             attributes=dict(
-                backgroundImage=backgroundImage
+                inputBackgroundImage=backgroundImage._ciImage()
             )
         )
         self._addFilter(filterDict)
@@ -3360,18 +3099,18 @@ class ImageObject:
         
         **Arguments:**
         
-        `breakpoint0` a float. Lower left corner of image to retain before stretching begins.
-        `breakpoint1` a float. Upper right corner of image to retain after stretching ends.
-        `growAmount` a float. Vector indicating how much image should grow in pixels in both dimensions.
+        `breakpoint0` a tuple (x, y). Lower left corner of image to retain before stretching begins.
+        `breakpoint1` a tuple (x, y). Upper right corner of image to retain after stretching ends.
+        `growAmount` a tuple (x, y). Vector indicating how much image should grow in pixels in both dimensions.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
         filterDict = dict(
             name='CINinePartStretched',
             attributes=dict(
-                breakpoint0=breakpoint0,
-                breakpoint1=breakpoint1,
-                growAmount=growAmount
+                inputBreakpoint0=AppKit.CIVector.vectorWithValues_count_(breakpoint0, 2),
+                inputBreakpoint1=AppKit.CIVector.vectorWithValues_count_(breakpoint1, 2),
+                inputGrowAmount=AppKit.CIVector.vectorWithValues_count_(growAmount, 2)
             )
         )
         self._addFilter(filterDict)
@@ -3382,9 +3121,9 @@ class ImageObject:
         
         **Arguments:**
         
-        `breakpoint0` a float. Lower left corner of image to retain before tiling begins.
-        `breakpoint1` a float. Upper right corner of image to retain after tiling ends.
-        `growAmount` a float. Vector indicating how much image should grow in pixels in both dimensions.
+        `breakpoint0` a tuple (x, y). Lower left corner of image to retain before tiling begins.
+        `breakpoint1` a tuple (x, y). Upper right corner of image to retain after tiling ends.
+        `growAmount` a tuple (x, y). Vector indicating how much image should grow in pixels in both dimensions.
         `flipYTiles` a float. Indicates that Y-Axis flip should occur.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
@@ -3392,10 +3131,10 @@ class ImageObject:
         filterDict = dict(
             name='CINinePartTiled',
             attributes=dict(
-                breakpoint0=breakpoint0,
-                breakpoint1=breakpoint1,
-                growAmount=growAmount,
-                flipYTiles=flipYTiles
+                inputBreakpoint0=AppKit.CIVector.vectorWithValues_count_(breakpoint0, 2),
+                inputBreakpoint1=AppKit.CIVector.vectorWithValues_count_(breakpoint1, 2),
+                inputGrowAmount=AppKit.CIVector.vectorWithValues_count_(growAmount, 2),
+                inputFlipYTiles=flipYTiles
             )
         )
         self._addFilter(filterDict)
@@ -3414,8 +3153,8 @@ class ImageObject:
         filterDict = dict(
             name='CINoiseReduction',
             attributes=dict(
-                noiseLevel=noiseLevel,
-                sharpness=sharpness
+                inputNoiseLevel=noiseLevel,
+                inputSharpness=sharpness
             )
         )
         self._addFilter(filterDict)
@@ -3436,10 +3175,10 @@ class ImageObject:
         filterDict = dict(
             name='CIOpTile',
             attributes=dict(
-                center=AppKit.CIVector.vectorWithX_Y_(center[0], center[1]),
-                scale=scale,
-                angle=radians(angle),
-                width=width
+                inputCenter=AppKit.CIVector.vectorWithX_Y_(center[0], center[1]),
+                inputScale=scale,
+                inputAngle=radians(angle),
+                inputWidth=width
             )
         )
         self._addFilter(filterDict)
@@ -3457,7 +3196,7 @@ class ImageObject:
         filterDict = dict(
             name='CIOverlayBlendMode',
             attributes=dict(
-                backgroundImage=backgroundImage
+                inputBackgroundImage=backgroundImage._ciImage()
             )
         )
         self._addFilter(filterDict)
@@ -3481,13 +3220,13 @@ class ImageObject:
         filterDict = dict(
             name='CIPageCurlTransition',
             attributes=dict(
-                targetImage=targetImage,
-                backsideImage=backsideImage,
-                shadingImage=shadingImage,
-                extent=AppKit.CIVector.vectorWithValues_count_(extent, 4),
-                time=time,
-                angle=radians(angle),
-                radius=radius
+                inputTargetImage=targetImage._ciImage(),
+                inputBacksideImage=backsideImage._ciImage(),
+                inputShadingImage=shadingImage._ciImage(),
+                inputExtent=AppKit.CIVector.vectorWithValues_count_(extent, 4),
+                inputTime=time,
+                inputAngle=radians(angle),
+                inputRadius=radius
             )
         )
         self._addFilter(filterDict)
@@ -3513,26 +3252,26 @@ class ImageObject:
         filterDict = dict(
             name='CIPageCurlWithShadowTransition',
             attributes=dict(
-                targetImage=targetImage,
-                backsideImage=backsideImage,
-                extent=AppKit.CIVector.vectorWithValues_count_(extent, 4),
-                time=time,
-                angle=radians(angle),
-                radius=radius,
-                shadowSize=shadowSize,
-                shadowAmount=shadowAmount,
-                shadowExtent=AppKit.CIVector.vectorWithValues_count_(shadowExtent, 4)
+                inputTargetImage=targetImage._ciImage(),
+                inputBacksideImage=backsideImage._ciImage(),
+                inputExtent=AppKit.CIVector.vectorWithValues_count_(extent, 4),
+                inputTime=time,
+                inputAngle=radians(angle),
+                inputRadius=radius,
+                inputShadowSize=shadowSize,
+                inputShadowAmount=shadowAmount,
+                inputShadowExtent=AppKit.CIVector.vectorWithValues_count_(shadowExtent, 4)
             )
         )
         self._addFilter(filterDict)
     
-    def paletteCentroid(self, paletteImage, perceptual: bool = False):
+    def paletteCentroid(self, paletteImage: Self, perceptual: bool = False):
         """
         Calculate the mean (x,y) image coordinates of a color palette.
         
         **Arguments:**
         
-        `paletteImage` a float. The input color palette, obtained using "CIKMeans" filter.
+        `paletteImage` an Image object. The input color palette, obtained using "CIKMeans" filter.
         `perceptual` a float. Specifies whether the color palette should be applied in a perceptual color space.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
@@ -3540,19 +3279,19 @@ class ImageObject:
         filterDict = dict(
             name='CIPaletteCentroid',
             attributes=dict(
-                paletteImage=paletteImage,
-                perceptual=perceptual
+                inputPaletteImage=paletteImage._ciImage(),
+                inputPerceptual=perceptual
             )
         )
         self._addFilter(filterDict)
     
-    def palettize(self, paletteImage, perceptual: bool = False):
+    def palettize(self, paletteImage: Self, perceptual: bool = False):
         """
         Paint an image from a color palette obtained using "CIKMeans".
         
         **Arguments:**
         
-        `paletteImage` a float. The input color palette, obtained using "CIKMeans" filter.
+        `paletteImage` an Image object. The input color palette, obtained using "CIKMeans" filter.
         `perceptual` a float. Specifies whether the color palette should be applied in a perceptual color space.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
@@ -3560,8 +3299,8 @@ class ImageObject:
         filterDict = dict(
             name='CIPalettize',
             attributes=dict(
-                paletteImage=paletteImage,
-                perceptual=perceptual
+                inputPaletteImage=paletteImage._ciImage(),
+                inputPerceptual=perceptual
             )
         )
         self._addFilter(filterDict)
@@ -3582,10 +3321,10 @@ class ImageObject:
         filterDict = dict(
             name='CIParallelogramTile',
             attributes=dict(
-                center=AppKit.CIVector.vectorWithX_Y_(center[0], center[1]),
-                angle=radians(angle),
-                acuteAngle=radians(acuteAngle),
-                width=width
+                inputCenter=AppKit.CIVector.vectorWithX_Y_(center[0], center[1]),
+                inputAngle=radians(angle),
+                inputAcuteAngle=radians(acuteAngle),
+                inputWidth=width
             )
         )
         self._addFilter(filterDict)
@@ -3615,22 +3354,22 @@ class ImageObject:
         filterDict = dict(
             name='CIPDF417BarcodeGenerator',
             attributes=dict(
-                message=AppKit.NSData.dataWithBytes_length_(message, len(message)),
-                minWidth=minWidth,
-                maxWidth=maxWidth,
-                minHeight=minHeight,
-                maxHeight=maxHeight,
-                dataColumns=dataColumns,
-                rows=rows,
-                preferredAspectRatio=preferredAspectRatio,
-                compactionMode=compactionMode,
-                compactStyle=compactStyle,
-                correctionLevel=correctionLevel,
-                alwaysSpecifyCompaction=alwaysSpecifyCompaction
+                inputMessage=AppKit.NSData.dataWithBytes_length_(message, len(message)),
+                inputMinWidth=minWidth,
+                inputMaxWidth=maxWidth,
+                inputMinHeight=minHeight,
+                inputMaxHeight=maxHeight,
+                inputDataColumns=dataColumns,
+                inputRows=rows,
+                inputPreferredAspectRatio=preferredAspectRatio,
+                inputCompactionMode=compactionMode,
+                inputCompactStyle=compactStyle,
+                inputCorrectionLevel=correctionLevel,
+                inputAlwaysSpecifyCompaction=alwaysSpecifyCompaction
             ),
             size=size,
             isGenerator=True
-        ),
+        )
         self._addFilter(filterDict)
     
     def personSegmentation(self, qualityLevel: float = 0.0):
@@ -3646,7 +3385,7 @@ class ImageObject:
         filterDict = dict(
             name='CIPersonSegmentation',
             attributes=dict(
-                qualityLevel=qualityLevel
+                inputQualityLevel=qualityLevel
             )
         )
         self._addFilter(filterDict)
@@ -3668,11 +3407,11 @@ class ImageObject:
         filterDict = dict(
             name='CIPerspectiveCorrection',
             attributes=dict(
-                topLeft=AppKit.CIVector.vectorWithValues_count_(topLeft, 2),
-                topRight=AppKit.CIVector.vectorWithValues_count_(topRight, 2),
-                bottomRight=AppKit.CIVector.vectorWithValues_count_(bottomRight, 2),
-                bottomLeft=AppKit.CIVector.vectorWithValues_count_(bottomLeft, 2),
-                crop=crop
+                inputTopLeft=AppKit.CIVector.vectorWithValues_count_(topLeft, 2),
+                inputTopRight=AppKit.CIVector.vectorWithValues_count_(topRight, 2),
+                inputBottomRight=AppKit.CIVector.vectorWithValues_count_(bottomRight, 2),
+                inputBottomLeft=AppKit.CIVector.vectorWithValues_count_(bottomLeft, 2),
+                inputCrop=crop
             )
         )
         self._addFilter(filterDict)
@@ -3693,10 +3432,10 @@ class ImageObject:
         filterDict = dict(
             name='CIPerspectiveRotate',
             attributes=dict(
-                focalLength=focalLength,
-                pitch=pitch,
-                yaw=yaw,
-                roll=roll
+                inputFocalLength=focalLength,
+                inputPitch=pitch,
+                inputYaw=yaw,
+                inputRoll=roll
             )
         )
         self._addFilter(filterDict)
@@ -3717,10 +3456,10 @@ class ImageObject:
         filterDict = dict(
             name='CIPerspectiveTile',
             attributes=dict(
-                topLeft=AppKit.CIVector.vectorWithValues_count_(topLeft, 2),
-                topRight=AppKit.CIVector.vectorWithValues_count_(topRight, 2),
-                bottomRight=AppKit.CIVector.vectorWithValues_count_(bottomRight, 2),
-                bottomLeft=AppKit.CIVector.vectorWithValues_count_(bottomLeft, 2)
+                inputTopLeft=AppKit.CIVector.vectorWithValues_count_(topLeft, 2),
+                inputTopRight=AppKit.CIVector.vectorWithValues_count_(topRight, 2),
+                inputBottomRight=AppKit.CIVector.vectorWithValues_count_(bottomRight, 2),
+                inputBottomLeft=AppKit.CIVector.vectorWithValues_count_(bottomLeft, 2)
             )
         )
         self._addFilter(filterDict)
@@ -3741,10 +3480,10 @@ class ImageObject:
         filterDict = dict(
             name='CIPerspectiveTransform',
             attributes=dict(
-                topLeft=AppKit.CIVector.vectorWithValues_count_(topLeft, 2),
-                topRight=AppKit.CIVector.vectorWithValues_count_(topRight, 2),
-                bottomRight=AppKit.CIVector.vectorWithValues_count_(bottomRight, 2),
-                bottomLeft=AppKit.CIVector.vectorWithValues_count_(bottomLeft, 2)
+                inputTopLeft=AppKit.CIVector.vectorWithValues_count_(topLeft, 2),
+                inputTopRight=AppKit.CIVector.vectorWithValues_count_(topRight, 2),
+                inputBottomRight=AppKit.CIVector.vectorWithValues_count_(bottomRight, 2),
+                inputBottomLeft=AppKit.CIVector.vectorWithValues_count_(bottomLeft, 2)
             )
         )
         self._addFilter(filterDict)
@@ -3766,11 +3505,11 @@ class ImageObject:
         filterDict = dict(
             name='CIPerspectiveTransformWithExtent',
             attributes=dict(
-                extent=AppKit.CIVector.vectorWithValues_count_(extent, 4),
-                topLeft=AppKit.CIVector.vectorWithValues_count_(topLeft, 2),
-                topRight=AppKit.CIVector.vectorWithValues_count_(topRight, 2),
-                bottomRight=AppKit.CIVector.vectorWithValues_count_(bottomRight, 2),
-                bottomLeft=AppKit.CIVector.vectorWithValues_count_(bottomLeft, 2)
+                inputExtent=AppKit.CIVector.vectorWithValues_count_(extent, 4),
+                inputTopLeft=AppKit.CIVector.vectorWithValues_count_(topLeft, 2),
+                inputTopRight=AppKit.CIVector.vectorWithValues_count_(topRight, 2),
+                inputBottomRight=AppKit.CIVector.vectorWithValues_count_(bottomRight, 2),
+                inputBottomLeft=AppKit.CIVector.vectorWithValues_count_(bottomLeft, 2)
             )
         )
         self._addFilter(filterDict)
@@ -3788,7 +3527,7 @@ class ImageObject:
         filterDict = dict(
             name='CIPhotoEffectChrome',
             attributes=dict(
-                extrapolate=extrapolate
+                inputExtrapolate=extrapolate
             )
         )
         self._addFilter(filterDict)
@@ -3806,7 +3545,7 @@ class ImageObject:
         filterDict = dict(
             name='CIPhotoEffectFade',
             attributes=dict(
-                extrapolate=extrapolate
+                inputExtrapolate=extrapolate
             )
         )
         self._addFilter(filterDict)
@@ -3824,7 +3563,7 @@ class ImageObject:
         filterDict = dict(
             name='CIPhotoEffectInstant',
             attributes=dict(
-                extrapolate=extrapolate
+                inputExtrapolate=extrapolate
             )
         )
         self._addFilter(filterDict)
@@ -3842,7 +3581,7 @@ class ImageObject:
         filterDict = dict(
             name='CIPhotoEffectMono',
             attributes=dict(
-                extrapolate=extrapolate
+                inputExtrapolate=extrapolate
             )
         )
         self._addFilter(filterDict)
@@ -3860,7 +3599,7 @@ class ImageObject:
         filterDict = dict(
             name='CIPhotoEffectNoir',
             attributes=dict(
-                extrapolate=extrapolate
+                inputExtrapolate=extrapolate
             )
         )
         self._addFilter(filterDict)
@@ -3878,7 +3617,7 @@ class ImageObject:
         filterDict = dict(
             name='CIPhotoEffectProcess',
             attributes=dict(
-                extrapolate=extrapolate
+                inputExtrapolate=extrapolate
             )
         )
         self._addFilter(filterDict)
@@ -3896,7 +3635,7 @@ class ImageObject:
         filterDict = dict(
             name='CIPhotoEffectTonal',
             attributes=dict(
-                extrapolate=extrapolate
+                inputExtrapolate=extrapolate
             )
         )
         self._addFilter(filterDict)
@@ -3914,7 +3653,7 @@ class ImageObject:
         filterDict = dict(
             name='CIPhotoEffectTransfer',
             attributes=dict(
-                extrapolate=extrapolate
+                inputExtrapolate=extrapolate
             )
         )
         self._addFilter(filterDict)
@@ -3934,9 +3673,9 @@ class ImageObject:
         filterDict = dict(
             name='CIPinchDistortion',
             attributes=dict(
-                center=AppKit.CIVector.vectorWithX_Y_(center[0], center[1]),
-                radius=radius,
-                scale=scale
+                inputCenter=AppKit.CIVector.vectorWithX_Y_(center[0], center[1]),
+                inputRadius=radius,
+                inputScale=scale
             )
         )
         self._addFilter(filterDict)
@@ -3954,7 +3693,7 @@ class ImageObject:
         filterDict = dict(
             name='CIPinLightBlendMode',
             attributes=dict(
-                backgroundImage=backgroundImage
+                inputBackgroundImage=backgroundImage._ciImage()
             )
         )
         self._addFilter(filterDict)
@@ -3973,8 +3712,8 @@ class ImageObject:
         filterDict = dict(
             name='CIPixellate',
             attributes=dict(
-                center=AppKit.CIVector.vectorWithX_Y_(center[0], center[1]),
-                scale=scale
+                inputCenter=AppKit.CIVector.vectorWithX_Y_(center[0], center[1]),
+                inputScale=scale
             )
         )
         self._addFilter(filterDict)
@@ -3993,8 +3732,8 @@ class ImageObject:
         filterDict = dict(
             name='CIPointillize',
             attributes=dict(
-                radius=radius,
-                center=AppKit.CIVector.vectorWithX_Y_(center[0], center[1])
+                inputRadius=radius,
+                inputCenter=AppKit.CIVector.vectorWithX_Y_(center[0], center[1])
             )
         )
         self._addFilter(filterDict)
@@ -4014,13 +3753,13 @@ class ImageObject:
         filterDict = dict(
             name='CIQRCodeGenerator',
             attributes=dict(
-                message=AppKit.NSData.dataWithBytes_length_(message, len(message)),
-                correctionLevel=correctionLevel
+                inputMessage=AppKit.NSData.dataWithBytes_length_(message, len(message)),
+                inputCorrectionLevel=correctionLevel
             ),
             size=size,
             isGenerator=True,
             fitImage=True
-        ),
+        )
         self._addFilter(filterDict)
     
     def radialGradient(self, size: Size, center: Point = (150.0, 150.0), radius0: float = 5.0, radius1: float = 100.0, color0: RGBAColorTuple = (1.0, 1.0, 1.0, 1.0), color1: RGBAColorTuple = (0.0, 0.0, 0.0, 1.0)):
@@ -4041,15 +3780,15 @@ class ImageObject:
         filterDict = dict(
             name='CIRadialGradient',
             attributes=dict(
-                center=AppKit.CIVector.vectorWithX_Y_(center[0], center[1]),
-                radius0=radius0,
-                radius1=radius1,
-                color0=AppKit.CIColor.colorWithRed_green_blue_alpha_(color0[0], color0[1], color0[2], color0[3]),
-                color1=AppKit.CIColor.colorWithRed_green_blue_alpha_(color1[0], color1[1], color1[2], color1[3])
+                inputCenter=AppKit.CIVector.vectorWithX_Y_(center[0], center[1]),
+                inputRadius0=radius0,
+                inputRadius1=radius1,
+                inputColor0=AppKit.CIColor.colorWithRed_green_blue_alpha_(color0[0], color0[1], color0[2], color0[3]),
+                inputColor1=AppKit.CIColor.colorWithRed_green_blue_alpha_(color1[0], color1[1], color1[2], color1[3])
             ),
             size=size,
             isGenerator=True
-        ),
+        )
         self._addFilter(filterDict)
     
     def randomGenerator(self, size: Size):
@@ -4088,13 +3827,13 @@ class ImageObject:
         filterDict = dict(
             name='CIRippleTransition',
             attributes=dict(
-                targetImage=targetImage,
-                shadingImage=shadingImage,
-                center=AppKit.CIVector.vectorWithX_Y_(center[0], center[1]),
-                extent=AppKit.CIVector.vectorWithValues_count_(extent, 4),
-                time=time,
-                width=width,
-                scale=scale
+                inputTargetImage=targetImage._ciImage(),
+                inputShadingImage=shadingImage._ciImage(),
+                inputCenter=AppKit.CIVector.vectorWithX_Y_(center[0], center[1]),
+                inputExtent=AppKit.CIVector.vectorWithValues_count_(extent, 4),
+                inputTime=time,
+                inputWidth=width,
+                inputScale=scale
             )
         )
         self._addFilter(filterDict)
@@ -4115,13 +3854,13 @@ class ImageObject:
         filterDict = dict(
             name='CIRoundedRectangleGenerator',
             attributes=dict(
-                extent=AppKit.CIVector.vectorWithValues_count_(extent, 4),
-                radius=radius,
-                color=AppKit.CIColor.colorWithRed_green_blue_alpha_(color[0], color[1], color[2], color[3])
+                inputExtent=AppKit.CIVector.vectorWithValues_count_(extent, 4),
+                inputRadius=radius,
+                inputColor=AppKit.CIColor.colorWithRed_green_blue_alpha_(color[0], color[1], color[2], color[3])
             ),
             size=size,
             isGenerator=True
-        ),
+        )
         self._addFilter(filterDict)
     
     def roundedRectangleStrokeGenerator(self, size: Size, extent: BoundingBox = (0.0, 0.0, 100.0, 100.0), radius: float = 10.0, color: RGBAColorTuple = (1.0, 1.0, 1.0, 1.0), width: float = 10.0):
@@ -4141,14 +3880,14 @@ class ImageObject:
         filterDict = dict(
             name='CIRoundedRectangleStrokeGenerator',
             attributes=dict(
-                extent=AppKit.CIVector.vectorWithValues_count_(extent, 4),
-                radius=radius,
-                color=AppKit.CIColor.colorWithRed_green_blue_alpha_(color[0], color[1], color[2], color[3]),
-                width=width
+                inputExtent=AppKit.CIVector.vectorWithValues_count_(extent, 4),
+                inputRadius=radius,
+                inputColor=AppKit.CIColor.colorWithRed_green_blue_alpha_(color[0], color[1], color[2], color[3]),
+                inputWidth=width
             ),
             size=size,
             isGenerator=True
-        ),
+        )
         self._addFilter(filterDict)
     
     def rowAverage(self, extent: BoundingBox = (0.0, 0.0, 640.0, 80.0)):
@@ -4164,7 +3903,7 @@ class ImageObject:
         filterDict = dict(
             name='CIRowAverage',
             attributes=dict(
-                extent=AppKit.CIVector.vectorWithValues_count_(extent, 4)
+                inputExtent=AppKit.CIVector.vectorWithValues_count_(extent, 4)
             )
         )
         self._addFilter(filterDict)
@@ -4204,7 +3943,7 @@ class ImageObject:
         filterDict = dict(
             name='CISaturationBlendMode',
             attributes=dict(
-                backgroundImage=backgroundImage
+                inputBackgroundImage=backgroundImage._ciImage()
             )
         )
         self._addFilter(filterDict)
@@ -4222,7 +3961,7 @@ class ImageObject:
         filterDict = dict(
             name='CIScreenBlendMode',
             attributes=dict(
-                backgroundImage=backgroundImage
+                inputBackgroundImage=backgroundImage._ciImage()
             )
         )
         self._addFilter(filterDict)
@@ -4240,7 +3979,7 @@ class ImageObject:
         filterDict = dict(
             name='CISepiaTone',
             attributes=dict(
-                intensity=intensity
+                inputIntensity=intensity
             )
         )
         self._addFilter(filterDict)
@@ -4259,8 +3998,8 @@ class ImageObject:
         filterDict = dict(
             name='CIShadedMaterial',
             attributes=dict(
-                shadingImage=shadingImage,
-                scale=scale
+                inputShadingImage=shadingImage._ciImage(),
+                inputScale=scale
             )
         )
         self._addFilter(filterDict)
@@ -4279,8 +4018,8 @@ class ImageObject:
         filterDict = dict(
             name='CISharpenLuminance',
             attributes=dict(
-                sharpness=sharpness,
-                radius=radius
+                inputSharpness=sharpness,
+                inputRadius=radius
             )
         )
         self._addFilter(filterDict)
@@ -4300,9 +4039,9 @@ class ImageObject:
         filterDict = dict(
             name='CISixfoldReflectedTile',
             attributes=dict(
-                center=AppKit.CIVector.vectorWithX_Y_(center[0], center[1]),
-                angle=radians(angle),
-                width=width
+                inputCenter=AppKit.CIVector.vectorWithX_Y_(center[0], center[1]),
+                inputAngle=radians(angle),
+                inputWidth=width
             )
         )
         self._addFilter(filterDict)
@@ -4322,9 +4061,9 @@ class ImageObject:
         filterDict = dict(
             name='CISixfoldRotatedTile',
             attributes=dict(
-                center=AppKit.CIVector.vectorWithX_Y_(center[0], center[1]),
-                angle=radians(angle),
-                width=width
+                inputCenter=AppKit.CIVector.vectorWithX_Y_(center[0], center[1]),
+                inputAngle=radians(angle),
+                inputWidth=width
             )
         )
         self._addFilter(filterDict)
@@ -4346,14 +4085,14 @@ class ImageObject:
         filterDict = dict(
             name='CISmoothLinearGradient',
             attributes=dict(
-                point0=AppKit.CIVector.vectorWithValues_count_(point0, 2),
-                point1=AppKit.CIVector.vectorWithValues_count_(point1, 2),
-                color0=AppKit.CIColor.colorWithRed_green_blue_alpha_(color0[0], color0[1], color0[2], color0[3]),
-                color1=AppKit.CIColor.colorWithRed_green_blue_alpha_(color1[0], color1[1], color1[2], color1[3])
+                inputPoint0=AppKit.CIVector.vectorWithValues_count_(point0, 2),
+                inputPoint1=AppKit.CIVector.vectorWithValues_count_(point1, 2),
+                inputColor0=AppKit.CIColor.colorWithRed_green_blue_alpha_(color0[0], color0[1], color0[2], color0[3]),
+                inputColor1=AppKit.CIColor.colorWithRed_green_blue_alpha_(color1[0], color1[1], color1[2], color1[3])
             ),
             size=size,
             isGenerator=True
-        ),
+        )
         self._addFilter(filterDict)
     
     def sobelGradients(self):
@@ -4380,7 +4119,7 @@ class ImageObject:
         filterDict = dict(
             name='CISoftLightBlendMode',
             attributes=dict(
-                backgroundImage=backgroundImage
+                inputBackgroundImage=backgroundImage._ciImage()
             )
         )
         self._addFilter(filterDict)
@@ -4398,7 +4137,7 @@ class ImageObject:
         filterDict = dict(
             name='CISourceAtopCompositing',
             attributes=dict(
-                backgroundImage=backgroundImage
+                inputBackgroundImage=backgroundImage._ciImage()
             )
         )
         self._addFilter(filterDict)
@@ -4416,7 +4155,7 @@ class ImageObject:
         filterDict = dict(
             name='CISourceInCompositing',
             attributes=dict(
-                backgroundImage=backgroundImage
+                inputBackgroundImage=backgroundImage._ciImage()
             )
         )
         self._addFilter(filterDict)
@@ -4434,7 +4173,7 @@ class ImageObject:
         filterDict = dict(
             name='CISourceOutCompositing',
             attributes=dict(
-                backgroundImage=backgroundImage
+                inputBackgroundImage=backgroundImage._ciImage()
             )
         )
         self._addFilter(filterDict)
@@ -4452,7 +4191,7 @@ class ImageObject:
         filterDict = dict(
             name='CISourceOverCompositing',
             attributes=dict(
-                backgroundImage=backgroundImage
+                inputBackgroundImage=backgroundImage._ciImage()
             )
         )
         self._addFilter(filterDict)
@@ -4481,18 +4220,18 @@ class ImageObject:
         filterDict = dict(
             name='CISpotColor',
             attributes=dict(
-                centerColor1=AppKit.CIColor.colorWithRed_green_blue_alpha_(centerColor1[0], centerColor1[1], centerColor1[2], centerColor1[3]),
-                replacementColor1=AppKit.CIColor.colorWithRed_green_blue_alpha_(replacementColor1[0], replacementColor1[1], replacementColor1[2], replacementColor1[3]),
-                closeness1=closeness1,
-                contrast1=contrast1,
-                centerColor2=AppKit.CIColor.colorWithRed_green_blue_alpha_(centerColor2[0], centerColor2[1], centerColor2[2], centerColor2[3]),
-                replacementColor2=AppKit.CIColor.colorWithRed_green_blue_alpha_(replacementColor2[0], replacementColor2[1], replacementColor2[2], replacementColor2[3]),
-                closeness2=closeness2,
-                contrast2=contrast2,
-                centerColor3=AppKit.CIColor.colorWithRed_green_blue_alpha_(centerColor3[0], centerColor3[1], centerColor3[2], centerColor3[3]),
-                replacementColor3=AppKit.CIColor.colorWithRed_green_blue_alpha_(replacementColor3[0], replacementColor3[1], replacementColor3[2], replacementColor3[3]),
-                closeness3=closeness3,
-                contrast3=contrast3
+                inputCenterColor1=AppKit.CIColor.colorWithRed_green_blue_alpha_(centerColor1[0], centerColor1[1], centerColor1[2], centerColor1[3]),
+                inputReplacementColor1=AppKit.CIColor.colorWithRed_green_blue_alpha_(replacementColor1[0], replacementColor1[1], replacementColor1[2], replacementColor1[3]),
+                inputCloseness1=closeness1,
+                inputContrast1=contrast1,
+                inputCenterColor2=AppKit.CIColor.colorWithRed_green_blue_alpha_(centerColor2[0], centerColor2[1], centerColor2[2], centerColor2[3]),
+                inputReplacementColor2=AppKit.CIColor.colorWithRed_green_blue_alpha_(replacementColor2[0], replacementColor2[1], replacementColor2[2], replacementColor2[3]),
+                inputCloseness2=closeness2,
+                inputContrast2=contrast2,
+                inputCenterColor3=AppKit.CIColor.colorWithRed_green_blue_alpha_(centerColor3[0], centerColor3[1], centerColor3[2], centerColor3[3]),
+                inputReplacementColor3=AppKit.CIColor.colorWithRed_green_blue_alpha_(replacementColor3[0], replacementColor3[1], replacementColor3[2], replacementColor3[3]),
+                inputCloseness3=closeness3,
+                inputContrast3=contrast3
             )
         )
         self._addFilter(filterDict)
@@ -4514,11 +4253,11 @@ class ImageObject:
         filterDict = dict(
             name='CISpotLight',
             attributes=dict(
-                lightPosition=AppKit.CIVector.vectorWithValues_count_(lightPosition, 3),
-                lightPointsAt=AppKit.CIVector.vectorWithValues_count_(lightPointsAt, 2),
-                brightness=brightness,
-                concentration=concentration,
-                color=AppKit.CIColor.colorWithRed_green_blue_alpha_(color[0], color[1], color[2], color[3])
+                inputLightPosition=AppKit.CIVector.vectorWithValues_count_(lightPosition, 3),
+                inputLightPointsAt=AppKit.CIVector.vectorWithValues_count_(lightPointsAt, 2),
+                inputBrightness=brightness,
+                inputConcentration=concentration,
+                inputColor=AppKit.CIColor.colorWithRed_green_blue_alpha_(color[0], color[1], color[2], color[3])
             )
         )
         self._addFilter(filterDict)
@@ -4555,18 +4294,18 @@ class ImageObject:
         filterDict = dict(
             name='CIStarShineGenerator',
             attributes=dict(
-                center=AppKit.CIVector.vectorWithX_Y_(center[0], center[1]),
-                color=AppKit.CIColor.colorWithRed_green_blue_alpha_(color[0], color[1], color[2], color[3]),
-                radius=radius,
-                crossScale=crossScale,
-                crossAngle=radians(crossAngle),
-                crossOpacity=crossOpacity,
-                crossWidth=crossWidth,
-                epsilon=epsilon
+                inputCenter=AppKit.CIVector.vectorWithX_Y_(center[0], center[1]),
+                inputColor=AppKit.CIColor.colorWithRed_green_blue_alpha_(color[0], color[1], color[2], color[3]),
+                inputRadius=radius,
+                inputCrossScale=crossScale,
+                inputCrossAngle=radians(crossAngle),
+                inputCrossOpacity=crossOpacity,
+                inputCrossWidth=crossWidth,
+                inputEpsilon=epsilon
             ),
             size=size,
             isGenerator=True
-        ),
+        )
         self._addFilter(filterDict)
     
     def straightenFilter(self, angle: float = 0.0):
@@ -4582,7 +4321,7 @@ class ImageObject:
         filterDict = dict(
             name='CIStraightenFilter',
             attributes=dict(
-                angle=radians(angle)
+                inputAngle=radians(angle)
             )
         )
         self._addFilter(filterDict)
@@ -4593,7 +4332,7 @@ class ImageObject:
         
         **Arguments:**
         
-        `size` a tuple (w, h). The size in pixels of the output image.
+        `size` a float. The size in pixels of the output image.
         `cropAmount` a float. Determines if and how much cropping should be used to achieve the target size. If value is 0 then only stretching is used. If 1 then only cropping is used.
         `centerStretchAmount` a float. Determine how much the center of the image is stretched if stretching is used. If value is 0 then the center of the image maintains the original aspect ratio. If 1 then the image is stretched uniformly.
         """
@@ -4602,9 +4341,9 @@ class ImageObject:
         filterDict = dict(
             name='CIStretchCrop',
             attributes=dict(
-                size=size,
-                cropAmount=cropAmount,
-                centerStretchAmount=centerStretchAmount
+                inputSize=AppKit.CIVector.vectorWithValues_count_(size, 2),
+                inputCropAmount=cropAmount,
+                inputCenterStretchAmount=centerStretchAmount
             )
         )
         self._addFilter(filterDict)
@@ -4627,15 +4366,15 @@ class ImageObject:
         filterDict = dict(
             name='CIStripesGenerator',
             attributes=dict(
-                center=AppKit.CIVector.vectorWithX_Y_(center[0], center[1]),
-                color0=AppKit.CIColor.colorWithRed_green_blue_alpha_(color0[0], color0[1], color0[2], color0[3]),
-                color1=AppKit.CIColor.colorWithRed_green_blue_alpha_(color1[0], color1[1], color1[2], color1[3]),
-                width=width,
-                sharpness=sharpness
+                inputCenter=AppKit.CIVector.vectorWithX_Y_(center[0], center[1]),
+                inputColor0=AppKit.CIColor.colorWithRed_green_blue_alpha_(color0[0], color0[1], color0[2], color0[3]),
+                inputColor1=AppKit.CIColor.colorWithRed_green_blue_alpha_(color1[0], color1[1], color1[2], color1[3]),
+                inputWidth=width,
+                inputSharpness=sharpness
             ),
             size=size,
             isGenerator=True
-        ),
+        )
         self._addFilter(filterDict)
     
     def subtractBlendMode(self, backgroundImage: Self):
@@ -4651,7 +4390,7 @@ class ImageObject:
         filterDict = dict(
             name='CISubtractBlendMode',
             attributes=dict(
-                backgroundImage=backgroundImage
+                inputBackgroundImage=backgroundImage._ciImage()
             )
         )
         self._addFilter(filterDict)
@@ -4676,17 +4415,17 @@ class ImageObject:
         filterDict = dict(
             name='CISunbeamsGenerator',
             attributes=dict(
-                center=AppKit.CIVector.vectorWithX_Y_(center[0], center[1]),
-                color=AppKit.CIColor.colorWithRed_green_blue_alpha_(color[0], color[1], color[2], color[3]),
-                sunRadius=sunRadius,
-                maxStriationRadius=maxStriationRadius,
-                striationStrength=striationStrength,
-                striationContrast=striationContrast,
-                time=time
+                inputCenter=AppKit.CIVector.vectorWithX_Y_(center[0], center[1]),
+                inputColor=AppKit.CIColor.colorWithRed_green_blue_alpha_(color[0], color[1], color[2], color[3]),
+                inputSunRadius=sunRadius,
+                inputMaxStriationRadius=maxStriationRadius,
+                inputStriationStrength=striationStrength,
+                inputStriationContrast=striationContrast,
+                inputTime=time
             ),
             size=size,
             isGenerator=True
-        ),
+        )
         self._addFilter(filterDict)
     
     def swipeTransition(self, targetImage: Self, extent: BoundingBox = (0.0, 0.0, 300.0, 300.0), color: RGBAColorTuple = (1.0, 1.0, 1.0, 1.0), time: float = 0.0, angle: float = 0.0, width: float = 300.0, opacity: float = 0.0):
@@ -4708,13 +4447,13 @@ class ImageObject:
         filterDict = dict(
             name='CISwipeTransition',
             attributes=dict(
-                targetImage=targetImage,
-                extent=AppKit.CIVector.vectorWithValues_count_(extent, 4),
-                color=AppKit.CIColor.colorWithRed_green_blue_alpha_(color[0], color[1], color[2], color[3]),
-                time=time,
-                angle=radians(angle),
-                width=width,
-                opacity=opacity
+                inputTargetImage=targetImage._ciImage(),
+                inputExtent=AppKit.CIVector.vectorWithValues_count_(extent, 4),
+                inputColor=AppKit.CIColor.colorWithRed_green_blue_alpha_(color[0], color[1], color[2], color[3]),
+                inputTime=time,
+                inputAngle=radians(angle),
+                inputWidth=width,
+                inputOpacity=opacity
             )
         )
         self._addFilter(filterDict)
@@ -4733,39 +4472,10 @@ class ImageObject:
         filterDict = dict(
             name='CITemperatureAndTint',
             attributes=dict(
-                neutral=AppKit.CIVector.vectorWithValues_count_(neutral, 2),
-                targetNeutral=AppKit.CIVector.vectorWithValues_count_(targetNeutral, 2)
+                inputNeutral=AppKit.CIVector.vectorWithValues_count_(neutral, 2),
+                inputTargetNeutral=AppKit.CIVector.vectorWithValues_count_(targetNeutral, 2)
             )
         )
-        self._addFilter(filterDict)
-    
-    def textImageGenerator(self, size: Size, text: FormattedString, fontName: str = 'HelveticaNeue', fontSize: float = 12.0, scaleFactor: float = 1.0, padding: float = 0.0):
-        """
-        Generate an image from a string and font information.
-        
-        **Arguments:**
-        
-        `size` a tuple (w, h)
-        `text` a `FormattedString`. The text to render.
-        `fontName` a float. The name of the font to use for the generated text.
-        `fontSize` a float. The size of the font to use for the generated text.
-        `scaleFactor` a float. The scale of the font to use for the generated text.
-        `padding` a float. The number of additional pixels to pad around the text’s bounding box.
-        """
-        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
-        # please, do not attempt to edit it manually as it will be overriden in the future
-        filterDict = dict(
-            name='CITextImageGenerator',
-            attributes=dict(
-                text=text.getNSObject(),
-                fontName=fontName,
-                fontSize=fontSize,
-                scaleFactor=scaleFactor,
-                padding=padding
-            ),
-            size=size,
-            isGenerator=True
-        ),
         self._addFilter(filterDict)
     
     def thermal(self):
@@ -4779,7 +4489,7 @@ class ImageObject:
         )
         self._addFilter(filterDict)
     
-    def toneCurve(self, point0: Point = (0.0, 0.0), point1: Point = (0.25, 0.25), point2: Point = (0.5, 0.5), point3: Point = (0.75, 0.75), point4: Point = (1.0, 1.0)):
+    def toneCurve(self, point0: Point = (0.0, 0.0), point1: Point = (0.25, 0.25), point2: Point = (0.5, 0.5), point3: Point = (0.75, 0.75), point4: Point = (1.0, 1.0), extrapolate: bool = False):
         """
         Adjusts tone response of the R, G, and B channels of an image. The input points are five x,y values that are interpolated using a spline curve. The curve is applied in a perceptual (gamma 2) version of the working space.
         
@@ -4790,17 +4500,39 @@ class ImageObject:
         `point2` a tuple (x, y). 
         `point3` a tuple (x, y). 
         `point4` a tuple (x, y). 
+        `extrapolate` a float. If true, then the color effect will be extrapolated if the input image contains RGB component values outside the range 0.0 to 1.0.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
         filterDict = dict(
             name='CIToneCurve',
             attributes=dict(
-                point0=AppKit.CIVector.vectorWithValues_count_(point0, 2),
-                point1=AppKit.CIVector.vectorWithValues_count_(point1, 2),
-                point2=AppKit.CIVector.vectorWithValues_count_(point2, 2),
-                point3=AppKit.CIVector.vectorWithValues_count_(point3, 2),
-                point4=AppKit.CIVector.vectorWithValues_count_(point4, 2)
+                inputPoint0=AppKit.CIVector.vectorWithValues_count_(point0, 2),
+                inputPoint1=AppKit.CIVector.vectorWithValues_count_(point1, 2),
+                inputPoint2=AppKit.CIVector.vectorWithValues_count_(point2, 2),
+                inputPoint3=AppKit.CIVector.vectorWithValues_count_(point3, 2),
+                inputPoint4=AppKit.CIVector.vectorWithValues_count_(point4, 2),
+                inputExtrapolate=extrapolate
+            )
+        )
+        self._addFilter(filterDict)
+    
+    def toneMapHeadroom(self, sourceHeadroom, targetHeadroom: float = 1.0):
+        """
+        Apply a global tone curve to an image that reduces colors from a source headroom value to a target headroom value.
+        
+        **Arguments:**
+        
+        `sourceHeadroom` a float. Specifies the headroom of the input image.
+        `targetHeadroom` a float. Specifies the target headroom of the output image.
+        """
+        # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
+        # please, do not attempt to edit it manually as it will be overriden in the future
+        filterDict = dict(
+            name='CIToneMapHeadroom',
+            attributes=dict(
+                inputSourceHeadroom=sourceHeadroom,
+                inputTargetHeadroom=targetHeadroom
             )
         )
         self._addFilter(filterDict)
@@ -4821,10 +4553,10 @@ class ImageObject:
         filterDict = dict(
             name='CITorusLensDistortion',
             attributes=dict(
-                center=AppKit.CIVector.vectorWithX_Y_(center[0], center[1]),
-                radius=radius,
-                width=width,
-                refraction=refraction
+                inputCenter=AppKit.CIVector.vectorWithX_Y_(center[0], center[1]),
+                inputRadius=radius,
+                inputWidth=width,
+                inputRefraction=refraction
             )
         )
         self._addFilter(filterDict)
@@ -4845,10 +4577,10 @@ class ImageObject:
         filterDict = dict(
             name='CITriangleKaleidoscope',
             attributes=dict(
-                point=AppKit.CIVector.vectorWithValues_count_(point, 2),
-                size=size,
-                rotation=rotation,
-                decay=decay
+                inputPoint=AppKit.CIVector.vectorWithValues_count_(point, 2),
+                inputSize=size,
+                inputRotation=radians(rotation),
+                inputDecay=decay
             )
         )
         self._addFilter(filterDict)
@@ -4868,9 +4600,9 @@ class ImageObject:
         filterDict = dict(
             name='CITriangleTile',
             attributes=dict(
-                center=AppKit.CIVector.vectorWithX_Y_(center[0], center[1]),
-                angle=radians(angle),
-                width=width
+                inputCenter=AppKit.CIVector.vectorWithX_Y_(center[0], center[1]),
+                inputAngle=radians(angle),
+                inputWidth=width
             )
         )
         self._addFilter(filterDict)
@@ -4890,9 +4622,9 @@ class ImageObject:
         filterDict = dict(
             name='CITwelvefoldReflectedTile',
             attributes=dict(
-                center=AppKit.CIVector.vectorWithX_Y_(center[0], center[1]),
-                angle=radians(angle),
-                width=width
+                inputCenter=AppKit.CIVector.vectorWithX_Y_(center[0], center[1]),
+                inputAngle=radians(angle),
+                inputWidth=width
             )
         )
         self._addFilter(filterDict)
@@ -4912,9 +4644,9 @@ class ImageObject:
         filterDict = dict(
             name='CITwirlDistortion',
             attributes=dict(
-                center=AppKit.CIVector.vectorWithX_Y_(center[0], center[1]),
-                radius=radius,
-                angle=radians(angle)
+                inputCenter=AppKit.CIVector.vectorWithX_Y_(center[0], center[1]),
+                inputRadius=radius,
+                inputAngle=radians(angle)
             )
         )
         self._addFilter(filterDict)
@@ -4933,8 +4665,8 @@ class ImageObject:
         filterDict = dict(
             name='CIUnsharpMask',
             attributes=dict(
-                radius=radius,
-                intensity=intensity
+                inputRadius=radius,
+                inputIntensity=intensity
             )
         )
         self._addFilter(filterDict)
@@ -4952,7 +4684,7 @@ class ImageObject:
         filterDict = dict(
             name='CIVibrance',
             attributes=dict(
-                amount=amount
+                inputAmount=amount
             )
         )
         self._addFilter(filterDict)
@@ -4971,8 +4703,8 @@ class ImageObject:
         filterDict = dict(
             name='CIVignette',
             attributes=dict(
-                intensity=intensity,
-                radius=radius
+                inputIntensity=intensity,
+                inputRadius=radius
             )
         )
         self._addFilter(filterDict)
@@ -4993,10 +4725,10 @@ class ImageObject:
         filterDict = dict(
             name='CIVignetteEffect',
             attributes=dict(
-                center=AppKit.CIVector.vectorWithX_Y_(center[0], center[1]),
-                radius=radius,
-                intensity=intensity,
-                falloff=falloff
+                inputCenter=AppKit.CIVector.vectorWithX_Y_(center[0], center[1]),
+                inputRadius=radius,
+                inputIntensity=intensity,
+                inputFalloff=falloff
             )
         )
         self._addFilter(filterDict)
@@ -5014,7 +4746,7 @@ class ImageObject:
         filterDict = dict(
             name='CIVividLightBlendMode',
             attributes=dict(
-                backgroundImage=backgroundImage
+                inputBackgroundImage=backgroundImage._ciImage()
             )
         )
         self._addFilter(filterDict)
@@ -5034,9 +4766,9 @@ class ImageObject:
         filterDict = dict(
             name='CIVortexDistortion',
             attributes=dict(
-                center=center,
-                radius=radius,
-                angle=angle
+                inputCenter=AppKit.CIVector.vectorWithX_Y_(center[0], center[1]),
+                inputRadius=radius,
+                inputAngle=angle
             )
         )
         self._addFilter(filterDict)
@@ -5054,7 +4786,7 @@ class ImageObject:
         filterDict = dict(
             name='CIWhitePointAdjust',
             attributes=dict(
-                color=AppKit.CIColor.colorWithRed_green_blue_alpha_(color[0], color[1], color[2], color[3])
+                inputColor=AppKit.CIColor.colorWithRed_green_blue_alpha_(color[0], color[1], color[2], color[3])
             )
         )
         self._addFilter(filterDict)
@@ -5084,8 +4816,8 @@ class ImageObject:
         filterDict = dict(
             name='CIZoomBlur',
             attributes=dict(
-                center=AppKit.CIVector.vectorWithX_Y_(center[0], center[1]),
-                amount=amount
+                inputCenter=AppKit.CIVector.vectorWithX_Y_(center[0], center[1]),
+                inputAmount=amount
             )
         )
         self._addFilter(filterDict)

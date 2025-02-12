@@ -34,6 +34,7 @@ class CodeWriter:
                 if value:
                     trailing = "" if index == len(data) - 1 else ","
                     self.addDict(key, value, space="", trailing=trailing)
+                    trailing = ""
             else:
                 comma = ","
                 if index == len(data) - 1:
@@ -49,6 +50,7 @@ class CodeWriter:
     def get(self, indentLevel=0):
         return self.INDENT*indentLevel + f"\n{self.INDENT*indentLevel}".join(self.code)
 
+
 class UnitTestWriter(CodeWriter):
 
     def header(self):
@@ -57,8 +59,10 @@ class UnitTestWriter(CodeWriter):
         self.add("import drawBot")
         self.add("from testSupport import DrawBotBaseTest")
         self.newline()
-        self.add('sampleImage = drawBot.ImageObject("tests/data/drawBot.png")')
-        self.add('fs = drawBot.FormattedString("Hello World")')
+        self.add('sourceImagePath = "data/drawBot144.png"')
+        self.add('sampleImage = drawBot.ImageObject("data/drawBot.png")')
+        self.add('sampleFormattedString = drawBot.FormattedString("Hello World")')
+        self.add('sampleText = drawBot.FormattedString("Hello World")')
         self.newline()
         self.newline()
         self.add("class ImageObjectTest(DrawBotBaseTest):")
@@ -96,13 +100,17 @@ converters = {
     "rectangle": "AppKit.CIVector.vectorWithValues_count_({inputKey}, 4)",
     "lightPosition": "AppKit.CIVector.vectorWithValues_count_({inputKey}, 3)",
     "angle": "radians({inputKey})",
+    "rotation": "radians({inputKey})",
     "message": "AppKit.NSData.dataWithBytes_length_({inputKey}, len({inputKey}))",
     "text": "text.getNSObject()",
+    "image": "{inputKey}._ciImage()",
+    ("size", "CIStretchCrop"): "AppKit.CIVector.vectorWithValues_count_({inputKey}, 2)",
 }
 
 variableValues = {
     "image": "an Image object",
     "size": "a tuple (w, h)",
+    ("size", "CIStretchCrop"): "a float",
     "center": "a tuple (x, y)",
     "angle": "a float in degrees",
     "minComponents": "RGBA tuple values for the lower end of the range.",
@@ -222,6 +230,14 @@ def getVariableValue(key, fallback=None):
     key = key[0]
     return variableValues.get(key, fallback)
 
+
+def getConverterValue(key, fallback=None):
+    if key in converters:
+        return converters[key]
+    key = key[0]
+    return converters.get(key, fallback)
+
+
 argumentToHint = {"text": ": FormattedString", "message": ": str"}
 
 toCopy = {
@@ -240,6 +256,9 @@ toCopy = {
         "glassesImage",
         "hairImage",
         "matteImage",
+        "paletteImage",
+        "guideImage",
+        "smallImage",
     ),
     "message": ("cube0Data", "cube1Data"),
     "rectangle": (
@@ -257,6 +276,7 @@ toCopy = {
         "blueCoefficients",
         "alphaCoefficients",
         "biasVector",
+        "focusRect"
     ),
     "color": (
         "replacementColor3",
@@ -283,6 +303,13 @@ toCopy = {
         "topRight",
         "bottomLeft",
         "bottomRight",
+        "breakpoint0",
+        "breakpoint1",
+        "growAmount",
+        "nosePositions",
+        "leftEyePositions",
+        "rightEyePositions",
+        "chinPositions",
     ),
     "lightPosition": ("lightPointsAt"),
     "angle": ("acuteAngle", "crossAngle"),
@@ -298,7 +325,7 @@ for k, v in toCopy.items():
 
 ignoreInputKeys = ["inputImage"]
 
-generators = list(AppKit.CIFilter.filterNamesInCategory_("CICategoryGenerator")) 
+generators = list(AppKit.CIFilter.filterNamesInCategory_("CICategoryGenerator"))
 generators.extend(
     [
         "CIPDF417BarcodeGenerator",
@@ -309,7 +336,7 @@ generators.extend(
     ]
 )
 
-allFilterNames = AppKit.CIFilter.filterNamesInCategory_(None) 
+allFilterNames = AppKit.CIFilter.filterNamesInCategory_(None)
 
 excludeFilterNames = [
     "CIBarcodeGenerator",
@@ -318,11 +345,36 @@ excludeFilterNames = [
     "CIMedianFilter",
     "CIColorCube",
     "CIColorCubeWithColorSpace",
+    "CIHueSaturationValueGradient",
     # this one requires a colorspace which is difficult to express for regular drawBot users
     # little use for a filter like this, it does not make sense to abstract this for now
     # no default value for the colorspace makes it difficult to use it
     "CIColorCubesMixedWithMask",
+    "CIColorCurves",
     "CIAffineTransform",
+
+    # use drawBot to draw text/formattedStrings into an image
+    "CITextImageGenerator",
+    "CIAttributedTextImageGenerator",
+
+    # no idea what inputCalibrationData or inputAuxDataMetadata is
+    "CIDepthBlurEffect",
+
+    # no idea what inputModel should be
+    "CICoreMLModelFilter",
+
+    # make an issue for a very good reason why DrawBot needs these filters!
+    "CIConvolution3X3",
+    "CIConvolution5X5",
+    "CIConvolution7X7",
+    "CIConvolution9Horizontal",
+    "CIConvolution9Vertical",
+    "CIConvolutionRGB7X7",
+    "CIConvolutionRGB9Vertical",
+    "CIConvolutionRGB9Horizontal",
+    "CIConvolutionRGB5X5",
+    "CIConvolutionRGB3X3"
+
 ]
 
 degreesAngleFilterNames = ["CIVortexDistortion"]
@@ -346,19 +398,19 @@ def generateImageObjectCode() -> tuple[str, str]:
     code = CodeWriter()
     unitTests = UnitTestWriter()
     unitTests.header()
-    
+
     for filterName in allFilterNames:
         if filterName in excludeFilterNames:
             continue
-        ciFilter = AppKit.CIFilter.filterWithName_(filterName) 
+        ciFilter = AppKit.CIFilter.filterWithName_(filterName)
         ciFilterAttributes = ciFilter.attributes()
         doc = CodeWriter()
-        doc.add(AppKit.CIFilter.localizedDescriptionForFilterName_(filterName)) 
-    
+        doc.add(AppKit.CIFilter.localizedDescriptionForFilterName_(filterName))
+
         args = []
         unitTestsArgs = []
         inputCode = CodeWriter()
-    
+
         inputKeys = [
             inputKey
             for inputKey in ciFilter.inputKeys()
@@ -371,9 +423,9 @@ def generateImageObjectCode() -> tuple[str, str]:
                 ciFilterAttributes.get(x, dict()).get("CIAttributeDefault") is not None
             )
         )
-    
+
         attributes = dict()
-    
+
         if inputKeys or filterName == "CIRandomGenerator":
             doc.newline()
             doc.add("**Arguments:**")
@@ -386,23 +438,24 @@ def generateImageObjectCode() -> tuple[str, str]:
                 info = ciFilterAttributes.get(inputKey)
                 default = info.get("CIAttributeDefault")
                 defaultClass = info.get("CIAttributeClass")
-    
+
                 description = info.get("CIAttributeDescription", "")
+                filterInputKey = inputKey
                 inputKey = camelCase(inputKey[5:])
                 arg = inputKey
-    
+
                 if inputKey in toCopy["image"]:
                     arg += ": Self"
-    
+
                 if inputKey in argumentToHint:
                     arg += argumentToHint[inputKey]
-    
+
                 # if filterName == "CIAztecCodeGenerator":
                 #     print(inputKeys)
                 #     print(ciFilterAttributes)
-    
+
                 if default is not None:
-                    if isinstance(default, AppKit.CIVector): 
+                    if isinstance(default, AppKit.CIVector):
                         if default.count() == 2:
                             default = default.X(), default.Y()
                             arg += ": Point"
@@ -414,22 +467,22 @@ def generateImageObjectCode() -> tuple[str, str]:
                                 default.valueAtIndex_(i) for i in range(default.count())
                             )
                             arg += ": tuple"
-    
+
                     elif isinstance(default, bool):
                         arg += ": bool"
-    
+
                     elif isinstance(default, (AppKit.NSString, str)):
                         default = f"'{default}'"
                         arg += ": str"
-    
+
                     elif isinstance(default, AppKit.NSNumber):
                         default = float(default)
                         arg += ": float"
-    
-                    elif isinstance(default, AppKit.NSAffineTransform): 
+
+                    elif isinstance(default, AppKit.NSAffineTransform):
                         default = tuple(default.transformStruct())
                         arg += ": TransformTuple"
-    
+
                     elif isinstance(default, AppKit.CIColor):
                         default = (
                             default.red(),
@@ -438,38 +491,37 @@ def generateImageObjectCode() -> tuple[str, str]:
                             default.alpha(),
                         )
                         arg += ": RGBAColorTuple"
-    
+
                     elif isinstance(default, AppKit.NSData):
                         default = None
                         arg += ": bytes | None"
-    
+
                     elif isinstance(default, type(Quartz.CGColorSpaceCreateDeviceCMYK())): # type: ignore
                         default = None
-    
+
                     else:
                         print(filterName, ciFilterAttributes)
                         raise ValueError(f"We can't parse this default class of `{inputKey}`: {defaultClass}, {default}, {type(default)}")
-    
+
                     arg += f" = {default}"
-    
-                if filterName in degreesAngleFilterNames:
+
+                if filterName in degreesAngleFilterNames and inputKey == "angle":
                     value = inputKey
                 else:
-                    value = converters.get(inputKey, inputKey).format(inputKey=inputKey)
+                    value = getConverterValue((inputKey, filterName), inputKey).format(inputKey=inputKey)
                 docValue = getVariableValue((inputKey, filterName), "a float")
-                attributes[inputKey] = value
-    
+                attributes[filterInputKey] = value
+
                 doc.add(f"`{inputKey}` {docValue}. {pythonifyDescription(description)}")
                 args.append(arg)
-    
-    
+
                 match inputKey:
                     case inputKey if inputKey.endswith("Image"):
                         value = "sampleImage"
                     case "gainMap" | "texture" | "mask":
                         value = "sampleImage"
                     case "text":
-                        value = "fs"
+                        value = "sampleFormattedString"
                     case "message":
                         value = "b'Hello World'"
                     case "topLeft" | "topRight" | "bottomRight" | "bottomLeft":
@@ -477,7 +529,7 @@ def generateImageObjectCode() -> tuple[str, str]:
                     case _:
                         value = default
                 unitTestsArgs.append(f"{inputKey}={value}")
-    
+
         drawBotFilterName = camelCase(filterName[2:])
         code.add(
             f"def {drawBotFilterName}"
@@ -496,28 +548,29 @@ def generateImageObjectCode() -> tuple[str, str]:
             filterDict["isGenerator"] = "True"
         if filterName.endswith("CodeGenerator"):
             filterDict["fitImage"] = "True"
-    
+
         code.addDict("filterDict", filterDict)
-    
+
         code.add("self._addFilter(filterDict)")
         code.dedent()
         code.newline()
-    
+
         unitTests.add(f"def test_{drawBotFilterName}(self):")
         unitTests.indent()
-        unitTests.add("img = drawBot.ImageObject()")
+        unitTests.add("img = drawBot.ImageObject(sourceImagePath)")
         unitTests.add(f"img.{drawBotFilterName}({', '.join(unitTestsArgs)})")
+        unitTests.add("img._applyFilters()")
         unitTests.newline()
         unitTests.dedent()
-    
+
     imageObjectText = IMAGE_OBJECT_PATH.read_text()
-    
+
     beforeFilters = []
     for eachLine in imageObjectText.splitlines():
         beforeFilters.append(eachLine)
         if eachLine == "    # --- filters ---":
             break
-    
+
     imageObjectCode = "\n".join(beforeFilters) + "\n" + code.get(indentLevel=1).replace("“", '"').replace("”", '"')
     unitTests.footer()
     unitTestsCode = unitTests.get()
