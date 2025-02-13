@@ -1,16 +1,18 @@
-import sys
 import os
-import unittest
-import re
 import random
-import AppKit # type: ignore
+import re
+import sys
+import unittest
+
+import AppKit  # type: ignore # type: ignore
+from testSupport import StdOutCollector, compareImages, randomSeed, tempTestDataDir, testDataDir, testRootDir
+
 import drawBot
 from drawBot.drawBotDrawingTools import DrawBotDrawingTool
-from testSupport import StdOutCollector, randomSeed, testRootDir, tempTestDataDir, testDataDir, compareImages
-
 
 _namePattern = re.compile(r"( +).. downloadcode:: ([A-Za-z0-9_]+).py\s*$")
 _indentPattern = re.compile(r"( +)")
+
 
 def _dedent(lines):
     minIndentation = 10000
@@ -61,15 +63,17 @@ def _collectExamples(modules):
 
 
 class ExampleTester(unittest.TestCase):
-
     def assertImagesSimilar(self, path1, path2):
         similarity = compareImages(path1, path2)
-        self.assertLessEqual(similarity, 0.0012, "Images %r and %s are not similar enough: %s" % (path1, path2, similarity))
+        self.assertLessEqual(
+            similarity, 0.0012, "Images %r and %s are not similar enough: %s" % (path1, path2, similarity)
+        )
 
 
 # The examples use an http image path; let's fake it with a local jpeg
 mockedImagePath = os.path.join(testRootDir, "data", "drawBot.jpg")
 assert os.path.exists(mockedImagePath)
+
 
 def mockImage(path, position, alpha=1):
     if isinstance(path, drawBot.ImageObject):
@@ -77,11 +81,14 @@ def mockImage(path, position, alpha=1):
     else:
         drawBot.image(mockedImagePath, position, alpha)
 
+
 def mockImageSize(path):
     return drawBot.imageSize(mockedImagePath)
 
+
 def mockImagePixelColor(path, xy):
     return drawBot.imagePixelColor(mockedImagePath, xy)
+
 
 def mockVariable(definitions, namespace):
     for item in definitions:
@@ -103,14 +110,18 @@ def mockVariable(definitions, namespace):
                 value = 50
         namespace[name] = value
 
+
 def mockPrintImage(pdf=None):
     pass
+
 
 def mockInstallFont(path):
     return "Helvetica"
 
+
 def mockUninstallFont(path):
     pass
+
 
 def mockRandInt(lo, hi):
     # For compatibility between Python 2 and 3
@@ -121,7 +132,6 @@ def mockRandInt(lo, hi):
 
 
 def _makeTestCase(exampleName, source, doSaveImage):
-
     def test(self):
         from drawBot.drawBotDrawingTools import _drawBotDrawingTool
 
@@ -129,10 +139,12 @@ def _makeTestCase(exampleName, source, doSaveImage):
 
         namespace = {}
         _drawBotDrawingTool._addToNamespace(namespace)
+
         def mockSaveImage(path, **options):
             fileName = "example_mockSaveImage_" + os.path.basename(path)
             path = os.path.join(tempTestDataDir, fileName)
             drawBot.saveImage(path, **options)
+
         namespace["saveImage"] = mockSaveImage
         namespace["image"] = mockImage
         namespace["imageSize"] = mockImageSize
@@ -165,14 +177,16 @@ skip = {
 expectedFailures = {}
 dontSaveImage = {"test_imageSize", "test_drawing"}
 
-def _addExampleTests():
 
-    allExamples = _collectExamples([
-        DrawBotDrawingTool,
-        drawBot.FormattedString,
-        drawBot.BezierPath,
-        drawBot.ImageObject,
-    ])
+def _addExampleTests():
+    allExamples = _collectExamples(
+        [
+            DrawBotDrawingTool,
+            drawBot.FormattedString,
+            drawBot.BezierPath,
+            drawBot.ImageObject,
+        ]
+    )
 
     for exampleName, source in allExamples.items():
         testMethodName = "test_%s" % exampleName
@@ -183,6 +197,7 @@ def _addExampleTests():
         if testMethodName in skip:
             testMethod = unittest.skip("manual skip")(testMethod)
         setattr(ExampleTester, testMethodName, testMethod)
+
 
 _addExampleTests()
 

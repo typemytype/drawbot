@@ -2,8 +2,9 @@
 # It ensures that rgb values specified in fill() end up in image output without
 # being mangled by a color space (within 8-bit resulution).
 
-import drawBot
 from PIL import Image
+
+import drawBot
 
 canvasSize = 400
 drawBot.size(canvasSize, canvasSize)
@@ -41,5 +42,5 @@ for i in range(bands):
         r, g, b, a = drawBot.imagePixelColor(fn, (x, y))
         print(" CG:", round(r, 4), round(g, 4), round(b, 4))
         r, g, b, a = im.getpixel((x, canvasSize - y))
-        print("PIL:", round(r/255, 4), round(g/255, 4), round(b/255, 4))
+        print("PIL:", round(r / 255, 4), round(g / 255, 4), round(b / 255, 4))
         print()

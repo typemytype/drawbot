@@ -1,12 +1,11 @@
-from .pdfContext import PDFContext
-from .imageContext import PNGContext, JPEGContext, TIFFContext, BMPContext
 from .gifContext import GIFContext
-from .svgContext import SVGContext
-from .printContext import PrintContext
-from .mp4Context import MP4Context
 from .icnsContext import ICNSContext
-from .imageObjectContext import PILContext, NSImageContext
-
+from .imageContext import BMPContext, JPEGContext, PNGContext, TIFFContext
+from .imageObjectContext import NSImageContext, PILContext
+from .mp4Context import MP4Context
+from .pdfContext import PDFContext
+from .printContext import PrintContext
+from .svgContext import SVGContext
 
 allContexts = [
     PDFContext,

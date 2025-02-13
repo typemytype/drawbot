@@ -71,9 +71,7 @@ def merge_wheels(url1, url2, dest_dir):
         platform_base_parts = platform.split("_")
         platform_base = "_".join(platform_base_parts[:3])
 
-        universal_wheel_path = (
-            dest_dir / f"{wheel_base.lower()}-{platform_base}_universal2.whl"
-        )
+        universal_wheel_path = dest_dir / f"{wheel_base.lower()}-{platform_base}_universal2.whl"
         print("writing universal wheel", universal_wheel_path.name)
         fuse_wheels(tmpdir / wheel_name1, tmpdir / wheel_name2, universal_wheel_path)
 
@@ -130,9 +128,7 @@ def main():
             assert len(platform_wheels) == 2
             merge_wheels(platform_wheels[0], platform_wheels[1], wheels_dir)
         else:
-            raise IncompatibleWheelError(
-                f"No universal2 solution found for non-portable wheel {wheel_filename}"
-            )
+            raise IncompatibleWheelError(f"No universal2 solution found for non-portable wheel {wheel_filename}")
 
 
 if __name__ == "__main__":

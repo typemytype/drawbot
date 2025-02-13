@@ -1,13 +1,13 @@
 from pathlib import Path
 
-import AppKit # type: ignore
-import Quartz # type: ignore
+import AppKit  # type: ignore
+import Quartz  # type: ignore
 
 IMAGE_OBJECT_PATH = Path(__file__).parent.parent / "drawBot/context/tools/imageObject.py"
 UNIT_TESTS_PATH = Path(__file__).parent.parent / "tests/testImageObject.py"
 
-class CodeWriter:
 
+class CodeWriter:
     def __init__(self, INDENT="    "):
         self.code = []
         self.INDENT = INDENT
@@ -47,10 +47,10 @@ class CodeWriter:
             self.add(line)
 
     def get(self, indentLevel=0):
-        return self.INDENT*indentLevel + f"\n{self.INDENT*indentLevel}".join(self.code)
+        return self.INDENT * indentLevel + f"\n{self.INDENT * indentLevel}".join(self.code)
+
 
 class UnitTestWriter(CodeWriter):
-
     def header(self):
         self.add("import unittest")
         self.add("import sys")
@@ -222,6 +222,7 @@ def getVariableValue(key, fallback=None):
     key = key[0]
     return variableValues.get(key, fallback)
 
+
 argumentToHint = {"text": ": FormattedString", "message": ": str"}
 
 toCopy = {
@@ -298,7 +299,7 @@ for k, v in toCopy.items():
 
 ignoreInputKeys = ["inputImage"]
 
-generators = list(AppKit.CIFilter.filterNamesInCategory_("CICategoryGenerator")) 
+generators = list(AppKit.CIFilter.filterNamesInCategory_("CICategoryGenerator"))
 generators.extend(
     [
         "CIPDF417BarcodeGenerator",
@@ -309,7 +310,7 @@ generators.extend(
     ]
 )
 
-allFilterNames = AppKit.CIFilter.filterNamesInCategory_(None) 
+allFilterNames = AppKit.CIFilter.filterNamesInCategory_(None)
 
 excludeFilterNames = [
     "CIBarcodeGenerator",
@@ -346,34 +347,26 @@ def generateImageObjectCode() -> tuple[str, str]:
     code = CodeWriter()
     unitTests = UnitTestWriter()
     unitTests.header()
-    
+
     for filterName in allFilterNames:
         if filterName in excludeFilterNames:
             continue
-        ciFilter = AppKit.CIFilter.filterWithName_(filterName) 
+        ciFilter = AppKit.CIFilter.filterWithName_(filterName)
         ciFilterAttributes = ciFilter.attributes()
         doc = CodeWriter()
-        doc.add(AppKit.CIFilter.localizedDescriptionForFilterName_(filterName)) 
-    
+        doc.add(AppKit.CIFilter.localizedDescriptionForFilterName_(filterName))
+
         args = []
         unitTestsArgs = []
         inputCode = CodeWriter()
-    
-        inputKeys = [
-            inputKey
-            for inputKey in ciFilter.inputKeys()
-            if inputKey not in ignoreInputKeys
-        ]
+
+        inputKeys = [inputKey for inputKey in ciFilter.inputKeys() if inputKey not in ignoreInputKeys]
         # this sorts the arguments by setting the ones without default first to avoid a syntax error
         # in the python code generated automatically
-        inputKeys.sort(
-            key=lambda x: bool(
-                ciFilterAttributes.get(x, dict()).get("CIAttributeDefault") is not None
-            )
-        )
-    
+        inputKeys.sort(key=lambda x: bool(ciFilterAttributes.get(x, dict()).get("CIAttributeDefault") is not None))
+
         attributes = dict()
-    
+
         if inputKeys or filterName == "CIRandomGenerator":
             doc.newline()
             doc.add("**Arguments:**")
@@ -386,23 +379,23 @@ def generateImageObjectCode() -> tuple[str, str]:
                 info = ciFilterAttributes.get(inputKey)
                 default = info.get("CIAttributeDefault")
                 defaultClass = info.get("CIAttributeClass")
-    
+
                 description = info.get("CIAttributeDescription", "")
                 inputKey = camelCase(inputKey[5:])
                 arg = inputKey
-    
+
                 if inputKey in toCopy["image"]:
                     arg += ": Self"
-    
+
                 if inputKey in argumentToHint:
                     arg += argumentToHint[inputKey]
-    
+
                 # if filterName == "CIAztecCodeGenerator":
                 #     print(inputKeys)
                 #     print(ciFilterAttributes)
-    
+
                 if default is not None:
-                    if isinstance(default, AppKit.CIVector): 
+                    if isinstance(default, AppKit.CIVector):
                         if default.count() == 2:
                             default = default.X(), default.Y()
                             arg += ": Point"
@@ -410,26 +403,24 @@ def generateImageObjectCode() -> tuple[str, str]:
                             default = default.X(), default.Y(), default.Z(), default.W()
                             arg += ": BoundingBox"
                         else:
-                            default = tuple(
-                                default.valueAtIndex_(i) for i in range(default.count())
-                            )
+                            default = tuple(default.valueAtIndex_(i) for i in range(default.count()))
                             arg += ": tuple"
-    
+
                     elif isinstance(default, bool):
                         arg += ": bool"
-    
+
                     elif isinstance(default, (AppKit.NSString, str)):
                         default = f"'{default}'"
                         arg += ": str"
-    
+
                     elif isinstance(default, AppKit.NSNumber):
                         default = float(default)
                         arg += ": float"
-    
-                    elif isinstance(default, AppKit.NSAffineTransform): 
+
+                    elif isinstance(default, AppKit.NSAffineTransform):
                         default = tuple(default.transformStruct())
                         arg += ": TransformTuple"
-    
+
                     elif isinstance(default, AppKit.CIColor):
                         default = (
                             default.red(),
@@ -438,31 +429,32 @@ def generateImageObjectCode() -> tuple[str, str]:
                             default.alpha(),
                         )
                         arg += ": RGBAColorTuple"
-    
+
                     elif isinstance(default, AppKit.NSData):
                         default = None
                         arg += ": bytes | None"
-    
-                    elif isinstance(default, type(Quartz.CGColorSpaceCreateDeviceCMYK())): # type: ignore
+
+                    elif isinstance(default, type(Quartz.CGColorSpaceCreateDeviceCMYK())):  # type: ignore
                         default = None
-    
+
                     else:
                         print(filterName, ciFilterAttributes)
-                        raise ValueError(f"We can't parse this default class of `{inputKey}`: {defaultClass}, {default}, {type(default)}")
-    
+                        raise ValueError(
+                            f"We can't parse this default class of `{inputKey}`: {defaultClass}, {default}, {type(default)}"
+                        )
+
                     arg += f" = {default}"
-    
+
                 if filterName in degreesAngleFilterNames:
                     value = inputKey
                 else:
                     value = converters.get(inputKey, inputKey).format(inputKey=inputKey)
                 docValue = getVariableValue((inputKey, filterName), "a float")
                 attributes[inputKey] = value
-    
+
                 doc.add(f"`{inputKey}` {docValue}. {pythonifyDescription(description)}")
                 args.append(arg)
-    
-    
+
                 match inputKey:
                     case inputKey if inputKey.endswith("Image"):
                         value = "sampleImage"
@@ -477,12 +469,9 @@ def generateImageObjectCode() -> tuple[str, str]:
                     case _:
                         value = default
                 unitTestsArgs.append(f"{inputKey}={value}")
-    
+
         drawBotFilterName = camelCase(filterName[2:])
-        code.add(
-            f"def {drawBotFilterName}"
-            + (f"(self, {', '.join(args)}):" if args else f"(self):")
-        )
+        code.add(f"def {drawBotFilterName}" + (f"(self, {', '.join(args)}):" if args else "(self):"))
         code.indent()
         code.add('"""')
         code.appendCode(doc)
@@ -496,33 +485,34 @@ def generateImageObjectCode() -> tuple[str, str]:
             filterDict["isGenerator"] = "True"
         if filterName.endswith("CodeGenerator"):
             filterDict["fitImage"] = "True"
-    
+
         code.addDict("filterDict", filterDict)
-    
+
         code.add("self._addFilter(filterDict)")
         code.dedent()
         code.newline()
-    
+
         unitTests.add(f"def test_{drawBotFilterName}(self):")
         unitTests.indent()
         unitTests.add("img = drawBot.ImageObject()")
         unitTests.add(f"img.{drawBotFilterName}({', '.join(unitTestsArgs)})")
         unitTests.newline()
         unitTests.dedent()
-    
+
     imageObjectText = IMAGE_OBJECT_PATH.read_text()
-    
+
     beforeFilters = []
     for eachLine in imageObjectText.splitlines():
         beforeFilters.append(eachLine)
         if eachLine == "    # --- filters ---":
             break
-    
+
     imageObjectCode = "\n".join(beforeFilters) + "\n" + code.get(indentLevel=1).replace("“", '"').replace("”", '"')
     unitTests.footer()
     unitTestsCode = unitTests.get()
 
     return imageObjectCode, unitTestsCode
+
 
 if __name__ == "__main__":
     imageObjectCode, unitTestsCode = generateImageObjectCode()

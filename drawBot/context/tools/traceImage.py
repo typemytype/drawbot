@@ -1,12 +1,13 @@
-import AppKit
+import os
 import tempfile
 from xml.dom import minidom
-import os
 
+import AppKit  # type: ignore
 from fontTools.misc.transform import Transform
 
-from .imageObject import ImageObject
 from drawBot.misc import executeExternalProcess, getExternalToolPath
+
+from .imageObject import ImageObject
 
 
 def _getPath(element, path=None, pathItems=None):
@@ -48,7 +49,6 @@ def _getPath(element, path=None, pathItems=None):
 
 
 class BaseSegment:
-
     def __init__(self):
         self._points = []
 
@@ -60,35 +60,30 @@ class BaseSegment:
 
 
 class AbsMoveTo(BaseSegment):
-
     def bezier(self, pen):
         for p in self._points:
             pen._moveTo(p)
 
 
 class RelMoveTo(BaseSegment):
-
     def bezier(self, pen):
         for p in self._points:
             pen._relMoveTo(p)
 
 
 class AbsLineTo(BaseSegment):
-
     def bezier(self, pen):
         for p in self._points:
             pen._lineTo(p)
 
 
 class RelLineTo(BaseSegment):
-
     def bezier(self, pen):
         for p in self._points:
             pen._relLineTo(p)
 
 
 class AbsCurveTo(BaseSegment):
-
     def bezier(self, pen):
         for i in range(2, len(self._points), 3):
             h1 = self._points[i - 2]
@@ -98,7 +93,6 @@ class AbsCurveTo(BaseSegment):
 
 
 class RelCurveTo(BaseSegment):
-
     def bezier(self, pen):
         for i in range(2, len(self._points), 3):
             h1 = self._points[i - 2]
@@ -108,19 +102,16 @@ class RelCurveTo(BaseSegment):
 
 
 class RelClosePath(BaseSegment):
-
     def bezier(self, pen):
         pen._closePath()
 
 
 class AbsClosePath(BaseSegment):
-
     def bezier(self, pen):
         pen._closePath()
 
 
 class RelativePen:
-
     def __init__(self, outPen, transform):
         self.outPen = outPen
         self.transform = transform
@@ -168,19 +159,11 @@ class RelativePen:
 
 
 instructions = dict(
-    m=RelMoveTo,
-    M=AbsMoveTo,
-    l=RelLineTo,
-    L=AbsLineTo,
-    c=RelCurveTo,
-    C=AbsCurveTo,
-    z=RelClosePath,
-    Z=AbsClosePath
+    m=RelMoveTo, M=AbsMoveTo, l=RelLineTo, L=AbsLineTo, c=RelCurveTo, C=AbsCurveTo, z=RelClosePath, Z=AbsClosePath
 )
 
 
 class Paths:
-
     def __init__(self):
         self._currentInstruction = None
         self._segments = list()
@@ -269,7 +252,7 @@ def saveImageAsBitmap(image, bitmapPath):
         AppKit.NSDeviceRGBColorSpace,  # color space
         0,  # bitmap format
         0,  # bytes per row
-        0   # bits per pixel
+        0,  # bits per pixel
     )
 
     AppKit.NSGraphicsContext.saveGraphicsState()
@@ -279,7 +262,9 @@ def saveImageAsBitmap(image, bitmapPath):
     AppKit.NSColor.whiteColor().set()
     AppKit.NSRectFill(((0, 0), (width, height)))
 
-    image._ciImage().drawAtPoint_fromRect_operation_fraction_((x, y), AppKit.NSMakeRect(0, 0, width, height), AppKit.NSCompositeSourceOver, 1)
+    image._ciImage().drawAtPoint_fromRect_operation_fraction_(
+        (x, y), AppKit.NSMakeRect(0, 0, width, height), AppKit.NSCompositeSourceOver, 1
+    )
 
     AppKit.NSGraphicsContext.restoreGraphicsState()
 
@@ -287,7 +272,7 @@ def saveImageAsBitmap(image, bitmapPath):
     data.writeToFile_atomically_(bitmapPath, True)
 
 
-def TraceImage(path, outPen, threshold=.2, blur=None, invert=False, turd=2, tolerance=0.2, offset=None):
+def TraceImage(path, outPen, threshold=0.2, blur=None, invert=False, turd=2, tolerance=0.2, offset=None):
     potrace = getExternalToolPath(os.path.dirname(__file__), "potrace")
     mkbitmap = getExternalToolPath(os.path.dirname(__file__), "mkbitmap")
 
@@ -311,15 +296,17 @@ def TraceImage(path, outPen, threshold=.2, blur=None, invert=False, turd=2, tole
         cmds.extend(["-b", str(blur)])
     if invert:
         cmds.extend(["-i"])
-    cmds.extend([
-        # "-g",
-        # "-1",
-        "-o",
-        bitmapPath,
-        imagePath
-    ])
+    cmds.extend(
+        [
+            # "-g",
+            # "-1",
+            "-o",
+            bitmapPath,
+            imagePath,
+        ]
+    )
     log = executeExternalProcess(cmds)
-    if log != ('', ''):
+    if log != ("", ""):
         print(log)
 
     assert potrace is not None
@@ -329,7 +316,7 @@ def TraceImage(path, outPen, threshold=.2, blur=None, invert=False, turd=2, tole
     cmds.extend(["-o", svgPath, bitmapPath])
 
     log = executeExternalProcess(cmds)
-    if log != ('', ''):
+    if log != ("", ""):
         print(log)
 
     importSVGWithPen(svgPath, outPen, (x, y, w, h), offset)

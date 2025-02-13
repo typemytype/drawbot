@@ -1,4 +1,5 @@
 import drawBot
+
 f = drawBot.FormattedString()
 f.fontSize(40)
 f.font("Helvetica")
@@ -11,7 +12,7 @@ f.align("right")
 f.append("right\n")
 
 _, height = f.size()
-x, y = drawBot.width() * .25, 200
+x, y = drawBot.width() * 0.25, 200.0
 
 with drawBot.savedState():
     drawBot.stroke(0)
@@ -26,7 +27,7 @@ drawBot.text(f, (x, y), align="center")
 y += height
 drawBot.text(f, (x, y), align="right")
 
-x, y = drawBot.width() * .75, 200
+x, y = drawBot.width() * 0.75, 200
 with drawBot.savedState():
     drawBot.stroke(0)
     drawBot.line((x, 0), (x, 1000))

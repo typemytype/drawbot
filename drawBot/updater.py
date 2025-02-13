@@ -1,24 +1,22 @@
+import plistlib
+import re
 import ssl
 import subprocess
-import plistlib
-import AppKit
-import re
-import traceback
 import tempfile
-import ssl
-from urllib.request import urlopen, Request
+import traceback
+from urllib.request import Request, urlopen
 
-from packaging.version import Version
-
+import AppKit  # type: ignore
 import vanilla
-from vanilla.dialogs import message
 from defconAppKit.windows.progressWindow import ProgressWindow
+from packaging.version import Version
+from vanilla.dialogs import message
 
 from drawBot import __version__
+
 from .misc import DrawBotError, getDefault
 
-
-_versionRE = re.compile(r'__version__\s*=\s*\"([^\"]+)\"')
+_versionRE = re.compile(r"__version__\s*=\s*\"([^\"]+)\"")
 
 __fallback_version__ = "0.0"
 
@@ -60,9 +58,9 @@ def downloadCurrentVersion():
     path = "https://github.com/typemytype/drawbot/releases/latest/download/DrawBot.dmg"
     try:
         context = ssl._create_unverified_context()
-        request = Request(path, headers={'User-Agent': 'Drawbot'})
+        request = Request(path, headers={"User-Agent": "Drawbot"})
         # download and mount
-        with tempfile.NamedTemporaryFile(mode='w+b') as dmgFile:
+        with tempfile.NamedTemporaryFile(mode="w+b") as dmgFile:
             response = urlopen(request, timeout=5, context=context)
             dmgFile.write(response.read())
             response.close()
@@ -87,6 +85,7 @@ class Updater:
     """
     Small controller poping up if a update is found.
     """
+
     def __init__(self, parentWindow=None):
         self.needsUpdate = False
         self.__version__ = __version__
@@ -108,16 +107,27 @@ class Updater:
         self.w.appIcon.setImage(imageObject=AppKit.NSApp().applicationIconImage())
 
         title = "There is a new version of DrawBot!"
-        txt = AppKit.NSAttributedString.alloc().initWithString_attributes_(title, {AppKit.NSFontAttributeName: AppKit.NSFont.boldSystemFontOfSize_(0)})
+        txt = AppKit.NSAttributedString.alloc().initWithString_attributes_(
+            title, {AppKit.NSFontAttributeName: AppKit.NSFont.boldSystemFontOfSize_(0)}
+        )
         self.w.introBold = vanilla.TextBox((100, 15, -15, 20), txt)
 
-        self.w.intro = vanilla.TextBox((100, 45, -15, 200), "DrawBot %s is out now (you have %s).\nWould you like to download it now?" % (self.currentVersion, __version__), sizeStyle="small")
+        self.w.intro = vanilla.TextBox(
+            (100, 45, -15, 200),
+            "DrawBot %s is out now (you have %s).\nWould you like to download it now?"
+            % (self.currentVersion, __version__),
+            sizeStyle="small",
+        )
 
-        self.w.cancelButton = vanilla.Button((-270, -30, 60, 20), "Cancel", callback=self.cancelCallback, sizeStyle="small")
+        self.w.cancelButton = vanilla.Button(
+            (-270, -30, 60, 20), "Cancel", callback=self.cancelCallback, sizeStyle="small"
+        )
         self.w.cancelButton.bind(".", ["command"])
         self.w.cancelButton.bind(chr(27), [])
 
-        self.w.openInBrowser = vanilla.Button((-200, -30, 120, 20), "Show In Browser", callback=self.openInBrowserCallback, sizeStyle="small")
+        self.w.openInBrowser = vanilla.Button(
+            (-200, -30, 120, 20), "Show In Browser", callback=self.openInBrowserCallback, sizeStyle="small"
+        )
         self.w.okButton = vanilla.Button((-70, -30, 55, 20), "OK", callback=self.okCallback, sizeStyle="small")
         self.w.setDefaultButton(self.w.okButton)
 

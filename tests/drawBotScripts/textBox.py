@@ -1,4 +1,5 @@
 import drawBot
+
 drawBot.size(200, 400)
 box = (10, 10, 180, 180)
 drawBot.fill(0)

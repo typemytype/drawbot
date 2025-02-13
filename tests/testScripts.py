@@ -1,18 +1,18 @@
-import unittest
+import glob
 import os
 import sys
-import glob
+import unittest
 import warnings
-from packaging.version import Version
-from drawBot.macOSVersion import macOSVersion
-from testSupport import DrawBotBaseTest, StdOutCollector, testRootDir, tempTestDataDir, testDataDir
 
+from packaging.version import Version
+from testSupport import DrawBotBaseTest, StdOutCollector, tempTestDataDir, testDataDir, testRootDir
+
+from drawBot.macOSVersion import macOSVersion
 
 drawBotScriptDir = os.path.join(testRootDir, "drawBotScripts")
 
 
 class DrawBotTest(DrawBotBaseTest):
-
     def test_instructionStack(self):
         expected = [
             "reset None",
@@ -26,10 +26,11 @@ class DrawBotTest(DrawBotBaseTest):
             "drawPath moveTo 10.0 10.0 lineTo 110.0 10.0 lineTo 110.0 110.0 lineTo 10.0 110.0 closePath",
             "textBox foo bar 72.48291015625 86.0 55.0341796875 24.0 center",
             "frameDuration 10",
-            "saveImage * {'myExtraArgument': True}"
+            "saveImage * {'myExtraArgument': True}",
         ]
         with StdOutCollector() as output:
             import drawBot
+
             drawBot.newDrawing()
             drawBot.size(200, 200)
             drawBot.save()
@@ -41,7 +42,7 @@ class DrawBotTest(DrawBotBaseTest):
             with im:
                 drawBot.size(20, 20)
                 drawBot.rect(5, 5, 10, 10)
-            drawBot.image(im, (10, 10), alpha=.5)
+            drawBot.image(im, (10, 10), alpha=0.5)
             drawBot.blendMode("saturation")
             drawBot.translate(10, 10)
             drawBot.rect(10, 10, 100, 100)
@@ -54,6 +55,7 @@ class DrawBotTest(DrawBotBaseTest):
     def test_booleanoperationListIntersections(self):
         expected = [(75, 150), (150, 75)]
         import drawBot
+
         path1 = drawBot.BezierPath()
         path1.rect(50, 50, 100, 100)
         path2 = drawBot.BezierPath()
@@ -75,7 +77,7 @@ def cleanupTraceback(lines):
             tracebackIndex = i
             break
     if tracebackIndex is not None:
-        return lines[:tracebackIndex+1] + [lines[-1]]
+        return lines[: tracebackIndex + 1] + [lines[-1]]
     else:
         return lines
 
@@ -83,7 +85,7 @@ def cleanupTraceback(lines):
 def readExpectedOutput(path):
     if os.path.exists(path):
         with open(path, "r") as f:
-            return [l for l in f.read().splitlines()]
+            return [line for line in f.read().splitlines()]
     else:
         return []
 
@@ -99,6 +101,7 @@ def makeTestCase(path, ext, ignoreDeprecationWarnings):
         expectedOutput = readExpectedOutput(expectedOutputPath)
         # get drawBot
         import drawBot
+
         # start a new drawing
         drawBot.newDrawing()
         # execute the script in place
@@ -117,11 +120,7 @@ def makeTestCase(path, ext, ignoreDeprecationWarnings):
     return test
 
 
-testExt = [
-    "svg",
-    "png",
-    "pdf"
-]
+testExt = ["svg", "png", "pdf"]
 
 
 skipTests = {
@@ -165,6 +164,7 @@ ignoreDeprecationWarnings = {
     "test_svg_imagePixelColor",
 }
 
+
 def _addTests():
     for path in glob.glob(os.path.join(drawBotScriptDir, "*.py")):
         scriptName = os.path.splitext(os.path.basename(path))[0]
@@ -180,8 +180,9 @@ def _addTests():
                 testMethod = unittest.skipIf(*conditionalSkip[testMethodName])(testMethod)
             setattr(DrawBotTest, testMethodName, testMethod)
 
+
 _addTests()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     sys.exit(unittest.main())

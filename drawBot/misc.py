@@ -1,12 +1,11 @@
-import AppKit
-
 import functools
-import sys
-import os
 import io
+import os
 import subprocess
-from fontTools.misc.transform import Transform
+import sys
 
+import AppKit  # type: ignore
+from fontTools.misc.transform import Transform
 
 # ==========
 # = errors =
@@ -20,6 +19,7 @@ class DrawBotError(TypeError):
 # =================
 # = default tools =
 # =================
+
 
 def getDefault(key, defaultValue=None):
     """
@@ -69,6 +69,7 @@ def setColorDefault(key, color):
 # = path tools =
 # ==============
 
+
 def optimizePath(path):
     path = os.fspath(path)
     if path.startswith("http"):
@@ -83,6 +84,7 @@ def optimizePath(path):
 # = number tools =
 # ================
 
+
 def formatNumber(value, decimals=2):
     value = float(value)
     if value.is_integer():
@@ -94,6 +96,7 @@ def formatNumber(value, decimals=2):
 # ===============
 # = color tools =
 # ===============
+
 
 def cmyk2rgb(c, m, y, k):
     """
@@ -123,6 +126,7 @@ def rgb2cmyk(r, g, b):
 # ==============
 # = file tools =
 # ==============
+
 
 def isPDF(url):
     if not isinstance(url, AppKit.NSURL):
@@ -162,9 +166,11 @@ def pilToNSImage(pilImage):
 
 # =============
 
+
 def stringToInt(code):
     import struct
-    return struct.unpack('>l', code)[0]
+
+    return struct.unpack(">l", code)[0]
 
 
 def transformationAtCenter(matrix, centerPoint):
@@ -201,6 +207,7 @@ def nsStringLength(s):
 # = language tools  =
 # ===================
 
+
 def canonicalLocaleCode(localeCode):
     parsedLoc = AppKit.NSLocale.componentsFromLocaleIdentifier_(localeCode)
     parts = [
@@ -220,8 +227,8 @@ def validateLanguageCode(localeCode):
 # = warnings =
 # ============
 
-class Warnings:
 
+class Warnings:
     def __init__(self):
         self._warnMessages = set()
         self.shouldShowWarnings = False
@@ -242,9 +249,9 @@ warnings = Warnings()
 
 
 class VariableController:
-
     def __init__(self, attributes, callback, document=None, continuous=True):
         import vanilla
+
         self._callback = callback
         self._attributes = None
         self._continuous = None
@@ -257,6 +264,7 @@ class VariableController:
 
     def buildUI(self, attributes, continuous):
         import vanilla
+
         if (self._attributes, self._continuous) == (attributes, continuous):
             return
         self._attributes = attributes
@@ -279,7 +287,9 @@ class VariableController:
             # create a label for every ui element except a checkbox
             if uiElement not in ("CheckBox", "Button"):
                 # create the label view
-                label = vanilla.TextBox((0, y + 2, labelSize - gutter, height), "%s:" % name, alignment="right", sizeStyle="small")
+                label = vanilla.TextBox(
+                    (0, y + 2, labelSize - gutter, height), "%s:" % name, alignment="right", sizeStyle="small"
+                )
                 # set the label view
                 setattr(ui, "%sLabel" % name, label)
             else:
@@ -321,7 +331,7 @@ class VariableController:
     def get(self):
         data = {}
         for attribute in self._attributes:
-            if attribute["ui"] in ("Button", ):
+            if attribute["ui"] in ("Button",):
                 continue
             name = attribute["name"]
             data[name] = getattr(self.w.ui, name).get()
@@ -336,17 +346,17 @@ class VariableController:
 
 def executeExternalProcess(cmds, cwd=None):
     r"""
-        >>> stdout, stderr = executeExternalProcess(["which", "ls"])
-        >>> stdout
-        '/bin/ls\n'
-        >>> assert stdout == '/bin/ls\n'
-        >>> executeExternalProcess(["which", "fooooo"])
-        Traceback (most recent call last):
-            ...
-        RuntimeError: 'which' failed with error code 1
-        >>> stdout, stderr = executeExternalProcess(["python", "-S", "-c", "print('hello')"])
-        >>> stdout
-        'hello\n'
+    >>> stdout, stderr = executeExternalProcess(["which", "ls"])
+    >>> stdout
+    '/bin/ls\n'
+    >>> assert stdout == '/bin/ls\n'
+    >>> executeExternalProcess(["which", "fooooo"])
+    Traceback (most recent call last):
+        ...
+    RuntimeError: 'which' failed with error code 1
+    >>> stdout, stderr = executeExternalProcess(["python", "-S", "-c", "print('hello')"])
+    >>> stdout
+    'hello\n'
     """
     p = subprocess.Popen(cmds, stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=cwd, universal_newlines=True)
     stdoutdata, stderrdata = p.communicate()
@@ -393,6 +403,7 @@ def memoize(function):
         # and and the result will be stored in the cache dict as [first, second]: returnValue
         # From then on, this value will be returned when the same argument is made to the addNumbers function
     """
+
     @functools.wraps(function)
     def wrapper(*args):
         key = (function, args)
@@ -402,9 +413,11 @@ def memoize(function):
             result = function(*args)
             _memoizeCache[key] = result
             return result
+
     return wrapper
 
 
 if __name__ == "__main__":
     import doctest
+
     doctest.testmod()

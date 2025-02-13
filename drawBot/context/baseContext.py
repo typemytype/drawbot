@@ -1,30 +1,24 @@
-import AppKit # type: ignore
-import CoreText # type: ignore
-import Quartz # type: ignore
-
 import math
-from typing import Any
 import os
+from typing import Any, Self
+
+import AppKit  # type: ignore
+import CoreText  # type: ignore
+import Quartz  # type: ignore
+from fontTools.pens.basePen import AbstractPen, BasePen  # type: ignore
+from fontTools.pens.pointPen import AbstractPointPen  # type: ignore
 from packaging.version import Version
 
-from fontTools.pens.basePen import BasePen, AbstractPen # type: ignore
-from fontTools.pens.pointPen import AbstractPointPen # type: ignore
-
-from drawBot.misc import DrawBotError, cmyk2rgb, warnings, transformationAtCenter
-from drawBot.macOSVersion import macOSVersion
-from drawBot.misc import memoize, validateLanguageCode
-
-from .tools import openType
-from .tools import variation
-from .tools import SFNTLayoutTypes
-
-from typing import Self
 from drawBot.aliases import (
     BoundingBox,
     Point,
-    TransformTuple,
     SomePath,
+    TransformTuple,
 )
+from drawBot.macOSVersion import macOSVersion
+from drawBot.misc import DrawBotError, cmyk2rgb, memoize, transformationAtCenter, validateLanguageCode, warnings
+
+from .tools import SFNTLayoutTypes, openType, variation
 
 _FALLBACKFONT = "LucidaGrande"
 _LINEJOINSTYLESMAP = dict(
@@ -41,8 +35,8 @@ _LINECAPSTYLESMAP = dict(
 
 # context specific attributes
 
-class ContextPropertyMixin:
 
+class ContextPropertyMixin:
     def copyContextProperties(self, other):
         # loop over all base classes
         for cls in self.__class__.__bases__:
@@ -52,7 +46,6 @@ class ContextPropertyMixin:
 
 
 class contextProperty:
-
     def __init__(self, doc, validator=None):
         self.__doc__ = doc
         if validator is not None:
@@ -83,7 +76,6 @@ class contextProperty:
 
 
 class SVGContextPropertyMixin:
-
     svgID = contextProperty("The svg id, as a string.", "stringValidator")
     svgClass = contextProperty("The svg class, as a string.", "stringValidator")
     svgLink = contextProperty("The svg link, as a string.", "stringValidator")
@@ -95,7 +87,6 @@ class SVGContextPropertyMixin:
 
 
 class BezierContour(list):
-
     """
     A Bezier contour object.
     """
@@ -108,7 +99,8 @@ class BezierContour(list):
         return "<BezierContour>"
 
     def _get_clockwise(self):
-        from fontTools.pens.areaPen import AreaPen # type: ignore
+        from fontTools.pens.areaPen import AreaPen  # type: ignore
+
         pen = AreaPen()
         pen.endPath = pen.closePath
         self.drawToPen(pen)
@@ -146,11 +138,13 @@ class BezierContour(list):
     def _get_points(self):
         return tuple([point for segment in self for point in segment])
 
-    points = property(_get_points, doc="Return an immutable list of all the points in the contour as point coordinate `(x, y)` tuples.")
+    points = property(
+        _get_points,
+        doc="Return an immutable list of all the points in the contour as point coordinate `(x, y)` tuples.",
+    )
 
 
 class BezierPath(BasePen, SVGContextPropertyMixin, ContextPropertyMixin):
-
     """
     Return a BezierPath object.
     This is a reusable object, if you want to draw the same over and over again.
@@ -212,7 +206,7 @@ class BezierPath(BasePen, SVGContextPropertyMixin, ContextPropertyMixin):
     _instructionSegmentTypeMap = {
         AppKit.NSMoveToBezierPathElement: "move",
         AppKit.NSLineToBezierPathElement: "line",
-        AppKit.NSCurveToBezierPathElement: "curve"
+        AppKit.NSCurveToBezierPathElement: "curve",
     }
 
     def __init__(self, path=None, glyphSet=None):
@@ -281,6 +275,7 @@ class BezierPath(BasePen, SVGContextPropertyMixin, ContextPropertyMixin):
         Begin using the path as a so called point pen and start a new subpath.
         """
         from fontTools.pens.pointPen import PointToSegmentPen
+
         self._pointToSegmentPen = PointToSegmentPen(self)
         self._pointToSegmentPen.beginPath()
 
@@ -368,7 +363,8 @@ class BezierPath(BasePen, SVGContextPropertyMixin, ContextPropertyMixin):
         Arc with `center` and a given `radius`, from `startAngle` to `endAngle`, going clockwise if `clockwise` is True and counter clockwise if `clockwise` is False.
         """
         self._path.appendBezierPathWithArcWithCenter_radius_startAngle_endAngle_clockwise_(
-            center, radius, startAngle, endAngle, clockwise)
+            center, radius, startAngle, endAngle, clockwise
+        )
 
     def arcTo(self, point1: Point, point2: Point, radius: float):
         """
@@ -447,7 +443,9 @@ class BezierPath(BasePen, SVGContextPropertyMixin, ContextPropertyMixin):
             x, y = offset
         else:
             x = y = 0
-        for subTxt, box in makeTextBoxes(attributedString, (x, y), align=align, plainText=not isinstance(txt, FormattedString)):
+        for subTxt, box in makeTextBoxes(
+            attributedString, (x, y), align=align, plainText=not isinstance(txt, FormattedString)
+        ):
             self.textBox(subTxt, box, font=font, fontSize=fontSize, align=align)
 
     def textBox(
@@ -530,6 +528,7 @@ class BezierPath(BasePen, SVGContextPropertyMixin, ContextPropertyMixin):
         * `offset`: add the traced vector outline with an offset to the BezierPath
         """
         from .tools import traceImage
+
         traceImage.TraceImage(path, self, threshold, blur, invert, turd, tolerance, offset)
 
     def getNSBezierPath(self) -> AppKit.NSBezierPath:
@@ -549,10 +548,7 @@ class BezierPath(BasePen, SVGContextPropertyMixin, ContextPropertyMixin):
                 Quartz.CGPathAddLineToPoint(path, None, points[0].x, points[0].y)
             elif instruction == AppKit.NSCurveToBezierPathElement:
                 Quartz.CGPathAddCurveToPoint(
-                    path, None,
-                    points[0].x, points[0].y,
-                    points[1].x, points[1].y,
-                    points[2].x, points[2].y
+                    path, None, points[0].x, points[0].y, points[1].x, points[1].y, points[2].x, points[2].y
                 )
             elif instruction == AppKit.NSClosePathBezierPathElement:
                 Quartz.CGPathCloseSubpath(path)
@@ -571,6 +567,7 @@ class BezierPath(BasePen, SVGContextPropertyMixin, ContextPropertyMixin):
                 self._path.curveToPoint_controlPoint1_controlPoint2_(points[2], points[0], points[1])
             elif instruction == Quartz.kCGPathElementCloseSubpath:
                 self._path.closePath()
+
         Quartz.CGPathApply(cgpath, None, _addPoints)
 
     def setNSBezierPath(self, path: AppKit.NSBezierPath):
@@ -683,7 +680,7 @@ class BezierPath(BasePen, SVGContextPropertyMixin, ContextPropertyMixin):
             y = x
         self.transform((x, 0, 0, y, 0, 0), center)
 
-    def skew(self, angle1: float, angle2: float=0, center: Point=(0, 0)):
+    def skew(self, angle1: float, angle2: float = 0, center: Point = (0, 0)):
         """
         Skew the path with given `angle1` and `angle2`.
 
@@ -722,7 +719,8 @@ class BezierPath(BasePen, SVGContextPropertyMixin, ContextPropertyMixin):
         Return the union between two bezier paths.
         """
         assert isinstance(other, self.__class__)
-        import booleanOperations # type: ignore
+        import booleanOperations  # type: ignore
+
         contours = self._contoursForBooleanOperations() + other._contoursForBooleanOperations()
         result = self.__class__()
         booleanOperations.union(contours, result)
@@ -733,6 +731,7 @@ class BezierPath(BasePen, SVGContextPropertyMixin, ContextPropertyMixin):
         Remove all overlaps in a bezier path.
         """
         import booleanOperations
+
         contours = self._contoursForBooleanOperations()
         result = self.__class__()
         booleanOperations.union(contours, result)
@@ -745,6 +744,7 @@ class BezierPath(BasePen, SVGContextPropertyMixin, ContextPropertyMixin):
         """
         assert isinstance(other, self.__class__)
         import booleanOperations
+
         subjectContours = self._contoursForBooleanOperations()
         clipContours = other._contoursForBooleanOperations()
         result = self.__class__()
@@ -770,6 +770,7 @@ class BezierPath(BasePen, SVGContextPropertyMixin, ContextPropertyMixin):
         """
         assert isinstance(other, self.__class__)
         import booleanOperations
+
         subjectContours = self._contoursForBooleanOperations()
         clipContours = other._contoursForBooleanOperations()
         result = self.__class__()
@@ -783,13 +784,16 @@ class BezierPath(BasePen, SVGContextPropertyMixin, ContextPropertyMixin):
         Optionaly provide an other path object to find intersection points.
         """
         import booleanOperations
+
         contours = self._contoursForBooleanOperations()
         if other is not None:
             assert isinstance(other, self.__class__)
             contours += other._contoursForBooleanOperations()
         return booleanOperations.getIntersections(contours)
 
-    def expandStroke(self, width: float, lineCap: str = "round", lineJoin: str = "round", miterLimit: float = 10) -> Self:
+    def expandStroke(
+        self, width: float, lineCap: str = "round", lineJoin: str = "round", miterLimit: float = 10
+    ) -> Self:
         """
         Returns a new bezier path with an expanded stroke around the original path,
         with a given `width`. Note: the new path will not contain the original path.
@@ -806,12 +810,7 @@ class BezierPath(BasePen, SVGContextPropertyMixin, ContextPropertyMixin):
             raise DrawBotError("lineCap must be 'butt', 'square' or 'round'")
 
         strokedCGPath = Quartz.CGPathCreateCopyByStrokingPath(
-            self._getCGPath(),
-            None,
-            width,
-            _LINECAPSTYLESMAP[lineCap],
-            _LINEJOINSTYLESMAP[lineJoin],
-            miterLimit
+            self._getCGPath(), None, width, _LINECAPSTYLESMAP[lineCap], _LINEJOINSTYLESMAP[lineJoin], miterLimit
         )
         result = self.__class__()
         result._setCGPath(strokedCGPath)
@@ -826,13 +825,7 @@ class BezierPath(BasePen, SVGContextPropertyMixin, ContextPropertyMixin):
 
         * `offset`: set the offset of the first dash.
         """
-        dashedCGPath = Quartz.CGPathCreateCopyByDashingPath(
-            self._getCGPath(),
-            None,
-            offset,
-            dash,
-            len(dash)
-        )
+        dashedCGPath = Quartz.CGPathCreateCopyByDashingPath(self._getCGPath(), None, offset, dash, len(dash))
         result = self.__class__()
         result._setCGPath(dashedCGPath)
         return result
@@ -893,17 +886,25 @@ class BezierPath(BasePen, SVGContextPropertyMixin, ContextPropertyMixin):
     def _get_points(self):
         return self._points()
 
-    points = property(_get_points, doc="Return an immutable list of all points in the BezierPath as point coordinate `(x, y)` tuples.")
+    points = property(
+        _get_points, doc="Return an immutable list of all points in the BezierPath as point coordinate `(x, y)` tuples."
+    )
 
     def _get_onCurvePoints(self):
         return self._points(offCurve=False)
 
-    onCurvePoints = property(_get_onCurvePoints, doc="Return an immutable list of all on curve points in the BezierPath as point coordinate `(x, y)` tuples.")
+    onCurvePoints = property(
+        _get_onCurvePoints,
+        doc="Return an immutable list of all on curve points in the BezierPath as point coordinate `(x, y)` tuples.",
+    )
 
     def _get_offCurvePoints(self):
         return self._points(onCurve=False)
 
-    offCurvePoints = property(_get_offCurvePoints, doc="Return an immutable list of all off curve points in the BezierPath as point coordinate `(x, y)` tuples.")
+    offCurvePoints = property(
+        _get_offCurvePoints,
+        doc="Return an immutable list of all off curve points in the BezierPath as point coordinate `(x, y)` tuples.",
+    )
 
     def _get_contours(self):
         contours = []
@@ -919,7 +920,10 @@ class BezierPath(BasePen, SVGContextPropertyMixin, ContextPropertyMixin):
             contours.pop()
         return tuple(contours)
 
-    contours = property(_get_contours, doc="Return an immutable list of contours with all point coordinates sorted in segments. A contour object has an `open` attribute.")
+    contours = property(
+        _get_contours,
+        doc="Return an immutable list of contours with all point coordinates sorted in segments. A contour object has an `open` attribute.",
+    )
 
     def __len__(self) -> int:
         return len(self.contours)
@@ -988,7 +992,6 @@ class Color:
 
 
 class CMYKColor(Color):
-
     colorSpace = AppKit.NSColorSpace.genericCMYKColorSpace()
 
     def __init__(self, c=None, m=None, y=None, k=None, a=1):
@@ -1027,7 +1030,9 @@ class Shadow:
 class Gradient:
     _colorClass = Color
 
-    def __init__(self, gradientType=None, start=None, end=None, colors=None, positions=None, startRadius=None, endRadius=None):
+    def __init__(
+        self, gradientType=None, start=None, end=None, colors=None, positions=None, startRadius=None, endRadius=None
+    ):
         if gradientType is None:
             return
         if gradientType not in ("linear", "radial"):
@@ -1070,12 +1075,16 @@ def makeTextBoxes(attributedString, xy, align, plainText):
 
     if align is not None:
         attributedString = attributedString.mutableCopy()
+
         # overwrite all align settings in each paragraph style
         def block(value, rng, stop):
             value = value.mutableCopy()
             value.setAlignment_(FormattedString._textAlignMap[align])
             attributedString.addAttribute_value_range_(AppKit.NSParagraphStyleAttributeName, value, rng)
-        attributedString.enumerateAttribute_inRange_options_usingBlock_(AppKit.NSParagraphStyleAttributeName, (0, len(attributedString)), 0, block)
+
+        attributedString.enumerateAttribute_inRange_options_usingBlock_(
+            AppKit.NSParagraphStyleAttributeName, (0, len(attributedString)), 0, block
+        )
 
     setter = CoreText.CTFramesetterCreateWithAttributedString(attributedString)
     path = Quartz.CGPathCreateMutable()
@@ -1103,7 +1112,7 @@ def makeTextBoxes(attributedString, xy, align, plainText):
             originX = 0
             if para is not None:
                 if para.alignment() == AppKit.NSTextAlignmentCenter:
-                    originX -= width * .5
+                    originX -= width * 0.5
                 elif para.alignment() == AppKit.NSTextAlignmentRight:
                     originX = -width
 
@@ -1143,7 +1152,6 @@ def makeTextBoxes(attributedString, xy, align, plainText):
 
 
 class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
-
     """
     Return a string object that can handle text formatting.
 
@@ -1218,10 +1226,7 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
         # byWord=0x8000 # AppKit.NSUnderlineByWord,
     )
 
-    _writingDirectionMap = dict(
-        LTR=AppKit.NSWritingDirectionLeftToRight,
-        RTL=AppKit.NSWritingDirectionRightToLeft
-    )
+    _writingDirectionMap = dict(LTR=AppKit.NSWritingDirectionLeftToRight, RTL=AppKit.NSWritingDirectionRightToLeft)
 
     _formattedAttributes: dict[str, Any] = dict(
         font=_FALLBACKFONT,
@@ -1229,13 +1234,11 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
         fallbackFontNumber=0,
         fontSize=10,
         fontNumber=0,
-
         fill=(0, 0, 0),
         cmykFill=None,
         stroke=None,
         cmykStroke=None,
         strokeWidth=1,
-
         align=None,
         lineHeight=None,
         tracking=None,
@@ -1251,7 +1254,6 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
         firstLineIndent=None,
         paragraphTopSpacing=None,
         paragraphBottomSpacing=None,
-
         language=None,
         writingDirection=None,
     )
@@ -1592,7 +1594,9 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
             if textLength == 0:
                 attributes = self.textProperties()
             else:
-                attributes, _ = self._attributedString.attribute_atIndex_effectiveRange_("drawBot.formattedString.properties", location + length - 1, None)
+                attributes, _ = self._attributedString.attribute_atIndex_effectiveRange_(
+                    "drawBot.formattedString.properties", location + length - 1, None
+                )
             new = self.__class__(**attributes)
             try:
                 new._attributedString = self._attributedString.attributedSubstringFromRange_(rng)
@@ -1662,12 +1666,7 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
         """
         self._fontSize = fontSize
 
-    def fill(self,
-            r: float | None = None,
-            g: float | None = None,
-            b: float | None = None,
-            alpha: float = 1
-        ):
+    def fill(self, r: float | None = None, g: float | None = None, b: float | None = None, alpha: float = 1):
         """
         Sets the fill color with a `red`, `green`, `blue` and `alpha` value.
         Each argument must a value float between 0 and 1.
@@ -1679,12 +1678,7 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
         self._fill = fill
         self._cmykFill = None
 
-    def stroke(self,
-              r: float | None = None,
-              g: float | None = None,
-              b: float | None = None,
-              alpha: float = 1
-        ):
+    def stroke(self, r: float | None = None, g: float | None = None, b: float | None = None, alpha: float = 1):
         """
         Sets the stroke color with a `red`, `green`, `blue` and `alpha` value.
         Each argument must a value float between 0 and 1.
@@ -1696,13 +1690,14 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
         self._stroke = stroke
         self._cmykStroke = None
 
-    def cmykFill(self,
-                c: float | None = None,
-                m: float | None = None,
-                y: float | None = None,
-                k: float | None = None,
-                alpha: float = 1
-        ):
+    def cmykFill(
+        self,
+        c: float | None = None,
+        m: float | None = None,
+        y: float | None = None,
+        k: float | None = None,
+        alpha: float = 1,
+    ):
         """
         Set a fill using a CMYK color before drawing a shape. This is handy if the file is intended for print.
 
@@ -1715,13 +1710,14 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
         self._cmykFill = cmykFill
         self._fill = None
 
-    def cmykStroke(self,
-                  c: float | None = None,
-                  m: float | None = None,
-                  y: float | None = None,
-                  k: float | None = None,
-                  alpha: float = 1
-        ):
+    def cmykStroke(
+        self,
+        c: float | None = None,
+        m: float | None = None,
+        y: float | None = None,
+        k: float | None = None,
+        alpha: float = 1,
+    ):
         """
         Set a stroke using a CMYK color before drawing a shape. This is handy if the file is intended for print.
 
@@ -2067,9 +2063,7 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
         """
         Copy the formatted string.
         """
-        attributes = {
-            key: getattr(self, "_%s" % key) for key in self._formattedAttributes
-        }
+        attributes = {key: getattr(self, "_%s" % key) for key in self._formattedAttributes}
         new = self.__class__(**attributes)
         new._attributedString = self._attributedString.mutableCopy()
         new.copyContextProperties(self)
@@ -2129,7 +2123,7 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
         """
         Return a list of glyph names supported by the current font.
         """
-        from fontTools.ttLib import TTFont, TTLibError # type: ignore
+        from fontTools.ttLib import TTFont, TTLibError  # type: ignore
 
         path = self.fontFilePath()
         if path is None:
@@ -2238,13 +2232,15 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
         if coreTextFontVariations:
             fontAttributes[CoreText.NSFontVariationAttribute] = coreTextFontVariations
 
-        fontAttributes[CoreText.kCTFontFeatureSettingsAttribute] = [dict(CTFeatureOpenTypeTag="calt", CTFeatureOpenTypeValue=False)]
+        fontAttributes[CoreText.kCTFontFeatureSettingsAttribute] = [
+            dict(CTFeatureOpenTypeTag="calt", CTFeatureOpenTypeValue=False)
+        ]
         fontDescriptor = font.fontDescriptor()
         fontDescriptor = fontDescriptor.fontDescriptorByAddingAttributes_(fontAttributes)
         font = AppKit.NSFont.fontWithDescriptor_size_(fontDescriptor, self._fontSize)
 
         fallbackFont = self._fallbackFont
-        self._fallbackFont = None # type: ignore
+        self._fallbackFont = None  # type: ignore
         _openTypeFeatures: dict[str, bool] = dict(self._openTypeFeatures)
         self._openTypeFeatures = dict(calt=False)
         for glyphName in glyphNames:
@@ -2257,7 +2253,9 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
                 self.append(baseString)
                 glyphInfo = AppKit.NSGlyphInfo.glyphInfoWithGlyph_forFont_baseString_(glyph, font, baseString)
                 if glyphInfo is not None:
-                    self._attributedString.addAttribute_value_range_(AppKit.NSGlyphInfoAttributeName, glyphInfo, (len(self) - 1, 1))
+                    self._attributedString.addAttribute_value_range_(
+                        AppKit.NSGlyphInfoAttributeName, glyphInfo, (len(self) - 1, 1)
+                    )
                 else:
                     warnings.warn(f"font '{font.fontName()}' has no glyph with glyph ID {glyph}")
             else:
@@ -2465,7 +2463,7 @@ class BaseContext:
     def reset(self):
         self._stack = []
         self._state = self._graphicsStateClass()
-        self._colorClass.colorSpace = self._colorSpaceMap['genericRGB']
+        self._colorClass.colorSpace = self._colorSpaceMap["genericRGB"]
         self._reset()
 
     def size(self, width=None, height=None):
@@ -2552,9 +2550,12 @@ class BaseContext:
 
     def colorSpace(self, colorSpace):
         if colorSpace is None:
-            colorSpace = 'genericRGB'
+            colorSpace = "genericRGB"
         if colorSpace not in self._colorSpaceMap:
-            raise DrawBotError("'%s' is not a valid colorSpace, argument must be '%s'" % (colorSpace, "', '".join(self._colorSpaceMap.keys())))
+            raise DrawBotError(
+                "'%s' is not a valid colorSpace, argument must be '%s'"
+                % (colorSpace, "', '".join(self._colorSpaceMap.keys()))
+            )
         colorSpace = self._colorSpaceMap[colorSpace]
         self._state.setColorSpace(colorSpace)
 
@@ -2639,16 +2640,22 @@ class BaseContext:
             self._state.gradient = None
             self.fill(0)
             return
-        self._state.gradient = self._gradientClass("radial", startPoint, endPoint, colors, locations, startRadius, endRadius)
+        self._state.gradient = self._gradientClass(
+            "radial", startPoint, endPoint, colors, locations, startRadius, endRadius
+        )
         self.fill(None)
 
-    def cmykRadialGradient(self, startPoint=None, endPoint=None, colors=None, locations=None, startRadius=0, endRadius=100):
+    def cmykRadialGradient(
+        self, startPoint=None, endPoint=None, colors=None, locations=None, startRadius=0, endRadius=100
+    ):
         if startPoint is None:
             self._state.gradient = None
             self.fill(0)
             return
         rgbColors = [cmyk2rgb(color[0], color[1], color[2], color[3]) for color in colors]
-        self._state.gradient = self._gradientClass("radial", startPoint, endPoint, rgbColors, locations, startRadius, endRadius)
+        self._state.gradient = self._gradientClass(
+            "radial", startPoint, endPoint, rgbColors, locations, startRadius, endRadius
+        )
         self._state.gradient.cmykColors = [self._cmykColorClass(*color) for color in colors]
         self.fill(None)
 
@@ -2771,7 +2778,7 @@ class BaseContext:
             if len(subStringText) and subStringText[-1] == chr(self._softHypen):
                 # here we go
                 # get the justified line and get the max line width
-                maxLineWidth, a, d, l = CoreText.CTLineGetTypographicBounds(justifiedLines[i], None, None, None)
+                maxLineWidth, _, _, _ = CoreText.CTLineGetTypographicBounds(justifiedLines[i], None, None, None)
                 # get the last attributes
                 hyphenAttr, _ = subString.attributesAtIndex_effectiveRange_(0, None)
                 # create a hyphen string
@@ -2782,7 +2789,9 @@ class BaseContext:
                 lineBreakLocation = len(subString)
                 possibleLineBreaks = [lineBreakLocation]
                 while lineBreakLocation:
-                    lineBreakLocation = subString.lineBreakBeforeIndex_withinRange_(lineBreakLocation, (0, len(subString)))
+                    lineBreakLocation = subString.lineBreakBeforeIndex_withinRange_(
+                        lineBreakLocation, (0, len(subString))
+                    )
                     if lineBreakLocation:
                         possibleLineBreaks.append(lineBreakLocation)
                 breakFound = False
@@ -2806,7 +2815,9 @@ class BaseContext:
                     # add a hyphen
                     attrString.replaceCharactersInRange_withString_((rng.location + lineBreak, 0), "-")
                 # remove all soft hyphens for the range of that line
-                mutString.replaceOccurrencesOfString_withString_options_range_(chr(self._softHypen), "", AppKit.NSLiteralSearch, rng)
+                mutString.replaceOccurrencesOfString_withString_options_range_(
+                    chr(self._softHypen), "", AppKit.NSLiteralSearch, rng
+                )
                 # reset the lines, from the adjusted attribute string
                 lines = self._getTypesetterLinesWithPath(attrString, path)
                 # reset the justifed lines form the adjusted attributed string
@@ -2814,7 +2825,9 @@ class BaseContext:
             # next line
             i += 1
         # remove all soft hyphen
-        mutString.replaceOccurrencesOfString_withString_options_range_(chr(self._softHypen), "", AppKit.NSLiteralSearch, (0, mutString.length()))
+        mutString.replaceOccurrencesOfString_withString_options_range_(
+            chr(self._softHypen), "", AppKit.NSLiteralSearch, (0, mutString.length())
+        )
         # done!
         return attrString
 
@@ -2847,7 +2860,9 @@ class BaseContext:
             para.setAlignment_(AppKit.NSJustifiedTextAlignment)
             attr.addAttribute_value_range_(AppKit.NSParagraphStyleAttributeName, para, rng)
 
-        attr.enumerateAttribute_inRange_options_usingBlock_(AppKit.NSParagraphStyleAttributeName, (0, len(attr)), 0, changeParaAttribute)
+        attr.enumerateAttribute_inRange_options_usingBlock_(
+            AppKit.NSParagraphStyleAttributeName, (0, len(attr)), 0, changeParaAttribute
+        )
         return attr
 
     def _getTypesetterLinesWithPath(self, attrString, path, offset=None):
@@ -2888,7 +2903,9 @@ class BaseContext:
                 CoreText.CGPathAddRect(path, None, CoreText.CGRectMake(0, 0, width, height))
                 attrString = self.hyphenateAttributedString(attrString, path)
             setter = CoreText.CTFramesetterCreateWithAttributedString(attrString)
-            (w, h), _ = CoreText.CTFramesetterSuggestFrameSizeWithConstraints(setter, (0, 0), None, (width, height), None)
+            (w, h), _ = CoreText.CTFramesetterSuggestFrameSizeWithConstraints(
+                setter, (0, 0), None, (width, height), None
+            )
         return w, h
 
     def textBox(self, txt, box, align="left"):
@@ -2915,6 +2932,7 @@ class BaseContext:
 
     def _fontNameForPath(self, path):
         from fontTools.ttLib import TTFont, TTLibError
+
         try:
             font = TTFont(path, fontNumber=0)  # in case of .ttc, use the first font
             psName = font["name"].getName(6, 1, 0)
@@ -2946,9 +2964,7 @@ class BaseContext:
 def getNSFontFromNameOrPath(fontNameOrPath, fontSize, fontNumber):
     if not isinstance(fontNameOrPath, (str, os.PathLike)):
         tp = type(fontNameOrPath).__name__
-        raise TypeError(
-            f"'fontNameOrPath' should be str or path-like, '{tp}' found"
-        )
+        raise TypeError(f"'fontNameOrPath' should be str or path-like, '{tp}' found")
     font = _getNSFontFromNameOrPath(fontNameOrPath, fontSize, fontNumber)
     if font is None:
         warnings.warn(f"not font could be found for '{fontNameOrPath}'")
@@ -2972,8 +2988,7 @@ def _getNSFontFromNameOrPath(fontNameOrPath, fontSize, fontNumber):
         return None
     if not 0 <= fontNumber < len(descriptors):
         raise IndexError(
-            f"fontNumber out of range for '{fontPath}': "
-            f"{fontNumber} not in range 0..{len(descriptors) - 1}"
+            f"fontNumber out of range for '{fontPath}': {fontNumber} not in range 0..{len(descriptors) - 1}"
         )
     return CoreText.CTFontCreateWithFontDescriptor(descriptors[fontNumber], fontSize, None)
 

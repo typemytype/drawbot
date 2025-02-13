@@ -1,5 +1,7 @@
 import os
+
 import drawBot
+
 drawBot.size(50, 50)
 characters = "Aa今"
 glyphNames = ["A", "a", "zzz"]

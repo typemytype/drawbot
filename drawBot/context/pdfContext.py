@@ -1,29 +1,37 @@
-import AppKit
+import AppKit  # type: ignore
 import CoreText
-import Quartz
-
+import Quartz  # type: ignore
 from packaging.version import Version
 
-from .tools import gifTools
-
-from .baseContext import BaseContext, FormattedString
-from ..misc import DrawBotError, isPDF, isGIF
 from ..macOSVersion import macOSVersion
+from ..misc import DrawBotError, isGIF, isPDF
+from .baseContext import BaseContext, FormattedString
+from .tools import gifTools
 
 
 def sendPDFtoPrinter(pdfDocument):
     printInfo = AppKit.NSPrintInfo.sharedPrintInfo()
     op = pdfDocument.getPrintOperationForPrintInfo_autoRotate_(printInfo, True)
     printPanel = op.printPanel()
-    printPanel.setOptions_(AppKit.NSPrintPanelShowsCopies | AppKit.NSPrintPanelShowsPageRange | AppKit.NSPrintPanelShowsPaperSize | AppKit.NSPrintPanelShowsOrientation | AppKit.NSPrintPanelShowsScaling | AppKit.NSPrintPanelShowsPrintSelection | AppKit.NSPrintPanelShowsPreview)
+    printPanel.setOptions_(
+        AppKit.NSPrintPanelShowsCopies
+        | AppKit.NSPrintPanelShowsPageRange
+        | AppKit.NSPrintPanelShowsPaperSize
+        | AppKit.NSPrintPanelShowsOrientation
+        | AppKit.NSPrintPanelShowsScaling
+        | AppKit.NSPrintPanelShowsPrintSelection
+        | AppKit.NSPrintPanelShowsPreview
+    )
     op.runOperation()
 
 
 class PDFContext(BaseContext):
-
     fileExtensions = ["pdf"]
     saveImageOptions = [
-        ("multipage", "If False, only the last page in the document will be saved into the output PDF. This value is ignored if it is None (default)."),
+        (
+            "multipage",
+            "If False, only the last page in the document will be saved into the output PDF. This value is ignored if it is None (default).",
+        ),
     ]
 
     def __init__(self):
@@ -72,7 +80,7 @@ class PDFContext(BaseContext):
             multipage = True
         if not multipage:
             pdfDocument = Quartz.PDFDocument.alloc().initWithData_(data)
-            page = pdfDocument.pageAtIndex_(pdfDocument.pageCount()-1)
+            page = pdfDocument.pageAtIndex_(pdfDocument.pageCount() - 1)
             data = page.dataRepresentation()
         data.writeToFile_atomically_(path, True)
 
@@ -128,7 +136,12 @@ class PDFContext(BaseContext):
                 self._pdfStrokeColor()
                 Quartz.CGContextSetLineWidth(self._pdfContext, self._state.strokeWidth)
                 if self._state.lineDash is not None:
-                    Quartz.CGContextSetLineDash(self._pdfContext, self._state.lineDashOffset, self._state.lineDash, len(self._state.lineDash))
+                    Quartz.CGContextSetLineDash(
+                        self._pdfContext,
+                        self._state.lineDashOffset,
+                        self._state.lineDash,
+                        len(self._state.lineDash),
+                    )
                 if self._state.miterLimit is not None:
                     Quartz.CGContextSetMiterLimit(self._pdfContext, self._state.miterLimit)
                 if self._state.lineCap is not None:
@@ -172,7 +185,7 @@ class PDFContext(BaseContext):
                 self._save()
                 if url is not None:
                     self._save()
-                    Quartz.CGContextSetTextPosition(self._pdfContext, x+originX, y+originY+baselineShift)
+                    Quartz.CGContextSetTextPosition(self._pdfContext, x + originX, y + originY + baselineShift)
                     urlBox = CoreText.CTRunGetImageBounds(ctRun, self._pdfContext, (0, 0))
                     urlBox = Quartz.CGContextConvertRectToDeviceSpace(self._pdfContext, urlBox)
                     Quartz.CGPDFContextSetURLForRect(self._pdfContext, url, urlBox)
@@ -188,13 +201,13 @@ class PDFContext(BaseContext):
                         self._state.fillColor = None
                         self._state.cmykColor = None
                         Quartz.CGContextSetTextDrawingMode(self._pdfContext, Quartz.kCGTextFill)
-                        Quartz.CGContextSetTextPosition(self._pdfContext, x+originX, y+originY+baselineShift)
+                        Quartz.CGContextSetTextPosition(self._pdfContext, x + originX, y + originY + baselineShift)
                         CoreText.CTRunDraw(ctRun, self._pdfContext, (0, 0))
                         self._restore()
                 if canDoGradients and self._state.gradient is not None:
                     self._save()
                     Quartz.CGContextSetTextDrawingMode(self._pdfContext, Quartz.kCGTextClip)
-                    Quartz.CGContextSetTextPosition(self._pdfContext, x+originX, y+originY+baselineShift)
+                    Quartz.CGContextSetTextPosition(self._pdfContext, x + originX, y + originY + baselineShift)
                     CoreText.CTRunDraw(ctRun, self._pdfContext, (0, 0))
                     self._pdfGradient(self._state.gradient)
                     self._restore()
@@ -207,7 +220,12 @@ class PDFContext(BaseContext):
                     self._pdfStrokeColor(strokeColor)
                     Quartz.CGContextSetLineWidth(self._pdfContext, abs(strokeWidth))
                     if self._state.lineDash is not None:
-                        Quartz.CGContextSetLineDash(self._pdfContext, self._state.lineDashOffset, self._state.lineDash, len(self._state.lineDash))
+                        Quartz.CGContextSetLineDash(
+                            self._pdfContext,
+                            self._state.lineDashOffset,
+                            self._state.lineDash,
+                            len(self._state.lineDash),
+                        )
                     if self._state.miterLimit is not None:
                         Quartz.CGContextSetMiterLimit(self._pdfContext, self._state.miterLimit)
                     if self._state.lineCap is not None:
@@ -221,13 +239,13 @@ class PDFContext(BaseContext):
                         # simple solution: draw it twice...
                         drawingMode = Quartz.kCGTextFill
                         Quartz.CGContextSetTextDrawingMode(self._pdfContext, drawingMode)
-                        Quartz.CGContextSetTextPosition(self._pdfContext, x+originX, y+originY+baselineShift)
+                        Quartz.CGContextSetTextPosition(self._pdfContext, x + originX, y + originY + baselineShift)
                         CoreText.CTRunDraw(ctRun, self._pdfContext, (0, 0))
                         drawingMode = Quartz.kCGTextStroke
 
                 if drawingMode is not None:
                     Quartz.CGContextSetTextDrawingMode(self._pdfContext, drawingMode)
-                    Quartz.CGContextSetTextPosition(self._pdfContext, x+originX, y+originY+baselineShift)
+                    Quartz.CGContextSetTextPosition(self._pdfContext, x + originX, y + originY + baselineShift)
                     CoreText.CTRunDraw(ctRun, self._pdfContext, (0, 0))
                 self._restore()
 
@@ -239,7 +257,7 @@ class PDFContext(BaseContext):
             image = key
             key = id(key)
         if pageNumber is not None:
-            key = "%s-%s" % (key, pageNumber)
+            key = f"{key}-{pageNumber}"
         if key not in self._cachedImages:
             if image is None:
                 if path.startswith("http"):
@@ -259,7 +277,7 @@ class PDFContext(BaseContext):
                 elif _isGIF:
                     if pageNumber is None:
                         pageNumber = gifTools.gifFrameCount(url)
-                    image = gifTools.gifFrameAtIndex(url, pageNumber-1)
+                    image = gifTools.gifFrameAtIndex(url, pageNumber - 1)
                     data = image.TIFFRepresentation()
                     source = Quartz.CGImageSourceCreateWithData(data, {})
                     if source is not None:
@@ -309,7 +327,15 @@ class PDFContext(BaseContext):
             elif instruction == AppKit.NSLineToBezierPathElement:
                 Quartz.CGContextAddLineToPoint(self._pdfContext, points[0].x, points[0].y)
             elif instruction == AppKit.NSCurveToBezierPathElement:
-                Quartz.CGContextAddCurveToPoint(self._pdfContext, points[0].x, points[0].y, points[1].x, points[1].y, points[2].x, points[2].y)
+                Quartz.CGContextAddCurveToPoint(
+                    self._pdfContext,
+                    points[0].x,
+                    points[0].y,
+                    points[1].x,
+                    points[1].y,
+                    points[2].x,
+                    points[2].y,
+                )
             elif instruction == AppKit.NSClosePathBezierPathElement:
                 Quartz.CGContextClosePath(self._pdfContext)
 
@@ -373,15 +399,26 @@ class PDFContext(BaseContext):
                 cgColor = self._rgbNSColorToCGColor(c)
                 colors.append(cgColor)
 
-        cgGradient = Quartz.CGGradientCreateWithColors(
-            colorSpace,
-            colors,
-            gradient.positions)
+        cgGradient = Quartz.CGGradientCreateWithColors(colorSpace, colors, gradient.positions)
 
         if gradient.gradientType == "linear":
-            Quartz.CGContextDrawLinearGradient(self._pdfContext, cgGradient, gradient.start, gradient.end, Quartz.kCGGradientDrawsBeforeStartLocation | Quartz.kCGGradientDrawsAfterEndLocation)
+            Quartz.CGContextDrawLinearGradient(
+                self._pdfContext,
+                cgGradient,
+                gradient.start,
+                gradient.end,
+                Quartz.kCGGradientDrawsBeforeStartLocation | Quartz.kCGGradientDrawsAfterEndLocation,
+            )
         elif gradient.gradientType == "radial":
-            Quartz.CGContextDrawRadialGradient(self._pdfContext, cgGradient, gradient.start, gradient.startRadius, gradient.end, gradient.endRadius, Quartz.kCGGradientDrawsBeforeStartLocation | Quartz.kCGGradientDrawsAfterEndLocation)
+            Quartz.CGContextDrawRadialGradient(
+                self._pdfContext,
+                cgGradient,
+                gradient.start,
+                gradient.startRadius,
+                gradient.end,
+                gradient.endRadius,
+                Quartz.kCGGradientDrawsBeforeStartLocation | Quartz.kCGGradientDrawsAfterEndLocation,
+            )
 
     def _nsColorToCGColor(self, c):
         if c.numberOfComponents() == 5:
@@ -390,13 +427,17 @@ class PDFContext(BaseContext):
             return self._rgbNSColorToCGColor(c)
 
     def _cmykNSColorToCGColor(self, c):
-        return Quartz.CGColorCreateGenericCMYK(c.cyanComponent(), c.magentaComponent(), c.yellowComponent(), c.blackComponent(), c.alphaComponent())
+        return Quartz.CGColorCreateGenericCMYK(
+            c.cyanComponent(), c.magentaComponent(), c.yellowComponent(), c.blackComponent(), c.alphaComponent()
+        )
 
     def _rgbNSColorToCGColor(self, c):
         if c.numberOfComponents() == 2:
             # gray color
             return Quartz.CGColorCreateGenericGray(c.whiteComponent(), c.alphaComponent())
-        return Quartz.CGColorCreateGenericRGB(c.redComponent(), c.greenComponent(), c.blueComponent(), c.alphaComponent())
+        return Quartz.CGColorCreateGenericRGB(
+            c.redComponent(), c.greenComponent(), c.blueComponent(), c.alphaComponent()
+        )
 
     def _linkURL(self, url, xywh):
         url = AppKit.NSURL.URLWithString_(url)

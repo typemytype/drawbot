@@ -34,14 +34,14 @@ DrawBot support for .drawbot packages.
 
 drawBotVersion = version.Version(__version__)
 
+
 @dataclass
 class DrawBotPackageInfo:
-
     name: str = ""
-    version:  str = "0.0"
+    version: str = "0.0"
     developer: str = ""
     developerURL: str = ""
-    requiresVersion:str = "0.0"
+    requiresVersion: str = "0.0"
     mainScript: str = "main.py"
 
     def validate(self):
@@ -68,7 +68,6 @@ class DrawBotPackageInfo:
 
 
 class DrawBotPackage:
-
     def __init__(self, path=None):
         self.path = path
         self.info = DrawBotPackageInfo()

@@ -5,12 +5,13 @@ import shlex
 import subprocess
 import sys
 import threading
-import AppKit
+
+import AppKit  # type: ignore
 from PyObjCTools.AppHelper import callAfter
 from vanilla import *
 from vanilla.dialogs import message
-from drawBot.ui.codeEditor import OutPutEditor as OutputEditor
 
+from drawBot.ui.codeEditor import OutPutEditor as OutputEditor
 
 welcomeText = """\
 Welcome to pip! Pip installs Python Packages from the PyPI database.
@@ -21,30 +22,27 @@ the popup button on the left, then click “Go!” or hit return or enter.
 
 
 class PipInstallerController:
-
     def __init__(self, targetPath):
         self.targetPath = targetPath
         self._isRunning = False
 
-        self.w = Window((640, 300), "Install Python Packages",
-                minSize=(640, 300), autosaveName="PipInstaller")
+        self.w = Window((640, 300), "Install Python Packages", minSize=(640, 300), autosaveName="PipInstaller")
         self.w.getNSWindow().setTitleVisibility_(True)
 
         items = [
             # "Search PyPI",  # disable for now, https://status.python.org/incidents/grk0k7sz6zkp
             "Install / Upgrade",
             "Uninstall",
-            "Show Package Info"
+            "Show Package Info",
         ]
         self.pipCommandNames = [f"pip{re.sub(r'[ /]', '', item)}Command" for item in items]
         self.pipCommandsButton = PopUpButton((0, 0, 0, 0), items)
         self.pipCommandsButton.getNSPopUpButton().setBezelStyle_(AppKit.NSBezelStyleTexturedRounded)
         self.pipCommandsButton.getNSPopUpButton().setFrame_((((0, 0), (140, 35))))
 
-        self.textEntry = EditText((0, 0, 0, 0),
-                placeholder="Enter one or more package names",
-                callback=self.textEntryCallback
-            )
+        self.textEntry = EditText(
+            (0, 0, 0, 0), placeholder="Enter one or more package names", callback=self.textEntryCallback
+        )
         self.textEntry.getNSTextField().setBezelStyle_(AppKit.NSTextFieldRoundedBezel)
         self.textEntry.getNSTextField().setFrame_((((0, 0), (200, 35))))
 
@@ -65,29 +63,36 @@ class PipInstallerController:
         self.progressSpinner.getNSProgressIndicator().setFrame_((((0, 0), (20, 20))))
 
         toolbarItems = [
-            dict(itemIdentifier="pipCommands",
-                 label="Pip Commands",
-                 view=self.pipCommandsButton.getNSPopUpButton(),
+            dict(
+                itemIdentifier="pipCommands",
+                label="Pip Commands",
+                view=self.pipCommandsButton.getNSPopUpButton(),
             ),
-            dict(itemIdentifier="pipTextEntry",
+            dict(
+                itemIdentifier="pipTextEntry",
                 label="Pip",
                 view=self.textEntry.getNSTextField(),
             ),
-            dict(itemIdentifier="pipGo",
+            dict(
+                itemIdentifier="pipGo",
                 label="Pip",
                 view=self.goButton.getNSButton(),
             ),
-            dict(itemIdentifier="pipSpinner",
+            dict(
+                itemIdentifier="pipSpinner",
                 label="Pip",
                 view=self.progressSpinner.getNSProgressIndicator(),
             ),
-            dict(itemIdentifier="pipExtraActions",
+            dict(
+                itemIdentifier="pipExtraActions",
                 label="Pip Actions",
                 view=self.extraActionButton.getNSPopUpButton(),
-            )
+            ),
         ]
 
-        items = self.w.addToolbar(toolbarIdentifier="PipInstallerToolbar", toolbarItems=toolbarItems, addStandardItems=False)
+        items = self.w.addToolbar(
+            toolbarIdentifier="PipInstallerToolbar", toolbarItems=toolbarItems, addStandardItems=False
+        )
 
         items["pipTextEntry"].setMinSize_((150, 22))
         items["pipTextEntry"].setMaxSize_((2000, 22))
@@ -113,8 +118,7 @@ class PipInstallerController:
 
     def windowShouldClose(self, window):
         if self.isRunning:
-            message("Window can’t be closed", "The ‘pip’ process is still running.",
-                    parentWindow=self.w)
+            message("Window can’t be closed", "The ‘pip’ process is still running.", parentWindow=self.w)
             return False
         return True
 
@@ -167,8 +171,10 @@ class PipInstallerController:
         packageNames = [arg.lower() for arg in userArguments if not arg.startswith("-")]
         extraArguments = [arg for arg in userArguments if arg.startswith("-")]
         outputLines = []
+
         def collectOutput(data):
             outputLines.append(data)
+
         def doneShowCallback(resultCode):
             if resultCode != 0:
                 self.stderrWrite("".join(outputLines))
@@ -180,9 +186,9 @@ class PipInstallerController:
             locationTag = "Location:"
             for line in outputLines:
                 if line.startswith(nameTag):
-                    name = line[len(nameTag):].strip()
+                    name = line[len(nameTag) :].strip()
                 elif line.startswith(locationTag):
-                    location = line[len(locationTag):].strip()
+                    location = line[len(locationTag) :].strip()
                     assert name is not None
                     packages[name.lower()] = location
                     name = None
@@ -197,6 +203,7 @@ class PipInstallerController:
                 self.callPip(["uninstall", "-y"] + extraArguments + packageNamesGood, clearOutput=False)
             else:
                 self.isRunning = False
+
         self.w.outputField.clear()
         self.isRunning = True
         self.setResultCode("--")
@@ -207,7 +214,9 @@ class PipInstallerController:
 
     def revealInstallFolderCallback(self, sender):
         if not os.path.exists(self.targetPath):
-            message("The install folder does not yet exists.", "Try again after installing a package.", parentWindow=self.w)
+            message(
+                "The install folder does not yet exists.", "Try again after installing a package.", parentWindow=self.w
+            )
         else:
             AppKit.NSWorkspace.sharedWorkspace().selectFile_inFileViewerRootedAtPath_(None, self.targetPath)
 
@@ -237,21 +246,22 @@ class PipInstallerController:
 
 
 def callPip(arguments, stdoutCallback, stderrCallback, resultCallback):
-    arguments = [sys.executable, '-m', "pip", "--disable-pip-version-check", "--isolated"] + arguments
+    arguments = [sys.executable, "-m", "pip", "--disable-pip-version-check", "--isolated"] + arguments
     env = dict(PYTHONPATH=":".join(sys.path), PYTHONHOME=sys.prefix, PATH="/usr/bin")
     callExternalProcess("pip", arguments, env, stdoutCallback, stderrCallback, resultCallback)
 
 
 def _testTimeout():
-    arguments = [sys.executable, '-c', "import time; print('Hiiiiiii'); time.sleep(3)"]
+    arguments = [sys.executable, "-c", "import time; print('Hiiiiiii'); time.sleep(3)"]
     env = dict(PYTHONPATH=":".join(sys.path), PATH="/usr/bin")
     callExternalProcess("pip", arguments, env, print, print, print, timeout=1)
 
 
 def callExternalProcess(name, arguments, env, stdoutCallback, stderrCallback, resultCallback, timeout=120):
     def worker():
-        process = subprocess.Popen(arguments, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
-                                   env=env, encoding="utf-8", bufsize=1)
+        process = subprocess.Popen(
+            arguments, stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=env, encoding="utf-8", bufsize=1
+        )
         readers = [process.stdout, process.stderr]
         while readers:
             readyReaders, _, _ = select.select(readers, [], [], timeout)
@@ -277,6 +287,7 @@ def callExternalProcess(name, arguments, env, stdoutCallback, stderrCallback, re
             callAfter(resultCallback, -1)
             return
         callAfter(resultCallback, process.returncode)
+
     thread = threading.Thread(target=worker)
     thread.start()
 
@@ -284,8 +295,8 @@ def callExternalProcess(name, arguments, env, stdoutCallback, stderrCallback, re
 if __name__ == "__main__":
     # _testTimeout()
     appSupportPath = AppKit.NSSearchPathForDirectoriesInDomains(
-            AppKit.NSApplicationSupportDirectory,
-            AppKit.NSUserDomainMask, True)[0]
+        AppKit.NSApplicationSupportDirectory, AppKit.NSUserDomainMask, True
+    )[0]
     version = f"{sys.version_info.major}.{sys.version_info.minor}"
     dbSitePath = os.path.join(appSupportPath, f"DrawBot/Python{version}")
     PipInstallerController(dbSitePath)

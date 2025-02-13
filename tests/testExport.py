@@ -1,24 +1,34 @@
-import sys
-import os
-import unittest
 import glob
-import drawBot
+import os
 import random
-import AppKit
+import sys
+import unittest
+
+import AppKit  # type: ignore
 import PIL
+from testSupport import (
+    DrawBotBaseTest,
+    StdOutCollector,
+    TempFile,
+    TempFolder,
+    randomSeed,
+    readData,
+    tempTestDataDir,
+    testDataDir,
+)
+
+import drawBot
 from drawBot.context.tools.gifTools import gifFrameCount
 from drawBot.misc import DrawBotError
-from testSupport import DrawBotBaseTest, StdOutCollector, TempFile, TempFolder, randomSeed, readData, testDataDir, tempTestDataDir
 
 
 class ExportTest(DrawBotBaseTest):
-
     def makeTestAnimation(self, numFrames=25, pageWidth=500, pageHeight=500):
         randomSeed(0)
         drawBot.newDrawing()
         for i in range(numFrames):
             drawBot.newPage(pageWidth, pageHeight)
-            drawBot.frameDuration(1/25)
+            drawBot.frameDuration(1 / 25)
             drawBot.fill(1)
             drawBot.rect(0, 0, pageWidth, pageHeight)
             drawBot.fill(0)
@@ -55,7 +65,10 @@ class ExportTest(DrawBotBaseTest):
         self.makeTestAnimation(1)
         with StdOutCollector(captureStdErr=True) as output:
             self._saveImageAndReturnSize(".png", someArbitraryOption="foo")
-        self.assertEqual(output.lines(), ['*** DrawBot warning: Unrecognized saveImage() option found for PNGContext: someArbitraryOption ***'])
+        self.assertEqual(
+            output.lines(),
+            ["*** DrawBot warning: Unrecognized saveImage() option found for PNGContext: someArbitraryOption ***"],
+        )
 
     def test_export_gif(self):
         self.makeTestAnimation(5)
@@ -87,6 +100,7 @@ class ExportTest(DrawBotBaseTest):
 
     def test_export_pathlib(self):
         import pathlib
+
         self.makeTestDrawing()
         with TempFile(suffix=".png") as tmp:
             drawBot.saveImage(pathlib.Path(tmp.path))
@@ -154,7 +168,9 @@ class ExportTest(DrawBotBaseTest):
             r, g, b, a = drawBot.imagePixelColor(tmp.path, (5, 5))
             self.assertEqual((round(r, 2), round(g, 2), round(b, 2)), (0, 1.0, 0))
         with TempFile(suffix=".jpg") as tmp:
-            drawBot.saveImage(tmp.path, imageJPEGCompressionFactor=1.0, imageFallbackBackgroundColor=AppKit.NSColor.redColor())
+            drawBot.saveImage(
+                tmp.path, imageJPEGCompressionFactor=1.0, imageFallbackBackgroundColor=AppKit.NSColor.redColor()
+            )
             r, g, b, a = drawBot.imagePixelColor(tmp.path, (5, 5))
             # TODO: fix excessive rounding. 2 digits fails on 10.13, at least on Travis
             self.assertEqual((round(r, 1), round(g, 1), round(b, 1)), (1, 0.0, 0))
@@ -237,7 +253,10 @@ class ExportTest(DrawBotBaseTest):
         self.makeTestDrawing()
         with self.assertRaises(TypeError) as cm:
             drawBot.saveImage(["foo.abcde"], foo=123)
-        self.assertEqual(cm.exception.args[0], "Cannot apply saveImage options to multiple output formats, expected 'str' or 'os.PathLike', got 'list'")
+        self.assertEqual(
+            cm.exception.args[0],
+            "Cannot apply saveImage options to multiple output formats, expected 'str' or 'os.PathLike', got 'list'",
+        )
 
     def test_saveImage_png_multipage(self):
         self.makeTestDrawing()
@@ -249,7 +268,10 @@ class ExportTest(DrawBotBaseTest):
         self.makeTestDrawing()
         with StdOutCollector(captureStdErr=True) as output:
             self._saveImageAndReturnSize(".png", ffmpegCodec="mpeg4")
-        self.assertEqual(output.lines(), ['*** DrawBot warning: Unrecognized saveImage() option found for PNGContext: ffmpegCodec ***'])
+        self.assertEqual(
+            output.lines(),
+            ["*** DrawBot warning: Unrecognized saveImage() option found for PNGContext: ffmpegCodec ***"],
+        )
 
     def test_saveImage_mp4_ffmpegCodec(self):
         self.makeTestDrawing()
@@ -273,20 +295,32 @@ class ExportTest(DrawBotBaseTest):
         self.makeTestDrawing()
         with StdOutCollector(captureStdErr=True) as output:
             self._saveImageAndReturnSize(".mp4", imageJPEGCompressionFactor=0.5)
-        self.assertEqual(output.lines(), ['*** DrawBot warning: Unrecognized saveImage() option found for MP4Context: imageJPEGCompressionFactor ***'])
+        self.assertEqual(
+            output.lines(),
+            [
+                "*** DrawBot warning: Unrecognized saveImage() option found for MP4Context: imageJPEGCompressionFactor ***"
+            ],
+        )
 
     def test_saveImage_mp4_multipage(self):
         self.makeTestDrawing()
         with StdOutCollector(captureStdErr=True) as output:
             self._saveImageAndReturnSize(".mp4", multipage=True)
-        self.assertEqual(output.lines(), ['*** DrawBot warning: Unrecognized saveImage() option found for MP4Context: multipage ***'])
+        self.assertEqual(
+            output.lines(), ["*** DrawBot warning: Unrecognized saveImage() option found for MP4Context: multipage ***"]
+        )
 
     def test_saveImage_multipage_positionalArgument(self):
         self.makeTestDrawing()
         with TempFile(suffix=".png") as tmp:
             with StdOutCollector(captureStdErr=True) as output:
                 drawBot.saveImage(tmp.path, False)
-        self.assertEqual(output.lines(), ["*** DrawBot warning: 'multipage' should be a keyword argument: use 'saveImage(path, multipage=True)' ***"])
+        self.assertEqual(
+            output.lines(),
+            [
+                "*** DrawBot warning: 'multipage' should be a keyword argument: use 'saveImage(path, multipage=True)' ***"
+            ],
+        )
 
     def test_saveImage_multiplePositionalArguments(self):
         self.makeTestDrawing()
@@ -334,7 +368,9 @@ class ExportTest(DrawBotBaseTest):
         with TempFile(suffix=".mp4") as tmp:
             with self.assertRaises(DrawBotError) as cm:
                 drawBot.saveImage(tmp.path)
-        self.assertEqual(cm.exception.args[0], "Exporting to mp4 doesn't support odd pixel dimensions for width and height.")
+        self.assertEqual(
+            cm.exception.args[0], "Exporting to mp4 doesn't support odd pixel dimensions for width and height."
+        )
 
     def test_oddPageWidth_mp4(self):
         # https://github.com/typemytype/drawbot/issues/250
@@ -342,7 +378,9 @@ class ExportTest(DrawBotBaseTest):
         with TempFile(suffix=".mp4") as tmp:
             with self.assertRaises(DrawBotError) as cm:
                 drawBot.saveImage(tmp.path)
-        self.assertEqual(cm.exception.args[0], "Exporting to mp4 doesn't support odd pixel dimensions for width and height.")
+        self.assertEqual(
+            cm.exception.args[0], "Exporting to mp4 doesn't support odd pixel dimensions for width and height."
+        )
 
     def makeTestICNSDrawing(self, formats):
         drawBot.newDrawing()
@@ -360,7 +398,10 @@ class ExportTest(DrawBotBaseTest):
         self.makeTestICNSDrawing([15])
         with self.assertRaises(DrawBotError) as cm:
             self._saveImageAndReturnSize(".icns")
-        self.assertEqual(cm.exception.args[0], "The .icns can not be build with the size '15x15'. Must be either: 16x16, 32x32, 128x128, 256x256, 512x512, 1024x1024")
+        self.assertEqual(
+            cm.exception.args[0],
+            "The .icns can not be build with the size '15x15'. Must be either: 16x16, 32x32, 128x128, 256x256, 512x512, 1024x1024",
+        )
 
     def test_export_svg_fallbackFont(self):
         expectedPath = os.path.join(testDataDir, "expected_svgSaveFallback.svg")
@@ -372,7 +413,9 @@ class ExportTest(DrawBotBaseTest):
 
         path = os.path.join(tempTestDataDir, "svgSaveFallback.svg")
         drawBot.saveImage(path)
-        self.assertEqual(readData(path), readData(expectedPath), "Files %r and %s are not the same" % (path, expectedPath))
+        self.assertEqual(
+            readData(path), readData(expectedPath), "Files %r and %s are not the same" % (path, expectedPath)
+        )
 
     def test_linkURL_svg(self):
         expectedPath = os.path.join(testDataDir, "expected_svgLinkURL.svg")
@@ -383,7 +426,9 @@ class ExportTest(DrawBotBaseTest):
 
         path = os.path.join(tempTestDataDir, "svgLinkURL.svg")
         drawBot.saveImage(path)
-        self.assertEqual(readData(path), readData(expectedPath), "Files %r and %s are not the same" % (path, expectedPath))
+        self.assertEqual(
+            readData(path), readData(expectedPath), "Files %r and %s are not the same" % (path, expectedPath)
+        )
 
     def test_formattedStringURL_svg(self):
         expectedPath = os.path.join(testDataDir, "expected_formattedStringURL.svg")
@@ -395,10 +440,13 @@ class ExportTest(DrawBotBaseTest):
 
         path = os.path.join(tempTestDataDir, "formattedStringURL.svg")
         drawBot.saveImage(path)
-        self.assertEqual(readData(path), readData(expectedPath), "Files %r and %s are not the same" % (path, expectedPath))
+        self.assertEqual(
+            readData(path), readData(expectedPath), "Files %r and %s are not the same" % (path, expectedPath)
+        )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     import doctest
+
     doctest.testmod()
     sys.exit(unittest.main())

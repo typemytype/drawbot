@@ -1,5 +1,6 @@
 # https://github.com/typemytype/drawbot/issues/402
 import drawBot
+
 drawBot.size(640, 160)
 
 fs = drawBot.FormattedString()

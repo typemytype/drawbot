@@ -1,10 +1,9 @@
-import Quartz
+import Quartz  # type: ignore
 
 from .pdfContext import PDFContext
 
 
 class DrawBotContext(PDFContext):
-
     def getNSPDFDocument(self):
         if not self._hasContext:
             return None

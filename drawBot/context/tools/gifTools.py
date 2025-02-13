@@ -1,7 +1,8 @@
-import AppKit
-import shutil
 import os
+import shutil
 import tempfile
+
+import AppKit  # type: ignore
 
 from drawBot.misc import executeExternalProcess, getExternalToolPath
 
@@ -17,7 +18,8 @@ def generateGif(sourcePaths, destPath, delays, loop=True):
         # ignore warnings
         "-w",
         # force to 256 colors
-        "--colors", "256",
+        "--colors",
+        "256",
     ]
     if loop:
         # make it loop
@@ -25,16 +27,17 @@ def generateGif(sourcePaths, destPath, delays, loop=True):
     # add source paths with delay for each frame
     for i, inputPath in enumerate(sourcePaths):
         cmds += [
-                # add the frame duration
-                "--delay", "%i" % delays[i],
-                # add the input gif for each frame
-                inputPath
-            ]
+            # add the frame duration
+            "--delay",
+            "%i" % delays[i],
+            # add the input gif for each frame
+            inputPath,
+        ]
 
     cmds += [
         # output path
         "--output",
-        destPath
+        destPath,
     ]
     executeExternalProcess(cmds)
     # remove the temp input gifs
@@ -55,7 +58,7 @@ def _explodeGif(path):
         # explode
         "--explode",
         # source path
-        path
+        path,
     ]
     executeExternalProcess(cmds, cwd=destRoot)
     files = os.listdir(destRoot)

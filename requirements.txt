@@ -28,6 +28,7 @@ git+https://github.com/typesupply/feaPyFoFum
 git+https://github.com/typesupply/feaTools2
 pip
 packaging
-black==23.10.0  # pin to older version, see https://github.com/ronaldoussoren/py2app/issues/518
+ruff
+ruff-api
 pytz
 delocate==0.10.7  # for merging intel+silicon wheels into universal2

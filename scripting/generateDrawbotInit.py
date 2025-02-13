@@ -5,11 +5,13 @@ to leverage the hints we have in the interfaces
 
 """
 
-from drawBot.context.tools import drawBotbuiltins
-from drawBot import _drawBotDrawingTool
 from pathlib import Path
 
+from drawBot import _drawBotDrawingTool
+from drawBot.context.tools import drawBotbuiltins
+
 INIT_PATH = Path(__file__).parent.parent / "drawBot/__init__.py"
+
 
 def generateInitCode():
     code = []
@@ -17,12 +19,12 @@ def generateInitCode():
         if name.startswith("_"):
             continue
         code.append(f"{name} = _drawBotDrawingTool.{name}")
-    
+
     code.append("")
     code.append("# directly import FormattedString, BezierPath, and ImageObject as classes")
     code.append("from drawBot.context.baseContext import FormattedString, BezierPath")
     code.append("from drawBot.context.tools.imageObject import ImageObject")
-    
+
     code.append("")
     code.append("from drawBot.context.tools import drawBotbuiltins")
     for name in dir(drawBotbuiltins):
@@ -39,6 +41,7 @@ def generateInitCode():
 
     return "\n".join(before) + "\n" + "\n".join(code)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     initCode = generateInitCode()
     INIT_PATH.write_text(initCode)

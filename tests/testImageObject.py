@@ -1,17 +1,24 @@
-import unittest
 import sys
-import drawBot
+import unittest
+
 from testSupport import DrawBotBaseTest
+
+import drawBot
 
 sampleImage = drawBot.ImageObject("tests/data/drawBot.png")
 fs = drawBot.FormattedString("Hello World")
 
 
 class ImageObjectTest(DrawBotBaseTest):
-
     def test_accordionFoldTransition(self):
         img = drawBot.ImageObject()
-        img.accordionFoldTransition(targetImage=sampleImage, bottomHeight=0.0, numberOfFolds=3.0, foldShadowAmount=0.1, time=0.0)
+        img.accordionFoldTransition(
+            targetImage=sampleImage,
+            bottomHeight=0.0,
+            numberOfFolds=3.0,
+            foldShadowAmount=0.1,
+            time=0.0,
+        )
 
     def test_additionCompositing(self):
         img = drawBot.ImageObject()
@@ -35,7 +42,13 @@ class ImageObjectTest(DrawBotBaseTest):
 
     def test_areaLogarithmicHistogram(self):
         img = drawBot.ImageObject()
-        img.areaLogarithmicHistogram(extent=(0.0, 0.0, 640.0, 80.0), scale=1.0, count=64.0, minimumStop=-10.0, maximumStop=4.0)
+        img.areaLogarithmicHistogram(
+            extent=(0.0, 0.0, 640.0, 80.0),
+            scale=1.0,
+            count=64.0,
+            minimumStop=-10.0,
+            maximumStop=4.0,
+        )
 
     def test_areaMaximum(self):
         img = drawBot.ImageObject()
@@ -67,7 +80,9 @@ class ImageObjectTest(DrawBotBaseTest):
 
     def test_aztecCodeGenerator(self):
         img = drawBot.ImageObject()
-        img.aztecCodeGenerator(size=(100, 100), message=b'Hello World', layers=None, compactStyle=None, correctionLevel=23.0)
+        img.aztecCodeGenerator(
+            size=(100, 100), message=b"Hello World", layers=None, compactStyle=None, correctionLevel=23.0
+        )
 
     def test_barsSwipeTransition(self):
         img = drawBot.ImageObject()
@@ -95,7 +110,12 @@ class ImageObjectTest(DrawBotBaseTest):
 
     def test_blurredRectangleGenerator(self):
         img = drawBot.ImageObject()
-        img.blurredRectangleGenerator(size=(100, 100), extent=(0.0, 0.0, 100.0, 100.0), sigma=10.0, color=(1.0, 1.0, 1.0, 1.0))
+        img.blurredRectangleGenerator(
+            size=(100, 100),
+            extent=(0.0, 0.0, 100.0, 100.0),
+            sigma=10.0,
+            color=(1.0, 1.0, 1.0, 1.0),
+        )
 
     def test_bokehBlur(self):
         img = drawBot.ImageObject()
@@ -115,11 +135,24 @@ class ImageObjectTest(DrawBotBaseTest):
 
     def test_cannyEdgeDetector(self):
         img = drawBot.ImageObject()
-        img.cannyEdgeDetector(gaussianSigma=1.6, perceptual=False, thresholdHigh=0.05, thresholdLow=0.02, hysteresisPasses=1.0)
+        img.cannyEdgeDetector(
+            gaussianSigma=1.6,
+            perceptual=False,
+            thresholdHigh=0.05,
+            thresholdLow=0.02,
+            hysteresisPasses=1.0,
+        )
 
     def test_checkerboardGenerator(self):
         img = drawBot.ImageObject()
-        img.checkerboardGenerator(size=(100, 100), center=(150.0, 150.0), color0=(1.0, 1.0, 1.0, 1.0), color1=(0.0, 0.0, 0.0, 1.0), width=80.0, sharpness=1.0)
+        img.checkerboardGenerator(
+            size=(100, 100),
+            center=(150.0, 150.0),
+            color0=(1.0, 1.0, 1.0, 1.0),
+            color1=(0.0, 0.0, 0.0, 1.0),
+            width=80.0,
+            sharpness=1.0,
+        )
 
     def test_circleSplashDistortion(self):
         img = drawBot.ImageObject()
@@ -143,7 +176,7 @@ class ImageObjectTest(DrawBotBaseTest):
 
     def test_code128BarcodeGenerator(self):
         img = drawBot.ImageObject()
-        img.code128BarcodeGenerator(size=(100, 100), message=b'Hello World', quietSpace=10.0, barcodeHeight=32.0)
+        img.code128BarcodeGenerator(size=(100, 100), message=b"Hello World", quietSpace=10.0, barcodeHeight=32.0)
 
     def test_colorAbsoluteDifference(self):
         img = drawBot.ImageObject()
@@ -167,7 +200,11 @@ class ImageObjectTest(DrawBotBaseTest):
 
     def test_colorCrossPolynomial(self):
         img = drawBot.ImageObject()
-        img.colorCrossPolynomial(redCoefficients=(1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0), greenCoefficients=(0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0), blueCoefficients=(0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0))
+        img.colorCrossPolynomial(
+            redCoefficients=(1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0),
+            greenCoefficients=(0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0),
+            blueCoefficients=(0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0),
+        )
 
     def test_colorCurves(self):
         img = drawBot.ImageObject()
@@ -187,7 +224,13 @@ class ImageObjectTest(DrawBotBaseTest):
 
     def test_colorMatrix(self):
         img = drawBot.ImageObject()
-        img.colorMatrix(RVector=(1.0, 0.0, 0.0, 0.0), GVector=(0.0, 1.0, 0.0, 0.0), BVector=(0.0, 0.0, 1.0, 0.0), AVector=(0.0, 0.0, 0.0, 1.0), biasVector=(0.0, 0.0, 0.0, 0.0))
+        img.colorMatrix(
+            RVector=(1.0, 0.0, 0.0, 0.0),
+            GVector=(0.0, 1.0, 0.0, 0.0),
+            BVector=(0.0, 0.0, 1.0, 0.0),
+            AVector=(0.0, 0.0, 0.0, 1.0),
+            biasVector=(0.0, 0.0, 0.0, 0.0),
+        )
 
     def test_colorMonochrome(self):
         img = drawBot.ImageObject()
@@ -195,7 +238,12 @@ class ImageObjectTest(DrawBotBaseTest):
 
     def test_colorPolynomial(self):
         img = drawBot.ImageObject()
-        img.colorPolynomial(redCoefficients=(0.0, 1.0, 0.0, 0.0), greenCoefficients=(0.0, 1.0, 0.0, 0.0), blueCoefficients=(0.0, 1.0, 0.0, 0.0), alphaCoefficients=(0.0, 1.0, 0.0, 0.0))
+        img.colorPolynomial(
+            redCoefficients=(0.0, 1.0, 0.0, 0.0),
+            greenCoefficients=(0.0, 1.0, 0.0, 0.0),
+            blueCoefficients=(0.0, 1.0, 0.0, 0.0),
+            alphaCoefficients=(0.0, 1.0, 0.0, 0.0),
+        )
 
     def test_colorPosterize(self):
         img = drawBot.ImageObject()
@@ -235,11 +283,93 @@ class ImageObjectTest(DrawBotBaseTest):
 
     def test_convolution5X5(self):
         img = drawBot.ImageObject()
-        img.convolution5X5(weights=(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0), bias=0.0)
+        img.convolution5X5(
+            weights=(
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+            ),
+            bias=0.0,
+        )
 
     def test_convolution7X7(self):
         img = drawBot.ImageObject()
-        img.convolution7X7(weights=(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0), bias=0.0)
+        img.convolution7X7(
+            weights=(
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+            ),
+            bias=0.0,
+        )
 
     def test_convolution9Horizontal(self):
         img = drawBot.ImageObject()
@@ -255,11 +385,93 @@ class ImageObjectTest(DrawBotBaseTest):
 
     def test_convolutionRGB5X5(self):
         img = drawBot.ImageObject()
-        img.convolutionRGB5X5(weights=(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0), bias=0.0)
+        img.convolutionRGB5X5(
+            weights=(
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+            ),
+            bias=0.0,
+        )
 
     def test_convolutionRGB7X7(self):
         img = drawBot.ImageObject()
-        img.convolutionRGB7X7(weights=(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0), bias=0.0)
+        img.convolutionRGB7X7(
+            weights=(
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+            ),
+            bias=0.0,
+        )
 
     def test_convolutionRGB9Horizontal(self):
         img = drawBot.ImageObject()
@@ -271,7 +483,15 @@ class ImageObjectTest(DrawBotBaseTest):
 
     def test_copyMachineTransition(self):
         img = drawBot.ImageObject()
-        img.copyMachineTransition(targetImage=sampleImage, extent=(0.0, 0.0, 300.0, 300.0), color=(0.6, 1.0, 0.8, 1.0), time=0.0, angle=0.0, width=200.0, opacity=1.3)
+        img.copyMachineTransition(
+            targetImage=sampleImage,
+            extent=(0.0, 0.0, 300.0, 300.0),
+            color=(0.6, 1.0, 0.8, 1.0),
+            time=0.0,
+            angle=0.0,
+            width=200.0,
+            opacity=1.3,
+        )
 
     def test_coreMLModelFilter(self):
         img = drawBot.ImageObject()
@@ -279,7 +499,9 @@ class ImageObjectTest(DrawBotBaseTest):
 
     def test_crop(self):
         img = drawBot.ImageObject()
-        img.crop(rectangle=(-8.988465674311579e+307, -8.988465674311579e+307, 1.7976931348623157e+308, 1.7976931348623157e+308))
+        img.crop(
+            rectangle=(-8.988465674311579e307, -8.988465674311579e307, 1.7976931348623157e308, 1.7976931348623157e308)
+        )
 
     def test_crystallize(self):
         img = drawBot.ImageObject()
@@ -291,11 +513,35 @@ class ImageObjectTest(DrawBotBaseTest):
 
     def test_depthBlurEffect(self):
         img = drawBot.ImageObject()
-        img.depthBlurEffect(disparityImage=sampleImage, matteImage=sampleImage, hairImage=sampleImage, glassesImage=sampleImage, gainMap=sampleImage, focusRect=None, calibrationData=None, auxDataMetadata=None, shape=None, aperture=0.0, leftEyePositions=(-1.0, -1.0), rightEyePositions=(-1.0, -1.0), chinPositions=(-1.0, -1.0), nosePositions=(-1.0, -1.0), lumaNoiseScale=0.0, scaleFactor=1.0)
+        img.depthBlurEffect(
+            disparityImage=sampleImage,
+            matteImage=sampleImage,
+            hairImage=sampleImage,
+            glassesImage=sampleImage,
+            gainMap=sampleImage,
+            focusRect=None,
+            calibrationData=None,
+            auxDataMetadata=None,
+            shape=None,
+            aperture=0.0,
+            leftEyePositions=(-1.0, -1.0),
+            rightEyePositions=(-1.0, -1.0),
+            chinPositions=(-1.0, -1.0),
+            nosePositions=(-1.0, -1.0),
+            lumaNoiseScale=0.0,
+            scaleFactor=1.0,
+        )
 
     def test_depthOfField(self):
         img = drawBot.ImageObject()
-        img.depthOfField(point0=(0.0, 300.0), point1=(300.0, 300.0), saturation=1.5, unsharpMaskRadius=2.5, unsharpMaskIntensity=0.5, radius=6.0)
+        img.depthOfField(
+            point0=(0.0, 300.0),
+            point1=(300.0, 300.0),
+            saturation=1.5,
+            unsharpMaskRadius=2.5,
+            unsharpMaskIntensity=0.5,
+            radius=6.0,
+        )
 
     def test_depthToDisparity(self):
         img = drawBot.ImageObject()
@@ -311,7 +557,14 @@ class ImageObjectTest(DrawBotBaseTest):
 
     def test_disintegrateWithMaskTransition(self):
         img = drawBot.ImageObject()
-        img.disintegrateWithMaskTransition(targetImage=sampleImage, maskImage=sampleImage, time=0.0, shadowRadius=8.0, shadowDensity=0.65, shadowOffset=(0.0, -10.0))
+        img.disintegrateWithMaskTransition(
+            targetImage=sampleImage,
+            maskImage=sampleImage,
+            time=0.0,
+            shadowRadius=8.0,
+            shadowDensity=0.65,
+            shadowOffset=(0.0, -10.0),
+        )
 
     def test_disparityToDepth(self):
         img = drawBot.ImageObject()
@@ -343,7 +596,9 @@ class ImageObjectTest(DrawBotBaseTest):
 
     def test_droste(self):
         img = drawBot.ImageObject()
-        img.droste(insetPoint0=(200.0, 200.0), insetPoint1=(400.0, 400.0), strands=1.0, periodicity=1.0, rotation=0.0, zoom=1.0)
+        img.droste(
+            insetPoint0=(200.0, 200.0), insetPoint1=(400.0, 400.0), strands=1.0, periodicity=1.0, rotation=0.0, zoom=1.0
+        )
 
     def test_edgePreserveUpsampleFilter(self):
         img = drawBot.ImageObject()
@@ -375,7 +630,17 @@ class ImageObjectTest(DrawBotBaseTest):
 
     def test_flashTransition(self):
         img = drawBot.ImageObject()
-        img.flashTransition(targetImage=sampleImage, center=(150.0, 150.0), extent=(0.0, 0.0, 300.0, 300.0), color=(1.0, 0.8, 0.6, 1.0), time=0.0, maxStriationRadius=2.58, striationStrength=0.5, striationContrast=1.375, fadeThreshold=0.85)
+        img.flashTransition(
+            targetImage=sampleImage,
+            center=(150.0, 150.0),
+            extent=(0.0, 0.0, 300.0, 300.0),
+            color=(1.0, 0.8, 0.6, 1.0),
+            time=0.0,
+            maxStriationRadius=2.58,
+            striationStrength=0.5,
+            striationContrast=1.375,
+            fadeThreshold=0.85,
+        )
 
     def test_fourfoldReflectedTile(self):
         img = drawBot.ImageObject()
@@ -403,7 +668,13 @@ class ImageObjectTest(DrawBotBaseTest):
 
     def test_gaussianGradient(self):
         img = drawBot.ImageObject()
-        img.gaussianGradient(size=(100, 100), center=(150.0, 150.0), color0=(1.0, 1.0, 1.0, 1.0), color1=(0.0, 0.0, 0.0, 0.0), radius=300.0)
+        img.gaussianGradient(
+            size=(100, 100),
+            center=(150.0, 150.0),
+            color0=(1.0, 1.0, 1.0, 1.0),
+            color1=(0.0, 0.0, 0.0, 0.0),
+            radius=300.0,
+        )
 
     def test_glassDistortion(self):
         img = drawBot.ImageObject()
@@ -471,15 +742,21 @@ class ImageObjectTest(DrawBotBaseTest):
 
     def test_keystoneCorrectionCombined(self):
         img = drawBot.ImageObject()
-        img.keystoneCorrectionCombined(topLeft=(2, 2), topRight=(2, 2), bottomRight=(2, 2), bottomLeft=(2, 2), focalLength=28.0)
+        img.keystoneCorrectionCombined(
+            topLeft=(2, 2), topRight=(2, 2), bottomRight=(2, 2), bottomLeft=(2, 2), focalLength=28.0
+        )
 
     def test_keystoneCorrectionHorizontal(self):
         img = drawBot.ImageObject()
-        img.keystoneCorrectionHorizontal(topLeft=(2, 2), topRight=(2, 2), bottomRight=(2, 2), bottomLeft=(2, 2), focalLength=28.0)
+        img.keystoneCorrectionHorizontal(
+            topLeft=(2, 2), topRight=(2, 2), bottomRight=(2, 2), bottomLeft=(2, 2), focalLength=28.0
+        )
 
     def test_keystoneCorrectionVertical(self):
         img = drawBot.ImageObject()
-        img.keystoneCorrectionVertical(topLeft=(2, 2), topRight=(2, 2), bottomRight=(2, 2), bottomLeft=(2, 2), focalLength=28.0)
+        img.keystoneCorrectionVertical(
+            topLeft=(2, 2), topRight=(2, 2), bottomRight=(2, 2), bottomLeft=(2, 2), focalLength=28.0
+        )
 
     def test_KMeans(self):
         img = drawBot.ImageObject()
@@ -495,7 +772,17 @@ class ImageObjectTest(DrawBotBaseTest):
 
     def test_lenticularHaloGenerator(self):
         img = drawBot.ImageObject()
-        img.lenticularHaloGenerator(size=(100, 100), center=(150.0, 150.0), color=(1.0, 0.9, 0.8, 1.0), haloRadius=70.0, haloWidth=87.0, haloOverlap=0.77, striationStrength=0.5, striationContrast=1.0, time=0.0)
+        img.lenticularHaloGenerator(
+            size=(100, 100),
+            center=(150.0, 150.0),
+            color=(1.0, 0.9, 0.8, 1.0),
+            haloRadius=70.0,
+            haloWidth=87.0,
+            haloOverlap=0.77,
+            striationStrength=0.5,
+            striationContrast=1.0,
+            time=0.0,
+        )
 
     def test_lightenBlendMode(self):
         img = drawBot.ImageObject()
@@ -515,7 +802,13 @@ class ImageObjectTest(DrawBotBaseTest):
 
     def test_linearGradient(self):
         img = drawBot.ImageObject()
-        img.linearGradient(size=(100, 100), point0=(0.0, 0.0), point1=(200.0, 200.0), color0=(1.0, 1.0, 1.0, 1.0), color1=(0.0, 0.0, 0.0, 1.0))
+        img.linearGradient(
+            size=(100, 100),
+            point0=(0.0, 0.0),
+            point1=(200.0, 200.0),
+            color0=(1.0, 1.0, 1.0, 1.0),
+            color1=(0.0, 0.0, 0.0, 1.0),
+        )
 
     def test_linearLightBlendMode(self):
         img = drawBot.ImageObject()
@@ -571,7 +864,9 @@ class ImageObjectTest(DrawBotBaseTest):
 
     def test_modTransition(self):
         img = drawBot.ImageObject()
-        img.modTransition(targetImage=sampleImage, center=(150.0, 150.0), time=0.0, angle=2.0, radius=150.0, compression=300.0)
+        img.modTransition(
+            targetImage=sampleImage, center=(150.0, 150.0), time=0.0, angle=2.0, radius=150.0, compression=300.0
+        )
 
     def test_morphologyGradient(self):
         img = drawBot.ImageObject()
@@ -611,7 +906,9 @@ class ImageObjectTest(DrawBotBaseTest):
 
     def test_ninePartTiled(self):
         img = drawBot.ImageObject()
-        img.ninePartTiled(breakpoint0=(50.0, 50.0), breakpoint1=(150.0, 150.0), growAmount=(100.0, 100.0), flipYTiles=True)
+        img.ninePartTiled(
+            breakpoint0=(50.0, 50.0), breakpoint1=(150.0, 150.0), growAmount=(100.0, 100.0), flipYTiles=True
+        )
 
     def test_noiseReduction(self):
         img = drawBot.ImageObject()
@@ -627,11 +924,29 @@ class ImageObjectTest(DrawBotBaseTest):
 
     def test_pageCurlTransition(self):
         img = drawBot.ImageObject()
-        img.pageCurlTransition(targetImage=sampleImage, backsideImage=sampleImage, shadingImage=sampleImage, extent=(0.0, 0.0, 300.0, 300.0), time=0.0, angle=0.0, radius=100.0)
+        img.pageCurlTransition(
+            targetImage=sampleImage,
+            backsideImage=sampleImage,
+            shadingImage=sampleImage,
+            extent=(0.0, 0.0, 300.0, 300.0),
+            time=0.0,
+            angle=0.0,
+            radius=100.0,
+        )
 
     def test_pageCurlWithShadowTransition(self):
         img = drawBot.ImageObject()
-        img.pageCurlWithShadowTransition(targetImage=sampleImage, backsideImage=sampleImage, extent=(0.0, 0.0, 0.0, 0.0), time=0.0, angle=0.0, radius=100.0, shadowSize=0.5, shadowAmount=0.7, shadowExtent=(0.0, 0.0, 0.0, 0.0))
+        img.pageCurlWithShadowTransition(
+            targetImage=sampleImage,
+            backsideImage=sampleImage,
+            extent=(0.0, 0.0, 0.0, 0.0),
+            time=0.0,
+            angle=0.0,
+            radius=100.0,
+            shadowSize=0.5,
+            shadowAmount=0.7,
+            shadowExtent=(0.0, 0.0, 0.0, 0.0),
+        )
 
     def test_paletteCentroid(self):
         img = drawBot.ImageObject()
@@ -647,7 +962,21 @@ class ImageObjectTest(DrawBotBaseTest):
 
     def test_PDF417BarcodeGenerator(self):
         img = drawBot.ImageObject()
-        img.PDF417BarcodeGenerator(size=(100, 100), message=b'Hello World', minWidth=None, maxWidth=None, minHeight=None, maxHeight=None, dataColumns=None, rows=None, preferredAspectRatio=None, compactionMode=None, compactStyle=None, correctionLevel=None, alwaysSpecifyCompaction=None)
+        img.PDF417BarcodeGenerator(
+            size=(100, 100),
+            message=b"Hello World",
+            minWidth=None,
+            maxWidth=None,
+            minHeight=None,
+            maxHeight=None,
+            dataColumns=None,
+            rows=None,
+            preferredAspectRatio=None,
+            compactionMode=None,
+            compactStyle=None,
+            correctionLevel=None,
+            alwaysSpecifyCompaction=None,
+        )
 
     def test_personSegmentation(self):
         img = drawBot.ImageObject()
@@ -671,7 +1000,9 @@ class ImageObjectTest(DrawBotBaseTest):
 
     def test_perspectiveTransformWithExtent(self):
         img = drawBot.ImageObject()
-        img.perspectiveTransformWithExtent(extent=(0.0, 0.0, 300.0, 300.0), topLeft=(2, 2), topRight=(2, 2), bottomRight=(2, 2), bottomLeft=(2, 2))
+        img.perspectiveTransformWithExtent(
+            extent=(0.0, 0.0, 300.0, 300.0), topLeft=(2, 2), topRight=(2, 2), bottomRight=(2, 2), bottomLeft=(2, 2)
+        )
 
     def test_photoEffectChrome(self):
         img = drawBot.ImageObject()
@@ -723,11 +1054,18 @@ class ImageObjectTest(DrawBotBaseTest):
 
     def test_QRCodeGenerator(self):
         img = drawBot.ImageObject()
-        img.QRCodeGenerator(size=(100, 100), message=b'Hello World', correctionLevel='M')
+        img.QRCodeGenerator(size=(100, 100), message=b"Hello World", correctionLevel="M")
 
     def test_radialGradient(self):
         img = drawBot.ImageObject()
-        img.radialGradient(size=(100, 100), center=(150.0, 150.0), radius0=5.0, radius1=100.0, color0=(1.0, 1.0, 1.0, 1.0), color1=(0.0, 0.0, 0.0, 1.0))
+        img.radialGradient(
+            size=(100, 100),
+            center=(150.0, 150.0),
+            radius0=5.0,
+            radius1=100.0,
+            color0=(1.0, 1.0, 1.0, 1.0),
+            color1=(0.0, 0.0, 0.0, 1.0),
+        )
 
     def test_randomGenerator(self):
         img = drawBot.ImageObject()
@@ -735,15 +1073,27 @@ class ImageObjectTest(DrawBotBaseTest):
 
     def test_rippleTransition(self):
         img = drawBot.ImageObject()
-        img.rippleTransition(targetImage=sampleImage, shadingImage=sampleImage, center=(150.0, 150.0), extent=(0.0, 0.0, 300.0, 300.0), time=0.0, width=100.0, scale=50.0)
+        img.rippleTransition(
+            targetImage=sampleImage,
+            shadingImage=sampleImage,
+            center=(150.0, 150.0),
+            extent=(0.0, 0.0, 300.0, 300.0),
+            time=0.0,
+            width=100.0,
+            scale=50.0,
+        )
 
     def test_roundedRectangleGenerator(self):
         img = drawBot.ImageObject()
-        img.roundedRectangleGenerator(size=(100, 100), extent=(0.0, 0.0, 100.0, 100.0), radius=10.0, color=(1.0, 1.0, 1.0, 1.0))
+        img.roundedRectangleGenerator(
+            size=(100, 100), extent=(0.0, 0.0, 100.0, 100.0), radius=10.0, color=(1.0, 1.0, 1.0, 1.0)
+        )
 
     def test_roundedRectangleStrokeGenerator(self):
         img = drawBot.ImageObject()
-        img.roundedRectangleStrokeGenerator(size=(100, 100), extent=(0.0, 0.0, 100.0, 100.0), radius=10.0, color=(1.0, 1.0, 1.0, 1.0), width=10.0)
+        img.roundedRectangleStrokeGenerator(
+            size=(100, 100), extent=(0.0, 0.0, 100.0, 100.0), radius=10.0, color=(1.0, 1.0, 1.0, 1.0), width=10.0
+        )
 
     def test_rowAverage(self):
         img = drawBot.ImageObject()
@@ -787,7 +1137,13 @@ class ImageObjectTest(DrawBotBaseTest):
 
     def test_smoothLinearGradient(self):
         img = drawBot.ImageObject()
-        img.smoothLinearGradient(size=(100, 100), point0=(0.0, 0.0), point1=(200.0, 200.0), color0=(1.0, 1.0, 1.0, 1.0), color1=(0.0, 0.0, 0.0, 1.0))
+        img.smoothLinearGradient(
+            size=(100, 100),
+            point0=(0.0, 0.0),
+            point1=(200.0, 200.0),
+            color0=(1.0, 1.0, 1.0, 1.0),
+            color1=(0.0, 0.0, 0.0, 1.0),
+        )
 
     def test_sobelGradients(self):
         img = drawBot.ImageObject()
@@ -815,11 +1171,30 @@ class ImageObjectTest(DrawBotBaseTest):
 
     def test_spotColor(self):
         img = drawBot.ImageObject()
-        img.spotColor(centerColor1=(0.0784, 0.0627, 0.0706, 1.0), replacementColor1=(0.4392, 0.1922, 0.1961, 1.0), closeness1=0.22, contrast1=0.98, centerColor2=(0.5255, 0.3059, 0.3451, 1.0), replacementColor2=(0.9137, 0.5608, 0.5059, 1.0), closeness2=0.15, contrast2=0.98, centerColor3=(0.9216, 0.4549, 0.3333, 1.0), replacementColor3=(0.9098, 0.7529, 0.6078, 1.0), closeness3=0.5, contrast3=0.99)
+        img.spotColor(
+            centerColor1=(0.0784, 0.0627, 0.0706, 1.0),
+            replacementColor1=(0.4392, 0.1922, 0.1961, 1.0),
+            closeness1=0.22,
+            contrast1=0.98,
+            centerColor2=(0.5255, 0.3059, 0.3451, 1.0),
+            replacementColor2=(0.9137, 0.5608, 0.5059, 1.0),
+            closeness2=0.15,
+            contrast2=0.98,
+            centerColor3=(0.9216, 0.4549, 0.3333, 1.0),
+            replacementColor3=(0.9098, 0.7529, 0.6078, 1.0),
+            closeness3=0.5,
+            contrast3=0.99,
+        )
 
     def test_spotLight(self):
         img = drawBot.ImageObject()
-        img.spotLight(lightPosition=(400.0, 600.0, 150.0), lightPointsAt=(200.0, 200.0, 0.0), brightness=3.0, concentration=0.1, color=(1.0, 1.0, 1.0, 1.0))
+        img.spotLight(
+            lightPosition=(400.0, 600.0, 150.0),
+            lightPointsAt=(200.0, 200.0, 0.0),
+            brightness=3.0,
+            concentration=0.1,
+            color=(1.0, 1.0, 1.0, 1.0),
+        )
 
     def test_SRGBToneCurveToLinear(self):
         img = drawBot.ImageObject()
@@ -827,7 +1202,17 @@ class ImageObjectTest(DrawBotBaseTest):
 
     def test_starShineGenerator(self):
         img = drawBot.ImageObject()
-        img.starShineGenerator(size=(100, 100), center=(150.0, 150.0), color=(1.0, 0.8, 0.6, 1.0), radius=50.0, crossScale=15.0, crossAngle=0.6, crossOpacity=-2.0, crossWidth=2.5, epsilon=-2.0)
+        img.starShineGenerator(
+            size=(100, 100),
+            center=(150.0, 150.0),
+            color=(1.0, 0.8, 0.6, 1.0),
+            radius=50.0,
+            crossScale=15.0,
+            crossAngle=0.6,
+            crossOpacity=-2.0,
+            crossWidth=2.5,
+            epsilon=-2.0,
+        )
 
     def test_straightenFilter(self):
         img = drawBot.ImageObject()
@@ -839,7 +1224,14 @@ class ImageObjectTest(DrawBotBaseTest):
 
     def test_stripesGenerator(self):
         img = drawBot.ImageObject()
-        img.stripesGenerator(size=(100, 100), center=(150.0, 150.0), color0=(1.0, 1.0, 1.0, 1.0), color1=(0.0, 0.0, 0.0, 1.0), width=80.0, sharpness=1.0)
+        img.stripesGenerator(
+            size=(100, 100),
+            center=(150.0, 150.0),
+            color0=(1.0, 1.0, 1.0, 1.0),
+            color1=(0.0, 0.0, 0.0, 1.0),
+            width=80.0,
+            sharpness=1.0,
+        )
 
     def test_subtractBlendMode(self):
         img = drawBot.ImageObject()
@@ -847,11 +1239,28 @@ class ImageObjectTest(DrawBotBaseTest):
 
     def test_sunbeamsGenerator(self):
         img = drawBot.ImageObject()
-        img.sunbeamsGenerator(size=(100, 100), center=(150.0, 150.0), color=(1.0, 0.5, 0.0, 1.0), sunRadius=40.0, maxStriationRadius=2.58, striationStrength=0.5, striationContrast=1.375, time=0.0)
+        img.sunbeamsGenerator(
+            size=(100, 100),
+            center=(150.0, 150.0),
+            color=(1.0, 0.5, 0.0, 1.0),
+            sunRadius=40.0,
+            maxStriationRadius=2.58,
+            striationStrength=0.5,
+            striationContrast=1.375,
+            time=0.0,
+        )
 
     def test_swipeTransition(self):
         img = drawBot.ImageObject()
-        img.swipeTransition(targetImage=sampleImage, extent=(0.0, 0.0, 300.0, 300.0), color=(1.0, 1.0, 1.0, 1.0), time=0.0, angle=0.0, width=300.0, opacity=0.0)
+        img.swipeTransition(
+            targetImage=sampleImage,
+            extent=(0.0, 0.0, 300.0, 300.0),
+            color=(1.0, 1.0, 1.0, 1.0),
+            time=0.0,
+            angle=0.0,
+            width=300.0,
+            opacity=0.0,
+        )
 
     def test_temperatureAndTint(self):
         img = drawBot.ImageObject()
@@ -859,7 +1268,9 @@ class ImageObjectTest(DrawBotBaseTest):
 
     def test_textImageGenerator(self):
         img = drawBot.ImageObject()
-        img.textImageGenerator(size=(100, 100), text=fs, fontName='HelveticaNeue', fontSize=12.0, scaleFactor=1.0, padding=0.0)
+        img.textImageGenerator(
+            size=(100, 100), text=fs, fontName="HelveticaNeue", fontSize=12.0, scaleFactor=1.0, padding=0.0
+        )
 
     def test_thermal(self):
         img = drawBot.ImageObject()
@@ -925,5 +1336,6 @@ class ImageObjectTest(DrawBotBaseTest):
         img = drawBot.ImageObject()
         img.zoomBlur(center=(150.0, 150.0), amount=20.0)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     sys.exit(unittest.main())
