@@ -1,12 +1,10 @@
 name: DrawBot Test Bench
 
 on:
-  push:
-    branches:
-    - master
-  pull_request:
-    branches:
-    - master
+  workflow_run:
+    workflows: ["Lint codebase and commit changes"]
+    types:
+    - completed
 
 jobs:
   test:
@@ -14,9 +12,8 @@ jobs:
     runs-on: macos-latest
 
     steps:
-
     - name: Checkout
-      uses: actions/checkout@v1
+      uses: actions/checkout@v2
 
     - name: Set up Python 3.12
       run: |
