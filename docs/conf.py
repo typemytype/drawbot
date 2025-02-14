@@ -475,4 +475,5 @@ class DrawBotDocumenter(autodoc.FunctionDocumenter):
 def setup(app):
     app.add_directive('showcode', ShowCode)
     app.add_directive('downloadcode', DownloadCode)
-    app.add_autodocumenter(DrawBotDocumenter)
+    # 'self' seems to be removed upstream while formatting the arguments
+    # app.add_autodocumenter(DrawBotDocumenter)

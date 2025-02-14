@@ -281,11 +281,11 @@ class ImageObject:
         
         **Arguments:**
         
-        `targetImage` an Image object. The target image for a transition.
-        `bottomHeight` a float. The height in pixels from the bottom of the image to the bottom of the folded part of the transition.
-        `numberOfFolds` a float. The number of folds used in the transition.
-        `foldShadowAmount` a float. A value that specifies the intensity of the shadow in the transition.
-        `time` a float. The duration of the effect.
+        * `targetImage` an Image object. The target image for a transition.
+        * `bottomHeight` a float. The height in pixels from the bottom of the image to the bottom of the folded part of the transition.
+        * `numberOfFolds` a float. The number of folds used in the transition.
+        * `foldShadowAmount` a float. A value that specifies the intensity of the shadow in the transition.
+        * `time` a float. The duration of the effect.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -307,7 +307,7 @@ class ImageObject:
         
         **Arguments:**
         
-        `backgroundImage` an Image object. The image to use as a background image.
+        * `backgroundImage` an Image object. The image to use as a background image.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -325,7 +325,7 @@ class ImageObject:
         
         **Arguments:**
         
-        `transform` a tuple (xx, xy, yx, yy, x, y). The transform to apply to the image.
+        * `transform` a tuple (xx, xy, yx, yy, x, y). The transform to apply to the image.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -343,7 +343,7 @@ class ImageObject:
         
         **Arguments:**
         
-        `transform` a tuple (xx, xy, yx, yy, x, y). The transform to apply to the image.
+        * `transform` a tuple (xx, xy, yx, yy, x, y). The transform to apply to the image.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -361,7 +361,7 @@ class ImageObject:
         
         **Arguments:**
         
-        `extent` a tuple (x, y, w, h). A rectangle that specifies the subregion of the image that you want to process.
+        * `extent` a tuple (x, y, w, h). A rectangle that specifies the subregion of the image that you want to process.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -379,9 +379,9 @@ class ImageObject:
         
         **Arguments:**
         
-        `extent` a tuple (x, y, w, h). A rectangle that, after intersection with the image extent, specifies the subregion of the image that you want to process.
-        `scale` a float. The scale value to use for the histogram values. If the scale is 1.0, then the bins in the resulting image will add up to 1.0.
-        `count` a float. The number of bins for the histogram. This value will determine the width of the output image.
+        * `extent` a tuple (x, y, w, h). A rectangle that, after intersection with the image extent, specifies the subregion of the image that you want to process.
+        * `scale` a float. The scale value to use for the histogram values. If the scale is 1.0, then the bins in the resulting image will add up to 1.0.
+        * `count` a float. The number of bins for the histogram. This value will determine the width of the output image.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -401,11 +401,11 @@ class ImageObject:
         
         **Arguments:**
         
-        `extent` a tuple (x, y, w, h). A rectangle that defines the extent of the effect.
-        `scale` a float. The amount of the effect.
-        `count` a float. The number of bins for the histogram. This value will determine the width of the output image.
-        `minimumStop` a float. The minimum of the range of color channel values to be in the logarithmic histogram image.
-        `maximumStop` a float. The maximum of the range of color channel values to be in the logarithmic histogram image.
+        * `extent` a tuple (x, y, w, h). A rectangle that defines the extent of the effect.
+        * `scale` a float. The amount of the effect.
+        * `count` a float. The number of bins for the histogram. This value will determine the width of the output image.
+        * `minimumStop` a float. The minimum of the range of color channel values to be in the logarithmic histogram image.
+        * `maximumStop` a float. The maximum of the range of color channel values to be in the logarithmic histogram image.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -427,7 +427,7 @@ class ImageObject:
         
         **Arguments:**
         
-        `extent` a tuple (x, y, w, h). A rectangle that specifies the subregion of the image that you want to process.
+        * `extent` a tuple (x, y, w, h). A rectangle that specifies the subregion of the image that you want to process.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -445,7 +445,7 @@ class ImageObject:
         
         **Arguments:**
         
-        `extent` a tuple (x, y, w, h). A rectangle that specifies the subregion of the image that you want to process.
+        * `extent` a tuple (x, y, w, h). A rectangle that specifies the subregion of the image that you want to process.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -463,7 +463,7 @@ class ImageObject:
         
         **Arguments:**
         
-        `extent` a tuple (x, y, w, h). A rectangle that specifies the subregion of the image that you want to process.
+        * `extent` a tuple (x, y, w, h). A rectangle that specifies the subregion of the image that you want to process.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -481,7 +481,7 @@ class ImageObject:
         
         **Arguments:**
         
-        `extent` a tuple (x, y, w, h). A rectangle that specifies the subregion of the image that you want to process.
+        * `extent` a tuple (x, y, w, h). A rectangle that specifies the subregion of the image that you want to process.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -499,7 +499,7 @@ class ImageObject:
         
         **Arguments:**
         
-        `extent` a tuple (x, y, w, h). A rectangle that specifies the subregion of the image that you want to process.
+        * `extent` a tuple (x, y, w, h). A rectangle that specifies the subregion of the image that you want to process.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -517,7 +517,7 @@ class ImageObject:
         
         **Arguments:**
         
-        `extent` a tuple (x, y, w, h). A rectangle that specifies the subregion of the image that you want to process.
+        * `extent` a tuple (x, y, w, h). A rectangle that specifies the subregion of the image that you want to process.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -535,11 +535,11 @@ class ImageObject:
         
         **Arguments:**
         
-        `size` a tuple (w, h)
-        `message` a string. The message to encode in the Aztec Barcode
-        `layers` a float. Aztec layers value between 1 and 32. Set to `None` for automatic.
-        `compactStyle` a bool. Force a compact style Aztec code to `True` or `False`. Set to `None` for automatic.
-        `correctionLevel` a float. Aztec error correction value between 5 and 95
+        * `size` a tuple (w, h)
+        * `message` a string. The message to encode in the Aztec Barcode
+        * `layers` a float. Aztec layers value between 1 and 32. Set to `None` for automatic.
+        * `compactStyle` a bool. Force a compact style Aztec code to `True` or `False`. Set to `None` for automatic.
+        * `correctionLevel` a float. Aztec error correction value between 5 and 95
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -563,11 +563,11 @@ class ImageObject:
         
         **Arguments:**
         
-        `targetImage` an Image object. The target image for a transition.
-        `angle` a float in degrees. The angle in degrees of the bars.
-        `width` a float. The width of each bar.
-        `barOffset` a float. The offset of one bar with respect to another.
-        `time` a float. The parametric time of the transition. This value drives the transition from start (at time 0) to end (at time 1).
+        * `targetImage` an Image object. The target image for a transition.
+        * `angle` a float in degrees. The angle in degrees of the bars.
+        * `width` a float. The width of each bar.
+        * `barOffset` a float. The offset of one bar with respect to another.
+        * `time` a float. The parametric time of the transition. This value drives the transition from start (at time 0) to end (at time 1).
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -589,8 +589,8 @@ class ImageObject:
         
         **Arguments:**
         
-        `backgroundImage` an Image object. The image to use as a background image.
-        `maskImage` an Image object. A masking image.
+        * `backgroundImage` an Image object. The image to use as a background image.
+        * `maskImage` an Image object. A masking image.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -609,8 +609,8 @@ class ImageObject:
         
         **Arguments:**
         
-        `backgroundImage` an Image object. The image to use as a background image.
-        `maskImage` an Image object. A masking image.
+        * `backgroundImage` an Image object. The image to use as a background image.
+        * `maskImage` an Image object. A masking image.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -629,8 +629,8 @@ class ImageObject:
         
         **Arguments:**
         
-        `backgroundImage` an Image object. The image to use as a background image.
-        `maskImage` an Image object. A grayscale mask. When a mask value is 0.0, the result is the background. When the mask value is 1.0, the result is the image.
+        * `backgroundImage` an Image object. The image to use as a background image.
+        * `maskImage` an Image object. A grayscale mask. When a mask value is 0.0, the result is the background. When the mask value is 1.0, the result is the image.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -649,8 +649,8 @@ class ImageObject:
         
         **Arguments:**
         
-        `backgroundImage` an Image object. The image to use as a background image.
-        `maskImage` an Image object. A masking image.
+        * `backgroundImage` an Image object. The image to use as a background image.
+        * `maskImage` an Image object. A masking image.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -669,8 +669,8 @@ class ImageObject:
         
         **Arguments:**
         
-        `radius` a float. The radius determines how many pixels are used to create the effect. The larger the radius, the greater the effect.
-        `intensity` a float. The intensity of the effect. A value of 0.0 is no effect. A value of 1.0 is the maximum effect.
+        * `radius` a float. The radius determines how many pixels are used to create the effect. The larger the radius, the greater the effect.
+        * `intensity` a float. The intensity of the effect. A value of 0.0 is no effect. A value of 1.0 is the maximum effect.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -689,10 +689,10 @@ class ImageObject:
         
         **Arguments:**
         
-        `size` a tuple (w, h)
-        `extent` a tuple (x, y, w, h). A rectangle that defines the extent of the effect.
-        `sigma` a float. The sigma for a gaussian blur.
-        `color` RGBA tuple Color (r, g, b, a). A color.
+        * `size` a tuple (w, h)
+        * `extent` a tuple (x, y, w, h). A rectangle that defines the extent of the effect.
+        * `sigma` a float. The sigma for a gaussian blur.
+        * `color` RGBA tuple Color (r, g, b, a). A color.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -714,10 +714,10 @@ class ImageObject:
         
         **Arguments:**
         
-        `radius` a float. The radius determines how many pixels are used to create the blur. The larger the radius, the blurrier the result.
-        `ringAmount` a float. The amount of extra emphasis at the ring of the bokeh.
-        `ringSize` a float. The size of extra emphasis at the ring of the bokeh.
-        `softness` a float. 
+        * `radius` a float. The radius determines how many pixels are used to create the blur. The larger the radius, the blurrier the result.
+        * `ringAmount` a float. The amount of extra emphasis at the ring of the bokeh.
+        * `ringSize` a float. The size of extra emphasis at the ring of the bokeh.
+        * `softness` a float. 
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -738,7 +738,7 @@ class ImageObject:
         
         **Arguments:**
         
-        `radius` a float. The radius determines how many pixels are used to create the blur. The larger the radius, the blurrier the result.
+        * `radius` a float. The radius determines how many pixels are used to create the blur. The larger the radius, the blurrier the result.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -756,9 +756,9 @@ class ImageObject:
         
         **Arguments:**
         
-        `center` a tuple (x, y). The center of the effect as x and y pixel coordinates.
-        `radius` a float. The radius determines how many pixels are used to create the distortion. The larger the radius, the wider the extent of the distortion.
-        `scale` a float. The scale of the effect determines the curvature of the bump. A value of 0.0 has no effect. Positive values create an outward bump; negative values create an inward bump.
+        * `center` a tuple (x, y). The center of the effect as x and y pixel coordinates.
+        * `radius` a float. The radius determines how many pixels are used to create the distortion. The larger the radius, the wider the extent of the distortion.
+        * `scale` a float. The scale of the effect determines the curvature of the bump. A value of 0.0 has no effect. Positive values create an outward bump; negative values create an inward bump.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -778,10 +778,10 @@ class ImageObject:
         
         **Arguments:**
         
-        `center` a tuple (x, y). The center of the effect as x and y pixel coordinates.
-        `radius` a float. The radius determines how many pixels are used to create the distortion. The larger the radius, the wider the extent of the distortion.
-        `angle` a float in degrees. The angle in degrees of the line around which the distortion occurs.
-        `scale` a float. The scale of the effect.
+        * `center` a tuple (x, y). The center of the effect as x and y pixel coordinates.
+        * `radius` a float. The radius determines how many pixels are used to create the distortion. The larger the radius, the wider the extent of the distortion.
+        * `angle` a float in degrees. The angle in degrees of the line around which the distortion occurs.
+        * `scale` a float. The scale of the effect.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -802,11 +802,11 @@ class ImageObject:
         
         **Arguments:**
         
-        `gaussianSigma` a float. The gaussian sigma of blur to apply to the image to reduce high-frequency noise.
-        `perceptual` a float. Specifies whether the edge thresholds should be computed in a perceptual color space.
-        `thresholdHigh` a float. The threshold that determines if gradient magnitude is a strong edge.
-        `thresholdLow` a float. The threshold that determines if gradient magnitude is a weak edge.
-        `hysteresisPasses` a float. The number of hysteresis passes to apply to promote weak edge pixels.
+        * `gaussianSigma` a float. The gaussian sigma of blur to apply to the image to reduce high-frequency noise.
+        * `perceptual` a float. Specifies whether the edge thresholds should be computed in a perceptual color space.
+        * `thresholdHigh` a float. The threshold that determines if gradient magnitude is a strong edge.
+        * `thresholdLow` a float. The threshold that determines if gradient magnitude is a weak edge.
+        * `hysteresisPasses` a float. The number of hysteresis passes to apply to promote weak edge pixels.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -828,12 +828,12 @@ class ImageObject:
         
         **Arguments:**
         
-        `size` a tuple (w, h)
-        `center` a tuple (x, y). The center of the effect as x and y pixel coordinates.
-        `color0` RGBA tuple Color (r, g, b, a). A color to use for the first set of squares.
-        `color1` RGBA tuple Color (r, g, b, a). A color to use for the second set of squares.
-        `width` a float. The width of the squares in the pattern.
-        `sharpness` a float. The sharpness of the edges in pattern. The smaller the value, the more blurry the pattern. Values range from 0.0 to 1.0.
+        * `size` a tuple (w, h)
+        * `center` a tuple (x, y). The center of the effect as x and y pixel coordinates.
+        * `color0` RGBA tuple Color (r, g, b, a). A color to use for the first set of squares.
+        * `color1` RGBA tuple Color (r, g, b, a). A color to use for the second set of squares.
+        * `width` a float. The width of the squares in the pattern.
+        * `sharpness` a float. The sharpness of the edges in pattern. The smaller the value, the more blurry the pattern. Values range from 0.0 to 1.0.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -857,8 +857,8 @@ class ImageObject:
         
         **Arguments:**
         
-        `center` a tuple (x, y). The center of the effect as x and y pixel coordinates.
-        `radius` a float. The radius determines how many pixels are used to create the distortion. The larger the radius, the wider the extent of the distortion.
+        * `center` a tuple (x, y). The center of the effect as x and y pixel coordinates.
+        * `radius` a float. The radius determines how many pixels are used to create the distortion. The larger the radius, the wider the extent of the distortion.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -877,9 +877,9 @@ class ImageObject:
         
         **Arguments:**
         
-        `center` a tuple (x, y). The center of the effect as x and y pixel coordinates.
-        `width` a float. The distance between each circle in the pattern.
-        `sharpness` a float. The sharpness of the circles. The larger the value, the sharper the circles.
+        * `center` a tuple (x, y). The center of the effect as x and y pixel coordinates.
+        * `width` a float. The distance between each circle in the pattern.
+        * `sharpness` a float. The sharpness of the circles. The larger the value, the sharper the circles.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -899,9 +899,9 @@ class ImageObject:
         
         **Arguments:**
         
-        `center` a tuple (x, y). The center of the effect as x and y pixel coordinates.
-        `radius` a float. The radius determines how many pixels are used to create the distortion. The larger the radius, the wider the extent of the distortion.
-        `angle` a float in degrees. The angle in degrees of the effect.
+        * `center` a tuple (x, y). The center of the effect as x and y pixel coordinates.
+        * `radius` a float. The radius determines how many pixels are used to create the distortion. The larger the radius, the wider the extent of the distortion.
+        * `angle` a float in degrees. The angle in degrees of the effect.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -921,7 +921,7 @@ class ImageObject:
         
         **Arguments:**
         
-        `extent` a tuple (x, y, w, h). A rectangle that defines the extent of the effect.
+        * `extent` a tuple (x, y, w, h). A rectangle that defines the extent of the effect.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -939,12 +939,12 @@ class ImageObject:
         
         **Arguments:**
         
-        `center` a tuple (x, y). The center of the effect as x and y pixel coordinates.
-        `width` a float. The distance between dots in the pattern.
-        `angle` a float in degrees. The angle in degrees of the pattern.
-        `sharpness` a float. The sharpness of the pattern. The larger the value, the sharper the pattern.
-        `GCR` a float. The gray component replacement value. The value can vary from 0.0 (none) to 1.0.
-        `UCR` a float. The under color removal value. The value can vary from 0.0 to 1.0. 
+        * `center` a tuple (x, y). The center of the effect as x and y pixel coordinates.
+        * `width` a float. The distance between dots in the pattern.
+        * `angle` a float in degrees. The angle in degrees of the pattern.
+        * `sharpness` a float. The sharpness of the pattern. The larger the value, the sharper the pattern.
+        * `GCR` a float. The gray component replacement value. The value can vary from 0.0 (none) to 1.0.
+        * `UCR` a float. The under color removal value. The value can vary from 0.0 to 1.0. 
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -967,10 +967,10 @@ class ImageObject:
         
         **Arguments:**
         
-        `size` a tuple (w, h)
-        `message` a string. The message to encode in the Code 128 Barcode
-        `quietSpace` a float. The number of empty white pixels that should surround the barcode.
-        `barcodeHeight` a float. The height of the generated barcode in pixels.
+        * `size` a tuple (w, h)
+        * `message` a string. The message to encode in the Code 128 Barcode
+        * `quietSpace` a float. The number of empty white pixels that should surround the barcode.
+        * `barcodeHeight` a float. The height of the generated barcode in pixels.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -992,7 +992,7 @@ class ImageObject:
         
         **Arguments:**
         
-        `image2` a float. The second input image for differencing.
+        * `image2` a float. The second input image for differencing.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -1010,7 +1010,7 @@ class ImageObject:
         
         **Arguments:**
         
-        `backgroundImage` an Image object. The image to use as a background image.
+        * `backgroundImage` an Image object. The image to use as a background image.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -1028,7 +1028,7 @@ class ImageObject:
         
         **Arguments:**
         
-        `backgroundImage` an Image object. The image to use as a background image.
+        * `backgroundImage` an Image object. The image to use as a background image.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -1046,8 +1046,8 @@ class ImageObject:
         
         **Arguments:**
         
-        `minComponents` a tuple (x, y, w, h). Lower clamping values.
-        `maxComponents` a tuple (x, y, w, h). Higher clamping values.
+        * `minComponents` a tuple (x, y, w, h). Lower clamping values.
+        * `maxComponents` a tuple (x, y, w, h). Higher clamping values.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -1066,9 +1066,9 @@ class ImageObject:
         
         **Arguments:**
         
-        `saturation` a float. The amount of saturation to apply. The larger the value, the more saturated the result.
-        `brightness` a float. The amount of brightness to apply. The larger the value, the brighter the result.
-        `contrast` a float. The amount of contrast to apply. The larger the value, the more contrast in the resulting image.
+        * `saturation` a float. The amount of saturation to apply. The larger the value, the more saturated the result.
+        * `brightness` a float. The amount of brightness to apply. The larger the value, the brighter the result.
+        * `contrast` a float. The amount of contrast to apply. The larger the value, the more contrast in the resulting image.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -1088,9 +1088,9 @@ class ImageObject:
         
         **Arguments:**
         
-        `redCoefficients` a tuple (x, y, w, h). Polynomial coefficients for red channel.
-        `greenCoefficients` a tuple (x, y, w, h). Polynomial coefficients for green channel.
-        `blueCoefficients` a tuple (x, y, w, h). Polynomial coefficients for blue channel.
+        * `redCoefficients` a tuple (x, y, w, h). Polynomial coefficients for red channel.
+        * `greenCoefficients` a tuple (x, y, w, h). Polynomial coefficients for green channel.
+        * `blueCoefficients` a tuple (x, y, w, h). Polynomial coefficients for blue channel.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -1110,7 +1110,7 @@ class ImageObject:
         
         **Arguments:**
         
-        `backgroundImage` an Image object. The image to use as a background image.
+        * `backgroundImage` an Image object. The image to use as a background image.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -1139,7 +1139,7 @@ class ImageObject:
         
         **Arguments:**
         
-        `gradientImage` an Image object. The image data from this image transforms the source image values.
+        * `gradientImage` an Image object. The image data from this image transforms the source image values.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -1157,11 +1157,11 @@ class ImageObject:
         
         **Arguments:**
         
-        `RVector` a tuple (x, y, w, h). The amount of red to multiply the source color values by.
-        `GVector` a tuple (x, y, w, h). The amount of green to multiply the source color values by.
-        `BVector` a tuple (x, y, w, h). The amount of blue to multiply the source color values by.
-        `AVector` a tuple (x, y, w, h). The amount of alpha to multiply the source color values by.
-        `biasVector` a tuple (x, y, w, h). A vector that’s added to each color component.
+        * `RVector` a tuple (x, y, w, h). The amount of red to multiply the source color values by.
+        * `GVector` a tuple (x, y, w, h). The amount of green to multiply the source color values by.
+        * `BVector` a tuple (x, y, w, h). The amount of blue to multiply the source color values by.
+        * `AVector` a tuple (x, y, w, h). The amount of alpha to multiply the source color values by.
+        * `biasVector` a tuple (x, y, w, h). A vector that’s added to each color component.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -1183,8 +1183,8 @@ class ImageObject:
         
         **Arguments:**
         
-        `color` RGBA tuple Color (r, g, b, a). The monochrome color to apply to the image.
-        `intensity` a float. The intensity of the monochrome effect. A value of 1.0 creates a monochrome image using the supplied color. A value of 0.0 has no effect on the image.
+        * `color` RGBA tuple Color (r, g, b, a). The monochrome color to apply to the image.
+        * `intensity` a float. The intensity of the monochrome effect. A value of 1.0 creates a monochrome image using the supplied color. A value of 0.0 has no effect on the image.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -1203,10 +1203,10 @@ class ImageObject:
         
         **Arguments:**
         
-        `redCoefficients` a tuple (x, y, w, h). Polynomial coefficients for red channel.
-        `greenCoefficients` a tuple (x, y, w, h). Polynomial coefficients for green channel.
-        `blueCoefficients` a tuple (x, y, w, h). Polynomial coefficients for blue channel.
-        `alphaCoefficients` a tuple (x, y, w, h). Polynomial coefficients for alpha channel.
+        * `redCoefficients` a tuple (x, y, w, h). Polynomial coefficients for red channel.
+        * `greenCoefficients` a tuple (x, y, w, h). Polynomial coefficients for green channel.
+        * `blueCoefficients` a tuple (x, y, w, h). Polynomial coefficients for blue channel.
+        * `alphaCoefficients` a tuple (x, y, w, h). Polynomial coefficients for alpha channel.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -1227,7 +1227,7 @@ class ImageObject:
         
         **Arguments:**
         
-        `levels` a float. The number of brightness levels to use for each color component. Lower values result in a more extreme poster effect.
+        * `levels` a float. The number of brightness levels to use for each color component. Lower values result in a more extreme poster effect.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -1245,7 +1245,7 @@ class ImageObject:
         
         **Arguments:**
         
-        `threshold` a float. The threshold value that governs if the RGB channels of the resulting image will be zero or one.
+        * `threshold` a float. The threshold value that governs if the RGB channels of the resulting image will be zero or one.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -1274,7 +1274,7 @@ class ImageObject:
         
         **Arguments:**
         
-        `extent` a tuple (x, y, w, h). A rectangle that specifies the subregion of the image that you want to process.
+        * `extent` a tuple (x, y, w, h). A rectangle that specifies the subregion of the image that you want to process.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -1303,8 +1303,8 @@ class ImageObject:
         
         **Arguments:**
         
-        `size` a tuple (w, h)
-        `color` RGBA tuple Color (r, g, b, a). The color to generate.
+        * `size` a tuple (w, h)
+        * `color` RGBA tuple Color (r, g, b, a). The color to generate.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -1324,7 +1324,7 @@ class ImageObject:
         
         **Arguments:**
         
-        `normalize` a float. If normalize is false then the L channel is in the range 0 to 100 and the a*b* channels are in the range -128 to 128. If normalize is true then the La*b* channels are in the range 0 to 1.
+        * `normalize` a float. If normalize is false then the L channel is in the range 0 to 100 and the a*b* channels are in the range -128 to 128. If normalize is true then the La*b* channels are in the range 0 to 1.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -1342,7 +1342,7 @@ class ImageObject:
         
         **Arguments:**
         
-        `normalize` a float. If normalize is false then the L channel is in the range 0 to 100 and the a*b* channels are in the range -128 to 128. If normalize is true then the La*b* channels are in the range 0 to 1.
+        * `normalize` a float. If normalize is false then the L channel is in the range 0 to 100 and the a*b* channels are in the range -128 to 128. If normalize is true then the La*b* channels are in the range 0 to 1.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -1360,13 +1360,13 @@ class ImageObject:
         
         **Arguments:**
         
-        `targetImage` an Image object. The target image for a transition.
-        `extent` a tuple (x, y, w, h). A rectangle that defines the extent of the effect.
-        `color` RGBA tuple Color (r, g, b, a). The color of the copier light.
-        `time` a float. The parametric time of the transition. This value drives the transition from start (at time 0) to end (at time 1).
-        `angle` a float in degrees. The angle in degrees of the copier light.
-        `width` a float. The width of the copier light. 
-        `opacity` a float. The opacity of the copier light. A value of 0.0 is transparent. A value of 1.0 is opaque.
+        * `targetImage` an Image object. The target image for a transition.
+        * `extent` a tuple (x, y, w, h). A rectangle that defines the extent of the effect.
+        * `color` RGBA tuple Color (r, g, b, a). The color of the copier light.
+        * `time` a float. The parametric time of the transition. This value drives the transition from start (at time 0) to end (at time 1).
+        * `angle` a float in degrees. The angle in degrees of the copier light.
+        * `width` a float. The width of the copier light. 
+        * `opacity` a float. The opacity of the copier light. A value of 0.0 is transparent. A value of 1.0 is opaque.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -1390,7 +1390,7 @@ class ImageObject:
         
         **Arguments:**
         
-        `rectangle` a tuple (x, y, w, h). The rectangle that specifies the crop to apply to the image.
+        * `rectangle` a tuple (x, y, w, h). The rectangle that specifies the crop to apply to the image.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -1408,8 +1408,8 @@ class ImageObject:
         
         **Arguments:**
         
-        `radius` a float. The radius determines how many pixels are used to create the effect. The larger the radius, the larger the resulting crystals.
-        `center` a tuple (x, y). The center of the effect as x and y pixel coordinates.
+        * `radius` a float. The radius determines how many pixels are used to create the effect. The larger the radius, the larger the resulting crystals.
+        * `center` a tuple (x, y). The center of the effect as x and y pixel coordinates.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -1428,7 +1428,7 @@ class ImageObject:
         
         **Arguments:**
         
-        `backgroundImage` an Image object. The image to use as a background image.
+        * `backgroundImage` an Image object. The image to use as a background image.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -1446,12 +1446,12 @@ class ImageObject:
         
         **Arguments:**
         
-        `point0` a tuple (x, y). 
-        `point1` a tuple (x, y). 
-        `saturation` a float. The amount to adjust the saturation.
-        `unsharpMaskRadius` a float. 
-        `unsharpMaskIntensity` a float. 
-        `radius` a float. The distance from the center of the effect.
+        * `point0` a tuple (x, y). 
+        * `point1` a tuple (x, y). 
+        * `saturation` a float. The amount to adjust the saturation.
+        * `unsharpMaskRadius` a float. 
+        * `unsharpMaskIntensity` a float. 
+        * `radius` a float. The distance from the center of the effect.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -1485,7 +1485,7 @@ class ImageObject:
         
         **Arguments:**
         
-        `backgroundImage` an Image object. The image to use as a background image.
+        * `backgroundImage` an Image object. The image to use as a background image.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -1503,7 +1503,7 @@ class ImageObject:
         
         **Arguments:**
         
-        `radius` a float. The radius determines how many pixels are used to create the blur. The larger the radius, the blurrier the result.
+        * `radius` a float. The radius determines how many pixels are used to create the blur. The larger the radius, the blurrier the result.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -1521,12 +1521,12 @@ class ImageObject:
         
         **Arguments:**
         
-        `targetImage` an Image object. The target image for a transition.
-        `maskImage` an Image object. An image that defines the shape to use when disintegrating from the source to the target image.
-        `time` a float. The parametric time of the transition. This value drives the transition from start (at time 0) to end (at time 1).
-        `shadowRadius` a float. The radius of the shadow created by the mask.
-        `shadowDensity` a float. The density of the shadow created by the mask.
-        `shadowOffset` a tuple (x, y). The offset of the shadow created by the mask.
+        * `targetImage` an Image object. The target image for a transition.
+        * `maskImage` an Image object. An image that defines the shape to use when disintegrating from the source to the target image.
+        * `time` a float. The parametric time of the transition. This value drives the transition from start (at time 0) to end (at time 1).
+        * `shadowRadius` a float. The radius of the shadow created by the mask.
+        * `shadowDensity` a float. The density of the shadow created by the mask.
+        * `shadowOffset` a tuple (x, y). The offset of the shadow created by the mask.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -1560,8 +1560,8 @@ class ImageObject:
         
         **Arguments:**
         
-        `displacementImage` an Image object. An image whose grayscale values will be applied to the source image.
-        `scale` a float. The amount of texturing of the resulting image. The larger the value, the greater the texturing.
+        * `displacementImage` an Image object. An image whose grayscale values will be applied to the source image.
+        * `scale` a float. The amount of texturing of the resulting image. The larger the value, the greater the texturing.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -1580,8 +1580,8 @@ class ImageObject:
         
         **Arguments:**
         
-        `targetImage` an Image object. The target image for a transition.
-        `time` a float. The parametric time of the transition. This value drives the transition from start (at time 0) to end (at time 1).
+        * `targetImage` an Image object. The target image for a transition.
+        * `time` a float. The parametric time of the transition. This value drives the transition from start (at time 0) to end (at time 1).
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -1600,7 +1600,7 @@ class ImageObject:
         
         **Arguments:**
         
-        `intensity` a float. The intensity of the effect.
+        * `intensity` a float. The intensity of the effect.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -1618,7 +1618,7 @@ class ImageObject:
         
         **Arguments:**
         
-        `backgroundImage` an Image object. The image to use as a background image.
+        * `backgroundImage` an Image object. The image to use as a background image.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -1636,7 +1636,7 @@ class ImageObject:
         
         **Arguments:**
         
-        `amount` a float. The amount of enhancement.
+        * `amount` a float. The amount of enhancement.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -1654,10 +1654,10 @@ class ImageObject:
         
         **Arguments:**
         
-        `center` a tuple (x, y). The center of the effect as x and y pixel coordinates.
-        `angle` a float in degrees. The angle in degrees of the pattern.
-        `width` a float. The distance between dots in the pattern.
-        `sharpness` a float. The sharpness of the pattern. The larger the value, the sharper the pattern.
+        * `center` a tuple (x, y). The center of the effect as x and y pixel coordinates.
+        * `angle` a float in degrees. The angle in degrees of the pattern.
+        * `width` a float. The distance between dots in the pattern.
+        * `sharpness` a float. The sharpness of the pattern. The larger the value, the sharper the pattern.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -1678,12 +1678,12 @@ class ImageObject:
         
         **Arguments:**
         
-        `insetPoint0` a tuple (x, y). 
-        `insetPoint1` a tuple (x, y). 
-        `strands` a float. 
-        `periodicity` a float. 
-        `rotation` a float. 
-        `zoom` a float. 
+        * `insetPoint0` a tuple (x, y). 
+        * `insetPoint1` a tuple (x, y). 
+        * `strands` a float. 
+        * `periodicity` a float. 
+        * `rotation` a float. 
+        * `zoom` a float. 
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -1706,9 +1706,9 @@ class ImageObject:
         
         **Arguments:**
         
-        `smallImage` an Image object. 
-        `spatialSigma` a float. 
-        `lumaSigma` a float. 
+        * `smallImage` an Image object. 
+        * `spatialSigma` a float. 
+        * `lumaSigma` a float. 
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -1728,7 +1728,7 @@ class ImageObject:
         
         **Arguments:**
         
-        `intensity` a float. The intensity of the edges. The larger the value, the higher the intensity.
+        * `intensity` a float. The intensity of the edges. The larger the value, the higher the intensity.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -1746,7 +1746,7 @@ class ImageObject:
         
         **Arguments:**
         
-        `radius` a float. The thickness of the edges. The larger the value, the thicker the edges.
+        * `radius` a float. The thickness of the edges. The larger the value, the thicker the edges.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -1764,9 +1764,9 @@ class ImageObject:
         
         **Arguments:**
         
-        `center` a tuple (x, y). The center of the effect as x and y pixel coordinates.
-        `angle` a float in degrees. The angle in degrees of the tiled pattern.
-        `width` a float. The width of a tile.
+        * `center` a tuple (x, y). The center of the effect as x and y pixel coordinates.
+        * `angle` a float in degrees. The angle in degrees of the tiled pattern.
+        * `width` a float. The width of a tile.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -1786,7 +1786,7 @@ class ImageObject:
         
         **Arguments:**
         
-        `backgroundImage` an Image object. The image to use as a background image.
+        * `backgroundImage` an Image object. The image to use as a background image.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -1804,7 +1804,7 @@ class ImageObject:
         
         **Arguments:**
         
-        `EV` a float. The amount to adjust the exposure of the image by. The larger the value, the brighter the exposure.
+        * `EV` a float. The amount to adjust the exposure of the image by. The larger the value, the brighter the exposure.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -1822,8 +1822,8 @@ class ImageObject:
         
         **Arguments:**
         
-        `color0` RGBA tuple Color (r, g, b, a). The first color to use for the color ramp.
-        `color1` RGBA tuple Color (r, g, b, a). The second color to use for the color ramp.
+        * `color0` RGBA tuple Color (r, g, b, a). The first color to use for the color ramp.
+        * `color1` RGBA tuple Color (r, g, b, a). The second color to use for the color ramp.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -1842,15 +1842,15 @@ class ImageObject:
         
         **Arguments:**
         
-        `targetImage` an Image object. The target image for a transition.
-        `center` a tuple (x, y). The center of the effect as x and y pixel coordinates.
-        `extent` a tuple (x, y, w, h). The extent of the flash.
-        `color` RGBA tuple Color (r, g, b, a). The color of the light rays emanating from the flash.
-        `time` a float. The parametric time of the transition. This value drives the transition from start (at time 0) to end (at time 1).
-        `maxStriationRadius` a float. The radius of the light rays emanating from the flash.
-        `striationStrength` a float. The strength of the light rays emanating from the flash.
-        `striationContrast` a float. The contrast of the light rays emanating from the flash.
-        `fadeThreshold` a float. The amount of fade between the flash and the target image. The higher the value, the more flash time and the less fade time.
+        * `targetImage` an Image object. The target image for a transition.
+        * `center` a tuple (x, y). The center of the effect as x and y pixel coordinates.
+        * `extent` a tuple (x, y, w, h). The extent of the flash.
+        * `color` RGBA tuple Color (r, g, b, a). The color of the light rays emanating from the flash.
+        * `time` a float. The parametric time of the transition. This value drives the transition from start (at time 0) to end (at time 1).
+        * `maxStriationRadius` a float. The radius of the light rays emanating from the flash.
+        * `striationStrength` a float. The strength of the light rays emanating from the flash.
+        * `striationContrast` a float. The contrast of the light rays emanating from the flash.
+        * `fadeThreshold` a float. The amount of fade between the flash and the target image. The higher the value, the more flash time and the less fade time.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -1876,10 +1876,10 @@ class ImageObject:
         
         **Arguments:**
         
-        `center` a tuple (x, y). The center of the effect as x and y pixel coordinates.
-        `angle` a float in degrees. The angle in degrees of the tiled pattern.
-        `width` a float. The width of a tile.
-        `acuteAngle` a float in degrees. The primary angle for the repeating reflected tile. Small values create thin diamond tiles, and higher values create fatter reflected tiles.
+        * `center` a tuple (x, y). The center of the effect as x and y pixel coordinates.
+        * `angle` a float in degrees. The angle in degrees of the tiled pattern.
+        * `width` a float. The width of a tile.
+        * `acuteAngle` a float in degrees. The primary angle for the repeating reflected tile. Small values create thin diamond tiles, and higher values create fatter reflected tiles.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -1900,9 +1900,9 @@ class ImageObject:
         
         **Arguments:**
         
-        `center` a tuple (x, y). The center of the effect as x and y pixel coordinates.
-        `angle` a float in degrees. The angle in degrees of the tiled pattern.
-        `width` a float. The width of a tile.
+        * `center` a tuple (x, y). The center of the effect as x and y pixel coordinates.
+        * `angle` a float in degrees. The angle in degrees of the tiled pattern.
+        * `width` a float. The width of a tile.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -1922,10 +1922,10 @@ class ImageObject:
         
         **Arguments:**
         
-        `center` a tuple (x, y). The center of the effect as x and y pixel coordinates.
-        `angle` a float in degrees. The angle in degrees of the tiled pattern.
-        `width` a float. The width of a tile.
-        `acuteAngle` a float in degrees. The primary angle for the repeating translated tile. Small values create thin diamond tiles, and higher values create fatter translated tiles.
+        * `center` a tuple (x, y). The center of the effect as x and y pixel coordinates.
+        * `angle` a float in degrees. The angle in degrees of the tiled pattern.
+        * `width` a float. The width of a tile.
+        * `acuteAngle` a float in degrees. The primary angle for the repeating translated tile. Small values create thin diamond tiles, and higher values create fatter translated tiles.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -1957,7 +1957,7 @@ class ImageObject:
         
         **Arguments:**
         
-        `power` a float. A gamma value to use to correct image brightness. The larger the value, the darker the result.
+        * `power` a float. A gamma value to use to correct image brightness. The larger the value, the darker the result.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -1975,7 +1975,7 @@ class ImageObject:
         
         **Arguments:**
         
-        `radius` a float. The radius determines how many pixels are used to create the blur. The larger the radius, the blurrier the result.
+        * `radius` a float. The radius determines how many pixels are used to create the blur. The larger the radius, the blurrier the result.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -1993,11 +1993,11 @@ class ImageObject:
         
         **Arguments:**
         
-        `size` a tuple (w, h)
-        `center` a tuple (x, y). The center of the effect as x and y pixel coordinates.
-        `color0` RGBA tuple Color (r, g, b, a). The first color to use in the gradient.
-        `color1` RGBA tuple Color (r, g, b, a). The second color to use in the gradient.
-        `radius` a float. The radius of the Gaussian distribution.
+        * `size` a tuple (w, h)
+        * `center` a tuple (x, y). The center of the effect as x and y pixel coordinates.
+        * `color0` RGBA tuple Color (r, g, b, a). The first color to use in the gradient.
+        * `color1` RGBA tuple Color (r, g, b, a). The second color to use in the gradient.
+        * `radius` a float. The radius of the Gaussian distribution.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -2020,9 +2020,9 @@ class ImageObject:
         
         **Arguments:**
         
-        `texture` an Image object. A texture to apply to the source image.
-        `center` a tuple (x, y). The center of the effect as x and y pixel coordinates.
-        `scale` a float. The amount of texturing of the resulting image. The larger the value, the greater the texturing.
+        * `texture` an Image object. A texture to apply to the source image.
+        * `center` a tuple (x, y). The center of the effect as x and y pixel coordinates.
+        * `scale` a float. The amount of texturing of the resulting image. The larger the value, the greater the texturing.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -2042,10 +2042,10 @@ class ImageObject:
         
         **Arguments:**
         
-        `point0` a tuple (x, y). The x and y position that defines the center of the circle at one end of the lozenge.
-        `point1` a tuple (x, y). The x and y position that defines the center of the circle at the other end of the lozenge.
-        `radius` a float. The radius of the lozenge. The larger the radius, the wider the extent of the distortion.
-        `refraction` a float. The refraction of the glass.
+        * `point0` a tuple (x, y). The x and y position that defines the center of the circle at one end of the lozenge.
+        * `point1` a tuple (x, y). The x and y position that defines the center of the circle at the other end of the lozenge.
+        * `radius` a float. The radius of the lozenge. The larger the radius, the wider the extent of the distortion.
+        * `refraction` a float. The refraction of the glass.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -2066,9 +2066,9 @@ class ImageObject:
         
         **Arguments:**
         
-        `center` a tuple (x, y). The center of the effect as x and y pixel coordinates.
-        `angle` a float in degrees. The angle in degrees of the tiled pattern.
-        `width` a float. The width of a tile.
+        * `center` a tuple (x, y). The center of the effect as x and y pixel coordinates.
+        * `angle` a float in degrees. The angle in degrees of the tiled pattern.
+        * `width` a float. The width of a tile.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -2088,8 +2088,8 @@ class ImageObject:
         
         **Arguments:**
         
-        `radius` a float. The radius determines how many pixels are used to create the effect. The larger the radius, the greater the effect.
-        `intensity` a float. The intensity of the effect. A value of 0.0 is no effect. A value of 1.0 is the maximum effect.
+        * `radius` a float. The radius determines how many pixels are used to create the effect. The larger the radius, the greater the effect.
+        * `intensity` a float. The intensity of the effect. A value of 0.0 is no effect. A value of 1.0 is the maximum effect.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -2108,9 +2108,9 @@ class ImageObject:
         
         **Arguments:**
         
-        `guideImage` an Image object. A larger image to use as a guide.
-        `radius` a float. The distance from the center of the effect.
-        `epsilon` a float. 
+        * `guideImage` an Image object. A larger image to use as a guide.
+        * `radius` a float. The distance from the center of the effect.
+        * `epsilon` a float. 
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -2130,7 +2130,7 @@ class ImageObject:
         
         **Arguments:**
         
-        `backgroundImage` an Image object. The image to use as a background image.
+        * `backgroundImage` an Image object. The image to use as a background image.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -2148,10 +2148,10 @@ class ImageObject:
         
         **Arguments:**
         
-        `center` a tuple (x, y). The center of the effect as x and y pixel coordinates.
-        `angle` a float in degrees. The angle in degrees of the pattern.
-        `width` a float. The distance between lines in the pattern.
-        `sharpness` a float. The amount of sharpening to apply.
+        * `center` a tuple (x, y). The center of the effect as x and y pixel coordinates.
+        * `angle` a float in degrees. The angle in degrees of the pattern.
+        * `width` a float. The distance between lines in the pattern.
+        * `sharpness` a float. The amount of sharpening to apply.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -2172,7 +2172,7 @@ class ImageObject:
         
         **Arguments:**
         
-        `radius` a float. The distance from the edge of the mask for the smooth transition is proportional to the input radius. Larger values make the transition smoother and more pronounced. Smaller values make the transition approximate a fillet radius.
+        * `radius` a float. The distance from the edge of the mask for the smooth transition is proportional to the input radius. Larger values make the transition smoother and more pronounced. Smaller values make the transition approximate a fillet radius.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -2190,8 +2190,8 @@ class ImageObject:
         
         **Arguments:**
         
-        `center` a tuple (x, y). The center of the effect as x and y pixel coordinates.
-        `scale` a float. The scale determines the size of the hexagons. Larger values result in larger hexagons.
+        * `center` a tuple (x, y). The center of the effect as x and y pixel coordinates.
+        * `scale` a float. The scale determines the size of the hexagons. Larger values result in larger hexagons.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -2210,9 +2210,9 @@ class ImageObject:
         
         **Arguments:**
         
-        `radius` a float. Shadow Highlight Radius.
-        `shadowAmount` a float. The amount of adjustment to the shadows of the image.
-        `highlightAmount` a float. The amount of adjustment to the highlights of the image.
+        * `radius` a float. Shadow Highlight Radius.
+        * `shadowAmount` a float. The amount of adjustment to the shadows of the image.
+        * `highlightAmount` a float. The amount of adjustment to the highlights of the image.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -2232,9 +2232,9 @@ class ImageObject:
         
         **Arguments:**
         
-        `height` a float. The height of the displayable histogram image.
-        `highLimit` a float. The fraction of the right portion of the histogram image to make lighter.
-        `lowLimit` a float. The fraction of the left portion of the histogram image to make darker.
+        * `height` a float. The height of the displayable histogram image.
+        * `highLimit` a float. The fraction of the right portion of the histogram image to make lighter.
+        * `lowLimit` a float. The fraction of the left portion of the histogram image to make darker.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -2254,8 +2254,8 @@ class ImageObject:
         
         **Arguments:**
         
-        `center` a tuple (x, y). The center of the effect as x and y pixel coordinates.
-        `radius` a float. The radius determines how many pixels are used to create the distortion. The larger the radius, the wider the extent of the distortion.
+        * `center` a tuple (x, y). The center of the effect as x and y pixel coordinates.
+        * `radius` a float. The radius determines how many pixels are used to create the distortion. The larger the radius, the wider the extent of the distortion.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -2274,7 +2274,7 @@ class ImageObject:
         
         **Arguments:**
         
-        `angle` a float in degrees. An angle in degrees to use to correct the hue of an image.
+        * `angle` a float in degrees. An angle in degrees to use to correct the hue of an image.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -2292,7 +2292,7 @@ class ImageObject:
         
         **Arguments:**
         
-        `backgroundImage` an Image object. The image to use as a background image.
+        * `backgroundImage` an Image object. The image to use as a background image.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -2310,9 +2310,9 @@ class ImageObject:
         
         **Arguments:**
         
-        `count` a float. The number of reflections in the pattern.
-        `center` a tuple (x, y). The center of the effect as x and y pixel coordinates.
-        `angle` a float in degrees. The angle in degrees of reflection.
+        * `count` a float. The number of reflections in the pattern.
+        * `center` a tuple (x, y). The center of the effect as x and y pixel coordinates.
+        * `angle` a float in degrees. The angle in degrees of reflection.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -2332,11 +2332,11 @@ class ImageObject:
         
         **Arguments:**
         
-        `topLeft` a tuple (x, y). The top left coordinate of the guide.
-        `topRight` a tuple (x, y). The top right coordinate of the guide.
-        `bottomRight` a tuple (x, y). The bottom right coordinate of the guide.
-        `bottomLeft` a tuple (x, y). The bottom left coordinate of the guide.
-        `focalLength` a float. 35mm equivalent focal length of the input image.
+        * `topLeft` a tuple (x, y). The top left coordinate of the guide.
+        * `topRight` a tuple (x, y). The top right coordinate of the guide.
+        * `bottomRight` a tuple (x, y). The bottom right coordinate of the guide.
+        * `bottomLeft` a tuple (x, y). The bottom left coordinate of the guide.
+        * `focalLength` a float. 35mm equivalent focal length of the input image.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -2358,11 +2358,11 @@ class ImageObject:
         
         **Arguments:**
         
-        `topLeft` a tuple (x, y). The top left coordinate of the guide.
-        `topRight` a tuple (x, y). The top right coordinate of the guide.
-        `bottomRight` a tuple (x, y). The bottom right coordinate of the guide.
-        `bottomLeft` a tuple (x, y). The bottom left coordinate of the guide.
-        `focalLength` a float. 35mm equivalent focal length of the input image.
+        * `topLeft` a tuple (x, y). The top left coordinate of the guide.
+        * `topRight` a tuple (x, y). The top right coordinate of the guide.
+        * `bottomRight` a tuple (x, y). The bottom right coordinate of the guide.
+        * `bottomLeft` a tuple (x, y). The bottom left coordinate of the guide.
+        * `focalLength` a float. 35mm equivalent focal length of the input image.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -2384,11 +2384,11 @@ class ImageObject:
         
         **Arguments:**
         
-        `topLeft` a tuple (x, y). The top left coordinate of the guide.
-        `topRight` a tuple (x, y). The top right coordinate of the guide.
-        `bottomRight` a tuple (x, y). The bottom right coordinate of the guide.
-        `bottomLeft` a tuple (x, y). The bottom left coordinate of the guide.
-        `focalLength` a float. 35mm equivalent focal length of the input image.
+        * `topLeft` a tuple (x, y). The top left coordinate of the guide.
+        * `topRight` a tuple (x, y). The top right coordinate of the guide.
+        * `bottomRight` a tuple (x, y). The bottom right coordinate of the guide.
+        * `bottomLeft` a tuple (x, y). The bottom left coordinate of the guide.
+        * `focalLength` a float. 35mm equivalent focal length of the input image.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -2410,11 +2410,11 @@ class ImageObject:
         
         **Arguments:**
         
-        `means` a float. Specifies the color seeds to use for k-means clustering, either passed as an image or an array of colors.
-        `extent` a tuple (x, y, w, h). A rectangle that defines the extent of the effect.
-        `count` a float. Specifies how many k-means color clusters should be used.
-        `passes` a float. Specifies how many k-means passes should be performed.
-        `perceptual` a float. Specifies whether the k-means color palette should be computed in a perceptual color space.
+        * `means` a float. Specifies the color seeds to use for k-means clustering, either passed as an image or an array of colors.
+        * `extent` a tuple (x, y, w, h). A rectangle that defines the extent of the effect.
+        * `count` a float. Specifies how many k-means color clusters should be used.
+        * `passes` a float. Specifies how many k-means passes should be performed.
+        * `perceptual` a float. Specifies whether the k-means color palette should be computed in a perceptual color space.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -2436,7 +2436,7 @@ class ImageObject:
         
         **Arguments:**
         
-        `image2` a float. The second input image for comparison.
+        * `image2` a float. The second input image for comparison.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -2454,8 +2454,8 @@ class ImageObject:
         
         **Arguments:**
         
-        `scale` a float. The scaling factor to use on the image. Values less than 1.0 scale down the images. Values greater than 1.0 scale up the image.
-        `aspectRatio` a float. The additional horizontal scaling factor to use on the image.
+        * `scale` a float. The scaling factor to use on the image. Values less than 1.0 scale down the images. Values greater than 1.0 scale up the image.
+        * `aspectRatio` a float. The additional horizontal scaling factor to use on the image.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -2474,15 +2474,15 @@ class ImageObject:
         
         **Arguments:**
         
-        `size` a tuple (w, h)
-        `center` a tuple (x, y). The center of the effect as x and y pixel coordinates.
-        `color` RGBA tuple Color (r, g, b, a). A color.
-        `haloRadius` a float. The radius of the halo.
-        `haloWidth` a float. The width of the halo, from its inner radius to its outer radius.
-        `haloOverlap` a float. 
-        `striationStrength` a float. The intensity of the halo colors. Larger values are more intense.
-        `striationContrast` a float. The contrast of the halo colors. Larger values are higher contrast.
-        `time` a float. The duration of the effect.
+        * `size` a tuple (w, h)
+        * `center` a tuple (x, y). The center of the effect as x and y pixel coordinates.
+        * `color` RGBA tuple Color (r, g, b, a). A color.
+        * `haloRadius` a float. The radius of the halo.
+        * `haloWidth` a float. The width of the halo, from its inner radius to its outer radius.
+        * `haloOverlap` a float. 
+        * `striationStrength` a float. The intensity of the halo colors. Larger values are more intense.
+        * `striationContrast` a float. The contrast of the halo colors. Larger values are higher contrast.
+        * `time` a float. The duration of the effect.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -2509,7 +2509,7 @@ class ImageObject:
         
         **Arguments:**
         
-        `backgroundImage` an Image object. The image to use as a background image.
+        * `backgroundImage` an Image object. The image to use as a background image.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -2527,9 +2527,9 @@ class ImageObject:
         
         **Arguments:**
         
-        `center` a tuple (x, y). The center of the effect as x and y pixel coordinates.
-        `rotation` a float. Rotation angle in degrees of the light tunnel.
-        `radius` a float. Center radius of the light tunnel.
+        * `center` a tuple (x, y). The center of the effect as x and y pixel coordinates.
+        * `rotation` a float. Rotation angle in degrees of the light tunnel.
+        * `radius` a float. Center radius of the light tunnel.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -2549,7 +2549,7 @@ class ImageObject:
         
         **Arguments:**
         
-        `backgroundImage` an Image object. The image to use as a background image.
+        * `backgroundImage` an Image object. The image to use as a background image.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -2567,7 +2567,7 @@ class ImageObject:
         
         **Arguments:**
         
-        `backgroundImage` an Image object. The image to use as a background image.
+        * `backgroundImage` an Image object. The image to use as a background image.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -2585,11 +2585,11 @@ class ImageObject:
         
         **Arguments:**
         
-        `size` a tuple (w, h)
-        `point0` a tuple (x, y). The starting position of the gradient -- where the first color begins.
-        `point1` a tuple (x, y). The ending position of the gradient -- where the second color begins.
-        `color0` RGBA tuple Color (r, g, b, a). The first color to use in the gradient.
-        `color1` RGBA tuple Color (r, g, b, a). The second color to use in the gradient.
+        * `size` a tuple (w, h)
+        * `point0` a tuple (x, y). The starting position of the gradient -- where the first color begins.
+        * `point1` a tuple (x, y). The ending position of the gradient -- where the second color begins.
+        * `color0` RGBA tuple Color (r, g, b, a). The first color to use in the gradient.
+        * `color1` RGBA tuple Color (r, g, b, a). The second color to use in the gradient.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -2612,7 +2612,7 @@ class ImageObject:
         
         **Arguments:**
         
-        `backgroundImage` an Image object. The image to use as a background image.
+        * `backgroundImage` an Image object. The image to use as a background image.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -2641,11 +2641,11 @@ class ImageObject:
         
         **Arguments:**
         
-        `NRNoiseLevel` a float. The noise level of the image (used with camera data) that gets removed before tracing the edges of the image. Increasing the noise level helps to clean up the traced edges of the image.
-        `NRSharpness` a float. The amount of sharpening done when removing noise in the image before tracing the edges of the image. This improves the edge acquisition.
-        `edgeIntensity` a float. The accentuation factor of the Sobel gradient information when tracing the edges of the image. Higher values find more edges, although typically a low value (such as 1.0) is used.
-        `threshold` a float. This value determines edge visibility. Larger values thin out the edges.
-        `contrast` a float. The amount of anti-aliasing to use on the edges produced by this filter. Higher values produce higher contrast edges (they are less anti-aliased).
+        * `NRNoiseLevel` a float. The noise level of the image (used with camera data) that gets removed before tracing the edges of the image. Increasing the noise level helps to clean up the traced edges of the image.
+        * `NRSharpness` a float. The amount of sharpening done when removing noise in the image before tracing the edges of the image. This improves the edge acquisition.
+        * `edgeIntensity` a float. The accentuation factor of the Sobel gradient information when tracing the edges of the image. Higher values find more edges, although typically a low value (such as 1.0) is used.
+        * `threshold` a float. This value determines edge visibility. Larger values thin out the edges.
+        * `contrast` a float. The amount of anti-aliasing to use on the edges produced by this filter. Higher values produce higher contrast edges (they are less anti-aliased).
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -2667,10 +2667,10 @@ class ImageObject:
         
         **Arguments:**
         
-        `center` a tuple (x, y). The center of the effect as x and y pixel coordinates.
-        `angle` a float in degrees. The angle in degrees of the pattern.
-        `width` a float. The distance between lines in the pattern.
-        `sharpness` a float. The sharpness of the pattern. The larger the value, the sharper the pattern.
+        * `center` a tuple (x, y). The center of the effect as x and y pixel coordinates.
+        * `angle` a float in degrees. The angle in degrees of the pattern.
+        * `width` a float. The distance between lines in the pattern.
+        * `sharpness` a float. The sharpness of the pattern. The larger the value, the sharper the pattern.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -2691,7 +2691,7 @@ class ImageObject:
         
         **Arguments:**
         
-        `backgroundImage` an Image object. The image to use as a background image.
+        * `backgroundImage` an Image object. The image to use as a background image.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -2709,8 +2709,8 @@ class ImageObject:
         
         **Arguments:**
         
-        `mask` an Image object. The mask image that determines how much to blur the image. The mask’s green channel value from 0.0 to 1.0 determines if the image is not blurred or blurred by the full radius.
-        `radius` a float. A value that governs the maximum blur radius to apply.
+        * `mask` an Image object. The mask image that determines how much to blur the image. The mask’s green channel value from 0.0 to 1.0 determines if the image is not blurred or blurred by the full radius.
+        * `radius` a float. A value that governs the maximum blur radius to apply.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -2751,7 +2751,7 @@ class ImageObject:
         
         **Arguments:**
         
-        `backgroundImage` an Image object. The image to use as a background image.
+        * `backgroundImage` an Image object. The image to use as a background image.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -2769,10 +2769,10 @@ class ImageObject:
         
         **Arguments:**
         
-        `size` a tuple (w, h)
-        `mesh` a float. An array of line segments stored as an array of CIVectors each containing a start point and end point.
-        `width` a float. The width in pixels of the effect.
-        `color` RGBA tuple Color (r, g, b, a). A color.
+        * `size` a tuple (w, h)
+        * `mesh` a float. An array of line segments stored as an array of CIVectors each containing a start point and end point.
+        * `width` a float. The width in pixels of the effect.
+        * `color` RGBA tuple Color (r, g, b, a). A color.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -2805,7 +2805,7 @@ class ImageObject:
         
         **Arguments:**
         
-        `backgroundImage` an Image object. The image to use as a background image.
+        * `backgroundImage` an Image object. The image to use as a background image.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -2823,8 +2823,8 @@ class ImageObject:
         
         **Arguments:**
         
-        `backgroundImage` an Image object. The image to use as a background image.
-        `amount` a float. The amount of the effect.
+        * `backgroundImage` an Image object. The image to use as a background image.
+        * `amount` a float. The amount of the effect.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -2843,12 +2843,12 @@ class ImageObject:
         
         **Arguments:**
         
-        `targetImage` an Image object. The target image for a transition.
-        `center` a tuple (x, y). The center of the effect as x and y pixel coordinates.
-        `time` a float. The parametric time of the transition. This value drives the transition from start (at time 0) to end (at time 1).
-        `angle` a float in degrees. The angle in degrees of the mod hole pattern.
-        `radius` a float. The radius of the undistorted holes in the pattern.
-        `compression` a float. The amount of stretching applied to the mod hole pattern. Holes in the center are not distorted as much as those at the edge of the image.
+        * `targetImage` an Image object. The target image for a transition.
+        * `center` a tuple (x, y). The center of the effect as x and y pixel coordinates.
+        * `time` a float. The parametric time of the transition. This value drives the transition from start (at time 0) to end (at time 1).
+        * `angle` a float in degrees. The angle in degrees of the mod hole pattern.
+        * `radius` a float. The radius of the undistorted holes in the pattern.
+        * `compression` a float. The amount of stretching applied to the mod hole pattern. Holes in the center are not distorted as much as those at the edge of the image.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -2871,7 +2871,7 @@ class ImageObject:
         
         **Arguments:**
         
-        `radius` a float. The desired radius of the circular morphological operation to the image.
+        * `radius` a float. The desired radius of the circular morphological operation to the image.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -2889,7 +2889,7 @@ class ImageObject:
         
         **Arguments:**
         
-        `radius` a float. The desired radius of the circular morphological operation to the image.
+        * `radius` a float. The desired radius of the circular morphological operation to the image.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -2907,7 +2907,7 @@ class ImageObject:
         
         **Arguments:**
         
-        `radius` a float. The desired radius of the circular morphological operation to the image.
+        * `radius` a float. The desired radius of the circular morphological operation to the image.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -2925,8 +2925,8 @@ class ImageObject:
         
         **Arguments:**
         
-        `width` a float. The width in pixels of the morphological operation. The value will be rounded to the nearest odd integer.
-        `height` a float. The height in pixels of the morphological operation. The value will be rounded to the nearest odd integer.
+        * `width` a float. The width in pixels of the morphological operation. The value will be rounded to the nearest odd integer.
+        * `height` a float. The height in pixels of the morphological operation. The value will be rounded to the nearest odd integer.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -2945,8 +2945,8 @@ class ImageObject:
         
         **Arguments:**
         
-        `width` a float. The width in pixels of the morphological operation. The value will be rounded to the nearest odd integer.
-        `height` a float. The height in pixels of the morphological operation. The value will be rounded to the nearest odd integer.
+        * `width` a float. The width in pixels of the morphological operation. The value will be rounded to the nearest odd integer.
+        * `height` a float. The height in pixels of the morphological operation. The value will be rounded to the nearest odd integer.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -2965,8 +2965,8 @@ class ImageObject:
         
         **Arguments:**
         
-        `radius` a float. The radius determines how many pixels are used to create the blur. The larger the radius, the blurrier the result.
-        `angle` a float in degrees. The angle in degrees of the motion determines which direction the blur smears.
+        * `radius` a float. The radius determines how many pixels are used to create the blur. The larger the radius, the blurrier the result.
+        * `angle` a float in degrees. The angle in degrees of the motion determines which direction the blur smears.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -2985,7 +2985,7 @@ class ImageObject:
         
         **Arguments:**
         
-        `backgroundImage` an Image object. The image to use as a background image.
+        * `backgroundImage` an Image object. The image to use as a background image.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -3003,7 +3003,7 @@ class ImageObject:
         
         **Arguments:**
         
-        `backgroundImage` an Image object. The image to use as a background image.
+        * `backgroundImage` an Image object. The image to use as a background image.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -3021,9 +3021,9 @@ class ImageObject:
         
         **Arguments:**
         
-        `breakpoint0` a tuple (x, y). Lower left corner of image to retain before stretching begins.
-        `breakpoint1` a tuple (x, y). Upper right corner of image to retain after stretching ends.
-        `growAmount` a tuple (x, y). Vector indicating how much image should grow in pixels in both dimensions.
+        * `breakpoint0` a tuple (x, y). Lower left corner of image to retain before stretching begins.
+        * `breakpoint1` a tuple (x, y). Upper right corner of image to retain after stretching ends.
+        * `growAmount` a tuple (x, y). Vector indicating how much image should grow in pixels in both dimensions.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -3043,10 +3043,10 @@ class ImageObject:
         
         **Arguments:**
         
-        `breakpoint0` a tuple (x, y). Lower left corner of image to retain before tiling begins.
-        `breakpoint1` a tuple (x, y). Upper right corner of image to retain after tiling ends.
-        `growAmount` a tuple (x, y). Vector indicating how much image should grow in pixels in both dimensions.
-        `flipYTiles` a float. Indicates that Y-Axis flip should occur.
+        * `breakpoint0` a tuple (x, y). Lower left corner of image to retain before tiling begins.
+        * `breakpoint1` a tuple (x, y). Upper right corner of image to retain after tiling ends.
+        * `growAmount` a tuple (x, y). Vector indicating how much image should grow in pixels in both dimensions.
+        * `flipYTiles` a float. Indicates that Y-Axis flip should occur.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -3067,8 +3067,8 @@ class ImageObject:
         
         **Arguments:**
         
-        `noiseLevel` a float. The amount of noise reduction. The larger the value, the more noise reduction.
-        `sharpness` a float. The sharpness of the final image. The larger the value, the sharper the result.
+        * `noiseLevel` a float. The amount of noise reduction. The larger the value, the more noise reduction.
+        * `sharpness` a float. The sharpness of the final image. The larger the value, the sharper the result.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -3087,10 +3087,10 @@ class ImageObject:
         
         **Arguments:**
         
-        `center` a tuple (x, y). The center of the effect as x and y pixel coordinates.
-        `scale` a float. The scale determines the number of tiles in the effect.
-        `angle` a float in degrees. The angle in degrees of a tile.
-        `width` a float. The width of a tile.
+        * `center` a tuple (x, y). The center of the effect as x and y pixel coordinates.
+        * `scale` a float. The scale determines the number of tiles in the effect.
+        * `angle` a float in degrees. The angle in degrees of a tile.
+        * `width` a float. The width of a tile.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -3111,7 +3111,7 @@ class ImageObject:
         
         **Arguments:**
         
-        `backgroundImage` an Image object. The image to use as a background image.
+        * `backgroundImage` an Image object. The image to use as a background image.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -3129,13 +3129,13 @@ class ImageObject:
         
         **Arguments:**
         
-        `targetImage` an Image object. The target image for a transition.
-        `backsideImage` an Image object. The image that appears on the back of the source image, as the page curls to reveal the target image.
-        `shadingImage` an Image object. An image that looks like a shaded sphere enclosed in a square image.
-        `extent` a tuple (x, y, w, h). The extent of the effect.
-        `time` a float. The parametric time of the transition. This value drives the transition from start (at time 0) to end (at time 1).
-        `angle` a float in degrees. The angle in degrees of the curling page.
-        `radius` a float. The radius of the curl.
+        * `targetImage` an Image object. The target image for a transition.
+        * `backsideImage` an Image object. The image that appears on the back of the source image, as the page curls to reveal the target image.
+        * `shadingImage` an Image object. An image that looks like a shaded sphere enclosed in a square image.
+        * `extent` a tuple (x, y, w, h). The extent of the effect.
+        * `time` a float. The parametric time of the transition. This value drives the transition from start (at time 0) to end (at time 1).
+        * `angle` a float in degrees. The angle in degrees of the curling page.
+        * `radius` a float. The radius of the curl.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -3159,15 +3159,15 @@ class ImageObject:
         
         **Arguments:**
         
-        `targetImage` an Image object. The target image for a transition.
-        `backsideImage` an Image object. The image that appears on the back of the source image, as the page curls to reveal the target image.
-        `extent` a tuple (x, y, w, h). The extent of the effect.
-        `time` a float. The parametric time of the transition. This value drives the transition from start (at time 0) to end (at time 1).
-        `angle` a float in degrees. The angle in degrees of the curling page.
-        `radius` a float. The radius of the curl.
-        `shadowSize` a float. The maximum size in pixels of the shadow.
-        `shadowAmount` a float. The strength of the shadow.
-        `shadowExtent` a tuple (x, y, w, h). The rectagular portion of input image that will cast a shadow.
+        * `targetImage` an Image object. The target image for a transition.
+        * `backsideImage` an Image object. The image that appears on the back of the source image, as the page curls to reveal the target image.
+        * `extent` a tuple (x, y, w, h). The extent of the effect.
+        * `time` a float. The parametric time of the transition. This value drives the transition from start (at time 0) to end (at time 1).
+        * `angle` a float in degrees. The angle in degrees of the curling page.
+        * `radius` a float. The radius of the curl.
+        * `shadowSize` a float. The maximum size in pixels of the shadow.
+        * `shadowAmount` a float. The strength of the shadow.
+        * `shadowExtent` a tuple (x, y, w, h). The rectagular portion of input image that will cast a shadow.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -3193,8 +3193,8 @@ class ImageObject:
         
         **Arguments:**
         
-        `paletteImage` an Image object. The input color palette, obtained using "CIKMeans" filter.
-        `perceptual` a float. Specifies whether the color palette should be applied in a perceptual color space.
+        * `paletteImage` an Image object. The input color palette, obtained using "CIKMeans" filter.
+        * `perceptual` a float. Specifies whether the color palette should be applied in a perceptual color space.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -3213,8 +3213,8 @@ class ImageObject:
         
         **Arguments:**
         
-        `paletteImage` an Image object. The input color palette, obtained using "CIKMeans" filter.
-        `perceptual` a float. Specifies whether the color palette should be applied in a perceptual color space.
+        * `paletteImage` an Image object. The input color palette, obtained using "CIKMeans" filter.
+        * `perceptual` a float. Specifies whether the color palette should be applied in a perceptual color space.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -3233,10 +3233,10 @@ class ImageObject:
         
         **Arguments:**
         
-        `center` a tuple (x, y). The center of the effect as x and y pixel coordinates.
-        `angle` a float in degrees. The angle in degrees of the tiled pattern.
-        `acuteAngle` a float in degrees. The primary angle for the repeating parallelogram tile. Small values create thin diamond tiles, and higher values create fatter parallelogram tiles.
-        `width` a float. The width of a tile.
+        * `center` a tuple (x, y). The center of the effect as x and y pixel coordinates.
+        * `angle` a float in degrees. The angle in degrees of the tiled pattern.
+        * `acuteAngle` a float in degrees. The primary angle for the repeating parallelogram tile. Small values create thin diamond tiles, and higher values create fatter parallelogram tiles.
+        * `width` a float. The width of a tile.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -3257,19 +3257,19 @@ class ImageObject:
         
         **Arguments:**
         
-        `size` a tuple (w, h)
-        `message` a string. The message to encode in the PDF417 Barcode
-        `minWidth` a float. The minimum width of the generated barcode in pixels.
-        `maxWidth` a float. The maximum width of the generated barcode in pixels.
-        `minHeight` a float. The minimum height of the generated barcode in pixels.
-        `maxHeight` a float. The maximum height of the generated barcode in pixels.
-        `dataColumns` a float. The number of data columns in the generated barcode
-        `rows` a float. The number of rows in the generated barcode
-        `preferredAspectRatio` a float. The preferred aspect ratio of the generated barcode
-        `compactionMode` a float. The compaction mode of the generated barcode.
-        `compactStyle` a bool. Force a compact style Aztec code to `True` or `False`. Set to `None` for automatic.
-        `correctionLevel` a float. The correction level ratio of the generated barcode
-        `alwaysSpecifyCompaction` a bool. Force compaction style to `True` or `False`. Set to `None` for automatic.
+        * `size` a tuple (w, h)
+        * `message` a string. The message to encode in the PDF417 Barcode
+        * `minWidth` a float. The minimum width of the generated barcode in pixels.
+        * `maxWidth` a float. The maximum width of the generated barcode in pixels.
+        * `minHeight` a float. The minimum height of the generated barcode in pixels.
+        * `maxHeight` a float. The maximum height of the generated barcode in pixels.
+        * `dataColumns` a float. The number of data columns in the generated barcode
+        * `rows` a float. The number of rows in the generated barcode
+        * `preferredAspectRatio` a float. The preferred aspect ratio of the generated barcode
+        * `compactionMode` a float. The compaction mode of the generated barcode.
+        * `compactStyle` a bool. Force a compact style Aztec code to `True` or `False`. Set to `None` for automatic.
+        * `correctionLevel` a float. The correction level ratio of the generated barcode
+        * `alwaysSpecifyCompaction` a bool. Force compaction style to `True` or `False`. Set to `None` for automatic.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -3300,7 +3300,7 @@ class ImageObject:
         
         **Arguments:**
         
-        `qualityLevel` a float. Determines the size and quality of the resulting segmentation mask. The value can be a number where 0 is accurate, 1 is balanced, and 2 is fast.
+        * `qualityLevel` a float. Determines the size and quality of the resulting segmentation mask. The value can be a number where 0 is accurate, 1 is balanced, and 2 is fast.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -3318,11 +3318,11 @@ class ImageObject:
         
         **Arguments:**
         
-        `topLeft` a tuple (x, y). The top left coordinate to be perspective corrected.
-        `topRight` a tuple (x, y). The top right coordinate to be perspective corrected.
-        `bottomRight` a tuple (x, y). The bottom right coordinate to be perspective corrected.
-        `bottomLeft` a tuple (x, y). The bottom left coordinate to be perspective corrected.
-        `crop` a float. 
+        * `topLeft` a tuple (x, y). The top left coordinate to be perspective corrected.
+        * `topRight` a tuple (x, y). The top right coordinate to be perspective corrected.
+        * `bottomRight` a tuple (x, y). The bottom right coordinate to be perspective corrected.
+        * `bottomLeft` a tuple (x, y). The bottom left coordinate to be perspective corrected.
+        * `crop` a float. 
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -3344,10 +3344,10 @@ class ImageObject:
         
         **Arguments:**
         
-        `focalLength` a float. 35mm equivalent focal length of the input image.
-        `pitch` a float. Pitch angle in degrees.
-        `yaw` a float. Yaw angle in degrees.
-        `roll` a float. Roll angle in degrees.
+        * `focalLength` a float. 35mm equivalent focal length of the input image.
+        * `pitch` a float. Pitch angle in degrees.
+        * `yaw` a float. Yaw angle in degrees.
+        * `roll` a float. Roll angle in degrees.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -3368,10 +3368,10 @@ class ImageObject:
         
         **Arguments:**
         
-        `topLeft` a tuple (x, y). The top left coordinate of a tile.
-        `topRight` a tuple (x, y). The top right coordinate of a tile.
-        `bottomRight` a tuple (x, y). The bottom right coordinate of a tile.
-        `bottomLeft` a tuple (x, y). The bottom left coordinate of a tile.
+        * `topLeft` a tuple (x, y). The top left coordinate of a tile.
+        * `topRight` a tuple (x, y). The top right coordinate of a tile.
+        * `bottomRight` a tuple (x, y). The bottom right coordinate of a tile.
+        * `bottomLeft` a tuple (x, y). The bottom left coordinate of a tile.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -3392,10 +3392,10 @@ class ImageObject:
         
         **Arguments:**
         
-        `topLeft` a tuple (x, y). The top left coordinate to map the image to.
-        `topRight` a tuple (x, y). The top right coordinate to map the image to.
-        `bottomRight` a tuple (x, y). The bottom right coordinate to map the image to.
-        `bottomLeft` a tuple (x, y). The bottom left coordinate to map the image to.
+        * `topLeft` a tuple (x, y). The top left coordinate to map the image to.
+        * `topRight` a tuple (x, y). The top right coordinate to map the image to.
+        * `bottomRight` a tuple (x, y). The bottom right coordinate to map the image to.
+        * `bottomLeft` a tuple (x, y). The bottom left coordinate to map the image to.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -3416,11 +3416,11 @@ class ImageObject:
         
         **Arguments:**
         
-        `extent` a tuple (x, y, w, h). A rectangle that defines the extent of the effect.
-        `topLeft` a tuple (x, y). The top left coordinate to map the image to.
-        `topRight` a tuple (x, y). The top right coordinate to map the image to.
-        `bottomRight` a tuple (x, y). The bottom right coordinate to map the image to.
-        `bottomLeft` a tuple (x, y). The bottom left coordinate to map the image to.
+        * `extent` a tuple (x, y, w, h). A rectangle that defines the extent of the effect.
+        * `topLeft` a tuple (x, y). The top left coordinate to map the image to.
+        * `topRight` a tuple (x, y). The top right coordinate to map the image to.
+        * `bottomRight` a tuple (x, y). The bottom right coordinate to map the image to.
+        * `bottomLeft` a tuple (x, y). The bottom left coordinate to map the image to.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -3442,7 +3442,7 @@ class ImageObject:
         
         **Arguments:**
         
-        `extrapolate` a float. If true, then the color effect will be extrapolated if the input image contains RGB component values outside the range 0.0 to 1.0.
+        * `extrapolate` a float. If true, then the color effect will be extrapolated if the input image contains RGB component values outside the range 0.0 to 1.0.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -3460,7 +3460,7 @@ class ImageObject:
         
         **Arguments:**
         
-        `extrapolate` a float. If true, then the color effect will be extrapolated if the input image contains RGB component values outside the range 0.0 to 1.0.
+        * `extrapolate` a float. If true, then the color effect will be extrapolated if the input image contains RGB component values outside the range 0.0 to 1.0.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -3478,7 +3478,7 @@ class ImageObject:
         
         **Arguments:**
         
-        `extrapolate` a float. If true, then the color effect will be extrapolated if the input image contains RGB component values outside the range 0.0 to 1.0.
+        * `extrapolate` a float. If true, then the color effect will be extrapolated if the input image contains RGB component values outside the range 0.0 to 1.0.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -3496,7 +3496,7 @@ class ImageObject:
         
         **Arguments:**
         
-        `extrapolate` a float. If true, then the color effect will be extrapolated if the input image contains RGB component values outside the range 0.0 to 1.0.
+        * `extrapolate` a float. If true, then the color effect will be extrapolated if the input image contains RGB component values outside the range 0.0 to 1.0.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -3514,7 +3514,7 @@ class ImageObject:
         
         **Arguments:**
         
-        `extrapolate` a float. If true, then the color effect will be extrapolated if the input image contains RGB component values outside the range 0.0 to 1.0.
+        * `extrapolate` a float. If true, then the color effect will be extrapolated if the input image contains RGB component values outside the range 0.0 to 1.0.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -3532,7 +3532,7 @@ class ImageObject:
         
         **Arguments:**
         
-        `extrapolate` a float. If true, then the color effect will be extrapolated if the input image contains RGB component values outside the range 0.0 to 1.0.
+        * `extrapolate` a float. If true, then the color effect will be extrapolated if the input image contains RGB component values outside the range 0.0 to 1.0.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -3550,7 +3550,7 @@ class ImageObject:
         
         **Arguments:**
         
-        `extrapolate` a float. If true, then the color effect will be extrapolated if the input image contains RGB component values outside the range 0.0 to 1.0.
+        * `extrapolate` a float. If true, then the color effect will be extrapolated if the input image contains RGB component values outside the range 0.0 to 1.0.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -3568,7 +3568,7 @@ class ImageObject:
         
         **Arguments:**
         
-        `extrapolate` a float. If true, then the color effect will be extrapolated if the input image contains RGB component values outside the range 0.0 to 1.0.
+        * `extrapolate` a float. If true, then the color effect will be extrapolated if the input image contains RGB component values outside the range 0.0 to 1.0.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -3586,9 +3586,9 @@ class ImageObject:
         
         **Arguments:**
         
-        `center` a tuple (x, y). The center of the effect as x and y pixel coordinates.
-        `radius` a float. The radius determines how many pixels are used to create the distortion. The larger the radius, the wider the extent of the distortion.
-        `scale` a float. The amount of pinching. A value of 0.0 has no effect. A value of 1.0 is the maximum pinch.
+        * `center` a tuple (x, y). The center of the effect as x and y pixel coordinates.
+        * `radius` a float. The radius determines how many pixels are used to create the distortion. The larger the radius, the wider the extent of the distortion.
+        * `scale` a float. The amount of pinching. A value of 0.0 has no effect. A value of 1.0 is the maximum pinch.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -3608,7 +3608,7 @@ class ImageObject:
         
         **Arguments:**
         
-        `backgroundImage` an Image object. The image to use as a background image.
+        * `backgroundImage` an Image object. The image to use as a background image.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -3626,8 +3626,8 @@ class ImageObject:
         
         **Arguments:**
         
-        `center` a tuple (x, y). The center of the effect as x and y pixel coordinates.
-        `scale` a float. The scale determines the size of the squares. Larger values result in larger squares.
+        * `center` a tuple (x, y). The center of the effect as x and y pixel coordinates.
+        * `scale` a float. The scale determines the size of the squares. Larger values result in larger squares.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -3646,8 +3646,8 @@ class ImageObject:
         
         **Arguments:**
         
-        `radius` a float. The radius of the circles in the resulting pattern.
-        `center` a tuple (x, y). The center of the effect as x and y pixel coordinates.
+        * `radius` a float. The radius of the circles in the resulting pattern.
+        * `center` a tuple (x, y). The center of the effect as x and y pixel coordinates.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -3666,9 +3666,9 @@ class ImageObject:
         
         **Arguments:**
         
-        `size` a tuple (w, h)
-        `message` a string. The message to encode in the QR Code
-        `correctionLevel` a string. QR Code correction level L, M, Q, or H.
+        * `size` a tuple (w, h)
+        * `message` a string. The message to encode in the QR Code
+        * `correctionLevel` a string. QR Code correction level L, M, Q, or H.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -3690,12 +3690,12 @@ class ImageObject:
         
         **Arguments:**
         
-        `size` a tuple (w, h)
-        `center` a tuple (x, y). The center of the effect as x and y pixel coordinates.
-        `radius0` a float. The radius of the starting circle to use in the gradient.
-        `radius1` a float. The radius of the ending circle to use in the gradient.
-        `color0` RGBA tuple Color (r, g, b, a). The first color to use in the gradient.
-        `color1` RGBA tuple Color (r, g, b, a). The second color to use in the gradient.
+        * `size` a tuple (w, h)
+        * `center` a tuple (x, y). The center of the effect as x and y pixel coordinates.
+        * `radius0` a float. The radius of the starting circle to use in the gradient.
+        * `radius1` a float. The radius of the ending circle to use in the gradient.
+        * `color0` RGBA tuple Color (r, g, b, a). The first color to use in the gradient.
+        * `color1` RGBA tuple Color (r, g, b, a). The second color to use in the gradient.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -3719,7 +3719,7 @@ class ImageObject:
         
         **Arguments:**
         
-        `size` a tuple (w, h)
+        * `size` a tuple (w, h)
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -3736,13 +3736,13 @@ class ImageObject:
         
         **Arguments:**
         
-        `targetImage` an Image object. The target image for a transition.
-        `shadingImage` an Image object. An image that looks like a shaded sphere enclosed in a square image.
-        `center` a tuple (x, y). The center of the effect as x and y pixel coordinates.
-        `extent` a tuple (x, y, w, h). A rectangle that defines the extent of the effect.
-        `time` a float. The parametric time of the transition. This value drives the transition from start (at time 0) to end (at time 1).
-        `width` a float. The width of the ripple.
-        `scale` a float. A value that determines whether the ripple starts as a bulge (higher value) or a dimple (lower value).
+        * `targetImage` an Image object. The target image for a transition.
+        * `shadingImage` an Image object. An image that looks like a shaded sphere enclosed in a square image.
+        * `center` a tuple (x, y). The center of the effect as x and y pixel coordinates.
+        * `extent` a tuple (x, y, w, h). A rectangle that defines the extent of the effect.
+        * `time` a float. The parametric time of the transition. This value drives the transition from start (at time 0) to end (at time 1).
+        * `width` a float. The width of the ripple.
+        * `scale` a float. A value that determines whether the ripple starts as a bulge (higher value) or a dimple (lower value).
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -3766,10 +3766,10 @@ class ImageObject:
         
         **Arguments:**
         
-        `size` a tuple (w, h)
-        `extent` a tuple (x, y, w, h). A rectangle that defines the extent of the effect.
-        `radius` a float. The distance from the center of the effect.
-        `color` RGBA tuple Color (r, g, b, a). A color.
+        * `size` a tuple (w, h)
+        * `extent` a tuple (x, y, w, h). A rectangle that defines the extent of the effect.
+        * `radius` a float. The distance from the center of the effect.
+        * `color` RGBA tuple Color (r, g, b, a). A color.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -3791,11 +3791,11 @@ class ImageObject:
         
         **Arguments:**
         
-        `size` a tuple (w, h)
-        `extent` a tuple (x, y, w, h). A rectangle that defines the extent of the effect.
-        `radius` a float. The distance from the center of the effect.
-        `color` RGBA tuple Color (r, g, b, a). A color.
-        `width` a float. The width in pixels of the effect.
+        * `size` a tuple (w, h)
+        * `extent` a tuple (x, y, w, h). A rectangle that defines the extent of the effect.
+        * `radius` a float. The distance from the center of the effect.
+        * `color` RGBA tuple Color (r, g, b, a). A color.
+        * `width` a float. The width in pixels of the effect.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -3818,7 +3818,7 @@ class ImageObject:
         
         **Arguments:**
         
-        `extent` a tuple (x, y, w, h). A rectangle that specifies the subregion of the image that you want to process.
+        * `extent` a tuple (x, y, w, h). A rectangle that specifies the subregion of the image that you want to process.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -3858,7 +3858,7 @@ class ImageObject:
         
         **Arguments:**
         
-        `backgroundImage` an Image object. The image to use as a background image.
+        * `backgroundImage` an Image object. The image to use as a background image.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -3876,7 +3876,7 @@ class ImageObject:
         
         **Arguments:**
         
-        `backgroundImage` an Image object. The image to use as a background image.
+        * `backgroundImage` an Image object. The image to use as a background image.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -3894,7 +3894,7 @@ class ImageObject:
         
         **Arguments:**
         
-        `intensity` a float. The intensity of the sepia effect. A value of 1.0 creates a monochrome sepia image. A value of 0.0 has no effect on the image.
+        * `intensity` a float. The intensity of the sepia effect. A value of 1.0 creates a monochrome sepia image. A value of 0.0 has no effect on the image.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -3912,8 +3912,8 @@ class ImageObject:
         
         **Arguments:**
         
-        `shadingImage` an Image object. The image to use as the height field. The resulting image has greater heights with lighter shades, and lesser heights (lower areas) with darker shades.
-        `scale` a float. The scale of the effect. The higher the value, the more dramatic the effect.
+        * `shadingImage` an Image object. The image to use as the height field. The resulting image has greater heights with lighter shades, and lesser heights (lower areas) with darker shades.
+        * `scale` a float. The scale of the effect. The higher the value, the more dramatic the effect.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -3932,8 +3932,8 @@ class ImageObject:
         
         **Arguments:**
         
-        `sharpness` a float. The amount of sharpening to apply. Larger values are sharper.
-        `radius` a float. The distance from the center of the effect.
+        * `sharpness` a float. The amount of sharpening to apply. Larger values are sharper.
+        * `radius` a float. The distance from the center of the effect.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -3952,9 +3952,9 @@ class ImageObject:
         
         **Arguments:**
         
-        `center` a tuple (x, y). The center of the effect as x and y pixel coordinates.
-        `angle` a float in degrees. The angle in degrees of the tiled pattern.
-        `width` a float. The width of a tile.
+        * `center` a tuple (x, y). The center of the effect as x and y pixel coordinates.
+        * `angle` a float in degrees. The angle in degrees of the tiled pattern.
+        * `width` a float. The width of a tile.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -3974,9 +3974,9 @@ class ImageObject:
         
         **Arguments:**
         
-        `center` a tuple (x, y). The center of the effect as x and y pixel coordinates.
-        `angle` a float in degrees. The angle in degrees of the tiled pattern.
-        `width` a float. The width of a tile.
+        * `center` a tuple (x, y). The center of the effect as x and y pixel coordinates.
+        * `angle` a float in degrees. The angle in degrees of the tiled pattern.
+        * `width` a float. The width of a tile.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -3996,11 +3996,11 @@ class ImageObject:
         
         **Arguments:**
         
-        `size` a tuple (w, h)
-        `point0` a tuple (x, y). The starting position of the gradient -- where the first color begins.
-        `point1` a tuple (x, y). The ending position of the gradient -- where the second color begins.
-        `color0` RGBA tuple Color (r, g, b, a). The first color to use in the gradient.
-        `color1` RGBA tuple Color (r, g, b, a). The second color to use in the gradient.
+        * `size` a tuple (w, h)
+        * `point0` a tuple (x, y). The starting position of the gradient -- where the first color begins.
+        * `point1` a tuple (x, y). The ending position of the gradient -- where the second color begins.
+        * `color0` RGBA tuple Color (r, g, b, a). The first color to use in the gradient.
+        * `color1` RGBA tuple Color (r, g, b, a). The second color to use in the gradient.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -4034,7 +4034,7 @@ class ImageObject:
         
         **Arguments:**
         
-        `backgroundImage` an Image object. The image to use as a background image.
+        * `backgroundImage` an Image object. The image to use as a background image.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -4052,7 +4052,7 @@ class ImageObject:
         
         **Arguments:**
         
-        `backgroundImage` an Image object. The image to use as a background image.
+        * `backgroundImage` an Image object. The image to use as a background image.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -4070,7 +4070,7 @@ class ImageObject:
         
         **Arguments:**
         
-        `backgroundImage` an Image object. The image to use as a background image.
+        * `backgroundImage` an Image object. The image to use as a background image.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -4088,7 +4088,7 @@ class ImageObject:
         
         **Arguments:**
         
-        `backgroundImage` an Image object. The image to use as a background image.
+        * `backgroundImage` an Image object. The image to use as a background image.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -4106,7 +4106,7 @@ class ImageObject:
         
         **Arguments:**
         
-        `backgroundImage` an Image object. The image to use as a background image.
+        * `backgroundImage` an Image object. The image to use as a background image.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -4124,18 +4124,18 @@ class ImageObject:
         
         **Arguments:**
         
-        `centerColor1` RGBA tuple Color (r, g, b, a). The center value of the first color range to replace.
-        `replacementColor1` RGBA tuple Color (r, g, b, a). A replacement color for the first color range.
-        `closeness1` a float. A value that indicates how close the first color must match before it is replaced.
-        `contrast1` a float. The contrast of the first replacement color.
-        `centerColor2` RGBA tuple Color (r, g, b, a). The center value of the second color range to replace.
-        `replacementColor2` RGBA tuple Color (r, g, b, a). A replacement color for the second color range.
-        `closeness2` a float. A value that indicates how close the second color must match before it is replaced.
-        `contrast2` a float. The contrast of the second replacement color.
-        `centerColor3` RGBA tuple Color (r, g, b, a). The center value of the third color range to replace.
-        `replacementColor3` RGBA tuple Color (r, g, b, a). A replacement color for the third color range.
-        `closeness3` a float. A value that indicates how close the third color must match before it is replaced.
-        `contrast3` a float. The contrast of the third replacement color.
+        * `centerColor1` RGBA tuple Color (r, g, b, a). The center value of the first color range to replace.
+        * `replacementColor1` RGBA tuple Color (r, g, b, a). A replacement color for the first color range.
+        * `closeness1` a float. A value that indicates how close the first color must match before it is replaced.
+        * `contrast1` a float. The contrast of the first replacement color.
+        * `centerColor2` RGBA tuple Color (r, g, b, a). The center value of the second color range to replace.
+        * `replacementColor2` RGBA tuple Color (r, g, b, a). A replacement color for the second color range.
+        * `closeness2` a float. A value that indicates how close the second color must match before it is replaced.
+        * `contrast2` a float. The contrast of the second replacement color.
+        * `centerColor3` RGBA tuple Color (r, g, b, a). The center value of the third color range to replace.
+        * `replacementColor3` RGBA tuple Color (r, g, b, a). A replacement color for the third color range.
+        * `closeness3` a float. A value that indicates how close the third color must match before it is replaced.
+        * `contrast3` a float. The contrast of the third replacement color.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -4164,11 +4164,11 @@ class ImageObject:
         
         **Arguments:**
         
-        `lightPosition` a tulple (x, y, z). The x and y position of the spotlight.
-        `lightPointsAt` a tuple (x, y). The x and y position that the spotlight points at.
-        `brightness` a float. The brightness of the spotlight.
-        `concentration` a float. The spotlight size. The smaller the value, the more tightly focused the light beam.
-        `color` RGBA tuple Color (r, g, b, a). The color of the spotlight.
+        * `lightPosition` a tulple (x, y, z). The x and y position of the spotlight.
+        * `lightPointsAt` a tuple (x, y). The x and y position that the spotlight points at.
+        * `brightness` a float. The brightness of the spotlight.
+        * `concentration` a float. The spotlight size. The smaller the value, the more tightly focused the light beam.
+        * `color` RGBA tuple Color (r, g, b, a). The color of the spotlight.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -4201,15 +4201,15 @@ class ImageObject:
         
         **Arguments:**
         
-        `size` a tuple (w, h)
-        `center` a tuple (x, y). The center of the effect as x and y pixel coordinates.
-        `color` RGBA tuple Color (r, g, b, a). The color to use for the outer shell of the circular star.
-        `radius` a float. The radius of the star.
-        `crossScale` a float. The size of the cross pattern.
-        `crossAngle` a float in degrees. The angle in degrees of the cross pattern.
-        `crossOpacity` a float. The opacity of the cross pattern.
-        `crossWidth` a float. The width of the cross pattern.
-        `epsilon` a float. The length of the cross spikes.
+        * `size` a tuple (w, h)
+        * `center` a tuple (x, y). The center of the effect as x and y pixel coordinates.
+        * `color` RGBA tuple Color (r, g, b, a). The color to use for the outer shell of the circular star.
+        * `radius` a float. The radius of the star.
+        * `crossScale` a float. The size of the cross pattern.
+        * `crossAngle` a float in degrees. The angle in degrees of the cross pattern.
+        * `crossOpacity` a float. The opacity of the cross pattern.
+        * `crossWidth` a float. The width of the cross pattern.
+        * `epsilon` a float. The length of the cross spikes.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -4236,7 +4236,7 @@ class ImageObject:
         
         **Arguments:**
         
-        `angle` a float in degrees. The angle in degrees of the effect.
+        * `angle` a float in degrees. The angle in degrees of the effect.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -4254,9 +4254,9 @@ class ImageObject:
         
         **Arguments:**
         
-        `size` a float. The size in pixels of the output image.
-        `cropAmount` a float. Determines if and how much cropping should be used to achieve the target size. If value is 0 then only stretching is used. If 1 then only cropping is used.
-        `centerStretchAmount` a float. Determine how much the center of the image is stretched if stretching is used. If value is 0 then the center of the image maintains the original aspect ratio. If 1 then the image is stretched uniformly.
+        * `size` a float. The size in pixels of the output image.
+        * `cropAmount` a float. Determines if and how much cropping should be used to achieve the target size. If value is 0 then only stretching is used. If 1 then only cropping is used.
+        * `centerStretchAmount` a float. Determine how much the center of the image is stretched if stretching is used. If value is 0 then the center of the image maintains the original aspect ratio. If 1 then the image is stretched uniformly.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -4276,12 +4276,12 @@ class ImageObject:
         
         **Arguments:**
         
-        `size` a tuple (w, h)
-        `center` a tuple (x, y). The center of the effect as x and y pixel coordinates.
-        `color0` RGBA tuple Color (r, g, b, a). A color to use for the odd stripes.
-        `color1` RGBA tuple Color (r, g, b, a). A color to use for the even stripes.
-        `width` a float. The width of a stripe.
-        `sharpness` a float. The sharpness of the stripe pattern. The smaller the value, the more blurry the pattern. Values range from 0.0 to 1.0.
+        * `size` a tuple (w, h)
+        * `center` a tuple (x, y). The center of the effect as x and y pixel coordinates.
+        * `color0` RGBA tuple Color (r, g, b, a). A color to use for the odd stripes.
+        * `color1` RGBA tuple Color (r, g, b, a). A color to use for the even stripes.
+        * `width` a float. The width of a stripe.
+        * `sharpness` a float. The sharpness of the stripe pattern. The smaller the value, the more blurry the pattern. Values range from 0.0 to 1.0.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -4305,7 +4305,7 @@ class ImageObject:
         
         **Arguments:**
         
-        `backgroundImage` an Image object. The image to use as a background image.
+        * `backgroundImage` an Image object. The image to use as a background image.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -4323,14 +4323,14 @@ class ImageObject:
         
         **Arguments:**
         
-        `size` a tuple (w, h)
-        `center` a tuple (x, y). The center of the effect as x and y pixel coordinates.
-        `color` RGBA tuple Color (r, g, b, a). The color of the sun.
-        `sunRadius` a float. The radius of the sun.
-        `maxStriationRadius` a float. The radius of the sunbeams.
-        `striationStrength` a float. The intensity of the sunbeams. Higher values result in more intensity.
-        `striationContrast` a float. The contrast of the sunbeams. Higher values result in more contrast.
-        `time` a float. The duration of the effect.
+        * `size` a tuple (w, h)
+        * `center` a tuple (x, y). The center of the effect as x and y pixel coordinates.
+        * `color` RGBA tuple Color (r, g, b, a). The color of the sun.
+        * `sunRadius` a float. The radius of the sun.
+        * `maxStriationRadius` a float. The radius of the sunbeams.
+        * `striationStrength` a float. The intensity of the sunbeams. Higher values result in more intensity.
+        * `striationContrast` a float. The contrast of the sunbeams. Higher values result in more contrast.
+        * `time` a float. The duration of the effect.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -4356,13 +4356,13 @@ class ImageObject:
         
         **Arguments:**
         
-        `targetImage` an Image object. The target image for a transition.
-        `extent` a tuple (x, y, w, h). The extent of the effect.
-        `color` RGBA tuple Color (r, g, b, a). The color of the swipe.
-        `time` a float. The parametric time of the transition. This value drives the transition from start (at time 0) to end (at time 1).
-        `angle` a float in degrees. The angle in degrees of the swipe.
-        `width` a float. The width of the swipe.
-        `opacity` a float. The opacity of the swipe.
+        * `targetImage` an Image object. The target image for a transition.
+        * `extent` a tuple (x, y, w, h). The extent of the effect.
+        * `color` RGBA tuple Color (r, g, b, a). The color of the swipe.
+        * `time` a float. The parametric time of the transition. This value drives the transition from start (at time 0) to end (at time 1).
+        * `angle` a float in degrees. The angle in degrees of the swipe.
+        * `width` a float. The width of the swipe.
+        * `opacity` a float. The opacity of the swipe.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -4386,8 +4386,8 @@ class ImageObject:
         
         **Arguments:**
         
-        `neutral` a tuple. A vector containing the source white point defined by color temperature and tint or chromaticity (x,y).
-        `targetNeutral` a tuple. A vector containing the desired white point defined by color temperature and tint or chromaticity (x,y).
+        * `neutral` a tuple. A vector containing the source white point defined by color temperature and tint or chromaticity (x,y).
+        * `targetNeutral` a tuple. A vector containing the desired white point defined by color temperature and tint or chromaticity (x,y).
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -4417,10 +4417,10 @@ class ImageObject:
         
         **Arguments:**
         
-        `center` a tuple (x, y). The center of the effect as x and y pixel coordinates.
-        `radius` a float. The outer radius of the torus.
-        `width` a float. The width of the ring.
-        `refraction` a float. The refraction of the glass.
+        * `center` a tuple (x, y). The center of the effect as x and y pixel coordinates.
+        * `radius` a float. The outer radius of the torus.
+        * `width` a float. The width of the ring.
+        * `refraction` a float. The refraction of the glass.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -4441,10 +4441,10 @@ class ImageObject:
         
         **Arguments:**
         
-        `point` a tuple (x, y). The x and y position to use as the center of the triangular area in the input image.
-        `size` a tuple (w, h). The size in pixels of the triangle.
-        `rotation` a float. Rotation angle in degrees of the triangle.
-        `decay` a float. The decay determines how fast the color fades from the center triangle.
+        * `point` a tuple (x, y). The x and y position to use as the center of the triangular area in the input image.
+        * `size` a tuple (w, h). The size in pixels of the triangle.
+        * `rotation` a float. Rotation angle in degrees of the triangle.
+        * `decay` a float. The decay determines how fast the color fades from the center triangle.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -4465,9 +4465,9 @@ class ImageObject:
         
         **Arguments:**
         
-        `center` a tuple (x, y). The center of the effect as x and y pixel coordinates.
-        `angle` a float in degrees. The angle in degrees of the tiled pattern.
-        `width` a float. The width of a tile.
+        * `center` a tuple (x, y). The center of the effect as x and y pixel coordinates.
+        * `angle` a float in degrees. The angle in degrees of the tiled pattern.
+        * `width` a float. The width of a tile.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -4487,9 +4487,9 @@ class ImageObject:
         
         **Arguments:**
         
-        `center` a tuple (x, y). The center of the effect as x and y pixel coordinates.
-        `angle` a float in degrees. The angle in degrees of the tiled pattern.
-        `width` a float. The width of a tile.
+        * `center` a tuple (x, y). The center of the effect as x and y pixel coordinates.
+        * `angle` a float in degrees. The angle in degrees of the tiled pattern.
+        * `width` a float. The width of a tile.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -4509,9 +4509,9 @@ class ImageObject:
         
         **Arguments:**
         
-        `center` a tuple (x, y). The center of the effect as x and y pixel coordinates.
-        `radius` a float. The radius determines how many pixels are used to create the distortion. The larger the radius, the wider the extent of the distortion.
-        `angle` a float in degrees. The angle in degrees of the twirl. Values can be positive or negative.
+        * `center` a tuple (x, y). The center of the effect as x and y pixel coordinates.
+        * `radius` a float. The radius determines how many pixels are used to create the distortion. The larger the radius, the wider the extent of the distortion.
+        * `angle` a float in degrees. The angle in degrees of the twirl. Values can be positive or negative.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -4531,8 +4531,8 @@ class ImageObject:
         
         **Arguments:**
         
-        `radius` a float. The radius around a given pixel to apply the unsharp mask. The larger the radius, the more of the image is affected.
-        `intensity` a float. The intensity of the effect. The larger the value, the more contrast in the affected area.
+        * `radius` a float. The radius around a given pixel to apply the unsharp mask. The larger the radius, the more of the image is affected.
+        * `intensity` a float. The intensity of the effect. The larger the value, the more contrast in the affected area.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -4551,7 +4551,7 @@ class ImageObject:
         
         **Arguments:**
         
-        `amount` a float. The amount to adjust the saturation.
+        * `amount` a float. The amount to adjust the saturation.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -4569,8 +4569,8 @@ class ImageObject:
         
         **Arguments:**
         
-        `intensity` a float. The intensity of the effect.
-        `radius` a float. The distance from the center of the effect.
+        * `intensity` a float. The intensity of the effect.
+        * `radius` a float. The distance from the center of the effect.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -4589,10 +4589,10 @@ class ImageObject:
         
         **Arguments:**
         
-        `center` a tuple (x, y). The center of the effect as x and y pixel coordinates.
-        `radius` a float. The distance from the center of the effect.
-        `intensity` a float. The intensity of the effect.
-        `falloff` a float. The falloff of the effect.
+        * `center` a tuple (x, y). The center of the effect as x and y pixel coordinates.
+        * `radius` a float. The distance from the center of the effect.
+        * `intensity` a float. The intensity of the effect.
+        * `falloff` a float. The falloff of the effect.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -4613,7 +4613,7 @@ class ImageObject:
         
         **Arguments:**
         
-        `backgroundImage` an Image object. The image to use as a background image.
+        * `backgroundImage` an Image object. The image to use as a background image.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -4631,9 +4631,9 @@ class ImageObject:
         
         **Arguments:**
         
-        `center` a tuple (x, y). The center of the effect as x and y pixel coordinates.
-        `radius` a float. The radius determines how many pixels are used to create the distortion. The larger the radius, the wider the extent of the distortion.
-        `angle` a float in degrees. The angle in degrees of the effect.
+        * `center` a tuple (x, y). The center of the effect as x and y pixel coordinates.
+        * `radius` a float. The radius determines how many pixels are used to create the distortion. The larger the radius, the wider the extent of the distortion.
+        * `angle` a float in degrees. The angle in degrees of the effect.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -4653,7 +4653,7 @@ class ImageObject:
         
         **Arguments:**
         
-        `color` RGBA tuple Color (r, g, b, a). A color to use as the white point.
+        * `color` RGBA tuple Color (r, g, b, a). A color to use as the white point.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future
@@ -4682,8 +4682,8 @@ class ImageObject:
         
         **Arguments:**
         
-        `center` a tuple (x, y). The center of the effect as x and y pixel coordinates.
-        `amount` a float. The zoom-in amount. Larger values result in more zooming in.
+        * `center` a tuple (x, y). The center of the effect as x and y pixel coordinates.
+        * `amount` a float. The zoom-in amount. Larger values result in more zooming in.
         """
         # the following code is automatically generated with `scripting/imageObjectCodeExtractor.py`
         # please, do not attempt to edit it manually as it will be overriden in the future

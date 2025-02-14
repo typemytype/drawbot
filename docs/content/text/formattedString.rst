@@ -6,4 +6,4 @@ Formatted Strings
     :undoc-members:
     :inherited-members:
     :show-inheritance:
-    :exclude-members: copyContextProperties
+    :exclude-members: copyContextProperties, svgClass, svgID, svgLink

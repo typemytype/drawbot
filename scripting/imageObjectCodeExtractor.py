@@ -441,7 +441,7 @@ def generateImageObjectCode() -> tuple[str, str]:
             if filterName in generators:
                 args.append("size: Size")
                 unitTestsArgs.append("size=(100, 100)")
-                doc.add(f"`size` {variableValues['size']}")
+                doc.add(f"* `size` {variableValues['size']}")
             for inputKey in inputKeys:
                 info = ciFilterAttributes.get(inputKey)
                 default = info.get("CIAttributeDefault")
@@ -520,7 +520,7 @@ def generateImageObjectCode() -> tuple[str, str]:
                 docValue = getVariableValue((inputKey, filterName), "a float")
                 attributes[filterInputKey] = value
 
-                doc.add(f"`{inputKey}` {docValue}. {pythonifyDescription(description)}")
+                doc.add(f"* `{inputKey}` {docValue}. {pythonifyDescription(description)}")
                 args.append(arg)
 
                 match inputKey:
