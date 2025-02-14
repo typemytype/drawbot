@@ -6,16 +6,16 @@
 
 DrawBot is a powerful, free application for macOS that invites you to write Python scripts to generate two-dimensional graphics. The built-in graphics primitives support rectangles, ovals, (bezier) paths, polygons, text objects, colors, transparency and much more. You can program multi-page documents and stop-motion animations. Export formats include PDF, SVG, PNG, JPEG, TIFF, animated GIF and MP4 video.
 
-To download the latest version of the app, go to  
+To download the latest version of the app, go to
 http://www.drawbot.com/content/download.html
 
 ---
 
 ## Using DrawBot as a Python module
 
-DrawBot can also be installed as a Python module, the app is not required. It works on Python3.10+.
+DrawBot can also be installed as a Python module, the app is not required. It works on Python3.11+.
 
-#### Install 
+#### Install
 
 The easiest way is to use pip:
 
