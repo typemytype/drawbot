@@ -1,6 +1,10 @@
 # Changelog For DrawBot
 
-## [3.132] 2025-02-...
+## [3.133] 2025-02-...
+
+## [3.132] 2025-02-24
+
+- Fix bug in Image object filters.
 
 ## [3.131] 2025-02-06
 
