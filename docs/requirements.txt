@@ -1,2 +1,1 @@
 fonttools
-sphinxcontrib-jquery
