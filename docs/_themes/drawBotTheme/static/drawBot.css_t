@@ -209,6 +209,7 @@ div.navbar {
 
 div.navbar ul {
 	margin-bottom: 5px;
+	display: inline-block;
 }
 
 div.navbar li {
@@ -228,6 +229,10 @@ div.navbar li a {
 
 div.navbar li a:hover {
 	font-weight: normal;
+}
+
+div.navbar #searchbox {
+	display: inline-block;
 }
 
 div.sphinxsidebarwrapper {
@@ -277,7 +282,7 @@ p.highlight-link a:hover {
 }
 
 .container input[type="text"] {
-	width: 160px;
+	width: 140px;
 }
 
 .container input[type="text"]:active, .container input[type="text"]:focus {
