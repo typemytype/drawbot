@@ -233,6 +233,7 @@ div.navbar li a:hover {
 
 div.navbar #searchbox {
 	display: inline-block;
+	position: relative;
 }
 
 div.sphinxsidebarwrapper {
@@ -252,6 +253,11 @@ form {
 
 p.highlight-link {
 	margin: 10px 0px 0px 0px;
+	padding: 0 10px;
+	position: absolute;
+	margin: 10px 0px 0px 0px;
+	background-color: {{ theme_headercolor2 }};
+	font-size: 11px;
 }
 
 p.highlight-link a {
