@@ -106,6 +106,9 @@ def mockVariable(definitions, namespace):
 def mockPrintImage(pdf=None):
     pass
 
+def mockShareImage(path, **kwargs):
+    pass
+
 def mockInstallFont(path):
     return "Helvetica"
 
@@ -139,6 +142,7 @@ def _makeTestCase(exampleName, source, doSaveImage):
         namespace["imagePixelColor"] = mockImagePixelColor
         namespace["Variable"] = mockVariable
         namespace["printImage"] = mockPrintImage
+        namespace["shareImage"] = mockShareImage
         namespace["installFont"] = mockInstallFont
         namespace["uninstallFont"] = mockUninstallFont
         namespace["randint"] = mockRandInt
