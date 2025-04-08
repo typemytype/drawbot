@@ -1,7 +1,10 @@
 from pathlib import Path
 
 import AppKit  # type: ignore
-import Quartz  # type: ignore
+import Quartz
+import ruff_api
+
+from drawBot.misc import ruff_options  # type: ignore
 
 IMAGE_OBJECT_PATH = Path(__file__).parent.parent / "drawBot/context/tools/imageObject.py"
 UNIT_TESTS_PATH = Path(__file__).parent.parent / "tests/testImageObject.py"
@@ -564,7 +567,10 @@ def generateImageObjectCode() -> tuple[str, str]:
     unitTests.footer()
     unitTestsCode = unitTests.get()
 
-    return imageObjectCode, unitTestsCode
+    options = ruff_options()
+    linted_code = ruff_api.format_string("imageObject.py", imageObjectCode, options)
+    linted_unit_tests = ruff_api.format_string("testImageObject.py", unitTestsCode, options)
+    return linted_code, linted_unit_tests
 
 
 if __name__ == "__main__":

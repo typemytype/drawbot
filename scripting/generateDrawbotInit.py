@@ -7,8 +7,11 @@ to leverage the hints we have in the interfaces
 
 from pathlib import Path
 
+import ruff_api
+
 from drawBot import _drawBotDrawingTool
 from drawBot.context.tools import drawBotbuiltins
+from drawBot.misc import ruff_options
 
 INIT_PATH = Path(__file__).parent.parent / "drawBot/__init__.py"
 
@@ -39,7 +42,7 @@ def generateInitCode():
         if eachLine == "# --- section automatically generated --- #":
             break
 
-    return "\n".join(before) + "\n" + "\n".join(code)
+    return ruff_api.format_string("__init__.py", "\n".join(before) + "\n" + "\n".join(code), ruff_options())
 
 
 if __name__ == "__main__":

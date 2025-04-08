@@ -417,6 +417,15 @@ def memoize(function):
     return wrapper
 
 
+def ruff_options():
+    import ruff_api
+    import tomllib
+
+    with open("ruff.toml", "rb") as f:
+        data = tomllib.load(f)
+    return ruff_api.FormatOptions(line_width=data["line-length"], target_version=data["target-version"])
+
+
 if __name__ == "__main__":
     import doctest
 
