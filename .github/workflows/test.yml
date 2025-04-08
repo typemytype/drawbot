@@ -1,10 +1,12 @@
 name: DrawBot Test Bench
 
 on:
-  workflow_run:
-    workflows: ["Lint codebase and commit changes"]
-    types:
-    - completed
+  push:
+    branches:
+    - master
+  pull_request:
+    branches:
+    - master
 
 jobs:
   test:
