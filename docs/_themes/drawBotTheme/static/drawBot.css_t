@@ -209,6 +209,7 @@ div.navbar {
 
 div.navbar ul {
 	margin-bottom: 5px;
+	display: inline-block;
 }
 
 div.navbar li {
@@ -230,6 +231,11 @@ div.navbar li a:hover {
 	font-weight: normal;
 }
 
+div.navbar #searchbox {
+	display: inline-block;
+	position: relative;
+}
+
 div.sphinxsidebarwrapper {
 	white-space: nowrap;
 }
@@ -247,6 +253,11 @@ form {
 
 p.highlight-link {
 	margin: 10px 0px 0px 0px;
+	padding: 0 10px;
+	position: absolute;
+	margin: 10px 0px 0px 0px;
+	background-color: {{ theme_headercolor2 }};
+	font-size: 11px;
 }
 
 p.highlight-link a {
@@ -277,7 +288,7 @@ p.highlight-link a:hover {
 }
 
 .container input[type="text"] {
-	width: 160px;
+	width: 140px;
 }
 
 .container input[type="text"]:active, .container input[type="text"]:focus {

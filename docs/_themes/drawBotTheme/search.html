@@ -2,6 +2,8 @@
 {% set title = _('Search') %}
 {% set script_files = script_files + ['_static/searchtools.js'] %}
 {% block extrahead %}
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="_static/language_data.js"></script>
   <script type="text/javascript">
     jQuery(function() { Search.loadIndex("{{ pathto('searchindex.js', 1) }}"); });
   </script>
