@@ -2,3 +2,5 @@ pillow
 attrs
 packaging
 mypy
+ruff
+ruff-api
