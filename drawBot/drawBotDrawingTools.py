@@ -5,7 +5,7 @@ from collections import namedtuple
 from contextlib import contextmanager
 from typing import Any
 
-import AppKit  # type: ignore # type: ignore
+import AppKit  # type: ignore
 import CoreText  # type: ignore
 import Quartz  # type: ignore
 

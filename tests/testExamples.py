@@ -4,7 +4,7 @@ import re
 import sys
 import unittest
 
-import AppKit  # type: ignore # type: ignore
+import AppKit  # type: ignore
 from testSupport import StdOutCollector, compareImages, randomSeed, tempTestDataDir, testDataDir, testRootDir
 
 import drawBot
