@@ -240,7 +240,7 @@ _multiLineRE = re.compile(
 _multiLineParts = [
     "'''",
     '"""',
-    "\*",
+    r"\*",
     "*/",
     "<!--",
     "--!># >>>",
