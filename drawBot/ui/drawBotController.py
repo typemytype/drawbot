@@ -4,7 +4,7 @@ from vanilla import Window
 
 from drawBot.context.drawBotContext import DrawBotContext
 from drawBot.drawBotDrawingTools import _drawBotDrawingTool
-from drawBot.misc import getDefault, setDefault, warnings, ruff_options
+from drawBot.misc import getDefault, setDefault, warnings
 from drawBot.scriptTools import CallbackRunner, ScriptRunner, StdOutput
 
 from .codeEditor import CodeEditor, OutPutEditor
@@ -174,7 +174,7 @@ class DrawBotController(BaseWindowController):
         code = self.code()
         # format the code with ruff
         try:
-            formattedCode = ruff_api.format_string("foo.py", code, ruff_options())
+            formattedCode = ruff_api.format_string("foo.py", code)
         except Exception:
             return
 
