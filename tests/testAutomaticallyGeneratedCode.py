@@ -1,7 +1,6 @@
 import sys
 import unittest
 from pathlib import Path
-import ruff_api
 
 sys.path.append(str((Path(__file__).parent.parent / "scripting").resolve()))
 
