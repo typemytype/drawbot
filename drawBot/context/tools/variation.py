@@ -91,17 +91,10 @@ def getNamedInstancesForFont(font):
 
 def getFontVariationAttributes(font, fontVariations):
     coreTextFontVariations = dict()
-    if fontVariations:
-        existingAxes = getVariationAxesForFont(font)
-        for axis, value in fontVariations.items():
-            if axis in existingAxes:
-                existinsAxis = existingAxes[axis]
-                # clip variation value within the min max value
-                if value < existinsAxis["minValue"]:
-                    value = existinsAxis["minValue"]
-                if value > existinsAxis["maxValue"]:
-                    value = existinsAxis["maxValue"]
-                coreTextFontVariations[convertVariationTagToInt(axis)] = value
-            else:
-                warnings.warn("variation axis '%s' not available for '%s'" % (axis, font.fontName()))
+    axes = getVariationAxesForFont(font)
+    for axisTag, axis in axes.items():
+        value = fontVariations.get(axisTag, axis["defaultValue"])
+        coreTextFontVariations[convertVariationTagToInt(axisTag)] = value
+    for axisTag in sorted(set(fontVariations) - set(axes)):
+        warnings.warn("variation axis '%s' not available for '%s'" % (axisTag, font.fontName()))
     return coreTextFontVariations
