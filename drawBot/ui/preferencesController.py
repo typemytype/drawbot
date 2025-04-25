@@ -1,7 +1,18 @@
 from Foundation import NSObject, NSMutableAttributedString, NSInsetRect
-from AppKit import NSApp, NSColorWell, NSActionCell, NSNotificationCenter, NSFontManager, \
-    NSCalibratedRGBColorSpace, NSTableViewFirstColumnOnlyAutoresizingStyle, \
-    NSBezierPath, NSFont, NSForegroundColorAttributeName, NSUnderlineColorAttributeName, NSTextAlignmentCenter
+from AppKit import (
+    NSApp,
+    NSColorWell,
+    NSActionCell,
+    NSNotificationCenter,
+    NSFontManager,
+    NSCalibratedRGBColorSpace,
+    NSTableViewFirstColumnOnlyAutoresizingStyle,
+    NSBezierPath,
+    NSFont,
+    NSForegroundColorAttributeName,
+    NSUnderlineColorAttributeName,
+    NSTextAlignmentCenter,
+)
 from objc import super
 
 from vanilla import *
@@ -10,11 +21,18 @@ from defconAppKit.windows.baseWindow import BaseWindowController
 
 from drawBot.misc import getDefault, setDefault, getFontDefault, setFontDefault, getColorDefault, setColorDefault
 
-from .codeEditor import _textAttributesForStyle, _hexToNSColor, fallbackBackgroundColor, fallbackHightLightColor, fallbackFont, styleFromDefault, fallbackStyles
+from .codeEditor import (
+    _textAttributesForStyle,
+    _hexToNSColor,
+    fallbackBackgroundColor,
+    fallbackHightLightColor,
+    fallbackFont,
+    styleFromDefault,
+    fallbackStyles,
+)
 
 
 class ColorCell(NSActionCell):
-
     def initWithDoubleClickCallack_(self, callback):
         self = super(ColorCell, self).init()
         self._callback = callback
@@ -34,7 +52,6 @@ class ColorCell(NSActionCell):
 
 
 class PreviewTokeCell(NSActionCell):
-
     def drawWithFrame_inView_(self, frame, view):
         frame.origin.x -= 1
         frame.size.width += 2
@@ -62,15 +79,12 @@ toolTips = {
     "Text": "",
     "Error": "Color for errors, tracebacks",
     "Punctuation": "Color for puntuaction {[(,.)]}",
-
     "Keyword": "Color for Python keyword",
     "Keyword.Namespace": "Color for imported modules",
-
     "Number": "Color for a number",
     "Number.Float": "Color for a float (0.5)",
     "Number.Oct": "Color for a octonal number",
     "Number.Hex": "Color for a hexadecimal number",
-
     "Name": "Color for all sorts of names",
     "Name.Tag": "Color for tag names",
     "Name.Variable": "Color for varialble names",
@@ -83,20 +97,15 @@ toolTips = {
     "Name.Builtin.Pseudo": "Color for builtin python names (None, self, True, False, ...)",
     "Name.Exception": "Color for exceptions",
     "Name.Decorator": "Color for decorators (@<name>)",
-
-
     "Operator": "Color for operators == != <= >=",
     "Operator.Word": "Color for word operators and or not in",
-
     "Comment": "Color for comments #...",
-
     "String": "Color for a string",
     "String.Doc": "Color for a doc string",
 }
 
 
 class SyntaxColorPanelDelegate(NSObject):
-
     def __new__(cls, *args, **kwargs):
         return cls.alloc().init()
 
@@ -108,8 +117,9 @@ class SyntaxColorPanelDelegate(NSObject):
 
 
 class SyntaxColorListDelegate(NSObject):
-
-    def tableView_toolTipForCell_rect_tableColumn_row_mouseLocation_(self, tableView, cell, rect, column, row, location):
+    def tableView_toolTipForCell_rect_tableColumn_row_mouseLocation_(
+        self, tableView, cell, rect, column, row, location
+    ):
         value = None
         if column.identifier() == "tokenString":
             value = cell.objectValue().string()
@@ -117,7 +127,6 @@ class SyntaxColorListDelegate(NSObject):
 
 
 class SyntaxPopupColorPanel(NSObject):
-
     def __new__(cls, *args, **kwargs):
         return cls.alloc().init()
 
@@ -134,7 +143,6 @@ class SyntaxPopupColorPanel(NSObject):
 
 
 class ColorItem(NSObject):
-
     def __new__(cls, *args, **kwargs):
         return cls.alloc().init()
 
@@ -201,7 +209,6 @@ class ColorItem(NSObject):
 
 
 class SyntaxColors(Group):
-
     def __init__(self, posSize):
         self._initializing = True
         super(SyntaxColors, self).__init__(posSize)
@@ -226,19 +233,27 @@ class SyntaxColors(Group):
 
         columnDescriptions = [
             dict(title="Element", key="tokenString", width=170, cell=PreviewTokeCell.alloc().init()),
-            dict(title="Color", key="color", width=100, cell=ColorCell.alloc().initWithDoubleClickCallack_(self.colorDoubleClickCallback), editable=True),
+            dict(
+                title="Color",
+                key="color",
+                width=100,
+                cell=ColorCell.alloc().initWithDoubleClickCallack_(self.colorDoubleClickCallback),
+                editable=True,
+            ),
             dict(title="", key="bold", width=50, cell=CheckBoxListCell("Bold")),
             dict(title="", key="italic", width=50, cell=CheckBoxListCell("Italic")),
             dict(title="", key="underline", width=90, cell=CheckBoxListCell("Underline")),
         ]
 
-        self.tokenList = List((10, y, -10, -10), [],
-                              columnDescriptions=columnDescriptions,
-                              editCallback=self.editCallback,
-                              allowsEmptySelection=True,
-                              allowsMultipleSelection=True,
-                              drawVerticalLines=False
-                              )
+        self.tokenList = List(
+            (10, y, -10, -10),
+            [],
+            columnDescriptions=columnDescriptions,
+            editCallback=self.editCallback,
+            allowsEmptySelection=True,
+            allowsMultipleSelection=True,
+            drawVerticalLines=False,
+        )
         self.tokenList.getNSTableView().setColumnAutoresizingStyle_(NSTableViewFirstColumnOnlyAutoresizingStyle)
         self.tokenList.getNSTableView().setUsesAlternatingRowBackgroundColors_(False)
         self._delegate = SyntaxColorListDelegate.alloc().init()
@@ -276,7 +291,7 @@ class SyntaxColors(Group):
         size = font.pointSize()
         if size == int(size):
             size = int(size)
-        s = u"%s %spt" % (font.displayName(), size)
+        s = "%s %spt" % (font.displayName(), size)
         self.font.set(s)
 
     def _selectFontCallback(self, sender):
@@ -338,7 +353,6 @@ class SyntaxColors(Group):
 
 
 class PreferencesController(BaseWindowController):
-
     def __init__(self):
         self.w = Window((500, 430), miniaturizable=False, minSize=(500, 430))
 
@@ -347,11 +361,15 @@ class PreferencesController(BaseWindowController):
 
         self.w.hl1 = HorizontalLine((10, y, -10, 1))
         y += 10
-        self.w.clearOutPut = CheckBox((10, y, -10, 22), "Clear text output before running script", callback=self.setToDefaults)
+        self.w.clearOutPut = CheckBox(
+            (10, y, -10, 22), "Clear text output before running script", callback=self.setToDefaults
+        )
         y += 30
         self.w.liveOutPut = CheckBox((10, y, -10, 22), "Live update output", callback=self.setToDefaults)
         y += 30
-        self.w.shouldOpenUntitledFile = CheckBox((10, y, -10, 22), "Should Open Untitled File", callback=self.setToDefaults)
+        self.w.shouldOpenUntitledFile = CheckBox(
+            (10, y, -10, 22), "Should Open Untitled File", callback=self.setToDefaults
+        )
         y += 30
         self.w.showToolbar = CheckBox((10, y, -10, 22), "Add Toolbar", callback=self.setToDefaults)
         y += 30
@@ -386,13 +404,19 @@ class PreferencesController(BaseWindowController):
 
     def checkNowCallback(self, sender):
         from drawBot.updater import Updater
+
         oldValue = getDefault("DrawBotCheckForUpdatesAtStartup", True)
         setDefault("DrawBotCheckForUpdatesAtStartup", True)
         updater = Updater(self.w)
         if updater.currentVersionErrors:
-            self.showMessage("Cannot retrieve the version number from the DrawBot repository.", "\n".join(updater.currentVersionErrors))
+            self.showMessage(
+                "Cannot retrieve the version number from the DrawBot repository.",
+                "\n".join(updater.currentVersionErrors),
+            )
         elif not updater.needsUpdate:
-            self.showMessage("You have the latest version!", "DrawBot %s is currently the newest version" % updater.__version__)
+            self.showMessage(
+                "You have the latest version!", "DrawBot %s is currently the newest version" % updater.__version__
+            )
         setDefault("DrawBotCheckForUpdatesAtStartup", oldValue)
 
     def show(self):
@@ -401,4 +425,5 @@ class PreferencesController(BaseWindowController):
 
 if __name__ == "__main__":
     from vanilla.test.testTools import executeVanillaTest
+
     executeVanillaTest(PreferencesController)

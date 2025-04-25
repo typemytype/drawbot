@@ -1,4 +1,5 @@
 import drawBot
+
 drawBot.size(500, 500)
 imagePath = "../data/drawBot.jpg"
 w, h = drawBot.imageSize(imagePath)

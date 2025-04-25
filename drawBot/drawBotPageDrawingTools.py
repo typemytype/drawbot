@@ -2,7 +2,6 @@ from .drawBotDrawingTools import _drawBotDrawingTool, DrawBotDrawingTool
 
 
 class DummyDrawBotDrawingTool(DrawBotDrawingTool):
-
     def __init__(self, instructionSet):
         super(DummyDrawBotDrawingTool, self).__init__()
         # add the instruction set
@@ -18,7 +17,6 @@ class DummyDrawBotDrawingTool(DrawBotDrawingTool):
 
 
 class DrawBotPage:
-
     def __init__(self, instructionSet):
         self._instructionSet = instructionSet
 

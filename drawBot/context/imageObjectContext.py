@@ -1,17 +1,20 @@
 import io
-import AppKit
+
+import AppKit  # type: ignore
+
 try:
     from PIL import Image
+
     hasPIL = True
 except ImportError:
     hasPIL = False
 
-from .imageContext import ImageContext
 from drawBot.misc import DrawBotError
+
+from .imageContext import ImageContext
 
 
 class BaseImageObjectContext(ImageContext):
-
     def _writeDataToFile(self, data, path, options):
         self._imageObjects = []
         # we just need a path with a file extension
@@ -32,7 +35,6 @@ class BaseImageObjectContext(ImageContext):
 
 
 class PILContext(BaseImageObjectContext):
-
     fileExtensions = ["PIL"]
 
     def __init__(self):
@@ -46,7 +48,6 @@ class PILContext(BaseImageObjectContext):
 
 
 class NSImageContext(BaseImageObjectContext):
-
     fileExtensions = ["NSImage"]
 
     def _getObjectForData(self, data):

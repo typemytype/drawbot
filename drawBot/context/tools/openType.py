@@ -1,13 +1,14 @@
 import os
-import AppKit
-import CoreText
 
-from fontTools.ttLib import TTFont
-from fontTools.ttLib.ttCollection import TTCollection
+import AppKit  # type: ignore
+import CoreText
 from fontTools.misc.macCreatorType import getMacCreatorAndType
 from fontTools.misc.macRes import ResourceReader
+from fontTools.ttLib import TTFont
+from fontTools.ttLib.ttCollection import TTCollection
 
 from drawBot.misc import memoize
+
 from . import SFNTLayoutTypes
 
 
@@ -63,7 +64,9 @@ def getFeatureTagsForFont(font):
     if "feat" in ft:
         for featureName in ft["feat"].table.FeatureNames.FeatureName:
             for featureSetting in featureName.Settings.Setting:
-                featureTag = SFNTLayoutTypes.reversedFeatureMap.get((featureName.FeatureType, featureSetting.SettingValue))
+                featureTag = SFNTLayoutTypes.reversedFeatureMap.get(
+                    (featureName.FeatureType, featureSetting.SettingValue)
+                )
                 if featureTag:
                     featureTag = featureTag.replace("_off", "")
                     featureTags.add(featureTag)

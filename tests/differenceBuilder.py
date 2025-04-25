@@ -1,21 +1,24 @@
 import os
-from PIL import Image, ImageChops
+import sys
 import tempfile
 
+from PIL import Image, ImageChops
 from testSupport import compareImages, testDataDir
 
 import drawBot
-import sys
 
 if len(sys.argv) == 3:
     root = sys.argv[1]
     dest = sys.argv[2]
 else:
-    from vanilla import dialogs
+    from vanilla import dialogs  # type: ignore
+
     root = dialogs.getFolder()[0]
     dest = dialogs.putFile(["pdf"])
 
-tests = [os.path.join(root, filename) for filename in os.listdir(root) if os.path.splitext(filename)[-1].lower() == ".png"]
+tests = [
+    os.path.join(root, filename) for filename in os.listdir(root) if os.path.splitext(filename)[-1].lower() == ".png"
+]
 
 drawBot.newDrawing()
 for path in tests:
@@ -53,7 +56,7 @@ for path in tests:
     with tempfile.NamedTemporaryFile("wb", suffix=".png") as f:
         diff.save(f, "png")
         imDiff = drawBot.ImageObject(f.name)
-        drawBot.image(imDiff, (w*2, 0))
+        drawBot.image(imDiff, (w * 2, 0))
 
     hist = diff.histogram()
 
@@ -72,10 +75,10 @@ for path in tests:
     alphaPath.moveTo((0, 0))
     for i in range(256):
         x = w * (i / 255)
-        redPath.lineTo((x, h * (reds[i]/255)))
-        greenPath.lineTo((x, h * (greens[i]/255)))
-        bluePath.lineTo((x, h * (blues[i]/255)))
-        alphaPath.lineTo((x, h * (alphas[i]/255)))
+        redPath.lineTo((x, h * (reds[i] / 255)))
+        greenPath.lineTo((x, h * (greens[i] / 255)))
+        bluePath.lineTo((x, h * (blues[i] / 255)))
+        alphaPath.lineTo((x, h * (alphas[i] / 255)))
 
     redPath.lineTo((w, 0))
     greenPath.lineTo((w, 0))
@@ -87,8 +90,8 @@ for path in tests:
     bluePath.closePath()
     alphaPath.closePath()
 
-    drawBot.translate(w*3, 0)
-    drawBot.scale(.25, 1)
+    drawBot.translate(w * 3, 0)
+    drawBot.scale(0.25, 1)
     drawBot.fill(1, 0, 0)
     drawBot.drawPath(redPath)
 

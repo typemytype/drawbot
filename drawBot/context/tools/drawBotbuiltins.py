@@ -1,4 +1,3 @@
-
 def norm(value: float, start: float, stop: float) -> float:
     """
     Return the interpolation factor (between 0 and 1) of a `value` between `start` and `stop`.

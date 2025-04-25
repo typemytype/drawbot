@@ -1,4 +1,5 @@
 import drawBot
+
 drawBot.size(200, 200)
 drawBot.text("hello world", (10, 10))
 drawBot.fill(1, 0, 0)
@@ -15,8 +16,8 @@ drawBot.line((0, 50), (drawBot.width(), 50))
 drawBot.stroke(None)
 drawBot.fill(0, 1, 1)
 drawBot.fontSize(20)
-drawBot.text("foo bar", (drawBot.width()*.5, 100), align="right")
-drawBot.text("foo bar", (drawBot.width()*.5, 120), align="center")
-drawBot.text("foo bar", (drawBot.width()*.5, 140), align="left")
+drawBot.text("foo bar", (drawBot.width() * 0.5, 100), align="right")
+drawBot.text("foo bar", (drawBot.width() * 0.5, 120), align="center")
+drawBot.text("foo bar", (drawBot.width() * 0.5, 140), align="left")
 # test empty text https://github.com/typemytype/drawbot/issues/389
 drawBot.text("", (0, 0))

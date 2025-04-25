@@ -1,30 +1,26 @@
-import AppKit
 import asyncio
-from corefoundationasyncio import CoreFoundationEventLoop
-
-import sys
 import os
-import site
 import random
+import site
+import sys
 
+import AppKit  # type: ignore
+import objc
+from corefoundationasyncio import CoreFoundationEventLoop
+from objc import super
 from vanilla.dialogs import message
 
-from drawBot.ui.drawBotController import DrawBotController
-from drawBot.ui.preferencesController import PreferencesController
-from drawBot.ui.debug import DebugWindowController
-from drawBot.scriptTools import retrieveCheckEventQueueForUserCancelFromCarbon
-
-from drawBot.ui.drawBotPackageController import DrawBotPackageController
-from drawBot.misc import getDefault, stringToInt
-from drawBot.updater import Updater
 from drawBot.drawBotPackage import DrawBotPackage
-
-import objc
-from objc import super
+from drawBot.misc import getDefault, stringToInt
+from drawBot.scriptTools import retrieveCheckEventQueueForUserCancelFromCarbon
+from drawBot.ui.debug import DebugWindowController
+from drawBot.ui.drawBotController import DrawBotController
+from drawBot.ui.drawBotPackageController import DrawBotPackageController
+from drawBot.ui.preferencesController import PreferencesController
+from drawBot.updater import Updater
 
 
 class DrawBotDocument(AppKit.NSDocument):
-
     def readFromFile_ofType_(self, path, tp):
         return True, None
 
@@ -85,6 +81,7 @@ class DrawBotDocument(AppKit.NSDocument):
 
         modDate = self.getModificationDate()
         if modDate > self._modDate:
+
             def _update(value):
                 if value:
                     self.vanillaWindowController.setPath(path)
@@ -109,11 +106,12 @@ class DrawBotDocument(AppKit.NSDocument):
 
 
 class DrawBotAppDelegate(AppKit.NSObject):
-
     def init(self):
         self = super(DrawBotAppDelegate, self).init()
         code = stringToInt(b"GURL")
-        AppKit.NSAppleEventManager.sharedAppleEventManager().setEventHandler_andSelector_forEventClass_andEventID_(self, "getUrl:withReplyEvent:", code, code)
+        AppKit.NSAppleEventManager.sharedAppleEventManager().setEventHandler_andSelector_forEventClass_andEventID_(
+            self, "getUrl:withReplyEvent:", code, code
+        )
         return self
 
     def applicationDidFinishLaunching_(self, notification):
@@ -122,6 +120,7 @@ class DrawBotAppDelegate(AppKit.NSObject):
         Updater()
         if sys.argv[1:]:
             import re
+
             pat = re.compile("--testScript=(.*)")
             for arg in sys.argv[1:]:
                 m = pat.match(arg)
@@ -133,6 +132,7 @@ class DrawBotAppDelegate(AppKit.NSObject):
 
     def _runTestScript_(self, testScript):
         import traceback
+
         assert os.path.exists(testScript), "%r cannot be found" % testScript
         with open(testScript) as f:
             source = f.read()
@@ -152,7 +152,9 @@ class DrawBotAppDelegate(AppKit.NSObject):
 
     def sheduleIconTimer(self):
         if getDefault("DrawBotAnimateIcon", False):
-            self._iconTimer = AppKit.NSTimer.scheduledTimerWithTimeInterval_target_selector_userInfo_repeats_(0.1, self, "animateApplicationIcon:", None, False)
+            self._iconTimer = AppKit.NSTimer.scheduledTimerWithTimeInterval_target_selector_userInfo_repeats_(
+                0.1, self, "animateApplicationIcon:", None, False
+            )
 
     _iconCounter = 0
     _iconHand = random.choice(["left", "right"])
@@ -190,15 +192,17 @@ class DrawBotAppDelegate(AppKit.NSObject):
             self.pipInstallerController.show()
         else:
             from drawBot.pipInstaller import PipInstallerController
+
             self.pipInstallerController = PipInstallerController(_getPIPTargetPath())
 
     def buildPackage_(self, sender):
         DrawBotPackageController()
 
     def getUrl_withReplyEvent_(self, event, reply):
-        from urllib.parse import urlparse
-        from urllib.request import urlopen, Request
         import ssl
+        from urllib.parse import urlparse
+        from urllib.request import Request, urlopen
+
         code = stringToInt(b"----")
         url = event.paramDescriptorForKeyword_(code)
         urlString = url.stringValue()
@@ -209,7 +213,7 @@ class DrawBotAppDelegate(AppKit.NSObject):
             # in the cloudzzz
             pythonPath = "https://%s%s" % (data.netloc, data.path)
             context = ssl._create_unverified_context()
-            request = Request(pythonPath, headers={'User-Agent': 'Drawbot'})
+            request = Request(pythonPath, headers={"User-Agent": "Drawbot"})
             response = urlopen(request, timeout=5, context=context)
             code = response.read()
             response.close()
@@ -234,11 +238,12 @@ class DrawBotAppDelegate(AppKit.NSObject):
         domain = data.netloc
         if not domain:
             domain = "Local"
-        document.vanillaWindowController.showAskYesNo("Download External Script",
+        document.vanillaWindowController.showAskYesNo(
+            "Download External Script",
             "You opened '%s' from '%s'.\n\n"
             "Read the code before running it so you know what it will do. If you don't understand it, don't run it.\n\n"
             "Do you want to open this Script?" % (fileName, domain),
-            result
+            result,
         )
 
     def application_openFile_(self, app, path):
@@ -254,8 +259,8 @@ class DrawBotAppDelegate(AppKit.NSObject):
 
 def _getPIPTargetPath():
     appSupportPath = AppKit.NSSearchPathForDirectoriesInDomains(
-        AppKit.NSApplicationSupportDirectory,
-        AppKit.NSUserDomainMask, True)[0]
+        AppKit.NSApplicationSupportDirectory, AppKit.NSUserDomainMask, True
+    )[0]
     version = f"{sys.version_info.major}.{sys.version_info.minor}"
     return os.path.join(appSupportPath, f"DrawBot/Python{version}")
 
@@ -264,8 +269,8 @@ def _addLocalSysPaths():
     version = f"{sys.version_info.major}.{sys.version_info.minor}"
     paths = [
         _getPIPTargetPath(),
-        f'/Library/Python/{version}/site-packages',
-        f'/Library/Frameworks/Python.framework/Versions/{version}/lib/python{version}/site-packages/',
+        f"/Library/Python/{version}/site-packages",
+        f"/Library/Frameworks/Python.framework/Versions/{version}/lib/python{version}/site-packages/",
     ]
     for path in paths:
         if path not in sys.path and os.path.exists(path):

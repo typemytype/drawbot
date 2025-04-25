@@ -1,13 +1,13 @@
-import sys
 import os
+import sys
 import unittest
 
-from testSupport import StdOutCollector, TempFolder, TempFile
+from testSupport import StdOutCollector, TempFile, TempFolder
+
 from drawBot.drawBotPackage import DrawBotPackage
 
 
 class PackageTest(unittest.TestCase):
-
     def test_buildPackage(self):
         package = DrawBotPackage()
         package.info.name = "demo"
@@ -61,7 +61,7 @@ class PackageTest(unittest.TestCase):
         with StdOutCollector() as output:
             succes, _ = package.run()
 
-        self.assertEqual(output.lines(), ['hello world'])
+        self.assertEqual(output.lines(), ["hello world"])
 
     def test_missingMainScript(self):
         path = os.path.join(os.path.dirname(__file__), "package/missingMainScript.drawbot")
@@ -71,5 +71,5 @@ class PackageTest(unittest.TestCase):
         self.assertTrue(message.startswith("Cannot find"))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     sys.exit(unittest.main())

@@ -1,4 +1,16 @@
-def roundedRect(x, y, w, h, radius, radiusBottomRight=None, radiusTopRight=None, radiusTopLeft=None):
+import drawBot as db
+
+
+def roundedRect(
+    x: float,
+    y: float,
+    w: float,
+    h: float,
+    radius: float,
+    radiusBottomRight: float | None = None,
+    radiusTopRight: float | None = None,
+    radiusTopLeft: float | None = None,
+):
     """
     Draw a rounded rect from position `x`, `y` with given width and height and given `radius`.
 
@@ -21,23 +33,24 @@ def roundedRect(x, y, w, h, radius, radiusBottomRight=None, radiusTopRight=None,
     if radiusTopLeft is None and radiusTopRight is None and radiusBottomRight is None:
         radiusTopLeft = radiusTopRight = radiusBottomRight = radius
 
+    assert radius and radiusBottomRight and radiusTopRight and radiusTopLeft
     if radiusBottomLeft + radiusBottomRight > w:
-        diff = (radiusBottomLeft + radiusBottomRight - w) * .5
+        diff = (radiusBottomLeft + radiusBottomRight - w) * 0.5
         radiusBottomLeft -= diff
         radiusBottomRight -= diff
     if radiusTopLeft + radiusTopRight > w:
-        diff = (radiusTopLeft + radiusTopRight - w) * .5
+        diff = (radiusTopLeft + radiusTopRight - w) * 0.5
         radiusTopLeft -= diff
         radiusTopRight -= diff
     if radiusBottomLeft + radiusTopLeft > h:
-        diff = (radiusBottomLeft + radiusTopLeft - h) * .5
+        diff = (radiusBottomLeft + radiusTopLeft - h) * 0.5
         radiusBottomLeft -= diff
         radiusTopLeft -= diff
     if radiusBottomRight + radiusTopRight > h:
-        diff = (radiusBottomRight + radiusTopRight - h) * .5
+        diff = (radiusBottomRight + radiusTopRight - h) * 0.5
         radiusBottomRight -= diff
         radiusTopRight -= diff
-    
+
     minValue = min(w, h)
 
     if radiusBottomRight < 0:
@@ -59,18 +72,20 @@ def roundedRect(x, y, w, h, radius, radiusBottomRight=None, radiusTopRight=None,
         radiusTopLeft = minValue
 
     # start drawing
-    path = BezierPath()
+    path = db.BezierPath()
     path.moveTo((x + radiusBottomLeft, y))
     path.lineTo((x + w - radiusBottomRight, y))
     path.arcTo((x + w, y), (x + w, y + radiusBottomRight), radiusBottomRight)
     path.lineTo((x + w, y + h - radiusTopRight))
     path.arcTo((x + w, y + h), (x + w - radiusTopRight, y + h), radiusTopRight)
     path.lineTo((x + radiusTopLeft, y + h))
-    path.arcTo((x, y + h),  (x, y + h - radiusTopLeft), radiusTopLeft)
+    path.arcTo((x, y + h), (x, y + h - radiusTopLeft), radiusTopLeft)
     path.lineTo((x, y + radiusBottomLeft))
     path.arcTo((x, y), (x + radiusBottomLeft, y), radiusBottomLeft)
     path.closePath()
-    drawPath(path)
+    db.drawPath(path)
 
-# draw a rounded rect
-roundedRect(10, 10, 100, 100, 20, 20, 70, 90)
+
+if __name__ == "__main__":
+    # draw a rounded rect
+    roundedRect(10, 10, 100, 100, 20, 20, 70, 90)

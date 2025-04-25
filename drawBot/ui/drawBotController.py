@@ -1,20 +1,18 @@
-import AppKit
-from vanilla import *
+import AppKit  # type: ignore
 from defconAppKit.windows.baseWindow import BaseWindowController
+from vanilla import Window
+
+from drawBot.context.drawBotContext import DrawBotContext
+from drawBot.drawBotDrawingTools import _drawBotDrawingTool
+from drawBot.misc import getDefault, setDefault, warnings
+from drawBot.scriptTools import CallbackRunner, ScriptRunner, StdOutput
 
 from .codeEditor import CodeEditor, OutPutEditor
 from .drawView import DrawView, ThumbnailView
-
-from drawBot.scriptTools import ScriptRunner, CallbackRunner, StdOutput
-from drawBot.drawBotDrawingTools import _drawBotDrawingTool
-from drawBot.context.drawBotContext import DrawBotContext
-from drawBot.misc import getDefault, setDefault, warnings
-
 from .splitView import SplitView
 
 
 class DrawBotController(BaseWindowController):
-
     """
     The controller for a DrawBot window.
     """
@@ -29,7 +27,7 @@ class DrawBotController(BaseWindowController):
         try:
             # on 10.7+ full screen support
             self.w.getNSWindow().setCollectionBehavior_(128)  # NSWindowCollectionBehaviorFullScreenPrimary
-        except:
+        except Exception:
             pass
 
         # the code editor
@@ -65,8 +63,8 @@ class DrawBotController(BaseWindowController):
         windowX, windowY, windowWidth, windowHeight = self.w.getPosSize()
         # set the split view dividers at a specific position based on the window size
         self.w.split.setDividerPosition(0, 0)
-        self.w.split.setDividerPosition(1, windowWidth * .6)
-        self.codeSplit.setDividerPosition(0, windowHeight * .7)
+        self.w.split.setDividerPosition(1, windowWidth * 0.6)
+        self.codeSplit.setDividerPosition(0, windowHeight * 0.7)
 
         if getDefault("DrawBotAddToolbar", True):
             # add toolbar
@@ -112,9 +110,11 @@ class DrawBotController(BaseWindowController):
         warnings.shouldShowWarnings = False
         # set context, only when the panes are visible
         if self.w.split.isPaneVisible("drawView") or self.w.split.isPaneVisible("thumbnails"):
+
             def createContext(context):
                 # draw the tool in to the context
                 _drawBotDrawingTool._drawInContext(context)
+
             # create a context to draw in
             context = DrawBotContext()
             # savely run the callback and track all traceback back the output
@@ -168,14 +168,16 @@ class DrawBotController(BaseWindowController):
         self.stderr = None
 
     def formatCode(self, sender=None):
-        import black
+        import ruff_api
+
         # get the code
         code = self.code()
-        # format the code with black
+        # format the code with ruff
         try:
-            formattedCode = black.format_str(code, mode=black.Mode())
-        except black.InvalidInput:
+            formattedCode = ruff_api.format_string("foo.py", code)
+        except Exception:
             return
+
         # set it back in the text view
         textView = self.codeView.getNSTextView()
         # store current selection by line range

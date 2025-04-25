@@ -1,11 +1,10 @@
-import AppKit
+import AppKit  # type: ignore
 from fontTools.pens.basePen import AbstractPen
 
 from .baseContext import BaseContext
 
 
 class StringPen(AbstractPen):
-
     def __init__(self, seperator=None):
         self.data = []
         if seperator is None:
@@ -37,7 +36,6 @@ class StringPen(AbstractPen):
 
 
 class PrintContext(BaseContext):
-
     fileExtensions = ["*"]
     validateSaveImageOptions = False
 

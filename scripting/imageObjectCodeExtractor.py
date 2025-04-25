@@ -1,13 +1,16 @@
 from pathlib import Path
 
-import AppKit # type: ignore
-import Quartz # type: ignore
+import AppKit  # type: ignore
+import Quartz
+import ruff_api
+
+from drawBot.misc import ruff_options  # type: ignore
 
 IMAGE_OBJECT_PATH = Path(__file__).parent.parent / "drawBot/context/tools/imageObject.py"
 UNIT_TESTS_PATH = Path(__file__).parent.parent / "tests/testImageObject.py"
 
-class CodeWriter:
 
+class CodeWriter:
     def __init__(self, INDENT="    "):
         self.code = []
         self.INDENT = INDENT
@@ -48,11 +51,10 @@ class CodeWriter:
             self.add(line)
 
     def get(self, indentLevel=0):
-        return self.INDENT*indentLevel + f"\n{self.INDENT*indentLevel}".join(self.code)
+        return self.INDENT * indentLevel + f"\n{self.INDENT * indentLevel}".join(self.code)
 
 
 class UnitTestWriter(CodeWriter):
-
     def header(self):
         self.add("import unittest")
         self.add("import sys")
@@ -276,7 +278,7 @@ toCopy = {
         "blueCoefficients",
         "alphaCoefficients",
         "biasVector",
-        "focusRect"
+        "focusRect",
     ),
     "color": (
         "replacementColor3",
@@ -352,17 +354,13 @@ excludeFilterNames = [
     "CIColorCubesMixedWithMask",
     "CIColorCurves",
     "CIAffineTransform",
-
     # use drawBot to draw text/formattedStrings into an image
     "CITextImageGenerator",
     "CIAttributedTextImageGenerator",
-
     # no idea what inputCalibrationData or inputAuxDataMetadata is
     "CIDepthBlurEffect",
-
     # no idea what inputModel should be
     "CICoreMLModelFilter",
-
     # make an issue for a very good reason why DrawBot needs these filters!
     "CIConvolution3X3",
     "CIConvolution5X5",
@@ -376,13 +374,10 @@ excludeFilterNames = [
     "CIConvolutionRGB3X3",
     "CIAreaAlphaWeightedHistogram",
     "CIAreaBoundsRed",
-
     "CIDistanceGradientFromRedMask",  # macos15+
     "CIMaximumScaleTransform",  # macos15+
     "CIToneCurve",  # macos15+
-    "CIToneMapHeadroom"  # macos15+
-
-
+    "CIToneMapHeadroom",  # macos15+
 ]
 
 degreesAngleFilterNames = ["CIVortexDistortion"]
@@ -419,18 +414,10 @@ def generateImageObjectCode() -> tuple[str, str]:
         unitTestsArgs = []
         inputCode = CodeWriter()
 
-        inputKeys = [
-            inputKey
-            for inputKey in ciFilter.inputKeys()
-            if inputKey not in ignoreInputKeys
-        ]
+        inputKeys = [inputKey for inputKey in ciFilter.inputKeys() if inputKey not in ignoreInputKeys]
         # this sorts the arguments by setting the ones without default first to avoid a syntax error
         # in the python code generated automatically
-        inputKeys.sort(
-            key=lambda x: bool(
-                ciFilterAttributes.get(x, dict()).get("CIAttributeDefault") is not None
-            )
-        )
+        inputKeys.sort(key=lambda x: bool(ciFilterAttributes.get(x, dict()).get("CIAttributeDefault") is not None))
 
         attributes = dict()
 
@@ -471,9 +458,7 @@ def generateImageObjectCode() -> tuple[str, str]:
                             default = default.X(), default.Y(), default.Z(), default.W()
                             arg += ": BoundingBox"
                         else:
-                            default = tuple(
-                                default.valueAtIndex_(i) for i in range(default.count())
-                            )
+                            default = tuple(default.valueAtIndex_(i) for i in range(default.count()))
                             arg += ": tuple"
 
                     elif isinstance(default, bool):
@@ -504,12 +489,14 @@ def generateImageObjectCode() -> tuple[str, str]:
                         default = None
                         arg += ": bytes | None"
 
-                    elif isinstance(default, type(Quartz.CGColorSpaceCreateDeviceCMYK())): # type: ignore
+                    elif isinstance(default, type(Quartz.CGColorSpaceCreateDeviceCMYK())):  # type: ignore
                         default = None
 
                     else:
                         print(filterName, ciFilterAttributes)
-                        raise ValueError(f"We can't parse this default class of `{inputKey}`: {defaultClass}, {default}, {type(default)}")
+                        raise ValueError(
+                            f"We can't parse this default class of `{inputKey}`: {defaultClass}, {default}, {type(default)}"
+                        )
 
                     arg += f" = {default}"
 
@@ -539,10 +526,7 @@ def generateImageObjectCode() -> tuple[str, str]:
                 unitTestsArgs.append(f"{inputKey}={value}")
 
         drawBotFilterName = camelCase(filterName[2:])
-        code.add(
-            f"def {drawBotFilterName}"
-            + (f"(self, {', '.join(args)}):" if args else f"(self):")
-        )
+        code.add(f"def {drawBotFilterName}" + (f"(self, {', '.join(args)}):" if args else f"(self):"))
         code.indent()
         code.add('"""')
         code.appendCode(doc)
@@ -583,7 +567,11 @@ def generateImageObjectCode() -> tuple[str, str]:
     unitTests.footer()
     unitTestsCode = unitTests.get()
 
-    return imageObjectCode, unitTestsCode
+    options = ruff_options()
+    linted_code = ruff_api.format_string("imageObject.py", imageObjectCode, options)
+    linted_unit_tests = ruff_api.format_string("testImageObject.py", unitTestsCode, options)
+    return linted_code, linted_unit_tests
+
 
 if __name__ == "__main__":
     imageObjectCode, unitTestsCode = generateImageObjectCode()

@@ -8,7 +8,6 @@ from drawBot.drawBotPackage import DrawBotPackage
 
 
 class DrawBotPackageController(BaseWindowController):
-
     packageInfo = [
         "name",
         "version",
@@ -38,9 +37,13 @@ class DrawBotPackageController(BaseWindowController):
         self.w.h1 = vanilla.HorizontalLine((0, y, 0, 1))
         y += 10
         self.w.scriptRoot_text = vanilla.TextBox((10, y, m - 15, 22), "Script Root:", alignment="right")
-        self.w.scriptRoot = vanilla.PathControl((m, y - 2, -10, 22), None, pathStyle="popUp", callback=self.scriptRootCallback)
+        self.w.scriptRoot = vanilla.PathControl(
+            (m, y - 2, -10, 22), None, pathStyle="popUp", callback=self.scriptRootCallback
+        )
         y += 25
-        self.w.scriptRoot_note = vanilla.TextBox((m, y, -10, 22), "A folder containing all required python files.", sizeStyle="mini")
+        self.w.scriptRoot_note = vanilla.TextBox(
+            (m, y, -10, 22), "A folder containing all required python files.", sizeStyle="mini"
+        )
 
         self.w.buildButton = vanilla.Button((-120, -30, -10, 22), "Build", callback=self.buildCallback)
         self.w.open()

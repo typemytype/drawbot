@@ -1,39 +1,49 @@
-from typing import Any
-import AppKit # type: ignore
-import CoreText # type: ignore
-import Quartz # type: ignore
 import math
 import os
 import random
 from collections import namedtuple
 from contextlib import contextmanager
+from typing import Any
 
-from .context import getContextForFileExt, getFileExtensions, getContextOptionsDocs
-from .context.baseContext import (
-    makeTextBoxes,
-    getNSFontFromNameOrPath,
-    getFontName,
-)
-from .context.baseContext import FormattedString, BezierPath
-from .context.dummyContext import DummyContext
+import AppKit  # type: ignore
+import CoreText  # type: ignore
+import Quartz  # type: ignore
 
-from .context.tools.imageObject import ImageObject
-from .context.tools import gifTools
-from .context.tools import drawBotbuiltins
-
-from .misc import DrawBotError, warnings, VariableController, optimizePath, isPDF, isEPS, isGIF, transformationAtCenter, clearMemoizeCache
 from .aliases import (
-    Point,
-    Size,
-    SomePath,
+    BoundingBox,
     CMYKColor,
     CMYKColorTuple,
+    Point,
+    RGBAColorTuple,
     RGBColor,
     RGBColorTuple,
-    RGBAColorTuple,
-    BoundingBox,
+    Size,
+    SomePath,
     TransformTuple,
 )
+from .context import getContextForFileExt, getContextOptionsDocs, getFileExtensions
+from .context.baseContext import (
+    BezierPath,
+    FormattedString,
+    getFontName,
+    getNSFontFromNameOrPath,
+    makeTextBoxes,
+)
+from .context.dummyContext import DummyContext
+from .context.tools import drawBotbuiltins, gifTools
+from .context.tools.imageObject import ImageObject
+from .misc import (
+    DrawBotError,
+    VariableController,
+    clearMemoizeCache,
+    isEPS,
+    isGIF,
+    isPDF,
+    optimizePath,
+    transformationAtCenter,
+    warnings,
+)
+
 
 def _getmodulecontents(module, names=None):
     d = {}
@@ -45,25 +55,25 @@ def _getmodulecontents(module, names=None):
 
 
 _paperSizes = {
-    'Letter'      : (612, 792),
-    'LetterSmall' : (612, 792),
-    'Tabloid'     : (792, 1224),
-    'Ledger'      : (1224, 792),
-    'Legal'       : (612, 1008),
-    'Statement'   : (396, 612),
-    'Executive'   : (540, 720),
-    'A0'          : (2384, 3371),
-    'A1'          : (1685, 2384),
-    'A2'          : (1190, 1684),
-    'A3'          : (842, 1190),
-    'A4'          : (595, 842),
-    'A4Small'     : (595, 842),
-    'A5'          : (420, 595),
-    'B4'          : (729, 1032),
-    'B5'          : (516, 729),
-    'Folio'       : (612, 936),
-    'Quarto'      : (610, 780),
-    '10x14'       : (720, 1008),
+    "Letter": (612, 792),
+    "LetterSmall": (612, 792),
+    "Tabloid": (792, 1224),
+    "Ledger": (1224, 792),
+    "Legal": (612, 1008),
+    "Statement": (396, 612),
+    "Executive": (540, 720),
+    "A0": (2384, 3371),
+    "A1": (1685, 2384),
+    "A2": (1190, 1684),
+    "A3": (842, 1190),
+    "A4": (595, 842),
+    "A4Small": (595, 842),
+    "A5": (420, 595),
+    "B4": (729, 1032),
+    "B5": (516, 729),
+    "Folio": (612, 936),
+    "Quarto": (610, 780),
+    "10x14": (720, 1008),
 }
 
 for key, (w, h) in list(_paperSizes.items()):
@@ -83,6 +93,7 @@ class DrawBotDrawingTool:
     def _get_version(self):
         try:
             from drawBot import drawBotSettings
+
             return drawBotSettings.__version__
         except Exception:
             pass
@@ -288,7 +299,7 @@ class DrawBotDrawingTool:
         else:
             raise DrawBotError("Can't use 'size()' after drawing has begun. Try to move it to the top of your script.")
 
-    def newPage(self, width: str  | float | None = None, height: float | None = None):
+    def newPage(self, width: str | float | None = None, height: float | None = None):
         """
         Create a new canvas to draw in.
         This will act like a page in a pdf or a frame in a mov.
@@ -370,6 +381,7 @@ class DrawBotDrawingTool:
                     oval(110, 10, 30, 30)
         """
         from .drawBotPageDrawingTools import DrawBotPage
+
         instructions = []
         for instructionSet in self._instructionsStack:
             for callback, _, _ in instructionSet:
@@ -423,7 +435,10 @@ class DrawBotDrawingTool:
 
         """
         if not isinstance(path, (str, os.PathLike)):
-            raise TypeError("Cannot apply saveImage options to multiple output formats, expected 'str' or 'os.PathLike', got '%s'" % type(path).__name__)
+            raise TypeError(
+                "Cannot apply saveImage options to multiple output formats, expected 'str' or 'os.PathLike', got '%s'"
+                % type(path).__name__
+            )
         # args are not supported anymore
         if args:
             if len(args) == 1:
@@ -449,14 +464,16 @@ class DrawBotDrawingTool:
             allowedSaveImageOptions = set(optionName for optionName, optionDoc in context.saveImageOptions)
             for optionName in options:
                 if optionName not in allowedSaveImageOptions:
-                    warnings.warn("Unrecognized saveImage() option found for %s: %s" % (context.__class__.__name__, optionName))
+                    warnings.warn(
+                        "Unrecognized saveImage() option found for %s: %s" % (context.__class__.__name__, optionName)
+                    )
         self._drawInContext(context)
         return context.saveImage(path, options)
 
     # filling docs with content from all possible and installed contexts
-    saveImage.__doc__ = saveImage.__doc__ % dict( # type: ignore
+    saveImage.__doc__ = saveImage.__doc__ % dict(  # type: ignore
         supportedExtensions="`%s`" % "`, `".join(getFileExtensions()),
-        supportedOptions="\n        ".join(getContextOptionsDocs())
+        supportedOptions="\n        ".join(getContextOptionsDocs()),
     )
 
     def printImage(self, pdf=None):
@@ -486,6 +503,7 @@ class DrawBotDrawingTool:
         Return the image as a pdf document object.
         """
         from .context.drawBotContext import DrawBotContext
+
         context = DrawBotContext()
         self._drawInContext(context)
         return context.getNSPDFDocument()
@@ -1644,7 +1662,10 @@ class DrawBotDrawingTool:
         List all available languages as dictionary mapped to a readable language/dialect name.
         """
         loc = AppKit.NSLocale.currentLocale()
-        return {tag: loc.displayNameForKey_value_(AppKit.NSLocaleIdentifier, tag) for tag in AppKit.NSLocale.availableLocaleIdentifiers()}
+        return {
+            tag: loc.displayNameForKey_value_(AppKit.NSLocaleIdentifier, tag)
+            for tag in AppKit.NSLocale.availableLocaleIdentifiers()
+        }
 
     def _checkLanguageHyphenation(self):
         language = self._dummyContext._state.text._language
@@ -1802,7 +1823,9 @@ class DrawBotDrawingTool:
         if align not in ("left", "center", "right", None):
             raise DrawBotError("align must be left, right, center")
         attributedString = self._dummyContext.attributedString(txt, align=align)
-        for subTxt, box in makeTextBoxes(attributedString, (x, y), align=align, plainText=not isinstance(txt, FormattedString)):
+        for subTxt, box in makeTextBoxes(
+            attributedString, (x, y), align=align, plainText=not isinstance(txt, FormattedString)
+        ):
             if isinstance(txt, FormattedString):
                 subTxt.copyContextProperties(txt)
             self.textBox(subTxt, box, align=align)
@@ -2002,7 +2025,7 @@ class DrawBotDrawingTool:
         if not isinstance(txt, (str, FormattedString)):
             raise TypeError("expected 'str' or 'FormattedString', got '%s'" % type(txt).__name__)
 
-        CharactersBounds = namedtuple('CharactersBounds', ['bounds', 'baselineOffset', 'formattedSubString'])
+        CharactersBounds = namedtuple("CharactersBounds", ["bounds", "baselineOffset", "formattedSubString"])
 
         bounds = list()
         path, (x, y) = self._dummyContext._getPathForFrameSetter(box)
@@ -2018,17 +2041,19 @@ class DrawBotDrawingTool:
                 runRange = CoreText.CTRunGetStringRange(ctRun)
                 runPos = CoreText.CTRunGetPositions(ctRun, (0, 1), None)[0]
                 runW, runH, ascent, descent = CoreText.CTRunGetTypographicBounds(ctRun, (0, 0), None, None, None)
-                bounds.append(CharactersBounds(
-                    (x + originX + runPos.x, y + originY + runPos.y - ascent, runW, runH + ascent),
-                    ascent,
-                    txt[runRange.location: runRange.location + runRange.length]
-                ))
+                bounds.append(
+                    CharactersBounds(
+                        (x + originX + runPos.x, y + originY + runPos.y - ascent, runW, runH + ascent),
+                        ascent,
+                        txt[runRange.location : runRange.location + runRange.length],
+                    )
+                )
         return bounds
 
     # images
     def image(
         self,
-        path: SomePath | ImageObject, # FIXME path as argument name might be misleading
+        path: SomePath | ImageObject,  # FIXME path as argument name might be misleading
         position: Point,
         alpha: float = 1,
         pageNumber: int | None = None,
@@ -2055,7 +2080,7 @@ class DrawBotDrawingTool:
 
     def imageSize(
         self,
-        path: SomePath | ImageObject, # FIXME path as argument name might be misleading
+        path: SomePath | ImageObject,  # FIXME path as argument name might be misleading
         pageNumber: int | None = None,
     ) -> tuple[float, float]:
         """
@@ -2115,9 +2140,11 @@ class DrawBotDrawingTool:
             w, h = rep.size()
         return w, h
 
-    def imagePixelColor(self,
-                       path: SomePath | ImageObject, # FIXME path as argument name might be misleading
-                       xy: Point) -> RGBAColorTuple | None:
+    def imagePixelColor(
+        self,
+        path: SomePath | ImageObject,  # FIXME path as argument name might be misleading
+        xy: Point,
+    ) -> RGBAColorTuple | None:
         """
         Return the color `r, g, b, a` of an image at a specified `x`, `y` position.
         Supports pdf, jpg, png, tiff and gif file formats. `NSImage` objects are supported too.
@@ -2413,8 +2440,7 @@ class DrawBotDrawingTool:
         places that accept a font name.
         """
         warnings.warn(
-            "installFont(path) has been deprecated, use the font path directly in "
-            "all places that accept a font name."
+            "installFont(path) has been deprecated, use the font path directly in all places that accept a font name."
         )
         path = os.fspath(path)
         if path in self._tempInstalledFonts:
@@ -2440,8 +2466,7 @@ class DrawBotDrawingTool:
         places that accept a font name.
         """
         warnings.warn(
-            "uninstallFont(path) has been deprecated, use the font path directly in "
-            "all places that accept a font name."
+            "uninstallFont(path) has been deprecated, use the font path directly in all places that accept a font name."
         )
         path = os.fspath(path)
         success, error = self._dummyContext.uninstallFont(path)
@@ -2610,7 +2635,9 @@ class DrawBotDrawingTool:
             controller._variableController.buildUI(variables, continuous=continuous)
             controller._variableController.show()
         except Exception:
-            controller._variableController = VariableController(variables, controller.runCode, document, continuous=continuous)
+            controller._variableController = VariableController(
+                variables, controller.runCode, document, continuous=continuous
+            )
 
         data = controller._variableController.get()
         for v, value in data.items():

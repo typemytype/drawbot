@@ -1,7 +1,29 @@
-from Foundation import NSInvocation, NSString, NSMakeRange, NSMaxRange, NSLocationInRange, NSNotFound, NSMakeRect, NSMinY, NSWidth, NSHeight
-from AppKit import NSRulerView, NSMiniControlSize, NSTextView, NSNotificationCenter, \
-    NSFontAttributeName, NSForegroundColorAttributeName, NSTextStorageDidProcessEditingNotification, \
-    NSFont, NSColor, NSBezierPath, NSRectFill, NSViewBoundsDidChangeNotification
+from Foundation import (
+    NSInvocation,
+    NSString,
+    NSMakeRange,
+    NSMaxRange,
+    NSLocationInRange,
+    NSNotFound,
+    NSMakeRect,
+    NSMinY,
+    NSWidth,
+    NSHeight,
+)
+from AppKit import (
+    NSRulerView,
+    NSMiniControlSize,
+    NSTextView,
+    NSNotificationCenter,
+    NSFontAttributeName,
+    NSForegroundColorAttributeName,
+    NSTextStorageDidProcessEditingNotification,
+    NSFont,
+    NSColor,
+    NSBezierPath,
+    NSRectFill,
+    NSViewBoundsDidChangeNotification,
+)
 import math
 from objc import super
 
@@ -13,14 +35,13 @@ http://www.noodlesoft.com/blog/2008/10/05/displaying-line-numbers-with-nstextvie
 
 
 class LineNumberNSRulerView(NSRulerView):
-
-    DEFAULT_THICKNESS = 22.
-    RULER_MARGIN = 5.
+    DEFAULT_THICKNESS = 22.0
+    RULER_MARGIN = 5.0
 
     def init(self):
         self = super(LineNumberNSRulerView, self).init()
         self._font = NSFont.labelFontOfSize_(NSFont.systemFontSizeForControlSize_(NSMiniControlSize))
-        self._textColor = NSColor.colorWithCalibratedWhite_alpha_(.42, 1)
+        self._textColor = NSColor.colorWithCalibratedWhite_alpha_(0.42, 1)
         self._rulerBackgroundColor = None
 
         self._lineIndices = None
@@ -40,10 +61,7 @@ class LineNumberNSRulerView(NSRulerView):
         return self._textColor
 
     def textAttributes(self):
-        return {
-            NSFontAttributeName: self.font(),
-            NSForegroundColorAttributeName: self.textColor()
-        }
+        return {NSFontAttributeName: self.font(), NSForegroundColorAttributeName: self.textColor()}
 
     def setRulerBackgroundColor_(self, color):
         self._rulerBackgroundColor = color
@@ -56,17 +74,22 @@ class LineNumberNSRulerView(NSRulerView):
         oldClientView = self.clientView()
 
         if oldClientView != view and isinstance(oldClientView, NSTextView):
-            NSNotificationCenter.defaultCenter().removeObserver_name_object_(self, NSTextStorageDidProcessEditingNotification, oldClientView.textStorage())
+            NSNotificationCenter.defaultCenter().removeObserver_name_object_(
+                self, NSTextStorageDidProcessEditingNotification, oldClientView.textStorage()
+            )
 
         super(LineNumberNSRulerView, self).setClientView_(view)
 
         if view is not None and isinstance(view, NSTextView):
-            NSNotificationCenter.defaultCenter().addObserver_selector_name_object_(self, "textDidChange:",
-                                                    NSTextStorageDidProcessEditingNotification,
-                                                    view.textStorage())
-            NSNotificationCenter.defaultCenter().addObserver_selector_name_object_(self, "textViewBoundsChange:",
-                                                    NSViewBoundsDidChangeNotification,
-                                                    view.enclosingScrollView().contentView())
+            NSNotificationCenter.defaultCenter().addObserver_selector_name_object_(
+                self, "textDidChange:", NSTextStorageDidProcessEditingNotification, view.textStorage()
+            )
+            NSNotificationCenter.defaultCenter().addObserver_selector_name_object_(
+                self,
+                "textViewBoundsChange:",
+                NSViewBoundsDidChangeNotification,
+                view.enclosingScrollView().contentView(),
+            )
 
     def lineIndices(self):
         if self._lineIndices is None:
@@ -110,7 +133,9 @@ class LineNumberNSRulerView(NSRulerView):
             index = NSMaxRange(text.lineRangeForRange_(NSMakeRange(index, 0)))
             numberOfLines += 1
 
-        lineStart, lineEnd, contentEnd = text.getLineStart_end_contentsEnd_forRange_(None, None, None, NSMakeRange(lineIndices[-1], 0))
+        lineStart, lineEnd, contentEnd = text.getLineStart_end_contentsEnd_forRange_(
+            None, None, None, NSMakeRange(lineIndices[-1], 0)
+        )
 
         if contentEnd < lineEnd:
             lineIndices.append(index)
@@ -121,7 +146,9 @@ class LineNumberNSRulerView(NSRulerView):
         newThickness = self.requiredThickness()
 
         if abs(oldThickness - newThickness) > 0:
-            invocation = NSInvocation.invocationWithMethodSignature_(self.methodSignatureForSelector_("setRuleThickness:"))
+            invocation = NSInvocation.invocationWithMethodSignature_(
+                self.methodSignatureForSelector_("setRuleThickness:")
+            )
             invocation.setSelector_("setRuleThickness:")
             invocation.setTarget_(self)
             invocation.setArgument_atIndex_(newThickness, 2)
@@ -188,11 +215,10 @@ class LineNumberNSRulerView(NSRulerView):
         for line in range(lineNumber, count):
             index = lines[line]
             if NSLocationInRange(index, _range):
-                rects, rectCount = layoutManager.rectArrayForCharacterRange_withinSelectedCharacterRange_inTextContainer_rectCount_(
-                    NSMakeRange(index, 0),
-                    nullRange,
-                    container,
-                    None
+                rects, rectCount = (
+                    layoutManager.rectArrayForCharacterRange_withinSelectedCharacterRange_inTextContainer_rectCount_(
+                        NSMakeRange(index, 0), nullRange, container, None
+                    )
                 )
                 if rectCount > 0:
                     ypos = yinset + NSMinY(rects[0]) - NSMinY(visibleRect)

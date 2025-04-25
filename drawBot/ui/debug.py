@@ -1,35 +1,30 @@
-from Foundation import NSLog
-from AppKit import NSPanel
-
 import sys
 
-from vanilla import *
+from AppKit import NSPanel  # type: ignore
+from Foundation import NSLog  # type: ignore
+from vanilla import FloatingWindow
 
 from .codeEditor import OutPutEditor
 
 
 class ShowHideNSPanel(NSPanel):
-
     def close(self):
         self.orderOut_(None)
 
 
 class ShowHideFloatingWindow(FloatingWindow):
-
     nsWindowClass = ShowHideNSPanel
 
 
 class DebugWindowController:
-
     """
     Debugger catching all sys.stdout and sys.sterr outside a script.
     """
 
     def __init__(self):
-        self.w = ShowHideFloatingWindow((300, 500), "Debugger",
-                                    minSize=(200, 300),
-                                    autosaveName="DrawBotDebugWindow",
-                                    initiallyVisible=False)
+        self.w = ShowHideFloatingWindow(
+            (300, 500), "Debugger", minSize=(200, 300), autosaveName="DrawBotDebugWindow", initiallyVisible=False
+        )
 
         self.w.debugText = OutPutEditor((0, 0, -0, -0), readOnly=True)
 

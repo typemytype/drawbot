@@ -1,21 +1,23 @@
 import os
-import tempfile
 import shutil
+import tempfile
 
 from drawBot.misc import warnings
 
 from .imageContext import PNGContext
-
 from .tools.mp4Tools import generateMP4
 
 
 class MP4Context(PNGContext):
-
     fileExtensions = ["mp4"]
 
     saveImageOptions = [
-        ("ffmpegCodec", "The codec to be used by ffmpeg. By default it is 'libx264' (for H.264). The 'mpeg4' codec gives better results when importing the movie into After Effects, at the expense of a larger file size."),
-    ] + [(key, doc) for key, doc in PNGContext.saveImageOptions if key != "multipage"]
+        (
+            "ffmpegCodec",
+            "The codec to be used by ffmpeg. By default it is 'libx264' (for H.264). The 'mpeg4' codec gives better results when importing the movie into After Effects, at the expense of a larger file size.",
+        ),
+    ]
+    saveImageOptions.extend((key, doc) for key, doc in PNGContext.saveImageOptions if key != "multipage")
 
     _defaultFrameDuration = 1 / 10
 

@@ -5,7 +5,6 @@ import os
 import sys
 import unittest
 
-
 inDrawBotApp = "drawBot.ui.codeEditor" in sys.modules
 
 testRootDir = os.path.dirname(os.path.abspath(__file__))

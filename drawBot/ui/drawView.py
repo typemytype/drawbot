@@ -9,13 +9,11 @@ epsPasteBoardType = "CorePasteboardFlavorType 0x41494342"
 
 
 class DrawBotPDFThumbnailView(PDFThumbnailView):
-
     def draggingUpdated_(self, draggingInfo):
         return NSDragOperationNone
 
 
 class ThumbnailView(Group):
-
     nsViewClass = DrawBotPDFThumbnailView
 
     def setDrawView(self, view):
@@ -36,7 +34,6 @@ class ThumbnailView(Group):
 
 
 class DrawBotPDFView(PDFView):
-
     def performKeyEquivalent_(self, event):
         # catch a bug in PDFView
         # cmd + ` causes a traceback
@@ -48,7 +45,6 @@ class DrawBotPDFView(PDFView):
 
 
 class DrawView(Group):
-
     nsViewClass = DrawBotPDFView
 
     def __init__(self, posSize):

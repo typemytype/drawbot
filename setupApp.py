@@ -1,17 +1,17 @@
-import py2app
+import datetime
+import json
+import os
+import plistlib
+import re
+import shutil
+import subprocess
+import sys
+import tempfile
 from distutils.core import setup
 from distutils.sysconfig import get_python_lib
+
 import pkg_resources
-import os
-import sys
-import subprocess
-import shutil
-import tempfile
-import json
-import time
-import datetime
-import re
-import plistlib
+import py2app
 
 from drawBot.drawBotSettings import __version__
 
@@ -22,9 +22,12 @@ timeStamp = rawTimeStamp.strftime("%y%m%d%H%M")
 
 
 _identifierPat = re.compile("[A-Za-z_][A-Za-z_0-9]*$")
+
+
 def _isIdentifier(s):
     """Return True if argument `s` is a valid Python identifier."""
     return _identifierPat.match(s) is not None
+
 
 def _findModules(root, extensions, skip, parent=""):
     """Yield all modules and packages and their submodules and subpackages found at `root`.
@@ -57,11 +60,11 @@ def _findModules(root, extensions, skip, parent=""):
                 else:
                     yield moduleName
 
+
 def getStdLibModules():
     """Return a list of all module names that are part of the Python Standard Library, and
     a flag indicating whether we are running from a pre-installed ("/System") python or not.
     """
-    versionDict = dict(major=sys.version_info.major, minor=sys.version_info.minor)
     stdLibPath = get_python_lib(standard_lib=True)
     isSystemPython = stdLibPath.startswith("/System/")
     extensions = {"py"}
@@ -116,7 +119,6 @@ iconFile = "DrawBot.icns"
 bundleIdentifier = "com.drawbot"
 
 plist = dict(
-
     CFBundleDocumentTypes=[
         dict(
             CFBundleTypeExtensions=["py"],
@@ -143,11 +145,7 @@ plist = dict(
     CFBundleVersion=__version__,
     CFBundleIconFile=iconFile,
     NSHumanReadableCopyright="Copyright by Just van Rossum and Frederik Berlaen.",
-    CFBundleURLTypes=[
-        dict(
-            CFBundleURLName="com.drawbot",
-            CFBundleURLSchemes=[appName.lower()])
-    ],
+    CFBundleURLTypes=[dict(CFBundleURLName="com.drawbot", CFBundleURLSchemes=[appName.lower()])],
     # NSRequiresAquaSystemAppearance=False,
 )
 
@@ -178,35 +176,37 @@ setup(
     options=dict(
         py2app=dict(
             packages=[
-                'vanilla',
-                'defcon',
-                'defconAppKit',
-                'fontParts',
-                'mutatorMath',
-                'woffTools',
-                'compositor',
-                'feaTools2',
-                'ufo2svg',
-                'fontPens',
-                'booleanOperations',
+                "vanilla",
+                "defcon",
+                "defconAppKit",
+                "fontParts",
+                "mutatorMath",
+                "woffTools",
+                "compositor",
+                "feaTools2",
+                "ufo2svg",
+                "fontPens",
+                "booleanOperations",
                 # 'pyclipper',
-                'pygments',
-                'jedi',
-                'fontTools',
-                'fs',
+                "pygments",
+                "jedi",
+                "fontTools",
+                "fs",
                 # 'xml'
-                'pkg_resources',
-                'parso',
-                'pip',
+                "pkg_resources",
+                "parso",
+                "pip",
                 "setuptools",
                 "packaging",
                 "PIL",
-                "black",
+                "ruff",
+                "ruff_api",
             ],
             includes=[
                 # 'csv',
                 # 'this'
-            ] + stdLibIncludes,
+            ]
+            + stdLibIncludes,
             excludes=[
                 "numpy",
                 "scipy",
@@ -215,9 +215,9 @@ setup(
                 "wx",
                 "sphinx",
                 "jinja2",
-            ]
+            ],
         )
-    )
+    ),
 )
 
 # fix the icon
@@ -299,7 +299,14 @@ if buildDMG or ftpHost is not None:
         # ================
         # = code signing =
         # ================
-        popen = subprocess.Popen([os.path.join(appToolsRoot, "codesign-app.sh"), "Developer ID Application: %s" % codeSignDeveloperName, appLocation, os.path.join(appToolsRoot, "entitlements.xml")])
+        popen = subprocess.Popen(
+            [
+                os.path.join(appToolsRoot, "codesign-app.sh"),
+                "Developer ID Application: %s" % codeSignDeveloperName,
+                appLocation,
+                os.path.join(appToolsRoot, "entitlements.xml"),
+            ]
+        )
         popen.wait()
 
     # ================
@@ -316,23 +323,41 @@ if buildDMG or ftpHost is not None:
 
     # add a link to the Applications
 
-    subprocess.run([
-        "ln", "-s", "/Applications", imgLocation
-    ], check=True)
+    subprocess.run(["ln", "-s", "/Applications", imgLocation], check=True)
 
-    subprocess.run([
-        "hdiutil", "create", "-fs", "HFS+",
-        "-size", "400m",
-        "-srcfolder", imgLocation,
-        "-volname", appName,
-        "-format", "UDZO",
-        os.path.join(distLocation, tempDmgName)
-    ], check=True)
+    subprocess.run(
+        [
+            "hdiutil",
+            "create",
+            "-fs",
+            "HFS+",
+            "-size",
+            "400m",
+            "-srcfolder",
+            imgLocation,
+            "-volname",
+            appName,
+            "-format",
+            "UDZO",
+            os.path.join(distLocation, tempDmgName),
+        ],
+        check=True,
+    )
 
-    subprocess.run([
-        "hdiutil", "convert", "-format", "UDZO", "-imagekey", "zlib-level=9",
-        "-o", dmgLocation, os.path.join(distLocation, tempDmgName)
-    ], check=True)
+    subprocess.run(
+        [
+            "hdiutil",
+            "convert",
+            "-format",
+            "UDZO",
+            "-imagekey",
+            "zlib-level=9",
+            "-o",
+            dmgLocation,
+            os.path.join(distLocation, tempDmgName),
+        ],
+        check=True,
+    )
 
     os.remove(os.path.join(distLocation, tempDmgName))
 
@@ -350,25 +375,29 @@ if buildDMG or ftpHost is not None:
             "xcrun",
             "notarytool",
             "submit",
-            "--apple-id", notarizeDeveloper,
-            "--team-id", notarizeTeamID,
-            "--password", notarizePassword,
-            "--output-format", "json",
+            "--apple-id",
+            notarizeDeveloper,
+            "--team-id",
+            notarizeTeamID,
+            "--password",
+            notarizePassword,
+            "--output-format",
+            "json",
             "--wait",
-            existingDmgLocation
+            existingDmgLocation,
         ]
 
         print("notarizing app")
         notarisationRequestID = None
 
-        with tempfile.TemporaryFile(mode='w+b') as stdoutFile:
+        with tempfile.TemporaryFile(mode="w+b") as stdoutFile:
             popen = subprocess.Popen(notarize, stdout=stdoutFile)
             popen.wait()
             stdoutFile.seek(0)
             data = stdoutFile.read()
             data = json.loads(data)
             print("notarisation data:")
-            print("\n".join([f"     {k}: {v}" for k, v, in data.items()]))
+            print("\n".join([f"     {k}: {v}" for k, v in data.items()]))
 
             if "id" in data:
                 notarisationRequestID = data["id"]
@@ -382,13 +411,16 @@ if buildDMG or ftpHost is not None:
                 "xcrun",
                 "notarytool",
                 "log",
-                "--apple-id", notarizeDeveloper,
-                "--team-id", notarizeTeamID,
-                "--password", notarizePassword,
+                "--apple-id",
+                notarizeDeveloper,
+                "--team-id",
+                notarizeTeamID,
+                "--password",
+                notarizePassword,
                 notarisationRequestID,
             ]
 
-            with open(os.path.join(distLocation, 'notarize_log.txt'), "w+b") as stdoutFile:
+            with open(os.path.join(distLocation, "notarize_log.txt"), "w+b") as stdoutFile:
                 popen = subprocess.Popen(notarizeInfo, stdout=stdoutFile)
                 popen.wait()
 
@@ -399,11 +431,7 @@ if buildDMG or ftpHost is not None:
             print("*" * 50)
 
         print("stapler")
-        notarizeStapler = [
-            "xcrun",
-            "stapler",
-            "staple", existingDmgLocation
-        ]
+        notarizeStapler = ["xcrun", "stapler", "staple", existingDmgLocation]
         popen = subprocess.Popen(notarizeStapler)
         popen.wait()
         print("done stapler")
@@ -413,22 +441,23 @@ if buildDMG or ftpHost is not None:
 
     if ftpHost and ftpPath and ftpLogin and ftpPassword:
         import ftplib
+
         print("-------------------------")
         print("-    uploading to ftp   -")
         session = ftplib.FTP(ftpHost, ftpLogin, ftpPassword)
         session.cwd(ftpPath)
 
-        dmgFile = open(existingDmgLocation, 'rb')
+        dmgFile = open(existingDmgLocation, "rb")
         fileName = os.path.basename(existingDmgLocation)
-        session.storbinary('STOR %s' % fileName, dmgFile)
+        session.storbinary("STOR %s" % fileName, dmgFile)
         dmgFile.close()
 
         # store a version
         session.cwd("versionHistory")
-        dmgFile = open(existingDmgLocation, 'rb')
+        dmgFile = open(existingDmgLocation, "rb")
         fileName, ext = os.path.splitext(fileName)
         fileName = fileName + "_" + timeStamp + ext
-        session.storbinary('STOR %s' % fileName, dmgFile)
+        session.storbinary("STOR %s" % fileName, dmgFile)
         dmgFile.close()
 
         print("- done uploading to ftp -")

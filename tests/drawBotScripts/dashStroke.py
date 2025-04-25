@@ -1,4 +1,5 @@
 import drawBot
+
 drawBot.newDrawing()
 drawBot.newPage(40, 40)
 path = drawBot.BezierPath()

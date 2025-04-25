@@ -1,15 +1,16 @@
-import sys
-import os
-import tempfile
-import unittest
-import shutil
-import random
 import io
+import os
+import random
+import shutil
+import sys
+import tempfile
 import traceback
-import AppKit
-from PIL import Image, ImageChops
-from drawBot.misc import warnings
+import unittest
 
+import AppKit  # type: ignore
+from PIL import Image, ImageChops
+
+from drawBot.misc import warnings
 
 testRootDir = os.path.dirname(os.path.abspath(__file__))
 testDataDir = os.path.join(testRootDir, "data")
@@ -22,7 +23,6 @@ warnings.shouldShowWarnings = True
 
 
 class DrawBotBaseTest(unittest.TestCase):
-
     def assertPDFFilesEqual(self, path1, path2):
         # read as pdf document
         pdf1 = AppKit.PDFDocument.alloc().initWithURL_(AppKit.NSURL.fileURLWithPath_(path1))
@@ -48,7 +48,11 @@ class DrawBotBaseTest(unittest.TestCase):
             f1 = io.BytesIO(data1)
             f2 = io.BytesIO(data2)
             similarity = compareImages(f1, f2)
-            self.assertLessEqual(similarity, 0.0011, "PDF files %r and %r are not similar enough: %s (page %s)" % (path1, path2, similarity, pageIndex + 1))
+            self.assertLessEqual(
+                similarity,
+                0.0011,
+                "PDF files %r and %r are not similar enough: %s (page %s)" % (path1, path2, similarity, pageIndex + 1),
+            )
 
     def assertSVGFilesEqual(self, path1, path2):
         # compare the content by line
@@ -63,7 +67,9 @@ class DrawBotBaseTest(unittest.TestCase):
         f1 = io.BytesIO(data1)
         f2 = io.BytesIO(data2)
         similarity = compareImages(f1, f2)
-        self.assertLessEqual(similarity, 0.0011, "Images %r and %r are not similar enough: %s" % (path1, path2, similarity))
+        self.assertLessEqual(
+            similarity, 0.0011, "Images %r and %r are not similar enough: %s" % (path1, path2, similarity)
+        )
 
     def assertGenericFilesEqual(self, path1, path2):
         self.assertEqual(readData(path1), readData(path2))
@@ -101,7 +107,6 @@ class DrawBotBaseTest(unittest.TestCase):
 
 
 class StdOutCollector:
-
     def __init__(self, **kwargs):
         # force captureStdErr to be a keyword argument
         if kwargs:
@@ -135,7 +140,6 @@ class StdOutCollector:
 
 
 class TempFile:
-
     """This context manager will deliver a pathname for a temporary file, and will
     remove it upon exit, if it indeed exists at that time. Note: it does _not_
     _create_ the temporary file.
@@ -172,17 +176,16 @@ class TempFile:
 
 
 class TempFolder(TempFile):
-
     """This context manager will create a temporary folder, and will remove it upon exit.
 
-        >>> with TempFolder() as tmp:
-        ...   assert os.path.exists(tmp.path)
-        ...   assert os.listdir(tmp.path) == []
-        ...
-        >>> assert not os.path.exists(tmp.path)
-        >>> with TempFolder(suffix=".mystuff") as tmp:
-        ...   assert tmp.path.endswith(".mystuff")
-        ...
+    >>> with TempFolder() as tmp:
+    ...   assert os.path.exists(tmp.path)
+    ...   assert os.listdir(tmp.path) == []
+    ...
+    >>> assert not os.path.exists(tmp.path)
+    >>> with TempFolder(suffix=".mystuff") as tmp:
+    ...   assert tmp.path.endswith(".mystuff")
+    ...
     """
 
     _create = staticmethod(tempfile.mkdtemp)

@@ -1,15 +1,17 @@
-import sys
+import io
 import os
 import pathlib
-import unittest
-import io
+import sys
 import tempfile
+import unittest
 from collections import OrderedDict
+
 from fontTools.ttLib import TTFont
-import drawBot
-from drawBot.misc import DrawBotError, warnings, validateLanguageCode
-from drawBot.scriptTools import ScriptRunner
 from testSupport import StdOutCollector, testDataDir
+
+import drawBot
+from drawBot.misc import DrawBotError, validateLanguageCode
+from drawBot.scriptTools import ScriptRunner
 
 
 def _roundDictValues(d, digits):
@@ -17,18 +19,17 @@ def _roundDictValues(d, digits):
 
 
 class MiscTest(unittest.TestCase):
-
     def test_openTypeFeatures(self):
         drawBot.newDrawing()
         fea = drawBot.listOpenTypeFeatures()
-        self.assertEqual(fea, ['liga'])
+        self.assertEqual(fea, ["liga"])
         drawBot.font("Helvetica")
         fea = drawBot.listOpenTypeFeatures()
-        self.assertEqual(fea, ['liga', 'pnum', 'tnum'])
+        self.assertEqual(fea, ["liga", "pnum", "tnum"])
         fea = drawBot.listOpenTypeFeatures("HoeflerText-Regular")
-        self.assertEqual(fea, ['dlig', 'liga', 'lnum', 'onum', 'pnum', 'titl', 'tnum'])
+        self.assertEqual(fea, ["dlig", "liga", "lnum", "onum", "pnum", "titl", "tnum"])
         fea = drawBot.openTypeFeatures(liga=False)
-        self.assertEqual(fea, {'liga': False})
+        self.assertEqual(fea, {"liga": False})
         drawBot.font("LucidaGrande")
         fea = drawBot.openTypeFeatures(resetFeatures=True)
         self.assertEqual(fea, {})
@@ -46,20 +47,22 @@ class MiscTest(unittest.TestCase):
         drawBot.font("Skia")
         # get the default font variations
         var = drawBot.listFontVariations()
-        var['wght'] = _roundDictValues(var['wght'], 3)
-        var['wdth'] = _roundDictValues(var['wdth'], 3)
-        expectedVar = OrderedDict({
-            'wght': {'name': 'Weight', 'minValue': 0.48, 'maxValue': 3.2, 'defaultValue': 1.0},
-            'wdth': {'name': 'Width', 'minValue': 0.62, 'maxValue': 1.3, 'defaultValue': 1.0},
-        })
+        var["wght"] = _roundDictValues(var["wght"], 3)
+        var["wdth"] = _roundDictValues(var["wdth"], 3)
+        expectedVar = OrderedDict(
+            {
+                "wght": {"name": "Weight", "minValue": 0.48, "maxValue": 3.2, "defaultValue": 1.0},
+                "wdth": {"name": "Width", "minValue": 0.62, "maxValue": 1.3, "defaultValue": 1.0},
+            }
+        )
         self.assertEqual(var, expectedVar)
         # set a font variation
         var = drawBot.fontVariations(wght=5)
-        expectedVarChanged = {'wght': 5, 'wdth': 1.0}
+        expectedVarChanged = {"wght": 5, "wdth": 1.0}
         self.assertEqual(var, expectedVarChanged)
         # clear all font variations settings
         var = drawBot.fontVariations(resetVariations=True)
-        self.assertEqual(var, {'wght': 1.0, 'wdth': 1.0})
+        self.assertEqual(var, {"wght": 1.0, "wdth": 1.0})
         drawBot.font("Helvetica")
         var = drawBot.listFontVariations()
         self.assertEqual(var, {})
@@ -73,7 +76,18 @@ class MiscTest(unittest.TestCase):
         drawBot.font("Skia")
         namedInstances = drawBot.listNamedInstances()
         namedInstances = _roundInstanceLocations(namedInstances)
-        expectedNamedInstances = {'Skia-Regular_Black': {'wght': 3.2, 'wdth': 1.0}, 'Skia-Regular_Extended': {'wght': 1.0, 'wdth': 1.3}, 'Skia-Regular_Condensed': {'wght': 1.0, 'wdth': 0.61998}, 'Skia-Regular_Light': {'wght': 0.48, 'wdth': 1.0}, 'Skia-Regular': {'wght': 1.0, 'wdth': 1.0}, 'Skia-Regular_Black-Extended': {'wght': 3.2, 'wdth': 1.3}, 'Skia-Regular_Light-Extended': {'wght': 0.48, 'wdth': 1.3}, 'Skia-Regular_Black-Condensed': {'wght': 3.0, 'wdth': 0.7}, 'Skia-Regular_Light-Condensed': {'wght': 0.48, 'wdth': 0.7}, 'Skia-Regular_Bold': {'wght': 1.95, 'wdth': 1.0}}
+        expectedNamedInstances = {
+            "Skia-Regular_Black": {"wght": 3.2, "wdth": 1.0},
+            "Skia-Regular_Extended": {"wght": 1.0, "wdth": 1.3},
+            "Skia-Regular_Condensed": {"wght": 1.0, "wdth": 0.61998},
+            "Skia-Regular_Light": {"wght": 0.48, "wdth": 1.0},
+            "Skia-Regular": {"wght": 1.0, "wdth": 1.0},
+            "Skia-Regular_Black-Extended": {"wght": 3.2, "wdth": 1.3},
+            "Skia-Regular_Light-Extended": {"wght": 0.48, "wdth": 1.3},
+            "Skia-Regular_Black-Condensed": {"wght": 3.0, "wdth": 0.7},
+            "Skia-Regular_Light-Condensed": {"wght": 0.48, "wdth": 0.7},
+            "Skia-Regular_Bold": {"wght": 1.95, "wdth": 1.0},
+        }
         expectedNamedInstances = _roundInstanceLocations(expectedNamedInstances)
         self.assertEqual(namedInstances, expectedNamedInstances)
         drawBot.font("Helvetica")
@@ -145,22 +159,22 @@ class MiscTest(unittest.TestCase):
     def test_ScriptRunner_io(self):
         out = io.StringIO()
         ScriptRunner("print('hey!')", stdout=out, stderr=out)
-        self.assertEqual(out.getvalue(), u'hey!\n')
+        self.assertEqual(out.getvalue(), "hey!\n")
         out = io.StringIO()
         ScriptRunner("print(u'hey!')", stdout=out, stderr=out)
-        self.assertEqual(out.getvalue(), u'hey!\n')
+        self.assertEqual(out.getvalue(), "hey!\n")
         out = io.StringIO()
-        ScriptRunner(u"print('hey!')", stdout=out, stderr=out)
-        self.assertEqual(out.getvalue(), u'hey!\n')
+        ScriptRunner("print('hey!')", stdout=out, stderr=out)
+        self.assertEqual(out.getvalue(), "hey!\n")
         out = io.StringIO()
-        ScriptRunner(u"print(u'hey!')", stdout=out, stderr=out)
-        self.assertEqual(out.getvalue(), u'hey!\n')
+        ScriptRunner("print(u'hey!')", stdout=out, stderr=out)
+        self.assertEqual(out.getvalue(), "hey!\n")
 
     def test_ScriptRunner_print_function(self):
         out = StdOutCollector()
         ScriptRunner("print 'hey!'", stdout=out, stderr=out)
         target = "SyntaxError: Missing parentheses in call to 'print'. Did you mean"
-        self.assertEqual(out.lines()[-1][:len(target)], target)
+        self.assertEqual(out.lines()[-1][: len(target)], target)
 
     def test_ScriptRunner_division(self):
         out = StdOutCollector()
@@ -169,8 +183,10 @@ class MiscTest(unittest.TestCase):
 
     def test_ScriptRunner_oldDivision(self):
         realGetDefault = drawBot.scriptTools.getDefault
+
         def mockedGetDefault(*args):
             return False
+
         drawBot.scriptTools.getDefault = mockedGetDefault
         try:
             out = StdOutCollector()
@@ -184,12 +200,12 @@ class MiscTest(unittest.TestCase):
         ScriptRunner("# -*- coding: utf-8 -*-\nprint(1/2)", stdout=out, stderr=out)
         self.assertEqual(out.lines(), ["0.5"])
         out = StdOutCollector()
-        ScriptRunner(u"# -*- coding: utf-8 -*-\nprint(1/2)", stdout=out, stderr=out)
+        ScriptRunner("# -*- coding: utf-8 -*-\nprint(1/2)", stdout=out, stderr=out)
         self.assertEqual(out.lines(), ["0.5"])
 
     def test_ScriptRunner_file(self):
         out = StdOutCollector()
-        path = os.path.join(testDataDir, "scriptRunnerTest.py") # use an actual file, no not confuse coverage testing
+        path = os.path.join(testDataDir, "scriptRunnerTest.py")  # use an actual file, no not confuse coverage testing
         ScriptRunner("print(__file__)\nprint(__name__)", stdout=out, stderr=out, path=path)
         self.assertEqual(out.lines(), [path, "__main__"])
 
@@ -197,7 +213,7 @@ class MiscTest(unittest.TestCase):
         out = StdOutCollector()
         path = os.path.join(testDataDir, "scriptRunnerTest.py")
         ScriptRunner(path=path, stdout=out, stderr=out)
-        self.assertEqual(out.lines(), [path, "__main__", u'\xc5benr\xe5'])
+        self.assertEqual(out.lines(), [path, "__main__", "\xc5benr\xe5"])
 
     def test_ScriptRunner_namespace(self):
         out = StdOutCollector()
@@ -210,13 +226,13 @@ class MiscTest(unittest.TestCase):
         self.assertEqual(out.lines(), [])
         out = StdOutCollector()
         ScriptRunner("print('hello world!')", stdout=out, stderr=out, checkSyntaxOnly=False)
-        self.assertEqual(out.lines(), ['hello world!'])
+        self.assertEqual(out.lines(), ["hello world!"])
         out = StdOutCollector()
         ScriptRunner("print('hello world!')", stdout=out, stderr=out, checkSyntaxOnly=True)
         self.assertEqual(out.lines(), [])
         out = StdOutCollector()
         ScriptRunner("aaa bbb", stdout=out, stderr=out, checkSyntaxOnly=True)
-        self.assertEqual(out.lines()[-1], 'SyntaxError: invalid syntax')
+        self.assertEqual(out.lines()[-1], "SyntaxError: invalid syntax")
 
     def test_newPage_empty_single(self):
         drawBot.newDrawing()
@@ -257,10 +273,17 @@ class MiscTest(unittest.TestCase):
         postscriptName = drawBot.font(fontPath)
         self.assertEqual(postscriptName, "MutatorMathTest-LightCondensed")
         variations = drawBot.listFontVariations()
-        self.assertEqual(variations, {'wdth': {'name': 'Width', 'minValue': 0.0, 'maxValue': 1000.0, 'defaultValue': 0.0}, 'wght': {'name': 'Weight', 'minValue': 0.0, 'maxValue': 1000.0, 'defaultValue': 0.0}})
+        self.assertEqual(
+            variations,
+            {
+                "wdth": {"name": "Width", "minValue": 0.0, "maxValue": 1000.0, "defaultValue": 0.0},
+                "wght": {"name": "Weight", "minValue": 0.0, "maxValue": 1000.0, "defaultValue": 0.0},
+            },
+        )
 
     def test_font_install_pathlib(self):
         import pathlib
+
         fontPath = os.path.join(testDataDir, "MutatorSans.ttf")
         fontPath = pathlib.Path(fontPath)
         drawBot.newDrawing()
@@ -268,7 +291,13 @@ class MiscTest(unittest.TestCase):
         postscriptName = drawBot.font(fontPath)
         self.assertEqual(postscriptName, "MutatorMathTest-LightCondensed")
         variations = drawBot.listFontVariations()
-        self.assertEqual(variations, {'wdth': {'name': 'Width', 'minValue': 0.0, 'maxValue': 1000.0, 'defaultValue': 0.0}, 'wght': {'name': 'Weight', 'minValue': 0.0, 'maxValue': 1000.0, 'defaultValue': 0.0}})
+        self.assertEqual(
+            variations,
+            {
+                "wdth": {"name": "Width", "minValue": 0.0, "maxValue": 1000.0, "defaultValue": 0.0},
+                "wght": {"name": "Weight", "minValue": 0.0, "maxValue": 1000.0, "defaultValue": 0.0},
+            },
+        )
 
     def test_formattedString_issue337(self):
         # https://github.com/typemytype/drawbot/issues/337
@@ -285,15 +314,15 @@ class MiscTest(unittest.TestCase):
     def test_formattedString_issue337_part3(self):
         # Verifying we get the correct line height on an empty string
         expected = [
-            'reset None',
-            'newPage 1000 1000',
-            'textBox A 0 -26.0 26.8994140625 96.0 left',
-            'textBox B 0 -38.0 25.751953125 96.0 left',
-            'textBox C 0 -50.0 26.9189453125 96.0 left',
-            'textBox A 10 -26.0 26.8994140625 96.0 left',
-            'textBox  10 48.0 20.0 96.0 left',
-            'textBox C 10 -50.0 26.9189453125 96.0 left',
-            'saveImage * {}'
+            "reset None",
+            "newPage 1000 1000",
+            "textBox A 0 -26.0 26.8994140625 96.0 left",
+            "textBox B 0 -38.0 25.751953125 96.0 left",
+            "textBox C 0 -50.0 26.9189453125 96.0 left",
+            "textBox A 10 -26.0 26.8994140625 96.0 left",
+            "textBox  10 48.0 20.0 96.0 left",
+            "textBox C 10 -50.0 26.9189453125 96.0 left",
+            "saveImage * {}",
         ]
         with StdOutCollector() as output:
             drawBot.newDrawing()
@@ -332,9 +361,19 @@ class MiscTest(unittest.TestCase):
         t.fontSize(40)
         t += "world " * 2
         bounds = drawBot.textBoxCharacterBounds(t, (10, 10, 300, 300))
-        self.assertEqual([i.bounds for i in bounds], [(10.0, 278.890625, 53.73046875, 11.77734375), (63.73046875, 274.671875, 114.755859375, 35.33203125), (178.486328125, 273.5, 91.611328125, 30.0), (10.0, 225.0, 206.640625, 40.0)])
+        self.assertEqual(
+            [i.bounds for i in bounds],
+            [
+                (10.0, 278.890625, 53.73046875, 11.77734375),
+                (63.73046875, 274.671875, 114.755859375, 35.33203125),
+                (178.486328125, 273.5, 91.611328125, 30.0),
+                (10.0, 225.0, 206.640625, 40.0),
+            ],
+        )
         self.assertEqual([i.baselineOffset for i in bounds], [2.109375, 6.328125, 7.5, 10.0])
-        self.assertEqual([str(i.formattedSubString) for i in bounds], ['hello hello ', 'foo foo ', 'bar bar ', 'world world '])
+        self.assertEqual(
+            [str(i.formattedSubString) for i in bounds], ["hello hello ", "foo foo ", "bar bar ", "world world "]
+        )
 
     def test_reloadFont(self):
         src = pathlib.Path(__file__).resolve().parent / "data" / "MutatorSans.ttf"
@@ -426,8 +465,11 @@ class MiscTest(unittest.TestCase):
 
 
 def _roundInstanceLocations(instanceLocations):
-    return {instanceName: {tag: round(value, 3) for tag, value in location.items()} for instanceName, location in instanceLocations.items()}
+    return {
+        instanceName: {tag: round(value, 3) for tag, value in location.items()}
+        for instanceName, location in instanceLocations.items()
+    }
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     sys.exit(unittest.main())

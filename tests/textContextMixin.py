@@ -1,16 +1,15 @@
-import sys
 import os
+import sys
 import unittest
 
-from testSupport import TempFile, readData, testDataDir
+from testSupport import readData, testDataDir
 
 import drawBot
+from drawBot.context.baseContext import BezierPath, ContextPropertyMixin, FormattedString, SVGContextPropertyMixin
 from drawBot.misc import DrawBotError
-from drawBot.context.baseContext import BezierPath, FormattedString, ContextPropertyMixin, SVGContextPropertyMixin
 
 
 class Dummy(SVGContextPropertyMixin, ContextPropertyMixin):
-
     def copy(self):
         new = self.__class__()
         new.copyContextProperties(self)
@@ -18,18 +17,13 @@ class Dummy(SVGContextPropertyMixin, ContextPropertyMixin):
 
 
 class SVGMixinTest(unittest.TestCase):
-
     def _svg_mixin(self, o, value):
         self.assertEqual(o.svgID, value)
         self.assertEqual(o.svgClass, value)
         self.assertEqual(o.svgLink, value)
 
     def _getObjects(self):
-        return [
-            Dummy(),
-            BezierPath(),
-            FormattedString()
-        ]
+        return [Dummy(), BezierPath(), FormattedString()]
 
     def test_empty_SVG_mixin(self):
         objs = self._getObjects()
@@ -111,8 +105,10 @@ class SVGMixinTest(unittest.TestCase):
 
         path = os.path.join(tempTestDataDir, "svgMixin.svg")
         drawBot.saveImage(path)
-        self.assertEqual(readData(path), readData(expectedPath), "Files %r and %s are not the same" % (path, expectedPath))
+        self.assertEqual(
+            readData(path), readData(expectedPath), "Files %r and %s are not the same" % (path, expectedPath)
+        )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     sys.exit(unittest.main())

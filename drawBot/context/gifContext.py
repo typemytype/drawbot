@@ -1,22 +1,22 @@
-import Quartz
 import tempfile
 
-from .imageContext import ImageContext, getSaveImageOptions
+import Quartz  # type: ignore
 
+from .imageContext import ImageContext, getSaveImageOptions
 from .tools.gifTools import generateGif
 
 
 class GIFContext(ImageContext):
-
     fileExtensions = ["gif"]
 
-    saveImageOptions = getSaveImageOptions([
-        "imageGIFDitherTransparency",
-        "imageGIFRGBColorTable",
-        "imageColorSyncProfileData",
-    ]) + [
-        ("imageGIFLoop", "Boolean that indicates whether the animated gif should loop")
-    ]
+    saveImageOptions = getSaveImageOptions(
+        [
+            "imageGIFDitherTransparency",
+            "imageGIFRGBColorTable",
+            "imageColorSyncProfileData",
+        ]
+    )
+    saveImageOptions.append(("imageGIFLoop", "Boolean that indicates whether the animated gif should loop"))
 
     _delay = 10
 

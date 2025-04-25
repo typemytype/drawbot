@@ -1,14 +1,15 @@
 #!/usr/bin/env python
-from __future__ import division, absolute_import, print_function
-from setuptools import setup
+from __future__ import absolute_import, division, print_function
+
 import os
 import re
 import shutil
 
+from setuptools import setup
 
-_versionRE = re.compile(r'__version__\s*=\s*\"([^\"]+)\"')
+_versionRE = re.compile(r"__version__\s*=\s*\"([^\"]+)\"")
 # read the version number for the settings file
-with open('drawBot/drawBotSettings.py', "r") as settings:
+with open("drawBot/drawBotSettings.py", "r") as settings:
     code = settings.read()
     found = _versionRE.search(code)
     assert found is not None, "drawBot __version__ not found"
@@ -27,7 +28,8 @@ for externalTool in externalTools:
     os.chmod(dest, 0o775)
 
 
-setup(name="drawBot",
+setup(
+    name="drawBot",
     version=__version__,
     description="DrawBot is a powerful tool that invites you to write simple Python scripts to generate two-dimensional graphics. The builtin graphics primitives support rectangles, ovals, (bezier) paths, polygons, text objects and transparency.",
     author="Just van Rossum, Erik van Blokland, Frederik Berlaen",
@@ -35,19 +37,9 @@ setup(name="drawBot",
     url="http://drawbot.com",
     license="BSD",
     python_requires=">=3.11",
-    packages=[
-        "drawBot",
-        "drawBot.context",
-        "drawBot.context.tools",
-        "drawBot.ui"
-    ],
+    packages=["drawBot", "drawBot.context", "drawBot.context.tools", "drawBot.ui"],
     package_data={
-        "drawBot": [
-            "context/tools/ffmpeg",
-            "context/tools/gifsicle",
-            "context/tools/mkbitmap",
-            "context/tools/potrace"
-        ]
+        "drawBot": ["context/tools/ffmpeg", "context/tools/gifsicle", "context/tools/mkbitmap", "context/tools/potrace"]
     },
     install_requires=[
         "pyobjc",

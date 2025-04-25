@@ -7,45 +7,45 @@ import CoreText
 
 # Feature types
 kAllTypographicFeaturesType = 0
-kLigaturesType  = 1
+kLigaturesType = 1
 kCursiveConnectionType = 2
-kLetterCaseType  = 3 # deprecated - use kLowerCaseType or kUpperCaseType instead
+kLetterCaseType = 3  # deprecated - use kLowerCaseType or kUpperCaseType instead
 kVerticalSubstitutionType = 4
 kLinguisticRearrangementType = 5
-kNumberSpacingType  = 6
-kSmartSwashType  = 8
-kDiacriticsType  = 9
-kVerticalPositionType  = 10
-kFractionsType  = 11
+kNumberSpacingType = 6
+kSmartSwashType = 8
+kDiacriticsType = 9
+kVerticalPositionType = 10
+kFractionsType = 11
 kOverlappingCharactersType = 13
 kTypographicExtrasType = 14
 kMathematicalExtrasType = 15
-kOrnamentSetsType  = 16
+kOrnamentSetsType = 16
 kCharacterAlternativesType = 17
-kDesignComplexityType  = 18
-kStyleOptionsType  = 19
-kCharacterShapeType  = 20
-kNumberCaseType  = 21
-kTextSpacingType  = 22
-kTransliterationType  = 23
-kAnnotationType  = 24
-kKanaSpacingType  = 25
+kDesignComplexityType = 18
+kStyleOptionsType = 19
+kCharacterShapeType = 20
+kNumberCaseType = 21
+kTextSpacingType = 22
+kTransliterationType = 23
+kAnnotationType = 24
+kKanaSpacingType = 25
 kIdeographicSpacingType = 26
 kUnicodeDecompositionType = 27
-kRubyKanaType   = 28
+kRubyKanaType = 28
 kCJKSymbolAlternativesType = 29
 kIdeographicAlternativesType = 30
 kCJKVerticalRomanPlacementType = 31
-kItalicCJKRomanType  = 32
+kItalicCJKRomanType = 32
 kCaseSensitiveLayoutType = 33
-kAlternateKanaType  = 34
+kAlternateKanaType = 34
 kStylisticAlternativesType = 35
 kContextualAlternatesType = 36
-kLowerCaseType  = 37
-kUpperCaseType  = 38
-kLanguageTagType  = 39
-kCJKRomanSpacingType  = 103
-kLastFeatureType  = -1
+kLowerCaseType = 37
+kUpperCaseType = 38
+kLanguageTagType = 39
+kCJKRomanSpacingType = 103
+kLastFeatureType = -1
 
 # Selectors for feature type kAllTypographicFeaturesType
 kAllTypeFeaturesOnSelector = 0
@@ -76,17 +76,17 @@ kHistoricalLigaturesOnSelector = 20
 kHistoricalLigaturesOffSelector = 21
 
 # Selectors for feature type kCursiveConnectionType
-kUnconnectedSelector  = 0
+kUnconnectedSelector = 0
 kPartiallyConnectedSelector = 1
-kCursiveSelector  = 2
+kCursiveSelector = 2
 
 # Selectors for feature type kLetterCaseType
-kUpperAndLowerCaseSelector = 0 # deprecated
-kAllCapsSelector  = 1 # deprecated
-kAllLowerCaseSelector  = 2 # deprecated
-kSmallCapsSelector  = 3 # deprecated
-kInitialCapsSelector  = 4 # deprecated
-kInitialCapsAndSmallCapsSelector = 5 # deprecated
+kUpperAndLowerCaseSelector = 0  # deprecated
+kAllCapsSelector = 1  # deprecated
+kAllLowerCaseSelector = 2  # deprecated
+kSmallCapsSelector = 3  # deprecated
+kInitialCapsSelector = 4  # deprecated
+kInitialCapsAndSmallCapsSelector = 5  # deprecated
 
 # Selectors for feature type kVerticalSubstitutionType
 kSubstituteVerticalFormsOnSelector = 0
@@ -121,13 +121,13 @@ kDecomposeDiacriticsSelector = 2
 
 # Selectors for feature type kVerticalPositionType
 kNormalPositionSelector = 0
-kSuperiorsSelector  = 1
-kInferiorsSelector  = 2
-kOrdinalsSelector  = 3
+kSuperiorsSelector = 1
+kInferiorsSelector = 2
+kOrdinalsSelector = 3
 kScientificInferiorsSelector = 4
 
 # Selectors for feature type kFractionsType
-kNoFractionsSelector  = 0
+kNoFractionsSelector = 0
 kVerticalFractionsSelector = 1
 kDiagonalFractionsSelector = 2
 
@@ -158,37 +158,37 @@ kSlashToDivideOnSelector = 4
 kSlashToDivideOffSelector = 5
 kInequalityLigaturesOnSelector = 6
 kInequalityLigaturesOffSelector = 7
-kExponentsOnSelector  = 8
-kExponentsOffSelector  = 9
+kExponentsOnSelector = 8
+kExponentsOffSelector = 9
 kMathematicalGreekOnSelector = 10
 kMathematicalGreekOffSelector = 11
 
 # Selectors for feature type kOrnamentSetsType
-kNoOrnamentsSelector  = 0
-kDingbatsSelector  = 1
-kPiCharactersSelector  = 2
-kFleuronsSelector  = 3
+kNoOrnamentsSelector = 0
+kDingbatsSelector = 1
+kPiCharactersSelector = 2
+kFleuronsSelector = 3
 kDecorativeBordersSelector = 4
 kInternationalSymbolsSelector = 5
-kMathSymbolsSelector  = 6
+kMathSymbolsSelector = 6
 
 # Selectors for feature type kCharacterAlternativesType
-kNoAlternatesSelector  = 0
+kNoAlternatesSelector = 0
 
 # Selectors for feature type kDesignComplexityType
-kDesignLevel1Selector  = 0
-kDesignLevel2Selector  = 1
-kDesignLevel3Selector  = 2
-kDesignLevel4Selector  = 3
-kDesignLevel5Selector  = 4
+kDesignLevel1Selector = 0
+kDesignLevel2Selector = 1
+kDesignLevel3Selector = 2
+kDesignLevel4Selector = 3
+kDesignLevel5Selector = 4
 
 # Selectors for feature type kStyleOptionsType
 kNoStyleOptionsSelector = 0
-kDisplayTextSelector  = 1
-kEngravedTextSelector  = 2
+kDisplayTextSelector = 1
+kEngravedTextSelector = 2
 kIlluminatedCapsSelector = 3
-kTitlingCapsSelector  = 4
-kTallCapsSelector  = 5
+kTitlingCapsSelector = 4
+kTallCapsSelector = 5
 
 # Selectors for feature type kCharacterShapeType
 kTraditionalCharactersSelector = 0
@@ -233,7 +233,7 @@ kHanjaToHangulAltTwoSelector = 8
 kHanjaToHangulAltThreeSelector = 9
 
 # Selectors for feature type kAnnotationType
-kNoAnnotationSelector  = 0
+kNoAnnotationSelector = 0
 kBoxAnnotationSelector = 1
 kRoundedBoxAnnotationSelector = 2
 kCircleAnnotationSelector = 3
@@ -263,10 +263,10 @@ kTranscodingCompositionOnSelector = 4
 kTranscodingCompositionOffSelector = 5
 
 # Selectors for feature type kRubyKanaType
-kNoRubyKanaSelector  = 0 # deprecated - use kRubyKanaOffSelector instead
-kRubyKanaSelector  = 1 # deprecated - use kRubyKanaOnSelector instead
-kRubyKanaOnSelector  = 2
-kRubyKanaOffSelector  = 3
+kNoRubyKanaSelector = 0  # deprecated - use kRubyKanaOffSelector instead
+kRubyKanaSelector = 1  # deprecated - use kRubyKanaOnSelector instead
+kRubyKanaOnSelector = 2
+kRubyKanaOffSelector = 3
 
 # Selectors for feature type kCJKSymbolAlternativesType
 kNoCJKSymbolAlternativesSelector = 0
@@ -289,8 +289,8 @@ kCJKVerticalRomanCenteredSelector = 0
 kCJKVerticalRomanHBaselineSelector = 1
 
 # Selectors for feature type kItalicCJKRomanType
-kNoCJKItalicRomanSelector = 0 # deprecated - use kCJKItalicRomanOffSelector instead
-kCJKItalicRomanSelector = 1 # deprecated - use kCJKItalicRomanOnSelector instead
+kNoCJKItalicRomanSelector = 0  # deprecated - use kCJKItalicRomanOffSelector instead
+kCJKItalicRomanSelector = 1  # deprecated - use kCJKItalicRomanOnSelector instead
 kCJKItalicRomanOnSelector = 2
 kCJKItalicRomanOffSelector = 3
 
@@ -375,82 +375,87 @@ kFullWidthCJKRomanSelector = 3
 
 # Table data courtesy of Apple.
 _coreTextfeatureData = [
-    ( 'c2pc',   kUpperCaseType,             kUpperCasePetiteCapsSelector,           kDefaultUpperCaseSelector ),
-    ( 'c2sc',   kUpperCaseType,             kUpperCaseSmallCapsSelector,            kDefaultUpperCaseSelector ),
-    ( 'calt',   kContextualAlternatesType,  kContextualAlternatesOnSelector,        kContextualAlternatesOffSelector ),
-    ( 'case',   kCaseSensitiveLayoutType,   kCaseSensitiveLayoutOnSelector,         kCaseSensitiveLayoutOffSelector ),
-    ( 'clig',   kLigaturesType,             kContextualLigaturesOnSelector,         kContextualLigaturesOffSelector ),
-    ( 'cpsp',   kCaseSensitiveLayoutType,   kCaseSensitiveSpacingOnSelector,        kCaseSensitiveSpacingOffSelector ),
-    ( 'cswh',   kContextualAlternatesType,  kContextualSwashAlternatesOnSelector,   kContextualSwashAlternatesOffSelector ),
-    ( 'dlig',   kLigaturesType,             kRareLigaturesOnSelector,               kRareLigaturesOffSelector ),
-    ( 'expt',   kCharacterShapeType,        kExpertCharactersSelector,              16 ),
-    ( 'frac',   kFractionsType,             kDiagonalFractionsSelector,             kNoFractionsSelector ),
-    ( 'fwid',   kTextSpacingType,           kMonospacedTextSelector,                7 ),
-    ( 'halt',   kTextSpacingType,           kAltHalfWidthTextSelector,              7 ),
-    ( 'hist',   kLigaturesType,             kHistoricalLigaturesOnSelector,         kHistoricalLigaturesOffSelector ),
-    ( 'hkna',   kAlternateKanaType,         kAlternateHorizKanaOnSelector,          kAlternateHorizKanaOffSelector, ),
-    ( 'hlig',   kLigaturesType,             kHistoricalLigaturesOnSelector,         kHistoricalLigaturesOffSelector ),
-    ( 'hngl',   kTransliterationType,       kHanjaToHangulSelector,                 kNoTransliterationSelector ),
-    ( 'hojo',   kCharacterShapeType,        kHojoCharactersSelector,                16 ),
-    ( 'hwid',   kTextSpacingType,           kHalfWidthTextSelector,                 7 ),
-    ( 'ital',   kItalicCJKRomanType,        kCJKItalicRomanOnSelector,              kCJKItalicRomanOffSelector ),
-    ( 'jp04',   kCharacterShapeType,        kJIS2004CharactersSelector,             16 ),
-    ( 'jp78',   kCharacterShapeType,        kJIS1978CharactersSelector,             16 ),
-    ( 'jp83',   kCharacterShapeType,        kJIS1983CharactersSelector,             16 ),
-    ( 'jp90',   kCharacterShapeType,        kJIS1990CharactersSelector,             16 ),
-    ( 'liga',   kLigaturesType,             kCommonLigaturesOnSelector,             kCommonLigaturesOffSelector ),
-    ( 'lnum',   kNumberCaseType,            kUpperCaseNumbersSelector,              2 ),
-    ( 'mgrk',   kMathematicalExtrasType,    kMathematicalGreekOnSelector,           kMathematicalGreekOffSelector ),
-    ( 'nlck',   kCharacterShapeType,        kNLCCharactersSelector,                 16 ),
-    ( 'onum',   kNumberCaseType,            kLowerCaseNumbersSelector,              2 ),
-    ( 'ordn',   kVerticalPositionType,      kOrdinalsSelector,                      kNormalPositionSelector ),
-    ( 'palt',   kTextSpacingType,           kAltProportionalTextSelector,           7 ),
-    ( 'pcap',   kLowerCaseType,             kLowerCasePetiteCapsSelector,           kDefaultLowerCaseSelector ),
-    ( 'pkna',   kTextSpacingType,           kProportionalTextSelector,              7 ),
-    ( 'pnum',   kNumberSpacingType,         kProportionalNumbersSelector,           4 ),
-    ( 'pwid',   kTextSpacingType,           kProportionalTextSelector,              7 ),
-    ( 'qwid',   kTextSpacingType,           kQuarterWidthTextSelector,              7 ),
-    ( 'ruby',   kRubyKanaType,              kRubyKanaOnSelector,                    kRubyKanaOffSelector ),
-    ( 'sinf',   kVerticalPositionType,      kScientificInferiorsSelector,           kNormalPositionSelector ),
-    ( 'smcp',   kLowerCaseType,             kLowerCaseSmallCapsSelector,            kDefaultLowerCaseSelector ),
-    ( 'smpl',   kCharacterShapeType,        kSimplifiedCharactersSelector,          16 ),
-    ( 'ss01',   kStylisticAlternativesType, kStylisticAltOneOnSelector,             kStylisticAltOneOffSelector ),
-    ( 'ss02',   kStylisticAlternativesType, kStylisticAltTwoOnSelector,             kStylisticAltTwoOffSelector ),
-    ( 'ss03',   kStylisticAlternativesType, kStylisticAltThreeOnSelector,           kStylisticAltThreeOffSelector ),
-    ( 'ss04',   kStylisticAlternativesType, kStylisticAltFourOnSelector,            kStylisticAltFourOffSelector ),
-    ( 'ss05',   kStylisticAlternativesType, kStylisticAltFiveOnSelector,            kStylisticAltFiveOffSelector ),
-    ( 'ss06',   kStylisticAlternativesType, kStylisticAltSixOnSelector,             kStylisticAltSixOffSelector ),
-    ( 'ss07',   kStylisticAlternativesType, kStylisticAltSevenOnSelector,           kStylisticAltSevenOffSelector ),
-    ( 'ss08',   kStylisticAlternativesType, kStylisticAltEightOnSelector,           kStylisticAltEightOffSelector ),
-    ( 'ss09',   kStylisticAlternativesType, kStylisticAltNineOnSelector,            kStylisticAltNineOffSelector ),
-    ( 'ss10',   kStylisticAlternativesType, kStylisticAltTenOnSelector,             kStylisticAltTenOffSelector ),
-    ( 'ss11',   kStylisticAlternativesType, kStylisticAltElevenOnSelector,          kStylisticAltElevenOffSelector ),
-    ( 'ss12',   kStylisticAlternativesType, kStylisticAltTwelveOnSelector,          kStylisticAltTwelveOffSelector ),
-    ( 'ss13',   kStylisticAlternativesType, kStylisticAltThirteenOnSelector,        kStylisticAltThirteenOffSelector ),
-    ( 'ss14',   kStylisticAlternativesType, kStylisticAltFourteenOnSelector,        kStylisticAltFourteenOffSelector ),
-    ( 'ss15',   kStylisticAlternativesType, kStylisticAltFifteenOnSelector,         kStylisticAltFifteenOffSelector ),
-    ( 'ss16',   kStylisticAlternativesType, kStylisticAltSixteenOnSelector,         kStylisticAltSixteenOffSelector ),
-    ( 'ss17',   kStylisticAlternativesType, kStylisticAltSeventeenOnSelector,       kStylisticAltSeventeenOffSelector ),
-    ( 'ss18',   kStylisticAlternativesType, kStylisticAltEighteenOnSelector,        kStylisticAltEighteenOffSelector ),
-    ( 'ss19',   kStylisticAlternativesType, kStylisticAltNineteenOnSelector,        kStylisticAltNineteenOffSelector ),
-    ( 'ss20',   kStylisticAlternativesType, kStylisticAltTwentyOnSelector,          kStylisticAltTwentyOffSelector ),
-    ( 'subs',   kVerticalPositionType,      kInferiorsSelector,                     kNormalPositionSelector ),
-    ( 'sups',   kVerticalPositionType,      kSuperiorsSelector,                     kNormalPositionSelector ),
-    ( 'swsh',   kContextualAlternatesType,  kSwashAlternatesOnSelector,             kSwashAlternatesOffSelector ),
-    ( 'titl',   kStyleOptionsType,          kTitlingCapsSelector,                   kNoStyleOptionsSelector ),
-    ( 'tnam',   kCharacterShapeType,        kTraditionalNamesCharactersSelector,    16 ),
-    ( 'tnum',   kNumberSpacingType,         kMonospacedNumbersSelector,             4 ),
-    ( 'trad',   kCharacterShapeType,        kTraditionalCharactersSelector,         16 ),
-    ( 'twid',   kTextSpacingType,           kThirdWidthTextSelector,                7 ),
-    ( 'unic',   kLetterCaseType,            14,                                     15 ),
-    ( 'valt',   kTextSpacingType,           kAltProportionalTextSelector,           7 ),
-    ( 'vert',   kVerticalSubstitutionType,  kSubstituteVerticalFormsOnSelector,     kSubstituteVerticalFormsOffSelector ),
-    ( 'vhal',   kTextSpacingType,           kAltHalfWidthTextSelector,              7 ),
-    ( 'vkna',   kAlternateKanaType,         kAlternateVertKanaOnSelector,           kAlternateVertKanaOffSelector ),
-    ( 'vpal',   kTextSpacingType,           kAltProportionalTextSelector,           7 ),
-    ( 'vrt2',   kVerticalSubstitutionType,  kSubstituteVerticalFormsOnSelector,     kSubstituteVerticalFormsOffSelector ),
-    ( 'zero',   kTypographicExtrasType,     kSlashedZeroOnSelector,                 kSlashedZeroOffSelector ),
-    ]
+    ("c2pc", kUpperCaseType, kUpperCasePetiteCapsSelector, kDefaultUpperCaseSelector),
+    ("c2sc", kUpperCaseType, kUpperCaseSmallCapsSelector, kDefaultUpperCaseSelector),
+    ("calt", kContextualAlternatesType, kContextualAlternatesOnSelector, kContextualAlternatesOffSelector),
+    ("case", kCaseSensitiveLayoutType, kCaseSensitiveLayoutOnSelector, kCaseSensitiveLayoutOffSelector),
+    ("clig", kLigaturesType, kContextualLigaturesOnSelector, kContextualLigaturesOffSelector),
+    ("cpsp", kCaseSensitiveLayoutType, kCaseSensitiveSpacingOnSelector, kCaseSensitiveSpacingOffSelector),
+    ("cswh", kContextualAlternatesType, kContextualSwashAlternatesOnSelector, kContextualSwashAlternatesOffSelector),
+    ("dlig", kLigaturesType, kRareLigaturesOnSelector, kRareLigaturesOffSelector),
+    ("expt", kCharacterShapeType, kExpertCharactersSelector, 16),
+    ("frac", kFractionsType, kDiagonalFractionsSelector, kNoFractionsSelector),
+    ("fwid", kTextSpacingType, kMonospacedTextSelector, 7),
+    ("halt", kTextSpacingType, kAltHalfWidthTextSelector, 7),
+    ("hist", kLigaturesType, kHistoricalLigaturesOnSelector, kHistoricalLigaturesOffSelector),
+    (
+        "hkna",
+        kAlternateKanaType,
+        kAlternateHorizKanaOnSelector,
+        kAlternateHorizKanaOffSelector,
+    ),
+    ("hlig", kLigaturesType, kHistoricalLigaturesOnSelector, kHistoricalLigaturesOffSelector),
+    ("hngl", kTransliterationType, kHanjaToHangulSelector, kNoTransliterationSelector),
+    ("hojo", kCharacterShapeType, kHojoCharactersSelector, 16),
+    ("hwid", kTextSpacingType, kHalfWidthTextSelector, 7),
+    ("ital", kItalicCJKRomanType, kCJKItalicRomanOnSelector, kCJKItalicRomanOffSelector),
+    ("jp04", kCharacterShapeType, kJIS2004CharactersSelector, 16),
+    ("jp78", kCharacterShapeType, kJIS1978CharactersSelector, 16),
+    ("jp83", kCharacterShapeType, kJIS1983CharactersSelector, 16),
+    ("jp90", kCharacterShapeType, kJIS1990CharactersSelector, 16),
+    ("liga", kLigaturesType, kCommonLigaturesOnSelector, kCommonLigaturesOffSelector),
+    ("lnum", kNumberCaseType, kUpperCaseNumbersSelector, 2),
+    ("mgrk", kMathematicalExtrasType, kMathematicalGreekOnSelector, kMathematicalGreekOffSelector),
+    ("nlck", kCharacterShapeType, kNLCCharactersSelector, 16),
+    ("onum", kNumberCaseType, kLowerCaseNumbersSelector, 2),
+    ("ordn", kVerticalPositionType, kOrdinalsSelector, kNormalPositionSelector),
+    ("palt", kTextSpacingType, kAltProportionalTextSelector, 7),
+    ("pcap", kLowerCaseType, kLowerCasePetiteCapsSelector, kDefaultLowerCaseSelector),
+    ("pkna", kTextSpacingType, kProportionalTextSelector, 7),
+    ("pnum", kNumberSpacingType, kProportionalNumbersSelector, 4),
+    ("pwid", kTextSpacingType, kProportionalTextSelector, 7),
+    ("qwid", kTextSpacingType, kQuarterWidthTextSelector, 7),
+    ("ruby", kRubyKanaType, kRubyKanaOnSelector, kRubyKanaOffSelector),
+    ("sinf", kVerticalPositionType, kScientificInferiorsSelector, kNormalPositionSelector),
+    ("smcp", kLowerCaseType, kLowerCaseSmallCapsSelector, kDefaultLowerCaseSelector),
+    ("smpl", kCharacterShapeType, kSimplifiedCharactersSelector, 16),
+    ("ss01", kStylisticAlternativesType, kStylisticAltOneOnSelector, kStylisticAltOneOffSelector),
+    ("ss02", kStylisticAlternativesType, kStylisticAltTwoOnSelector, kStylisticAltTwoOffSelector),
+    ("ss03", kStylisticAlternativesType, kStylisticAltThreeOnSelector, kStylisticAltThreeOffSelector),
+    ("ss04", kStylisticAlternativesType, kStylisticAltFourOnSelector, kStylisticAltFourOffSelector),
+    ("ss05", kStylisticAlternativesType, kStylisticAltFiveOnSelector, kStylisticAltFiveOffSelector),
+    ("ss06", kStylisticAlternativesType, kStylisticAltSixOnSelector, kStylisticAltSixOffSelector),
+    ("ss07", kStylisticAlternativesType, kStylisticAltSevenOnSelector, kStylisticAltSevenOffSelector),
+    ("ss08", kStylisticAlternativesType, kStylisticAltEightOnSelector, kStylisticAltEightOffSelector),
+    ("ss09", kStylisticAlternativesType, kStylisticAltNineOnSelector, kStylisticAltNineOffSelector),
+    ("ss10", kStylisticAlternativesType, kStylisticAltTenOnSelector, kStylisticAltTenOffSelector),
+    ("ss11", kStylisticAlternativesType, kStylisticAltElevenOnSelector, kStylisticAltElevenOffSelector),
+    ("ss12", kStylisticAlternativesType, kStylisticAltTwelveOnSelector, kStylisticAltTwelveOffSelector),
+    ("ss13", kStylisticAlternativesType, kStylisticAltThirteenOnSelector, kStylisticAltThirteenOffSelector),
+    ("ss14", kStylisticAlternativesType, kStylisticAltFourteenOnSelector, kStylisticAltFourteenOffSelector),
+    ("ss15", kStylisticAlternativesType, kStylisticAltFifteenOnSelector, kStylisticAltFifteenOffSelector),
+    ("ss16", kStylisticAlternativesType, kStylisticAltSixteenOnSelector, kStylisticAltSixteenOffSelector),
+    ("ss17", kStylisticAlternativesType, kStylisticAltSeventeenOnSelector, kStylisticAltSeventeenOffSelector),
+    ("ss18", kStylisticAlternativesType, kStylisticAltEighteenOnSelector, kStylisticAltEighteenOffSelector),
+    ("ss19", kStylisticAlternativesType, kStylisticAltNineteenOnSelector, kStylisticAltNineteenOffSelector),
+    ("ss20", kStylisticAlternativesType, kStylisticAltTwentyOnSelector, kStylisticAltTwentyOffSelector),
+    ("subs", kVerticalPositionType, kInferiorsSelector, kNormalPositionSelector),
+    ("sups", kVerticalPositionType, kSuperiorsSelector, kNormalPositionSelector),
+    ("swsh", kContextualAlternatesType, kSwashAlternatesOnSelector, kSwashAlternatesOffSelector),
+    ("titl", kStyleOptionsType, kTitlingCapsSelector, kNoStyleOptionsSelector),
+    ("tnam", kCharacterShapeType, kTraditionalNamesCharactersSelector, 16),
+    ("tnum", kNumberSpacingType, kMonospacedNumbersSelector, 4),
+    ("trad", kCharacterShapeType, kTraditionalCharactersSelector, 16),
+    ("twid", kTextSpacingType, kThirdWidthTextSelector, 7),
+    ("unic", kLetterCaseType, 14, 15),
+    ("valt", kTextSpacingType, kAltProportionalTextSelector, 7),
+    ("vert", kVerticalSubstitutionType, kSubstituteVerticalFormsOnSelector, kSubstituteVerticalFormsOffSelector),
+    ("vhal", kTextSpacingType, kAltHalfWidthTextSelector, 7),
+    ("vkna", kAlternateKanaType, kAlternateVertKanaOnSelector, kAlternateVertKanaOffSelector),
+    ("vpal", kTextSpacingType, kAltProportionalTextSelector, 7),
+    ("vrt2", kVerticalSubstitutionType, kSubstituteVerticalFormsOnSelector, kSubstituteVerticalFormsOffSelector),
+    ("zero", kTypographicExtrasType, kSlashedZeroOnSelector, kSlashedZeroOffSelector),
+]
 
 _featureMap = dict()
 for tag, sel, on, off in _coreTextfeatureData:
@@ -464,7 +469,7 @@ for key, value in _featureMap.items():
     featureType, featureSelector = value
     feature = {
         CoreText.NSFontFeatureTypeIdentifierKey: featureType,
-        CoreText.NSFontFeatureSelectorIdentifierKey: featureSelector
+        CoreText.NSFontFeatureSelectorIdentifierKey: featureSelector,
     }
     featureMap[key] = feature
     reversedFeatureMap[(featureType, featureSelector)] = key

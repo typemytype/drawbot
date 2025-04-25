@@ -1,4 +1,5 @@
 import drawBot
+
 drawBot.size(300, 300)
 drawBot.save()
 drawBot.fill(1, 0, 0)

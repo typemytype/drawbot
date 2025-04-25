@@ -1,22 +1,18 @@
-import AppKit
-import CoreText
-
-import os
 import base64
+import os
 
+import AppKit  # type: ignore
+import CoreText
+from fontTools.misc.transform import Transform
 from fontTools.misc.xmlWriter import XMLWriter
 
-from fontTools.misc.transform import Transform
+from drawBot.misc import formatNumber, warnings
 
-from .tools.openType import getFeatureTagsForFontAttributes
-from .baseContext import BaseContext, GraphicsState, Shadow, Color, Gradient, BezierPath, FormattedString
+from .baseContext import BaseContext, Color, FormattedString, Gradient, GraphicsState, Shadow
 from .imageContext import _makeBitmapImageRep
-
-from drawBot.misc import warnings, formatNumber
 
 
 class _UniqueIDGenerator:
-
     def __init__(self, prefix):
         self._prefix = prefix
         self._intGenerator = self._intGeneratorFunc()
@@ -36,7 +32,6 @@ class _UniqueIDGenerator:
 
 
 class SVGFile:
-
     optimize = False
 
     def __init__(self):
@@ -62,7 +57,6 @@ class SVGFile:
 
 
 class SVGColor(Color):
-
     def svgColor(self):
         c = self.getNSObject()
         if c:
@@ -79,7 +73,6 @@ class SVGColor(Color):
 
 
 class SVGGradient(Gradient):
-
     _colorClass = SVGColor
     _idGenerator = _UniqueIDGenerator("gradient")
 
@@ -136,7 +129,9 @@ class SVGGradient(Gradient):
             tagID = "%s_flipped" % tagID
             y1 = ctx.height - y1
             y2 = ctx.height - y2
-        ctx.begintag("radialGradient", id=tagID, cx=x2, cy=y2, r=self.endRadius, fx=x1, fy=y1, gradientUnits="userSpaceOnUse")
+        ctx.begintag(
+            "radialGradient", id=tagID, cx=x2, cy=y2, r=self.endRadius, fx=x1, fy=y1, gradientUnits="userSpaceOnUse"
+        )
         ctx.newline()
         for i, color in enumerate(self.colors):
             position = self.positions[i]
@@ -151,7 +146,6 @@ class SVGGradient(Gradient):
 
 
 class SVGShadow(Shadow):
-
     _colorClass = SVGColor
     _idGenerator = _UniqueIDGenerator("shadow")
 
@@ -211,7 +205,6 @@ class SVGShadow(Shadow):
 
 
 class SVGGraphicsState(GraphicsState):
-
     _colorClass = SVGColor
 
     def __init__(self):
@@ -227,7 +220,6 @@ class SVGGraphicsState(GraphicsState):
 
 
 class SVGContext(BaseContext):
-
     _graphicsStateClass = SVGGraphicsState
     _shadowClass = SVGShadow
     _colorClass = SVGColor
@@ -239,13 +231,13 @@ class SVGContext(BaseContext):
     _svgTagArguments = [
         ("version", "1.1"),
         ("xmlns", "http://www.w3.org/2000/svg"),
-        ("xmlns:xlink", "http://www.w3.org/1999/xlink")
+        ("xmlns:xlink", "http://www.w3.org/1999/xlink"),
     ]
 
     _svgLineJoinStylesMap = {
         AppKit.NSMiterLineJoinStyle: "miter",
         AppKit.NSRoundLineJoinStyle: "round",
-        AppKit.NSBevelLineJoinStyle: "bevel"
+        AppKit.NSBevelLineJoinStyle: "bevel",
     }
 
     _svgLineCapStylesMap = {
@@ -287,7 +279,9 @@ class SVGContext(BaseContext):
     def cmykLinearGradient(self, startPoint=None, endPoint=None, colors=None, locations=None):
         warnings.warn("cmykLinearGradient is not supported in a svg context")
 
-    def cmykRadialGradient(self, startPoint=None, endPoint=None, colors=None, locations=None, startRadius=0, endRadius=100):
+    def cmykRadialGradient(
+        self, startPoint=None, endPoint=None, colors=None, locations=None, startRadius=0, endRadius=100
+    ):
         warnings.warn("cmykRadialGradient is not supported in a svg context")
 
     def cmykShadow(self, offset, blur, color):
@@ -328,7 +322,7 @@ class SVGContext(BaseContext):
         self._svgContext = XMLWriter(self._svgData, encoding="utf-8", indentwhite=self.indentation)
         self._svgContext.width = self.width
         self._svgContext.height = self.height
-        attrs = [('width', self.width), ('height', self.height), ('viewBox', f"0 0 {self.width} {self.height}")]
+        attrs = [("width", self.width), ("height", self.height), ("viewBox", f"0 0 {self.width} {self.height}")]
         self._svgContext.begintag("svg", attrs + self._svgTagArguments)
         self._svgContext.newline()
         self._state.transformMatrix = self._state.transformMatrix.scale(1, -1).translate(0, -self.height)
@@ -412,7 +406,7 @@ class SVGContext(BaseContext):
 
         data = {
             "text-anchor": "start",
-            "transform": self._svgTransform(self._state.transformMatrix.translate(x, y + self.height).scale(1, -1))
+            "transform": self._svgTransform(self._state.transformMatrix.translate(x, y + self.height).scale(1, -1)),
         }
         if self._state.shadow is not None:
             data["filter"] = "url(#%s_flipped)" % self._state.shadow.tagID
@@ -451,7 +445,10 @@ class SVGContext(BaseContext):
 
                 fontName = font.fontName()
                 fontSize = font.pointSize()
-                fontFallbacks = [fallbackFont.postscriptName() for fallbackFont in fontDescriptor.get(CoreText.NSFontCascadeListAttribute, [])]
+                fontFallbacks = [
+                    fallbackFont.postscriptName()
+                    for fallbackFont in fontDescriptor.get(CoreText.NSFontCascadeListAttribute, [])
+                ]
                 fontNames = ", ".join([fontName] + fontFallbacks)
 
                 style = dict()
@@ -468,7 +465,7 @@ class SVGContext(BaseContext):
                     spanData["stroke"] = c
                     if a != 1:
                         spanData["stroke-opacity"] = a
-                    spanData["stroke-width"] = formatNumber(abs(strokeWidth) * .5)
+                    spanData["stroke-width"] = formatNumber(abs(strokeWidth) * 0.5)
                 spanData["font-family"] = fontNames
                 spanData["font-size"] = formatNumber(fontSize)
 
@@ -564,7 +561,7 @@ class SVGContext(BaseContext):
                 ("id", imageID),
                 ("width", width),
                 ("height", height),
-                ("xlink:href", "data:image/%s;base64,%s" % (mimeSubtype, base64.b64encode(imageData).decode("ascii")))
+                ("xlink:href", "data:image/%s;base64,%s" % (mimeSubtype, base64.b64encode(imageData).decode("ascii"))),
             ]
             self._svgContext.begintag("defs")
             self._svgContext.newline()
@@ -580,7 +577,7 @@ class SVGContext(BaseContext):
             ("y", 0),
             ("opacity", alpha * self._state.opacity),
             ("transform", self._svgTransform(self._state.transformMatrix.translate(x, y + height).scale(1, -1))),
-            ("xlink:href", "#%s" % imageID)
+            ("xlink:href", "#%s" % imageID),
         ]
         self._svgContext.simpletag("use", data)
         self._svgContext.newline()
@@ -619,7 +616,14 @@ class SVGContext(BaseContext):
                 offy2 = points[1].y - previousPoint.y
                 x = points[2].x - previousPoint.x
                 y = points[2].y - previousPoint.y
-                svg += "c%s,%s,%s,%s,%s,%s " % (formatNumber(offx1), formatNumber(offy1), formatNumber(offx2), formatNumber(offy2), formatNumber(x), formatNumber(y))
+                svg += "c%s,%s,%s,%s,%s,%s " % (
+                    formatNumber(offx1),
+                    formatNumber(offy1),
+                    formatNumber(offx2),
+                    formatNumber(offy2),
+                    formatNumber(x),
+                    formatNumber(y),
+                )
                 previousPoint = points[-1]
             elif instruction == AppKit.NSClosePathBezierPathElement:
                 svg += "Z "
@@ -691,14 +695,14 @@ class SVGContext(BaseContext):
         x, y, w, h = xywh
         rectData = dict(
             x=x,
-            y=self.height-y-h,
+            y=self.height - y - h,
             width=w,
             height=h,
             fill="transparent",
         )
         self._svgContext.begintag("a", href=url)
         self._svgContext.newline()
-        self._svgContext.simpletag('rect', **rectData)
+        self._svgContext.simpletag("rect", **rectData)
         self._svgContext.newline()
         self._svgContext.endtag("a")
         self._svgContext.newline()

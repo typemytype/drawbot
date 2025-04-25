@@ -1,6 +1,6 @@
-import CoreText
 from collections import OrderedDict
 
+import CoreText
 from fontTools.ttLib import TTFont
 
 from drawBot.misc import memoize, warnings
@@ -14,7 +14,7 @@ https://developer.apple.com/documentation/coretext/1508650-ctfontdescriptorcreat
 def convertIntToVariationTag(value):
     chars = []
     for shift in range(4):
-        chars.append(chr((value >> (shift * 8)) & 0xff))
+        chars.append(chr((value >> (shift * 8)) & 0xFF))
     return "".join(reversed(chars))
 
 
