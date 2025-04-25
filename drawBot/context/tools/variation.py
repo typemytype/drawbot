@@ -101,8 +101,6 @@ def getFontVariationAttributes(font, fontVariations):
         coreTextFontVariations[convertVariationTagToInt(axisTag)] = value
 
     for axisTag in sorted(set(fontVariations) - set(axes)):
-        warnings.warn(
-            "variation axis '%s' not available for '%s'" % (axisTag, font.fontName())
-        )
+        warnings.warn("variation axis '%s' not available for '%s'" % (axisTag, font.fontName()))
 
     return coreTextFontVariations
