@@ -93,8 +93,13 @@ def getFontVariationAttributes(font, fontVariations):
     coreTextFontVariations = dict()
     axes = getVariationAxesForFont(font)
     for axisTag, axis in axes.items():
-        value = fontVariations.get(axisTag, axis["defaultValue"])
+        value = min(
+            max(fontVariations.get(axisTag, axis["defaultValue"]), axis["minValue"]),
+            axis["maxValue"],
+        )
         coreTextFontVariations[convertVariationTagToInt(axisTag)] = value
     for axisTag in sorted(set(fontVariations) - set(axes)):
-        warnings.warn("variation axis '%s' not available for '%s'" % (axisTag, font.fontName()))
+        warnings.warn(
+            "variation axis '%s' not available for '%s'" % (axisTag, font.fontName())
+        )
     return coreTextFontVariations
