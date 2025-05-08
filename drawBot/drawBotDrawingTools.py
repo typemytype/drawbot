@@ -8,7 +8,6 @@ from typing import Any
 import AppKit  # type: ignore
 import CoreText  # type: ignore
 import Quartz  # type: ignore
-from .drawBotPageDrawingTools import DrawBotPage
 from .aliases import (
     BoundingBox,
     CMYKColor,
@@ -29,6 +28,7 @@ from .context.baseContext import (
     getNSFontFromNameOrPath,
     makeTextBoxes,
 )
+from typing import TYPE_CHECKING
 from .context.dummyContext import DummyContext
 from .context.tools import drawBotbuiltins, gifTools
 from .context.tools.imageObject import ImageObject
@@ -44,6 +44,8 @@ from .misc import (
     warnings,
 )
 
+if TYPE_CHECKING:
+    from .drawBotPageDrawingTools import DrawBotPage
 
 def _getmodulecontents(module, names=None):
     d = {}
@@ -338,7 +340,8 @@ class DrawBotDrawingTool:
         self._dummyContext = DummyContext()
         self._addInstruction("newPage", width, height)
 
-    def pages(self) -> tuple[DrawBotPage, ...]:
+
+    def pages(self) -> tuple["DrawBotPage", ...]:
         """
         Return all pages.
 
@@ -380,6 +383,8 @@ class DrawBotDrawingTool:
                     # draw an oval in each of them
                     oval(110, 10, 30, 30)
         """
+        from .drawBotPageDrawingTools import DrawBotPage
+
         instructions = []
         for instructionSet in self._instructionsStack:
             for callback, _, _ in instructionSet:
