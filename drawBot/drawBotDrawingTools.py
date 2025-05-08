@@ -1890,8 +1890,8 @@ class DrawBotDrawingTool:
         return self._dummyContext.clippedText(txt, box, align)
 
     def textBox(
-        self, txt: FormattedString | str, box: BoundingBox, align: str | None = None
-    ) -> str | FormattedString:  # FIXME is this correct?
+        self, txt: FormattedString | str, box: BoundingBox, align: str | None = None,
+    ) -> str | FormattedString | None:
         """
         Draw a text in a provided rectangle.
 
