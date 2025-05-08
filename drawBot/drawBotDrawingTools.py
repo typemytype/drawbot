@@ -496,7 +496,7 @@ class DrawBotDrawingTool:
         else:
             context.printImage(pdf)
 
-    def pdfImage(self):
+    def pdfImage(self):  # FIXME how could we annotate this?
         """
         Return the image as a pdf document object.
         """
@@ -1698,7 +1698,7 @@ class DrawBotDrawingTool:
         self._dummyContext.writingDirection(direction)
         self._addInstruction("writingDirection", direction)
 
-    def openTypeFeatures(self, *args: bool | None, **features: bool) -> dict[str, bool]:
+    def openTypeFeatures(self, *args: bool | None, **features: bool) -> dict[str, bool]: # FIXME I am sure we discussed this already, but why do we need args here? From the example is not evident...
         """
         Enable OpenType features.
 
