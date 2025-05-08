@@ -388,7 +388,7 @@ class DrawBotDrawingTool:
                     break
         return tuple(DrawBotPage(instructionSet) for instructionSet in instructions)
 
-    def saveImage(self, path: SomePath, *args, **options: dict[str, Any]):
+    def saveImage(self, path: SomePath, *args: Any, **options: Any):  # FIXME how could we annotate this one?
         """
         Save or export the canvas to a specified format.
         The `path` argument is a single destination path to save the current drawing actions.
