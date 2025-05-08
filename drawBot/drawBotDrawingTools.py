@@ -1173,7 +1173,15 @@ class DrawBotDrawingTool:
             rect(10, 10, 980, 980)
         """
         self._requiresNewFirstPage = True
-        self._addInstruction("radialGradient", startPoint, endPoint, colors, locations, startRadius, endRadius)
+        self._addInstruction(
+            "radialGradient",
+            startPoint,
+            endPoint,
+            colors,
+            locations,
+            startRadius,
+            endRadius,
+        )
 
     def cmykRadialGradient(
         self,
@@ -1211,7 +1219,15 @@ class DrawBotDrawingTool:
             rect(10, 10, 980, 980)
         """
         self._requiresNewFirstPage = True
-        self._addInstruction("cmykRadialGradient", startPoint, endPoint, colors, locations, startRadius, endRadius)
+        self._addInstruction(
+            "cmykRadialGradient",
+            startPoint,
+            endPoint,
+            colors,
+            locations,
+            startRadius,
+            endRadius,
+        )
 
     # path drawing behavoir
 
@@ -1698,7 +1714,11 @@ class DrawBotDrawingTool:
         self._dummyContext.writingDirection(direction)
         self._addInstruction("writingDirection", direction)
 
-    def openTypeFeatures(self, *args: bool | None, **features: bool) -> dict[str, bool]: # FIXME I am sure we discussed this already, but why do we need args here? From the example is not evident...
+    def openTypeFeatures(
+        self, *args: bool | None, **features: bool
+    ) -> dict[
+        str, bool
+    ]:  # FIXME I am sure we discussed this already, but why do we need args here? From the example is not evident...
         """
         Enable OpenType features.
 
@@ -1739,7 +1759,9 @@ class DrawBotDrawingTool:
 
     listOpenTypeFeatures.__doc__ = FormattedString.listOpenTypeFeatures.__doc__
 
-    def fontVariations(self, *args: None, **axes: float) -> dict[str, float]:  # FIXME why was bool there? also, why *args?
+    def fontVariations(
+        self, *args: None, **axes: float
+    ) -> dict[str, float]:  # FIXME why was bool there? also, why *args?
         """
         Pick a variation by axes values.
 
@@ -1829,7 +1851,10 @@ class DrawBotDrawingTool:
             raise DrawBotError("align must be left, right, center")
         attributedString = self._dummyContext.attributedString(txt, align=align)
         for subTxt, box in makeTextBoxes(
-            attributedString, (x, y), align=align, plainText=not isinstance(txt, FormattedString)
+            attributedString,
+            (x, y),
+            align=align,
+            plainText=not isinstance(txt, FormattedString),
         ):
             if isinstance(txt, FormattedString):
                 subTxt.copyContextProperties(txt)
@@ -2060,7 +2085,12 @@ class DrawBotDrawingTool:
                 runW, runH, ascent, descent = CoreText.CTRunGetTypographicBounds(ctRun, (0, 0), None, None, None)
                 bounds.append(
                     CharactersBounds(
-                        (x + originX + runPos.x, y + originY + runPos.y - ascent, runW, runH + ascent),
+                        (
+                            x + originX + runPos.x,
+                            y + originY + runPos.y - ascent,
+                            runW,
+                            runH + ascent,
+                        ),
                         ascent,
                         txt[runRange.location : runRange.location + runRange.length],
                     )
