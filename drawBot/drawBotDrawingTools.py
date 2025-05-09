@@ -5,7 +5,7 @@ import os
 import random
 from collections import namedtuple
 from contextlib import contextmanager
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, Literal
 
 import AppKit  # type: ignore
 import CoreText  # type: ignore
@@ -1293,7 +1293,7 @@ class DrawBotDrawingTool:
         self._requiresNewFirstPage = True
         self._addInstruction("miterLimit", value)
 
-    def lineJoin(self, value: str):
+    def lineJoin(self, value: Literal["miter", "round", "bevel"]):
         """
         Set a line join.
 
@@ -1336,7 +1336,7 @@ class DrawBotDrawingTool:
         self._requiresNewFirstPage = True
         self._addInstruction("lineJoin", value)
 
-    def lineCap(self, value: str):
+    def lineCap(self, value: Literal["butt", "square", "round"]):
         """
         Set a line cap.
 
@@ -1565,7 +1565,7 @@ class DrawBotDrawingTool:
         self._dummyContext.baselineShift(value)
         self._addInstruction("baselineShift", value)
 
-    def underline(self, value: str | None) -> None:  # FIXME could we assert the value in entrance?
+    def underline(self, value: Literal["single", "thick", "double"] | None) -> None:
         """
         Set the underline value.
         Underline must be `single`, `thick`, `double` or `None`.
@@ -1579,7 +1579,7 @@ class DrawBotDrawingTool:
         self._dummyContext.underline(value)
         self._addInstruction("underline", value)
 
-    def strikethrough(self, value: str | None) -> None:  # FIXME could we assert the value in entrance?
+    def strikethrough(self, value: Literal["single", "thick", "double"] | None) -> None:
         """
         Set the strikethrough value.
         Underline must be `single`, `thick`, `double` or `None`.
@@ -1702,9 +1702,7 @@ class DrawBotDrawingTool:
             if not CoreText.CFStringIsHyphenationAvailableForLocale(locale):
                 warnings.warn(f"Language '{language}' has no hyphenation available.")
 
-    def writingDirection(
-        self, direction: str | None
-    ) -> None:  # FIXME could we assert the value in entrance? or give a warning?
+    def writingDirection(self, direction: Literal["LTR", "RTL"] | None) -> None:
         """
         Set the writing direction: `None`, `'LTR'` or `'RTL'`.
 
@@ -1834,7 +1832,12 @@ class DrawBotDrawingTool:
 
     # drawing text
 
-    def text(self, txt: FormattedString | str, position: Point, align: str | None = None) -> None:
+    def text(
+        self,
+        txt: FormattedString | str,
+        position: Point,
+        align: Literal["left", "center", "right"] | None = None,
+    ) -> None:
         """
         Draw a text at a provided position.
 
@@ -1873,7 +1876,7 @@ class DrawBotDrawingTool:
         self,
         txt: FormattedString | str,
         box: BoundingBox | BezierPath,
-        align: str | None = None,
+        align: Literal["left", "center", "right", "justified"] | None = None,
     ) -> FormattedString | str | None:
         """
         Returns the overflowed text without drawing the text.
@@ -1902,7 +1905,7 @@ class DrawBotDrawingTool:
         self,
         txt: FormattedString | str,
         box: BoundingBox,
-        align: str | None = None,
+        align: Literal["left", "center", "right", "justified"] | None = None,
     ) -> str | FormattedString | None:
         """
         Draw a text in a provided rectangle.
@@ -2042,7 +2045,10 @@ class DrawBotDrawingTool:
         return self._dummyContext.clippedText(txt, box, align)
 
     def textBoxBaselines(
-        self, txt: FormattedString | str, box: BoundingBox, align: str | None = None
+        self,
+        txt: FormattedString | str,
+        box: BoundingBox,
+        align: Literal["left", "center", "right", "justified"] | None = None,
     ) -> list[tuple[float, float]]:
         """
         Returns a list of `x, y` coordinates
