@@ -33,7 +33,6 @@ from .context.baseContext import (
     makeTextBoxes,
     newFramesetterWithAttributedString,
 )
-from typing import TYPE_CHECKING
 from .context.dummyContext import DummyContext
 from .context.tools import drawBotbuiltins, gifTools
 from .context.tools.imageObject import ImageObject
