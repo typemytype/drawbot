@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import math
 import os
 import random
@@ -340,8 +342,7 @@ class DrawBotDrawingTool:
         self._dummyContext = DummyContext()
         self._addInstruction("newPage", width, height)
 
-
-    def pages(self) -> tuple["DrawBotPage", ...]:
+    def pages(self) -> tuple[DrawBotPage, ...]:
         """
         Return all pages.
 
