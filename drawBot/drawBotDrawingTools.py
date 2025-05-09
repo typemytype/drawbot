@@ -505,7 +505,7 @@ class DrawBotDrawingTool:
         else:
             context.printImage(pdf)
 
-    def pdfImage(self) -> Quartz.PDFDocument:
+    def pdfImage(self) -> Quartz.PDFDocument | None:
         """
         Return the image as a pdf document object.
         """
