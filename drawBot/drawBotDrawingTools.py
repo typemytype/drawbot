@@ -394,7 +394,9 @@ class DrawBotDrawingTool:
                     break
         return tuple(DrawBotPage(instructionSet) for instructionSet in instructions)
 
-    def saveImage(self, path: SomePath, *args: Any, **options: Any):  # FIXME how could we annotate this one?
+    def saveImage(
+        self, path: SomePath, *args: Any, **options: Any
+    ) -> list[AppKit.NSImage | PIL.ImageFile.ImageFile] | None:
         """
         Save or export the canvas to a specified format.
         The `path` argument is a single destination path to save the current drawing actions.
@@ -502,7 +504,7 @@ class DrawBotDrawingTool:
         else:
             context.printImage(pdf)
 
-    def pdfImage(self):  # FIXME how could we annotate this?
+    def pdfImage(self) -> Quartz.PDFDocument:
         """
         Return the image as a pdf document object.
         """
@@ -2263,9 +2265,7 @@ class DrawBotDrawingTool:
             color.alphaComponent(),
         )
 
-    def imageResolution(
-        self, path: SomePath | AppKit.NSImage
-    ) -> int:  # FIXME how can it be an integer with that kind of arithmetic operation?
+    def imageResolution(self, path: SomePath | AppKit.NSImage) -> float:
         """
         Return the image resolution for a given image. Supports pdf, jpg, png, tiff and gif file formats. `NSImage` objects are supported too.
         """
