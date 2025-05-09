@@ -5,11 +5,12 @@ import os
 import random
 from collections import namedtuple
 from contextlib import contextmanager
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import AppKit  # type: ignore
 import CoreText  # type: ignore
 import Quartz  # type: ignore
+
 from .aliases import (
     BoundingBox,
     CMYKColor,
@@ -30,7 +31,6 @@ from .context.baseContext import (
     getNSFontFromNameOrPath,
     makeTextBoxes,
 )
-from typing import TYPE_CHECKING
 from .context.dummyContext import DummyContext
 from .context.tools import drawBotbuiltins, gifTools
 from .context.tools.imageObject import ImageObject
