@@ -49,6 +49,7 @@ from .misc import (
 if TYPE_CHECKING:
     from .drawBotPageDrawingTools import DrawBotPage
 
+
 def _getmodulecontents(module, names=None):
     d = {}
     if names is None:
@@ -1898,7 +1899,10 @@ class DrawBotDrawingTool:
         return self._dummyContext.clippedText(txt, box, align)
 
     def textBox(
-        self, txt: FormattedString | str, box: BoundingBox, align: str | None = None,
+        self,
+        txt: FormattedString | str,
+        box: BoundingBox,
+        align: str | None = None,
     ) -> str | FormattedString | None:
         """
         Draw a text in a provided rectangle.
