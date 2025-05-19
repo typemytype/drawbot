@@ -398,9 +398,7 @@ class DrawBotDrawingTool:
                     break
         return tuple(DrawBotPage(instructionSet) for instructionSet in instructions)
 
-    def saveImage(
-        self, path: SomePath, *args: Any, **options: Any
-    ) -> list[AppKit.NSImage | PIL.ImageFile.ImageFile] | None:
+    def saveImage(self, path: SomePath, *args: Any, **options: Any):
         """
         Save or export the canvas to a specified format.
         The `path` argument is a single destination path to save the current drawing actions.
