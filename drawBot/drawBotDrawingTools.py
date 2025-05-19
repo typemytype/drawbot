@@ -395,9 +395,7 @@ class DrawBotDrawingTool:
                     break
         return tuple(DrawBotPage(instructionSet) for instructionSet in instructions)
 
-    def saveImage(
-        self, path: SomePath, *args: Any, **options: Any
-    ) -> list[AppKit.NSImage | PIL.ImageFile.ImageFile] | None:
+    def saveImage(self, path: SomePath, *args: Any, **options: Any):
         """
         Save or export the canvas to a specified format.
         The `path` argument is a single destination path to save the current drawing actions.
@@ -1721,11 +1719,7 @@ class DrawBotDrawingTool:
         self._dummyContext.writingDirection(direction)
         self._addInstruction("writingDirection", direction)
 
-    def openTypeFeatures(
-        self, *args: bool | None, **features: bool
-    ) -> dict[
-        str, bool
-    ]:  # FIXME I am sure we discussed this already, but why do we need args here? From the example is not evident...
+    def openTypeFeatures(self, *args: bool | None, **features: bool) -> dict[str, bool]:
         """
         Enable OpenType features.
 
@@ -2070,7 +2064,6 @@ class DrawBotDrawingTool:
         origins = CoreText.CTFrameGetLineOrigins(box, (0, len(ctLines)), None)
         return [(x + o.x, y + o.y) for o in origins]
 
-    # FIXME align is not used
     def textBoxCharacterBounds(
         self, txt: FormattedString | str, box: BoundingBox, align: str | None = None
     ) -> list[tuple[BoundingBox | BezierPath, float, FormattedString | str]]:
@@ -2087,7 +2080,7 @@ class DrawBotDrawingTool:
 
         CharactersBounds = namedtuple("CharactersBounds", ["bounds", "baselineOffset", "formattedSubString"])
 
-        bounds = list()
+        bounds = list[tuple[BoundingBox | BezierPath, float, FormattedString | str]]()
         path, (x, y) = self._dummyContext._getPathForFrameSetter(box)
         attrString = self._dummyContext.attributedString(txt)
         setter = CoreText.CTFramesetterCreateWithAttributedString(attrString)
