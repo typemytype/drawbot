@@ -9,6 +9,7 @@ from typing import TYPE_CHECKING, Any, Literal
 
 import AppKit  # type: ignore
 import CoreText  # type: ignore
+import PIL  # type: ignore
 import Quartz  # type: ignore
 
 from .aliases import (
@@ -395,7 +396,9 @@ class DrawBotDrawingTool:
                     break
         return tuple(DrawBotPage(instructionSet) for instructionSet in instructions)
 
-    def saveImage(self, path: SomePath, *args: Any, **options: Any):
+    def saveImage(
+        self, path: SomePath, *args: Any, **options: Any
+    ) -> list[AppKit.NSImage | PIL.ImageFile.ImageFile] | None:
         """
         Save or export the canvas to a specified format.
         The `path` argument is a single destination path to save the current drawing actions.
