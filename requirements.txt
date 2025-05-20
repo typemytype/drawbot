@@ -28,7 +28,6 @@ git+https://github.com/typesupply/feaPyFoFum
 git+https://github.com/typesupply/feaTools2
 pip
 packaging
-ruff
 ruff-api
 pytz
 delocate==0.10.7  # for merging intel+silicon wheels into universal2
