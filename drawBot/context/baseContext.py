@@ -3045,8 +3045,11 @@ def getFontName(font) -> str | None:
 
 
 def newFramesetterWithAttributedString(attrString):
-    allowUnbounded = len(attrString) > 2000  # somewhat arbitrary
-    typesetter = CoreText.CTTypesetterCreateWithAttributedStringAndOptions(
-        attrString, {CoreText.kCTTypesetterOptionAllowUnboundedLayout: allowUnbounded}
-    )
-    return CoreText.CTFramesetterCreateWithTypesetter(typesetter)
+    if macOSVersion >= Version("10.14"):
+        allowUnbounded = len(attrString) > 2000  # somewhat arbitrary
+        typesetter = CoreText.CTTypesetterCreateWithAttributedStringAndOptions(
+            attrString, {CoreText.kCTTypesetterOptionAllowUnboundedLayout: allowUnbounded}
+        )
+        return CoreText.CTFramesetterCreateWithTypesetter(typesetter)
+    else:
+        return CoreText.CTFramesetterCreateWithAttributedString(attrString)
