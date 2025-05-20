@@ -49,43 +49,33 @@ def getVariationAxesForFont(font):
 
 
 @memoize
-def getNamedInstancesForFont(font):
+def getNamedInstancesForDescriptors(descriptors):
     """
     Return a dict { postscriptName: location } of all named instances in a given font.
     """
-    instances = OrderedDict()
-    if font is None:
-        return instances
-    fontDescriptor = font.fontDescriptor()
-    url = CoreText.CTFontDescriptorCopyAttribute(fontDescriptor, CoreText.kCTFontURLAttribute)
-    if url is None:
-        return instances
+    instances = dict()
 
-    variationAxesDescriptions = CoreText.CTFontCopyVariationAxes(font)
-    if variationAxesDescriptions is None:
-        # non-variable fonts have no named instances
-        return instances
-    tagNameMap = {}
-    for variationAxesDescription in variationAxesDescriptions:
-        tag = convertIntToVariationTag(variationAxesDescription[CoreText.kCTFontVariationAxisIdentifierKey])
-        name = variationAxesDescription[CoreText.kCTFontVariationAxisNameKey]
-        tagNameMap[tag] = name
+    for descriptor in descriptors:
+        # convert to a ctFont
+        font = CoreText.CTFontCreateWithFontDescriptor(descriptor, 10, None)
+        # get the default variation axes
+        variationAxesDescriptions = CoreText.CTFontCopyVariationAxes(font)
 
-    ft = TTFont(url.path(), lazy=True, fontNumber=0)
-    if "fvar" in ft:
-        cgFont, _ = CoreText.CTFontCopyGraphicsFont(font, None)
-        fvar = ft["fvar"]
+        if variationAxesDescriptions is not None:
+            # variable fonts have named instances
+            fontVariation = CoreText.CTFontCopyVariation(font)
+            variationCoordinates = {}
 
-        for instance in fvar.instances:
-            fontVariations = dict()
-            for axis, value in instance.coordinates.items():
-                fontVariations[tagNameMap[axis]] = value
+            for variationAxesDescription in variationAxesDescriptions:
+                tag = convertIntToVariationTag(variationAxesDescription[CoreText.NSFontVariationAxisIdentifierKey])
+                variationCoordinates[tag] = variationAxesDescription[CoreText.NSFontVariationAxisDefaultValueKey]
 
-            varFont = CoreText.CGFontCreateCopyWithVariations(cgFont, fontVariations)
-            postScriptName = CoreText.CGFontCopyPostScriptName(varFont)
-            instances[postScriptName] = instance.coordinates
+            for fontVariationKey, fontVariationValue in fontVariation.items():
+                tag = convertIntToVariationTag(fontVariationKey)
+                variationCoordinates[tag] = fontVariationValue
 
-    ft.close()
+            instances[descriptor.postscriptName()] = variationCoordinates
+
     return instances
 
 

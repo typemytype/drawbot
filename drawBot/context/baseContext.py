@@ -1905,8 +1905,20 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
         """
         if fontNameOrPath is None:
             fontNameOrPath = self._font
-        font = getNSFontFromNameOrPath(fontNameOrPath, 10, fontNumber)
-        return variation.getNamedInstancesForFont(font)
+        if not os.path.exists(fontNameOrPath):
+            # the font is installed
+            font = getNSFontFromNameOrPath(fontNameOrPath, 10, fontNumber)
+            # get the url from the font descriptor
+            url = CoreText.CTFontDescriptorCopyAttribute(font.fontDescriptor(), CoreText.kCTFontURLAttribute)
+            if url is None:
+                return dict()
+            else:
+                path = url.path()
+        else:
+            path = fontNameOrPath
+
+        descriptors = getFontDescriptorsFromPath(path)
+        return variation.getNamedInstancesForDescriptors(descriptors)
 
     def tabs(self, tab: tuple[float, str] | None, *tabs: tuple[float, str]):
         """
@@ -3013,8 +3025,11 @@ _reloadedFontDescriptors: dict[SomePath, tuple[float, Any]] = {}
 
 @memoize
 def getFontDescriptorsFromPath(fontPath):
-    modTime = os.stat(fontPath).st_mtime
-    prevModTime, descriptors = _reloadedFontDescriptors.get(fontPath, (modTime, None))
+    if os.path.exists(fontPath):
+        modTime = os.stat(fontPath).st_mtime
+    else:
+        modTime = -1
+    prevModTime, descriptors = _reloadedFontDescriptors.get(fontPath, (modTime, ()))
     if modTime == prevModTime:
         if not descriptors:
             # Load font from disk, letting the OS handle caching and loading
@@ -3032,7 +3047,7 @@ def getFontDescriptorsFromPath(fontPath):
         data = AppKit.NSData.dataWithContentsOfFile_(fontPath)
         descriptors = CoreText.CTFontManagerCreateFontDescriptorsFromData(data)
         _reloadedFontDescriptors[fontPath] = modTime, descriptors
-    return descriptors
+    return tuple(descriptors)
 
 
 def getFontName(font) -> str | None:
