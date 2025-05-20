@@ -199,7 +199,6 @@ setup(
                 "setuptools",
                 "packaging",
                 "PIL",
-                "ruff",
                 "ruff_api",
             ],
             includes=[
