@@ -3053,4 +3053,3 @@ def newFramesetterWithAttributedString(attrString):
         return CoreText.CTFramesetterCreateWithTypesetter(typesetter)
     else:
         return CoreText.CTFramesetterCreateWithAttributedString(attrString)
-
