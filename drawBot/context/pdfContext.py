@@ -5,7 +5,7 @@ from packaging.version import Version
 
 from ..macOSVersion import macOSVersion
 from ..misc import DrawBotError, isGIF, isPDF
-from .baseContext import BaseContext, FormattedString
+from .baseContext import BaseContext, FormattedString, newFrameSetterWithAttributedString
 from .tools import gifTools
 
 
@@ -164,7 +164,7 @@ class PDFContext(BaseContext):
         if self._state.hyphenation:
             attrString = self.hyphenateAttributedString(attrString, path)
 
-        setter = CoreText.CTFramesetterCreateWithAttributedString(attrString)
+        setter = newFrameSetterWithAttributedString(attrString)
         frame = CoreText.CTFramesetterCreateFrame(setter, (0, 0), path, None)
 
         ctLines = CoreText.CTFrameGetLines(frame)

@@ -8,7 +8,15 @@ from fontTools.misc.xmlWriter import XMLWriter
 
 from drawBot.misc import formatNumber, warnings
 
-from .baseContext import BaseContext, Color, FormattedString, Gradient, GraphicsState, Shadow
+from .baseContext import (
+    BaseContext,
+    Color,
+    FormattedString,
+    Gradient,
+    GraphicsState,
+    Shadow,
+    newFrameSetterWithAttributedString,
+)
 from .imageContext import _makeBitmapImageRep
 
 
@@ -398,7 +406,7 @@ class SVGContext(BaseContext):
         if self._state.hyphenation:
             attrString = self.hyphenateAttributedString(attrString, path)
         txt = attrString.string()
-        setter = CoreText.CTFramesetterCreateWithAttributedString(attrString)
+        setter = newFrameSetterWithAttributedString(attrString)
         box = CoreText.CTFramesetterCreateFrame(setter, (0, 0), path, None)
 
         self._svgBeginClipPath()

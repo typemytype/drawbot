@@ -483,7 +483,7 @@ class BezierPath(BasePen, SVGContextPropertyMixin, ContextPropertyMixin):
         path, (x, y) = context._getPathForFrameSetter(box)
         attributedString = context.attributedString(txt, align)
 
-        setter = CoreText.CTFramesetterCreateWithAttributedString(attributedString)
+        setter = newFrameSetterWithAttributedString(attributedString)
         frame = CoreText.CTFramesetterCreateFrame(setter, (0, 0), path, None)
         ctLines = CoreText.CTFrameGetLines(frame)
         origins = CoreText.CTFrameGetLineOrigins(frame, (0, len(ctLines)), None)
@@ -1086,7 +1086,7 @@ def makeTextBoxes(attributedString, xy, align, plainText):
             AppKit.NSParagraphStyleAttributeName, (0, len(attributedString)), 0, block
         )
 
-    setter = CoreText.CTFramesetterCreateWithAttributedString(attributedString)
+    setter = newFrameSetterWithAttributedString(attributedString)
     path = Quartz.CGPathCreateMutable()
     Quartz.CGPathAddRect(path, None, Quartz.CGRectMake(x, y, w, h * 2))
     frame = CoreText.CTFramesetterCreateFrame(setter, (0, 0), path, None)
@@ -1132,7 +1132,7 @@ def makeTextBoxes(attributedString, xy, align, plainText):
                 box = (lineX, lineY, width, h * 2)
             else:
                 lineY = y + originY + firstLineJump - h * 2
-                subSetter = CoreText.CTFramesetterCreateWithAttributedString(attributedSubstring)
+                subSetter = newFrameSetterWithAttributedString(attributedSubstring)
                 subPath = Quartz.CGPathCreateMutable()
                 Quartz.CGPathAddRect(subPath, None, Quartz.CGRectMake(lineX, lineY, w, h * 2))
                 subFrame = CoreText.CTFramesetterCreateFrame(subSetter, (0, 0), subPath, None)
@@ -2837,7 +2837,7 @@ class BaseContext:
         if self._state.hyphenation:
             hyphenIndexes = [i for i, c in enumerate(attrString.string()) if c == "-"]
             attrString = self.hyphenateAttributedString(attrString, path)
-        setter = CoreText.CTFramesetterCreateWithAttributedString(attrString)
+        setter = newFrameSetterWithAttributedString(attrString)
         box = CoreText.CTFramesetterCreateFrame(setter, (0, 0), path, None)
         visibleRange = CoreText.CTFrameGetVisibleStringRange(box)
         clip = visibleRange.length
@@ -2869,7 +2869,7 @@ class BaseContext:
         # get lines for an attribute string with a given path
         if offset is None:
             offset = 0, 0
-        setter = CoreText.CTFramesetterCreateWithAttributedString(attrString)
+        setter = newFrameSetterWithAttributedString(attrString)
         frame = CoreText.CTFramesetterCreateFrame(setter, offset, path, None)
         return CoreText.CTFrameGetLines(frame)
 
@@ -2902,7 +2902,7 @@ class BaseContext:
                 path = CoreText.CGPathCreateMutable()
                 CoreText.CGPathAddRect(path, None, CoreText.CGRectMake(0, 0, width, height))
                 attrString = self.hyphenateAttributedString(attrString, path)
-            setter = CoreText.CTFramesetterCreateWithAttributedString(attrString)
+            setter = newFrameSetterWithAttributedString(attrString)
             (w, h), _ = CoreText.CTFramesetterSuggestFrameSizeWithConstraints(
                 setter, (0, 0), None, (width, height), None
             )
@@ -3042,3 +3042,11 @@ def getFontName(font) -> str | None:
     if fontName is not None:
         fontName = str(fontName)
     return fontName
+
+
+def newFrameSetterWithAttributedString(attrString):
+    allowUnbounded = len(attrString) > 2000  # somewhat arbitrary
+    typeSetter = CoreText.CTTypesetterCreateWithAttributedStringAndOptions(
+        attrString, {CoreText.kCTTypesetterOptionAllowUnboundedLayout: allowUnbounded}
+    )
+    return CoreText.CTFramesetterCreateWithTypesetter(typeSetter)
