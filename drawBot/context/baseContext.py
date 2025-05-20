@@ -3029,7 +3029,7 @@ def getFontDescriptorsFromPath(fontPath):
         modTime = os.stat(fontPath).st_mtime
     else:
         modTime = -1
-    prevModTime, descriptors = _reloadedFontDescriptors.get(fontPath, (modTime, tuple()))
+    prevModTime, descriptors = _reloadedFontDescriptors.get(fontPath, (modTime, ()))
     if modTime == prevModTime:
         if not descriptors:
             # Load font from disk, letting the OS handle caching and loading
