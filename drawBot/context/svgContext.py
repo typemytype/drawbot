@@ -15,7 +15,7 @@ from .baseContext import (
     Gradient,
     GraphicsState,
     Shadow,
-    newFrameSetterWithAttributedString,
+    newFramesetterWithAttributedString,
 )
 from .imageContext import _makeBitmapImageRep
 
@@ -406,7 +406,7 @@ class SVGContext(BaseContext):
         if self._state.hyphenation:
             attrString = self.hyphenateAttributedString(attrString, path)
         txt = attrString.string()
-        setter = newFrameSetterWithAttributedString(attrString)
+        setter = newFramesetterWithAttributedString(attrString)
         box = CoreText.CTFramesetterCreateFrame(setter, (0, 0), path, None)
 
         self._svgBeginClipPath()

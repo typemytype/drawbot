@@ -28,7 +28,7 @@ from .context.baseContext import (
     getFontName,
     getNSFontFromNameOrPath,
     makeTextBoxes,
-    newFrameSetterWithAttributedString,
+    newFramesetterWithAttributedString,
 )
 from .context.dummyContext import DummyContext
 from .context.tools import drawBotbuiltins, gifTools
@@ -2008,7 +2008,7 @@ class DrawBotDrawingTool:
             raise TypeError("expected 'str' or 'FormattedString', got '%s'" % type(txt).__name__)
         path, (x, y) = self._dummyContext._getPathForFrameSetter(box)
         attrString = self._dummyContext.attributedString(txt, align=align)
-        setter = newFrameSetterWithAttributedString(attrString)
+        setter = newFramesetterWithAttributedString(attrString)
         box = CoreText.CTFramesetterCreateFrame(setter, (0, 0), path, None)
         ctLines = CoreText.CTFrameGetLines(box)
         origins = CoreText.CTFrameGetLineOrigins(box, (0, len(ctLines)), None)
@@ -2031,7 +2031,7 @@ class DrawBotDrawingTool:
         bounds = list()
         path, (x, y) = self._dummyContext._getPathForFrameSetter(box)
         attrString = self._dummyContext.attributedString(txt)
-        setter = newFrameSetterWithAttributedString(attrString)
+        setter = newFramesetterWithAttributedString(attrString)
         box = CoreText.CTFramesetterCreateFrame(setter, (0, 0), path, None)
         ctLines = CoreText.CTFrameGetLines(box)
         origins = CoreText.CTFrameGetLineOrigins(box, (0, len(ctLines)), None)
