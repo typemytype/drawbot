@@ -3029,7 +3029,7 @@ def getFontDescriptorsFromPath(fontPath):
         modTime = os.stat(fontPath).st_mtime
     else:
         modTime = -1
-    prevModTime, descriptors = _reloadedFontDescriptors.get(fontPath, (modTime, None))
+    prevModTime, descriptors = _reloadedFontDescriptors.get(fontPath, (modTime, tuple()))
     if modTime == prevModTime:
         if not descriptors:
             # Load font from disk, letting the OS handle caching and loading
@@ -3047,11 +3047,7 @@ def getFontDescriptorsFromPath(fontPath):
         data = AppKit.NSData.dataWithContentsOfFile_(fontPath)
         descriptors = CoreText.CTFontManagerCreateFontDescriptorsFromData(data)
         _reloadedFontDescriptors[fontPath] = modTime, descriptors
-    if descriptors is None:
-        descriptors = tuple()
-    else:
-        descriptors = tuple(descriptors)
-    return descriptors
+    return tuple(descriptors)
 
 
 def getFontName(font) -> str | None:
