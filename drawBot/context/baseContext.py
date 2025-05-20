@@ -1894,7 +1894,7 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
                 fontName = self._font
             raise DrawBotError(f"Can not find instance with name: '{name}' for '{fontName}'.")
 
-    def listNamedInstances(self, fontNameOrPath: SomePath | None = None) -> dict[str, dict]:
+    def listNamedInstances(self, fontNameOrPath: SomePath | None = None, fontNumber: int = 0) -> dict[str, dict]:
         """
         List all named instances from a variable font for the current font.
 
@@ -1907,9 +1907,9 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
             fontNameOrPath = self._font
         if not os.path.exists(fontNameOrPath):
             # the font is installed
-            nsFont = AppKit.NSFont.fontWithName_size_(fontNameOrPath, 10)
+            font = getNSFontFromNameOrPath(fontNameOrPath, 10, fontNumber)
             # get the url from the font descriptor
-            url = CoreText.CTFontDescriptorCopyAttribute(nsFont.fontDescriptor(), CoreText.kCTFontURLAttribute)
+            url = CoreText.CTFontDescriptorCopyAttribute(font.fontDescriptor(), CoreText.kCTFontURLAttribute)
             if url is None:
                 return dict()
             else:
