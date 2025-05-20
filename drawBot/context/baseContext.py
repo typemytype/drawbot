@@ -1905,7 +1905,19 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
         """
         if fontNameOrPath is None:
             fontNameOrPath = self._font
-        descriptors = getFontDescriptorsFromPath(fontNameOrPath)
+        if not os.path.exists(fontNameOrPath):
+            # the font is installed
+            nsFont = AppKit.NSFont.fontWithName_size_(fontNameOrPath, 10)
+            # get the url from the font descriptor
+            url = CoreText.CTFontDescriptorCopyAttribute(nsFont.fontDescriptor(), CoreText.kCTFontURLAttribute)
+            if url is None:
+                return dict()
+            else:
+                path = url.path()
+        else:
+            path = fontNameOrPath
+
+        descriptors = getFontDescriptorsFromPath(path)
         return variation.getNamedInstancesForDescriptors(descriptors)
 
     def tabs(self, tab: tuple[float, str] | None, *tabs: tuple[float, str]):
@@ -3013,13 +3025,16 @@ _reloadedFontDescriptors: dict[SomePath, tuple[float, Any]] = {}
 
 @memoize
 def getFontDescriptorsFromPath(fontPath):
-    url = AppKit.NSURL.fileURLWithPath_(fontPath)
-    assert url is not None
-    modTime = os.stat(fontPath).st_mtime
+    if os.path.exists(fontPath):
+        modTime = os.stat(fontPath).st_mtime
+    else:
+        modTime = -1
     prevModTime, descriptors = _reloadedFontDescriptors.get(fontPath, (modTime, None))
     if modTime == prevModTime:
         if not descriptors:
             # Load font from disk, letting the OS handle caching and loading
+            url = AppKit.NSURL.fileURLWithPath_(fontPath)
+            assert url is not None
             descriptors = CoreText.CTFontManagerCreateFontDescriptorsFromURL(url)
             # Nothing was reloaded, this is the general case: do not cache the
             # descriptors globally (they are cached per newDrawing session via
@@ -3032,7 +3047,11 @@ def getFontDescriptorsFromPath(fontPath):
         data = AppKit.NSData.dataWithContentsOfFile_(fontPath)
         descriptors = CoreText.CTFontManagerCreateFontDescriptorsFromData(data)
         _reloadedFontDescriptors[fontPath] = modTime, descriptors
-    return tuple(descriptors)
+    if descriptors is None:
+        descriptors = tuple()
+    else:
+        descriptors = tuple(descriptors)
+    return descriptors
 
 
 def getFontName(font) -> str | None:
