@@ -1894,7 +1894,7 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
                 fontName = self._font
             raise DrawBotError(f"Can not find instance with name: '{name}' for '{fontName}'.")
 
-    def listNamedInstances(self, fontNameOrPath: SomePath | None = None, fontNumber: int = 0) -> dict[str, dict]:
+    def listNamedInstances(self, fontNameOrPath: SomePath | None = None) -> dict[str, dict]:
         """
         List all named instances from a variable font for the current font.
 
@@ -1905,8 +1905,8 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
         """
         if fontNameOrPath is None:
             fontNameOrPath = self._font
-        font = getNSFontFromNameOrPath(fontNameOrPath, 10, fontNumber)
-        return variation.getNamedInstancesForFont(font)
+        descriptors = getFontDescriptorsFromPath(fontNameOrPath)
+        return variation.getNamedInstancesForDescriptors(descriptors)
 
     def tabs(self, tab: tuple[float, str] | None, *tabs: tuple[float, str]):
         """
@@ -3013,13 +3013,13 @@ _reloadedFontDescriptors: dict[SomePath, tuple[float, Any]] = {}
 
 @memoize
 def getFontDescriptorsFromPath(fontPath):
+    url = AppKit.NSURL.fileURLWithPath_(fontPath)
+    assert url is not None
     modTime = os.stat(fontPath).st_mtime
     prevModTime, descriptors = _reloadedFontDescriptors.get(fontPath, (modTime, None))
     if modTime == prevModTime:
         if not descriptors:
             # Load font from disk, letting the OS handle caching and loading
-            url = AppKit.NSURL.fileURLWithPath_(fontPath)
-            assert url is not None
             descriptors = CoreText.CTFontManagerCreateFontDescriptorsFromURL(url)
             # Nothing was reloaded, this is the general case: do not cache the
             # descriptors globally (they are cached per newDrawing session via
@@ -3032,7 +3032,7 @@ def getFontDescriptorsFromPath(fontPath):
         data = AppKit.NSData.dataWithContentsOfFile_(fontPath)
         descriptors = CoreText.CTFontManagerCreateFontDescriptorsFromData(data)
         _reloadedFontDescriptors[fontPath] = modTime, descriptors
-    return descriptors
+    return tuple(descriptors)
 
 
 def getFontName(font) -> str | None:
