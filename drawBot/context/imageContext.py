@@ -167,10 +167,6 @@ class ImageContext(PDFContext):
                     imageResolution=imageResolution,
                     colorSpaceName=colorSpaceName,
                 )
-
-                if "imageColorSyncProfileData" in options:
-                    imageRep.setProperty_withValue_(AppKit.NSImageColorSyncProfileData, options["imageColorSyncProfileData"])  # doing this with representationUsingType_properties_ does not work
-
                 if self.ensureEvenPixelDimensions:
                     if imageRep.pixelsWide() % 2 or imageRep.pixelsHigh() % 2:
                         msg = f"Exporting to {', '.join(self.fileExtensions)} doesn't support odd pixel dimensions for width and height."
