@@ -2364,6 +2364,7 @@ class BaseContext:
         sRGB=AppKit.NSColorSpace.sRGBColorSpace(),
         genericGray=AppKit.NSColorSpace.genericGrayColorSpace(),
         genericGamma22Gray=AppKit.NSColorSpace.genericGamma22GrayColorSpace(),
+        displayP3=AppKit.NSColorSpace.displayP3ColorSpace(),
     )
 
     _blendModeMap = dict(
