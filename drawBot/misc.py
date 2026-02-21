@@ -155,6 +155,15 @@ def isGIF(url):
     return rep is not None, rep
 
 
+def isPNG(url):
+    if not isinstance(url, AppKit.NSURL):
+        url = AppKit.NSURL.fileURLWithPath_(url)
+    if url.pathExtension().lower() != "png":
+        return False, None
+    rep = AppKit.NSImageRep.imageRepWithContentsOfURL_(url)
+    return rep is not None, rep
+
+
 def pilToNSImage(pilImage):
     buffer = io.BytesIO()
     pilImage.save(buffer, "PNG")

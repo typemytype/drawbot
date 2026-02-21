@@ -246,18 +246,6 @@ class BMPContext(ImageContext):
     fileExtensions = ["bmp"]
 
 
-class PNGContext(ImageContext):
-    fileExtensions = ["png"]
-
-    saveImageOptions = getSaveImageOptions(
-        [
-            "imagePNGGamma",
-            "imagePNGInterlaced",
-            "imageColorSyncProfileData",
-        ]
-    )
-
-
 class TIFFContext(ImageContext):
     fileExtensions = ["tif", "tiff"]
 

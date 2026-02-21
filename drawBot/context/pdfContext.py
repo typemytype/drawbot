@@ -4,9 +4,9 @@ import Quartz  # type: ignore
 from packaging.version import Version
 
 from ..macOSVersion import macOSVersion
-from ..misc import DrawBotError, isGIF, isPDF
+from ..misc import DrawBotError, isGIF, isPDF, isPNG
 from .baseContext import BaseContext, FormattedString, newFramesetterWithAttributedString
-from .tools import gifTools
+from .tools import gifTools, apng
 
 
 def sendPDFtoPrinter(pdfDocument):
@@ -266,6 +266,7 @@ class PDFContext(BaseContext):
                     url = AppKit.NSURL.fileURLWithPath_(path)
                 _isPDF, _ = isPDF(url)
                 _isGIF, _ = isGIF(url)
+                _isPNG, _ = isPNG(url)
                 if _isPDF:
                     pdf = Quartz.CGPDFDocumentCreateWithURL(url)
                     if pdf is not None:
@@ -284,6 +285,15 @@ class PDFContext(BaseContext):
                         self._cachedImages[key] = False, Quartz.CGImageSourceCreateImageAtIndex(source, 0, None)
                     else:
                         raise DrawBotError("No image found at frame %s in %s" % (pageNumber, key))
+                elif _isPNG:
+                    if pageNumber is not None:
+                        image = AppKit.NSImage.alloc().initByReferencingURL_(url)
+                    else:
+                        animatedPNG = apng.APNG.open(path)
+                        if pageNumber >= len(animatedPNG.frames):
+                            raise DrawBotError("No image found at frame %s in %s" % (pageNumber, key))
+                        pngData, pngFrameOptions = animatedPNG.frames[pageNumber - 1]
+                        image = AppKit.NSImage.alloc().initWithData_(pngData.to_bytes())
                 else:
                     image = AppKit.NSImage.alloc().initByReferencingURL_(url)
             if image and not _isPDF:
