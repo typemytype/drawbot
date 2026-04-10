@@ -873,7 +873,7 @@ class DrawBotDrawingTool:
     ) -> None:
         """
         Sets the fill color with a `red`, `green`, `blue` and `alpha` value.
-        Each argument must a value float between 0 and 1.
+        Each argument must be a value float between 0 and 1.
 
         .. downloadcode:: fill.py
 
@@ -913,7 +913,7 @@ class DrawBotDrawingTool:
     ) -> None:
         """
         Sets the stroke color with a `red`, `green`, `blue` and `alpha` value.
-        Each argument must a value float between 0 and 1.
+        Each argument must be a value float between 0 and 1.
 
         .. downloadcode:: stroke.py
 
@@ -1043,7 +1043,7 @@ class DrawBotDrawingTool:
         """
         Adds a shadow with an `offset` (x, y), `blur` and a `color`.
         The `color` argument must be a tuple similarly as `fill`.
-        The `offset`and `blur` argument will be drawn independent of the current context transformations.
+        The `offset` and `blur` argument will be drawn independent of the current context transformations.
 
         .. downloadcode:: shadow.py
 
@@ -1161,7 +1161,7 @@ class DrawBotDrawingTool:
 
         * `startPoint` as (x, y)
         * `endPoint` as (x, y)
-        * `colors` as a list of colors, described similary as `fill`
+        * `colors` as a list of colors, described similarly as `fill`
         * `locations` of each color as a list of floats. (optionally)
         * `startRadius` radius around the startPoint in degrees (optionally)
         * `endRadius` radius around the endPoint in degrees (optionally)
@@ -1207,7 +1207,7 @@ class DrawBotDrawingTool:
 
         * `startPoint` as (x, y)
         * `endPoint` as (x, y)
-        * `colors` as a list of colors, described similary as `cmykFill`
+        * `colors` as a list of colors, described similarly as `cmykFill`
         * `locations` of each color as a list of floats. (optionally)
         * `startRadius` radius around the startPoint in degrees (optionally)
         * `endRadius` radius around the endPoint in degrees (optionally)
@@ -1347,7 +1347,7 @@ class DrawBotDrawingTool:
 
             # set stroke color to black
             stroke(0)
-            # set a strok width
+            # set a stroke width
             strokeWidth(50)
             # translate the canvas
             translate(150, 50)
@@ -1361,7 +1361,7 @@ class DrawBotDrawingTool:
             lineCap("square")
             # draw a line
             line((0, 200), (0, 800))
-            # translate the canvase
+            # translate the canvas
             translate(300, 0)
             # set a line cap style
             lineCap("round")
@@ -1373,8 +1373,8 @@ class DrawBotDrawingTool:
 
     def lineDash(self, value: float | None, *values: float, offset: float = 0):
         """
-        Set a line dash with any given amount of lenghts.
-        Uneven lenghts will have a visible stroke, even lenghts will be invisible.
+        Set a line dash with any given amount of lengths.
+        Uneven lengths will have a visible stroke, even lengths will be invisible.
 
         optionally an `offset` can be given to set the offset of the first dash.
 
@@ -1382,7 +1382,7 @@ class DrawBotDrawingTool:
 
             # set stroke color to black
             stroke(0)
-            # set a strok width
+            # set a stroke width
             strokeWidth(50)
             # translate the canvas
             translate(150, 50)
@@ -1402,7 +1402,7 @@ class DrawBotDrawingTool:
             lineDash(2, 10, 5, 5, offset=2)
             # draw a line
             line((0, 200), (0, 800))
-            # translate the canvase
+            # translate the canvas
             translate(200, 0)
             # reset the line dash
             lineDash(None)
@@ -1583,7 +1583,7 @@ class DrawBotDrawingTool:
     def strikethrough(self, value: Literal["single", "thick", "double"] | None) -> None:
         """
         Set the strikethrough value.
-        Underline must be `single`, `thick`, `double` or `None`.
+        Strikethrough must be `single`, `thick`, `double` or `None`.
 
         .. downloadcode:: strikethrough.py
 
@@ -1679,7 +1679,7 @@ class DrawBotDrawingTool:
             language("nl")
             # shift up a bit
             translate(500, 0)
-            # darw the text again with a language set
+            # draw the text again with a language set
             textBox(word, box)
         """
         self._dummyContext.language(language)
@@ -1800,7 +1800,7 @@ class DrawBotDrawingTool:
     def fontNamedInstance(self, name: str, fontNameOrPath: SomePath | None = None) -> None:
         """
         Set a font with `name` of a named instance.
-        The `name` of the named instance must be listed in `listNamedInstances()`,
+        The `name` of the named instance must be listed in `listNamedInstances()`.
 
         Optionally a `fontNameOrPath` can be given. If a font path is given that `fontNameOrPath` will be set.
 
@@ -1924,12 +1924,12 @@ class DrawBotDrawingTool:
             fill(1, 0, 0)
             # draw a rectangle with variables from above
             rect(x, y, w, h)
-            # set a diferent fill
+            # set a different fill
             fill(1)
             # set a font size
             fontSize(200)
             # draw text in a text box
-            # with varibales from above
+            # with variables from above
             overflow = textBox("hallo, this text is a bit to long",
                             (x, y, w, h), align="center")
             # a text box returns text overflow
@@ -2120,12 +2120,12 @@ class DrawBotDrawingTool:
         pageNumber: int | None = None,
     ) -> None:
         """
-        Add an image from a `path` with an `offset` and an `alpha` value.
+        Add an image from a `path` with a `position` and an `alpha` value.
         This accepts most common file types like pdf, jpg, png, tiff and gif. `NSImage` objects are accepted too.
 
         Optionally an `alpha` can be provided, which is a value between 0 and 1.
 
-        Optionally a `pageNumber` can be provided when the path referes to a multi page pdf file.
+        Optionally a `pageNumber` can be provided when the path refers to a multi page pdf file.
 
         .. downloadcode:: image.py
 
@@ -2336,7 +2336,7 @@ class DrawBotDrawingTool:
             fps = 30
             # duration of the movie
             seconds = 3
-            # calculate the lenght of a single frame
+            # calculate the length of a single frame
             duration = 1 / fps
             # calculate the amount of frames needed
             totalFrames = seconds * fps
@@ -2450,7 +2450,7 @@ class DrawBotDrawingTool:
         like `font`, `fontSize` and `lineHeight` as a tuple (width, height).
 
         Optionally a `width` constrain or `height` constrain can be provided
-        to calculate the lenght or width of text with the given constrain.
+        to calculate the length or width of text with the given constrain.
         """
         if not isinstance(txt, (str, FormattedString)):
             raise TypeError("expected 'str' or 'FormattedString', got '%s'" % type(txt).__name__)
@@ -2485,7 +2485,7 @@ class DrawBotDrawingTool:
         The postscript font name can be used to set the font as the active font.
 
         Fonts are installed only for the current process.
-        Fonts will not be accesible outside the scope of drawBot.
+        Fonts will not be accessible outside the scope of drawBot.
 
         All installed fonts will automatically be uninstalled when the script is done.
 
