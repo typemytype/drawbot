@@ -367,11 +367,11 @@ Sometimes your program needs to respond to particular values or situations. If t
     print(a > 15 or b > 15)
 
     # inversing a truth value:
-    print("not True:"
+    print("not True:")
     print(not True)
     print("not False:")
     print(not False)
-    print("not not False:"
+    print("not not False:")
     print(not not False)
     print("not not not False:")
     print(not not not False)

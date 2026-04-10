@@ -31,6 +31,7 @@ from .context.baseContext import (
     getFontName,
     getNSFontFromNameOrPath,
     makeTextBoxes,
+    newFramesetterWithAttributedString,
 )
 from .context.dummyContext import DummyContext
 from .context.tools import drawBotbuiltins, gifTools
@@ -1940,7 +1941,7 @@ class DrawBotDrawingTool:
 
         .. downloadcode:: overflowText.py
 
-            t = '''DrawBot is a powerful, free application for MacOSX that invites you to write simple Python scripts to generate two-dimensional graphics. The builtin graphics primitives support rectangles, ovals, (bezier) paths, polygons, text objects and transparency.
+            t = '''DrawBot is a powerful, free application for macOS that invites you to write simple Python scripts to generate two-dimensional graphics. The builtin graphics primitives support rectangles, ovals, (bezier) paths, polygons, text objects and transparency.
             DrawBot is an ideal tool to teach the basics of programming. Students get colorful graphic treats while getting familiar with variables, conditional statements, functions and what have you. Results can be saved in a selection of different file formats, including as high resolution, scaleable PDF.
             DrawBot has proven itself as part of the curriculum at selected courses at the Royal Academy in The Hague.'''
 
@@ -2061,7 +2062,7 @@ class DrawBotDrawingTool:
             raise TypeError("expected 'str' or 'FormattedString', got '%s'" % type(txt).__name__)
         path, (x, y) = self._dummyContext._getPathForFrameSetter(box)
         attrString = self._dummyContext.attributedString(txt, align=align)
-        setter = CoreText.CTFramesetterCreateWithAttributedString(attrString)
+        setter = newFramesetterWithAttributedString(attrString)
         box = CoreText.CTFramesetterCreateFrame(setter, (0, 0), path, None)
         ctLines = CoreText.CTFrameGetLines(box)
         origins = CoreText.CTFrameGetLineOrigins(box, (0, len(ctLines)), None)
@@ -2086,7 +2087,7 @@ class DrawBotDrawingTool:
         bounds = list[tuple[BoundingBox | BezierPath, float, FormattedString | str]]()
         path, (x, y) = self._dummyContext._getPathForFrameSetter(box)
         attrString = self._dummyContext.attributedString(txt)
-        setter = CoreText.CTFramesetterCreateWithAttributedString(attrString)
+        setter = newFramesetterWithAttributedString(attrString)
         box = CoreText.CTFramesetterCreateFrame(setter, (0, 0), path, None)
         ctLines = CoreText.CTFrameGetLines(box)
         origins = CoreText.CTFrameGetLineOrigins(box, (0, len(ctLines)), None)
