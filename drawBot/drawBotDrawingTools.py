@@ -9,21 +9,8 @@ from typing import TYPE_CHECKING, Any, Literal
 
 import AppKit  # type: ignore
 import CoreText  # type: ignore
-import PIL  # type: ignore
 import Quartz  # type: ignore
 
-from .aliases import (
-    BoundingBox,
-    CMYKColor,
-    CMYKColorTuple,
-    Point,
-    RGBAColorTuple,
-    RGBColor,
-    RGBColorTuple,
-    Size,
-    SomePath,
-    TransformTuple,
-)
 from .context import getContextForFileExt, getContextOptionsDocs, getFileExtensions
 from .context.baseContext import (
     BezierPath,
@@ -49,6 +36,20 @@ from .misc import (
 )
 
 if TYPE_CHECKING:
+    from collections.abc import Generator
+
+    from .aliases import (
+        BoundingBox,
+        CMYKColor,
+        CMYKColorTuple,
+        Point,
+        RGBAColorTuple,
+        RGBColor,
+        RGBColorTuple,
+        Size,
+        SomePath,
+        TransformTuple,
+    )
     from .drawBotPageDrawingTools import DrawBotPage
 
 
@@ -197,7 +198,7 @@ class DrawBotDrawingTool:
         gifTools.clearExplodedGifCache()
 
     @contextmanager
-    def drawing(self):
+    def drawing(self) -> Generator[None, None, None]:
         """
         Reset and clean the drawing stack in a `with` statement.
 
@@ -344,7 +345,6 @@ class DrawBotDrawingTool:
         self._hasPage = True
         self._dummyContext = DummyContext()
         self._addInstruction("newPage", width, height)
-
 
     def pages(self) -> tuple["DrawBotPage", ...]:
         """
@@ -543,7 +543,7 @@ class DrawBotDrawingTool:
         self._addInstruction("restore")
 
     @contextmanager
-    def savedState(self):
+    def savedState(self) -> Generator[None, None, None]:
         """
         Save and restore the current graphics state in a `with` statement.
 
@@ -796,7 +796,7 @@ class DrawBotDrawingTool:
 
     # color
 
-    def colorSpace(self, colorSpace) -> None:
+    def colorSpace(self, colorSpace: str | None) -> None:
         """
         Set the color space.
         Options are `genericRGB`, `adobeRGB1998`, `sRGB`, `genericGray`, `genericGamma22Gray`.
@@ -1089,7 +1089,7 @@ class DrawBotDrawingTool:
         endPoint: Point | None = None,
         colors: list[RGBColor | RGBColorTuple] | None = None,
         locations: list[float] | None = None,
-    ):
+    ) -> None:
         """
         A linear gradient fill with:
 
@@ -1294,7 +1294,7 @@ class DrawBotDrawingTool:
         self._requiresNewFirstPage = True
         self._addInstruction("miterLimit", value)
 
-    def lineJoin(self, value: Literal["miter", "round", "bevel"]):
+    def lineJoin(self, value: Literal["miter", "round", "bevel"]) -> None:
         """
         Set a line join.
 
@@ -1337,7 +1337,7 @@ class DrawBotDrawingTool:
         self._requiresNewFirstPage = True
         self._addInstruction("lineJoin", value)
 
-    def lineCap(self, value: Literal["butt", "square", "round"]):
+    def lineCap(self, value: Literal["butt", "square", "round"]) -> None:
         """
         Set a line cap.
 
@@ -1371,7 +1371,7 @@ class DrawBotDrawingTool:
         self._requiresNewFirstPage = True
         self._addInstruction("lineCap", value)
 
-    def lineDash(self, value: float | None, *values: float, offset: float = 0):
+    def lineDash(self, value: float | None, *values: float, offset: float = 0) -> None:
         """
         Set a line dash with any given amount of lengths.
         Uneven lengths will have a visible stroke, even lengths will be invisible.
@@ -1521,7 +1521,7 @@ class DrawBotDrawingTool:
         self._dummyContext.fontSize(fontSize)
         self._addInstruction("fontSize", fontSize)
 
-    def lineHeight(self, value):
+    def lineHeight(self, value: float) -> None:
         """
         Set the line height.
 
@@ -1559,7 +1559,7 @@ class DrawBotDrawingTool:
         self._dummyContext.tracking(value)
         self._addInstruction("tracking", value)
 
-    def baselineShift(self, value) -> None:
+    def baselineShift(self, value: float) -> None:
         """
         Set the shift of the baseline.
         """
@@ -1653,7 +1653,7 @@ class DrawBotDrawingTool:
         self._dummyContext.tabs(*tabs)
         self._addInstruction("tabs", *tabs)
 
-    def language(self, language) -> None:
+    def language(self, language: str | None) -> None:
         """
         Set the preferred language as language tag or None to use the default language.
         A language tag might be a [iso639-2 or iso639-1](https://www.loc.gov/standards/iso639-2/php/English_list.php)
@@ -2083,7 +2083,7 @@ class DrawBotDrawingTool:
 
         CharactersBounds = namedtuple("CharactersBounds", ["bounds", "baselineOffset", "formattedSubString"])
 
-        bounds = list[tuple[BoundingBox | BezierPath, float, FormattedString | str]]()
+        bounds: list[tuple[BoundingBox | BezierPath, float, FormattedString | str]] = []
         path, (x, y) = self._dummyContext._getPathForFrameSetter(box)
         attrString = self._dummyContext.attributedString(txt)
         setter = newFramesetterWithAttributedString(attrString)
@@ -2373,7 +2373,7 @@ class DrawBotDrawingTool:
 
     # pdf links
 
-    def linkURL(self, url: str, xywh: BoundingBox):
+    def linkURL(self, url: str, xywh: BoundingBox) -> None:
         """
         Add a clickable rectangle for an external url link.
 
@@ -2383,7 +2383,7 @@ class DrawBotDrawingTool:
         self._requiresNewFirstPage = True
         self._addInstruction("linkURL", url, (x, y, w, h))
 
-    def linkDestination(self, name: str, xy: Point):
+    def linkDestination(self, name: str, xy: Point) -> None:
         """
         Add a destination point for a link within a PDF.
         Setup a clickable retangle with `linkRect(name, (x, y, w, h))` with the same name.
@@ -2394,7 +2394,7 @@ class DrawBotDrawingTool:
         self._requiresNewFirstPage = True
         self._addInstruction("linkDestination", name, (x, y))
 
-    def linkRect(self, name: str, xywh: BoundingBox):
+    def linkRect(self, name: str, xywh: BoundingBox) -> None:
         """
         Add a clickable rectangle for a link within a PDF.
         Use `linkDestination(name, (x, y))` with the same name to set the destination of the clickable rectangle.
@@ -2615,7 +2615,7 @@ class DrawBotDrawingTool:
         """
         return self._dummyContext._state.text.fontLineHeight()
 
-    def Variable(self, variables, workSpace, continuous=True) -> None:
+    def Variable(self, variables: list[dict[str, Any]], workSpace: dict[str, Any], continuous: bool = True) -> None:
         """
         Build small UI for variables in a script.
 
