@@ -1722,7 +1722,7 @@ class DrawBotDrawingTool:
         self._dummyContext.writingDirection(direction)
         self._addInstruction("writingDirection", direction)
 
-    def openTypeFeatures(self, *args: bool | None, **features: bool) -> dict[str, bool]:
+    def openTypeFeatures(self, *, resetFeatures: bool = False, **features: bool) -> dict[str, bool]:
         """
         Enable OpenType features.
 
@@ -1754,8 +1754,8 @@ class DrawBotDrawingTool:
             # the same string again, back to default features
             text(someTxt, (100, 70))
         """
-        result = self._dummyContext.openTypeFeatures(*args, **features)
-        self._addInstruction("openTypeFeatures", *args, **features)
+        result = self._dummyContext.openTypeFeatures(resetFeatures=resetFeatures, **features)
+        self._addInstruction("openTypeFeatures", resetFeatures=resetFeatures, **features)
         return result
 
     def listOpenTypeFeatures(self, fontNameOrPath: SomePath | None = None) -> list[str]:

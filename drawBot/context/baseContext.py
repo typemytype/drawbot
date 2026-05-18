@@ -1787,9 +1787,10 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
         """
         self._url = url
 
-    def openTypeFeatures(self, *args: None, **features: bool) -> dict[str, bool]:
+    def openTypeFeatures(self, *, resetFeatures: bool = False, **features: bool) -> dict[str, bool]:
         """
         Enable OpenType features and return the current openType features settings.
+        You can reset the default values with `openTypeFeatures(resetFeatures=True)`
 
         If no arguments are given `openTypeFeatures()` will just return the current openType features settings.
 
@@ -1811,19 +1812,9 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
             # draw the formatted string
             text(t, (10, 80))
         """
-        if args and features:
-            raise DrawBotError("Can't combine positional arguments and keyword arguments")
-        if args:
-            if len(args) != 1:
-                raise DrawBotError("There can only be one positional argument")
-            if args[0] is not None:
-                raise DrawBotError("First positional argument can only be None")
-            warnings.warn("openTypeFeatures(None) is deprecated, use openTypeFeatures(resetFeatures=True) instead.")
+        if resetFeatures:
             self._openTypeFeatures.clear()
-        else:
-            if features.pop("resetFeatures", False):
-                self._openTypeFeatures.clear()
-            self._openTypeFeatures.update(features)
+        self._openTypeFeatures.update(features)
         return dict(self._openTypeFeatures)
 
     def listOpenTypeFeatures(self, fontNameOrPath: SomePath | None = None, fontNumber: int = 0) -> list[str]:
@@ -2720,8 +2711,8 @@ class BaseContext:
     def writingDirection(self, direction):
         self._state.text.writingDirection(direction)
 
-    def openTypeFeatures(self, *args: None, **features: dict[str, bool]) -> dict[str, bool]:
-        return self._state.text.openTypeFeatures(*args, **features)
+    def openTypeFeatures(self, *, resetFeatures: bool = False, **features: bool) -> dict[str, bool]:
+        return self._state.text.openTypeFeatures(resetFeatures=resetFeatures, **features)
 
     def fontVariations(self, *, resetVariations: bool = False, **axes: float) -> dict[str, float]:
         return self._state.text.fontVariations(resetVariations=resetVariations, **axes)

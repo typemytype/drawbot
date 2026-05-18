@@ -1,2 +1,1 @@
 ['dlig', 'liga', 'lnum', 'onum', 'pnum', 'titl', 'tnum']
-*** DrawBot warning: openTypeFeatures(None) is deprecated, use openTypeFeatures(resetFeatures=True) instead. ***

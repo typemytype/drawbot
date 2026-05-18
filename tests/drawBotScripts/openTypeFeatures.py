@@ -10,7 +10,7 @@ print(drawBot.listOpenTypeFeatures())
 
 drawBot.text("Hoefler Fact #123", (20, 170))
 
-drawBot.openTypeFeatures(None)
+drawBot.openTypeFeatures(resetFeatures=True)
 
 drawBot.openTypeFeatures(dlig=True)
 drawBot.text("Hoefler Fact #123", (20, 140))
