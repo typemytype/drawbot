@@ -1763,15 +1763,13 @@ class DrawBotDrawingTool:
 
     listOpenTypeFeatures.__doc__ = FormattedString.listOpenTypeFeatures.__doc__
 
-    def fontVariations(
-        self, *args: None, **axes: float
-    ) -> dict[str, float]:  # FIXME why was bool there? also, why *args?
+    def fontVariations(self, *, resetVariations: bool = False, **axes: float) -> dict[str, float]:
         """
         Pick a variation by axes values.
 
         .. downloadcode:: fontVariations.py
 
-            size(1000, 500)
+            size(1000, 600)
             # pick a font
             font("Skia")
             # pick a font size
@@ -1782,14 +1780,17 @@ class DrawBotDrawingTool:
             # pick a variation from the current font
             fontVariations(wght=.6)
             # draw text!!
-            text("Hello Q", (100, 100))
+            text("Hello Q", (100, 40))
             # pick a variation from the current font
             fontVariations(wght=3, wdth=1.2)
             # draw text!!
-            text("Hello Q", (100, 300))
+            text("Hello Q", (100, 220))
+            # reset defaults
+            fontVariations(resetVariations=True)
+            text("Hello Q", (100, 420))
         """
-        result = self._dummyContext.fontVariations(*args, **axes)
-        self._addInstruction("fontVariations", *args, **axes)
+        result = self._dummyContext.fontVariations(resetVariations=resetVariations, **axes)
+        self._addInstruction("fontVariations", resetVariations=resetVariations, **axes)
         return result
 
     def listFontVariations(self, fontNameOrPath: SomePath | None = None) -> dict[str, dict]:

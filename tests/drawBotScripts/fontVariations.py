@@ -5,7 +5,7 @@ drawBot.size(200, 200)
 drawBot.font("Skia")
 drawBot.fontSize(30)
 
-drawBot.fontVariations(None)
+drawBot.fontVariations(resetVariations=True)
 
 variations = drawBot.listFontVariations()
 for axisTag in sorted(variations):

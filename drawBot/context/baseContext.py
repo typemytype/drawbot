@@ -1837,25 +1837,16 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
         font = getNSFontFromNameOrPath(fontNameOrPath, 10, fontNumber)
         return openType.getFeatureTagsForFont(font)
 
-    def fontVariations(self, *args: None, **axes: float | bool) -> dict[str, float]:
+    def fontVariations(self, *, resetVariations: bool = False, **axes: float) -> dict[str, float]:
         """
         Pick a variation by axes values and return the current font variations settings.
+        You can reset the default values with `fontVariations(resetVariations=True)`
 
         If no arguments are given `fontVariations()` will just return the current font variations settings.
         """
-        if args and axes:
-            raise DrawBotError("Can't combine positional arguments and keyword arguments")
-        if args:
-            if len(args) != 1:
-                raise DrawBotError("There can only be one positional argument")
-            if args[0] is not None:
-                raise DrawBotError("First positional argument can only be None")
-            warnings.warn("fontVariations(None) is deprecated, use fontVariations(resetVariations=True) instead.")
+        if resetVariations:
             self._fontVariations.clear()
-        else:
-            if axes.pop("resetVariations", False):
-                self._fontVariations.clear()
-            self._fontVariations.update(axes)
+        self._fontVariations.update(axes)
         defaultVariations = self.listFontVariations()
         currentVariation = {axis: data["defaultValue"] for axis, data in defaultVariations.items()}
         currentVariation.update(self._fontVariations)
@@ -2732,8 +2723,8 @@ class BaseContext:
     def openTypeFeatures(self, *args: None, **features: dict[str, bool]) -> dict[str, bool]:
         return self._state.text.openTypeFeatures(*args, **features)
 
-    def fontVariations(self, *args, **axes):
-        return self._state.text.fontVariations(*args, **axes)
+    def fontVariations(self, *, resetVariations: bool = False, **axes: float) -> dict[str, float]:
+        return self._state.text.fontVariations(resetVariations=resetVariations, **axes)
 
     def fontNamedInstance(self, name, fontNameOrPath):
         self._state.text.fontNamedInstance(name, fontNameOrPath)

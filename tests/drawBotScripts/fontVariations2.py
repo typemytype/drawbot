@@ -7,7 +7,7 @@ s = drawBot.FormattedString()
 s.font("Skia")
 s.fontSize(30)
 s.lineHeight(30)
-s.fontVariations(None)
+s.fontVariations(resetVariations=True)
 
 s.append("Hello Q\n")
 s.fontVariations(wght=0.6)
