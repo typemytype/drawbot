@@ -17,7 +17,7 @@ class ImageObject:
 
     .. downloadcode:: imageObject.py
 
-        newPage(550, 300)
+        size(550, 300)
         # initiate a new image object
         im = ImageObject()
 

@@ -1157,7 +1157,7 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
 
     .. downloadcode:: formattedString.py
 
-        newPage(1000, 200)
+        size(1000, 200)
         # create a formatted string
         txt = FormattedString()
 
@@ -1796,7 +1796,7 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
 
         .. downloadcode:: openTypeFeaturesFormattedString.py
 
-            newPage(1000, 200)
+            size(1000, 200)
             # create an empty formatted string object
             t = FormattedString()
             # set a font
@@ -2183,7 +2183,7 @@ class FormattedString(SVGContextPropertyMixin, ContextPropertyMixin):
 
         .. downloadcode:: appendGlyphFormattedString.py
 
-            newPage(1300, 400)
+            size(1300, 400)
             # create an empty formatted string object
             t = FormattedString()
             # set a font

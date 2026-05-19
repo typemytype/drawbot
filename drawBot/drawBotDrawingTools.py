@@ -353,7 +353,7 @@ class DrawBotDrawingTool:
         .. downloadcode:: pages.py
 
             # set a size
-            newPage(200, 200)
+            size(200, 200)
             # draw a rectangle
             rect(10, 10, 100, 100)
             # create a new page
@@ -413,7 +413,7 @@ class DrawBotDrawingTool:
         .. downloadcode:: saveImage.py
 
             # set the canvas size
-            newPage(150, 100)
+            size(150, 100)
 
             # draw a background
             rect(10, 10, width()-20, height()-20)
@@ -434,7 +434,7 @@ class DrawBotDrawingTool:
         .. downloadcode:: saveImageResolutionExample.py
 
             # same example but we just change the image resolution
-            newPage(150, 100)
+            size(150, 100)
             rect(10, 10, width()-20, height()-20)
             fill(1)
             text("Hello World!", (20, 40))
@@ -493,7 +493,7 @@ class DrawBotDrawingTool:
         .. downloadcode:: printImage.py
 
             # set A4 page size
-            newPage(595, 842)
+            size(595, 842)
             # draw something
             oval(0, 0, width(), height())
             # send it to the printer
@@ -671,7 +671,7 @@ class DrawBotDrawingTool:
                 x, y = pos
                 oval(x-r, y-r, r*2, r*2)
 
-            newPage(300, 300)
+            size(300, 300)
             fill(None)
 
             path = BezierPath()
@@ -1544,7 +1544,7 @@ class DrawBotDrawingTool:
 
         .. downloadcode:: tracking.py
 
-            newPage(1000, 350)
+            size(1000, 350)
             # set tracking
             tracking(100)
             # set font size
@@ -1587,7 +1587,7 @@ class DrawBotDrawingTool:
 
         .. downloadcode:: strikethrough.py
 
-            newPage(1000, 200)
+            size(1000, 200)
             strikethrough("single")
             fontSize(100)
             text("hello strikethrough", (40, 60))
@@ -1664,7 +1664,7 @@ class DrawBotDrawingTool:
 
         .. downloadcode:: language.py
 
-            newPage(1000, 600)
+            size(1000, 600)
             # a long dutch word
             word = "paardenkop"
             # a box where we draw in
@@ -1711,7 +1711,7 @@ class DrawBotDrawingTool:
 
         .. downloadcode:: textRTL.py
 
-            newPage(400, 100)
+            size(400, 100)
             # A bi-directional string
             s = "Latin میتوان در بسیاری"
             # Set the writing direction to Right-To-Left
@@ -1769,7 +1769,7 @@ class DrawBotDrawingTool:
 
         .. downloadcode:: fontVariations.py
 
-            newPage(1000, 600)
+            size(1000, 600)
             # pick a font
             font("Skia")
             # pick a font size
