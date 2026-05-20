@@ -8,7 +8,7 @@ s.fontSize(20)
 
 s.append("Hoefler Fact #123\n")
 
-s.openTypeFeatures(None)
+s.openTypeFeatures(resetFeatures=True)
 
 s.openTypeFeatures(dlig=True)
 s.append("Hoefler Fact #123\n")

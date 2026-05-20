@@ -10,9 +10,9 @@ Text Properties
 .. autofunction:: drawBot.lineHeight
 .. autofunction:: drawBot.tracking
 .. autofunction:: drawBot.baselineShift
-.. autofunction:: drawBot.openTypeFeatures(frac=True, case=True, ...)
+.. autofunction:: drawBot.openTypeFeatures(frac=True, case=True, ..., resetFeatures=False)
 .. autofunction:: drawBot.listOpenTypeFeatures
-.. autofunction:: drawBot.fontVariations(wdth=0.6, wght=0.1, ...)
+.. autofunction:: drawBot.fontVariations(wdth=0.6, wght=0.1, ..., resetVariations=False)
 .. autofunction:: drawBot.listFontVariations
 .. autofunction:: drawBot.fontNamedInstance
 .. autofunction:: drawBot.listNamedInstances

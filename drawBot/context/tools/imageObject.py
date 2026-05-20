@@ -1,15 +1,11 @@
-import AppKit  # type: ignore
-import Quartz  # type: ignore
-from math import radians
 import os
 from math import radians
-from typing import Any
-
-import AppKit
 from typing import Self
 
+import AppKit  # type: ignore
+import Quartz  # type: ignore
+
 from drawBot.aliases import BoundingBox, Point, RGBAColorTuple, Size, SomePath, TransformTuple
-from drawBot.context.baseContext import FormattedString
 from drawBot.context.imageContext import _makeBitmapImageRep
 from drawBot.misc import DrawBotError, optimizePath
 
