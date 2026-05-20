@@ -2030,7 +2030,7 @@ class DrawBotDrawingTool:
 
         bounds = list()
         path, (x, y) = self._dummyContext._getPathForFrameSetter(box)
-        attrString = self._dummyContext.attributedString(txt)
+        attrString = self._dummyContext.attributedString(txt, align=align)
         setter = newFramesetterWithAttributedString(attrString)
         box = CoreText.CTFramesetterCreateFrame(setter, (0, 0), path, None)
         ctLines = CoreText.CTFrameGetLines(box)
