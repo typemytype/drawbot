@@ -1,6 +1,7 @@
 from .gifContext import GIFContext
+from .pngContext import PNGContext
 from .icnsContext import ICNSContext
-from .imageContext import BMPContext, JPEGContext, PNGContext, TIFFContext
+from .imageContext import BMPContext, JPEGContext, TIFFContext
 from .imageObjectContext import NSImageContext, PILContext
 from .mp4Context import MP4Context
 from .pdfContext import PDFContext

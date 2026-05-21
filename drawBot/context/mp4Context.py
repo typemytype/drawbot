@@ -4,7 +4,7 @@ import tempfile
 
 from drawBot.misc import warnings
 
-from .imageContext import PNGContext
+from .pngContext import PNGContext
 from .tools.mp4Tools import generateMP4
 
 
