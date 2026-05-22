@@ -1,3 +1,5 @@
+"""Tests for the ``.drawbot`` package format."""
+
 import os
 import sys
 import unittest

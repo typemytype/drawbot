@@ -1,3 +1,14 @@
+"""End-to-end rendering tests driven by scripts in `tests/drawBotScripts/`.
+
+For every `.py` file in `drawBotScripts/`, a test is generated for each of
+`svg`, `png`, and `pdf`: the script is executed, its captured stdout is
+compared against `tests/data/expected_<name>.txt` (when present), and the
+rendered file is compared against `tests/data/expected_<name>.<ext>.
+
+Fresh renders are written under `tests/tempTestData/` so failures can be
+inspected locally.
+"""
+
 import glob
 import os
 import sys

@@ -1,3 +1,5 @@
+"""Guards that committed auto-generated source files stay in sync with their generators."""
+
 import sys
 import unittest
 from pathlib import Path

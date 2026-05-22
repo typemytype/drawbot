@@ -94,3 +94,51 @@ __Compile:__
 
 
 ## [Release protocol](https://github.com/typemytype/drawbot/wiki/DrawBot-release-protocol)
+
+---
+
+## Development
+
+### Setup
+
+From the repository root, create a virtual environment, activate it, and install both the package and test dependencies:
+
+    python3 -m venv .venv
+    source .venv/bin/activate
+    pip install -r requirements.txt -r test-requirements.txt
+
+### Running the tests
+
+From the repository root (with the environment activated):
+
+    python tests/runAllTests.py
+
+`runAllTests.py` discovers every `test*.py` module under `tests/`. Individual test modules can also be executed directly (e.g. `python tests/testExport.py`).
+
+The runtime dependencies for the test suite (`Pillow`, `attrs`, `packaging`, `mypy`, `ruff`, `ruff-api`) live in `test-requirements.txt`.
+
+### Benchmarks and tempTestData
+
+`tests/data/` is the benchmark folder. Filenames follow a prefix convention:
+
+- `expected_<name>.<ext>` — reference output for `testScripts.py` and parts of `testExport.py`.
+- `example_<name>.png` — reference renders for `testExamples.py` (also used by the docs site).
+- no prefix — assets consumed by the test scripts themselves (sample images, fonts, etc.).
+
+Freshly rendered output goes into `tests/tempTestData/` (gitignored). When a comparison fails, that's where you'll find the actual rendered file alongside the expected one.
+
+### Rendering drift across macOS versions and CI
+
+Quartz / Core Image rendering is not bit-identical across macOS versions, so the comparison helpers in `testSupport.py` fall back to a fuzzy image diff with a small tolerance whenever raw byte equality fails. Even so, CI on GitHub Actions might run on a different macOS image than your machine, and some tests may pass locally while failing in CI (or vice versa). To find the exact macOS version GitHub Actions is using, open the workflow webpage, expand the **Set up job** step, and read the `Image OS` / `Runner Image` lines in its log.
+
+To investigate further, use `tests/differenceBuilder.py`. It builds a PDF report visualizing the diff between a folder of freshly rendered images and the benchmarks in `tests/data/`. For each pair it lays out the new render, the expected image tracked in the benchmark folder, a pixel-difference image, and a histogram side by side. Pages where the fuzzy similarity exceeds the tolerance are drawn with a red border so failures are easier to spot. Run it as:
+
+    python tests/differenceBuilder.py <folder_with_renders> <output.pdf>
+
+or invoke it with no arguments to pick the folders via a dialog. The resulting PDF is generated on the fly and not committed.
+
+When a test passes locally but fails in CI (or vice versa):
+
+1. Pull the failing artifacts from the Github Actions failed workflow and check the "Drawbot Test Differences" PDF. Keep the "DrawBot Temp Data Results" at hand as well.
+2. If the difference between the images is small and clearly attributable to an OS version change (check the overlay and the histogram), the benchmark in `tests/data/` can be updated — but don't blindly copy the CI render over the local one, remember to add the correct prefix as needed.
+3. If the difference is large, treat it as a real problem.

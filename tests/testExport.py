@@ -1,3 +1,11 @@
+"""Tests for the various ``saveImage`` output formats.
+
+Renders some drawings and saves them to a range of extensions
+(``.png``, ``.jpg``, ``.gif``, ``.tif``, ``.svg``, ``.pdf``, ``.mp4``,
+``.icns``, etc.), then asserts on file size, dimensions, frame count, or
+content.
+"""
+
 import glob
 import os
 import random

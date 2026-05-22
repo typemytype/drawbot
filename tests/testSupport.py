@@ -1,3 +1,5 @@
+"""Shared helpers for the test suite. Not a test module itself."""
+
 import io
 import os
 import random

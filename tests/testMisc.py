@@ -1,3 +1,5 @@
+"""Plain unit tests for miscellaneous DrawBot APIs. No image rendering involved."""
+
 import io
 import os
 import pathlib
