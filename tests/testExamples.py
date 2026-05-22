@@ -1,3 +1,12 @@
+"""Tests for the ``.. downloadcode::`` examples embedded in DrawBot docstrings.
+
+Walks the public API of ``DrawBotDrawingTool``, ``FormattedString``,
+``BezierPath``, and ``ImageObject``, extracts every example marked with a
+``.. downloadcode:: name.py`` directive in a docstring, and generates a
+``test_<name>`` for each one.
+
+"""
+
 import os
 import random
 import re

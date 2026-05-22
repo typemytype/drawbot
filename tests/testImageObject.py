@@ -1,7 +1,11 @@
-import unittest
+"""Smoke tests for every Core Image filter exposed on ``ImageObject``."""
+
 import sys
-import drawBot
+import unittest
+
 from testSupport import DrawBotBaseTest
+
+import drawBot
 
 sourceImagePath = "tests/data/drawBot144.png"
 sampleImage = drawBot.ImageObject("tests/data/drawBot.png")
