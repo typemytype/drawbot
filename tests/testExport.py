@@ -1,4 +1,5 @@
 import glob
+import io
 import os
 import random
 import sys
@@ -6,6 +7,7 @@ import unittest
 
 import AppKit  # type: ignore
 import PIL
+from PIL import ImageCms
 from testSupport import (
     DrawBotBaseTest,
     StdOutCollector,
@@ -442,6 +444,55 @@ class ExportTest(DrawBotBaseTest):
         drawBot.saveImage(path)
         self.assertEqual(
             readData(path), readData(expectedPath), "Files %r and %s are not the same" % (path, expectedPath)
+        )
+
+    def test_export_color_space_cmyk(self):
+        drawBot.newDrawing()
+        drawBot.size(1000, 1000)
+        drawBot.cmykFill(1, 0, 0, 0)
+        drawBot.rect(0, 0, 250, 1000)
+        drawBot.cmykFill(0, 1, 0, 0)
+        drawBot.rect(250, 0, 250, 1000)
+        drawBot.cmykFill(0, 0, 1, 0)
+        drawBot.rect(500, 0, 250, 1000)
+        drawBot.cmykFill(0, 0, 0, 1)
+        drawBot.rect(750, 0, 250, 1000)
+
+        rgba_path = os.path.join(tempTestDataDir, "cmyk_export_default.tiff")
+        cmyk_path = os.path.join(tempTestDataDir, "cmyk_export_with_color_space.tiff")
+        cmyk_with_profile_path = os.path.join(tempTestDataDir, "cmyk_export_with_color_space_and_profile.tiff")
+
+        drawBot.saveImage(rgba_path)
+        drawBot.saveImage(cmyk_path, colorSpace="CMYK")
+
+        icc_data = AppKit.NSData.dataWithContentsOfFile_("/System/Library/ColorSync/Profiles/Generic CMYK Profile.icc")
+        drawBot.saveImage(cmyk_with_profile_path, colorSpace="CMYK", imageColorSyncProfileData=icc_data)
+
+        drawBot.endDrawing()
+
+        rgba_image = PIL.Image.open(rgba_path)
+        self.assertEqual(rgba_image.mode, "RGBA")
+
+        rgba_image_profile = ImageCms.ImageCmsProfile(
+            io.BytesIO(rgba_image.info.get("icc_profile"))
+        )
+        self.assertEqual(
+            rgba_image_profile.profile.profile_description,
+            "Generic RGB Profile"
+        )
+
+        cmyk_image = PIL.Image.open(cmyk_path)
+        self.assertEqual(cmyk_image.mode, "CMYK")
+        self.assertIsNone(cmyk_image.info.get("icc_profile"))
+
+        cmyk_with_profile_image = PIL.Image.open(cmyk_with_profile_path)
+        self.assertEqual(cmyk_with_profile_image.mode, "CMYK")
+        cmyk_with_profile_image_profile = ImageCms.ImageCmsProfile(
+            io.BytesIO(cmyk_with_profile_image.info.get("icc_profile"))
+        )
+        self.assertEqual(
+            cmyk_with_profile_image_profile.profile.profile_description,
+            "Generic CMYK Profile"
         )
 
 
