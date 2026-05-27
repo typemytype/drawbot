@@ -799,7 +799,7 @@ class DrawBotDrawingTool:
     def colorSpace(self, colorSpace: str | None) -> None:
         """
         Set the color space.
-        Options are `genericRGB`, `adobeRGB1998`, `sRGB`, `genericGray`, `genericGamma22Gray`.
+        Options are `genericRGB`, `adobeRGB1998`, `sRGB`, `genericGray`, `genericGamma22Gray`, `displayP3`.
         The default is `genericRGB`.
         `None` will reset it back to the default.
 
